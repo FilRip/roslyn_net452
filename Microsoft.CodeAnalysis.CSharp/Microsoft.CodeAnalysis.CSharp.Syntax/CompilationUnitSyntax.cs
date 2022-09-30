@@ -5,22 +5,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     public sealed class CompilationUnitSyntax : CSharpSyntaxNode, ICompilationUnitSyntax

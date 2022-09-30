@@ -2,16 +2,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public sealed class WithOperation : Operation, IWithOperation, IOperation

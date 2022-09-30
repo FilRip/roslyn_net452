@@ -13,22 +13,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public sealed class ObjectWriter : IDisposable

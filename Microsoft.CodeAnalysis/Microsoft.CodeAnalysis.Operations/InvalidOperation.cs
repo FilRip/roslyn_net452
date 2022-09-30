@@ -4,14 +4,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public sealed class InvalidOperation : Operation, IInvalidOperation, IOperation

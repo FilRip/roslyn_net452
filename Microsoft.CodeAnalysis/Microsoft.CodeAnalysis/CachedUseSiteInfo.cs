@@ -5,28 +5,6 @@ using Microsoft.CodeAnalysis.Symbols;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public struct CachedUseSiteInfo<TAssemblySymbol> where TAssemblySymbol : class, IAssemblySymbolInternal

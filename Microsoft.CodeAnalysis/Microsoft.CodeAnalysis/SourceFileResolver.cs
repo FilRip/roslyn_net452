@@ -10,28 +10,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public class SourceFileResolver : SourceReferenceResolver, IEquatable<SourceFileResolver>

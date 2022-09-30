@@ -9,14 +9,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Text
 {
     internal sealed class CompositeText : SourceText

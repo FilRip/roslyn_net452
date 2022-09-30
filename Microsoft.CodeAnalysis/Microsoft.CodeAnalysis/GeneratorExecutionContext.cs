@@ -7,10 +7,6 @@ using Microsoft.CodeAnalysis.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public readonly struct GeneratorExecutionContext

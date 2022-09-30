@@ -7,8 +7,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     internal class SyntaxTreeComparer : IEqualityComparer<SyntaxTree>

@@ -4,32 +4,6 @@ using Microsoft.CodeAnalysis.Symbols;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public readonly struct UseSiteInfo<TAssemblySymbol> where TAssemblySymbol : class, IAssemblySymbolInternal

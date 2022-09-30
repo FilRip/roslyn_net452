@@ -2,18 +2,6 @@ using System.Diagnostics;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]

@@ -8,8 +8,6 @@ using SystemExtensions;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Text
 {
     internal static class EncodedStringText

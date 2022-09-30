@@ -14,16 +14,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 {
     internal sealed class PEEventSymbol : EventSymbol

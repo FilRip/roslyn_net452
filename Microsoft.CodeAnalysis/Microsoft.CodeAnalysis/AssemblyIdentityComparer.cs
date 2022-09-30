@@ -2,8 +2,6 @@ using System;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public class AssemblyIdentityComparer

@@ -1,11 +1,5 @@
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Syntax
 {
     public static class SyntaxListBuilderExtensions

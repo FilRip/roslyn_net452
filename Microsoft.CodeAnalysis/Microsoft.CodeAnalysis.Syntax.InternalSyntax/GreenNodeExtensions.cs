@@ -1,9 +1,5 @@
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
     public static class GreenNodeExtensions

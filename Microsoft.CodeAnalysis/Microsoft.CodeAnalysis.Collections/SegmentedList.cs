@@ -9,34 +9,6 @@ using Microsoft.CodeAnalysis.Collections.Internal;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Collections
 {
     [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]

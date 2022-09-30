@@ -4,12 +4,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
     internal sealed class ArrayTypeSymbol : TypeSymbol, IArrayTypeSymbol, ITypeSymbol, INamespaceOrTypeSymbol, ISymbol, IEquatable<ISymbol?>

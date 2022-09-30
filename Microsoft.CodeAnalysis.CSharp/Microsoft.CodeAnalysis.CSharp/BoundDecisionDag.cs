@@ -10,8 +10,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public sealed class BoundDecisionDag : BoundNode

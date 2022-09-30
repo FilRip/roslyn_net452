@@ -5,12 +5,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal abstract class SynthesizedParameterSymbolBase : ParameterSymbol

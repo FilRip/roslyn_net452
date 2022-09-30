@@ -5,14 +5,6 @@ using System.Collections.Immutable;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public static class SpecializedCollections

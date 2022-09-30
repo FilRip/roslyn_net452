@@ -13,8 +13,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     public abstract class ParameterSymbol : Symbol, IParameterTypeInformation, IParameterListEntry, IParameterDefinition, IDefinition, IReference, INamedEntity, IParameterSymbolInternal, ISymbolInternal

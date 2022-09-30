@@ -2,10 +2,6 @@ using System;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     internal static class WeakReferenceExtensions

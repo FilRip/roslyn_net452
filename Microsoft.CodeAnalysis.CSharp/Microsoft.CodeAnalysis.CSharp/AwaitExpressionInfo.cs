@@ -4,12 +4,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public struct AwaitExpressionInfo : IEquatable<AwaitExpressionInfo>

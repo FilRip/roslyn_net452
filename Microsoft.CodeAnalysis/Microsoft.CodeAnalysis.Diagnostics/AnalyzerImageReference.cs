@@ -6,14 +6,6 @@ using System.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]

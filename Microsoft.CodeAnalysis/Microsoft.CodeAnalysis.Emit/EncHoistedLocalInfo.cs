@@ -8,8 +8,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Emit
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]

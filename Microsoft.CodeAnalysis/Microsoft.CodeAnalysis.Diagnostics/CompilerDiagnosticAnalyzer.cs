@@ -5,26 +5,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public abstract class CompilerDiagnosticAnalyzer : DiagnosticAnalyzer

@@ -9,10 +9,6 @@ using Microsoft.CodeAnalysis.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal sealed class SynthesizedSimpleProgramEntryPointSymbol : SourceMemberMethodSymbol

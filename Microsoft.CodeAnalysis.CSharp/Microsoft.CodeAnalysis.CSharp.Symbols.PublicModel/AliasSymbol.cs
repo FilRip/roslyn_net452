@@ -2,8 +2,6 @@ using System;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
     internal sealed class AliasSymbol : Symbol, IAliasSymbol, ISymbol, IEquatable<ISymbol?>

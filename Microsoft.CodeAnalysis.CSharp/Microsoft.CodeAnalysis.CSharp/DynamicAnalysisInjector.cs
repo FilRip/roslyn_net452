@@ -10,8 +10,6 @@ using Microsoft.CodeAnalysis.Text;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed class DynamicAnalysisInjector : CompoundInstrumenter

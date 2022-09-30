@@ -6,12 +6,6 @@ using System.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public class ConsList<T> : IEnumerable<T>, IEnumerable

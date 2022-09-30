@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.Symbols;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.Cci
 {
     public interface IReference

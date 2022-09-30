@@ -1,7 +1,5 @@
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public interface IWhileLoopOperation : ILoopOperation, IOperation

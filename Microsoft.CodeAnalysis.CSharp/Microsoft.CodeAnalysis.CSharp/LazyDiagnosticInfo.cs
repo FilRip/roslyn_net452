@@ -2,8 +2,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public abstract class LazyDiagnosticInfo : DiagnosticInfo

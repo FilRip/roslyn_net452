@@ -2,14 +2,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     internal sealed class ParenthesizedOperation : Operation, IParenthesizedOperation, IOperation

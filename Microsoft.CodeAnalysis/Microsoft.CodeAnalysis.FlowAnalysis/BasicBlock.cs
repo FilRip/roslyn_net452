@@ -2,20 +2,6 @@ using System.Collections.Immutable;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     public sealed class BasicBlock

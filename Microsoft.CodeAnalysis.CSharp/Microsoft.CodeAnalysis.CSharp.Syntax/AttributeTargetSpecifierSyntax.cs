@@ -2,12 +2,6 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     public sealed class AttributeTargetSpecifierSyntax : CSharpSyntaxNode

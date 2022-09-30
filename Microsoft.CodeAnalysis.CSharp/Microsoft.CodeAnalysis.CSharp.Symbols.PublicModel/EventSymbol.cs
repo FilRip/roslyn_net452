@@ -4,18 +4,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
     internal sealed class EventSymbol : Symbol, IEventSymbol, ISymbol, IEquatable<ISymbol?>

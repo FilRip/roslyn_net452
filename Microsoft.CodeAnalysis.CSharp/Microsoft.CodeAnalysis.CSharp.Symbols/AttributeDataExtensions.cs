@@ -4,8 +4,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal static class AttributeDataExtensions

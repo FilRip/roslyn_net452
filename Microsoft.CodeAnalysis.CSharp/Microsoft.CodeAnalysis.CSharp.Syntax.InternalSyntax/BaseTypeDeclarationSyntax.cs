@@ -2,16 +2,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
     public abstract class BaseTypeDeclarationSyntax : MemberDeclarationSyntax

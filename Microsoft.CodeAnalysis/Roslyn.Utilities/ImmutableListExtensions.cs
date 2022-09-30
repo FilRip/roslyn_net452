@@ -3,8 +3,6 @@ using System.Collections.Immutable;
 
 #nullable enable
 
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     internal static class ImmutableListExtensions

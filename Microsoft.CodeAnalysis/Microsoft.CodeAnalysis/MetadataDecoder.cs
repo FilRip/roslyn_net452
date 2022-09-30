@@ -12,8 +12,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public abstract class MetadataDecoder<ModuleSymbol, TypeSymbol, MethodSymbol, FieldSymbol, Symbol> : TypeNameDecoder<ModuleSymbol, TypeSymbol>, IAttributeNamedArgumentDecoder where ModuleSymbol : class, IModuleSymbolInternal where TypeSymbol : class, Symbol, ITypeSymbolInternal where MethodSymbol : class, Symbol, IMethodSymbolInternal where FieldSymbol : class, Symbol, IFieldSymbolInternal where Symbol : class, ISymbolInternal

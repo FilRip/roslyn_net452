@@ -4,10 +4,6 @@ using System.Reflection;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public static class UICultureUtilities

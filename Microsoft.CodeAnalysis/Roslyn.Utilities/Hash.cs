@@ -7,14 +7,6 @@ using Microsoft.CodeAnalysis;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public static class Hash

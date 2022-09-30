@@ -2,8 +2,6 @@ using System.Reflection;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.Cci
 {
     public interface IPlatformInvokeInformation

@@ -4,10 +4,6 @@ using Microsoft.Cci;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public sealed class MetadataConstant : IMetadataExpression

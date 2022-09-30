@@ -3,10 +3,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
     internal sealed class DiscardSymbol : Symbol, IDiscardSymbol, ISymbol, IEquatable<ISymbol?>

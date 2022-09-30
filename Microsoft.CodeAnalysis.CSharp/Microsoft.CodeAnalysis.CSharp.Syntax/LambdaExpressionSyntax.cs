@@ -1,9 +1,5 @@
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     public abstract class LambdaExpressionSyntax : AnonymousFunctionExpressionSyntax

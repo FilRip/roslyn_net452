@@ -5,26 +5,6 @@ using System.Reflection.Metadata;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public interface IMethodSymbol : ISymbol, IEquatable<ISymbol?>

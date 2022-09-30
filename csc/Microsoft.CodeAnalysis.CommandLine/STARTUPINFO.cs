@@ -3,10 +3,6 @@ using System.Runtime.InteropServices;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CommandLine
 {
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

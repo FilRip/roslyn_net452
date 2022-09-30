@@ -12,8 +12,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.Cci
 {
     internal sealed class FullMetadataWriter : MetadataWriter

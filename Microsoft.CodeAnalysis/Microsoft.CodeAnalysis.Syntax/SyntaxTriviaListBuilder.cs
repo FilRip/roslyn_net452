@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Syntax
 {
     public class SyntaxTriviaListBuilder

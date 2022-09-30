@@ -1,7 +1,5 @@
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public struct DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> where TAttributeSyntax : SyntaxNode where TAttributeData : AttributeData

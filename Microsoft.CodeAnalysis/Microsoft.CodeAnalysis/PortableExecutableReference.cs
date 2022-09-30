@@ -6,16 +6,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public abstract class PortableExecutableReference : MetadataReference

@@ -2,8 +2,6 @@ using System;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
     internal sealed class DynamicTypeSymbol : TypeSymbol, IDynamicTypeSymbol, ITypeSymbol, INamespaceOrTypeSymbol, ISymbol, IEquatable<ISymbol?>

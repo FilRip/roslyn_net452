@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.Cci
 {
     internal static class IteratorHelper

@@ -4,10 +4,6 @@ using Microsoft.CodeAnalysis.Emit;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.Cci
 {
     public interface IMethodReference : ISignature, ITypeMemberReference, IReference, INamedEntity

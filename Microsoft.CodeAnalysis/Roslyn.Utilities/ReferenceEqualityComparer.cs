@@ -3,14 +3,6 @@ using System.Runtime.CompilerServices;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public class ReferenceEqualityComparer : IEqualityComparer<object?>

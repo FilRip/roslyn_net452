@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.Emit;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.Cci
 {
     public interface IParameterDefinition : IDefinition, IReference, INamedEntity, IParameterTypeInformation, IParameterListEntry

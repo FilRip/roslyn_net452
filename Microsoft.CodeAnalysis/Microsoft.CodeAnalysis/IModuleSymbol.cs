@@ -3,10 +3,6 @@ using System.Collections.Immutable;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public interface IModuleSymbol : ISymbol, IEquatable<ISymbol?>

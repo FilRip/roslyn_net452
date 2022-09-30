@@ -3,8 +3,6 @@ using System.Globalization;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public struct CodeAnalysisResourcesLocalizableErrorArgument : IFormattable

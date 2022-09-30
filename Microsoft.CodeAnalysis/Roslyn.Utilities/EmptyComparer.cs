@@ -2,8 +2,6 @@ using System.Collections.Generic;
 
 #nullable enable
 
-#nullable enable
-
 namespace Roslyn.Utilities
 {
     public sealed class EmptyComparer : IEqualityComparer<object>

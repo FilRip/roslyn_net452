@@ -2,8 +2,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public abstract class BoundDagTest : BoundNode

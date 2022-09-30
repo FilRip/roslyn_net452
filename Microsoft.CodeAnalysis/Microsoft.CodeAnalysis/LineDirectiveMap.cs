@@ -6,10 +6,6 @@ using Microsoft.CodeAnalysis.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public abstract class LineDirectiveMap<TDirective> where TDirective : SyntaxNode

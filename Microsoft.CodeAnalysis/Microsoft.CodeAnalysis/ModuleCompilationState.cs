@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.Symbols;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public class ModuleCompilationState<TNamedTypeSymbol, TMethodSymbol> : CommonModuleCompilationState where TNamedTypeSymbol : class, INamedTypeSymbolInternal where TMethodSymbol : class, IMethodSymbolInternal

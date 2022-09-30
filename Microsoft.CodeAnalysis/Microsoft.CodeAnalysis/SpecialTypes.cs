@@ -4,8 +4,6 @@ using Microsoft.Cci;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public static class SpecialTypes

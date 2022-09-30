@@ -10,16 +10,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public abstract class ArrayMethod : IMethodReference, ISignature, ITypeMemberReference, IReference, INamedEntity

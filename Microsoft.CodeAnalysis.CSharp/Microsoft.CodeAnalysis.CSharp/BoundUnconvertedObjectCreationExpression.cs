@@ -8,14 +8,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public sealed class BoundUnconvertedObjectCreationExpression : BoundExpression

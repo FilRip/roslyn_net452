@@ -7,14 +7,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public sealed class UnboundLambda : BoundExpression

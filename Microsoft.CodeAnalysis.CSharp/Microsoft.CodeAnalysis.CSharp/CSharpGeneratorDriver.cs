@@ -6,10 +6,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public sealed class CSharpGeneratorDriver : GeneratorDriver

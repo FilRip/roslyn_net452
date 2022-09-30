@@ -6,10 +6,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Text
 {
     internal sealed class StringText : SourceText

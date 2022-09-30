@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     public sealed class ControlFlowBranch

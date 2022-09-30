@@ -2,10 +2,6 @@ using System;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public struct SymbolDisplayPart

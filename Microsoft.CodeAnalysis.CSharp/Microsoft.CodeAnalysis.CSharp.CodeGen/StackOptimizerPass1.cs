@@ -10,10 +10,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 {
     internal sealed class StackOptimizerPass1 : BoundTreeRewriter

@@ -4,20 +4,6 @@ using Microsoft.CodeAnalysis.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     internal readonly struct AnalysisContextInfo

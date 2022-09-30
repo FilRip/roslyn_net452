@@ -6,12 +6,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Text
 {
     internal sealed class LargeTextWriter : SourceTextWriter

@@ -3,10 +3,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public struct AliasAndUsingDirective

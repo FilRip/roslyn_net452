@@ -5,10 +5,6 @@ using Microsoft.Cci;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public abstract class StrongNameProvider

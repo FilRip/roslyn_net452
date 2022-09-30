@@ -3,8 +3,6 @@ using System.Diagnostics;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public class BoundStatementList : BoundStatement

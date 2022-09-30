@@ -1,13 +1,5 @@
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public abstract class OperationWalker : OperationVisitor

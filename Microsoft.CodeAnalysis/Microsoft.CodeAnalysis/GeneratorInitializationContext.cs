@@ -3,8 +3,6 @@ using System.Threading;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public struct GeneratorInitializationContext

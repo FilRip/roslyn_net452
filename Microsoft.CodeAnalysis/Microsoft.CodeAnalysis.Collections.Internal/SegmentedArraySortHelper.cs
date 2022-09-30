@@ -4,10 +4,6 @@ using System.Runtime.CompilerServices;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Collections.Internal
 {
     internal static class SegmentedArraySortHelper<T>

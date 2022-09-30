@@ -2,8 +2,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     public sealed class SynthesizedRecordConstructor : SourceConstructorSymbolBase

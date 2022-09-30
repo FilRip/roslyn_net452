@@ -17,8 +17,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 {
     internal sealed class CodeGenerator

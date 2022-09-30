@@ -2,12 +2,6 @@ using System;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public sealed class AnalyzerLoadFailureEventArgs : EventArgs

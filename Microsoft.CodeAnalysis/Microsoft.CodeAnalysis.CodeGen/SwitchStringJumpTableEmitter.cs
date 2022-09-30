@@ -5,10 +5,6 @@ using Microsoft.CodeAnalysis.Emit;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public struct SwitchStringJumpTableEmitter

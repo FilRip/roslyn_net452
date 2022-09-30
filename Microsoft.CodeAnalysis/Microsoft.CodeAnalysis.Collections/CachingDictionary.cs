@@ -8,10 +8,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Collections
 {
     public class CachingDictionary<TKey, TElement> where TKey : notnull

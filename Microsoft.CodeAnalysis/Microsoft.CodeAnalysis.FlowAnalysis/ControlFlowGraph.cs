@@ -6,22 +6,6 @@ using Microsoft.CodeAnalysis.Operations;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     public sealed class ControlFlowGraph

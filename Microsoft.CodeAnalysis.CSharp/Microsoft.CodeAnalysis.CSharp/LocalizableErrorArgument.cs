@@ -3,8 +3,6 @@ using System.Globalization;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal struct LocalizableErrorArgument : IFormattable

@@ -5,16 +5,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.RuntimeMembers
 {
     public abstract class SignatureComparer<MethodSymbol, FieldSymbol, PropertySymbol, TypeSymbol, ParameterSymbol> where MethodSymbol : class where FieldSymbol : class where PropertySymbol : class where TypeSymbol : class where ParameterSymbol : class

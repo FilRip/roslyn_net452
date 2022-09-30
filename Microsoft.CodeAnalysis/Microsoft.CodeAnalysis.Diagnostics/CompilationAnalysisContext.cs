@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis.Text;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public struct CompilationAnalysisContext

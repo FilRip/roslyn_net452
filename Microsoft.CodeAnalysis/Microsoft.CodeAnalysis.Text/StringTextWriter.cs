@@ -3,12 +3,6 @@ using System.Text;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Text
 {
     internal class StringTextWriter : SourceTextWriter

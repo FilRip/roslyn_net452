@@ -5,12 +5,6 @@ using Microsoft.CodeAnalysis.CodeGen;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Emit
 {
     internal readonly struct AddedOrChangedMethodInfo

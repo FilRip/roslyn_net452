@@ -4,10 +4,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public sealed class ArrayInitializerOperation : Operation, IArrayInitializerOperation, IOperation

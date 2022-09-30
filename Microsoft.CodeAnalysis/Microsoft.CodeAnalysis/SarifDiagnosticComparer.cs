@@ -5,8 +5,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     internal sealed class SarifDiagnosticComparer : IEqualityComparer<DiagnosticDescriptor>

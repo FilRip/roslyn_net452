@@ -2,10 +2,6 @@ using System.Collections.Immutable;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public abstract class HasDynamicArgumentsExpression : Operation

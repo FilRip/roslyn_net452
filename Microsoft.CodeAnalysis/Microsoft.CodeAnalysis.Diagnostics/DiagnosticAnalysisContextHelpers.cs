@@ -9,8 +9,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     internal static class DiagnosticAnalysisContextHelpers

@@ -2,12 +2,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     public sealed class DeconstructionAssignmentOperation : BaseAssignmentOperation, IDeconstructionAssignmentOperation, IAssignmentOperation, IOperation

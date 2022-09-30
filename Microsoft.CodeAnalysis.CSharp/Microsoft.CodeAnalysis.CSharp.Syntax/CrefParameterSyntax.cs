@@ -2,14 +2,6 @@ using System.ComponentModel;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     public sealed class CrefParameterSyntax : CSharpSyntaxNode

@@ -4,10 +4,6 @@ using Microsoft.CodeAnalysis.Symbols;
 
 #nullable enable
 
-#nullable enable
-
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public sealed class MetadataLocation : Location, IEquatable<MetadataLocation?>

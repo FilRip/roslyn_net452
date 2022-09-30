@@ -6,8 +6,6 @@ using System.Diagnostics;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.PooledObjects
 {
     [DebuggerDisplay("Count = {Count,nq}")]

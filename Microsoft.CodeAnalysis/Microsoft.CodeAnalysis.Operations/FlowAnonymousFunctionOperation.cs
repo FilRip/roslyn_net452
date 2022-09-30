@@ -4,8 +4,6 @@ using Roslyn.Utilities;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Operations
 {
     internal sealed class FlowAnonymousFunctionOperation : Operation, IFlowAnonymousFunctionOperation, IOperation

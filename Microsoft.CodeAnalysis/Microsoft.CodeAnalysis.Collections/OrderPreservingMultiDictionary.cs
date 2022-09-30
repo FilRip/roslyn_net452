@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 #nullable enable
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Collections
 {
     public sealed class OrderPreservingMultiDictionary<K, V> : IEnumerable<KeyValuePair<K, OrderPreservingMultiDictionary<K, V>.ValueSet>>, IEnumerable where K : notnull where V : notnull
