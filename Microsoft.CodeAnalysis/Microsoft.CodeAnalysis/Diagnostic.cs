@@ -14,7 +14,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public abstract class Diagnostic : IEquatable<Diagnostic?>, IFormattable
     {
         private sealed class DiagnosticWithProgrammaticSuppression : Diagnostic

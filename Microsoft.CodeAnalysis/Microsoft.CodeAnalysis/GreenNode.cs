@@ -15,7 +15,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public abstract class GreenNode : IObjectWritable
     {
         [Flags()]
@@ -854,7 +853,7 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal GreenNode AddError(DiagnosticInfo err)
+        public GreenNode AddError(DiagnosticInfo err)
         {
             DiagnosticInfo[] array;
             if (GetDiagnostics() == null)

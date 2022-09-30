@@ -10,10 +10,9 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class SyntaxTreeExtensions
+    public static class SyntaxTreeExtensions
     {
-        [Conditional("DEBUG")]
-        internal static void VerifySource(this SyntaxTree tree, IEnumerable<TextChangeRange>? changes = null)
+        public static void VerifySource(this SyntaxTree tree, IEnumerable<TextChangeRange>? changes = null)
         {
             SyntaxNode root = tree.GetRoot();
             SourceText text = tree.GetText();

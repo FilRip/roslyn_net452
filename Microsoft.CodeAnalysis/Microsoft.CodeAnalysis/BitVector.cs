@@ -8,7 +8,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct BitVector : IEquatable<BitVector>
     {
         private const ulong ZeroWord = 0uL;

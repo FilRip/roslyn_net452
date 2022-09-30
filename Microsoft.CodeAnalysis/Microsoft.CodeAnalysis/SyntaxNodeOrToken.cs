@@ -12,9 +12,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [StructLayout(LayoutKind.Auto)]
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    public readonly struct SyntaxNodeOrToken : IEquatable<SyntaxNodeOrToken>
+    [StructLayout(LayoutKind.Auto)]public readonly struct SyntaxNodeOrToken : IEquatable<SyntaxNodeOrToken>
     {
         private readonly SyntaxNode? _nodeOrParent;
 

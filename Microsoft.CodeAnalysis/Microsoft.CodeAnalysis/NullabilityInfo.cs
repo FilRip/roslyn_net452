@@ -7,7 +7,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public readonly struct NullabilityInfo : IEquatable<NullabilityInfo>
     {
         public NullableAnnotation Annotation { get; }

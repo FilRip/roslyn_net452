@@ -13,9 +13,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [StructLayout(LayoutKind.Auto)]
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    public readonly struct SyntaxToken : IEquatable<SyntaxToken>
+    [StructLayout(LayoutKind.Auto)]public readonly struct SyntaxToken : IEquatable<SyntaxToken>
     {
         private static readonly Func<DiagnosticInfo, Diagnostic> s_createDiagnosticWithoutLocation = Diagnostic.Create;
 

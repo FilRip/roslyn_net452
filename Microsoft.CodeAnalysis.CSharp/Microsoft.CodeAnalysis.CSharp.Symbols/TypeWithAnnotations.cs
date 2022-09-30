@@ -12,10 +12,8 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public readonly struct TypeWithAnnotations : IFormattable
     {
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
         internal sealed class Boxed
         {
             internal static readonly Boxed Sentinel = new Boxed(default(TypeWithAnnotations));

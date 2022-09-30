@@ -4,7 +4,6 @@ using System.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     internal abstract class AbstractTypeParameterMap : AbstractTypeMap
     {
         protected readonly SmallDictionary<TypeParameterSymbol, TypeWithAnnotations> Mapping;

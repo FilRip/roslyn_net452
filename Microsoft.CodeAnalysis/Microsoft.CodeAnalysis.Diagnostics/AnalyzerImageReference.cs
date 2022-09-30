@@ -8,7 +8,6 @@ using System.Text;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class AnalyzerImageReference : AnalyzerReference
     {
         private readonly ImmutableArray<DiagnosticAnalyzer> _analyzers;

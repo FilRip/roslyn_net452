@@ -3,7 +3,6 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public class EmitResult
     {
         public bool Success { get; }

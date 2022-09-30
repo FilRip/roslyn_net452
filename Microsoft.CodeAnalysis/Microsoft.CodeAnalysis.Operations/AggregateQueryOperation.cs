@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class AggregateQueryOperation : Operation, IAggregateQueryOperation, IOperation
+    public sealed class AggregateQueryOperation : Operation, IAggregateQueryOperation, IOperation
     {
         public IOperation Group { get; }
 
@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.None;
 
-        internal AggregateQueryOperation(IOperation group, IOperation aggregation, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit)
+        public AggregateQueryOperation(IOperation group, IOperation aggregation, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Group = Operation.SetParentOperation(group, this);

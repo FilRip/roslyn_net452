@@ -16,7 +16,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public abstract class SyntaxNode
     {
         private struct ChildSyntaxListEnumeratorStack : IDisposable

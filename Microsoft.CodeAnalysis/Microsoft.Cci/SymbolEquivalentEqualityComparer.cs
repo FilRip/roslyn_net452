@@ -25,8 +25,8 @@ namespace Microsoft.Cci
             {
                 return false;
             }
-            ISymbolInternal internalSymbol = x!.GetInternalSymbol();
-            ISymbolInternal internalSymbol2 = y!.GetInternalSymbol();
+            ISymbolInternal? internalSymbol = x!.GetInternalSymbol();
+            ISymbolInternal? internalSymbol2 = y!.GetInternalSymbol();
             if (internalSymbol != null && internalSymbol2 != null)
             {
                 return internalSymbol.Equals(internalSymbol2);
@@ -36,7 +36,7 @@ namespace Microsoft.Cci
 
         public int GetHashCode(IReference? obj)
         {
-            ISymbolInternal symbolInternal = obj?.GetInternalSymbol();
+            ISymbolInternal? symbolInternal = obj?.GetInternalSymbol();
             if (symbolInternal != null)
             {
                 return symbolInternal.GetHashCode();
@@ -69,7 +69,7 @@ namespace Microsoft.Cci
 
         public int GetHashCode(INamespace? obj)
         {
-            INamespaceSymbolInternal namespaceSymbolInternal = obj?.GetInternalSymbol();
+            INamespaceSymbolInternal? namespaceSymbolInternal = obj?.GetInternalSymbol();
             if (namespaceSymbolInternal != null)
             {
                 return namespaceSymbolInternal.GetHashCode();

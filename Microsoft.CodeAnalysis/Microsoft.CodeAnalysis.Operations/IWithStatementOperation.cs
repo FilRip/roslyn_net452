@@ -1,6 +1,6 @@
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal interface IWithStatementOperation : IOperation
+    public interface IWithStatementOperation : IOperation
     {
         IOperation Body { get; }
 

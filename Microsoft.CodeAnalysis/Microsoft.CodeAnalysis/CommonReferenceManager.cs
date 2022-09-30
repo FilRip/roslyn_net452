@@ -20,8 +20,7 @@ namespace Microsoft.CodeAnalysis
 {
     public abstract class CommonReferenceManager<TCompilation, TAssemblySymbol> : CommonReferenceManager where TCompilation : Compilation where TAssemblySymbol : class, IAssemblySymbolInternal
     {
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        public abstract class AssemblyData
+    public abstract class AssemblyData
         {
             public abstract AssemblyIdentity Identity { get; }
 
@@ -117,10 +116,7 @@ namespace Microsoft.CodeAnalysis
             {
                 throw ExceptionUtilities.Unreachable;
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        public readonly struct AssemblyReferenceBinding
+        }public readonly struct AssemblyReferenceBinding
         {
             private readonly AssemblyIdentity? _referenceIdentity;
 
@@ -174,10 +170,7 @@ namespace Microsoft.CodeAnalysis
                 DefinitionIndex = definitionIndex;
                 AssemblySymbol = symbol;
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        public struct BoundInputAssembly
+        }public struct BoundInputAssembly
         {
             public TAssemblySymbol? AssemblySymbol;
 
@@ -191,10 +184,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 return "?";
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        protected struct ResolvedReference
+        }protected struct ResolvedReference
         {
             private readonly MetadataImageKind _kind;
 

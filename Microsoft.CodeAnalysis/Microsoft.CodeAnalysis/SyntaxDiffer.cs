@@ -146,7 +146,7 @@ namespace Microsoft.CodeAnalysis
             return GetPossiblyDifferentTextSpans(before!.GetRoot(), after!.GetRoot());
         }
 
-        internal static IList<TextSpan> GetPossiblyDifferentTextSpans(SyntaxNode oldNode, SyntaxNode newNode)
+        public static IList<TextSpan> GetPossiblyDifferentTextSpans(SyntaxNode oldNode, SyntaxNode newNode)
         {
             return new SyntaxDiffer(oldNode, newNode, computeNewText: false).ComputeSpansInNew();
         }

@@ -82,8 +82,8 @@ namespace Microsoft.Cci
             {
                 return false;
             }
-            ISymbolInternal internalSymbol = x!.GetInternalSymbol();
-            ISymbolInternal internalSymbol2 = y!.GetInternalSymbol();
+            ISymbolInternal? internalSymbol = x!.GetInternalSymbol();
+            ISymbolInternal? internalSymbol2 = y!.GetInternalSymbol();
             if (internalSymbol != null && internalSymbol2 != null)
             {
                 return internalSymbol.Equals(internalSymbol2);

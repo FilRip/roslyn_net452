@@ -6,7 +6,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class RaiseEventOperation : Operation, IRaiseEventOperation, IOperation
+    public sealed class RaiseEventOperation : Operation, IRaiseEventOperation, IOperation
     {
         public IEventReferenceOperation EventReference { get; }
 
@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.RaiseEvent;
 
-        internal RaiseEventOperation(IEventReferenceOperation eventReference, ImmutableArray<IArgumentOperation> arguments, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public RaiseEventOperation(IEventReferenceOperation eventReference, ImmutableArray<IArgumentOperation> arguments, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             EventReference = Operation.SetParentOperation(eventReference, this);

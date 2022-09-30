@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class OmittedArgumentOperation : Operation, IOmittedArgumentOperation, IOperation
+    public sealed class OmittedArgumentOperation : Operation, IOmittedArgumentOperation, IOperation
     {
         public override ITypeSymbol? Type { get; }
 
@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.OmittedArgument;
 
-        internal OmittedArgumentOperation(SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit)
+        public OmittedArgumentOperation(SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Type = type;

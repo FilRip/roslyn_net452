@@ -15,7 +15,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class ILBuilder
     {
         internal enum BlockType
@@ -34,10 +33,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             NotReachable,
             Reachable,
             BlockedByFinally
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        internal class BasicBlock
+        }internal class BasicBlock
         {
             private class PooledBasicBlock : BasicBlock
             {
@@ -117,15 +113,19 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 }
             }
 
+            //destination of the branch. 
+            //null if branch code is nop or ret or if label is not yet marked.
             public BasicBlock BranchBlock
             {
                 get
                 {
                     BasicBlock result = null;
+
                     if (BranchLabel != null)
                     {
                         result = builder._labelInfos[BranchLabel].bb;
                     }
+
                     return result;
                 }
             }

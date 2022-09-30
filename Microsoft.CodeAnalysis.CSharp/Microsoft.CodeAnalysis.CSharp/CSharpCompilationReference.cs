@@ -3,7 +3,6 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     internal sealed class CSharpCompilationReference : CompilationReference
     {
         public new CSharpCompilation Compilation { get; }

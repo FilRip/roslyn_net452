@@ -1,6 +1,6 @@
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal class ForToLoopOperationUserDefinedInfo
+    public class ForToLoopOperationUserDefinedInfo
     {
         public readonly IBinaryOperation Addition;
 

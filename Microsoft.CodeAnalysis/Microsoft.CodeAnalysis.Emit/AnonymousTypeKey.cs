@@ -10,7 +10,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct AnonymousTypeKey : IEquatable<AnonymousTypeKey>
     {
         internal readonly bool IsDelegate;

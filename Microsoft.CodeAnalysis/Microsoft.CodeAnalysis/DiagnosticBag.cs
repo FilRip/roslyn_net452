@@ -12,9 +12,7 @@ using Roslyn.Utilities;
 #nullable enable
 
 namespace Microsoft.CodeAnalysis
-{
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    [DebuggerTypeProxy(typeof(DebuggerProxy))]
+{[DebuggerTypeProxy(typeof(DebuggerProxy))]
     public class DiagnosticBag
     {
         internal sealed class DebuggerProxy

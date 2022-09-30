@@ -13,7 +13,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public class DiagnosticInfo : IFormattable, IObjectWritable
     {
         private readonly CommonMessageProvider _messageProvider;

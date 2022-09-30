@@ -4,7 +4,6 @@ using System.IO;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct Directive
     {
         private readonly DirectiveTriviaSyntax _node;

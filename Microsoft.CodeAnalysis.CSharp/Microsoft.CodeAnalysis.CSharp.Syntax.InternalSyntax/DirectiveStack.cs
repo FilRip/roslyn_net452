@@ -5,7 +5,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct DirectiveStack
     {
         public static readonly DirectiveStack Empty = new DirectiveStack(ConsList<Directive>.Empty);

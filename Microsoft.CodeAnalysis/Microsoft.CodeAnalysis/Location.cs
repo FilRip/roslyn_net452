@@ -8,7 +8,6 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public abstract class Location
     {
         public abstract LocationKind Kind { get; }

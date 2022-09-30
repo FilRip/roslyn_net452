@@ -29,14 +29,14 @@ namespace Microsoft.Cci
             {
                 return false;
             }
-            IFieldReference fieldReference = x as IFieldReference;
-            IFieldReference fieldReference2 = y as IFieldReference;
+            IFieldReference? fieldReference = x as IFieldReference;
+            IFieldReference? fieldReference2 = y as IFieldReference;
             if (fieldReference != null && fieldReference2 != null)
             {
                 return _metadataWriter.GetFieldSignatureIndex(fieldReference) == _metadataWriter.GetFieldSignatureIndex(fieldReference2);
             }
-            IMethodReference methodReference = x as IMethodReference;
-            IMethodReference methodReference2 = y as IMethodReference;
+            IMethodReference? methodReference = x as IMethodReference;
+            IMethodReference? methodReference2 = y as IMethodReference;
             if (methodReference != null && methodReference2 != null)
             {
                 return _metadataWriter.GetMethodSignatureHandle(methodReference) == _metadataWriter.GetMethodSignatureHandle(methodReference2);

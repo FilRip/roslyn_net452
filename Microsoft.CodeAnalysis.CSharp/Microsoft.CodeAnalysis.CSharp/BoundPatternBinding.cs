@@ -2,7 +2,6 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct BoundPatternBinding
     {
         public readonly BoundExpression VariableAccess;

@@ -11,7 +11,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class MergedTypeDeclaration : MergedNamespaceOrTypeDeclaration
     {
         private readonly ImmutableArray<SingleTypeDeclaration> _declarations;

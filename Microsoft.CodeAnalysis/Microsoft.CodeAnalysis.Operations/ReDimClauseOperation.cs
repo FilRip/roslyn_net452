@@ -6,7 +6,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class ReDimClauseOperation : Operation, IReDimClauseOperation, IOperation
+    public sealed class ReDimClauseOperation : Operation, IReDimClauseOperation, IOperation
     {
         public IOperation Operand { get; }
 
@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.ReDimClause;
 
-        internal ReDimClauseOperation(IOperation operand, ImmutableArray<IOperation> dimensionSizes, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public ReDimClauseOperation(IOperation operand, ImmutableArray<IOperation> dimensionSizes, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Operand = Operation.SetParentOperation(operand, this);

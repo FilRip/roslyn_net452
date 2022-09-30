@@ -17,7 +17,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class NullableWalker : LocalDataFlowPass<NullableWalker.LocalState, NullableWalker.LocalFunctionState>
     {
         public sealed class VariableState
@@ -44,10 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 TrackedEntries = trackedEntries;
                 RequiredAnalysis = requiredAnalysis;
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        private readonly struct VisitResult
+        }private readonly struct VisitResult
         {
             public readonly TypeWithState RValueType;
 
@@ -212,10 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Container = container;
                 State = state;
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        public struct LocalState : LocalDataFlowPass<LocalState, LocalFunctionState>.ILocalDataFlowState, AbstractFlowPass<LocalState, LocalFunctionState>.ILocalState
+        }public struct LocalState : LocalDataFlowPass<LocalState, LocalFunctionState>.ILocalDataFlowState, AbstractFlowPass<LocalState, LocalFunctionState>.ILocalState
         {
             private sealed class Boxed
             {
@@ -839,10 +832,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 VariableState = variableState;
                 SharedStateIndex = sharedStateIndex;
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        public sealed class VariablesSnapshot
+        }public sealed class VariablesSnapshot
         {
             internal readonly int Id;
 
@@ -873,10 +863,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 object arg = Symbol ?? ((object)"<null>");
                 return $"Id={Id}, Symbol={arg}, Count={VariableSlot.Length}";
             }
-        }
-
-        [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        public sealed class Variables
+        }public sealed class Variables
         {
             private const int MaxSlotDepth = 5;
 

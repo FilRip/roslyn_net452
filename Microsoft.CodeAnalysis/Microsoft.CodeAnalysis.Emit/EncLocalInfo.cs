@@ -10,7 +10,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public readonly struct EncLocalInfo : IEquatable<EncLocalInfo>
     {
         public readonly LocalSlotDebugInfo SlotInfo;

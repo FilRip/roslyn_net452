@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.CodeAnalysis.CSha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions", "SystemExtensions\SystemExtensions.csproj", "{3DD47086-4CBF-4EE4-B3A4-D9FDA601BBBE}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Microsoft.CodeAnalysis.VisualBasic", "Microsoft.CodeAnalysis.VisualBasic\Microsoft.CodeAnalysis.VisualBasic.vbproj", "{121916D9-F081-4693-8598-15151855C74E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3DD47086-4CBF-4EE4-B3A4-D9FDA601BBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DD47086-4CBF-4EE4-B3A4-D9FDA601BBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DD47086-4CBF-4EE4-B3A4-D9FDA601BBBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{121916D9-F081-4693-8598-15151855C74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{121916D9-F081-4693-8598-15151855C74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{121916D9-F081-4693-8598-15151855C74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{121916D9-F081-4693-8598-15151855C74E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

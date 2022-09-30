@@ -7,7 +7,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct ClosureDebugInfo : IEquatable<ClosureDebugInfo>
     {
         public readonly int SyntaxOffset;

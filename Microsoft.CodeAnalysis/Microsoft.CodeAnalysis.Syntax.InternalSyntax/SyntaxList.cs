@@ -626,7 +626,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             return this[index];
         }
 
-        internal GreenNode? ItemUntyped(int index)
+        public GreenNode? ItemUntyped(int index)
         {
             GreenNode node = _node;
             if (node.IsList)

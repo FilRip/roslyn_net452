@@ -7,7 +7,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     internal sealed class MetadataImageReference : PortableExecutableReference
     {
         private readonly string? _display;

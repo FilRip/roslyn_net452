@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class RelationalCaseClauseOperation : BaseCaseClauseOperation, IRelationalCaseClauseOperation, ICaseClauseOperation, IOperation
+    public sealed class RelationalCaseClauseOperation : BaseCaseClauseOperation, IRelationalCaseClauseOperation, ICaseClauseOperation, IOperation
     {
         public IOperation Value { get; }
 
@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override CaseKind CaseKind => CaseKind.Relational;
 
-        internal RelationalCaseClauseOperation(IOperation value, BinaryOperatorKind relation, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public RelationalCaseClauseOperation(IOperation value, BinaryOperatorKind relation, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(label, semanticModel, syntax, isImplicit)
         {
             Value = Operation.SetParentOperation(value, this);

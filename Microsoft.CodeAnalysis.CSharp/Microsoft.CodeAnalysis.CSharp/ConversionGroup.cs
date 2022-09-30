@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class ConversionGroup
     {
         internal readonly Conversion Conversion;

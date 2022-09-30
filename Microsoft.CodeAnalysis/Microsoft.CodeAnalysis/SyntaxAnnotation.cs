@@ -8,7 +8,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class SyntaxAnnotation : IObjectWritable, IEquatable<SyntaxAnnotation?>
     {
         private readonly long _id;

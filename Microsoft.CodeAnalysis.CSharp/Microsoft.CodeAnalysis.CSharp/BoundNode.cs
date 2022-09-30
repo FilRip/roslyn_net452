@@ -11,7 +11,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public abstract class BoundNode : IBoundNodeWithIOperationChildren
     {
         [Flags()]

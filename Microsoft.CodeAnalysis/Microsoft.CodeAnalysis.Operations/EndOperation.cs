@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class EndOperation : Operation, IEndOperation, IOperation
+    public sealed class EndOperation : Operation, IEndOperation, IOperation
     {
         public override ITypeSymbol? Type => null;
 
@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.End;
 
-        internal EndOperation(SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public EndOperation(SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
         }

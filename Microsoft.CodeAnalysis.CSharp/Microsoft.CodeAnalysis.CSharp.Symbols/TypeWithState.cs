@@ -4,7 +4,6 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     internal readonly struct TypeWithState
     {
         public readonly TypeSymbol? Type;

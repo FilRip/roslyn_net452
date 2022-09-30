@@ -12,9 +12,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [StructLayout(LayoutKind.Auto)]
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    public readonly struct SyntaxTrivia : IEquatable<SyntaxTrivia>
+    [StructLayout(LayoutKind.Auto)]public readonly struct SyntaxTrivia : IEquatable<SyntaxTrivia>
     {
         public static readonly Func<SyntaxTrivia, bool> Any = (SyntaxTrivia t) => true;
 

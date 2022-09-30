@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class RangeCaseClauseOperation : BaseCaseClauseOperation, IRangeCaseClauseOperation, ICaseClauseOperation, IOperation
+    public sealed class RangeCaseClauseOperation : BaseCaseClauseOperation, IRangeCaseClauseOperation, ICaseClauseOperation, IOperation
     {
         public IOperation MinimumValue { get; }
 
@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override CaseKind CaseKind => CaseKind.Range;
 
-        internal RangeCaseClauseOperation(IOperation minimumValue, IOperation maximumValue, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public RangeCaseClauseOperation(IOperation minimumValue, IOperation maximumValue, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(label, semanticModel, syntax, isImplicit)
         {
             MinimumValue = Operation.SetParentOperation(minimumValue, this);

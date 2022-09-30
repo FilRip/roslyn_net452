@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class WithStatementOperation : Operation, IWithStatementOperation, IOperation
+    public sealed class WithStatementOperation : Operation, IWithStatementOperation, IOperation
     {
         public IOperation Body { get; }
 
@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.None;
 
-        internal WithStatementOperation(IOperation body, IOperation value, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public WithStatementOperation(IOperation body, IOperation value, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Body = Operation.SetParentOperation(body, this);

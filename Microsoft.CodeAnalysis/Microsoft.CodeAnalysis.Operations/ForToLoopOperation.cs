@@ -6,7 +6,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class ForToLoopOperation : BaseLoopOperation, IForToLoopOperation, ILoopOperation, IOperation
+    public sealed class ForToLoopOperation : BaseLoopOperation, IForToLoopOperation, ILoopOperation, IOperation
     {
         public IOperation LoopControlVariable { get; }
 
@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override LoopKind LoopKind => LoopKind.ForTo;
 
-        internal ForToLoopOperation(IOperation loopControlVariable, IOperation initialValue, IOperation limitValue, IOperation stepValue, bool isChecked, ImmutableArray<IOperation> nextVariables, (ILocalSymbol LoopObject, ForToLoopOperationUserDefinedInfo UserDefinedInfo) info, IOperation body, ImmutableArray<ILocalSymbol> locals, ILabelSymbol continueLabel, ILabelSymbol exitLabel, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public ForToLoopOperation(IOperation loopControlVariable, IOperation initialValue, IOperation limitValue, IOperation stepValue, bool isChecked, ImmutableArray<IOperation> nextVariables, (ILocalSymbol LoopObject, ForToLoopOperationUserDefinedInfo UserDefinedInfo) info, IOperation body, ImmutableArray<ILocalSymbol> locals, ILabelSymbol continueLabel, ILabelSymbol exitLabel, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(body, locals, continueLabel, exitLabel, semanticModel, syntax, isImplicit)
         {
             LoopControlVariable = Operation.SetParentOperation(loopControlVariable, this);

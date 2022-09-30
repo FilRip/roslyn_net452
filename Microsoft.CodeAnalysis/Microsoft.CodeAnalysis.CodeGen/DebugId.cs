@@ -7,7 +7,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct DebugId : IEquatable<DebugId>
     {
         public const int UndefinedOrdinal = -1;

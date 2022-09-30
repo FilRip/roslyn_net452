@@ -4,7 +4,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal sealed class ParenthesizedOperation : Operation, IParenthesizedOperation, IOperation
+    public sealed class ParenthesizedOperation : Operation, IParenthesizedOperation, IOperation
     {
         public IOperation Operand { get; }
 
@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public override OperationKind Kind => OperationKind.Parenthesized;
 
-        internal ParenthesizedOperation(IOperation operand, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, ConstantValue? constantValue, bool isImplicit)
+        public ParenthesizedOperation(IOperation operand, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, ConstantValue? constantValue, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Operand = Operation.SetParentOperation(operand, this);

@@ -9,7 +9,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public class DiagnosticWithInfo : Diagnostic
     {
         private readonly DiagnosticInfo _info;

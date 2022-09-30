@@ -14,7 +14,6 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public sealed class AssemblyIdentity : IEquatable<AssemblyIdentity>
     {
         private readonly AssemblyContentType _contentType;
