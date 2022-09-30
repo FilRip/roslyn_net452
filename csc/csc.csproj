@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B3441E49-C9D4-4BFC-A468-09C0D55EA7E4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>csc</RootNamespace>
+    <AssemblyName>csc</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>FilRip.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\AnalyzerInconsistencyBuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildClient.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildPathsAlt.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildProtocolConstants.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildRequest.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildServerConnection.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompileFunc.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompilerServerLogger.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompilerServerLoggerExtensions.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompletedBuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ConsoleUtil.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CreateServerFunc.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\EmptyCompilerServerLogger.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ExitingTraceListener.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\FileMutex.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ICompilerServerLogger.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\IncorrectHashBuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\IServerMutex.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\MismatchedVersionBuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\NativeMethods.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\PROCESS_INFORMATION.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\RejectedBuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\RequestLanguage.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\RunCompilationResult.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ServerFileMutexPair.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ServerNamedMutex.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ShutdownBuildResponse.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CommandLine\STARTUPINFO.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CSharp.CommandLine\Csc.cs" />
+    <Compile Include="Microsoft.CodeAnalysis.CSharp.CommandLine\Program.cs" />
+    <Compile Include="Microsoft.CodeAnalysis\NamedPipeUtil.cs" />
+    <Compile Include="Microsoft.CodeAnalysis\RuntimeHostInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+    <None Include="FilRip.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.CodeAnalysis.CSharp\Microsoft.CodeAnalysis.CSharp.csproj">
+      <Project>{b97dce8e-3212-46b0-8663-98b658c6511c}</Project>
+      <Name>Microsoft.CodeAnalysis.CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.CodeAnalysis\Microsoft.CodeAnalysis.csproj">
+      <Project>{c6a7a8f3-4c01-4b70-b58b-6c5d4191423f}</Project>
+      <Name>Microsoft.CodeAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SystemExtensions\SystemExtensions.csproj">
+      <Project>{3dd47086-4cbf-4ee4-b3a4-d9fda601bbbe}</Project>
+      <Name>SystemExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

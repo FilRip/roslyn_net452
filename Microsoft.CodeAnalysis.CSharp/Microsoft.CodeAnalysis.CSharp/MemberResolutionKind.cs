@@ -1,0 +1,30 @@
+namespace Microsoft.CodeAnalysis.CSharp
+{
+    public enum MemberResolutionKind : byte
+    {
+        None,
+        ApplicableInNormalForm,
+        ApplicableInExpandedForm,
+        InaccessibleTypeArgument,
+        NoCorrespondingParameter,
+        NoCorrespondingNamedParameter,
+        DuplicateNamedArgument,
+        RequiredParameterMissing,
+        NameUsedForPositional,
+        BadNonTrailingNamedArgument,
+        UseSiteError,
+        UnsupportedMetadata,
+        BadArgumentConversion,
+        TypeInferenceFailed,
+        TypeInferenceExtensionInstanceArgument,
+        ConstructedParameterFailedConstraintCheck,
+        ConstraintFailure,
+        StaticInstanceMismatch,
+        WrongCallingConvention,
+        WrongRefKind,
+        WrongReturnType,
+        LessDerived,
+        Worse,
+        Worst
+    }
+}

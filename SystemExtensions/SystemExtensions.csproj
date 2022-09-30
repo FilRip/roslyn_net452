@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3DD47086-4CBF-4EE4-B3A4-D9FDA601BBBE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SystemExtensions</RootNamespace>
+    <AssemblyName>SystemExtensions</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>FilRip.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\netstandard1.1\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\netstandard1.1\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interop.cs" />
+    <Compile Include="Microsoft.Win32.SafeHandles\SafeAllocHHandle.cs" />
+    <Compile Include="System.Runtime.CompilerServices\__BlockReflectionAttribute.cs" />
+    <Compile Include="System.Text\BaseCodePageEncoding.cs" />
+    <Compile Include="System.Text\CodePagesEncodingProvider.cs" />
+    <Compile Include="System.Text\DBCSCodePageEncoding.cs" />
+    <Compile Include="System.Text\DecoderFallbackBufferHelper.cs" />
+    <Compile Include="System.Text\DecoderNLS.cs" />
+    <Compile Include="System.Text\EncoderFallbackBufferHelper.cs" />
+    <Compile Include="System.Text\EncoderNLS.cs" />
+    <Compile Include="System.Text\EncodingByteBuffer.cs" />
+    <Compile Include="System.Text\EncodingCharBuffer.cs" />
+    <Compile Include="System.Text\EncodingNLS.cs" />
+    <Compile Include="System.Text\EncodingTable.cs" />
+    <Compile Include="System.Text\EUCJPEncoding.cs" />
+    <Compile Include="System.Text\GB18030Encoding.cs" />
+    <Compile Include="System.Text\InternalDecoderBestFitFallback.cs" />
+    <Compile Include="System.Text\InternalDecoderBestFitFallbackBuffer.cs" />
+    <Compile Include="System.Text\InternalEncoderBestFitFallback.cs" />
+    <Compile Include="System.Text\InternalEncoderBestFitFallbackBuffer.cs" />
+    <Compile Include="System.Text\ISCIIEncoding.cs" />
+    <Compile Include="System.Text\ISO2022Encoding.cs" />
+    <Compile Include="System.Text\SBCSCodePageEncoding.cs" />
+    <Compile Include="System\SR.cs" />
+    <Compile Include="System\Text\FormattableString.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="System\AppContext.cs" />
+    <Compile Include="System\AppContextDefaultValues.cs" />
+    <Compile Include="System\Text\ExtensionsEncoding.cs" />
+    <Compile Include="System\Runtime\System.Runtime.Versioning.CompatibilitySwitch.cs" />
+    <Compile Include="System\Text\EncodingProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="codepages.nlp" />
+    <None Include="FilRip.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

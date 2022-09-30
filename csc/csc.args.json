@@ -1,0 +1,10 @@
+{
+  "FileVersion": 2,
+  "Id": "b3441e49-c9d4-4bfc-a468-09c0d55ea7e4",
+  "Items": [
+    {
+      "Id": "e918bff0-0ca1-4d8b-be74-92a7c32e52ca",
+      "Command": "test.cs -debug:portable"
+    }
+  ]
+}
