@@ -783,19 +783,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         private static bool TokenCharacterCanBeDoubled(char c)
         {
-            switch (c)
+            return c switch
             {
-                case '"':
-                case '+':
-                case '-':
-                case ':':
-                case '<':
-                case '=':
-                case '?':
-                    return true;
-                default:
-                    return false;
-            }
+                '"' or '+' or '-' or ':' or '<' or '=' or '?' => true,
+                _ => false,
+            };
         }
 
         private static int GetDeclarationDepth(SyntaxToken token)

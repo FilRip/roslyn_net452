@@ -54,18 +54,18 @@ namespace Microsoft.CodeAnalysis.CommandLine
 			{
 				ExtensionsEncoding.Encoding_RegisterProvider(CodePagesEncodingProvider.Instance);
 			}
-			BuildClient buildClient = new BuildClient(language, compileFunc, logger);
+			BuildClient buildClient = new(language, compileFunc, logger);
 			string baseDirectory = AppContext.BaseDirectory;
 			string currentDirectory = Directory.GetCurrentDirectory();
 			string tempPath = BuildServerConnection.GetTempPath(currentDirectory);
-			BuildPaths buildPaths = new BuildPaths(baseDirectory, currentDirectory, systemSdkDirectory, tempPath);
+			BuildPaths buildPaths = new(baseDirectory, currentDirectory, systemSdkDirectory, tempPath);
 			IEnumerable<string> commandLineArgs = GetCommandLineArgs(arguments);
 			return buildClient.RunCompilation(commandLineArgs, buildPaths, null, null, requestId).ExitCode;
 		}
 
 		internal RunCompilationResult RunCompilation(IEnumerable<string> originalArguments, BuildPaths buildPaths, TextWriter textWriter = null, string pipeName = null, Guid? requestId = null)
 		{
-			textWriter = textWriter ?? Console.Out;
+			textWriter ??= Console.Out;
 			if (CommandLineParser.TryParseClientArgs(originalArguments.Select((string arg) => arg.Trim()).ToArray(), out var parsedArgs, out var containsShared, out var keepAliveValue, out var pipeName2, out var errorMessage))
 			{
 				if (pipeName == null)
@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 				}
 				if (containsShared)
 				{
-					pipeName = pipeName ?? GetPipeName(buildPaths);
+					pipeName ??= GetPipeName(buildPaths);
 					string environmentVariable = Environment.GetEnvironmentVariable("LIB");
 					RunCompilationResult? runCompilationResult = RunServerCompilation(textWriter, parsedArgs, buildPaths, environmentVariable, pipeName, keepAliveValue, requestId);
 					if (runCompilationResult.HasValue)
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
 		public Task<RunCompilationResult> RunCompilationAsync(IEnumerable<string> originalArguments, BuildPaths buildPaths, TextWriter textWriter = null)
 		{
-			TaskCompletionSource<RunCompilationResult> tcs = new TaskCompletionSource<RunCompilationResult>();
+			TaskCompletionSource<RunCompilationResult> tcs = new();
 			new Thread((ThreadStart)delegate
 			{
 				try
@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
 		private int RunLocalCompilation(string[] arguments, BuildPaths buildPaths, TextWriter textWriter)
 		{
-			DefaultAnalyzerAssemblyLoader analyzerAssemblyLoader = new DefaultAnalyzerAssemblyLoader();
+			DefaultAnalyzerAssemblyLoader analyzerAssemblyLoader = new();
 			return _compileFunc(arguments, buildPaths, textWriter, analyzerAssemblyLoader);
 		}
 
@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 			BuildResponse result;
 			try
 			{
-				BuildPathsAlt buildPaths2 = new BuildPathsAlt(buildPaths.ClientDirectory, buildPaths.WorkingDirectory, buildPaths.SdkDirectory, buildPaths.TempDirectory);
+				BuildPathsAlt buildPaths2 = new(buildPaths.ClientDirectory, buildPaths.WorkingDirectory, buildPaths.SdkDirectory, buildPaths.TempDirectory);
 				result = BuildServerConnection.RunServerCompilationCoreAsync(requestId ?? Guid.NewGuid(), _language, arguments, buildPaths2, pipeName, keepAlive, libDirectory, _timeoutOverride, _createServerFunc, _logger, CancellationToken.None).Result;
 				if (result == null)
 				{

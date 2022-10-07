@@ -273,97 +273,121 @@ namespace Microsoft.CodeAnalysis.CSharp
             return result;
         }
 
-        private BoundExpression Spill(BoundSpillSequenceBuilder builder, BoundExpression expression, RefKind refKind = RefKind.None, bool sideEffectsOnly = false)
+        private BoundExpression Spill(
+            BoundSpillSequenceBuilder builder,
+            BoundExpression expression,
+            RefKind refKind = RefKind.None,
+            bool sideEffectsOnly = false)
         {
             if (builder.Syntax != null)
-            {
                 _F.Syntax = builder.Syntax;
-            }
+
             while (true)
             {
                 switch (expression.Kind)
                 {
                     case BoundKind.ArrayInitialization:
-                        {
-                            BoundArrayInitialization boundArrayInitialization = (BoundArrayInitialization)expression;
-                            ImmutableArray<BoundExpression> initializers = VisitExpressionList(ref builder, boundArrayInitialization.Initializers, default(ImmutableArray<RefKind>), forceSpill: true);
-                            return boundArrayInitialization.Update(initializers);
-                        }
+                        var arrayInitialization = (BoundArrayInitialization)expression;
+                        var newInitializers = VisitExpressionList(ref builder, arrayInitialization.Initializers, forceSpill: true);
+                        return arrayInitialization.Update(newInitializers);
+
                     case BoundKind.ArgListOperator:
-                        {
-                            BoundArgListOperator boundArgListOperator = (BoundArgListOperator)expression;
-                            ImmutableArray<BoundExpression> arguments = VisitExpressionList(ref builder, boundArgListOperator.Arguments, boundArgListOperator.ArgumentRefKindsOpt, forceSpill: true);
-                            return boundArgListOperator.Update(arguments, boundArgListOperator.ArgumentRefKindsOpt, boundArgListOperator.Type);
-                        }
-                    case (BoundKind)255:
-                        goto IL_011f;
+                        var argumentList = (BoundArgListOperator)expression;
+                        var newArgs = VisitExpressionList(ref builder, argumentList.Arguments, argumentList.ArgumentRefKindsOpt, forceSpill: true);
+                        return argumentList.Update(newArgs, argumentList.ArgumentRefKindsOpt, argumentList.Type);
+
+                    case SpillSequenceBuilderKind:
+                        var sequenceBuilder = (BoundSpillSequenceBuilder)expression;
+                        builder.Include(sequenceBuilder);
+                        expression = sequenceBuilder.Value;
+                        continue;
+
                     case BoundKind.Sequence:
-                        if (refKind != 0)
+                        // neither the side-effects nor the value of the sequence contains await 
+                        // (otherwise it would be converted to a SpillSequenceBuilder).
+                        if (refKind != RefKind.None)
                         {
                             return expression;
                         }
-                        break;
+
+                        goto default;
+
                     case BoundKind.ThisReference:
                     case BoundKind.BaseReference:
-                        if (refKind != 0 || expression.Type!.IsReferenceType)
+                        if (refKind != RefKind.None || expression.Type.IsReferenceType)
                         {
                             return expression;
                         }
-                        break;
+
+                        goto default;
+
                     case BoundKind.Parameter:
-                        if (refKind != 0)
+                        if (refKind != RefKind.None)
                         {
                             return expression;
                         }
-                        break;
+
+                        goto default;
+
                     case BoundKind.Local:
+                        var local = (BoundLocal)expression;
+                        if (local.LocalSymbol.SynthesizedKind == SynthesizedLocalKind.Spill || refKind != RefKind.None)
                         {
-                            BoundLocal boundLocal = (BoundLocal)expression;
-                            if (boundLocal.LocalSymbol.SynthesizedKind == SynthesizedLocalKind.Spill || refKind != 0)
-                            {
-                                return boundLocal;
-                            }
-                            break;
+                            return local;
                         }
+
+                        goto default;
+
                     case BoundKind.FieldAccess:
+                        var field = (BoundFieldAccess)expression;
+                        var fieldSymbol = field.FieldSymbol;
+                        if (fieldSymbol.IsStatic)
                         {
-                            BoundFieldAccess boundFieldAccess = (BoundFieldAccess)expression;
-                            FieldSymbol fieldSymbol = boundFieldAccess.FieldSymbol;
-                            if (fieldSymbol.IsStatic)
+                            // no need to spill static fields if used as locations or if readonly
+                            if (refKind != RefKind.None || fieldSymbol.IsReadOnly)
                             {
-                                if (refKind != 0 || fieldSymbol.IsReadOnly)
-                                {
-                                    return boundFieldAccess;
-                                }
+                                return field;
                             }
-                            else if (refKind != 0)
-                            {
-                                BoundExpression receiver = Spill(builder, boundFieldAccess.ReceiverOpt, fieldSymbol.ContainingType.IsValueType ? refKind : RefKind.None);
-                                return boundFieldAccess.Update(receiver, fieldSymbol, boundFieldAccess.ConstantValueOpt, boundFieldAccess.ResultKind, boundFieldAccess.Type);
-                            }
-                            break;
+                            goto default;
                         }
-                    case BoundKind.TypeExpression:
+
+                        if (refKind == RefKind.None) goto default;
+
+                        var receiver = Spill(builder, field.ReceiverOpt, fieldSymbol.ContainingType.IsValueType ? refKind : RefKind.None);
+                        return field.Update(receiver, fieldSymbol, field.ConstantValueOpt, field.ResultKind, field.Type);
+
                     case BoundKind.Literal:
+                    case BoundKind.TypeExpression:
                         return expression;
+
                     case BoundKind.ConditionalReceiver:
+                        // we will rewrite this as a part of rewriting whole LoweredConditionalAccess
+                        // later, if needed
                         return expression;
+
+                    default:
+                        if (expression.Type.IsVoidType() || sideEffectsOnly)
+                        {
+                            builder.AddStatement(_F.ExpressionStatement(expression));
+                            return null;
+                        }
+                        else
+                        {
+                            BoundAssignmentOperator assignToTemp;
+
+                            var replacement = _F.StoreToTemp(
+                                expression,
+                                out assignToTemp,
+                                refKind: refKind,
+                                kind: SynthesizedLocalKind.Spill,
+                                syntaxOpt: _F.Syntax);
+
+                            builder.AddLocal(replacement.LocalSymbol);
+                            builder.AddStatement(_F.ExpressionStatement(assignToTemp));
+                            return replacement;
+                        }
                 }
-                break;
-            IL_011f:
-                BoundSpillSequenceBuilder boundSpillSequenceBuilder = (BoundSpillSequenceBuilder)expression;
-                builder.Include(boundSpillSequenceBuilder);
-                expression = boundSpillSequenceBuilder.Value;
             }
-            if (expression.Type.IsVoidType() || sideEffectsOnly)
-            {
-                builder.AddStatement(_F.ExpressionStatement(expression));
-                return null;
-            }
-            BoundLocal boundLocal2 = _F.StoreToTemp(expression, out BoundAssignmentOperator store, refKind, SynthesizedLocalKind.Spill, _F.Syntax);
-            builder.AddLocal(boundLocal2.LocalSymbol);
-            builder.AddStatement(_F.ExpressionStatement(store));
-            return boundLocal2;
         }
 
         private ImmutableArray<BoundExpression> VisitExpressionList(ref BoundSpillSequenceBuilder builder, ImmutableArray<BoundExpression> args, ImmutableArray<RefKind> refKinds = default(ImmutableArray<RefKind>), bool forceSpill = false, bool sideEffectsOnly = false)

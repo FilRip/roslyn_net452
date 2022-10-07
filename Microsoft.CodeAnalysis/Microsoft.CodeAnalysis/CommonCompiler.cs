@@ -1280,8 +1280,8 @@ namespace Microsoft.CodeAnalysis
                                                                                                                     select kvp;
             consoleOutput.WriteLine();
             func = (double d) => (!(d < 0.001)) ? string.Format(culture2, "{0,8:##0.000}", d) : string.Format(culture2, "{0,8:<0.000}", 0.001);
-            Func<int, string> func2 = (int i) => string.Format("{0,5}", (i < 1) ? "<1" : i.ToString());
-            Func<string, string> func3 = (string? s) => "   " + s;
+            string func2(int i) => string.Format("{0,5}", (i < 1) ? "<1" : i.ToString());
+            string func3(string? s) => "   " + s;
             string text = string.Format("{0,8}", CodeAnalysisResources.AnalyzerExecutionTimeColumnHeader);
             string text2 = string.Format("{0,5}", "%");
             string text3 = func3(CodeAnalysisResources.AnalyzerNameColumnHeader);

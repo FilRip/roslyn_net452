@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.Debugging
                     return customDebugInfoRecord.Data;
                 }
             }
-            return default(ImmutableArray<byte>);
+            return default;
         }
 
         public static IEnumerable<CustomDebugInfoRecord> GetCustomDebugInfoRecords(byte[] customDebugInfo)
@@ -210,120 +210,149 @@ namespace Microsoft.CodeAnalysis.Debugging
             offset += size - 8;
         }
 
-        public static ImmutableArray<ImmutableArray<string>> GetCSharpGroupedImportStrings<TArg>(int methodToken, TArg arg, Func<int, TArg, byte[]> getMethodCustomDebugInfo, Func<int, TArg, ImmutableArray<string>> getMethodImportStrings, out ImmutableArray<string> externAliasStrings)
+        /// <summary>
+        /// Get the import strings for a given method, following forward pointers as necessary.
+        /// </summary>
+        /// <returns>
+        /// For each namespace enclosing the method, a list of import strings, innermost to outermost.
+        /// There should always be at least one entry, for the global namespace.
+        /// </returns>
+        public static ImmutableArray<ImmutableArray<string>> GetCSharpGroupedImportStrings<TArg>(
+            int methodToken,
+            TArg arg,
+            Func<int, TArg, byte[]> getMethodCustomDebugInfo,
+            Func<int, TArg, ImmutableArray<string>> getMethodImportStrings,
+            out ImmutableArray<string> externAliasStrings)
         {
-            externAliasStrings = default(ImmutableArray<string>);
-            ImmutableArray<short> immutableArray = default(ImmutableArray<short>);
-            bool flag = false;
-            while (true)
+            externAliasStrings = default;
+
+            ImmutableArray<short> groupSizes = default;
+            var seenForward = false;
+
+        RETRY:
+            var bytes = getMethodCustomDebugInfo(methodToken, arg);
+            if (bytes == null)
             {
-            IL_0012:
-                byte[] array = getMethodCustomDebugInfo(methodToken, arg);
-                if (array == null)
-                {
-                    return default(ImmutableArray<ImmutableArray<string>>);
-                }
-                foreach (CustomDebugInfoRecord customDebugInfoRecord in GetCustomDebugInfoRecords(array))
-                {
-                    switch (customDebugInfoRecord.Kind)
-                    {
-                        case CustomDebugInfoKind.UsingGroups:
-                            if (!immutableArray.IsDefault)
-                            {
-                                throw new InvalidOperationException($"Expected at most one Using record for method {FormatMethodToken(methodToken)}");
-                            }
-                            immutableArray = DecodeUsingRecord(customDebugInfoRecord.Data);
-                            break;
-                        case CustomDebugInfoKind.ForwardMethodInfo:
-                            if (!externAliasStrings.IsDefault)
-                            {
-                                throw new InvalidOperationException($"Did not expect both Forward and ForwardToModule records for method {FormatMethodToken(methodToken)}");
-                            }
-                            methodToken = DecodeForwardRecord(customDebugInfoRecord.Data);
-                            if (!flag)
-                            {
-                                flag = true;
-                                goto IL_0012;
-                            }
-                            break;
-                        case CustomDebugInfoKind.ForwardModuleInfo:
-                            {
-                                if (!externAliasStrings.IsDefault)
-                                {
-                                    throw new InvalidOperationException($"Expected at most one ForwardToModule record for method {FormatMethodToken(methodToken)}");
-                                }
-                                int arg2 = DecodeForwardToModuleRecord(customDebugInfoRecord.Data);
-                                ImmutableArray<string> immutableArray2 = getMethodImportStrings(arg2, arg);
-                                ArrayBuilder<string> instance = ArrayBuilder<string>.GetInstance();
-                                ImmutableArray<string>.Enumerator enumerator2 = immutableArray2.GetEnumerator();
-                                while (enumerator2.MoveNext())
-                                {
-                                    string current2 = enumerator2.Current;
-                                    if (IsCSharpExternAliasInfo(current2))
-                                    {
-                                        instance.Add(current2);
-                                    }
-                                }
-                                externAliasStrings = instance.ToImmutableAndFree();
-                                break;
-                            }
-                    }
-                }
-                break;
+                return default;
             }
-            if (immutableArray.IsDefault)
+
+            foreach (var record in GetCustomDebugInfoRecords(bytes))
             {
-                return default(ImmutableArray<ImmutableArray<string>>);
-            }
-            ImmutableArray<string> immutableArray3 = getMethodImportStrings(methodToken, arg);
-            ArrayBuilder<ImmutableArray<string>> instance2 = ArrayBuilder<ImmutableArray<string>>.GetInstance(immutableArray.Length);
-            ArrayBuilder<string> instance3 = ArrayBuilder<string>.GetInstance();
-            int i = 0;
-            ImmutableArray<short>.Enumerator enumerator3 = immutableArray.GetEnumerator();
-            while (enumerator3.MoveNext())
-            {
-                short current3 = enumerator3.Current;
-                int num = 0;
-                while (num < current3)
+                switch (record.Kind)
                 {
-                    if (i >= immutableArray3.Length)
-                    {
-                        throw new InvalidOperationException($"Group size indicates more imports than there are import strings (method {FormatMethodToken(methodToken)}).");
-                    }
-                    string text = immutableArray3[i];
-                    if (IsCSharpExternAliasInfo(text))
-                    {
-                        throw new InvalidOperationException($"Encountered extern alias info before all import strings were consumed (method {FormatMethodToken(methodToken)}).");
-                    }
-                    instance3.Add(text);
-                    num++;
-                    i++;
+                    case CustomDebugInfoKind.UsingGroups:
+                        if (!groupSizes.IsDefault)
+                        {
+                            throw new InvalidOperationException(string.Format("Expected at most one Using record for method {0}", FormatMethodToken(methodToken)));
+                        }
+
+                        groupSizes = DecodeUsingRecord(record.Data);
+                        break;
+
+                    case CustomDebugInfoKind.ForwardMethodInfo:
+                        if (!externAliasStrings.IsDefault)
+                        {
+                            throw new InvalidOperationException(string.Format("Did not expect both Forward and ForwardToModule records for method {0}", FormatMethodToken(methodToken)));
+                        }
+
+                        methodToken = DecodeForwardRecord(record.Data);
+
+                        // Follow at most one forward link (as in FUNCBRECEE::ensureNamespaces).
+                        // NOTE: Dev11 may produce chains of forward links (e.g. for System.Collections.Immutable).
+                        if (!seenForward)
+                        {
+                            seenForward = true;
+                            goto RETRY;
+                        }
+
+                        break;
+
+                    case CustomDebugInfoKind.ForwardModuleInfo:
+                        if (!externAliasStrings.IsDefault)
+                        {
+                            throw new InvalidOperationException(string.Format("Expected at most one ForwardToModule record for method {0}", FormatMethodToken(methodToken)));
+                        }
+
+                        var moduleInfoMethodToken = DecodeForwardToModuleRecord(record.Data);
+
+                        var allModuleInfoImportStrings = getMethodImportStrings(moduleInfoMethodToken, arg);
+
+                        var externAliasBuilder = ArrayBuilder<string>.GetInstance();
+
+                        foreach (var importString in allModuleInfoImportStrings)
+                        {
+                            if (IsCSharpExternAliasInfo(importString))
+                            {
+                                externAliasBuilder.Add(importString);
+                            }
+                        }
+
+                        externAliasStrings = externAliasBuilder.ToImmutableAndFree();
+                        break;
                 }
-                instance2.Add(instance3.ToImmutable());
-                instance3.Clear();
             }
+
+            if (groupSizes.IsDefault)
+            {
+                // This can happen in malformed PDBs (e.g. chains of forwards).
+                return default;
+            }
+
+            var importStrings = getMethodImportStrings(methodToken, arg);
+
+            var resultBuilder = ArrayBuilder<ImmutableArray<string>>.GetInstance(groupSizes.Length);
+            var groupBuilder = ArrayBuilder<string>.GetInstance();
+            var pos = 0;
+
+            foreach (var groupSize in groupSizes)
+            {
+                for (var i = 0; i < groupSize; i++, pos++)
+                {
+                    if (pos >= importStrings.Length)
+                    {
+                        throw new InvalidOperationException(string.Format("Group size indicates more imports than there are import strings (method {0}).", FormatMethodToken(methodToken)));
+                    }
+
+                    var importString = importStrings[pos];
+                    if (IsCSharpExternAliasInfo(importString))
+                    {
+                        throw new InvalidOperationException(string.Format("Encountered extern alias info before all import strings were consumed (method {0}).", FormatMethodToken(methodToken)));
+                    }
+
+                    groupBuilder.Add(importString);
+                }
+
+                resultBuilder.Add(groupBuilder.ToImmutable());
+                groupBuilder.Clear();
+            }
+
             if (externAliasStrings.IsDefault)
             {
-                for (; i < immutableArray3.Length; i++)
+                // Extern alias detail strings (prefix "Z") are not included in the group counts.
+                for (; pos < importStrings.Length; pos++)
                 {
-                    string text2 = immutableArray3[i];
-                    if (!IsCSharpExternAliasInfo(text2))
+                    var importString = importStrings[pos];
+                    if (!IsCSharpExternAliasInfo(importString))
                     {
-                        throw new InvalidOperationException($"Expected only extern alias info strings after consuming the indicated number of imports (method {FormatMethodToken(methodToken)}).");
+                        throw new InvalidOperationException(string.Format("Expected only extern alias info strings after consuming the indicated number of imports (method {0}).", FormatMethodToken(methodToken)));
                     }
-                    instance3.Add(text2);
+
+                    groupBuilder.Add(importString);
                 }
-                externAliasStrings = instance3.ToImmutableAndFree();
+
+                externAliasStrings = groupBuilder.ToImmutableAndFree();
             }
             else
             {
-                instance3.Free();
-                if (i < immutableArray3.Length)
+                groupBuilder.Free();
+
+                if (pos < importStrings.Length)
                 {
-                    throw new InvalidOperationException($"Group size indicates fewer imports than there are import strings (method {FormatMethodToken(methodToken)}).");
+                    throw new InvalidOperationException(string.Format("Group size indicates fewer imports than there are import strings (method {0}).", FormatMethodToken(methodToken)));
                 }
             }
-            return instance2.ToImmutableAndFree();
+
+            return resultBuilder.ToImmutableAndFree();
         }
 
         public static ImmutableArray<string> GetVisualBasicImportStrings<TArg>(int methodToken, TArg arg, Func<int, TArg, ImmutableArray<string>> getMethodImportStrings)

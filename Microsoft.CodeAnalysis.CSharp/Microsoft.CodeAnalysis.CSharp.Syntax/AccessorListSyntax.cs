@@ -6,13 +6,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
     {
         private SyntaxNode? accessors;
 
-        public SyntaxToken OpenBraceToken => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AccessorListSyntax)base.Green).openBraceToken, base.Position, 0);
+        public SyntaxToken OpenBraceToken => new(this, ((InternalSyntax.AccessorListSyntax)base.Green).openBraceToken, base.Position, 0);
 
-        public SyntaxList<AccessorDeclarationSyntax> Accessors => new SyntaxList<AccessorDeclarationSyntax>(GetRed(ref accessors, 1));
+        public SyntaxList<AccessorDeclarationSyntax> Accessors => new(GetRed(ref accessors, 1));
 
-        public SyntaxToken CloseBraceToken => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AccessorListSyntax)base.Green).closeBraceToken, GetChildPosition(2), GetChildIndex(2));
+        public SyntaxToken CloseBraceToken => new(this, ((InternalSyntax.AccessorListSyntax)base.Green).closeBraceToken, GetChildPosition(2), GetChildIndex(2));
 
-        internal AccessorListSyntax(Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
+        internal AccessorListSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
             : base(green, parent, position)
         {
         }

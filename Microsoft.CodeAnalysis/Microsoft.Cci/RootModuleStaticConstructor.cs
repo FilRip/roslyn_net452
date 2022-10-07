@@ -57,7 +57,7 @@ namespace Microsoft.Cci
 
         public IMarshallingInformation ReturnValueMarshallingInformation => null;
 
-        public ImmutableArray<byte> ReturnValueMarshallingDescriptor => default(ImmutableArray<byte>);
+        public ImmutableArray<byte> ReturnValueMarshallingDescriptor => default;
 
         public IEnumerable<SecurityAttribute> SecurityAttributes => null;
 
@@ -111,7 +111,7 @@ namespace Microsoft.Cci
 
         public IImportScope ImportScope => null;
 
-        public DebugId MethodId => default(DebugId);
+        public DebugId MethodId => default;
 
         public ImmutableArray<StateMachineHoistedLocalScope> StateMachineHoistedLocalScopes => ImmutableArray<StateMachineHoistedLocalScope>.Empty;
 

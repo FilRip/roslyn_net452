@@ -386,39 +386,37 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool DoesInputTypeContain(BoundExpression argument, TypeSymbol formalParameterType, TypeParameterSymbol typeParameter)
         {
-            TypeSymbol delegateOrFunctionPointerType = formalParameterType.GetDelegateOrFunctionPointerType();
+            // SPEC: If E is a method group or an anonymous function and T is a delegate
+            // SPEC: type or expression tree type then all the parameter types of T are
+            // SPEC: input types of E with type T.
+
+            var delegateOrFunctionPointerType = formalParameterType.GetDelegateOrFunctionPointerType();
             if ((object)delegateOrFunctionPointerType == null)
             {
-                return false;
+                return false; // No input types.
             }
-            bool flag = delegateOrFunctionPointerType.IsFunctionPointer();
-            if (!flag || argument.Kind == BoundKind.UnconvertedAddressOfOperator)
+
+            var isFunctionPointer = delegateOrFunctionPointerType.IsFunctionPointer();
+            if ((isFunctionPointer && argument.Kind != BoundKind.UnconvertedAddressOfOperator) ||
+                (!isFunctionPointer && argument.Kind is not (BoundKind.UnboundLambda or BoundKind.MethodGroup)))
             {
-                if (!flag)
-                {
-                    BoundKind kind = argument.Kind;
-                    if (kind != BoundKind.UnboundLambda && kind != BoundKind.MethodGroup)
-                    {
-                        goto IL_003a;
-                    }
-                }
-                ImmutableArray<ParameterSymbol> immutableArray = delegateOrFunctionPointerType.DelegateOrFunctionPointerParameters();
-                if (immutableArray.IsDefaultOrEmpty)
-                {
-                    return false;
-                }
-                ImmutableArray<ParameterSymbol>.Enumerator enumerator = immutableArray.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    if (enumerator.Current.Type.ContainsTypeParameter(typeParameter))
-                    {
-                        return true;
-                    }
-                }
+                return false; // No input types.
+            }
+
+            var parameters = delegateOrFunctionPointerType.DelegateOrFunctionPointerParameters();
+            if (parameters.IsDefaultOrEmpty)
+            {
                 return false;
             }
-            goto IL_003a;
-        IL_003a:
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Type.ContainsTypeParameter(typeParameter))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -434,47 +432,45 @@ namespace Microsoft.CodeAnalysis.CSharp
             return false;
         }
 
-        private static bool DoesOutputTypeContain(BoundExpression argument, TypeSymbol formalParameterType, TypeParameterSymbol typeParameter)
+        private static bool DoesOutputTypeContain(BoundExpression argument, TypeSymbol formalParameterType,
+            TypeParameterSymbol typeParameter)
         {
-            TypeSymbol delegateOrFunctionPointerType = formalParameterType.GetDelegateOrFunctionPointerType();
+            // SPEC: If E is a method group or an anonymous function and T is a delegate
+            // SPEC: type or expression tree type then the return type of T is an output type
+            // SPEC: of E with type T.
+
+            var delegateOrFunctionPointerType = formalParameterType.GetDelegateOrFunctionPointerType();
             if ((object)delegateOrFunctionPointerType == null)
             {
                 return false;
             }
-            bool flag = delegateOrFunctionPointerType.IsFunctionPointer();
-            if (!flag || argument.Kind == BoundKind.UnconvertedAddressOfOperator)
+
+            var isFunctionPointer = delegateOrFunctionPointerType.IsFunctionPointer();
+            if ((isFunctionPointer && argument.Kind != BoundKind.UnconvertedAddressOfOperator) ||
+                (!isFunctionPointer && argument.Kind is not (BoundKind.UnboundLambda or BoundKind.MethodGroup)))
             {
-                if (!flag)
-                {
-                    BoundKind kind = argument.Kind;
-                    if (kind != BoundKind.UnboundLambda && kind != BoundKind.MethodGroup)
-                    {
-                        goto IL_003d;
-                    }
-                }
-                MethodSymbol methodSymbol;
-                if (!(delegateOrFunctionPointerType is NamedTypeSymbol namedTypeSymbol))
-                {
-                    if (!(delegateOrFunctionPointerType is FunctionPointerTypeSymbol functionPointerTypeSymbol))
-                    {
-                        throw ExceptionUtilities.UnexpectedValue(delegateOrFunctionPointerType);
-                    }
-                    methodSymbol = functionPointerTypeSymbol.Signature;
-                }
-                else
-                {
-                    methodSymbol = namedTypeSymbol.DelegateInvokeMethod;
-                }
-                MethodSymbol methodSymbol2 = methodSymbol;
-                if ((object)methodSymbol2 == null || methodSymbol2.HasUseSiteError)
-                {
-                    return false;
-                }
-                return methodSymbol2.ReturnType?.ContainsTypeParameter(typeParameter) ?? false;
+                return false;
             }
-            goto IL_003d;
-        IL_003d:
-            return false;
+
+            MethodSymbol method = delegateOrFunctionPointerType switch
+            {
+                NamedTypeSymbol n => n.DelegateInvokeMethod,
+                FunctionPointerTypeSymbol f => f.Signature,
+                _ => throw ExceptionUtilities.UnexpectedValue(delegateOrFunctionPointerType)
+            };
+
+            if ((object)method == null || method.HasUseSiteError)
+            {
+                return false;
+            }
+
+            var returnType = method.ReturnType;
+            if ((object)returnType == null)
+            {
+                return false;
+            }
+
+            return returnType.ContainsTypeParameter(typeParameter);
         }
 
         private bool HasUnfixedParamInOutputType(BoundExpression argument, TypeSymbol formalParameterType)
@@ -937,39 +933,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool FunctionPointerRefKindsEqual(FunctionPointerMethodSymbol sourceSignature, FunctionPointerMethodSymbol targetSignature)
         {
-            bool flag = sourceSignature.RefKind == targetSignature.RefKind;
-            bool flag2;
-            if (flag)
-            {
-                bool isDefault = sourceSignature.ParameterRefKinds.IsDefault;
-                bool isDefault2 = targetSignature.ParameterRefKinds.IsDefault;
-                if (isDefault)
-                {
-                    if (!isDefault2)
-                    {
-                        goto IL_0039;
-                    }
-                    flag2 = true;
-                }
-                else
-                {
-                    if (isDefault2)
-                    {
-                        goto IL_0039;
-                    }
-                    flag2 = sourceSignature.ParameterRefKinds.SequenceEqual(targetSignature.ParameterRefKinds);
-                }
-                goto IL_0054;
-            }
-            goto IL_0056;
-        IL_0056:
-            return flag;
-        IL_0039:
-            flag2 = false;
-            goto IL_0054;
-        IL_0054:
-            flag = flag2;
-            goto IL_0056;
+            return sourceSignature.RefKind == targetSignature.RefKind
+                   && (sourceSignature.ParameterRefKinds.IsDefault, targetSignature.ParameterRefKinds.IsDefault) switch
+                   {
+                       (true, false) or (false, true) => false,
+                       (true, true) => true,
+                       _ => sourceSignature.ParameterRefKinds.SequenceEqual(targetSignature.ParameterRefKinds)
+                   };
         }
 
         private void ExactTypeArgumentInference(NamedTypeSymbol source, NamedTypeSymbol target, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -1459,70 +1429,114 @@ namespace Microsoft.CodeAnalysis.CSharp
             return true;
         }
 
-        private static TypeWithAnnotations Fix(HashSet<TypeWithAnnotations> exact, HashSet<TypeWithAnnotations> lower, HashSet<TypeWithAnnotations> upper, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConversionsBase conversions)
+        private static TypeWithAnnotations Fix(
+            HashSet<TypeWithAnnotations> exact,
+            HashSet<TypeWithAnnotations> lower,
+            HashSet<TypeWithAnnotations> upper,
+            ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
+            ConversionsBase conversions)
         {
-            Dictionary<TypeWithAnnotations, TypeWithAnnotations> dictionary = new Dictionary<TypeWithAnnotations, TypeWithAnnotations>(EqualsIgnoringDynamicTupleNamesAndNullabilityComparer.Instance);
+            // UNDONE: This method makes a lot of garbage.
+
+            // SPEC: An unfixed type parameter with a set of bounds is fixed as follows:
+
+            // SPEC: * The set of candidate types starts out as the set of all types in
+            // SPEC:   the bounds.
+
+            // SPEC: * We then examine each bound in turn. For each exact bound U of Xi,
+            // SPEC:   all types which are not identical to U are removed from the candidate set.
+
+            // Optimization: if we have two or more exact bounds, fixing is impossible.
+
+            var candidates = new Dictionary<TypeWithAnnotations, TypeWithAnnotations>(EqualsIgnoringDynamicTupleNamesAndNullabilityComparer.Instance);
+
+            // Optimization: if we have one exact bound then we need not add any
+            // inexact bounds; we're just going to remove them anyway.
+
             if (exact == null)
             {
                 if (lower != null)
                 {
-                    AddAllCandidates(dictionary, lower, VarianceKind.Out, conversions);
+                    // Lower bounds represent co-variance.
+                    AddAllCandidates(candidates, lower, VarianceKind.Out, conversions);
                 }
                 if (upper != null)
                 {
-                    AddAllCandidates(dictionary, upper, VarianceKind.In, conversions);
+                    // Lower bounds represent contra-variance.
+                    AddAllCandidates(candidates, upper, VarianceKind.In, conversions);
                 }
             }
             else
             {
-                AddAllCandidates(dictionary, exact, VarianceKind.None, conversions);
-                if (dictionary.Count >= 2)
+                // Exact bounds represent invariance.
+                AddAllCandidates(candidates, exact, VarianceKind.None, conversions);
+                if (candidates.Count >= 2)
                 {
-                    return default(TypeWithAnnotations);
+                    return default;
                 }
             }
-            if (dictionary.Count == 0)
+
+            if (candidates.Count == 0)
             {
-                return default(TypeWithAnnotations);
+                return default;
             }
-            ArrayBuilder<TypeWithAnnotations> instance = ArrayBuilder<TypeWithAnnotations>.GetInstance();
-            GetAllCandidates(dictionary, instance);
+
+            // Don't mutate the collection as we're iterating it.
+            var initialCandidates = ArrayBuilder<TypeWithAnnotations>.GetInstance();
+            GetAllCandidates(candidates, initialCandidates);
+
+            // SPEC:   For each lower bound U of Xi all types to which there is not an
+            // SPEC:   implicit conversion from U are removed from the candidate set.
+
             if (lower != null)
             {
-                MergeOrRemoveCandidates(dictionary, lower, instance, conversions, VarianceKind.Out, ref useSiteInfo);
+                MergeOrRemoveCandidates(candidates, lower, initialCandidates, conversions, VarianceKind.Out, ref useSiteInfo);
             }
+
+            // SPEC:   For each upper bound U of Xi all types from which there is not an
+            // SPEC:   implicit conversion to U are removed from the candidate set.
+
             if (upper != null)
             {
-                MergeOrRemoveCandidates(dictionary, upper, instance, conversions, VarianceKind.In, ref useSiteInfo);
+                MergeOrRemoveCandidates(candidates, upper, initialCandidates, conversions, VarianceKind.In, ref useSiteInfo);
             }
-            instance.Clear();
-            GetAllCandidates(dictionary, instance);
-            TypeWithAnnotations result = default(TypeWithAnnotations);
-            ArrayBuilder<TypeWithAnnotations>.Enumerator enumerator = instance.GetEnumerator();
-            while (enumerator.MoveNext())
+
+            initialCandidates.Clear();
+            GetAllCandidates(candidates, initialCandidates);
+
+            // SPEC: * If among the remaining candidate types there is a unique type V to
+            // SPEC:   which there is an implicit conversion from all the other candidate
+            // SPEC:   types, then the parameter is fixed to V.
+            TypeWithAnnotations best = default;
+            foreach (var candidate in initialCandidates)
             {
-                TypeWithAnnotations current = enumerator.Current;
-                ArrayBuilder<TypeWithAnnotations>.Enumerator enumerator2 = instance.GetEnumerator();
-                while (enumerator2.MoveNext())
+                foreach (var candidate2 in initialCandidates)
                 {
-                    TypeWithAnnotations current2 = enumerator2.Current;
-                    if (current.Equals(current2, TypeCompareKind.ConsiderEverything) || ImplicitConversionExists(current2, current, ref useSiteInfo, conversions.WithNullability(includeNullability: false)))
+                    if (!candidate.Equals(candidate2, TypeCompareKind.ConsiderEverything) &&
+                        !ImplicitConversionExists(candidate2, candidate, ref useSiteInfo, conversions.WithNullability(false)))
                     {
-                        continue;
+                        goto OuterBreak;
                     }
-                    goto IL_0100;
                 }
-                if (!result.HasType)
+
+                if (!best.HasType)
                 {
-                    result = current;
-                    continue;
+                    best = candidate;
                 }
-                result = default(TypeWithAnnotations);
-                break;
-            IL_0100:;
+                else
+                {
+                    // best candidate is not unique
+                    best = default;
+                    break;
+                }
+
+            OuterBreak:
+                ;
             }
-            instance.Free();
-            return result;
+
+            initialCandidates.Free();
+
+            return best;
         }
 
         private static bool ImplicitConversionExists(TypeWithAnnotations sourceWithAnnotations, TypeWithAnnotations destinationWithAnnotations, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConversionsBase conversions)

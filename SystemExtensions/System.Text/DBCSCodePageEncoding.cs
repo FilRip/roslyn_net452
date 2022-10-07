@@ -84,9 +84,9 @@ namespace System.Text
 				}
 				_bytesUnknown = ptr2->ByteReplace;
 				charUnknown = ptr2->UnicodeReplace;
-				if (base.DecoderFallback is InternalDecoderBestFitFallback)
+				if (base.DecoderFallback is InternalDecoderBestFitFallback fallback)
 				{
-					((InternalDecoderBestFitFallback)base.DecoderFallback).cReplacement = charUnknown;
+					fallback.cReplacement = charUnknown;
 				}
 				_byteCountUnknown = 1;
 				if (_bytesUnknown > 255)

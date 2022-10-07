@@ -118,7 +118,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             FreeSlot(local);
         }
 
-        public LocalDefinition AllocateSlot(ITypeReference type, LocalSlotConstraints constraints, ImmutableArray<bool> dynamicTransformFlags = default(ImmutableArray<bool>), ImmutableArray<string> tupleElementNames = default(ImmutableArray<string>))
+        public LocalDefinition AllocateSlot(ITypeReference type, LocalSlotConstraints constraints, ImmutableArray<bool> dynamicTransformFlags = default, ImmutableArray<string> tupleElementNames = default)
         {
             if (!FreeSlots.TryPop(new LocalSignature(type, constraints), out var value))
             {

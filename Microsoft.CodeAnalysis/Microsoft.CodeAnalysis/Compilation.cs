@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis
                     try
                     {
                         StrongNameFileSystem fileSystem = _strongNameProvider!.FileSystem;
-                        Func<string, Stream> factory = (string path) => fileSystem.CreateFileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+                        Stream factory(string path) => fileSystem.CreateFileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
                         text = Path.Combine(fileSystem.GetTempPath(), Guid.NewGuid().ToString("N"));
                         stream = FileUtilities.CreateFileStreamChecked(factory, text);
                     }

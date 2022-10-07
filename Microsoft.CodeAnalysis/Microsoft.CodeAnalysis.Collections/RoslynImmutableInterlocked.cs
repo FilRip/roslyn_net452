@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.Collections
 
         public static bool InterlockedInitialize<TKey, TValue>(ref ImmutableSegmentedDictionary<TKey, TValue> location, ImmutableSegmentedDictionary<TKey, TValue> value) where TKey : notnull
         {
-            return InterlockedCompareExchange(ref location, value, default(ImmutableSegmentedDictionary<TKey, TValue>)).IsDefault;
+            return InterlockedCompareExchange(ref location, value, default).IsDefault;
         }
 
         public static TValue GetOrAdd<TKey, TValue, TArg>(ref ImmutableSegmentedDictionary<TKey, TValue> location, TKey key, Func<TKey, TArg, TValue> valueFactory, TArg factoryArgument) where TKey : notnull

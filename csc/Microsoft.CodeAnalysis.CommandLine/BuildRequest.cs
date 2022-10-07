@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
 		public static BuildRequest Create(RequestLanguage language, IList<string> args, string workingDirectory, string tempDirectory, string compilerHash, Guid? requestId = null, string? keepAlive = null, string? libDirectory = null)
 		{
-			List<Argument> list = new List<Argument>(args.Count + 1 + ((libDirectory != null) ? 1 : 0));
+			List<Argument> list = new(args.Count + 1 + ((libDirectory != null) ? 1 : 0));
 			list.Add(new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory));
 			list.Add(new Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory));
 			if (keepAlive != null)
@@ -109,13 +109,13 @@ namespace Microsoft.CodeAnalysis.CommandLine
 			byte[] requestBuffer = new byte[num];
 			await BuildProtocolConstants.ReadAllAsync(inStream, requestBuffer, num, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 			cancellationToken.ThrowIfCancellationRequested();
-			using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(requestBuffer), Encoding.Unicode))
+			using (BinaryReader binaryReader = new(new MemoryStream(requestBuffer), Encoding.Unicode))
 			{
 				Guid value = readGuid(binaryReader);
 				RequestLanguage language = (RequestLanguage)binaryReader.ReadUInt32();
 				string compilerHash = binaryReader.ReadString();
 				uint num2 = binaryReader.ReadUInt32();
-				List<Argument> list = new List<Argument>((int)num2);
+				List<Argument> list = new((int)num2);
 				for (int i = 0; i < num2; i++)
 				{
 					cancellationToken.ThrowIfCancellationRequested();
@@ -134,12 +134,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
 			}
 		}
 
-		public async Task WriteAsync(Stream outStream, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task WriteAsync(Stream outStream, CancellationToken cancellationToken = default)
 		{
-			using MemoryStream memoryStream = new MemoryStream();
-			using BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.Unicode);
-			writer.Write(RequestId.ToByteArray());
-			writer.Write((uint)Language);
+			using MemoryStream memoryStream = new();
+			using BinaryWriter writer = new(memoryStream, Encoding.Unicode);
+			writer.Write(RequestId.ToByteArray());			writer.Write((uint)Language);
 			writer.Write(CompilerHash);
 			writer.Write(Arguments.Count);
 			foreach (Argument argument in Arguments)

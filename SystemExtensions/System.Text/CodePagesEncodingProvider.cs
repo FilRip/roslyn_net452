@@ -7,9 +7,9 @@ namespace System.Text
 	{
 		private static readonly EncodingProvider s_singleton = new CodePagesEncodingProvider();
 
-		private Dictionary<int, Encoding> _encodings = new Dictionary<int, Encoding>();
+		private Dictionary<int, Encoding> _encodings = new();
 
-		private ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
+		private ReaderWriterLockSlim _cacheLock = new();
 
 		private const int ISCIIAssemese = 57006;
 

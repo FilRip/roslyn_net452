@@ -1195,54 +1195,48 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable disable
+
         private CSharpSyntaxNode GetBindingRootOrInitializer(CSharpSyntaxNode node)
         {
             CSharpSyntaxNode bindingRoot = GetBindingRoot(node);
-            if (bindingRoot is ParameterSyntax parameterSyntax)
+
+            // if binding root is parameter, make it equal value
+            // we need to do this since node map doesn't contain bound node for parameter
+            if (bindingRoot is ParameterSyntax parameter && parameter.Default?.FullSpan.Contains(node.Span) == true)
             {
-                EqualsValueClauseSyntax? @default = parameterSyntax.Default;
-                if (@default != null && @default!.FullSpan.Contains(node.Span))
+                return parameter.Default;
+            }
+
+            // if binding root is field variable declarator, make it initializer
+            // we need to do this since node map doesn't contain bound node for field/event variable declarator
+            if (bindingRoot is VariableDeclaratorSyntax variableDeclarator && variableDeclarator.Initializer?.FullSpan.Contains(node.Span) == true)
+            {
+                if (variableDeclarator.Parent?.Parent.IsKind(SyntaxKind.FieldDeclaration) == true ||
+                    variableDeclarator.Parent?.Parent.IsKind(SyntaxKind.EventFieldDeclaration) == true)
                 {
-                    return parameterSyntax.Default;
+                    return variableDeclarator.Initializer;
                 }
             }
-            if (bindingRoot is VariableDeclaratorSyntax variableDeclaratorSyntax)
+
+            // if binding root is enum member declaration, make it equal value
+            // we need to do this since node map doesn't contain bound node for enum member decl
+            if (bindingRoot is EnumMemberDeclarationSyntax enumMember && enumMember.EqualsValue?.FullSpan.Contains(node.Span) == true)
             {
-                EqualsValueClauseSyntax? initializer = variableDeclaratorSyntax.Initializer;
-                if (initializer != null && initializer!.FullSpan.Contains(node.Span))
-                {
-                    CSharpSyntaxNode? parent = variableDeclaratorSyntax.Parent;
-                    if (parent == null || !parent!.Parent.IsKind(SyntaxKind.FieldDeclaration))
-                    {
-                        CSharpSyntaxNode? parent2 = variableDeclaratorSyntax.Parent;
-                        if (parent2 == null || !parent2!.Parent.IsKind(SyntaxKind.EventFieldDeclaration))
-                        {
-                            goto IL_00ac;
-                        }
-                    }
-                    return variableDeclaratorSyntax.Initializer;
-                }
+                return enumMember.EqualsValue;
             }
-            goto IL_00ac;
-        IL_00ac:
-            if (bindingRoot is EnumMemberDeclarationSyntax enumMemberDeclarationSyntax)
+
+            // if binding root is property member declaration, make it equal value
+            // we need to do this since node map doesn't contain bound node for property initializer
+            if (bindingRoot is PropertyDeclarationSyntax propertyMember && propertyMember.Initializer?.FullSpan.Contains(node.Span) == true)
             {
-                EqualsValueClauseSyntax? equalsValue = enumMemberDeclarationSyntax.EqualsValue;
-                if (equalsValue != null && equalsValue!.FullSpan.Contains(node.Span))
-                {
-                    return enumMemberDeclarationSyntax.EqualsValue;
-                }
+                return propertyMember.Initializer;
             }
-            if (bindingRoot is PropertyDeclarationSyntax propertyDeclarationSyntax)
-            {
-                EqualsValueClauseSyntax? initializer2 = propertyDeclarationSyntax.Initializer;
-                if (initializer2 != null && initializer2!.FullSpan.Contains(node.Span))
-                {
-                    return propertyDeclarationSyntax.Initializer;
-                }
-            }
+
             return bindingRoot;
         }
+
+#nullable enable
 
         private IOperation GetRootOperation()
         {

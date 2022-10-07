@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         public SyntaxToken OpenBraceToken => openBraceToken;
 
-        public Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AccessorDeclarationSyntax> Accessors => new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AccessorDeclarationSyntax>(accessors);
+        public CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AccessorDeclarationSyntax> Accessors => new(accessors);
 
         public SyntaxToken CloseBraceToken => closeBraceToken;
 

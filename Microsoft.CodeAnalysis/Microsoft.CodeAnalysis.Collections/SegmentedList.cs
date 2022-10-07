@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 _list = list;
                 _index = 0;
                 _version = list._version;
-                _current = default(T);
+                _current = default;
             }
 
             public void Dispose()
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
                 }
                 _index = _list._size + 1;
-                _current = default(T);
+                _current = default;
                 return false;
             }
 
@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
                 }
                 _index = 0;
-                _current = default(T);
+                _current = default;
             }
         }
 
@@ -441,7 +441,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     return _items[i];
                 }
             }
-            return default(T);
+            return default;
         }
 
         public SegmentedList<T> FindAll(Predicate<T> match)
@@ -509,7 +509,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     return _items[num];
                 }
             }
-            return default(T);
+            return default;
         }
 
         public int FindLastIndex(Predicate<T> match)
@@ -838,7 +838,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 SegmentedArray.Copy(_items, index + 1, _items, index, _size - index);
             }
-            _items[_size] = default(T);
+            _items[_size] = default;
             _version++;
         }
 

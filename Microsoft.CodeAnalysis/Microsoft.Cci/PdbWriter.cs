@@ -452,7 +452,7 @@ namespace Microsoft.Cci
             }
             else
             {
-                algorithmId = default(Guid);
+                algorithmId = default;
                 checksum = null;
             }
             immutableArray = sourceInfo.EmbeddedTextBlob;

@@ -87,73 +87,103 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return null;
         }
 
+        /// <summary>
+        /// Lookup an immediately nested type referenced from metadata, names should be
+        /// compared case-sensitively.
+        /// </summary>
+        /// <param name="emittedTypeName">
+        /// Simple type name, possibly with generic name mangling.
+        /// </param>
+        /// <returns>
+        /// Symbol for the type, or MissingMetadataSymbol if the type isn't found.
+        /// </returns>
         internal virtual NamedTypeSymbol LookupMetadataType(ref MetadataTypeName emittedTypeName)
         {
-            if (Kind == SymbolKind.ErrorType)
+            NamespaceOrTypeSymbol scope = this;
+
+            if (scope.Kind == SymbolKind.ErrorType)
             {
-                return new MissingMetadataTypeSymbol.Nested((NamedTypeSymbol)this, ref emittedTypeName);
+                return new MissingMetadataTypeSymbol.Nested((NamedTypeSymbol)scope, ref emittedTypeName);
             }
-            NamedTypeSymbol namedTypeSymbol = null;
-            bool isNamespace = IsNamespace;
-            ImmutableArray<NamedTypeSymbol>.Enumerator enumerator;
-            if (emittedTypeName.IsMangled && (emittedTypeName.ForcedArity == -1 || emittedTypeName.ForcedArity == emittedTypeName.InferredArity))
+
+            NamedTypeSymbol? namedType = null;
+
+            ImmutableArray<NamedTypeSymbol> namespaceOrTypeMembers;
+            bool isTopLevel = scope.IsNamespace;
+
+            if (emittedTypeName.IsMangled)
             {
-                enumerator = GetTypeMembers(emittedTypeName.UnmangledTypeName).GetEnumerator();
-                while (enumerator.MoveNext())
+                if (emittedTypeName.ForcedArity == -1 || emittedTypeName.ForcedArity == emittedTypeName.InferredArity)
                 {
-                    NamedTypeSymbol current = enumerator.Current;
-                    if (emittedTypeName.InferredArity == current.Arity && current.MangleName)
+                    // Let's handle mangling case first.
+                    namespaceOrTypeMembers = scope.GetTypeMembers(emittedTypeName.UnmangledTypeName);
+
+                    foreach (var named in namespaceOrTypeMembers)
                     {
-                        if ((object)namedTypeSymbol != null)
+                        if (emittedTypeName.InferredArity == named.Arity && named.MangleName)
                         {
-                            namedTypeSymbol = null;
-                            break;
+                            if ((object?)namedType != null)
+                            {
+                                namedType = null;
+                                break;
+                            }
+
+                            namedType = named;
                         }
-                        namedTypeSymbol = current;
                     }
                 }
             }
-            int num = emittedTypeName.ForcedArity;
+
+            // Now try lookup without removing generic arity mangling.
+            int forcedArity = emittedTypeName.ForcedArity;
+
             if (emittedTypeName.UseCLSCompliantNameArityEncoding)
             {
+                // Only types with arity 0 are acceptable, we already examined types with mangled names.
                 if (emittedTypeName.InferredArity > 0)
                 {
-                    goto IL_0100;
+                    goto Done;
                 }
-                if (num == -1)
+                else if (forcedArity == -1)
                 {
-                    num = 0;
+                    forcedArity = 0;
                 }
-                else if (num != 0)
+                else if (forcedArity != 0)
                 {
-                    goto IL_0100;
+                    goto Done;
                 }
             }
-            enumerator = GetTypeMembers(emittedTypeName.TypeName).GetEnumerator();
-            while (enumerator.MoveNext())
+
+            namespaceOrTypeMembers = scope.GetTypeMembers(emittedTypeName.TypeName);
+
+            foreach (var named in namespaceOrTypeMembers)
             {
-                NamedTypeSymbol current2 = enumerator.Current;
-                if (!current2.MangleName && (num == -1 || num == current2.Arity))
+                if (!named.MangleName && (forcedArity == -1 || forcedArity == named.Arity))
                 {
-                    if ((object)namedTypeSymbol != null)
+                    if ((object?)namedType != null)
                     {
-                        namedTypeSymbol = null;
+                        namedType = null;
                         break;
                     }
-                    namedTypeSymbol = current2;
+
+                    namedType = named;
                 }
             }
-            goto IL_0100;
-        IL_0100:
-            if ((object)namedTypeSymbol == null)
+
+        Done:
+            if ((object?)namedType == null)
             {
-                if (isNamespace)
+                if (isTopLevel)
                 {
-                    return new MissingMetadataTypeSymbol.TopLevel(ContainingModule, ref emittedTypeName);
+                    return new MissingMetadataTypeSymbol.TopLevel(scope.ContainingModule, ref emittedTypeName);
                 }
-                return new MissingMetadataTypeSymbol.Nested((NamedTypeSymbol)this, ref emittedTypeName);
+                else
+                {
+                    return new MissingMetadataTypeSymbol.Nested((NamedTypeSymbol)scope, ref emittedTypeName);
+                }
             }
-            return namedTypeSymbol;
+
+            return namedType;
         }
 
         internal IEnumerable<NamespaceOrTypeSymbol>? GetNamespaceOrTypeByQualifiedName(IEnumerable<string> qualifiedName)

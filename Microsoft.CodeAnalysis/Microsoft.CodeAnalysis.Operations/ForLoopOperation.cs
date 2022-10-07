@@ -70,47 +70,26 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (!Before.IsEmpty)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto IL_005e;
+                    if (!Before.IsEmpty) return (true, 0, 0);
+                    else goto case 0;
+                case 0 when previousIndex + 1 < Before.Length:
+                    return (true, 0, previousIndex + 1);
                 case 0:
-                    if (previousIndex + 1 < Before.Length)
-                    {
-                        return (true, 0, previousIndex + 1);
-                    }
-                    goto IL_005e;
+                    if (Condition != null) return (true, 1, 0);
+                    else goto case 1;
                 case 1:
-                    if (base.Body != null)
-                    {
-                        return (true, 2, 0);
-                    }
-                    goto case 2;
+                    if (Body != null) return (true, 2, 0);
+                    else goto case 2;
                 case 2:
-                    if (!AtLoopBottom.IsEmpty)
-                    {
-                        return (true, 3, 0);
-                    }
-                    goto case 4;
+                    if (!AtLoopBottom.IsEmpty) return (true, 3, 0);
+                    else goto case 3;
+                case 3 when previousIndex + 1 < AtLoopBottom.Length:
+                    return (true, 3, previousIndex + 1);
                 case 3:
-                    if (previousIndex + 1 < AtLoopBottom.Length)
-                    {
-                        return (true, 3, previousIndex + 1);
-                    }
-                    goto case 4;
                 case 4:
                     return (false, 4, 0);
                 default:
-                    {
-                        throw ExceptionUtilities.UnexpectedValue((previousSlot, previousIndex));
-                    }
-                IL_005e:
-                    if (Condition != null)
-                    {
-                        return (true, 1, 0);
-                    }
-                    goto case 1;
+                    throw ExceptionUtilities.UnexpectedValue((previousSlot, previousIndex));
             }
         }
 

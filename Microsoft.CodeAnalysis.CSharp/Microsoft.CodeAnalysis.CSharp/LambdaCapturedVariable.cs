@@ -45,36 +45,37 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return GeneratedNames.ThisProxyFieldName();
             }
-            if (variable is LocalSymbol localSymbol)
+
+            var local = variable as LocalSymbol;
+            if ((object)local != null)
             {
-                if (localSymbol.SynthesizedKind == SynthesizedLocalKind.LambdaDisplayClass)
+                if (local.SynthesizedKind == SynthesizedLocalKind.LambdaDisplayClass)
                 {
                     return GeneratedNames.MakeLambdaDisplayLocalName(uniqueId++);
                 }
-                if (localSymbol.SynthesizedKind == SynthesizedLocalKind.ExceptionFilterAwaitHoistedExceptionLocal)
+
+                if (local.SynthesizedKind == SynthesizedLocalKind.ExceptionFilterAwaitHoistedExceptionLocal)
                 {
-                    return GeneratedNames.MakeHoistedLocalFieldName(localSymbol.SynthesizedKind, uniqueId++);
+                    return GeneratedNames.MakeHoistedLocalFieldName(local.SynthesizedKind, uniqueId++);
                 }
-                if (localSymbol.SynthesizedKind == SynthesizedLocalKind.InstrumentationPayload)
+
+                if (local.SynthesizedKind == SynthesizedLocalKind.InstrumentationPayload)
                 {
                     return GeneratedNames.MakeSynthesizedInstrumentationPayloadLocalFieldName(uniqueId++);
                 }
-                if (localSymbol.SynthesizedKind == SynthesizedLocalKind.UserDefined)
+
+                if (local.SynthesizedKind == SynthesizedLocalKind.UserDefined &&
+                    (local.ScopeDesignatorOpt?.Kind() == SyntaxKind.SwitchSection ||
+                     local.ScopeDesignatorOpt?.Kind() == SyntaxKind.SwitchExpressionArm))
                 {
-                    SyntaxNode scopeDesignatorOpt = localSymbol.ScopeDesignatorOpt;
-                    if (scopeDesignatorOpt == null || scopeDesignatorOpt.Kind() != SyntaxKind.SwitchSection)
-                    {
-                        SyntaxNode scopeDesignatorOpt2 = localSymbol.ScopeDesignatorOpt;
-                        if (scopeDesignatorOpt2 == null || scopeDesignatorOpt2.Kind() != SyntaxKind.SwitchExpressionArm)
-                        {
-                            goto IL_00c6;
-                        }
-                    }
-                    return GeneratedNames.MakeHoistedLocalFieldName(localSymbol.SynthesizedKind, uniqueId++, localSymbol.Name);
+                    // The programmer can use the same identifier for pattern variables in different
+                    // sections of a switch statement, but they are all hoisted into
+                    // the same frame for the enclosing switch statement and must be given
+                    // unique field names.
+                    return GeneratedNames.MakeHoistedLocalFieldName(local.SynthesizedKind, uniqueId++, local.Name);
                 }
             }
-            goto IL_00c6;
-        IL_00c6:
+
             return variable.Name;
         }
 

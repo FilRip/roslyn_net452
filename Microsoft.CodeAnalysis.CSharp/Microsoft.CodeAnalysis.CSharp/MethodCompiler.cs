@@ -272,172 +272,224 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void CompileNamedType(NamedTypeSymbol containingType)
         {
-            TypeCompilationState typeCompilationState = new TypeCompilationState(containingType, _compilation, _moduleBeingBuiltOpt);
-            CancellationToken cancellationToken = _cancellationToken;
-            cancellationToken.ThrowIfCancellationRequested();
-            SynthesizedInstanceConstructor synthesizedInstanceConstructor = null;
-            SynthesizedInteractiveInitializerMethod scriptInitializerOpt = null;
-            SynthesizedEntryPointSymbol synthesizedEntryPointSymbol = null;
-            int methodOrdinal = -1;
+            var compilationState = new TypeCompilationState(containingType, _compilation, _moduleBeingBuiltOpt);
+
+            _cancellationToken.ThrowIfCancellationRequested();
+
+            // Find the constructor of a script class.
+            SynthesizedInstanceConstructor scriptCtor = null;
+            SynthesizedInteractiveInitializerMethod scriptInitializer = null;
+            SynthesizedEntryPointSymbol scriptEntryPoint = null;
+            int scriptCtorOrdinal = -1;
             if (containingType.IsScriptClass)
             {
-                synthesizedInstanceConstructor = containingType.GetScriptConstructor();
-                scriptInitializerOpt = containingType.GetScriptInitializer();
-                synthesizedEntryPointSymbol = containingType.GetScriptEntryPoint();
+                // The field initializers of a script class could be arbitrary statements,
+                // including blocks.  Field initializers containing blocks need to
+                // use a MethodBodySemanticModel to build up the appropriate tree of binders, and
+                // MethodBodySemanticModel requires an "owning" method.  That's why we're digging out
+                // the constructor - it will own the field initializers.
+                scriptCtor = containingType.GetScriptConstructor();
+                scriptInitializer = containingType.GetScriptInitializer();
+                scriptEntryPoint = containingType.GetScriptEntryPoint();
             }
-            SynthesizedSubmissionFields synthesizedSubmissionFields = (containingType.IsSubmissionClass ? new SynthesizedSubmissionFields(_compilation, containingType) : null);
-            Binder.ProcessedFieldInitializers processedInitializers = default(Binder.ProcessedFieldInitializers);
-            Binder.ProcessedFieldInitializers processedInitializers2 = default(Binder.ProcessedFieldInitializers);
-            SourceMemberContainerTypeSymbol sourceMemberContainerTypeSymbol = containingType as SourceMemberContainerTypeSymbol;
-            if ((object)sourceMemberContainerTypeSymbol != null)
+
+            var synthesizedSubmissionFields = containingType.IsSubmissionClass ? new SynthesizedSubmissionFields(_compilation, containingType) : null;
+            var processedStaticInitializers = new Binder.ProcessedFieldInitializers();
+            var processedInstanceInitializers = new Binder.ProcessedFieldInitializers();
+
+            var sourceTypeSymbol = containingType as SourceMemberContainerTypeSymbol;
+
+            if ((object)sourceTypeSymbol != null)
             {
-                cancellationToken = _cancellationToken;
-                cancellationToken.ThrowIfCancellationRequested();
-                Binder.BindFieldInitializers(_compilation, scriptInitializerOpt, sourceMemberContainerTypeSymbol.StaticInitializers, _diagnostics, ref processedInitializers);
-                cancellationToken = _cancellationToken;
-                cancellationToken.ThrowIfCancellationRequested();
-                Binder.BindFieldInitializers(_compilation, scriptInitializerOpt, sourceMemberContainerTypeSymbol.InstanceInitializers, _diagnostics, ref processedInitializers2);
-                if (typeCompilationState.Emitting)
+                _cancellationToken.ThrowIfCancellationRequested();
+                Binder.BindFieldInitializers(_compilation, scriptInitializer, sourceTypeSymbol.StaticInitializers, _diagnostics, ref processedStaticInitializers);
+
+                _cancellationToken.ThrowIfCancellationRequested();
+                Binder.BindFieldInitializers(_compilation, scriptInitializer, sourceTypeSymbol.InstanceInitializers, _diagnostics, ref processedInstanceInitializers);
+
+                if (compilationState.Emitting)
                 {
-                    CompileSynthesizedExplicitImplementations(sourceMemberContainerTypeSymbol, typeCompilationState);
+                    CompileSynthesizedExplicitImplementations(sourceTypeSymbol, compilationState);
                 }
             }
-            bool flag = false;
-            ImmutableArray<Symbol> members = containingType.GetMembers();
-            for (int i = 0; i < members.Length; i++)
+
+            // Indicates if a static constructor is in the member,
+            // so we can decide to synthesize a static constructor.
+            bool hasStaticConstructor = false;
+
+            var members = containingType.GetMembers();
+            for (int memberOrdinal = 0; memberOrdinal < members.Length; memberOrdinal++)
             {
-                Symbol symbol = members[i];
-                if (!PassesFilter(_filterOpt, symbol))
+                var member = members[memberOrdinal];
+
+                //When a filter is supplied, limit the compilation of members passing the filter.
+                if (!PassesFilter(_filterOpt, member))
                 {
                     continue;
                 }
-                switch (symbol.Kind)
+
+                switch (member.Kind)
                 {
                     case SymbolKind.NamedType:
-                        symbol.Accept(this, typeCompilationState);
+                        member.Accept(this, compilationState);
                         break;
+
                     case SymbolKind.Method:
                         {
-                            MethodSymbol methodSymbol = (MethodSymbol)symbol;
-                            if (methodSymbol.IsScriptConstructor)
+                            MethodSymbol method = (MethodSymbol)member;
+                            if (method.IsScriptConstructor)
                             {
-                                methodOrdinal = i;
+                                scriptCtorOrdinal = memberOrdinal;
+                                continue;
                             }
-                            else
+
+                            if ((object)method == scriptEntryPoint)
                             {
-                                if ((object)methodSymbol == synthesizedEntryPointSymbol || IsFieldLikeEventAccessor(methodSymbol))
+                                continue;
+                            }
+
+                            if (IsFieldLikeEventAccessor(method))
+                            {
+                                continue;
+                            }
+
+                            if (method.IsPartialDefinition())
+                            {
+                                method = method.PartialImplementationPart;
+                                if ((object)method == null)
                                 {
-                                    break;
+                                    continue;
                                 }
-                                if (methodSymbol.IsPartialDefinition())
-                                {
-                                    methodSymbol = methodSymbol.PartialImplementationPart;
-                                    if ((object)methodSymbol == null)
-                                    {
-                                        break;
-                                    }
-                                }
-                                Binder.ProcessedFieldInitializers processedInitializers3 = ((methodSymbol.MethodKind == MethodKind.Constructor || methodSymbol.IsScriptInitializer) ? processedInitializers2 : ((methodSymbol.MethodKind == MethodKind.StaticConstructor) ? processedInitializers : default(Binder.ProcessedFieldInitializers)));
-                                CompileMethod(methodSymbol, i, ref processedInitializers3, synthesizedSubmissionFields, typeCompilationState);
-                                if (methodSymbol.MethodKind == MethodKind.StaticConstructor)
-                                {
-                                    flag = true;
-                                }
+                            }
+
+                            Binder.ProcessedFieldInitializers processedInitializers =
+                                (method.MethodKind == MethodKind.Constructor || method.IsScriptInitializer) ? processedInstanceInitializers :
+                                method.MethodKind == MethodKind.StaticConstructor ? processedStaticInitializers :
+                                default(Binder.ProcessedFieldInitializers);
+
+                            CompileMethod(method, memberOrdinal, ref processedInitializers, synthesizedSubmissionFields, compilationState);
+
+                            // Set a flag to indicate that a static constructor is created.
+                            if (method.MethodKind == MethodKind.StaticConstructor)
+                            {
+                                hasStaticConstructor = true;
                             }
                             break;
                         }
+
                     case SymbolKind.Property:
-                        if (symbol is SourcePropertySymbolBase sourcePropertySymbolBase && sourcePropertySymbolBase.IsSealed && typeCompilationState.Emitting)
                         {
-                            CompileSynthesizedSealedAccessors(sourcePropertySymbolBase, typeCompilationState);
+                            var sourceProperty = member as SourcePropertySymbolBase;
+                            if ((object)sourceProperty != null && sourceProperty.IsSealed && compilationState.Emitting)
+                            {
+                                CompileSynthesizedSealedAccessors(sourceProperty, compilationState);
+                            }
+                            break;
                         }
-                        break;
+
                     case SymbolKind.Event:
-                        if (symbol is SourceEventSymbol sourceEventSymbol && sourceEventSymbol.HasAssociatedField && !sourceEventSymbol.IsAbstract && typeCompilationState.Emitting)
                         {
-                            CompileFieldLikeEventAccessor(sourceEventSymbol, isAddMethod: true);
-                            CompileFieldLikeEventAccessor(sourceEventSymbol, isAddMethod: false);
+                            SourceEventSymbol eventSymbol = member as SourceEventSymbol;
+                            if ((object)eventSymbol != null && eventSymbol.HasAssociatedField && !eventSymbol.IsAbstract && compilationState.Emitting)
+                            {
+                                CompileFieldLikeEventAccessor(eventSymbol, isAddMethod: true);
+                                CompileFieldLikeEventAccessor(eventSymbol, isAddMethod: false);
+                            }
+                            break;
                         }
-                        break;
+
                     case SymbolKind.Field:
                         {
-                            FieldSymbol fieldSymbol = (FieldSymbol)symbol;
-                            if (!(symbol is TupleErrorFieldSymbol))
+                            var fieldSymbol = (FieldSymbol)member;
+                            if (member is TupleErrorFieldSymbol)
                             {
-                                if (fieldSymbol.IsConst)
-                                {
-                                    ConstantValue constantValue = fieldSymbol.GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false);
-                                    SetGlobalErrorIfTrue(constantValue == null || constantValue.IsBad);
-                                }
-                                if (fieldSymbol.IsFixedSizeBuffer && typeCompilationState.Emitting)
-                                {
-                                    fieldSymbol.FixedImplementationType(typeCompilationState.ModuleBuilderOpt);
-                                }
+                                break;
+                            }
+
+                            if (fieldSymbol.IsConst)
+                            {
+                                // We check specifically for constant fields with bad values because they never result
+                                // in bound nodes being inserted into method bodies (in which case, they would be covered
+                                // by the method-level check).
+                                ConstantValue constantValue = fieldSymbol.GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false);
+                                SetGlobalErrorIfTrue(constantValue == null || constantValue.IsBad);
+                            }
+
+                            if (fieldSymbol.IsFixedSizeBuffer && compilationState.Emitting)
+                            {
+                                // force the generation of implementation types for fixed-size buffers
+                                TypeSymbol discarded = fieldSymbol.FixedImplementationType(compilationState.ModuleBuilderOpt);
                             }
                             break;
                         }
                 }
             }
+
+            // process additional anonymous type members
             if (AnonymousTypeManager.IsAnonymousTypeTemplate(containingType))
             {
-                Binder.ProcessedFieldInitializers processedInitializers4 = default(Binder.ProcessedFieldInitializers);
-                ImmutableArray<MethodSymbol>.Enumerator enumerator = AnonymousTypeManager.GetAnonymousTypeHiddenMethods(containingType).GetEnumerator();
-                while (enumerator.MoveNext())
+                var processedInitializers = default(Binder.ProcessedFieldInitializers);
+                foreach (var method in AnonymousTypeManager.GetAnonymousTypeHiddenMethods(containingType))
                 {
-                    MethodSymbol current = enumerator.Current;
-                    CompileMethod(current, -1, ref processedInitializers4, synthesizedSubmissionFields, typeCompilationState);
+                    CompileMethod(method, -1, ref processedInitializers, synthesizedSubmissionFields, compilationState);
                 }
             }
-            if (_moduleBeingBuiltOpt != null && !flag && !processedInitializers.BoundInitializers.IsDefaultOrEmpty)
+
+            // In the case there are field initializers but we haven't created an implicit static constructor (.cctor) for it,
+            // (since we may not add .cctor implicitly created for decimals into the symbol table)
+            // it is necessary for the compiler to generate the static constructor here if we are emitting.
+            if (_moduleBeingBuiltOpt != null && !hasStaticConstructor && !processedStaticInitializers.BoundInitializers.IsDefaultOrEmpty)
             {
-                MethodSymbol methodSymbol2 = new SynthesizedStaticConstructor(sourceMemberContainerTypeSymbol);
-                if (PassesFilter(_filterOpt, methodSymbol2))
+                MethodSymbol method = new SynthesizedStaticConstructor(sourceTypeSymbol);
+                if (PassesFilter(_filterOpt, method))
                 {
-                    CompileMethod(methodSymbol2, -1, ref processedInitializers, synthesizedSubmissionFields, typeCompilationState);
-                    if (_moduleBeingBuiltOpt.GetMethodBody(methodSymbol2) != null)
+                    CompileMethod(method, -1, ref processedStaticInitializers, synthesizedSubmissionFields, compilationState);
+
+                    // If this method has been successfully built, we emit it.
+                    if (_moduleBeingBuiltOpt.GetMethodBody(method) != null)
                     {
-                        _moduleBeingBuiltOpt.AddSynthesizedDefinition(sourceMemberContainerTypeSymbol, methodSymbol2.GetCciAdapter());
+                        _moduleBeingBuiltOpt.AddSynthesizedDefinition(sourceTypeSymbol, method.GetCciAdapter());
                     }
                 }
             }
-            bool flag2 = !flag && processedInitializers.BoundInitializers.IsDefaultOrEmpty && _compilation.LanguageVersion >= MessageID.IDS_FeatureNullableReferenceTypes.RequiredVersion();
-            bool flag3;
-            if (flag2)
+
+            // If there is no explicit or implicit .cctor and no static initializers, then report
+            // warnings for any static non-nullable fields. (If there is no .cctor, there
+            // shouldn't be any initializers but for robustness, we check both.)
+            if (!hasStaticConstructor &&
+                processedStaticInitializers.BoundInitializers.IsDefaultOrEmpty &&
+                _compilation.LanguageVersion >= MessageID.IDS_FeatureNullableReferenceTypes.RequiredVersion() &&
+                containingType is { IsImplicitlyDeclared: false, TypeKind: TypeKind.Class or TypeKind.Struct or TypeKind.Interface })
             {
-                if ((object)containingType != null && !containingType.IsImplicitlyDeclared)
+                NullableWalker.AnalyzeIfNeeded(
+                    this._compilation,
+                    new SynthesizedStaticConstructor(containingType),
+                    GetSynthesizedEmptyBody(containingType),
+                    _diagnostics.DiagnosticBag,
+                    useConstructorExitWarnings: true,
+                    initialNullableState: null,
+                    getFinalNullableState: false,
+                    finalNullableState: out _);
+            }
+
+            // compile submission constructor last so that synthesized submission fields are collected from all script methods:
+            if (scriptCtor != null && compilationState.Emitting)
+            {
+                var processedInitializers = new Binder.ProcessedFieldInitializers() { BoundInitializers = ImmutableArray<BoundInitializer>.Empty };
+                CompileMethod(scriptCtor, scriptCtorOrdinal, ref processedInitializers, synthesizedSubmissionFields, compilationState);
+                if (synthesizedSubmissionFields != null)
                 {
-                    TypeKind typeKind = containingType.TypeKind;
-                    if (typeKind == TypeKind.Class || typeKind == TypeKind.Interface || typeKind == TypeKind.Struct)
-                    {
-                        flag3 = true;
-                        goto IL_03f7;
-                    }
+                    synthesizedSubmissionFields.AddToType(containingType, compilationState.ModuleBuilderOpt);
                 }
-                flag3 = false;
-                goto IL_03f7;
             }
-            goto IL_03fb;
-        IL_03f7:
-            flag2 = flag3;
-            goto IL_03fb;
-        IL_03fb:
-            if (flag2)
-            {
-                NullableWalker.AnalyzeIfNeeded(_compilation, new SynthesizedStaticConstructor(containingType), GetSynthesizedEmptyBody(containingType), _diagnostics.DiagnosticBag, useConstructorExitWarnings: true, null, getFinalNullableState: false, out var _);
-            }
-            if (synthesizedInstanceConstructor != null && typeCompilationState.Emitting)
-            {
-                Binder.ProcessedFieldInitializers processedFieldInitializers = default(Binder.ProcessedFieldInitializers);
-                processedFieldInitializers.BoundInitializers = ImmutableArray<BoundInitializer>.Empty;
-                Binder.ProcessedFieldInitializers processedInitializers5 = processedFieldInitializers;
-                CompileMethod(synthesizedInstanceConstructor, methodOrdinal, ref processedInitializers5, synthesizedSubmissionFields, typeCompilationState);
-                synthesizedSubmissionFields?.AddToType(containingType, typeCompilationState.ModuleBuilderOpt);
-            }
+
+            // Emit synthesized methods produced during lowering if any
             if (_moduleBeingBuiltOpt != null)
             {
-                CompileSynthesizedMethods(typeCompilationState);
+                CompileSynthesizedMethods(compilationState);
             }
-            typeCompilationState.Free();
+
+            compilationState.Free();
         }
 
         private void CompileSynthesizedMethods(PrivateImplementationDetails privateImplClass, BindingDiagnosticBag diagnostics)

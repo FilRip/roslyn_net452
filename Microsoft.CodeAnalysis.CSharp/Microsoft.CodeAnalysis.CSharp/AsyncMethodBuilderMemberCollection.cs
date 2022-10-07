@@ -147,32 +147,22 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static NamedTypeSymbol ValidateBuilderType(SyntheticBoundNodeFactory F, object builderAttributeArgument, Accessibility desiredAccessibility, bool isGeneric)
         {
-            bool num;
-            if (builderAttributeArgument is NamedTypeSymbol namedTypeSymbol && !namedTypeSymbol.IsErrorType() && !namedTypeSymbol.IsVoidType() && namedTypeSymbol.DeclaredAccessibility == desiredAccessibility)
+            var builderType = builderAttributeArgument as NamedTypeSymbol;
+
+            if ((object)builderType != null &&
+                 !builderType.IsErrorType() &&
+                 !builderType.IsVoidType() &&
+                 builderType.DeclaredAccessibility == desiredAccessibility)
             {
-                if (!isGeneric)
+                bool isArityOk = isGeneric
+                                 ? builderType.IsUnboundGenericType && builderType.ContainingType?.IsGenericType != true && builderType.Arity == 1
+                                 : !builderType.IsGenericType;
+                if (isArityOk)
                 {
-                    num = !namedTypeSymbol.IsGenericType;
-                    goto IL_005c;
-                }
-                if (namedTypeSymbol.IsUnboundGenericType)
-                {
-                    NamedTypeSymbol containingType = namedTypeSymbol.ContainingType;
-                    if ((object)containingType == null || !containingType.IsGenericType)
-                    {
-                        num = namedTypeSymbol.Arity == 1;
-                        goto IL_005c;
-                    }
+                    return builderType;
                 }
             }
-            goto IL_0060;
-        IL_005c:
-            if (num)
-            {
-                return namedTypeSymbol;
-            }
-            goto IL_0060;
-        IL_0060:
+
             F.Diagnostics.Add(ErrorCode.ERR_BadAsyncReturn, F.Syntax.Location);
             return null;
         }

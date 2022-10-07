@@ -70,7 +70,7 @@ namespace Microsoft.Cci
             _documentTable = new List<DocumentRow>(documentCountEstimate);
             _documentIndex = new Dictionary<DebugSourceDocument, int>(documentCountEstimate);
             _methodTable = new List<MethodRow>(methodCountEstimate);
-            _blobs.Add(ImmutableArray<byte>.Empty, default(BlobHandle));
+            _blobs.Add(ImmutableArray<byte>.Empty, default);
             _blobHeapSize = 1;
         }
 
@@ -79,7 +79,7 @@ namespace Microsoft.Cci
             DynamicAnalysisMethodBodyData dynamicAnalysisMethodBodyData = bodyOpt?.DynamicAnalysisData;
             if (dynamicAnalysisMethodBodyData == null)
             {
-                _methodTable.Add(default(MethodRow));
+                _methodTable.Add(default);
                 return;
             }
             BlobHandle spans = SerializeSpans(dynamicAnalysisMethodBodyData.Spans, _documentIndex);
@@ -122,7 +122,7 @@ namespace Microsoft.Cci
         {
             if (guid == Guid.Empty)
             {
-                return default(GuidHandle);
+                return default;
             }
             if (_guids.TryGetValue(guid, out var value))
             {
@@ -138,7 +138,7 @@ namespace Microsoft.Cci
         {
             if (spans.Length == 0)
             {
-                return default(BlobHandle);
+                return default;
             }
             BlobBuilder blobBuilder = new BlobBuilder(4 + spans.Length * 4);
             int num = -1;
@@ -201,8 +201,8 @@ namespace Microsoft.Cci
                 _documentTable.Add(new DocumentRow
                 {
                     Name = SerializeDocumentName(document.Location),
-                    HashAlgorithm = (sourceInfo.Checksum.IsDefault ? default(GuidHandle) : GetOrAddGuid(sourceInfo.ChecksumAlgorithmId)),
-                    Hash = (sourceInfo.Checksum.IsDefault ? default(BlobHandle) : GetOrAddBlob(sourceInfo.Checksum))
+                    HashAlgorithm = (sourceInfo.Checksum.IsDefault ? default : GetOrAddGuid(sourceInfo.ChecksumAlgorithmId)),
+                    Hash = (sourceInfo.Checksum.IsDefault ? default : GetOrAddBlob(sourceInfo.Checksum))
                 });
             }
             return value;

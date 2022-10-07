@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
     {
         private static ResourceManager s_resourceManager;
 
-        internal static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager(typeof(Strings)));
+        internal static ResourceManager ResourceManager => s_resourceManager ??= new ResourceManager(typeof(Strings));
 
         internal static CultureInfo Culture { get; set; }
 

@@ -62,36 +62,21 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (Body != null)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto case 0;
+                    if (Body != null) return (true, 0, 0);
+                    else goto case 0;
                 case 0:
-                    if (!Catches.IsEmpty)
-                    {
-                        return (true, 1, 0);
-                    }
-                    goto IL_0068;
+                    if (!Catches.IsEmpty) return (true, 1, 0);
+                    else goto case 1;
+                case 1 when previousIndex + 1 < Catches.Length:
+                    return (true, 1, previousIndex + 1);
                 case 1:
-                    if (previousIndex + 1 < Catches.Length)
-                    {
-                        return (true, 1, previousIndex + 1);
-                    }
-                    goto IL_0068;
+                    if (Finally != null) return (true, 2, 0);
+                    else goto case 2;
                 case 2:
                 case 3:
                     return (false, 3, 0);
                 default:
-                    {
-                        throw ExceptionUtilities.UnexpectedValue((previousSlot, previousIndex));
-                    }
-                IL_0068:
-                    if (Finally != null)
-                    {
-                        return (true, 2, 0);
-                    }
-                    goto case 2;
+                    throw ExceptionUtilities.UnexpectedValue((previousSlot, previousIndex));
             }
         }
 

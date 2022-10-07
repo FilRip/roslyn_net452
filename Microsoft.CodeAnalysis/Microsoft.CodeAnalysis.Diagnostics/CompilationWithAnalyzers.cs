@@ -483,7 +483,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                                 Location current = enumerator2.Current;
                                 if (current.SourceTree != null && current.SourceTree != model2.SyntaxTree)
                                 {
-                                    hashSet = hashSet ?? new HashSet<SyntaxTree>();
+                                    hashSet ??= new HashSet<SyntaxTree>();
                                     hashSet.Add(current.SourceTree);
                                 }
                             }

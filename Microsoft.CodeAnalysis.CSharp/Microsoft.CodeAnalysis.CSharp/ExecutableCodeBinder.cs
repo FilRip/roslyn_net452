@@ -78,55 +78,52 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return;
             }
-            ImmutableArray<ParameterSymbol>.Enumerator enumerator = iterator.Parameters.GetEnumerator();
-            while (enumerator.MoveNext())
+
+            foreach (var parameter in iterator.Parameters)
             {
-                ParameterSymbol current = enumerator.Current;
-                if (current.RefKind != 0)
+                if (parameter.RefKind != RefKind.None)
                 {
-                    diagnostics.Add(ErrorCode.ERR_BadIteratorArgType, current.Locations[0]);
+                    diagnostics.Add(ErrorCode.ERR_BadIteratorArgType, parameter.Locations[0]);
                 }
-                else if (current.Type.IsUnsafe())
+                else if (parameter.Type.IsUnsafe())
                 {
-                    diagnostics.Add(ErrorCode.ERR_UnsafeIteratorArgType, current.Locations[0]);
+                    diagnostics.Add(ErrorCode.ERR_UnsafeIteratorArgType, parameter.Locations[0]);
                 }
             }
-            Location location = (iterator as SynthesizedSimpleProgramEntryPointSymbol)?.ReturnTypeSyntax.GetLocation() ?? iterator.Locations[0];
+
+            Location errorLocation = (iterator as SynthesizedSimpleProgramEntryPointSymbol)?.ReturnTypeSyntax.GetLocation() ?? iterator.Locations[0];
             if (iterator.IsVararg)
             {
-                diagnostics.Add(ErrorCode.ERR_VarargsIterator, location);
+                // error CS1636: __arglist is not allowed in the parameter list of iterators
+                diagnostics.Add(ErrorCode.ERR_VarargsIterator, errorLocation);
             }
-            SourceMemberMethodSymbol obj = iterator as SourceMemberMethodSymbol;
-            if ((object)obj == null || !obj.IsUnsafe)
+
+            if (((iterator as SourceMemberMethodSymbol)?.IsUnsafe == true || (iterator as LocalFunctionSymbol)?.IsUnsafe == true)
+                && compilation.Options.AllowUnsafe) // Don't cascade
             {
-                LocalFunctionSymbol obj2 = iterator as LocalFunctionSymbol;
-                if ((object)obj2 == null || !obj2.IsUnsafe)
-                {
-                    goto IL_0104;
-                }
+                diagnostics.Add(ErrorCode.ERR_IllegalInnerUnsafe, errorLocation);
             }
-            if (compilation.Options.AllowUnsafe)
-            {
-                diagnostics.Add(ErrorCode.ERR_IllegalInnerUnsafe, location);
-            }
-            goto IL_0104;
-        IL_0104:
-            TypeSymbol returnType = iterator.ReturnType;
+
+            var returnType = iterator.ReturnType;
             RefKind refKind = iterator.RefKind;
-            if (InMethodBinder.GetIteratorElementTypeFromReturnType(compilation, refKind, returnType, location, diagnostics).IsDefault)
+            TypeWithAnnotations elementType = InMethodBinder.GetIteratorElementTypeFromReturnType(compilation, refKind, returnType, errorLocation, diagnostics);
+
+            if (elementType.IsDefault)
             {
-                if (refKind != 0)
+                if (refKind != RefKind.None)
                 {
-                    Binder.Error(diagnostics, ErrorCode.ERR_BadIteratorReturnRef, location, iterator);
+                    Error(diagnostics, ErrorCode.ERR_BadIteratorReturnRef, errorLocation, iterator);
                 }
                 else if (!returnType.IsErrorType())
                 {
-                    Binder.Error(diagnostics, ErrorCode.ERR_BadIteratorReturn, location, iterator, returnType);
+                    Error(diagnostics, ErrorCode.ERR_BadIteratorReturn, errorLocation, iterator, returnType);
                 }
             }
-            if (InMethodBinder.IsAsyncStreamInterface(compilation, refKind, returnType) && !iterator.IsAsync)
+
+            bool asyncInterface = InMethodBinder.IsAsyncStreamInterface(compilation, refKind, returnType);
+            if (asyncInterface && !iterator.IsAsync)
             {
-                diagnostics.Add(ErrorCode.ERR_IteratorMustBeAsync, location, iterator, returnType);
+                diagnostics.Add(ErrorCode.ERR_IteratorMustBeAsync, errorLocation, iterator, returnType);
             }
         }
     }

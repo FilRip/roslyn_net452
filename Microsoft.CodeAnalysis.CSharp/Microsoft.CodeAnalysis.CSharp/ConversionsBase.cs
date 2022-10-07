@@ -2845,7 +2845,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return source;
                 }
                 CompoundUseSiteInfo<AssemblySymbol> inLambdaUseSiteInfo = useSiteInfo;
-                Func<UserDefinedConversionAnalysis, bool> func = (UserDefinedConversionAnalysis conv) => IsEncompassedBy(sourceExpression, source, conv.FromType, ref inLambdaUseSiteInfo);
+                bool func(UserDefinedConversionAnalysis conv) => IsEncompassedBy(sourceExpression, source, conv.FromType, ref inLambdaUseSiteInfo);
                 if (u.Any(func))
                 {
                     TypeSymbol result = MostEncompassedType(u, func, (UserDefinedConversionAnalysis conv) => conv.FromType, ref inLambdaUseSiteInfo);
@@ -2864,7 +2864,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return target;
             }
             CompoundUseSiteInfo<AssemblySymbol> inLambdaUseSiteInfo = useSiteInfo;
-            Func<UserDefinedConversionAnalysis, bool> func = (UserDefinedConversionAnalysis conv) => IsEncompassedBy(null, conv.ToType, target, ref inLambdaUseSiteInfo);
+            bool func(UserDefinedConversionAnalysis conv) => IsEncompassedBy(null, conv.ToType, target, ref inLambdaUseSiteInfo);
             if (u.Any(func))
             {
                 TypeSymbol result = MostEncompassingType(u, func, (UserDefinedConversionAnalysis conv) => conv.ToType, ref inLambdaUseSiteInfo);

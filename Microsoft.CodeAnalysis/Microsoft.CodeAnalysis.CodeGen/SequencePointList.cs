@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     OffsetAndSpan offsetAndSpan = points[i];
                     TextSpan span = offsetAndSpan.Span;
                     bool isHiddenPosition = span == RawSequencePoint.HiddenSequencePointSpan;
-                    FileLinePositionSpan fileLinePositionSpan2 = default(FileLinePositionSpan);
+                    FileLinePositionSpan fileLinePositionSpan2 = default;
                     if (!isHiddenPosition)
                     {
                         fileLinePositionSpan2 = tree.GetMappedLineSpanAndVisibility(span, out isHiddenPosition);

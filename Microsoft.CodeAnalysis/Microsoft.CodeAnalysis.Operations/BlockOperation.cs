@@ -39,17 +39,11 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (!Operations.IsEmpty)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto case 1;
+                    if (!Operations.IsEmpty) return (true, 0, 0);
+                    else goto case 0;
+                case 0 when previousIndex + 1 < Operations.Length:
+                    return (true, 0, previousIndex + 1);
                 case 0:
-                    if (previousIndex + 1 < Operations.Length)
-                    {
-                        return (true, 0, previousIndex + 1);
-                    }
-                    goto case 1;
                 case 1:
                     return (false, 1, 0);
                 default:

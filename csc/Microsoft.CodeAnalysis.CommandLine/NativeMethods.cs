@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 	{
 		internal static readonly IntPtr NullPtr = IntPtr.Zero;
 
-		internal static readonly IntPtr InvalidIntPtr = new IntPtr(-1);
+		internal static readonly IntPtr InvalidIntPtr = new(-1);
 
 		internal const uint NORMAL_PRIORITY_CLASS = 32u;
 

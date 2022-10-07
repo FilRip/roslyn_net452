@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             ImmutableArray<BoundDecisionDagNode> topologicallySortedNodes = TopologicallySortedNodes;
             PooledDictionary<BoundDecisionDagNode, BoundDecisionDagNode> replacement = PooledDictionary<BoundDecisionDagNode, BoundDecisionDagNode>.GetInstance();
-            Func<BoundDecisionDagNode, BoundDecisionDagNode> arg = (BoundDecisionDagNode n) => replacement[n];
+            BoundDecisionDagNode arg(BoundDecisionDagNode n) => replacement[n];
             for (int num = topologicallySortedNodes.Length - 1; num >= 0; num--)
             {
                 BoundDecisionDagNode boundDecisionDagNode = topologicallySortedNodes[num];

@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CommandLine
 		{
 			FatalError.Handler = FailFast.OnFatalException;
 			string responseFile = Path.Combine(buildPaths.ClientDirectory, "csc.rsp");
-			Csc compiler = new Csc(responseFile, buildPaths, args, analyzerLoader);
+			Csc compiler = new(responseFile, buildPaths, args, analyzerLoader);
 			return ConsoleUtil.RunWithUtf8Output(compiler.Arguments.Utf8Output, textWriter, (TextWriter tw) => compiler.Run(tw));
 		}
 	}

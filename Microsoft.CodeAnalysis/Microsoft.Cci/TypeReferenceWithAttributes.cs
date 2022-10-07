@@ -10,7 +10,7 @@ namespace Microsoft.Cci
 
         public ImmutableArray<ICustomAttribute> Attributes { get; }
 
-        public TypeReferenceWithAttributes(ITypeReference typeRef, ImmutableArray<ICustomAttribute> attributes = default(ImmutableArray<ICustomAttribute>))
+        public TypeReferenceWithAttributes(ITypeReference typeRef, ImmutableArray<ICustomAttribute> attributes = default)
         {
             TypeRef = typeRef;
             Attributes = attributes.NullToEmpty();

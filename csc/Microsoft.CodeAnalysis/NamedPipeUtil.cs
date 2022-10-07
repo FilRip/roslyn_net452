@@ -83,9 +83,9 @@ namespace Microsoft.CodeAnalysis
 			{
 				return null;
 			}
-			PipeSecurity pipeSecurity = new PipeSecurity();
+			PipeSecurity pipeSecurity = new();
 			SecurityIdentifier owner = WindowsIdentity.GetCurrent().Owner;
-			PipeAccessRule rule = new PipeAccessRule(owner, PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow);
+			PipeAccessRule rule = new(owner, PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow);
 			pipeSecurity.AddAccessRule(rule);
 			pipeSecurity.SetOwner(owner);
 			return pipeSecurity;

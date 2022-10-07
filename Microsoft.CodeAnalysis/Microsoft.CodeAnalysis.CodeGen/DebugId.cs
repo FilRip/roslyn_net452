@@ -32,9 +32,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            if (obj is DebugId)
+            if (obj is DebugId id)
             {
-                return Equals((DebugId)obj);
+                return Equals(id);
             }
             return false;
         }

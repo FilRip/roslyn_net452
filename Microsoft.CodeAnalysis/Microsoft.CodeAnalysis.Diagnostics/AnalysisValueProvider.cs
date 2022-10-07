@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
             catch (Exception)
             {
-                value = default(TValue);
+                value = default;
                 return false;
             }
         }

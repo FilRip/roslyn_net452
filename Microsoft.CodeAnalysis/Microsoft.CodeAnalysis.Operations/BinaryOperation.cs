@@ -68,17 +68,11 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (LeftOperand != null)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto case 0;
+                    if (LeftOperand != null) return (true, 0, 0);
+                    else goto case 0;
                 case 0:
-                    if (RightOperand != null)
-                    {
-                        return (true, 1, 0);
-                    }
-                    goto case 1;
+                    if (RightOperand != null) return (true, 1, 0);
+                    else goto case 1;
                 case 1:
                 case 2:
                     return (false, 2, 0);

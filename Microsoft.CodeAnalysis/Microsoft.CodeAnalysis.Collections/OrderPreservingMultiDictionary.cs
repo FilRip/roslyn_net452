@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 get
                 {
-                    if (!(_value is ArrayBuilder<V> arrayBuilder))
+                    if (_value is not ArrayBuilder<V> arrayBuilder)
                     {
                         if (index == 0)
                         {
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 get
                 {
-                    if (!(_value is ArrayBuilder<V> arrayBuilder))
+                    if (_value is not ArrayBuilder<V> arrayBuilder)
                     {
                         return ImmutableArray.Create((V)_value);
                     }
@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.Collections
                         return true;
                     }
                 }
-                value = default(V);
+                value = default;
                 return false;
             }
 
@@ -149,8 +149,7 @@ namespace Microsoft.CodeAnalysis.Collections
 
             internal ValueSet WithAddedItem(V item)
             {
-                ArrayBuilder<V> arrayBuilder = _value as ArrayBuilder<V>;
-                if (arrayBuilder == null)
+                if (_value is not ArrayBuilder<V> arrayBuilder)
                 {
                     arrayBuilder = ArrayBuilder<V>.GetInstance(2);
                     arrayBuilder.Add((V)_value);
@@ -256,7 +255,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 return value2.TryGetValue(predicate, arg, out value);
             }
-            value = default(V);
+            value = default;
             return false;
         }
 

@@ -30,7 +30,7 @@ internal static class Interop
 		internal unsafe static int GetLeadByteRanges(int codePage, byte[] leadByteRanges)
 		{
 			int num = 0;
-			CPINFOEXW cPINFOEXW = default(CPINFOEXW);
+			CPINFOEXW cPINFOEXW = default;
 			if (GetCPInfoExW((uint)codePage, 0u, &cPINFOEXW) != 0)
 			{
 				for (int i = 0; i < 10 && leadByteRanges[i] != 0; i += 2)
@@ -45,7 +45,7 @@ internal static class Interop
 
 		internal unsafe static bool TryGetACPCodePage(out int codePage)
 		{
-			CPINFOEXW cPINFOEXW = default(CPINFOEXW);
+			CPINFOEXW cPINFOEXW = default;
 			if (GetCPInfoExW(0u, 0u, &cPINFOEXW) != 0)
 			{
 				codePage = (int)cPINFOEXW.CodePage;

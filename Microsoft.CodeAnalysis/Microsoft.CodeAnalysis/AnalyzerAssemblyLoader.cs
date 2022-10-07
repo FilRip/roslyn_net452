@@ -9,15 +9,15 @@ namespace Microsoft.CodeAnalysis
 {
     public abstract class AnalyzerAssemblyLoader : IAnalyzerAssemblyLoader
     {
-        private readonly object _guard = new object();
+        private readonly object _guard = new();
 
-        private readonly Dictionary<string, Assembly> _loadedAssembliesByPath = new Dictionary<string, Assembly>();
+        private readonly Dictionary<string, Assembly> _loadedAssembliesByPath = new();
 
-        private readonly Dictionary<string, AssemblyIdentity> _loadedAssemblyIdentitiesByPath = new Dictionary<string, AssemblyIdentity>();
+        private readonly Dictionary<string, AssemblyIdentity> _loadedAssemblyIdentitiesByPath = new();
 
-        private readonly Dictionary<AssemblyIdentity, Assembly> _loadedAssembliesByIdentity = new Dictionary<AssemblyIdentity, Assembly>();
+        private readonly Dictionary<AssemblyIdentity, Assembly> _loadedAssembliesByIdentity = new();
 
-        private readonly Dictionary<string, HashSet<string>> _knownAssemblyPathsBySimpleName = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, HashSet<string>> _knownAssemblyPathsBySimpleName = new(StringComparer.OrdinalIgnoreCase);
 
         protected abstract Assembly LoadFromPathImpl(string fullPath);
 
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 else
                 {
-                    if ((object)identity == null)
+                    if (identity is null)
                     {
                         identity = GetOrAddAssemblyIdentity(fullPath);
                     }

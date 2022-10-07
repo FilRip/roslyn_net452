@@ -3,11 +3,11 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Threading;
 
-#nullable enable
+#nullable disable
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
-    internal sealed class PreprocessingSymbol : IPreprocessingSymbol, ISymbol, IEquatable<ISymbol?>
+    internal sealed class PreprocessingSymbol : IPreprocessingSymbol
     {
         private readonly string _name;
 

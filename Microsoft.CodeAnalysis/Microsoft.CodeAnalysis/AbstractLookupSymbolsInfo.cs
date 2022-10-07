@@ -163,24 +163,18 @@ namespace Microsoft.CodeAnalysis
 
             public void GetUniqueSymbolOrArities(out IArityEnumerable? arities, out TSymbol? uniqueSymbol)
             {
-                if (HasUniqueSymbol)
+                if (this.HasUniqueSymbol)
                 {
                     arities = null;
+#nullable disable // Can '_uniqueSymbolOrArities' be null? https://github.com/dotnet/roslyn/issues/39166
                     uniqueSymbol = (TSymbol)_uniqueSymbolOrArities;
-                    return;
-                }
-                object obj;
-                if (_uniqueSymbolOrArities != null || _arityBitVectorOrUniqueArity != 0)
-                {
-                    IArityEnumerable arityEnumerable = this;
-                    obj = arityEnumerable;
+#nullable enable
                 }
                 else
                 {
-                    obj = null;
+                    arities = (_uniqueSymbolOrArities == null && _arityBitVectorOrUniqueArity == 0) ? null : (IArityEnumerable)this;
+                    uniqueSymbol = null;
                 }
-                arities = (IArityEnumerable?)obj;
-                uniqueSymbol = null;
             }
 
             public ArityEnumerator GetEnumerator()

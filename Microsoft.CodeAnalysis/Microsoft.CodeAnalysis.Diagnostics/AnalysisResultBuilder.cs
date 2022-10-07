@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 return;
             }
-            lazyLocalDiagnostics = lazyLocalDiagnostics ?? new Dictionary<TKey, Dictionary<DiagnosticAnalyzer, ImmutableArray<Diagnostic>.Builder>>();
+            lazyLocalDiagnostics ??= new Dictionary<TKey, Dictionary<DiagnosticAnalyzer, ImmutableArray<Diagnostic>.Builder>>();
             foreach (IGrouping<TKey, Diagnostic> item in diagnostics.GroupBy<Diagnostic, TKey>(getKeyFunc))
             {
                 TKey key = item.Key;
@@ -360,7 +360,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         value = AnalyzerActionCounts.Empty;
                     }
                     int suppressionActionCounts = ((current is DiagnosticSuppressor) ? 1 : 0);
-                    TimeSpan executionTime = ((_analyzerExecutionTimeOpt != null) ? _analyzerExecutionTimeOpt![current] : default(TimeSpan));
+                    TimeSpan executionTime = ((_analyzerExecutionTimeOpt != null) ? _analyzerExecutionTimeOpt![current] : default);
                     AnalyzerTelemetryInfo value2 = new(value, suppressionActionCounts, executionTime);
                     builder.Add(current, value2);
                 }

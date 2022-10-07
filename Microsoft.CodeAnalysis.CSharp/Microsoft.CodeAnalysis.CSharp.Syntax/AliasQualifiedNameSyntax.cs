@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         public IdentifierNameSyntax Alias => GetRedAtZero(ref alias);
 
-        public SyntaxToken ColonColonToken => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AliasQualifiedNameSyntax)base.Green).colonColonToken, GetChildPosition(1), GetChildIndex(1));
+        public SyntaxToken ColonColonToken => new(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AliasQualifiedNameSyntax)base.Green).colonColonToken, GetChildPosition(1), GetChildIndex(1));
 
         public SimpleNameSyntax Name => GetRed(ref name, 2);
 

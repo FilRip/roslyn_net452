@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (_syntax.Declaration != null)
             {
                 TypeSyntax type = _syntax.Declaration!.Type;
-                Action<ArrayRankSpecifierSyntax, (ForLoopBinder, ArrayBuilder<LocalSymbol>)> action = delegate (ArrayRankSpecifierSyntax rankSpecifier, (ForLoopBinder binder, ArrayBuilder<LocalSymbol> locals) args)
+                static void action(ArrayRankSpecifierSyntax rankSpecifier, (ForLoopBinder binder, ArrayBuilder<LocalSymbol> locals) args)
                 {
                     SeparatedSyntaxList<ExpressionSyntax>.Enumerator enumerator2 = rankSpecifier.Sizes.GetEnumerator();
                     while (enumerator2.MoveNext())
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             ExpressionVariableFinder.FindExpressionVariables(args.binder, args.locals, current2);
                         }
                     }
-                };
+                }
                 (ForLoopBinder, ArrayBuilder<LocalSymbol>) argument = (this, instance);
                 type.VisitRankSpecifiers(action, in argument);
                 SeparatedSyntaxList<VariableDeclaratorSyntax>.Enumerator enumerator = _syntax.Declaration!.Variables.GetEnumerator();

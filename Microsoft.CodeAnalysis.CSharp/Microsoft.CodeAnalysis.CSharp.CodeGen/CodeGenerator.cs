@@ -4024,142 +4024,129 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             }
         }
 
+        //NOTE: The result of this should be a boolean on the stack.
         private void EmitBinaryCondOperator(BoundBinaryOperator binOp, bool sense)
         {
-            bool flag = sense;
-            BinaryOperatorKind binaryOperatorKind = binOp.OperatorKind.OperatorWithLogical();
-            int num;
-            if (binaryOperatorKind <= BinaryOperatorKind.GreaterThanOrEqual)
+            bool andOrSense = sense;
+            int opIdx;
+
+            switch (binOp.OperatorKind.OperatorWithLogical())
             {
-                if (binaryOperatorKind <= BinaryOperatorKind.NotEqual)
-                {
-                    if (binaryOperatorKind != BinaryOperatorKind.Equal)
+                case BinaryOperatorKind.LogicalOr:
+                    // Rewrite (a || b) as ~(~a && ~b)
+                    andOrSense = !andOrSense;
+                    // Fall through
+                    goto case BinaryOperatorKind.LogicalAnd;
+
+                case BinaryOperatorKind.LogicalAnd:
+                    // ~(a && b) is equivalent to (~a || ~b)
+                    if (!andOrSense)
                     {
-                        if (binaryOperatorKind != BinaryOperatorKind.NotEqual)
-                        {
-                            goto IL_01db;
-                        }
-                        sense = !sense;
+                        // generate (~a || ~b)
+                        EmitShortCircuitingOperator(binOp, sense, sense, true);
                     }
-                    ConstantValue constantValue = binOp.Left.ConstantValue;
-                    BoundExpression boundExpression = binOp.Right;
-                    if (constantValue == null)
+                    else
                     {
-                        constantValue = boundExpression.ConstantValue;
-                        boundExpression = binOp.Left;
+                        // generate (a && b)
+                        EmitShortCircuitingOperator(binOp, sense, !sense, false);
                     }
-                    if (constantValue != null)
+                    return;
+
+                case BinaryOperatorKind.And:
+                    EmitBinaryCondOperatorHelper(ILOpCode.And, binOp.Left, binOp.Right, sense);
+                    return;
+
+                case BinaryOperatorKind.Or:
+                    EmitBinaryCondOperatorHelper(ILOpCode.Or, binOp.Left, binOp.Right, sense);
+                    return;
+
+                case BinaryOperatorKind.Xor:
+                    // Xor is equivalent to not equal.
+                    if (sense)
+                        EmitBinaryCondOperatorHelper(ILOpCode.Xor, binOp.Left, binOp.Right, true);
+                    else
+                        EmitBinaryCondOperatorHelper(ILOpCode.Ceq, binOp.Left, binOp.Right, true);
+                    return;
+
+                case BinaryOperatorKind.NotEqual:
+                    // neq  is emitted as  !eq
+                    sense = !sense;
+                    goto case BinaryOperatorKind.Equal;
+
+                case BinaryOperatorKind.Equal:
+
+                    var constant = binOp.Left.ConstantValue;
+                    var comparand = binOp.Right;
+
+                    if (constant == null)
                     {
-                        if (constantValue.IsDefaultValue)
+                        constant = comparand.ConstantValue;
+                        comparand = binOp.Left;
+                    }
+
+                    if (constant != null)
+                    {
+                        if (constant.IsDefaultValue)
                         {
-                            if (!constantValue.IsFloating)
+                            if (!constant.IsFloating)
                             {
                                 if (sense)
                                 {
-                                    EmitIsNullOrZero(boundExpression, constantValue);
+                                    EmitIsNullOrZero(comparand, constant);
                                 }
                                 else
                                 {
-                                    EmitIsNotNullOrZero(boundExpression, constantValue);
+                                    //  obj != null/0   for pointers and integral numerics is emitted as cgt.un
+                                    EmitIsNotNullOrZero(comparand, constant);
                                 }
                                 return;
                             }
                         }
-                        else if (constantValue.IsBoolean)
+                        else if (constant.IsBoolean)
                         {
-                            EmitExpression(boundExpression, used: true);
+                            // treat  "x = True" ==> "x"
+                            EmitExpression(comparand, true);
                             EmitIsSense(sense);
                             return;
                         }
                     }
+
                     EmitBinaryCondOperatorHelper(ILOpCode.Ceq, binOp.Left, binOp.Right, sense);
                     return;
-                }
-                if (binaryOperatorKind != BinaryOperatorKind.GreaterThan)
-                {
-                    if (binaryOperatorKind != BinaryOperatorKind.LessThan)
-                    {
-                        if (binaryOperatorKind != BinaryOperatorKind.GreaterThanOrEqual)
-                        {
-                            goto IL_01db;
-                        }
-                        num = 3;
-                        sense = !sense;
-                    }
-                    else
-                    {
-                        num = 0;
-                    }
-                }
-                else
-                {
-                    num = 2;
-                }
+
+                case BinaryOperatorKind.LessThan:
+                    opIdx = 0;
+                    break;
+
+                case BinaryOperatorKind.LessThanOrEqual:
+                    opIdx = 1;
+                    sense = !sense; // lte is emitted as !gt 
+                    break;
+
+                case BinaryOperatorKind.GreaterThan:
+                    opIdx = 2;
+                    break;
+
+                case BinaryOperatorKind.GreaterThanOrEqual:
+                    opIdx = 3;
+                    sense = !sense; // gte is emitted as !lt 
+                    break;
+
+                default:
+                    throw ExceptionUtilities.UnexpectedValue(binOp.OperatorKind.OperatorWithLogical());
             }
-            else
-            {
-                if (binaryOperatorKind > BinaryOperatorKind.Xor)
-                {
-                    if (binaryOperatorKind != BinaryOperatorKind.Or)
-                    {
-                        if (binaryOperatorKind != BinaryOperatorKind.LogicalAnd)
-                        {
-                            if (binaryOperatorKind != BinaryOperatorKind.LogicalOr)
-                            {
-                                goto IL_01db;
-                            }
-                            flag = !flag;
-                        }
-                        if (!flag)
-                        {
-                            EmitShortCircuitingOperator(binOp, sense, sense, stopValue: true);
-                        }
-                        else
-                        {
-                            EmitShortCircuitingOperator(binOp, sense, !sense, stopValue: false);
-                        }
-                    }
-                    else
-                    {
-                        EmitBinaryCondOperatorHelper(ILOpCode.Or, binOp.Left, binOp.Right, sense);
-                    }
-                    return;
-                }
-                if (binaryOperatorKind != BinaryOperatorKind.LessThanOrEqual)
-                {
-                    switch (binaryOperatorKind)
-                    {
-                        case BinaryOperatorKind.And:
-                            EmitBinaryCondOperatorHelper(ILOpCode.And, binOp.Left, binOp.Right, sense);
-                            return;
-                        case BinaryOperatorKind.Xor:
-                            if (sense)
-                            {
-                                EmitBinaryCondOperatorHelper(ILOpCode.Xor, binOp.Left, binOp.Right, sense: true);
-                            }
-                            else
-                            {
-                                EmitBinaryCondOperatorHelper(ILOpCode.Ceq, binOp.Left, binOp.Right, sense: true);
-                            }
-                            return;
-                    }
-                    goto IL_01db;
-                }
-                num = 1;
-                sense = !sense;
-            }
+
             if (IsUnsignedBinaryOperator(binOp))
             {
-                num += 4;
+                opIdx += 4;
             }
             else if (IsFloat(binOp.OperatorKind))
             {
-                num += 8;
+                opIdx += 8;
             }
-            EmitBinaryCondOperatorHelper(s_compOpCodes[num], binOp.Left, binOp.Right, sense);
+
+            EmitBinaryCondOperatorHelper(s_compOpCodes[opIdx], binOp.Left, binOp.Right, sense);
             return;
-        IL_01db:
-            throw ExceptionUtilities.UnexpectedValue(binOp.OperatorKind.OperatorWithLogical());
         }
 
         private void EmitIsNotNullOrZero(BoundExpression comparand, ConstantValue nullOrZero)
@@ -5084,23 +5071,15 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             return _builder.InExceptionHandler;
         }
 
+        // Compiler generated return mapped to a block is very likely the synthetic return
+        // that was added at the end of the last block of a void method by analysis.
+        // This is likely to be the last return in the method, so if we have not yet
+        // emitted return sequence, it is convenient to do it right here (if we can).
         private bool CanHandleReturnLabel(BoundReturnStatement boundReturnStatement)
         {
-            if (boundReturnStatement.WasCompilerGenerated)
-            {
-                if (!boundReturnStatement.Syntax.IsKind(SyntaxKind.Block))
-                {
-                    MethodSymbol method = _method;
-                    if ((object)method == null || !method.IsImplicitConstructor)
-                    {
-                        goto IL_003d;
-                    }
-                }
-                return !_builder.InExceptionHandler;
-            }
-            goto IL_003d;
-        IL_003d:
-            return false;
+            return boundReturnStatement.WasCompilerGenerated &&
+                    (boundReturnStatement.Syntax.IsKind(SyntaxKind.Block) || _method?.IsImplicitConstructor == true) &&
+                    !_builder.InExceptionHandler;
         }
 
         private void EmitReturnStatement(BoundReturnStatement boundReturnStatement)
@@ -5322,67 +5301,78 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             EmitSwitchHeader(dispatch.Expression, dispatch.Cases.Select<(ConstantValue, LabelSymbol), KeyValuePair<ConstantValue, object>>(((ConstantValue value, LabelSymbol label) p) => new KeyValuePair<ConstantValue, object>(p.value, p.label)).ToArray(), dispatch.DefaultLabel, dispatch.EqualityMethod);
         }
 
-        private void EmitSwitchHeader(BoundExpression expression, KeyValuePair<ConstantValue, object>[] switchCaseLabels, LabelSymbol fallThroughLabel, MethodSymbol equalityMethod)
+        private void EmitSwitchHeader(
+            BoundExpression expression,
+            KeyValuePair<ConstantValue, object>[] switchCaseLabels,
+            LabelSymbol fallThroughLabel,
+            MethodSymbol equalityMethod)
         {
-            LocalDefinition localDefinition = null;
-            BoundSequence boundSequence = null;
+            LocalDefinition temp = null;
+            LocalOrParameter key;
+            BoundSequence sequence = null;
+
             if (expression.Kind == BoundKind.Sequence)
             {
-                boundSequence = (BoundSequence)expression;
-                DefineLocals(boundSequence);
-                EmitSideEffects(boundSequence);
-                expression = boundSequence.Value;
+                sequence = (BoundSequence)expression;
+                DefineLocals(sequence);
+                EmitSideEffects(sequence);
+                expression = sequence.Value;
             }
+
             if (expression.Kind == BoundKind.SequencePointExpression)
             {
-                BoundSequencePointExpression boundSequencePointExpression = (BoundSequencePointExpression)expression;
-                EmitSequencePoint(boundSequencePointExpression);
-                expression = boundSequencePointExpression.Expression;
+                var sequencePointExpression = (BoundSequencePointExpression)expression;
+                EmitSequencePoint(sequencePointExpression);
+                expression = sequencePointExpression.Expression;
             }
-            BoundKind kind = expression.Kind;
-            LocalOrParameter key;
-            if (kind != BoundKind.Local)
+
+            switch (expression.Kind)
             {
-                if (kind == BoundKind.Parameter)
-                {
-                    BoundParameter boundParameter = (BoundParameter)expression;
-                    if (boundParameter.ParameterSymbol.RefKind == RefKind.None)
+                case BoundKind.Local:
+                    var local = ((BoundLocal)expression).LocalSymbol;
+                    if (local.RefKind == RefKind.None && !IsStackLocal(local))
                     {
-                        key = ParameterSlot(boundParameter);
-                        goto IL_00eb;
+                        key = this.GetLocal(local);
+                        break;
                     }
-                }
+                    goto default;
+
+                case BoundKind.Parameter:
+                    var parameter = (BoundParameter)expression;
+                    if (parameter.ParameterSymbol.RefKind == RefKind.None)
+                    {
+                        key = ParameterSlot(parameter);
+                        break;
+                    }
+                    goto default;
+
+                default:
+                    EmitExpression(expression, true);
+                    temp = AllocateTemp(expression.Type, expression.Syntax);
+                    _builder.EmitLocalStore(temp);
+                    key = temp;
+                    break;
             }
-            else
-            {
-                LocalSymbol localSymbol = ((BoundLocal)expression).LocalSymbol;
-                if (localSymbol.RefKind == RefKind.None && !IsStackLocal(localSymbol))
-                {
-                    key = GetLocal(localSymbol);
-                    goto IL_00eb;
-                }
-            }
-            EmitExpression(expression, used: true);
-            localDefinition = AllocateTemp(expression.Type, expression.Syntax);
-            _builder.EmitLocalStore(localDefinition);
-            key = localDefinition;
-            goto IL_00eb;
-        IL_00eb:
-            if (expression.Type!.SpecialType != SpecialType.System_String)
+
+            // Emit switch jump table
+            if (expression.Type.SpecialType != SpecialType.System_String)
             {
                 _builder.EmitIntegerSwitchJumpTable(switchCaseLabels, fallThroughLabel, key, expression.Type.EnumUnderlyingTypeOrSelf().PrimitiveTypeCode);
             }
             else
             {
-                EmitStringSwitchJumpTable(switchCaseLabels, fallThroughLabel, key, expression.Syntax, equalityMethod);
+                this.EmitStringSwitchJumpTable(switchCaseLabels, fallThroughLabel, key, expression.Syntax, equalityMethod);
             }
-            if (localDefinition != null)
+
+            if (temp != null)
             {
-                FreeTemp(localDefinition);
+                FreeTemp(temp);
             }
-            if (boundSequence != null)
+
+            if (sequence != null)
             {
-                FreeLocals(boundSequence);
+                // sequence was used as a value, can release all its locals.
+                FreeLocals(sequence);
             }
         }
 
@@ -5409,7 +5399,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             {
                 stringLengthRef = _module.Translate(methodSymbol, syntaxNode, _diagnostics);
             }
-            SwitchStringJumpTableEmitter.EmitStringCompareAndBranch emitStringCondBranchDelegate = delegate (LocalOrParameter keyArg, ConstantValue stringConstant, object targetLabel)
+            void emitStringCondBranchDelegate(LocalOrParameter keyArg, ConstantValue stringConstant, object targetLabel)
             {
                 if (stringConstant == ConstantValue.Null)
                 {
@@ -5433,7 +5423,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 {
                     EmitStringCompareAndBranch(key, syntaxNode, stringConstant, targetLabel, stringEqualityMethodRef);
                 }
-            };
+            }
             _builder.EmitStringSwitchJumpTable(switchCaseLabels, fallThroughLabel, key, localDefinition, emitStringCondBranchDelegate, SynthesizedStringSwitchHashMethod.ComputeStringHash);
             if (localDefinition != null)
             {

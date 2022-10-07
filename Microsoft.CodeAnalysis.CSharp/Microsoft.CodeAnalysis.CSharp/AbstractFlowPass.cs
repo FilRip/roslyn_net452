@@ -9,8 +9,6 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public abstract class AbstractFlowPass<TLocalState, TLocalFunctionState> : BoundTreeVisitor where TLocalState : AbstractFlowPass<TLocalState, TLocalFunctionState>.ILocalState where TLocalFunctionState : AbstractFlowPass<TLocalState, TLocalFunctionState>.AbstractLocalFunctionState
@@ -29,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public readonly LabelSymbol Label;
 
-            public PendingBranch(BoundNode branch, TLocalState state, LabelSymbol label, bool isConditionalState = false, TLocalState stateWhenTrue = default(TLocalState), TLocalState stateWhenFalse = default(TLocalState))
+            public PendingBranch(BoundNode branch, TLocalState state, LabelSymbol label, bool isConditionalState = false, TLocalState stateWhenTrue = default, TLocalState stateWhenFalse = default)
             {
                 Branch = branch;
                 State = state.Clone();
@@ -153,14 +151,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected void SetConditionalState(TLocalState whenTrue, TLocalState whenFalse)
         {
             IsConditionalState = true;
-            State = default(TLocalState);
+            State = default;
             StateWhenTrue = whenTrue;
             StateWhenFalse = whenFalse;
         }
 
         protected void SetState(TLocalState newState)
         {
-            StateWhenTrue = (StateWhenFalse = default(TLocalState));
+            StateWhenTrue = (StateWhenFalse = default);
             IsConditionalState = false;
             State = newState;
         }
@@ -331,7 +329,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return RemoveReturns();
         }
 
-        protected ImmutableArray<PendingBranch> Analyze(ref bool badRegion, Optional<TLocalState> initialState = default(Optional<TLocalState>))
+        protected ImmutableArray<PendingBranch> Analyze(ref bool badRegion, Optional<TLocalState> initialState = default)
         {
             ImmutableArray<PendingBranch> result;
             do
@@ -357,7 +355,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected bool ShouldAnalyzeOutParameters(out Location location)
         {
-            if (!(_symbol is MethodSymbol methodSymbol) || methodSymbol.Locations.Length != 1)
+            if (_symbol is not MethodSymbol methodSymbol || methodSymbol.Locations.Length != 1)
             {
                 location = null;
                 return false;
@@ -471,7 +469,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Unsplit();
                 SetConditionalState(UnreachableState(), State);
             }
-            else if ((object)node.Type == null || node.Type!.SpecialType != SpecialType.System_Boolean)
+            else if (node.Type is null || node.Type!.SpecialType != SpecialType.System_Boolean)
             {
                 Unsplit();
             }
@@ -623,7 +621,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected SavedPending SavePending()
         {
-            SavedPending result = new SavedPending(PendingBranches, _labelsSeen);
+            SavedPending result = new(PendingBranches, _labelsSeen);
             PendingBranches = ArrayBuilder<PendingBranch>.GetInstance();
             _labelsSeen = PooledHashSet<BoundStatement>.GetInstance();
             return result;
@@ -738,7 +736,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundNode VisitTupleExpression(BoundTupleExpression node)
         {
-            VisitArguments(node.Arguments, default(ImmutableArray<RefKind>), null);
+            VisitArguments(node.Arguments, default, null);
             return null;
         }
 
@@ -900,7 +898,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override BoundNode VisitCall(BoundCall node)
         {
             bool num = node.Method.CallsAreOmitted(node.SyntaxTree);
-            TLocalState state = default(TLocalState);
+            TLocalState state = default;
             if (num)
             {
                 state = State.Clone();
@@ -939,7 +937,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitReceiverBeforeCall(BoundExpression receiverOpt, MethodSymbol method)
         {
-            if ((object)method == null || method.MethodKind != MethodKind.Constructor)
+            if (method is null || method.MethodKind != MethodKind.Constructor)
             {
                 VisitRvalue(receiverOpt);
             }
@@ -951,11 +949,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return;
             }
-            if ((object)method == null)
+            if (method is null)
             {
                 WriteArgument(receiverOpt, RefKind.Ref, null);
             }
-            else if (method.TryGetThisParameter(out ParameterSymbol thisParameter) && (object)thisParameter != null && !TypeIsImmutable(thisParameter.Type))
+            else if (method.TryGetThisParameter(out ParameterSymbol thisParameter) && thisParameter is object && !TypeIsImmutable(thisParameter.Type))
             {
                 RefKind refKind = thisParameter.RefKind;
                 if (refKind.IsWritableReference())
@@ -980,7 +978,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             MethodSymbol readMethod = GetReadMethod(node.Indexer);
             VisitReceiverBeforeCall(node.ReceiverOpt, readMethod);
             VisitArguments(node.Arguments, node.ArgumentRefKindsOpt, readMethod);
-            if ((object)readMethod != null)
+            if (readMethod is object)
             {
                 VisitReceiverAfterCall(node.ReceiverOpt, readMethod);
             }
@@ -995,9 +993,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             VisitRvalue(node.Argument);
             Symbol patternSymbol = node.PatternSymbol;
             MethodSymbol methodSymbol2;
-            if (!(patternSymbol is PropertySymbol property))
+            if (patternSymbol is not PropertySymbol property)
             {
-                if (!(patternSymbol is MethodSymbol methodSymbol))
+                if (patternSymbol is not MethodSymbol methodSymbol)
                 {
                     throw ExceptionUtilities.UnexpectedValue(node.PatternSymbol);
                 }
@@ -1110,7 +1108,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node.Argument is BoundMethodGroup boundMethodGroup)
             {
-                if ((object)node.MethodOpt != null && node.MethodOpt!.RequiresInstanceReceiver)
+                if (node.MethodOpt is object && node.MethodOpt!.RequiresInstanceReceiver)
                 {
                     if (TrackingRegions)
                     {
@@ -1190,7 +1188,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node.ConversionKind == ConversionKind.MethodGroup)
             {
-                if (node.IsExtensionMethod || ((object)node.SymbolOpt != null && node.SymbolOpt!.RequiresInstanceReceiver))
+                if (node.IsExtensionMethod || (node.SymbolOpt is object && node.SymbolOpt!.RequiresInstanceReceiver))
                 {
                     BoundExpression receiverOpt = ((BoundMethodGroup)node.Operand).ReceiverOpt;
                     if (TrackingRegions)
@@ -1563,7 +1561,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitFieldAccessInternal(BoundExpression receiverOpt, FieldSymbol fieldSymbol)
         {
-            if ((object)fieldSymbol != null && (fieldSymbol.IsFixedSizeBuffer || (!fieldSymbol.IsStatic && fieldSymbol.ContainingType.TypeKind == TypeKind.Struct && receiverOpt != null && receiverOpt.Kind != BoundKind.TypeExpression && (object)receiverOpt.Type != null && !receiverOpt.Type.IsPrimitiveRecursiveStruct())))
+            if (fieldSymbol is object && (fieldSymbol.IsFixedSizeBuffer || (!fieldSymbol.IsStatic && fieldSymbol.ContainingType.TypeKind == TypeKind.Struct && receiverOpt != null && receiverOpt.Kind != BoundKind.TypeExpression && receiverOpt.Type is object && !receiverOpt.Type.IsPrimitiveRecursiveStruct())))
             {
                 VisitLvalue(receiverOpt);
             }
@@ -1697,71 +1695,84 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitBinaryLogicalOperatorChildren(BoundExpression node)
         {
-            ArrayBuilder<BoundExpression> instance = ArrayBuilder<BoundExpression>.GetInstance();
-            BoundExpression boundExpression = node;
+            // Do not blow the stack due to a deep recursion on the left.
+            var stack = ArrayBuilder<BoundExpression>.GetInstance();
+
+            BoundExpression binary;
+            BoundExpression child = node;
+
             while (true)
             {
-                BoundExpression boundExpression2;
-                switch (boundExpression.Kind)
+                var childKind = child.Kind;
+
+                if (childKind == BoundKind.BinaryOperator)
                 {
-                    case BoundKind.BinaryOperator:
-                        {
-                            BoundBinaryOperator boundBinaryOperator = (BoundBinaryOperator)boundExpression;
-                            if (boundBinaryOperator.OperatorKind.IsLogical())
-                            {
-                                boundExpression2 = boundExpression;
-                                boundExpression = boundBinaryOperator.Left;
-                                goto IL_0049;
-                            }
-                            break;
-                        }
-                    case BoundKind.UserDefinedConditionalLogicalOperator:
-                        boundExpression2 = boundExpression;
-                        boundExpression = ((BoundUserDefinedConditionalLogicalOperator)boundExpression2).Left;
-                        goto IL_0049;
+                    var binOp = (BoundBinaryOperator)child;
+
+                    if (!binOp.OperatorKind.IsLogical())
+                    {
+                        break;
+                    }
+
+                    binary = child;
+                    child = binOp.Left;
                 }
-                break;
-            IL_0049:
-                instance.Push(boundExpression2);
-            }
-            VisitCondition(boundExpression);
-            while (true)
-            {
-                BoundExpression boundExpression2 = instance.Pop();
-                BinaryOperatorKind operatorKind;
-                BoundExpression right;
-                switch (boundExpression2.Kind)
+                else if (childKind == BoundKind.UserDefinedConditionalLogicalOperator)
                 {
-                    case BoundKind.BinaryOperator:
-                        {
-                            BoundBinaryOperator obj2 = (BoundBinaryOperator)boundExpression2;
-                            operatorKind = obj2.OperatorKind;
-                            right = obj2.Right;
-                            break;
-                        }
-                    case BoundKind.UserDefinedConditionalLogicalOperator:
-                        {
-                            BoundUserDefinedConditionalLogicalOperator obj = (BoundUserDefinedConditionalLogicalOperator)boundExpression2;
-                            operatorKind = obj.OperatorKind;
-                            right = obj.Right;
-                            break;
-                        }
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(boundExpression2.Kind);
+                    binary = child;
+                    child = ((BoundUserDefinedConditionalLogicalOperator)binary).Left;
                 }
-                bool flag = operatorKind.Operator() == BinaryOperatorKind.And;
-                bool isBool = operatorKind.OperandTypes() == BinaryOperatorKind.Bool;
-                TLocalState leftTrue = StateWhenTrue;
-                TLocalState leftFalse = StateWhenFalse;
-                SetState(flag ? leftTrue : leftFalse);
-                AfterLeftChildOfBinaryLogicalOperatorHasBeenVisited(boundExpression2, right, flag, isBool, ref leftTrue, ref leftFalse);
-                if (instance.Count == 0)
+                else
                 {
                     break;
                 }
-                AdjustConditionalState(boundExpression2);
+
+                stack.Push(binary);
             }
-            instance.Free();
+
+            VisitCondition(child);
+
+            while (true)
+            {
+                binary = stack.Pop();
+
+                BinaryOperatorKind kind;
+                BoundExpression right;
+                switch (binary.Kind)
+                {
+                    case BoundKind.BinaryOperator:
+                        var binOp = (BoundBinaryOperator)binary;
+                        kind = binOp.OperatorKind;
+                        right = binOp.Right;
+                        break;
+                    case BoundKind.UserDefinedConditionalLogicalOperator:
+                        var udBinOp = (BoundUserDefinedConditionalLogicalOperator)binary;
+                        kind = udBinOp.OperatorKind;
+                        right = udBinOp.Right;
+                        break;
+                    default:
+                        throw ExceptionUtilities.UnexpectedValue(binary.Kind);
+                }
+
+                var op = kind.Operator();
+                var isAnd = op == BinaryOperatorKind.And;
+                var isBool = kind.OperandTypes() == BinaryOperatorKind.Bool;
+
+                var leftTrue = this.StateWhenTrue;
+                var leftFalse = this.StateWhenFalse;
+                SetState(isAnd ? leftTrue : leftFalse);
+
+                AfterLeftChildOfBinaryLogicalOperatorHasBeenVisited(binary, right, isAnd, isBool, ref leftTrue, ref leftFalse);
+
+                if (stack.Count == 0)
+                {
+                    break;
+                }
+
+                AdjustConditionalState(binary);
+            }
+
+            stack.Free();
         }
 
         protected virtual void AfterLeftChildOfBinaryLogicalOperatorHasBeenVisited(BoundExpression binary, BoundExpression right, bool isAnd, bool isBool, ref TLocalState leftTrue, ref TLocalState leftFalse)
@@ -1960,7 +1971,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ResolveContinues(node.ContinueLabel);
             LoopTail(node);
             ResolveBreaks(breakState, node.BreakLabel);
-            if (AwaitUsingAndForeachAddsPendingBranch && ((CommonForEachStatementSyntax)node.Syntax).AwaitKeyword != default(SyntaxToken))
+            if (AwaitUsingAndForeachAddsPendingBranch && ((CommonForEachStatementSyntax)node.Syntax).AwaitKeyword != default)
             {
                 PendingBranches.Add(new PendingBranch(node, State, null));
             }
@@ -2415,7 +2426,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitAnonymousObjectCreationExpression(BoundAnonymousObjectCreationExpression node)
         {
-            VisitArguments(node.Arguments, default(ImmutableArray<RefKind>), node.Constructor);
+            VisitArguments(node.Arguments, default, node.Constructor);
             return null;
         }
 
@@ -2464,16 +2475,20 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitObjectInitializerMember(BoundObjectInitializerMember node)
         {
-            if (!node.Arguments.IsDefaultOrEmpty)
+            var arguments = node.Arguments;
+            if (!arguments.IsDefaultOrEmpty)
             {
                 MethodSymbol method = null;
-                Symbol? memberSymbol = node.MemberSymbol;
-                if ((object)memberSymbol != null && memberSymbol!.Kind == SymbolKind.Property)
+
+                if (node.MemberSymbol?.Kind == SymbolKind.Property)
                 {
-                    method = GetReadMethod((PropertySymbol)node.MemberSymbol);
+                    var property = (PropertySymbol)node.MemberSymbol;
+                    method = GetReadMethod(property);
                 }
+
                 VisitArguments(node.Arguments, node.ArgumentRefKindsOpt, method);
             }
+
             return null;
         }
 
@@ -2486,21 +2501,21 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node.AddMethod.CallsAreOmitted(node.SyntaxTree))
             {
-                TLocalState val = (val = State.Clone());
+                TLocalState val = State.Clone();
                 SetUnreachable();
-                VisitArguments(node.Arguments, default(ImmutableArray<RefKind>), node.AddMethod);
+                VisitArguments(node.Arguments, default, node.AddMethod);
                 State = val;
             }
             else
             {
-                VisitArguments(node.Arguments, default(ImmutableArray<RefKind>), node.AddMethod);
+                VisitArguments(node.Arguments, default, node.AddMethod);
             }
             return null;
         }
 
         public override BoundNode VisitDynamicCollectionElementInitializer(BoundDynamicCollectionElementInitializer node)
         {
-            VisitArguments(node.Arguments, default(ImmutableArray<RefKind>), null);
+            VisitArguments(node.Arguments, default, null);
             return null;
         }
 
@@ -2582,33 +2597,34 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitNullCoalescingAssignmentOperator(BoundNullCoalescingAssignmentOperator node)
         {
-            TLocalState other;
-            if (RegularPropertyAccess(node.LeftOperand))
+            TLocalState leftState;
+            if (RegularPropertyAccess(node.LeftOperand) &&
+                (BoundPropertyAccess)node.LeftOperand is var left &&
+                left.PropertySymbol is var property &&
+                property.RefKind == RefKind.None)
             {
-                BoundPropertyAccess boundPropertyAccess = (BoundPropertyAccess)node.LeftOperand;
-                PropertySymbol propertySymbol = boundPropertyAccess.PropertySymbol;
-                if (propertySymbol.RefKind == RefKind.None)
-                {
-                    MethodSymbol ownOrInheritedGetMethod = propertySymbol.GetOwnOrInheritedGetMethod();
-                    VisitReceiverBeforeCall(boundPropertyAccess.ReceiverOpt, ownOrInheritedGetMethod);
-                    VisitReceiverAfterCall(boundPropertyAccess.ReceiverOpt, ownOrInheritedGetMethod);
-                    TLocalState state = State.Clone();
-                    AdjustStateForNullCoalescingAssignmentNonNullCase(node);
-                    other = State.Clone();
-                    SetState(state);
-                    VisitAssignmentOfNullCoalescingAssignment(node, boundPropertyAccess);
-                    goto IL_00d1;
-                }
+                var readMethod = property.GetOwnOrInheritedGetMethod();
+
+                VisitReceiverBeforeCall(left.ReceiverOpt, readMethod);
+                VisitReceiverAfterCall(left.ReceiverOpt, readMethod);
+
+                var savedState = this.State.Clone();
+                AdjustStateForNullCoalescingAssignmentNonNullCase(node);
+                leftState = this.State.Clone();
+                SetState(savedState);
+                VisitAssignmentOfNullCoalescingAssignment(node, left);
             }
-            VisitRvalue(node.LeftOperand, isKnownToBeAnLvalue: true);
-            TLocalState state2 = State.Clone();
-            AdjustStateForNullCoalescingAssignmentNonNullCase(node);
-            other = State.Clone();
-            SetState(state2);
-            VisitAssignmentOfNullCoalescingAssignment(node, null);
-            goto IL_00d1;
-        IL_00d1:
-            Join(ref State, ref other);
+            else
+            {
+                VisitRvalue(node.LeftOperand, isKnownToBeAnLvalue: true);
+                var savedState = this.State.Clone();
+                AdjustStateForNullCoalescingAssignmentNonNullCase(node);
+                leftState = this.State.Clone();
+                SetState(savedState);
+                VisitAssignmentOfNullCoalescingAssignment(node, propertyAccessOpt: null);
+            }
+
+            Join(ref this.State, ref leftState);
             return null;
         }
 
@@ -2686,7 +2702,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected virtual TLocalState ReachableBottomState()
         {
-            return default(TLocalState);
+            return default;
         }
 
         protected abstract bool Join(ref TLocalState self, ref TLocalState other);
@@ -2713,57 +2729,96 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (localFunc.Symbol.IsExtern)
             {
+                // an extern local function is not permitted to have a body and thus shouldn't be flow analyzed
                 return null;
             }
-            Symbol currentSymbol = CurrentSymbol;
-            LocalFunctionSymbol localFunctionSymbol = (LocalFunctionSymbol)(CurrentSymbol = localFunc.Symbol);
-            SavedPending oldPending = SavePending();
-            TLocalState state = State;
-            State = TopState();
-            Optional<TLocalState> nonMonotonicState = NonMonotonicState;
+
+            var oldSymbol = this.CurrentSymbol;
+            var localFuncSymbol = localFunc.Symbol;
+            this.CurrentSymbol = localFuncSymbol;
+
+            var oldPending = SavePending(); // we do not support branches into a lambda
+
+            // SPEC: The entry point to a local function is always reachable.
+            // Captured variables are definitely assigned if they are definitely assigned on
+            // all branches into the local function.
+
+            var savedState = this.State;
+            this.State = this.TopState();
+
+            Optional<TLocalState> savedNonMonotonicState = NonMonotonicState;
             if (_nonMonotonicTransfer)
             {
                 NonMonotonicState = ReachableBottomState();
             }
-            if (!localFunc.WasCompilerGenerated)
+
+            if (!localFunc.WasCompilerGenerated) EnterParameters(localFuncSymbol.Parameters);
+
+            // State changes to captured variables are recorded, as calls to local functions
+            // transition the state of captured variables if the variables have state changes
+            // across all branches leaving the local function
+
+            var localFunctionState = GetOrCreateLocalFuncUsages(localFuncSymbol);
+            var savedLocalFunctionState = LocalFunctionStart(localFunctionState);
+
+            var oldPending2 = SavePending();
+
+            // If this is an iterator, there's an implicit branch before the first statement
+            // of the function where the enumerable is returned.
+            if (localFuncSymbol.IsIterator)
             {
-                EnterParameters(localFunctionSymbol.Parameters);
+                PendingBranches.Add(new PendingBranch(null, this.State, null));
             }
-            TLocalFunctionState orCreateLocalFuncUsages = GetOrCreateLocalFuncUsages(localFunctionSymbol);
-            TLocalFunctionState savedState = LocalFunctionStart(orCreateLocalFuncUsages);
-            SavedPending oldPending2 = SavePending();
-            if (localFunctionSymbol.IsIterator)
-            {
-                PendingBranches.Add(new PendingBranch(null, State, null));
-            }
+
             VisitAlways(localFunc.Body);
-            RestorePending(oldPending2);
-            ImmutableArray<PendingBranch> immutableArray = RemoveReturns();
+            RestorePending(oldPending2); // process any forward branches within the lambda body
+            ImmutableArray<PendingBranch> pendingReturns = RemoveReturns();
             RestorePending(oldPending);
-            Location location = null;
-            if (!localFunctionSymbol.Locations.IsDefaultOrEmpty)
+
+            Location? location = null;
+
+            if (!localFuncSymbol.Locations.IsDefaultOrEmpty)
             {
-                location = localFunctionSymbol.Locations[0];
+                location = localFuncSymbol.Locations[0];
             }
-            LeaveParameters(localFunctionSymbol.Parameters, localFunc.Syntax, location);
-            TLocalState stateAtReturn = State;
-            ImmutableArray<PendingBranch>.Enumerator enumerator = immutableArray.GetEnumerator();
-            while (enumerator.MoveNext())
+
+            LeaveParameters(localFuncSymbol.Parameters, localFunc.Syntax, location);
+
+            // Intersect the state of all branches out of the local function
+            var stateAtReturn = this.State;
+            foreach (PendingBranch pending in pendingReturns)
             {
-                PendingBranch current = enumerator.Current;
-                State = current.State;
-                BoundNode branch = current.Branch;
-                LeaveParameters(localFunctionSymbol.Parameters, branch?.Syntax, (branch != null && !branch.WasCompilerGenerated) ? null : location);
-                Join(ref stateAtReturn, ref State);
+                this.State = pending.State;
+                BoundNode branch = pending.Branch;
+
+                // Pass the local function identifier as a location if the branch
+                // is null or compiler generated.
+                LeaveParameters(localFuncSymbol.Parameters,
+                  branch?.Syntax,
+                  branch?.WasCompilerGenerated == false ? null : location);
+
+                Join(ref stateAtReturn, ref this.State);
             }
-            if (RecordStateChange(savedState, orCreateLocalFuncUsages, ref stateAtReturn) && orCreateLocalFuncUsages.Visited)
+
+            // Record any changes to the state of captured variables
+            if (RecordStateChange(
+                    savedLocalFunctionState,
+                    localFunctionState,
+                    ref stateAtReturn) &&
+                localFunctionState.Visited)
             {
+                // If the sets have changed and we already used the results
+                // of this local function in another computation, the previous
+                // calculations may be invalid. We need to analyze until we
+                // reach a fixed-point. 
                 stateChangedAfterUse = true;
-                orCreateLocalFuncUsages.Visited = false;
+                localFunctionState.Visited = false;
             }
-            State = state;
-            NonMonotonicState = nonMonotonicState;
-            CurrentSymbol = currentSymbol;
+
+            this.State = savedState;
+            NonMonotonicState = savedNonMonotonicState;
+            this.CurrentSymbol = oldSymbol;
+
             return null;
         }
 

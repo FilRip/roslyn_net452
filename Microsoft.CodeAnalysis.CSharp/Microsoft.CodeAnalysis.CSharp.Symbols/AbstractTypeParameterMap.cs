@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private string GetDebuggerDisplay()
         {
-            StringBuilder stringBuilder = new StringBuilder("[");
+            StringBuilder stringBuilder = new("[");
             stringBuilder.Append(GetType().Name);
             SmallDictionary<TypeParameterSymbol, TypeWithAnnotations>.Enumerator enumerator = Mapping.GetEnumerator();
             while (enumerator.MoveNext())

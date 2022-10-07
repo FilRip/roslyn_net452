@@ -116,7 +116,7 @@ namespace Microsoft.Cci
                         {
                             arrayBuilder = ArrayBuilder<T>.GetInstance();
                         }
-                        arrayBuilder.Add(getInfo(default(LocalScope), current2));
+                        arrayBuilder.Add(getInfo(default, current2));
                     }
                 }
                 enumerator2 = current.Constants.GetEnumerator();

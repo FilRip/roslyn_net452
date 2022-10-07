@@ -22,8 +22,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
 		public async Task WriteAsync(Stream outStream, CancellationToken cancellationToken)
 		{
-			using MemoryStream memoryStream = new MemoryStream();
-			using BinaryWriter writer = new BinaryWriter(memoryStream, Encoding.Unicode);
+			using MemoryStream memoryStream = new();
+			using BinaryWriter writer = new(memoryStream, Encoding.Unicode);
 			writer.Write((int)Type);
 			AddResponseBody(writer);
 			writer.Flush();
@@ -36,14 +36,14 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
 		protected abstract void AddResponseBody(BinaryWriter writer);
 
-		public static async Task<BuildResponse> ReadAsync(Stream stream, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<BuildResponse> ReadAsync(Stream stream, CancellationToken cancellationToken = default)
 		{
 			byte[] lengthBuffer = new byte[4];
 			await BuildProtocolConstants.ReadAllAsync(stream, lengthBuffer, 4, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 			uint num = BitConverter.ToUInt32(lengthBuffer, 0);
 			byte[] responseBuffer = new byte[num];
 			await BuildProtocolConstants.ReadAllAsync(stream, responseBuffer, responseBuffer.Length, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-			using BinaryReader binaryReader = new BinaryReader(new MemoryStream(responseBuffer), Encoding.Unicode);
+			using BinaryReader binaryReader = new(new MemoryStream(responseBuffer), Encoding.Unicode);
 			return binaryReader.ReadInt32() switch
 			{
 				1 => CompletedBuildResponse.Create(binaryReader), 

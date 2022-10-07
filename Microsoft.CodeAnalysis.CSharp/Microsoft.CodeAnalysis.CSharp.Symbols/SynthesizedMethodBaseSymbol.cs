@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
-#nullable enable
+#nullable disable
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 if (_parameters.IsDefault)
                 {
-                    ImmutableInterlocked.InterlockedCompareExchange(ref _parameters, MakeParameters(), default(ImmutableArray<ParameterSymbol>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref _parameters, MakeParameters(), default);
                 }
                 return _parameters;
             }
@@ -48,78 +48,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         protected virtual ImmutableArray<ParameterSymbol> BaseMethodParameters => BaseMethod.Parameters;
 
         internal virtual bool InheritsBaseMethodAttributes => false;
-
-        internal sealed override MethodImplAttributes ImplementationAttributes
-        {
-            get
-            {
-                if (!InheritsBaseMethodAttributes)
-                {
-                    return MethodImplAttributes.IL;
-                }
-                return BaseMethod.ImplementationAttributes;
-            }
-        }
-
-        internal sealed override MarshalPseudoCustomAttributeData? ReturnValueMarshallingInformation
-        {
-            get
-            {
-                if (!InheritsBaseMethodAttributes)
-                {
-                    return null;
-                }
-                return BaseMethod.ReturnValueMarshallingInformation;
-            }
-        }
-
-        internal sealed override bool HasSpecialName
-        {
-            get
-            {
-                if (InheritsBaseMethodAttributes)
-                {
-                    return BaseMethod.HasSpecialName;
-                }
-                return false;
-            }
-        }
-
-        public sealed override bool AreLocalsZeroed
-        {
-            get
-            {
-                if (BaseMethod is SourceMethodSymbol sourceMethodSymbol)
-                {
-                    return sourceMethodSymbol.AreLocalsZeroed;
-                }
-                return true;
-            }
-        }
-
-        internal sealed override bool RequiresSecurityObject
-        {
-            get
-            {
-                if (InheritsBaseMethodAttributes)
-                {
-                    return BaseMethod.RequiresSecurityObject;
-                }
-                return false;
-            }
-        }
-
-        internal sealed override bool HasDeclarativeSecurity
-        {
-            get
-            {
-                if (InheritsBaseMethodAttributes)
-                {
-                    return BaseMethod.HasDeclarativeSecurity;
-                }
-                return false;
-            }
-        }
 
         public sealed override RefKind RefKind => BaseMethod.RefKind;
 
@@ -238,6 +166,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return BaseMethod.GetReturnTypeAttributes();
         }
 
+#nullable enable
+
         public sealed override DllImportData? GetDllImportData()
         {
             if (!InheritsBaseMethodAttributes)
@@ -245,6 +175,78 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return null;
             }
             return BaseMethod.GetDllImportData();
+        }
+
+        internal sealed override MethodImplAttributes ImplementationAttributes
+        {
+            get
+            {
+                if (!InheritsBaseMethodAttributes)
+                {
+                    return MethodImplAttributes.IL;
+                }
+                return BaseMethod.ImplementationAttributes;
+            }
+        }
+
+        internal sealed override MarshalPseudoCustomAttributeData? ReturnValueMarshallingInformation
+        {
+            get
+            {
+                if (!InheritsBaseMethodAttributes)
+                {
+                    return null;
+                }
+                return BaseMethod.ReturnValueMarshallingInformation;
+            }
+        }
+
+        internal sealed override bool HasSpecialName
+        {
+            get
+            {
+                if (InheritsBaseMethodAttributes)
+                {
+                    return BaseMethod.HasSpecialName;
+                }
+                return false;
+            }
+        }
+
+        public sealed override bool AreLocalsZeroed
+        {
+            get
+            {
+                if (BaseMethod is SourceMethodSymbol sourceMethodSymbol)
+                {
+                    return sourceMethodSymbol.AreLocalsZeroed;
+                }
+                return true;
+            }
+        }
+
+        internal sealed override bool RequiresSecurityObject
+        {
+            get
+            {
+                if (InheritsBaseMethodAttributes)
+                {
+                    return BaseMethod.RequiresSecurityObject;
+                }
+                return false;
+            }
+        }
+
+        internal sealed override bool HasDeclarativeSecurity
+        {
+            get
+            {
+                if (InheritsBaseMethodAttributes)
+                {
+                    return BaseMethod.HasDeclarativeSecurity;
+                }
+                return false;
+            }
         }
 
         internal sealed override IEnumerable<SecurityAttribute> GetSecurityInformation()
@@ -255,5 +257,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             return BaseMethod.GetSecurityInformation();
         }
+
+#nullable disable
     }
 }

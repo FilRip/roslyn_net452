@@ -16,8 +16,6 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public abstract class AnalyzerDriver : IDisposable
@@ -95,9 +93,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private sealed class EventProcessedState
         {
-            public static readonly EventProcessedState Processed = new EventProcessedState(EventProcessedStateKind.Processed);
+            public static readonly EventProcessedState Processed = new(EventProcessedStateKind.Processed);
 
-            public static readonly EventProcessedState NotProcessed = new EventProcessedState(EventProcessedStateKind.NotProcessed);
+            public static readonly EventProcessedState NotProcessed = new(EventProcessedStateKind.NotProcessed);
 
             public EventProcessedStateKind Kind { get; }
 
@@ -106,7 +104,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             private EventProcessedState(EventProcessedStateKind kind)
             {
                 Kind = kind;
-                SubsetProcessedAnalyzers = default(ImmutableArray<DiagnosticAnalyzer>);
+                SubsetProcessedAnalyzers = default;
             }
 
             private EventProcessedState(ImmutableArray<DiagnosticAnalyzer> subsetProcessedAnalyzers)
@@ -249,7 +247,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         protected AnalyzerManager AnalyzerManager { get; }
 
-        protected AnalyzerExecutor AnalyzerExecutor => _lazyAnalyzerExecutor;
+        protected AnalyzerExecutor? AnalyzerExecutor => _lazyAnalyzerExecutor;
 
         protected CompilationData CurrentCompilationData => _lazyCurrentCompilationData;
 
@@ -257,19 +255,19 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         protected ref readonly AnalyzerActions AnalyzerActions => ref _lazyAnalyzerActions;
 
-        protected ImmutableHashSet<DiagnosticAnalyzer> UnsuppressedAnalyzers => _lazyUnsuppressedAnalyzers;
+        protected ImmutableHashSet<DiagnosticAnalyzer>? UnsuppressedAnalyzers => _lazyUnsuppressedAnalyzers;
 
         private ConcurrentDictionary<(INamespaceOrTypeSymbol, DiagnosticAnalyzer), IGroupedAnalyzerActions> PerSymbolAnalyzerActionsCache => _lazyPerSymbolAnalyzerActionsCache;
 
-        private ImmutableHashSet<DiagnosticAnalyzer> CompilationEndAnalyzers => _lazyCompilationEndAnalyzers;
+        private ImmutableHashSet<DiagnosticAnalyzer>? CompilationEndAnalyzers => _lazyCompilationEndAnalyzers;
 
         private ImmutableSegmentedDictionary<DiagnosticAnalyzer, SemaphoreSlim> AnalyzerGateMap => _lazyAnalyzerGateMap;
 
         private ImmutableSegmentedDictionary<DiagnosticAnalyzer, GeneratedCodeAnalysisFlags> GeneratedCodeAnalysisFlagsMap => _lazyGeneratedCodeAnalysisFlagsMap;
 
-        private ImmutableHashSet<DiagnosticAnalyzer> NonConfigurableAnalyzers => _lazyNonConfigurableAnalyzers;
+        private ImmutableHashSet<DiagnosticAnalyzer>? NonConfigurableAnalyzers => _lazyNonConfigurableAnalyzers;
 
-        private ImmutableHashSet<DiagnosticAnalyzer> SymbolStartAnalyzers => _lazySymbolStartAnalyzers;
+        private ImmutableHashSet<DiagnosticAnalyzer>? SymbolStartAnalyzers => _lazySymbolStartAnalyzers;
 
         private bool TreatAllCodeAsNonGeneratedCode => _lazyTreatAllCodeAsNonGeneratedCode.Value;
 
@@ -587,7 +585,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             Exception ex = faultedTask.Exception?.InnerException;
             if (ex != null && !(ex is OperationCanceledException))
             {
-                Diagnostic arg = Microsoft.CodeAnalysis.Diagnostics.AnalyzerExecutor.CreateDriverExceptionDiagnostic(ex);
+                Diagnostic arg = AnalyzerExecutor.CreateDriverExceptionDiagnostic(ex);
                 DiagnosticAnalyzer arg2 = analyzers[0];
                 analyzerExecutor.OnAnalyzerException(ex, arg2, arg);
             }
@@ -602,7 +600,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             foreach (SyntaxTree syntaxTree in analysisScope.SyntaxTrees)
             {
                 bool flag = IsGeneratedCode(syntaxTree);
-                SourceOrAdditionalFile file = new SourceOrAdditionalFile(syntaxTree);
+                SourceOrAdditionalFile file = new(syntaxTree);
                 if (flag && DoNotAnalyzeGeneratedCode)
                 {
                     analysisState?.MarkSyntaxAnalysisComplete(file, analysisScope.Analyzers);
@@ -639,7 +637,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
             foreach (AdditionalText additionalFile in analysisScope.AdditionalFiles)
             {
-                SourceOrAdditionalFile file = new SourceOrAdditionalFile(additionalFile);
+                SourceOrAdditionalFile file = new(additionalFile);
                 PooledHashSet<DiagnosticAnalyzer> pooledHashSet = ((analysisState != null) ? PooledHashSet<DiagnosticAnalyzer>.GetInstance() : null);
                 try
                 {
@@ -913,7 +911,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             return false;
             static ImmutableHashSet<ISymbol> computeGeneratedCodeSymbolsInTree(SyntaxTree tree, Compilation compilation, INamedTypeSymbol generatedCodeAttribute, CancellationToken cancellationToken)
             {
-                GeneratedCodeTokenWalker generatedCodeTokenWalker = new GeneratedCodeTokenWalker(cancellationToken);
+                GeneratedCodeTokenWalker generatedCodeTokenWalker = new(cancellationToken);
                 generatedCodeTokenWalker.Visit(tree.GetRoot(cancellationToken));
                 if (!generatedCodeTokenWalker.HasGeneratedCodeIdentifier)
                 {
@@ -1159,7 +1157,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         }
                         d = optional.Value;
                     }
-                    if (!(d is CompilationCompletedEvent compilationCompletedEvent))
+                    if (d is not CompilationCompletedEvent compilationCompletedEvent)
                     {
                         await ProcessEventAsync(d, analysisScope, analysisState, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
                     }
@@ -1201,9 +1199,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 await analysisState2.OnCompilationEventProcessedAsync(compilationEvent, processedAnalyzers, onSymbolAndMembersProcessedAsync).ConfigureAwait(continueOnCapturedContext: false);
             }
-            else if (!(compilationEvent is SymbolDeclaredCompilationEvent symbolDeclaredEvent))
+            else if (compilationEvent is not SymbolDeclaredCompilationEvent symbolDeclaredEvent)
             {
-                if (!(compilationEvent is CompilationUnitCompletedEvent compilationUnitCompletedEvent))
+                if (compilationEvent is not CompilationUnitCompletedEvent compilationUnitCompletedEvent)
                 {
                     if (compilationEvent is CompilationCompletedEvent compilationCompletedEvent)
                     {
@@ -1249,13 +1247,13 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         {
             cancellationToken.ThrowIfCancellationRequested();
             EventProcessedState result;
-            if (!(compilationEvent is SymbolDeclaredCompilationEvent symbolEvent))
+            if (compilationEvent is not SymbolDeclaredCompilationEvent symbolEvent)
             {
-                if (!(compilationEvent is CompilationUnitCompletedEvent completedEvent))
+                if (compilationEvent is not CompilationUnitCompletedEvent completedEvent)
                 {
-                    if (!(compilationEvent is CompilationCompletedEvent endEvent))
+                    if (compilationEvent is not CompilationCompletedEvent endEvent)
                     {
-                        if (!(compilationEvent is CompilationStartedEvent startedEvent))
+                        if (compilationEvent is not CompilationStartedEvent startedEvent)
                         {
                             throw new InvalidOperationException("Unexpected compilation event of type " + compilationEvent.GetType().Name);
                         }
@@ -1648,7 +1646,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 return EmptyGroupedActions;
             }
-            if (!(symbol is INamespaceOrTypeSymbol namespaceOrType))
+            if (symbol is not INamespaceOrTypeSymbol namespaceOrType)
             {
                 return await getAllActionsAsync(this, symbol, analyzer, analysisState, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             }
@@ -1700,7 +1698,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 if (!(await analyzerManager.IsConcurrentAnalyzerAsync(analyzer, analyzerExecutor).ConfigureAwait(continueOnCapturedContext: false)))
                 {
-                    SemaphoreSlim value = new SemaphoreSlim(1);
+                    SemaphoreSlim value = new(1);
                     builder.Add(analyzer, value);
                 }
             }
@@ -1855,7 +1853,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private sealed class GroupedAnalyzerActions : IGroupedAnalyzerActions
         {
-            public static readonly GroupedAnalyzerActions Empty = new GroupedAnalyzerActions(ImmutableArray<(DiagnosticAnalyzer, GroupedAnalyzerActionsForAnalyzer)>.Empty, in AnalyzerActions.Empty);
+            public static readonly GroupedAnalyzerActions Empty = new(ImmutableArray<(DiagnosticAnalyzer, GroupedAnalyzerActionsForAnalyzer)>.Empty, in AnalyzerActions.Empty);
 
             public ImmutableArray<(DiagnosticAnalyzer analyzer, GroupedAnalyzerActionsForAnalyzer groupedActions)> GroupedActionsByAnalyzer { get; }
 
@@ -1875,7 +1873,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     return Empty;
                 }
-                GroupedAnalyzerActionsForAnalyzer item = new GroupedAnalyzerActionsForAnalyzer(analyzer, in analyzerActions, analyzerActionsNeedFiltering: false);
+                GroupedAnalyzerActionsForAnalyzer item = new(analyzer, in analyzerActions, analyzerActionsNeedFiltering: false);
                 return new GroupedAnalyzerActions(ImmutableArray<(DiagnosticAnalyzer, GroupedAnalyzerActionsForAnalyzer)>.Empty.Add((analyzer, item)), in analyzerActions);
             }
 
@@ -1979,16 +1977,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 _analyzerActionsNeedFiltering = analyzerActionsNeedFiltering;
             }
 
-            [Conditional("DEBUG")]
-            private static void VerifyActions<TAnalyzerAction>(in ImmutableArray<TAnalyzerAction> actions, DiagnosticAnalyzer analyzer) where TAnalyzerAction : AnalyzerAction
-            {
-                ImmutableArray<TAnalyzerAction>.Enumerator enumerator = actions.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    _ = enumerator.Current;
-                }
-            }
-
             private ImmutableArray<TAnalyzerAction> GetFilteredActions<TAnalyzerAction>(in ImmutableArray<TAnalyzerAction> actions) where TAnalyzerAction : AnalyzerAction
             {
                 return GetFilteredActions(in actions, _analyzer, _analyzerActionsNeedFiltering);
@@ -2029,7 +2017,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     };
                     return true;
                 }
-                actions = default(ExecutableCodeBlockAnalyzerActions);
+                actions = default;
                 return false;
             }
         }

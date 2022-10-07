@@ -6,7 +6,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
     {
         private SyntaxNode? arguments;
 
-        public SyntaxToken OpenParenToken => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.ArgumentListSyntax)base.Green).openParenToken, base.Position, 0);
+        public SyntaxToken OpenParenToken => new(this, ((InternalSyntax.ArgumentListSyntax)base.Green).openParenToken, base.Position, 0);
 
         public override SeparatedSyntaxList<ArgumentSyntax> Arguments
         {
@@ -15,15 +15,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 SyntaxNode red = GetRed(ref arguments, 1);
                 if (red == null)
                 {
-                    return default(SeparatedSyntaxList<ArgumentSyntax>);
+                    return default;
                 }
                 return new SeparatedSyntaxList<ArgumentSyntax>(red, GetChildIndex(1));
             }
         }
 
-        public SyntaxToken CloseParenToken => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.ArgumentListSyntax)base.Green).closeParenToken, GetChildPosition(2), GetChildIndex(2));
+        public SyntaxToken CloseParenToken => new(this, ((InternalSyntax.ArgumentListSyntax)base.Green).closeParenToken, GetChildPosition(2), GetChildIndex(2));
 
-        internal ArgumentListSyntax(Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
+        internal ArgumentListSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
             : base(green, parent, position)
         {
         }

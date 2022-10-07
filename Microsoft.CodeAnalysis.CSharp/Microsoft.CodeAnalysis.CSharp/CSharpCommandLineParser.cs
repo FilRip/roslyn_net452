@@ -1642,7 +1642,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 AddDiagnostic(diagnostics, ErrorCode.FTL_InvalidInputFileName, filePath);
                 return null;
             }
-            Func<Stream> dataProvider = () => new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            Stream dataProvider() => new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             return new ResourceDescription(resourceName, fileName, dataProvider, isPublic, embedded, checkArgs: false);
         }
 

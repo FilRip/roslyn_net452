@@ -57,50 +57,42 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return OverriddenOrHiddenMembersResult.Create(overriddenMembers, hiddenMembers);
         }
 
-        private static void FindOverriddenOrHiddenMembers(Symbol member, NamedTypeSymbol containingType, bool memberIsFromSomeCompilation, out ArrayBuilder<Symbol> hiddenBuilder, out ImmutableArray<Symbol> overriddenMembers)
+        private static void FindOverriddenOrHiddenMembers(Symbol member, NamedTypeSymbol containingType, bool memberIsFromSomeCompilation,
+            out ArrayBuilder<Symbol> hiddenBuilder,
+            out ImmutableArray<Symbol> overriddenMembers)
         {
-            Symbol currTypeBestMatch = null;
+            Symbol bestMatch = null;
             hiddenBuilder = null;
-            Symbol symbol;
-            if (!(member is MethodSymbol method))
+
+            // A specific override exact match candidate, if one is known. This supports covariant returns, for which signature
+            // matching is not sufficient. This member is treated as being as good as an exact match.
+            Symbol knownOverriddenMember = member switch
             {
-                if (member is PEPropertySymbol pEPropertySymbol)
-                {
-                    if (pEPropertySymbol.GetMethod is PEMethodSymbol pEMethodSymbol)
-                    {
-                        MethodSymbol explicitlyOverriddenClassMethod = pEMethodSymbol.ExplicitlyOverriddenClassMethod;
-                        if ((object)explicitlyOverriddenClassMethod != null && explicitlyOverriddenClassMethod.AssociatedSymbol is PropertySymbol propertySymbol)
-                        {
-                            symbol = propertySymbol;
-                            goto IL_00a3;
-                        }
-                    }
-                }
-                else if (member is RetargetingPropertySymbol retargetingPropertySymbol && retargetingPropertySymbol.GetMethod is RetargetingMethodSymbol retargetingMethodSymbol)
-                {
-                    MethodSymbol explicitlyOverriddenClassMethod2 = retargetingMethodSymbol.ExplicitlyOverriddenClassMethod;
-                    if ((object)explicitlyOverriddenClassMethod2 != null && explicitlyOverriddenClassMethod2.AssociatedSymbol is PropertySymbol propertySymbol2)
-                    {
-                        symbol = propertySymbol2;
-                        goto IL_00a3;
-                    }
-                }
-                symbol = null;
-            }
-            else
+                MethodSymbol method => KnownOverriddenClassMethod(method),
+                PEPropertySymbol { GetMethod: PEMethodSymbol { ExplicitlyOverriddenClassMethod: { AssociatedSymbol: PropertySymbol overriddenProperty } } } => overriddenProperty,
+                RetargetingPropertySymbol { GetMethod: RetargetingMethodSymbol { ExplicitlyOverriddenClassMethod: { AssociatedSymbol: PropertySymbol overriddenProperty } } } => overriddenProperty,
+                _ => null
+            };
+
+            for (NamedTypeSymbol currType = containingType.BaseTypeNoUseSiteDiagnostics;
+                (object)currType != null && (object)bestMatch == null && hiddenBuilder == null;
+                currType = currType.BaseTypeNoUseSiteDiagnostics)
             {
-                symbol = KnownOverriddenClassMethod(method);
+                bool unused;
+                FindOverriddenOrHiddenMembersInType(
+                    member,
+                    memberIsFromSomeCompilation,
+                    containingType,
+                    knownOverriddenMember,
+                    currType,
+                    out bestMatch,
+                    out unused,
+                    out hiddenBuilder);
             }
-            goto IL_00a3;
-        IL_00a3:
-            Symbol knownOverriddenMember = symbol;
-            NamedTypeSymbol baseTypeNoUseSiteDiagnostics = containingType.BaseTypeNoUseSiteDiagnostics;
-            while ((object)baseTypeNoUseSiteDiagnostics != null && (object)currTypeBestMatch == null && hiddenBuilder == null)
-            {
-                FindOverriddenOrHiddenMembersInType(member, memberIsFromSomeCompilation, containingType, knownOverriddenMember, baseTypeNoUseSiteDiagnostics, out currTypeBestMatch, out var _, out hiddenBuilder);
-                baseTypeNoUseSiteDiagnostics = baseTypeNoUseSiteDiagnostics.BaseTypeNoUseSiteDiagnostics;
-            }
-            FindRelatedMembers(member.IsOverride, memberIsFromSomeCompilation, member.Kind, currTypeBestMatch, out overriddenMembers, ref hiddenBuilder);
+
+            // Based on bestMatch, find other methods that will be overridden, hidden, or runtime overridden
+            // (in bestMatch.ContainingType).
+            FindRelatedMembers(member.IsOverride, memberIsFromSomeCompilation, member.Kind, bestMatch, out overriddenMembers, ref hiddenBuilder);
         }
 
         public static Symbol FindFirstHiddenMemberIfAny(Symbol member, bool memberIsFromSomeCompilation)

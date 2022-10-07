@@ -16,8 +16,6 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis
 {
     public sealed class PEModule : IDisposable
@@ -980,28 +978,25 @@ namespace Microsoft.CodeAnalysis
 
         public bool HasDateTimeConstantAttribute(EntityHandle token, out ConstantValue defaultValue)
         {
-            AttributeInfo attributeInfo = FindLastTargetAttribute(token, AttributeDescription.DateTimeConstantAttribute);
-            if (attributeInfo.HasValue && TryExtractLongValueFromAttribute(attributeInfo.Handle, out var value))
+            long value;
+            AttributeInfo info = FindLastTargetAttribute(token, AttributeDescription.DateTimeConstantAttribute);
+            if (info.HasValue && TryExtractLongValueFromAttribute(info.Handle, out value))
             {
-                long num = value;
-                DateTime minValue = DateTime.MinValue;
-                if (num >= minValue.Ticks)
+                // if value is outside this range, DateTime would throw when constructed
+                if (value < DateTime.MinValue.Ticks || value > DateTime.MaxValue.Ticks)
                 {
-                    long num2 = value;
-                    minValue = DateTime.MaxValue;
-                    if (num2 <= minValue.Ticks)
-                    {
-                        defaultValue = ConstantValue.Create(new DateTime(value));
-                        goto IL_005c;
-                    }
+                    defaultValue = ConstantValue.Bad;
                 }
-                defaultValue = ConstantValue.Bad;
-                goto IL_005c;
+                else
+                {
+                    defaultValue = ConstantValue.Create(new DateTime(value));
+                }
+
+                return true;
             }
+
             defaultValue = null;
             return false;
-        IL_005c:
-            return true;
         }
 
         public bool HasDecimalConstantAttribute(EntityHandle token, out ConstantValue defaultValue)

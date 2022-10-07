@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 _version = dictionary._version;
                 _index = 0;
                 _getEnumeratorRetType = getEnumeratorRetType;
-                _current = default(KeyValuePair<TKey, TValue>);
+                _current = default;
             }
 
             public bool MoveNext()
@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     }
                 }
                 _index = _dictionary._count + 1;
-                _current = default(KeyValuePair<TKey, TValue>);
+                _current = default;
                 return false;
             }
 
@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
                 }
                 _index = 0;
-                _current = default(KeyValuePair<TKey, TValue>);
+                _current = default;
             }
         }
 
@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     _dictionary = dictionary;
                     _version = dictionary._version;
                     _index = 0;
-                    _currentKey = default(TKey);
+                    _currentKey = default;
                 }
 
                 public void Dispose()
@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis.Collections
                         }
                     }
                     _index = _dictionary._count + 1;
-                    _currentKey = default(TKey);
+                    _currentKey = default;
                     return false;
                 }
 
@@ -206,7 +206,7 @@ namespace Microsoft.CodeAnalysis.Collections
                         ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
                     }
                     _index = 0;
-                    _currentKey = default(TKey);
+                    _currentKey = default;
                 }
             }
 
@@ -374,7 +374,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     _dictionary = dictionary;
                     _version = dictionary._version;
                     _index = 0;
-                    _currentValue = default(TValue);
+                    _currentValue = default;
                 }
 
                 public void Dispose()
@@ -397,7 +397,7 @@ namespace Microsoft.CodeAnalysis.Collections
                         }
                     }
                     _index = _dictionary._count + 1;
-                    _currentValue = default(TValue);
+                    _currentValue = default;
                     return false;
                 }
 
@@ -408,7 +408,7 @@ namespace Microsoft.CodeAnalysis.Collections
                         ThrowHelper.ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion();
                     }
                     _index = 0;
-                    _currentValue = default(TValue);
+                    _currentValue = default;
                 }
             }
 
@@ -571,13 +571,13 @@ namespace Microsoft.CodeAnalysis.Collections
 
         public int Count => _count - _freeCount;
 
-        public KeyCollection Keys => _keys ?? (_keys = new KeyCollection(this));
+        public KeyCollection Keys => _keys ??= new KeyCollection(this);
 
         ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
 
         IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
 
-        public ValueCollection Values => _values ?? (_values = new ValueCollection(this));
+        public ValueCollection Values => _values ??= new ValueCollection(this);
 
         ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
 
@@ -593,7 +593,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     return reference;
                 }
                 ThrowHelper.ThrowKeyNotFoundException(key);
-                return default(TValue);
+                return default;
             }
             set
             {
@@ -1016,8 +1016,8 @@ namespace Microsoft.CodeAnalysis.Collections
                             entries[num3]._next = reference._next;
                         }
                         reference._next = -3 - _freeList;
-                        reference._key = default(TKey);
-                        reference._value = default(TValue);
+                        reference._key = default;
+                        reference._value = default;
                         _freeList = num4;
                         _freeCount++;
                         return true;
@@ -1063,8 +1063,8 @@ namespace Microsoft.CodeAnalysis.Collections
                         }
                         value = reference._value;
                         reference._next = -3 - _freeList;
-                        reference._key = default(TKey);
-                        reference._value = default(TValue);
+                        reference._key = default;
+                        reference._value = default;
                         _freeList = num4;
                         _freeCount++;
                         return true;
@@ -1078,7 +1078,7 @@ namespace Microsoft.CodeAnalysis.Collections
                     }
                 }
             }
-            value = default(TValue);
+            value = default;
             return false;
         }
 
@@ -1090,7 +1090,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 value = reference;
                 return true;
             }
-            value = default(TValue);
+            value = default;
             return false;
         }
 

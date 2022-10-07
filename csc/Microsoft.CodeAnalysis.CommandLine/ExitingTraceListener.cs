@@ -31,10 +31,10 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
 		private void Exit(string originalMessage)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			stringBuilder.AppendLine("Debug.Assert failed with message: " + originalMessage);
 			stringBuilder.AppendLine("Stack Trace");
-			StackTrace stackTrace = new StackTrace();
+			StackTrace stackTrace = new();
 			stringBuilder.AppendLine(stackTrace.ToString());
 			string message = stringBuilder.ToString();
 			Logger.Log(message);

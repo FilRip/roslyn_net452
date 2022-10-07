@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 for (int i = 0; i < Arguments.Count; i++)
                 {
                     BoundExpression boundExpression = Arguments[i];
-                    if ((object)boundExpression.Type != null && boundExpression.Type.IsDynamic() && (!flag || RefKinds[i] == Microsoft.CodeAnalysis.RefKind.None))
+                    if (boundExpression.Type is object && boundExpression.Type.IsDynamic() && (!flag || RefKinds[i] == CodeAnalysis.RefKind.None))
                     {
                         _lazyHasDynamicArgument = ThreeState.True;
                         return true;
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (Names.Count == 0)
             {
-                return default(ImmutableArray<string>);
+                return default;
             }
             ArrayBuilder<string> instance = ArrayBuilder<string>.GetInstance(Names.Count);
             for (int i = 0; i < Names.Count; i++)
@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (RefKinds.Count <= 0)
             {
-                return Microsoft.CodeAnalysis.RefKind.None;
+                return CodeAnalysis.RefKind.None;
             }
             return RefKinds[i];
         }

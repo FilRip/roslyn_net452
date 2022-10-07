@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 value = value2.Pop();
                 return true;
             }
-            value = default(R);
+            value = default;
             return false;
         }
     }

@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 _addCategorizedLocalDiagnostic = null;
                 _addCategorizedNonLocalDiagnostic = null;
                 _shouldSuppressGeneratedCodeDiagnostic = null;
-                _cancellationToken = default(CancellationToken);
+                _cancellationToken = default;
                 s_objectPool.Free(this);
             }
 
@@ -183,13 +183,13 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             return _isAnalyzerSuppressedForTree!(analyzer, tree, Compilation.Options.SyntaxTreeOptionsProvider);
         }
 
-        public static AnalyzerExecutor Create(Compilation compilation, AnalyzerOptions analyzerOptions, Action<Diagnostic>? addNonCategorizedDiagnostic, Action<Exception, DiagnosticAnalyzer, Diagnostic> onAnalyzerException, Func<Exception, bool>? analyzerExceptionFilter, Func<DiagnosticAnalyzer, bool> isCompilerAnalyzer, AnalyzerManager analyzerManager, Func<DiagnosticAnalyzer, bool> shouldSkipAnalysisOnGeneratedCode, Func<Diagnostic, DiagnosticAnalyzer, Compilation, CancellationToken, bool> shouldSuppressGeneratedCodeDiagnostic, Func<SyntaxTree, TextSpan, bool> isGeneratedCodeLocation, Func<DiagnosticAnalyzer, SyntaxTree, SyntaxTreeOptionsProvider?, bool> isAnalyzerSuppressedForTree, Func<DiagnosticAnalyzer, object?> getAnalyzerGate, Func<SyntaxTree, SemanticModel> getSemanticModel, bool logExecutionTime = false, Action<Diagnostic, DiagnosticAnalyzer, bool>? addCategorizedLocalDiagnostic = null, Action<Diagnostic, DiagnosticAnalyzer>? addCategorizedNonLocalDiagnostic = null, Action<Suppression>? addSuppression = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static AnalyzerExecutor Create(Compilation compilation, AnalyzerOptions analyzerOptions, Action<Diagnostic>? addNonCategorizedDiagnostic, Action<Exception, DiagnosticAnalyzer, Diagnostic> onAnalyzerException, Func<Exception, bool>? analyzerExceptionFilter, Func<DiagnosticAnalyzer, bool> isCompilerAnalyzer, AnalyzerManager analyzerManager, Func<DiagnosticAnalyzer, bool> shouldSkipAnalysisOnGeneratedCode, Func<Diagnostic, DiagnosticAnalyzer, Compilation, CancellationToken, bool> shouldSuppressGeneratedCodeDiagnostic, Func<SyntaxTree, TextSpan, bool> isGeneratedCodeLocation, Func<DiagnosticAnalyzer, SyntaxTree, SyntaxTreeOptionsProvider?, bool> isAnalyzerSuppressedForTree, Func<DiagnosticAnalyzer, object?> getAnalyzerGate, Func<SyntaxTree, SemanticModel> getSemanticModel, bool logExecutionTime = false, Action<Diagnostic, DiagnosticAnalyzer, bool>? addCategorizedLocalDiagnostic = null, Action<Diagnostic, DiagnosticAnalyzer>? addCategorizedNonLocalDiagnostic = null, Action<Suppression>? addSuppression = null, CancellationToken cancellationToken = default)
         {
             ConcurrentDictionary<DiagnosticAnalyzer, StrongBox<long>> analyzerExecutionTimeMap = (logExecutionTime ? new ConcurrentDictionary<DiagnosticAnalyzer, StrongBox<long>>() : null);
             return new AnalyzerExecutor(compilation, analyzerOptions, addNonCategorizedDiagnostic, onAnalyzerException, analyzerExceptionFilter, isCompilerAnalyzer, analyzerManager, shouldSkipAnalysisOnGeneratedCode, shouldSuppressGeneratedCodeDiagnostic, isGeneratedCodeLocation, isAnalyzerSuppressedForTree, getAnalyzerGate, getSemanticModel, analyzerExecutionTimeMap, addCategorizedLocalDiagnostic, addCategorizedNonLocalDiagnostic, addSuppression, cancellationToken);
         }
 
-        public static AnalyzerExecutor CreateForSupportedDiagnostics(Action<Exception, DiagnosticAnalyzer, Diagnostic>? onAnalyzerException, AnalyzerManager analyzerManager, CancellationToken cancellationToken = default(CancellationToken))
+        public static AnalyzerExecutor CreateForSupportedDiagnostics(Action<Exception, DiagnosticAnalyzer, Diagnostic>? onAnalyzerException, AnalyzerManager analyzerManager, CancellationToken cancellationToken = default)
         {
             if (onAnalyzerException == null)
             {
@@ -990,7 +990,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         internal void ExecuteAndCatchIfThrows<TArg>(DiagnosticAnalyzer analyzer, Action<TArg> analyze, TArg argument, AnalysisContextInfo? info = null)
         {
-            SharedStopwatch sharedStopwatch = default(SharedStopwatch);
+            SharedStopwatch sharedStopwatch = default;
             if (_analyzerExecutionTimeMap != null)
             {
                 SharedStopwatch.StartNew();

@@ -65,23 +65,14 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (ExceptionDeclarationOrExpression != null)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto case 0;
+                    if (ExceptionDeclarationOrExpression != null) return (true, 0, 0);
+                    else goto case 0;
                 case 0:
-                    if (Filter != null)
-                    {
-                        return (true, 1, 0);
-                    }
-                    goto case 1;
+                    if (Filter != null) return (true, 1, 0);
+                    else goto case 1;
                 case 1:
-                    if (Handler != null)
-                    {
-                        return (true, 2, 0);
-                    }
-                    goto case 2;
+                    if (Handler != null) return (true, 2, 0);
+                    else goto case 2;
                 case 2:
                 case 3:
                     return (false, 3, 0);

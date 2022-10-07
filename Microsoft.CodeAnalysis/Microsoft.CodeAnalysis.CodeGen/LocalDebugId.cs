@@ -44,9 +44,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            if (obj is LocalDebugId)
+            if (obj is LocalDebugId id)
             {
-                return Equals((LocalDebugId)obj);
+                return Equals(id);
             }
             return false;
         }

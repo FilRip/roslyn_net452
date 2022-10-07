@@ -5,7 +5,7 @@ namespace Microsoft.Win32.SafeHandles
 {
 	internal sealed class SafeAllocHHandle : SafeBuffer
 	{
-		internal static SafeAllocHHandle InvalidHandle => new SafeAllocHHandle(IntPtr.Zero);
+		internal static SafeAllocHHandle InvalidHandle => new(IntPtr.Zero);
 
 		private SafeAllocHHandle()
 			: base(ownsHandle: true)

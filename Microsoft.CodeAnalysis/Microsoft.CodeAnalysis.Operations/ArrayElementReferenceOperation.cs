@@ -51,23 +51,14 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (ArrayReference != null)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto case 0;
+                    if (ArrayReference != null) return (true, 0, 0);
+                    else goto case 0;
                 case 0:
-                    if (!Indices.IsEmpty)
-                    {
-                        return (true, 1, 0);
-                    }
-                    goto case 2;
+                    if (!Indices.IsEmpty) return (true, 1, 0);
+                    else goto case 1;
+                case 1 when previousIndex + 1 < Indices.Length:
+                    return (true, 1, previousIndex + 1);
                 case 1:
-                    if (previousIndex + 1 < Indices.Length)
-                    {
-                        return (true, 1, previousIndex + 1);
-                    }
-                    goto case 2;
                 case 2:
                     return (false, 2, 0);
                 default:

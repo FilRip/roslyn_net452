@@ -10,6 +10,6 @@ namespace Microsoft.CodeAnalysis
     {
         public abstract string Path { get; }
 
-        public abstract SourceText? GetText(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract SourceText? GetText(CancellationToken cancellationToken = default);
     }
 }

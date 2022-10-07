@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         private ArrowExpressionClauseSyntax? expressionBody;
 
-        public SyntaxList<AttributeListSyntax> AttributeLists => new SyntaxList<AttributeListSyntax>(GetRed(ref attributeLists, 0));
+        public SyntaxList<AttributeListSyntax> AttributeLists => new(GetRed(ref attributeLists, 0));
 
         public SyntaxTokenList Modifiers
         {
@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             }
         }
 
-        public SyntaxToken Keyword => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AccessorDeclarationSyntax)base.Green).keyword, GetChildPosition(2), GetChildIndex(2));
+        public SyntaxToken Keyword => new(this, ((InternalSyntax.AccessorDeclarationSyntax)base.Green).keyword, GetChildPosition(2), GetChildIndex(2));
 
         public BlockSyntax? Body => GetRed(ref body, 3);
 
@@ -35,10 +35,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
         {
             get
             {
-                Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.SyntaxToken semicolonToken = ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AccessorDeclarationSyntax)base.Green).semicolonToken;
+                InternalSyntax.SyntaxToken semicolonToken = ((InternalSyntax.AccessorDeclarationSyntax)base.Green).semicolonToken;
                 if (semicolonToken == null)
                 {
-                    return default(SyntaxToken);
+                    return default;
                 }
                 return new SyntaxToken(this, semicolonToken, GetChildPosition(5), GetChildIndex(5));
             }

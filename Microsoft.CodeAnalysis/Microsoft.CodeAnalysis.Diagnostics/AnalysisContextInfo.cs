@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         private string GetFlattenedNodeText(SyntaxNode node)
         {
             int num = node.Span.Start;
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             foreach (SyntaxToken item in node.DescendantTokens())
             {
                 if (item.Span.Start - num > 0)

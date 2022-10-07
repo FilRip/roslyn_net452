@@ -345,89 +345,111 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        public static void Analyze(CSharpCompilation compilation, MethodSymbol member, BoundNode node, DiagnosticBag diagnostics, bool requireOutParamsAssigned = true)
+        /// <summary>
+        /// Perform data flow analysis, reporting all necessary diagnostics.
+        /// </summary>
+        public static void Analyze(
+            CSharpCompilation compilation,
+            MethodSymbol member,
+            BoundNode node,
+            DiagnosticBag diagnostics,
+            bool requireOutParamsAssigned = true)
         {
-            DiagnosticBag diagnosticBag = analyze(strictAnalysis: true);
-            if (diagnosticBag.IsEmptyWithoutResolution)
+            // Run the strongest version of analysis
+            DiagnosticBag strictDiagnostics = analyze(strictAnalysis: true);
+            if (strictDiagnostics.IsEmptyWithoutResolution)
             {
-                diagnosticBag.Free();
+                // If it reports nothing, there is nothing to report and we are done.
+                strictDiagnostics.Free();
                 return;
             }
-            DiagnosticBag diagnosticBag2 = analyze(strictAnalysis: false);
-            if (diagnosticBag2.AsEnumerable().Any((Diagnostic d) => d.Code == 8078))
+
+            // Also run the compat (weaker) version of analysis to see if we get the same diagnostics.
+            // If any are missing, the extra ones from the strong analysis will be downgraded to a warning.
+            DiagnosticBag compatDiagnostics = analyze(strictAnalysis: false);
+
+            // If the compat diagnostics caused a stack overflow, the two analyses might not produce comparable sets of diagnostics.
+            // So we just report the compat ones including that error.
+            if (compatDiagnostics.AsEnumerable().Any(d => (ErrorCode)d.Code == ErrorCode.ERR_InsufficientStack))
             {
-                diagnostics.AddRangeAndFree(diagnosticBag2);
-                diagnosticBag.Free();
+                diagnostics.AddRangeAndFree(compatDiagnostics);
+                strictDiagnostics.Free();
                 return;
             }
-            if (diagnosticBag.Count == diagnosticBag2.Count)
+
+            // If the compat diagnostics did not overflow and we have the same number of diagnostics, we just report the stricter set.
+            // It is OK if the strict analysis had an overflow here, causing the sets to be incomparable: the reported diagnostics will
+            // include the error reporting that fact.
+            if (strictDiagnostics.Count == compatDiagnostics.Count)
             {
-                diagnostics.AddRangeAndFree(diagnosticBag);
-                diagnosticBag2.Free();
+                diagnostics.AddRangeAndFree(strictDiagnostics);
+                compatDiagnostics.Free();
                 return;
             }
-            HashSet<Diagnostic> hashSet = new HashSet<Diagnostic>(diagnosticBag2.AsEnumerable(), SameDiagnosticComparer.Instance);
-            diagnosticBag2.Free();
-            foreach (Diagnostic item in diagnosticBag.AsEnumerable())
+
+            HashSet<Diagnostic> compatDiagnosticSet = new HashSet<Diagnostic>(compatDiagnostics.AsEnumerable(), SameDiagnosticComparer.Instance);
+            compatDiagnostics.Free();
+            foreach (var diagnostic in strictDiagnostics.AsEnumerable())
             {
-                if (item.Severity != DiagnosticSeverity.Error || hashSet.Contains(item))
+                // If it is a warning (e.g. WRN_AsyncLacksAwaits), or an error that would be reported by the compatible analysis, just report it.
+                if (diagnostic.Severity != DiagnosticSeverity.Error || compatDiagnosticSet.Contains(diagnostic))
                 {
-                    diagnostics.Add(item);
+                    diagnostics.Add(diagnostic);
                     continue;
                 }
-                ErrorCode code = (ErrorCode)item.Code;
-                ErrorCode code2 = code switch
+
+                // Otherwise downgrade the error to a warning.
+                ErrorCode oldCode = (ErrorCode)diagnostic.Code;
+                ErrorCode newCode = oldCode switch
                 {
+#pragma warning disable format
                     ErrorCode.ERR_UnassignedThisAutoProperty => ErrorCode.WRN_UnassignedThisAutoProperty,
-                    ErrorCode.ERR_UnassignedThis => ErrorCode.WRN_UnassignedThis,
-                    ErrorCode.ERR_ParamUnassigned => ErrorCode.WRN_ParamUnassigned,
-                    ErrorCode.ERR_UseDefViolationProperty => ErrorCode.WRN_UseDefViolationProperty,
-                    ErrorCode.ERR_UseDefViolationField => ErrorCode.WRN_UseDefViolationField,
-                    ErrorCode.ERR_UseDefViolationThis => ErrorCode.WRN_UseDefViolationThis,
-                    ErrorCode.ERR_UseDefViolationOut => ErrorCode.WRN_UseDefViolationOut,
-                    ErrorCode.ERR_UseDefViolation => ErrorCode.WRN_UseDefViolation,
-                    _ => code,
+                    ErrorCode.ERR_UnassignedThis             => ErrorCode.WRN_UnassignedThis,
+                    ErrorCode.ERR_ParamUnassigned            => ErrorCode.WRN_ParamUnassigned,
+                    ErrorCode.ERR_UseDefViolationProperty    => ErrorCode.WRN_UseDefViolationProperty,
+                    ErrorCode.ERR_UseDefViolationField       => ErrorCode.WRN_UseDefViolationField,
+                    ErrorCode.ERR_UseDefViolationThis        => ErrorCode.WRN_UseDefViolationThis,
+                    ErrorCode.ERR_UseDefViolationOut         => ErrorCode.WRN_UseDefViolationOut,
+                    ErrorCode.ERR_UseDefViolation            => ErrorCode.WRN_UseDefViolation,
+                    _ => oldCode, // rare but possible, e.g. ErrorCode.ERR_InsufficientStack occurring in strict mode only due to needing extra frames
+#pragma warning restore format
                 };
-                object?[] array;
-                if (item is DiagnosticWithInfo diagnosticWithInfo)
-                {
-                    DiagnosticInfo info = diagnosticWithInfo.Info;
-                    if (info != null)
-                    {
-                        object[] arguments = info.Arguments;
-                        array = arguments;
-                        goto IL_0201;
-                    }
-                }
-                array = item.Arguments.ToArray();
-                goto IL_0201;
-            IL_0201:
-                object[] args = array;
-                diagnostics.Add(code2, item.Location, args);
+
+                // We don't know any other way this can happen, but if it does we recover gracefully in production.
+
+                var args = diagnostic is DiagnosticWithInfo { Info: { Arguments: var arguments } } ? arguments : diagnostic.Arguments.ToArray();
+                diagnostics.Add(newCode, diagnostic.Location, args);
             }
-            diagnosticBag.Free();
+
+            strictDiagnostics.Free();
+            return;
+
             DiagnosticBag analyze(bool strictAnalysis)
             {
-                DiagnosticBag instance = DiagnosticBag.GetInstance();
-                DefiniteAssignmentPass definiteAssignmentPass = new DefiniteAssignmentPass(compilation, member, node, strictAnalysis, trackUnassignments: false, null, requireOutParamsAssigned)
-                {
-                    _convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = true
-                };
+                DiagnosticBag result = DiagnosticBag.GetInstance();
+                var walker = new DefiniteAssignmentPass(
+                    compilation,
+                    member,
+                    node,
+                    strictAnalysis: strictAnalysis,
+                    requireOutParamsAssigned: requireOutParamsAssigned);
+                walker._convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = true;
+
                 try
                 {
                     bool badRegion = false;
-                    definiteAssignmentPass.Analyze(ref badRegion, instance);
-                    return instance;
+                    walker.Analyze(ref badRegion, result);
                 }
-                catch (CancelledByStackGuardException ex) when (diagnostics != null)
+                catch (BoundTreeVisitor.CancelledByStackGuardException ex) when (diagnostics != null)
                 {
-                    ex.AddAnError(instance);
-                    return instance;
+                    ex.AddAnError(result);
                 }
                 finally
                 {
-                    definiteAssignmentPass.Free();
+                    walker.Free();
                 }
+
+                return result;
             }
         }
 

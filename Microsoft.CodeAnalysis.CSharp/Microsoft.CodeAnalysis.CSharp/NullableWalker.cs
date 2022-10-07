@@ -5453,56 +5453,46 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ImmutableArray<BoundExpression> GetArgumentsForMethodTypeInference(ImmutableArray<VisitArgumentResult> argumentResults, ImmutableArray<BoundExpression> arguments)
         {
-            int length = argumentResults.Length;
-            ArrayBuilder<BoundExpression> instance = ArrayBuilder<BoundExpression>.GetInstance(length);
-            for (int i = 0; i < length; i++)
+            // https://github.com/dotnet/roslyn/issues/27961 MethodTypeInferrer.Infer relies
+            // on the BoundExpressions for tuple element types and method groups.
+            // By using a generic BoundValuePlaceholder, we're losing inference in those cases.
+            // https://github.com/dotnet/roslyn/issues/27961 Inference should be based on
+            // unconverted arguments. Consider cases such as `default`, lambdas, tuples.
+            int n = argumentResults.Length;
+            var builder = ArrayBuilder<BoundExpression>.GetInstance(n);
+            for (int i = 0; i < n; i++)
             {
-                VisitArgumentResult visitArgumentResult = argumentResults[i];
-                Optional<LocalState> stateForLambda = visitArgumentResult.StateForLambda;
-                TypeWithAnnotations argumentType2 = visitArgumentResult.RValueType.ToTypeWithAnnotations(compilation);
-                instance.Add(getArgumentForMethodTypeInference(arguments[i], argumentType2, stateForLambda));
+                var visitArgumentResult = argumentResults[i];
+                var lambdaState = visitArgumentResult.StateForLambda;
+                // Note: for `out` arguments, the argument result contains the declaration type (see `VisitArgumentEvaluate`)
+                var argumentResult = visitArgumentResult.RValueType.ToTypeWithAnnotations(compilation);
+                builder.Add(getArgumentForMethodTypeInference(arguments[i], argumentResult, lambdaState));
             }
-            return instance.ToImmutableAndFree();
+            return builder.ToImmutableAndFree();
+
             BoundExpression getArgumentForMethodTypeInference(BoundExpression argument, TypeWithAnnotations argumentType, Optional<LocalState> lambdaState)
             {
                 if (argument.Kind == BoundKind.Lambda)
                 {
+                    // MethodTypeInferrer must infer nullability for lambdas based on the nullability
+                    // from flow analysis rather than the declared nullability. To allow that, we need
+                    // to re-bind lambdas in MethodTypeInferrer.
                     return getUnboundLambda((BoundLambda)argument, GetVariableState(_variables, lambdaState.Value));
                 }
                 if (!argumentType.HasType)
                 {
                     return argument;
                 }
-                if (argument is BoundLocal boundLocal)
+                if (argument is BoundLocal { DeclarationKind: BoundLocalDeclarationKind.WithInferredType }
+                             or BoundConditionalOperator { WasTargetTyped: true }
+                             or BoundConvertedSwitchExpression { WasTargetTyped: true })
                 {
-                    if (boundLocal.DeclarationKind == BoundLocalDeclarationKind.WithInferredType)
-                    {
-                        goto IL_0071;
-                    }
-                }
-                else if (argument is BoundConditionalOperator boundConditionalOperator)
-                {
-                    if (boundConditionalOperator.WasTargetTyped)
-                    {
-                        goto IL_0071;
-                    }
-                }
-                else if (argument is BoundConvertedSwitchExpression boundConvertedSwitchExpression && boundConvertedSwitchExpression.WasTargetTyped)
-                {
-                    goto IL_0071;
-                }
-                bool flag = false;
-                goto IL_0077;
-            IL_0077:
-                if (flag)
-                {
-                    return new BoundExpressionWithNullability(argument.Syntax, argument, NullableAnnotation.Oblivious, null);
+                    // target-typed contexts don't contribute to nullability
+                    return new BoundExpressionWithNullability(argument.Syntax, argument, NullableAnnotation.Oblivious, type: null);
                 }
                 return new BoundExpressionWithNullability(argument.Syntax, argument, argumentType.NullableAnnotation, argumentType.Type);
-            IL_0071:
-                flag = true;
-                goto IL_0077;
             }
+
             static UnboundLambda getUnboundLambda(BoundLambda expr, VariableState variableState)
             {
                 return expr.UnboundLambda.WithNullableState(variableState);
@@ -5984,215 +5974,302 @@ namespace Microsoft.CodeAnalysis.CSharp
             return null;
         }
 
-        private TypeWithState VisitConversion(BoundConversion? conversionOpt, BoundExpression conversionOperand, Conversion conversion, TypeWithAnnotations targetTypeWithNullability, TypeWithState operandType, bool checkConversion, bool fromExplicitCast, bool useLegacyWarnings, AssignmentKind assignmentKind, ParameterSymbol? parameterOpt = null, bool reportTopLevelWarnings = true, bool reportRemainingWarnings = true, bool extensionMethodThisArgument = false, Optional<LocalState> stateForLambda = default(Optional<LocalState>), bool trackMembers = false, Location? diagnosticLocationOpt = null)
+        /// <summary>
+        /// Apply the conversion to the type of the operand and return the resulting type. (If the
+        /// operand does not have an explicit type, the operand expression is used for the type.)
+        /// If `checkConversion` is set, the incoming conversion is assumed to be from binding and will be
+        /// re-calculated, this time considering nullability. (Note that the conversion calculation considers
+        /// nested nullability only. The caller is responsible for checking the top-level nullability of
+        /// the type returned by this method.) `trackMembers` should be set if the nullability of any
+        /// members of the operand should be copied to the converted result when possible.
+        /// </summary>
+        private TypeWithState VisitConversion(
+            BoundConversion? conversionOpt,
+            BoundExpression conversionOperand,
+            Conversion conversion,
+            TypeWithAnnotations targetTypeWithNullability,
+            TypeWithState operandType,
+            bool checkConversion,
+            bool fromExplicitCast,
+            bool useLegacyWarnings,
+            AssignmentKind assignmentKind,
+            ParameterSymbol? parameterOpt = null,
+            bool reportTopLevelWarnings = true,
+            bool reportRemainingWarnings = true,
+            bool extensionMethodThisArgument = false,
+            Optional<LocalState> stateForLambda = default,
+            bool trackMembers = false,
+            Location? diagnosticLocationOpt = null)
         {
-            BoundExpression conversionOperand2 = conversionOperand;
-            NullableFlowState resultState2 = NullableFlowState.NotNull;
-            bool flag = true;
-            bool isSuppressed2 = false;
-            if ((object)diagnosticLocationOpt == null)
-            {
-                diagnosticLocationOpt = (conversionOpt ?? conversionOperand2).Syntax.GetLocation();
-            }
-            if (conversionOperand2.IsSuppressed)
+            NullableFlowState resultState = NullableFlowState.NotNull;
+            bool canConvertNestedNullability = true;
+            bool isSuppressed = false;
+            diagnosticLocationOpt ??= (conversionOpt ?? conversionOperand).Syntax.GetLocation();
+
+            if (conversionOperand.IsSuppressed == true)
             {
                 reportTopLevelWarnings = false;
                 reportRemainingWarnings = false;
-                isSuppressed2 = true;
+                isSuppressed = true;
             }
-            TypeSymbol type = targetTypeWithNullability.Type;
+#nullable disable
+
+            TypeSymbol targetType = targetTypeWithNullability.Type;
             switch (conversion.Kind)
             {
                 case ConversionKind.MethodGroup:
                     {
-                        BoundMethodGroup boundMethodGroup = conversionOperand2 as BoundMethodGroup;
-                        (MethodSymbol invokeSignature, ImmutableArray<ParameterSymbol>) tuple = getDelegateOrFunctionPointerInfo(type);
-                        MethodSymbol item = tuple.invokeSignature;
-                        ImmutableArray<ParameterSymbol> item2 = tuple.Item2;
-                        MethodSymbol methodSymbol = conversion.Method;
-                        if (boundMethodGroup != null)
+                        var group = conversionOperand as BoundMethodGroup;
+                        var (invokeSignature, parameters) = getDelegateOrFunctionPointerInfo(targetType);
+                        var method = conversion.Method;
+                        if (group != null)
                         {
-                            if (methodSymbol?.OriginalDefinition is LocalFunctionSymbol symbol)
+                            if (method?.OriginalDefinition is LocalFunctionSymbol localFunc)
                             {
-                                VisitLocalFunctionUse(symbol);
+                                VisitLocalFunctionUse(localFunc);
                             }
-                            methodSymbol = CheckMethodGroupReceiverNullability(boundMethodGroup, item2, methodSymbol, conversion.IsExtensionMethod);
+                            method = CheckMethodGroupReceiverNullability(group, parameters, method, conversion.IsExtensionMethod);
                         }
-                        if (reportRemainingWarnings && item != null)
+                        if (reportRemainingWarnings && invokeSignature != null)
                         {
-                            ReportNullabilityMismatchWithTargetDelegate(diagnosticLocationOpt, type, item, methodSymbol, conversion.IsExtensionMethod);
+                            ReportNullabilityMismatchWithTargetDelegate(diagnosticLocationOpt, targetType, invokeSignature, method, conversion.IsExtensionMethod);
                         }
-                        resultState2 = NullableFlowState.NotNull;
-                        break;
                     }
+                    resultState = NullableFlowState.NotNull;
+                    break;
+
+                    static (MethodSymbol invokeSignature, ImmutableArray<ParameterSymbol>) getDelegateOrFunctionPointerInfo(TypeSymbol targetType)
+                        => targetType switch
+                        {
+                            NamedTypeSymbol { TypeKind: TypeKind.Delegate, DelegateInvokeMethod: { Parameters: { } parameters } signature } => (signature, parameters),
+                            FunctionPointerTypeSymbol { Signature: { Parameters: { } parameters } signature } => (signature, parameters),
+                            { SpecialType: SpecialType.System_Delegate } => (null, ImmutableArray<ParameterSymbol>.Empty),
+                            ErrorTypeSymbol => (null, ImmutableArray<ParameterSymbol>.Empty),
+                            _ => throw ExceptionUtilities.UnexpectedValue(targetType)
+                        };
+
                 case ConversionKind.AnonymousFunction:
-                    if (conversionOperand2 is BoundLambda boundLambda)
+                    if (conversionOperand is BoundLambda lambda)
                     {
-                        NamedTypeSymbol delegateType = type.GetDelegateType();
-                        VisitLambda(boundLambda, delegateType, stateForLambda);
+                        var delegateType = targetType.GetDelegateType();
+                        VisitLambda(lambda, delegateType, stateForLambda);
                         if (reportRemainingWarnings)
                         {
-                            ReportNullabilityMismatchWithTargetDelegate(diagnosticLocationOpt, delegateType, boundLambda.UnboundLambda);
+                            ReportNullabilityMismatchWithTargetDelegate(diagnosticLocationOpt, delegateType, lambda.UnboundLambda);
                         }
-                        TrackAnalyzedNullabilityThroughConversionGroup(targetTypeWithNullability.ToTypeWithState(), conversionOpt, conversionOperand2);
-                        return TypeWithState.Create(type, NullableFlowState.NotNull);
+
+                        TrackAnalyzedNullabilityThroughConversionGroup(targetTypeWithNullability.ToTypeWithState(), conversionOpt, conversionOperand);
+
+                        return TypeWithState.Create(targetType, NullableFlowState.NotNull);
                     }
                     break;
+
                 case ConversionKind.InterpolatedString:
-                    resultState2 = NullableFlowState.NotNull;
+                    resultState = NullableFlowState.NotNull;
                     break;
+
+                case ConversionKind.ObjectCreation:
                 case ConversionKind.SwitchExpression:
                 case ConversionKind.ConditionalExpression:
-                case ConversionKind.ObjectCreation:
-                    resultState2 = visitNestedTargetTypedConstructs();
-                    TrackAnalyzedNullabilityThroughConversionGroup(targetTypeWithNullability.ToTypeWithState(), conversionOpt, conversionOperand2);
+                    resultState = visitNestedTargetTypedConstructs();
+                    TrackAnalyzedNullabilityThroughConversionGroup(targetTypeWithNullability.ToTypeWithState(), conversionOpt, conversionOperand);
                     break;
-                case ConversionKind.ImplicitUserDefined:
+
                 case ConversionKind.ExplicitUserDefined:
-                    return VisitUserDefinedConversion(conversionOpt, conversionOperand2, conversion, targetTypeWithNullability, operandType, useLegacyWarnings, assignmentKind, parameterOpt, reportTopLevelWarnings, reportRemainingWarnings, diagnosticLocationOpt);
-                case ConversionKind.ImplicitDynamic:
+                case ConversionKind.ImplicitUserDefined:
+                    return VisitUserDefinedConversion(conversionOpt, conversionOperand, conversion, targetTypeWithNullability, operandType, useLegacyWarnings, assignmentKind, parameterOpt, reportTopLevelWarnings, reportRemainingWarnings, diagnosticLocationOpt);
+
                 case ConversionKind.ExplicitDynamic:
-                    resultState2 = getConversionResultState(operandType);
+                case ConversionKind.ImplicitDynamic:
+                    resultState = getConversionResultState(operandType);
                     break;
+
                 case ConversionKind.Boxing:
-                    resultState2 = getBoxingConversionResultState(targetTypeWithNullability, operandType);
+                    resultState = getBoxingConversionResultState(targetTypeWithNullability, operandType);
                     break;
+
                 case ConversionKind.Unboxing:
-                    if (type.IsNonNullableValueType())
+                    if (targetType.IsNonNullableValueType())
                     {
                         if (!operandType.IsNotNull && reportRemainingWarnings)
                         {
                             ReportDiagnostic(ErrorCode.WRN_UnboxPossibleNull, diagnosticLocationOpt);
                         }
-                        LearnFromNonNullTest(conversionOperand2, ref State);
+
+                        LearnFromNonNullTest(conversionOperand, ref State);
                     }
                     else
                     {
-                        resultState2 = getUnboxingConversionResultState(operandType);
+                        resultState = getUnboxingConversionResultState(operandType);
                     }
                     break;
+
                 case ConversionKind.ImplicitThrow:
-                    resultState2 = NullableFlowState.NotNull;
+                    resultState = NullableFlowState.NotNull;
                     break;
+
                 case ConversionKind.NoConversion:
-                    resultState2 = getConversionResultState(operandType);
+                    resultState = getConversionResultState(operandType);
                     break;
+
                 case ConversionKind.NullLiteral:
                 case ConversionKind.DefaultLiteral:
                     checkConversion = false;
                     goto case ConversionKind.Identity;
+
                 case ConversionKind.Identity:
+                    // If the operand is an explicit conversion, and this identity conversion
+                    // is converting to the same type including nullability, skip the conversion
+                    // to avoid reporting redundant warnings. Also check useLegacyWarnings
+                    // since that value was used when reporting warnings for the explicit cast.
+                    // Don't skip the node when it's a user-defined conversion, as identity conversions
+                    // on top of user-defined conversions means that we're coming in from VisitUserDefinedConversion
+                    // and that any warnings caught by this recursive call of VisitConversion won't be redundant.
+                    if (useLegacyWarnings && conversionOperand is BoundConversion operandConversion && !operandConversion.ConversionKind.IsUserDefinedConversion())
                     {
-                        if (useLegacyWarnings && conversionOperand2 is BoundConversion boundConversion && !boundConversion.ConversionKind.IsUserDefinedConversion())
+                        var explicitType = operandConversion.ConversionGroupOpt?.ExplicitType;
+                        if (explicitType?.Equals(targetTypeWithNullability, TypeCompareKind.ConsiderEverything) == true)
                         {
-                            TypeWithAnnotations? typeWithAnnotations = boundConversion.ConversionGroupOpt?.ExplicitType;
-                            if (typeWithAnnotations.HasValue && typeWithAnnotations.GetValueOrDefault().Equals(targetTypeWithNullability, TypeCompareKind.ConsiderEverything))
-                            {
-                                TrackAnalyzedNullabilityThroughConversionGroup(calculateResultType(targetTypeWithNullability, fromExplicitCast, operandType.State, isSuppressed2, type), conversionOpt, conversionOperand2);
-                                return operandType;
-                            }
+                            TrackAnalyzedNullabilityThroughConversionGroup(
+                                calculateResultType(targetTypeWithNullability, fromExplicitCast, operandType.State, isSuppressed, targetType),
+                                conversionOpt,
+                                conversionOperand);
+                            return operandType;
                         }
-                        TypeSymbol? type3 = operandType.Type;
-                        if (((object)type3 == null || !type3!.IsTupleType) && conversionOperand2.Kind != BoundKind.TupleLiteral)
-                        {
-                            goto case ConversionKind.ImplicitReference;
-                        }
-                        goto case ConversionKind.ImplicitTupleLiteral;
                     }
+                    if (operandType.Type?.IsTupleType == true || conversionOperand.Kind == BoundKind.TupleLiteral)
+                    {
+                        goto case ConversionKind.ImplicitTuple;
+                    }
+                    goto case ConversionKind.ImplicitReference;
+
                 case ConversionKind.ImplicitReference:
                 case ConversionKind.ExplicitReference:
+                    // Inherit state from the operand.
                     if (checkConversion)
                     {
-                        conversion = GenerateConversion(_conversions, conversionOperand2, operandType.Type, type, fromExplicitCast, extensionMethodThisArgument);
-                        flag = conversion.Exists;
+                        conversion = GenerateConversion(_conversions, conversionOperand, operandType.Type, targetType, fromExplicitCast, extensionMethodThisArgument);
+                        canConvertNestedNullability = conversion.Exists;
                     }
-                    resultState2 = (conversion.IsReference ? getReferenceConversionResultState(targetTypeWithNullability, operandType) : operandType.State);
+
+                    resultState = conversion.IsReference ? getReferenceConversionResultState(targetTypeWithNullability, operandType) : operandType.State;
                     break;
+
                 case ConversionKind.ImplicitNullable:
+                    if (trackMembers)
                     {
-                        if (trackMembers && AreNullableAndUnderlyingTypes(type, operandType.Type, out var underlyingTypeWithAnnotations))
+                        if (AreNullableAndUnderlyingTypes(targetType, operandType.Type, out TypeWithAnnotations underlyingType))
                         {
-                            int num2 = MakeSlot(conversionOperand2);
-                            if (num2 > 0)
+                            // Conversion of T to Nullable<T> is equivalent to new Nullable<T>(t).
+                            int valueSlot = MakeSlot(conversionOperand);
+                            if (valueSlot > 0)
                             {
-                                int orCreatePlaceholderSlot2 = GetOrCreatePlaceholderSlot(conversionOpt);
-                                TrackNullableStateOfNullableValue(orCreatePlaceholderSlot2, type, conversionOperand2, underlyingTypeWithAnnotations.ToTypeWithState(), num2);
+                                int containingSlot = GetOrCreatePlaceholderSlot(conversionOpt);
+                                TrackNullableStateOfNullableValue(containingSlot, targetType, conversionOperand, underlyingType.ToTypeWithState(), valueSlot);
                             }
                         }
-                        if (checkConversion)
-                        {
-                            conversion = GenerateConversion(_conversions, conversionOperand2, operandType.Type, type, fromExplicitCast, extensionMethodThisArgument);
-                            flag = conversion.Exists;
-                        }
-                        resultState2 = operandType.State;
-                        break;
                     }
+
+                    if (checkConversion)
+                    {
+                        conversion = GenerateConversion(_conversions, conversionOperand, operandType.Type, targetType, fromExplicitCast, extensionMethodThisArgument);
+                        canConvertNestedNullability = conversion.Exists;
+                    }
+
+                    resultState = operandType.State;
+                    break;
+
                 case ConversionKind.ExplicitNullable:
+                    if (operandType.Type?.IsNullableType() == true && !targetType.IsNullableType())
                     {
-                        TypeSymbol? type2 = operandType.Type;
-                        if ((object)type2 != null && type2.IsNullableType() && !type.IsNullableType())
+                        // Explicit conversion of Nullable<T> to T is equivalent to Nullable<T>.Value.
+                        if (reportTopLevelWarnings && operandType.MayBeNull)
                         {
-                            if (reportTopLevelWarnings && operandType.MayBeNull)
-                            {
-                                ReportDiagnostic(ErrorCode.WRN_NullableValueTypeMayBeNull, diagnosticLocationOpt);
-                            }
-                            if (conversionOperand2 != null)
-                            {
-                                LearnFromNonNullTest(conversionOperand2, ref State);
-                            }
+                            ReportDiagnostic(ErrorCode.WRN_NullableValueTypeMayBeNull, diagnosticLocationOpt);
                         }
-                        goto case ConversionKind.ImplicitNullable;
+
+                        // Mark the value as not nullable, regardless of whether it was known to be nullable,
+                        // because the implied call to `.Value` will only succeed if not null.
+                        if (conversionOperand != null)
+                        {
+                            LearnFromNonNullTest(conversionOperand, ref State);
+                        }
                     }
-                case ConversionKind.ImplicitTupleLiteral:
+                    goto case ConversionKind.ImplicitNullable;
+
                 case ConversionKind.ImplicitTuple:
+                case ConversionKind.ImplicitTupleLiteral:
                 case ConversionKind.ExplicitTupleLiteral:
                 case ConversionKind.ExplicitTuple:
                     if (trackMembers)
                     {
-                        ConversionKind kind = conversion.Kind;
-                        if (kind == ConversionKind.ImplicitTuple || kind == ConversionKind.ExplicitTuple)
+                        switch (conversion.Kind)
                         {
-                            int num = MakeSlot(conversionOperand2);
-                            if (num > 0)
-                            {
-                                int orCreatePlaceholderSlot = GetOrCreatePlaceholderSlot(conversionOpt);
-                                if (orCreatePlaceholderSlot > 0)
+                            case ConversionKind.ImplicitTuple:
+                            case ConversionKind.ExplicitTuple:
+                                int valueSlot = MakeSlot(conversionOperand);
+                                if (valueSlot > 0)
                                 {
-                                    TrackNullableStateOfTupleConversion(conversionOpt, conversionOperand2, conversion, type, operandType.Type, orCreatePlaceholderSlot, num, assignmentKind, parameterOpt, reportRemainingWarnings);
+                                    int slot = GetOrCreatePlaceholderSlot(conversionOpt);
+                                    if (slot > 0)
+                                    {
+                                        TrackNullableStateOfTupleConversion(conversionOpt, conversionOperand, conversion, targetType, operandType.Type, slot, valueSlot, assignmentKind, parameterOpt, reportWarnings: reportRemainingWarnings);
+                                    }
                                 }
-                            }
+                                break;
                         }
                     }
-                    if (checkConversion && !type.IsErrorType())
+
+                    if (checkConversion && !targetType.IsErrorType())
                     {
-                        conversion = GenerateConversion(_conversions, conversionOperand2, operandType.Type, type, fromExplicitCast, extensionMethodThisArgument);
-                        flag = conversion.Exists;
+                        // https://github.com/dotnet/roslyn/issues/29699: Report warnings for user-defined conversions on tuple elements.
+                        conversion = GenerateConversion(_conversions, conversionOperand, operandType.Type, targetType, fromExplicitCast, extensionMethodThisArgument);
+                        canConvertNestedNullability = conversion.Exists;
                     }
-                    resultState2 = NullableFlowState.NotNull;
+                    resultState = NullableFlowState.NotNull;
+                    break;
+
+                case ConversionKind.Deconstruction:
+                    // Can reach here, with an error type, when the
+                    // Deconstruct method is missing or inaccessible.
+                    break;
+
+                case ConversionKind.ExplicitEnumeration:
+                    // Can reach here, with an error type.
+                    break;
+
+                default:
+                    Debug.Assert(targetType.IsValueType || targetType.IsErrorType());
                     break;
             }
-            TypeWithState typeWithState = calculateResultType(targetTypeWithNullability, fromExplicitCast, resultState2, isSuppressed2, type);
-            TypeSymbol? type4 = operandType.Type;
-            if (((object)type4 == null || !type4.IsErrorType()) && !type.IsErrorType())
+
+            TypeWithState resultType = calculateResultType(targetTypeWithNullability, fromExplicitCast, resultState, isSuppressed, targetType);
+
+            if (operandType.Type?.IsErrorType() != true && !targetType.IsErrorType())
             {
+                // Need to report all warnings that apply since the warnings can be suppressed individually.
                 if (reportTopLevelWarnings)
                 {
-                    ReportNullableAssignmentIfNecessary(conversionOperand2, targetTypeWithNullability, typeWithState, useLegacyWarnings, assignmentKind, parameterOpt, diagnosticLocationOpt);
+                    ReportNullableAssignmentIfNecessary(conversionOperand, targetTypeWithNullability, resultType, useLegacyWarnings, assignmentKind, parameterOpt, diagnosticLocationOpt);
                 }
-                if (reportRemainingWarnings && !flag)
+                if (reportRemainingWarnings && !canConvertNestedNullability)
                 {
                     if (assignmentKind == AssignmentKind.Argument)
                     {
-                        ReportNullabilityMismatchInArgument(diagnosticLocationOpt, operandType.Type, parameterOpt, type, forOutput: false);
+                        ReportNullabilityMismatchInArgument(diagnosticLocationOpt, operandType.Type, parameterOpt, targetType, forOutput: false);
                     }
                     else
                     {
-                        ReportNullabilityMismatchInAssignment(diagnosticLocationOpt, GetTypeAsDiagnosticArgument(operandType.Type), type);
+                        ReportNullabilityMismatchInAssignment(diagnosticLocationOpt, GetTypeAsDiagnosticArgument(operandType.Type), targetType);
                     }
                 }
             }
-            TrackAnalyzedNullabilityThroughConversionGroup(typeWithState, conversionOpt, conversionOperand2);
-            return typeWithState;
+
+            TrackAnalyzedNullabilityThroughConversionGroup(resultType, conversionOpt, conversionOperand);
+
+            return resultType;
+
+#nullable enable
             static TypeWithState calculateResultType(TypeWithAnnotations targetTypeWithNullability, bool fromExplicitCast, NullableFlowState resultState, bool isSuppressed, TypeSymbol targetType)
             {
                 if (isSuppressed)
@@ -6201,10 +6278,98 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else if (fromExplicitCast && targetTypeWithNullability.NullableAnnotation.IsAnnotated() && !targetType.IsNullableType())
                 {
-                    resultState = (((object)targetType == null || !targetType.IsTypeParameterDisallowingAnnotationInCSharp8()) ? NullableFlowState.MaybeNull : NullableFlowState.MaybeDefault);
+                    // An explicit cast to a nullable reference type introduces nullability
+                    resultState = targetType?.IsTypeParameterDisallowingAnnotationInCSharp8() == true ? NullableFlowState.MaybeDefault : NullableFlowState.MaybeNull;
                 }
-                return TypeWithState.Create(targetType, resultState);
+
+                var resultType = TypeWithState.Create(targetType, resultState);
+                return resultType;
             }
+
+            static NullableFlowState getReferenceConversionResultState(TypeWithAnnotations targetType, TypeWithState operandType)
+            {
+                var state = operandType.State;
+                switch (state)
+                {
+                    case NullableFlowState.MaybeNull:
+                        if (targetType.Type?.IsTypeParameterDisallowingAnnotationInCSharp8() == true)
+                        {
+                            var type = operandType.Type;
+                            if (type is null || !type.IsTypeParameterDisallowingAnnotationInCSharp8())
+                            {
+                                return NullableFlowState.MaybeDefault;
+                            }
+                            else if (targetType.NullableAnnotation.IsNotAnnotated() &&
+                                type is TypeParameterSymbol typeParameter1 &&
+                                dependsOnTypeParameter(typeParameter1, (TypeParameterSymbol)targetType.Type, NullableAnnotation.NotAnnotated, out var annotation))
+                            {
+                                return (annotation == NullableAnnotation.Annotated) ? NullableFlowState.MaybeDefault : NullableFlowState.MaybeNull;
+                            }
+                        }
+                        break;
+                    case NullableFlowState.MaybeDefault:
+                        if (targetType.Type?.IsTypeParameterDisallowingAnnotationInCSharp8() == false)
+                        {
+                            return NullableFlowState.MaybeNull;
+                        }
+                        break;
+                }
+                return state;
+            }
+
+            // Converting to a less-derived type (object, interface, type parameter).
+            // If the operand is MaybeNull, the result should be
+            // MaybeNull (if the target type allows) or MaybeDefault otherwise.
+            static NullableFlowState getBoxingConversionResultState(TypeWithAnnotations targetType, TypeWithState operandType)
+            {
+                var state = operandType.State;
+                if (state == NullableFlowState.MaybeNull)
+                {
+                    var type = operandType.Type;
+                    if (type is null || !type.IsTypeParameterDisallowingAnnotationInCSharp8())
+                    {
+                        return NullableFlowState.MaybeDefault;
+                    }
+                    else if (targetType.NullableAnnotation.IsNotAnnotated() &&
+                        type is TypeParameterSymbol typeParameter1 &&
+                        targetType.Type is TypeParameterSymbol typeParameter2)
+                    {
+                        bool dependsOn = dependsOnTypeParameter(typeParameter1, typeParameter2, NullableAnnotation.NotAnnotated, out var annotation);
+                        if (dependsOn)
+                        {
+                            return (annotation == NullableAnnotation.Annotated) ? NullableFlowState.MaybeDefault : NullableFlowState.MaybeNull;
+                        }
+                    }
+                }
+                return state;
+            }
+
+            // Converting to a more-derived type (struct, class, type parameter).
+            // If the operand is MaybeNull or MaybeDefault, the result should be
+            // MaybeDefault.
+            static NullableFlowState getUnboxingConversionResultState(TypeWithState operandType)
+            {
+                var state = operandType.State;
+                if (state == NullableFlowState.MaybeNull)
+                {
+                    return NullableFlowState.MaybeDefault;
+                }
+                return state;
+            }
+
+            static NullableFlowState getConversionResultState(TypeWithState operandType)
+            {
+                var state = operandType.State;
+                if (state == NullableFlowState.MaybeNull)
+                {
+                    return NullableFlowState.MaybeDefault;
+                }
+                return state;
+            }
+
+            // If type parameter 1 depends on type parameter 2 (that is, if type parameter 2 appears
+            // in the constraint types of type parameter 1), returns the effective annotation on
+            // type parameter 2 in the constraints of type parameter 1.
             static bool dependsOnTypeParameter(TypeParameterSymbol typeParameter1, TypeParameterSymbol typeParameter2, NullableAnnotation typeParameter1Annotation, out NullableAnnotation annotation)
             {
                 if (typeParameter1.Equals(typeParameter2, TypeCompareKind.AllIgnoreOptions))
@@ -6212,215 +6377,77 @@ namespace Microsoft.CodeAnalysis.CSharp
                     annotation = typeParameter1Annotation;
                     return true;
                 }
-                bool flag2 = false;
-                NullableAnnotation a = NullableAnnotation.Annotated;
-                ImmutableArray<TypeWithAnnotations>.Enumerator enumerator = typeParameter1.ConstraintTypesNoUseSiteDiagnostics.GetEnumerator();
-                while (enumerator.MoveNext())
+                bool dependsOn = false;
+                var combinedAnnotation = NullableAnnotation.Annotated;
+                foreach (var constraintType in typeParameter1.ConstraintTypesNoUseSiteDiagnostics)
                 {
-                    TypeWithAnnotations current = enumerator.Current;
-                    if (current.Type is TypeParameterSymbol typeParameter4 && dependsOnTypeParameter(typeParameter4, typeParameter2, current.NullableAnnotation, out var annotation3))
+                    if (constraintType.Type is TypeParameterSymbol constraintTypeParameter &&
+                        dependsOnTypeParameter(constraintTypeParameter, typeParameter2, constraintType.NullableAnnotation, out var constraintAnnotation))
                     {
-                        flag2 = true;
-                        a = a.Meet(annotation3);
+                        dependsOn = true;
+                        combinedAnnotation = combinedAnnotation.Meet(constraintAnnotation);
                     }
                 }
-                if (flag2)
+                if (dependsOn)
                 {
-                    annotation = a.Join(typeParameter1Annotation);
+                    annotation = combinedAnnotation.Join(typeParameter1Annotation);
                     return true;
                 }
-                annotation = NullableAnnotation.NotAnnotated;
+                annotation = default;
                 return false;
             }
-            static NullableFlowState getBoxingConversionResultState(TypeWithAnnotations targetType, TypeWithState operandType)
-            {
-                NullableFlowState state4 = operandType.State;
-                if (state4 == NullableFlowState.MaybeNull)
-                {
-                    TypeSymbol type8 = operandType.Type;
-                    if ((object)type8 == null || !type8.IsTypeParameterDisallowingAnnotationInCSharp8())
-                    {
-                        return NullableFlowState.MaybeDefault;
-                    }
-                    if (targetType.NullableAnnotation.IsNotAnnotated() && type8 is TypeParameterSymbol typeParameter5 && targetType.Type is TypeParameterSymbol typeParameter6 && dependsOnTypeParameter(typeParameter5, typeParameter6, NullableAnnotation.NotAnnotated, out var annotation4))
-                    {
-                        if (annotation4 != NullableAnnotation.Annotated)
-                        {
-                            return NullableFlowState.MaybeNull;
-                        }
-                        return NullableFlowState.MaybeDefault;
-                    }
-                }
-                return state4;
-            }
-            static NullableFlowState getConversionResultState(TypeWithState operandType)
-            {
-                NullableFlowState state2 = operandType.State;
-                if (state2 == NullableFlowState.MaybeNull)
-                {
-                    return NullableFlowState.MaybeDefault;
-                }
-                return state2;
-            }
-            static (MethodSymbol invokeSignature, ImmutableArray<ParameterSymbol>) getDelegateOrFunctionPointerInfo(TypeSymbol targetType)
-            {
-                if (targetType is NamedTypeSymbol namedTypeSymbol)
-                {
-                    if (targetType.TypeKind == TypeKind.Delegate)
-                    {
-                        MethodSymbol delegateInvokeMethod = namedTypeSymbol.DelegateInvokeMethod;
-                        if ((object)delegateInvokeMethod != null)
-                        {
-                            ImmutableArray<ParameterSymbol> parameters = delegateInvokeMethod.Parameters;
-                            return (delegateInvokeMethod, parameters);
-                        }
-                    }
-                    if (targetType.SpecialType == SpecialType.System_Delegate)
-                    {
-                        goto IL_0080;
-                    }
-                    if (targetType is ErrorTypeSymbol)
-                    {
-                        return (null, ImmutableArray<ParameterSymbol>.Empty);
-                    }
-                }
-                else
-                {
-                    if (targetType is FunctionPointerTypeSymbol functionPointerTypeSymbol)
-                    {
-                        FunctionPointerMethodSymbol signature = functionPointerTypeSymbol.Signature;
-                        if ((object)signature != null)
-                        {
-                            ImmutableArray<ParameterSymbol> parameters2 = signature.Parameters;
-                            return (signature, parameters2);
-                        }
-                    }
-                    else if ((object)targetType == null)
-                    {
-                        goto IL_009e;
-                    }
-                    if (targetType.SpecialType == SpecialType.System_Delegate)
-                    {
-                        goto IL_0080;
-                    }
-                }
-                goto IL_009e;
-            IL_0080:
-                return (null, ImmutableArray<ParameterSymbol>.Empty);
-            IL_009e:
-                throw ExceptionUtilities.UnexpectedValue(targetType);
-            }
-            static NullableFlowState getReferenceConversionResultState(TypeWithAnnotations targetType, TypeWithState operandType)
-            {
-                NullableFlowState state = operandType.State;
-                switch (state)
-                {
-                    case NullableFlowState.MaybeNull:
-                        {
-                            TypeSymbol type6 = targetType.Type;
-                            if ((object)type6 != null && type6.IsTypeParameterDisallowingAnnotationInCSharp8())
-                            {
-                                TypeSymbol type7 = operandType.Type;
-                                if ((object)type7 == null || !type7.IsTypeParameterDisallowingAnnotationInCSharp8())
-                                {
-                                    return NullableFlowState.MaybeDefault;
-                                }
-                                if (targetType.NullableAnnotation.IsNotAnnotated() && type7 is TypeParameterSymbol typeParameter3 && dependsOnTypeParameter(typeParameter3, (TypeParameterSymbol)targetType.Type, NullableAnnotation.NotAnnotated, out var annotation2))
-                                {
-                                    if (annotation2 != NullableAnnotation.Annotated)
-                                    {
-                                        return NullableFlowState.MaybeNull;
-                                    }
-                                    return NullableFlowState.MaybeDefault;
-                                }
-                            }
-                            break;
-                        }
-                    case NullableFlowState.MaybeDefault:
-                        {
-                            TypeSymbol type5 = targetType.Type;
-                            if ((object)type5 != null && !type5.IsTypeParameterDisallowingAnnotationInCSharp8())
-                            {
-                                return NullableFlowState.MaybeNull;
-                            }
-                            break;
-                        }
-                }
-                return state;
-            }
-            static NullableFlowState getUnboxingConversionResultState(TypeWithState operandType)
-            {
-                NullableFlowState state3 = operandType.State;
-                if (state3 == NullableFlowState.MaybeNull)
-                {
-                    return NullableFlowState.MaybeDefault;
-                }
-                return state3;
-            }
+
             NullableFlowState visitNestedTargetTypedConstructs()
             {
-                if (conversionOperand2 is BoundConditionalOperator boundConditionalOperator)
+                switch (conversionOperand)
                 {
-                    if (boundConditionalOperator.WasTargetTyped)
-                    {
-                        ImmutableArray<(LocalState, TypeWithState, bool)> immutableArray = ConditionalInfoForConversion[boundConditionalOperator];
-                        BoundExpression consequence = boundConditionalOperator.Consequence;
-                        (BoundExpression expression, Conversion conversion) tuple2 = RemoveConversion(consequence, includeExplicitConversions: false);
-                        BoundExpression item3 = tuple2.expression;
-                        Conversion item4 = tuple2.conversion;
-                        TypeWithState typeWithState2 = ConvertConditionalOperandOrSwitchExpressionArmResult(consequence, item3, item4, targetTypeWithNullability, immutableArray[0].Item2, immutableArray[0].Item1, immutableArray[0].Item3);
-                        BoundExpression alternative = boundConditionalOperator.Alternative;
-                        (BoundExpression expression, Conversion conversion) tuple3 = RemoveConversion(alternative, includeExplicitConversions: false);
-                        BoundExpression item5 = tuple3.expression;
-                        Conversion item6 = tuple3.conversion;
-                        TypeWithState typeWithState3 = ConvertConditionalOperandOrSwitchExpressionArmResult(alternative, item5, item6, targetTypeWithNullability, immutableArray[1].Item2, immutableArray[1].Item1, immutableArray[1].Item3);
-                        ConditionalInfoForConversion.Remove(boundConditionalOperator);
-                        return typeWithState2.State.Join(typeWithState3.State);
-                    }
-                }
-                else if (conversionOperand2 is BoundConvertedSwitchExpression boundConvertedSwitchExpression)
-                {
-                    if (boundConvertedSwitchExpression.WasTargetTyped)
-                    {
-                        ImmutableArray<(LocalState, TypeWithState, bool)> immutableArray2 = ConditionalInfoForConversion[boundConvertedSwitchExpression];
-                        ArrayBuilder<TypeWithState> instance = ArrayBuilder<TypeWithState>.GetInstance(immutableArray2.Length);
-                        for (int i = 0; i < immutableArray2.Length; i++)
+                    case BoundConditionalOperator { WasTargetTyped: true } conditional:
                         {
-                            (LocalState, TypeWithState, bool) tuple4 = immutableArray2[i];
-                            LocalState item7 = tuple4.Item1;
-                            TypeWithState item8 = tuple4.Item2;
-                            bool item9 = tuple4.Item3;
-                            BoundExpression value = boundConvertedSwitchExpression.SwitchArms[i].Value;
-                            var (operand, conversion2) = RemoveConversion(value, includeExplicitConversions: false);
-                            instance.Add(ConvertConditionalOperandOrSwitchExpressionArmResult(value, operand, conversion2, targetTypeWithNullability, item8, item7, item9));
+                            var info = ConditionalInfoForConversion[conditional];
+
+                            var consequence = conditional.Consequence;
+                            (BoundExpression consequenceOperand, Conversion consequenceConversion) = RemoveConversion(consequence, includeExplicitConversions: false);
+                            var consequenceRValue = ConvertConditionalOperandOrSwitchExpressionArmResult(consequence, consequenceOperand, consequenceConversion, targetTypeWithNullability, info[0].ResultType, info[0].State, info[0].EndReachable);
+                            var alternative = conditional.Alternative;
+                            (BoundExpression alternativeOperand, Conversion alternativeConversion) = RemoveConversion(alternative, includeExplicitConversions: false);
+                            var alternativeRValue = ConvertConditionalOperandOrSwitchExpressionArmResult(alternative, alternativeOperand, alternativeConversion, targetTypeWithNullability, info[1].ResultType, info[1].State, info[1].EndReachable);
+
+                            ConditionalInfoForConversion.Remove(conditional);
+
+                            return consequenceRValue.State.Join(alternativeRValue.State);
                         }
-                        NullableFlowState nullableState = BestTypeInferrer.GetNullableState(instance);
-                        instance.Free();
-                        ConditionalInfoForConversion.Remove(boundConvertedSwitchExpression);
-                        return nullableState;
-                    }
-                }
-                else if (conversionOperand2 is BoundObjectCreationExpression boundObjectCreationExpression)
-                {
-                    if (boundObjectCreationExpression.WasTargetTyped)
-                    {
-                        goto IL_022d;
-                    }
-                }
-                else
-                {
-                    if (conversionOperand2 is BoundUnconvertedObjectCreationExpression)
-                    {
-                        goto IL_022d;
-                    }
-                    if (conversionOperand2 is BoundUnconvertedConditionalOperator || conversionOperand2 is BoundUnconvertedSwitchExpression)
-                    {
+
+                    case BoundConvertedSwitchExpression { WasTargetTyped: true } @switch:
+                        {
+                            var info = ConditionalInfoForConversion[@switch];
+
+                            var resultTypes = ArrayBuilder<TypeWithState>.GetInstance(info.Length);
+
+                            for (int i = 0; i < info.Length; i++)
+                            {
+                                var (state, armResultType, isReachable) = info[i];
+                                var arm = @switch.SwitchArms[i].Value;
+                                var (operand, conversion) = RemoveConversion(arm, includeExplicitConversions: false);
+                                resultTypes.Add(ConvertConditionalOperandOrSwitchExpressionArmResult(arm, operand, conversion, targetTypeWithNullability, armResultType, state, isReachable));
+                            }
+
+                            var resultState = BestTypeInferrer.GetNullableState(resultTypes);
+                            resultTypes.Free();
+                            ConditionalInfoForConversion.Remove(@switch);
+                            return resultState;
+                        }
+
+                    case BoundObjectCreationExpression { WasTargetTyped: true }:
+                    case BoundUnconvertedObjectCreationExpression:
+                        return NullableFlowState.NotNull;
+
+                    case BoundUnconvertedConditionalOperator:
+                    case BoundUnconvertedSwitchExpression:
                         return operandType.State;
-                    }
+
+                    default:
+                        throw ExceptionUtilities.UnexpectedValue(conversionOperand.Kind);
                 }
-                throw ExceptionUtilities.UnexpectedValue(conversionOperand2.Kind);
-            IL_022d:
-                return NullableFlowState.NotNull;
             }
         }
 
@@ -6549,60 +6576,58 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitDelegateCreationExpression(BoundDelegateCreationExpression node)
         {
-            if (node.MethodOpt?.OriginalDefinition is LocalFunctionSymbol symbol)
+            if (node.MethodOpt?.OriginalDefinition is LocalFunctionSymbol localFunc)
             {
-                VisitLocalFunctionUse(symbol);
+                VisitLocalFunctionUse(localFunc);
             }
-            NamedTypeSymbol namedTypeSymbol = (NamedTypeSymbol)node.Type;
-            BoundExpression argument = node.Argument;
-            if (!(argument is BoundMethodGroup boundMethodGroup))
+
+            var delegateType = (NamedTypeSymbol)node.Type;
+            switch (node.Argument)
             {
-                if (!(argument is BoundLambda boundLambda))
-                {
-                    if (argument != null)
+                case BoundMethodGroup group:
                     {
-                        TypeSymbol type = argument.Type;
-                        if ((object)type != null && type.TypeKind == TypeKind.Delegate)
+                        VisitMethodGroup(group);
+                        var method = node.MethodOpt;
+                        if (method is object)
                         {
-                            TypeWithAnnotations targetType = TypeWithAnnotations.Create(type, NullableAnnotation.NotAnnotated);
-                            TypeWithState valueType = VisitRvalueWithState(argument);
-                            ReportNullableAssignmentIfNecessary(argument, targetType, valueType, useLegacyWarnings: false);
-                            if (!argument.IsSuppressed)
+                            method = CheckMethodGroupReceiverNullability(group, delegateType.DelegateInvokeMethod.Parameters, method, node.IsExtensionMethod);
+                            if (!group.IsSuppressed)
                             {
-                                ReportNullabilityMismatchWithTargetDelegate(argument.Syntax.Location, namedTypeSymbol, namedTypeSymbol.DelegateInvokeMethod, type.DelegateInvokeMethod(), invokedAsExtensionMethod: false);
+                                ReportNullabilityMismatchWithTargetDelegate(group.Syntax.Location, delegateType, delegateType.DelegateInvokeMethod, method, node.IsExtensionMethod);
                             }
-                            LearnFromNonNullTest(argument, ref State);
-                            goto IL_01a0;
+                        }
+                        SetAnalyzedNullability(group, default);
+                    }
+                    break;
+                case BoundLambda lambda:
+                    {
+                        VisitLambda(lambda, delegateType);
+                        SetNotNullResult(lambda);
+                        if (!lambda.IsSuppressed)
+                        {
+                            ReportNullabilityMismatchWithTargetDelegate(lambda.Symbol.DiagnosticLocation, delegateType, lambda.UnboundLambda);
                         }
                     }
+                    break;
+                case BoundExpression arg when arg.Type is { TypeKind: TypeKind.Delegate } argType:
+                    {
+                        var argTypeWithAnnotations = TypeWithAnnotations.Create(argType, NullableAnnotation.NotAnnotated);
+                        var argState = VisitRvalueWithState(arg);
+                        ReportNullableAssignmentIfNecessary(arg, argTypeWithAnnotations, argState, useLegacyWarnings: false);
+                        if (!arg.IsSuppressed)
+                        {
+                            ReportNullabilityMismatchWithTargetDelegate(arg.Syntax.Location, delegateType, delegateType.DelegateInvokeMethod, argType.DelegateInvokeMethod(), invokedAsExtensionMethod: false);
+                        }
+
+                        // Delegate creation will throw an exception if the argument is null
+                        LearnFromNonNullTest(arg, ref State);
+                    }
+                    break;
+                default:
                     VisitRvalue(node.Argument);
-                }
-                else
-                {
-                    VisitLambda(boundLambda, namedTypeSymbol);
-                    SetNotNullResult(boundLambda);
-                    if (!boundLambda.IsSuppressed)
-                    {
-                        ReportNullabilityMismatchWithTargetDelegate(boundLambda.Symbol.DiagnosticLocation, namedTypeSymbol, boundLambda.UnboundLambda);
-                    }
-                }
+                    break;
             }
-            else
-            {
-                VisitMethodGroup(boundMethodGroup);
-                MethodSymbol methodOpt = node.MethodOpt;
-                if ((object)methodOpt != null)
-                {
-                    methodOpt = CheckMethodGroupReceiverNullability(boundMethodGroup, namedTypeSymbol.DelegateInvokeMethod.Parameters, methodOpt, node.IsExtensionMethod);
-                    if (!boundMethodGroup.IsSuppressed)
-                    {
-                        ReportNullabilityMismatchWithTargetDelegate(boundMethodGroup.Syntax.Location, namedTypeSymbol, namedTypeSymbol.DelegateInvokeMethod, methodOpt, node.IsExtensionMethod);
-                    }
-                }
-                SetAnalyzedNullability(boundMethodGroup, default(VisitResult));
-            }
-            goto IL_01a0;
-        IL_01a0:
+
             SetNotNullResult(node);
             return null;
         }
@@ -6819,71 +6844,32 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private FlowAnalysisAnnotations GetLValueAnnotations(BoundExpression expr)
         {
+            // Annotations are ignored when binding an attribute to avoid cycles. (Members used
+            // in attributes are error scenarios, so missing warnings should not be important.)
             if (IsAnalyzingAttribute)
             {
                 return FlowAnalysisAnnotations.None;
             }
-            FlowAnalysisAnnotations flowAnalysisAnnotations;
-            if (!(expr is BoundPropertyAccess boundPropertyAccess))
+
+            var annotations = expr switch
             {
-                if (!(expr is BoundIndexerAccess boundIndexerAccess))
-                {
-                    if (!(expr is BoundFieldAccess boundFieldAccess))
-                    {
-                        if (!(expr is BoundObjectInitializerMember boundObjectInitializerMember))
-                        {
-                            if (expr is BoundParameter boundParameter)
-                            {
-                                ParameterSymbol parameterSymbol = boundParameter.ParameterSymbol;
-                                if ((object)parameterSymbol != null)
-                                {
-                                    flowAnalysisAnnotations = ToInwardAnnotations(GetParameterAnnotations(parameterSymbol) & ~FlowAnalysisAnnotations.NotNull);
-                                    goto IL_00cb;
-                                }
-                            }
-                            goto IL_00c8;
-                        }
-                        Symbol memberSymbol = boundObjectInitializerMember.MemberSymbol;
-                        if (!(memberSymbol is PropertySymbol property))
-                        {
-                            if (!(memberSymbol is FieldSymbol field2))
-                            {
-                                goto IL_00c8;
-                            }
-                            flowAnalysisAnnotations = getFieldAnnotations(field2);
-                        }
-                        else
-                        {
-                            flowAnalysisAnnotations = property.GetFlowAnalysisAnnotations();
-                        }
-                    }
-                    else
-                    {
-                        flowAnalysisAnnotations = getFieldAnnotations(boundFieldAccess.FieldSymbol);
-                    }
-                }
-                else
-                {
-                    flowAnalysisAnnotations = boundIndexerAccess.Indexer.GetFlowAnalysisAnnotations();
-                }
-            }
-            else
-            {
-                flowAnalysisAnnotations = boundPropertyAccess.PropertySymbol.GetFlowAnalysisAnnotations();
-            }
-            goto IL_00cb;
-        IL_00c8:
-            flowAnalysisAnnotations = FlowAnalysisAnnotations.None;
-            goto IL_00cb;
-        IL_00cb:
-            return flowAnalysisAnnotations & (FlowAnalysisAnnotations.AllowNull | FlowAnalysisAnnotations.DisallowNull);
+                BoundPropertyAccess property => property.PropertySymbol.GetFlowAnalysisAnnotations(),
+                BoundIndexerAccess indexer => indexer.Indexer.GetFlowAnalysisAnnotations(),
+                BoundFieldAccess field => getFieldAnnotations(field.FieldSymbol),
+                BoundObjectInitializerMember { MemberSymbol: PropertySymbol prop } => prop.GetFlowAnalysisAnnotations(),
+                BoundObjectInitializerMember { MemberSymbol: FieldSymbol field } => getFieldAnnotations(field),
+                BoundParameter { ParameterSymbol: ParameterSymbol parameter }
+                    => ToInwardAnnotations(GetParameterAnnotations(parameter) & ~FlowAnalysisAnnotations.NotNull), // NotNull is enforced upon method exit
+                _ => FlowAnalysisAnnotations.None
+            };
+
+            return annotations & (FlowAnalysisAnnotations.DisallowNull | FlowAnalysisAnnotations.AllowNull);
+
             static FlowAnalysisAnnotations getFieldAnnotations(FieldSymbol field)
             {
-                if (!(field.AssociatedSymbol is PropertySymbol property2))
-                {
-                    return field.FlowAnalysisAnnotations;
-                }
-                return property2.GetFlowAnalysisAnnotations();
+                return field.AssociatedSymbol is PropertySymbol property ?
+                    property.GetFlowAnalysisAnnotations() :
+                    field.FlowAnalysisAnnotations;
             }
         }
 
@@ -7127,72 +7113,99 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitIncrementOperator(BoundIncrementOperator node)
         {
-            TypeWithState typeWithState = VisitRvalueWithState(node.Operand);
-            TypeWithAnnotations lvalueResultType = LvalueResultType;
-            bool flag = false;
-            object obj;
-            if (State.Reachable)
+            var operandType = VisitRvalueWithState(node.Operand);
+            var operandLvalue = LvalueResultType;
+            bool setResult = false;
+
+            if (this.State.Reachable)
             {
-                if (node.OperatorKind.IsUserDefined())
+                // https://github.com/dotnet/roslyn/issues/29961 Update increment method based on operand type.
+                MethodSymbol? incrementOperator = (node.OperatorKind.IsUserDefined() && node.MethodOpt?.ParameterCount == 1) ? node.MethodOpt : null;
+                TypeWithAnnotations targetTypeOfOperandConversion;
+                AssignmentKind assignmentKind = AssignmentKind.Assignment;
+                ParameterSymbol? parameter = null;
+
+                // Analyze operator call properly (honoring [Disallow|Allow|Maybe|NotNull] attribute annotations) https://github.com/dotnet/roslyn/issues/32671
+                // https://github.com/dotnet/roslyn/issues/29961 Update conversion method based on operand type.
+                if (node.OperandConversion.IsUserDefined && node.OperandConversion.Method?.ParameterCount == 1)
                 {
-                    MethodSymbol? methodOpt = node.MethodOpt;
-                    if ((object)methodOpt != null && methodOpt!.ParameterCount == 1)
-                    {
-                        obj = node.MethodOpt;
-                        goto IL_0053;
-                    }
+                    targetTypeOfOperandConversion = node.OperandConversion.Method.ReturnTypeWithAnnotations;
                 }
-                obj = null;
-                goto IL_0053;
-            }
-            goto IL_01bb;
-        IL_00dc:
-            TypeWithAnnotations targetTypeWithNullability;
-            AssignmentKind assignmentKind;
-            ParameterSymbol parameterOpt;
-            TypeWithState typeWithState2 = ((!targetTypeWithNullability.HasType) ? typeWithState : VisitConversion(null, node.Operand, node.OperandConversion, targetTypeWithNullability, typeWithState, checkConversion: true, fromExplicitCast: false, useLegacyWarnings: false, assignmentKind, parameterOpt));
-            MethodSymbol methodSymbol;
-            TypeWithState operandType = methodSymbol?.ReturnTypeWithAnnotations.ToTypeWithState() ?? typeWithState2;
-            TypeWithAnnotations targetTypeWithNullability2 = typeWithState.ToTypeWithAnnotations(compilation);
-            operandType = VisitConversion(null, node, node.ResultConversion, targetTypeWithNullability2, operandType, checkConversion: true, fromExplicitCast: false, useLegacyWarnings: false, AssignmentKind.Assignment);
-            if (!node.HasErrors)
-            {
-                UnaryOperatorKind unaryOperatorKind = node.OperatorKind.Operator();
-                TypeWithState type = ((unaryOperatorKind == UnaryOperatorKind.PrefixIncrement || unaryOperatorKind == UnaryOperatorKind.PrefixDecrement) ? operandType : typeWithState);
-                SetResultType(node, type);
-                flag = true;
-                TrackNullableStateForAssignment(node, lvalueResultType, MakeSlot(node.Operand), operandType);
-            }
-            goto IL_01bb;
-        IL_0053:
-            methodSymbol = (MethodSymbol)obj;
-            assignmentKind = AssignmentKind.Assignment;
-            parameterOpt = null;
-            if (node.OperandConversion.IsUserDefined)
-            {
-                MethodSymbol? method = node.OperandConversion.Method;
-                if ((object)method != null && method!.ParameterCount == 1)
+                else if (incrementOperator is object)
                 {
-                    targetTypeWithNullability = node.OperandConversion.Method!.ReturnTypeWithAnnotations;
-                    goto IL_00dc;
+                    targetTypeOfOperandConversion = incrementOperator.Parameters[0].TypeWithAnnotations;
+                    assignmentKind = AssignmentKind.Argument;
+                    parameter = incrementOperator.Parameters[0];
+                }
+                else
+                {
+                    // Either a built-in increment, or an error case.
+                    targetTypeOfOperandConversion = default;
+                }
+
+                TypeWithState resultOfOperandConversionType;
+
+                if (targetTypeOfOperandConversion.HasType)
+                {
+                    // https://github.com/dotnet/roslyn/issues/29961 Should something special be done for targetTypeOfOperandConversion for lifted case?
+                    resultOfOperandConversionType = VisitConversion(
+                        conversionOpt: null,
+                        node.Operand,
+                        node.OperandConversion,
+                        targetTypeOfOperandConversion,
+                        operandType,
+                        checkConversion: true,
+                        fromExplicitCast: false,
+                        useLegacyWarnings: false,
+                        assignmentKind,
+                        parameter,
+                        reportTopLevelWarnings: true,
+                        reportRemainingWarnings: true);
+                }
+                else
+                {
+                    resultOfOperandConversionType = operandType;
+                }
+
+                TypeWithState resultOfIncrementType;
+                if (incrementOperator is null)
+                {
+                    resultOfIncrementType = resultOfOperandConversionType;
+                }
+                else
+                {
+                    resultOfIncrementType = incrementOperator.ReturnTypeWithAnnotations.ToTypeWithState();
+                }
+
+                var operandTypeWithAnnotations = operandType.ToTypeWithAnnotations(compilation);
+                resultOfIncrementType = VisitConversion(
+                    conversionOpt: null,
+                    node,
+                    node.ResultConversion,
+                    operandTypeWithAnnotations,
+                    resultOfIncrementType,
+                    checkConversion: true,
+                    fromExplicitCast: false,
+                    useLegacyWarnings: false,
+                    AssignmentKind.Assignment);
+
+                // https://github.com/dotnet/roslyn/issues/29961 Check node.Type.IsErrorType() instead?
+                if (!node.HasErrors)
+                {
+                    var op = node.OperatorKind.Operator();
+                    TypeWithState resultType = (op == UnaryOperatorKind.PrefixIncrement || op == UnaryOperatorKind.PrefixDecrement) ? resultOfIncrementType : operandType;
+                    SetResultType(node, resultType);
+                    setResult = true;
+
+                    TrackNullableStateForAssignment(node, targetType: operandLvalue, targetSlot: MakeSlot(node.Operand), valueType: resultOfIncrementType);
                 }
             }
-            if ((object)methodSymbol != null)
-            {
-                targetTypeWithNullability = methodSymbol.Parameters[0].TypeWithAnnotations;
-                assignmentKind = AssignmentKind.Argument;
-                parameterOpt = methodSymbol.Parameters[0];
-            }
-            else
-            {
-                targetTypeWithNullability = default(TypeWithAnnotations);
-            }
-            goto IL_00dc;
-        IL_01bb:
-            if (!flag)
+
+            if (!setResult)
             {
                 SetNotNullResult(node);
             }
+
             return null;
         }
 
@@ -8067,23 +8080,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitLiteral(BoundLiteral node)
         {
-            BoundNode result = base.VisitLiteral(node);
-            TypeSymbol? type = node.Type;
-            TypeSymbol? type2 = node.Type;
-            int defaultState;
-            if ((object)type2 == null || type2.CanContainNull())
-            {
-                ConstantValue? constantValue = node.ConstantValue;
-                if ((object)constantValue != null && constantValue!.IsNull)
-                {
-                    defaultState = 3;
-                    goto IL_003b;
-                }
-            }
-            defaultState = 0;
-            goto IL_003b;
-        IL_003b:
-            SetResultType(node, TypeWithState.Create(type, (NullableFlowState)defaultState));
+            var result = base.VisitLiteral(node);
+
+            SetResultType(node, TypeWithState.Create(node.Type, node.Type?.CanContainNull() != false && node.ConstantValue?.IsNull == true ? NullableFlowState.MaybeDefault : NullableFlowState.NotNull));
+
             SplitIfBooleanConstant(node);
             return result;
         }

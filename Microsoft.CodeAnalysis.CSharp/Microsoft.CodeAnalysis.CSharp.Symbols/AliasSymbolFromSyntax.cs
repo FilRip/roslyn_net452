@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 BindingDiagnosticBag instance = BindingDiagnosticBag.GetInstance();
                 NamespaceOrTypeSymbol value = (IsExtern ? ResolveExternAliasTarget(instance) : ResolveAliasTarget(((UsingDirectiveSyntax)_directive.GetSyntax()).Name, instance, basesBeingResolved));
-                if ((object)Interlocked.CompareExchange(ref _aliasTarget, value, null) == null)
+                if (Interlocked.CompareExchange(ref _aliasTarget, value, null) is null)
                 {
                     Interlocked.Exchange(ref _aliasTargetDiagnostics, instance);
                     _state.NotePartComplete(CompletionPart.StartBaseType);
@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 else
                 {
                     instance.Free();
-                    _state.SpinWaitComplete(CompletionPart.StartBaseType, default(CancellationToken));
+                    _state.SpinWaitComplete(CompletionPart.StartBaseType, default);
                 }
             }
             return _aliasTarget;

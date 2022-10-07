@@ -827,7 +827,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 _items = array._items;
                 _nextItemSegment = 0;
                 _nextItemIndex = 0;
-                _current = default(T);
+                _current = default;
             }
 
             public void Dispose()
@@ -858,7 +858,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 _nextItemSegment = 0;
                 _nextItemIndex = 0;
-                _current = default(T);
+                _current = default;
             }
         }
 
@@ -1139,7 +1139,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 return 1;
             }
-            if (!(other is SegmentedArray<T> segmentedArray) || Length != segmentedArray.Length)
+            if (other is not SegmentedArray<T> segmentedArray || Length != segmentedArray.Length)
             {
                 throw new ArgumentException(SR.ArgumentException_OtherNotArrayOfCorrectLength, "other");
             }
@@ -1160,7 +1160,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 return false;
             }
-            if (!(other is SegmentedArray<T> segmentedArray))
+            if (other is not SegmentedArray<T> segmentedArray)
             {
                 return false;
             }

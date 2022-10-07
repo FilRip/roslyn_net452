@@ -39,9 +39,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            if (obj is LambdaDebugInfo)
+            if (obj is LambdaDebugInfo info)
             {
-                return Equals((LambdaDebugInfo)obj);
+                return Equals(info);
             }
             return false;
         }

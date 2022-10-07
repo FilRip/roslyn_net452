@@ -29,9 +29,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            if (obj is LocalSlotDebugInfo)
+            if (obj is LocalSlotDebugInfo info)
             {
-                return Equals((LocalSlotDebugInfo)obj);
+                return Equals(info);
             }
             return false;
         }

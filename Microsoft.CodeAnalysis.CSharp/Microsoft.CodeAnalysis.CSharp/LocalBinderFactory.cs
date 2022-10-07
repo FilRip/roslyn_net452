@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitRankSpecifiers(TypeSyntax type, Binder enclosing)
         {
-            Action<ArrayRankSpecifierSyntax, (LocalBinderFactory, Binder)> action = delegate (ArrayRankSpecifierSyntax rankSpecifier, (LocalBinderFactory localBinderFactory, Binder binder) args)
+            static void action(ArrayRankSpecifierSyntax rankSpecifier, (LocalBinderFactory localBinderFactory, Binder binder) args)
             {
                 SeparatedSyntaxList<ExpressionSyntax>.Enumerator enumerator = rankSpecifier.Sizes.GetEnumerator();
                 while (enumerator.MoveNext())
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         args.localBinderFactory.Visit(current, args.binder);
                     }
                 }
-            };
+            }
             (LocalBinderFactory, Binder) argument = (this, enclosing);
             type.VisitRankSpecifiers(action, in argument);
         }
@@ -641,7 +641,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             while (true)
             {
                 Visit(node.Right);
-                if (!(node.Left is BinaryExpressionSyntax binaryExpressionSyntax))
+                if (node.Left is not BinaryExpressionSyntax binaryExpressionSyntax)
                 {
                     break;
                 }

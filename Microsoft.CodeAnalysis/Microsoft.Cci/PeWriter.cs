@@ -101,13 +101,13 @@ namespace Microsoft.Cci
             {
                 return false;
             }
-            BlobContentId pdbContentId = nativePdbWriterOpt?.GetContentId() ?? default(BlobContentId);
+            BlobContentId pdbContentId = nativePdbWriterOpt?.GetContentId() ?? default;
             nativePdbWriterOpt = null;
             ushort portablePdbVersion = 0;
             MetadataRootBuilder rootBuilder = metadataWriter.GetRootBuilder();
             PEHeaderBuilder header = new PEHeaderBuilder(serializationProperties.Machine, serializationProperties.SectionAlignment, serializationProperties.FileAlignment, serializationProperties.BaseAddress, serializationProperties.LinkerMajorVersion, serializationProperties.LinkerMinorVersion, 4, 0, 0, 0, serializationProperties.MajorSubsystemVersion, serializationProperties.MinorSubsystemVersion, serializationProperties.Subsystem, serializationProperties.DllCharacteristics, serializationProperties.ImageCharacteristics, serializationProperties.SizeOfStackReserve, serializationProperties.SizeOfStackCommit, serializationProperties.SizeOfHeapReserve, serializationProperties.SizeOfHeapCommit);
             Func<IEnumerable<Blob>, BlobContentId> deterministicIdProvider = (isDeterministic ? ((Func<IEnumerable<Blob>, BlobContentId>)((IEnumerable<Blob> content) => BlobContentId.FromHash(CryptographicHashProvider.ComputeHash(context.Module.PdbChecksumAlgorithm, content)))) : null); // FilRip : modified ComputeHash
-            ImmutableArray<byte> portablePdbContentHash = default(ImmutableArray<byte>);
+            ImmutableArray<byte> portablePdbContentHash = default;
             BlobBuilder blobBuilder4 = null;
             if (metadataWriter.EmitPortableDebugMetadata)
             {

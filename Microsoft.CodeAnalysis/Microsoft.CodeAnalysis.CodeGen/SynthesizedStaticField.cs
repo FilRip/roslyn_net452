@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public IMarshallingInformation? MarshallingInformation => null;
 
-        public ImmutableArray<byte> MarshallingDescriptor => default(ImmutableArray<byte>);
+        public ImmutableArray<byte> MarshallingDescriptor => default;
 
         public int Offset
         {

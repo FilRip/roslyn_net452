@@ -6515,39 +6515,49 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static LiftingResult UserDefinedBinaryOperatorCanBeLifted(TypeSymbol left, TypeSymbol right, TypeSymbol result, BinaryOperatorKind kind)
         {
-            if (!left.IsValueType || left.IsNullableType() || !right.IsValueType || right.IsNullableType())
+            // SPEC: For the binary operators + - * / % & | ^ << >> a lifted form of the
+            // SPEC: operator exists if the operand and result types are all non-nullable
+            // SPEC: value types. The lifted form is constructed by adding a single ?
+            // SPEC: modifier to each operand and result type. 
+            //
+            // SPEC: For the equality operators == != a lifted form of the operator exists
+            // SPEC: if the operand types are both non-nullable value types and if the 
+            // SPEC: result type is bool. The lifted form is constructed by adding
+            // SPEC: a single ? modifier to each operand type.
+            //
+            // SPEC: For the relational operators > < >= <= a lifted form of the 
+            // SPEC: operator exists if the operand types are both non-nullable value
+            // SPEC: types and if the result type is bool. The lifted form is 
+            // SPEC: constructed by adding a single ? modifier to each operand type.
+
+            if (!left.IsValueType ||
+                left.IsNullableType() ||
+                !right.IsValueType ||
+                right.IsNullableType())
             {
                 return LiftingResult.NotLifted;
             }
-            if (kind <= BinaryOperatorKind.GreaterThan)
+
+            switch (kind)
             {
-                if (kind != BinaryOperatorKind.Equal && kind != BinaryOperatorKind.NotEqual)
-                {
-                    if (kind != BinaryOperatorKind.GreaterThan)
-                    {
-                        goto IL_0077;
-                    }
-                }
-                else if (!TypeSymbol.Equals(left, right, TypeCompareKind.ConsiderEverything))
-                {
-                    return LiftingResult.NotLifted;
-                }
+                case BinaryOperatorKind.Equal:
+                case BinaryOperatorKind.NotEqual:
+                    // Spec violation: can't lift unless the types match.
+                    // The spec doesn't require this, but dev11 does and it reduces ambiguity in some cases.
+                    if (!TypeSymbol.Equals(left, right, TypeCompareKind.ConsiderEverything2)) return LiftingResult.NotLifted;
+                    goto case BinaryOperatorKind.GreaterThan;
+                case BinaryOperatorKind.GreaterThan:
+                case BinaryOperatorKind.GreaterThanOrEqual:
+                case BinaryOperatorKind.LessThan:
+                case BinaryOperatorKind.LessThanOrEqual:
+                    return result.SpecialType == SpecialType.System_Boolean ?
+                        LiftingResult.LiftOperandsButNotResult :
+                        LiftingResult.NotLifted;
+                default:
+                    return result.IsValueType && !result.IsNullableType() ?
+                        LiftingResult.LiftOperandsAndResult :
+                        LiftingResult.NotLifted;
             }
-            else if (kind != BinaryOperatorKind.LessThan && kind != BinaryOperatorKind.GreaterThanOrEqual && kind != BinaryOperatorKind.LessThanOrEqual)
-            {
-                goto IL_0077;
-            }
-            if (result.SpecialType != SpecialType.System_Boolean)
-            {
-                return LiftingResult.NotLifted;
-            }
-            return LiftingResult.LiftOperandsButNotResult;
-        IL_0077:
-            if (!result.IsValueType || result.IsNullableType())
-            {
-                return LiftingResult.NotLifted;
-            }
-            return LiftingResult.LiftOperandsAndResult;
         }
 
         private void BinaryOperatorOverloadResolution(BoundExpression left, BoundExpression right, BinaryOperatorOverloadResolutionResult result, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -7260,109 +7270,135 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
         private void RemoveCallingConventionMismatches<TMember>(ArrayBuilder<MemberResolutionResult<TMember>> results, in CallingConventionInfo expectedConvention) where TMember : Symbol
         {
-            if (typeof(TMember) != typeof(MethodSymbol) || _binder.InAttributeArgument || (_binder.Flags & BinderFlags.InContextualAttributeBinder) != 0)
+            if (typeof(TMember) != typeof(MethodSymbol))
             {
                 return;
             }
+
+            Debug.Assert(!expectedConvention.CallKind.HasUnknownCallingConventionAttributeBits());
+            Debug.Assert(expectedConvention.UnmanagedCallingConventionTypes is not null);
+            Debug.Assert(expectedConvention.UnmanagedCallingConventionTypes.IsEmpty || expectedConvention.CallKind == Cci.CallingConvention.Unmanaged);
+
+            Debug.Assert(!_binder.IsEarlyAttributeBinder);
+            if (_binder.InAttributeArgument || (_binder.Flags & BinderFlags.InContextualAttributeBinder) != 0)
+            {
+                // We're at a location where the unmanaged data might not yet been bound. This cannot be valid code
+                // anyway, as attribute arguments can't be method references, so we'll just assume that the conventions
+                // match, as there will be other errors that supersede these anyway
+                return;
+            }
+
             for (int i = 0; i < results.Count; i++)
             {
-                MemberResolutionResult<TMember> result2 = results[i];
-                MethodSymbol methodSymbol = (MethodSymbol)(object)result2.Member;
-                if (!result2.Result.IsValid)
+                var result = results[i];
+                var member = (MethodSymbol)(Symbol)result.Member;
+                if (result.Result.IsValid)
                 {
-                    continue;
-                }
-                UnmanagedCallersOnlyAttributeData unmanagedCallersOnlyAttributeData = methodSymbol.GetUnmanagedCallersOnlyAttributeData(forceComplete: true);
-                CallingConvention callingConvention;
-                ImmutableHashSet<INamedTypeSymbolInternal> immutableHashSet;
-                ImmutableHashSet<INamedTypeSymbolInternal> callingConventionTypes;
-                if (unmanagedCallersOnlyAttributeData == null)
-                {
-                    callingConvention = methodSymbol.CallingConvention;
-                    immutableHashSet = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
-                }
-                else
-                {
-                    callingConventionTypes = unmanagedCallersOnlyAttributeData.CallingConventionTypes;
-                    int count = callingConventionTypes.Count;
-                    if (count != 0)
+                    // We're not in an attribute, so cycles shouldn't be possible
+                    var unmanagedCallersOnlyData = member.GetUnmanagedCallersOnlyAttributeData(forceComplete: true);
+
+                    Debug.Assert(!ReferenceEquals(unmanagedCallersOnlyData, UnmanagedCallersOnlyAttributeData.AttributePresentDataNotBound)
+                                 && !ReferenceEquals(unmanagedCallersOnlyData, UnmanagedCallersOnlyAttributeData.Uninitialized));
+
+                    Cci.CallingConvention actualCallKind;
+                    ImmutableHashSet<INamedTypeSymbolInternal> actualUnmanagedCallingConventionTypes;
+
+                    if (unmanagedCallersOnlyData is null)
                     {
-                        if (count != 1)
-                        {
-                            goto IL_013b;
-                        }
-                        switch (callingConventionTypes.Single().Name)
-                        {
-                            case "CallConvCdecl":
-                                break;
-                            case "CallConvStdcall":
-                                goto IL_0117;
-                            case "CallConvThiscall":
-                                goto IL_0123;
-                            case "CallConvFastcall":
-                                goto IL_012f;
-                            default:
-                                goto IL_013b;
-                        }
-                        callingConvention = CallingConvention.CDecl;
-                        immutableHashSet = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
+                        actualCallKind = member.CallingConvention;
+                        actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
                     }
                     else
                     {
-                        callingConvention = CallingConvention.Unmanaged;
-                        immutableHashSet = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
-                    }
-                }
-                goto IL_0143;
-            IL_013b:
-                callingConvention = CallingConvention.Unmanaged;
-                immutableHashSet = callingConventionTypes;
-                goto IL_0143;
-            IL_012f:
-                callingConvention = CallingConvention.FastCall;
-                immutableHashSet = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
-                goto IL_0143;
-            IL_0123:
-                callingConvention = CallingConvention.ThisCall;
-                immutableHashSet = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
-                goto IL_0143;
-            IL_0117:
-                callingConvention = CallingConvention.Standard;
-                immutableHashSet = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
-                goto IL_0143;
-            IL_0143:
-                if (callingConvention.HasUnknownCallingConventionAttributeBits() || !callingConvention.IsCallingConvention(expectedConvention.CallKind))
-                {
-                    results[i] = makeWrongCallingConvention(result2);
-                }
-                else
-                {
-                    if (!expectedConvention.CallKind.IsCallingConvention(CallingConvention.Unmanaged))
-                    {
-                        continue;
-                    }
-                    if (expectedConvention.UnmanagedCallingConventionTypes!.Count != immutableHashSet.Count)
-                    {
-                        results[i] = makeWrongCallingConvention(result2);
-                        continue;
-                    }
-                    foreach (CustomModifier item in expectedConvention.UnmanagedCallingConventionTypes!)
-                    {
-                        if (!immutableHashSet.Contains(((CSharpCustomModifier)item).ModifierSymbol))
+                        // There's data from an UnmanagedCallersOnlyAttribute present, which takes precedence over the
+                        // CallKind bit in the method definition. We use the following rules to decode the attribute:
+                        // * If no types are specified, the CallKind is treated as Unmanaged, with no unmanaged calling convention types
+                        // * If there is one type specified, and that type is named CallConvCdecl, CallConvThiscall, CallConvStdcall, or 
+                        //   CallConvFastcall, the CallKind is treated as CDecl, ThisCall, Standard, or FastCall, respectively, with no
+                        //   calling types.
+                        // * If multiple types are specified or the single type is not named one of the specially called out types above,
+                        //   the CallKind is treated as Unmanaged, with the union of the types specified treated as calling convention types.
+
+                        var unmanagedCallingConventionTypes = unmanagedCallersOnlyData.CallingConventionTypes;
+                        Debug.Assert(unmanagedCallingConventionTypes.All(u => FunctionPointerTypeSymbol.IsCallingConventionModifier((NamedTypeSymbol)u)));
+
+                        switch (unmanagedCallingConventionTypes.Count)
                         {
-                            results[i] = makeWrongCallingConvention(result2);
-                            break;
+                            case 0:
+                                actualCallKind = Cci.CallingConvention.Unmanaged;
+                                actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
+                                break;
+                            case 1:
+                                switch (unmanagedCallingConventionTypes.Single().Name)
+                                {
+                                    case "CallConvCdecl":
+                                        actualCallKind = Cci.CallingConvention.CDecl;
+                                        actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
+                                        break;
+                                    case "CallConvStdcall":
+                                        actualCallKind = Cci.CallingConvention.Standard;
+                                        actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
+                                        break;
+                                    case "CallConvThiscall":
+                                        actualCallKind = Cci.CallingConvention.ThisCall;
+                                        actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
+                                        break;
+                                    case "CallConvFastcall":
+                                        actualCallKind = Cci.CallingConvention.FastCall;
+                                        actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
+                                        break;
+                                    default:
+                                        goto outerDefault;
+                                }
+                                break;
+
+                            default:
+                            outerDefault:
+                                actualCallKind = Cci.CallingConvention.Unmanaged;
+                                actualUnmanagedCallingConventionTypes = unmanagedCallingConventionTypes;
+                                break;
+                        }
+                    }
+
+                    // The rules for matching a calling convention are:
+                    // 1. The CallKinds must match exactly
+                    // 2. If the CallKind is Unmanaged, then the set of calling convention types must match exactly, ignoring order
+                    //    and duplicates. We already have both sets in a HashSet, so we can just ensure they're the same length and
+                    //    that everything from one set is in the other set.
+
+                    if (actualCallKind.HasUnknownCallingConventionAttributeBits() || !actualCallKind.IsCallingConvention(expectedConvention.CallKind))
+                    {
+                        results[i] = makeWrongCallingConvention(result);
+                        continue;
+                    }
+
+                    if (expectedConvention.CallKind.IsCallingConvention(Cci.CallingConvention.Unmanaged))
+                    {
+                        if (expectedConvention.UnmanagedCallingConventionTypes.Count != actualUnmanagedCallingConventionTypes.Count)
+                        {
+                            results[i] = makeWrongCallingConvention(result);
+                            continue;
+                        }
+
+                        foreach (var expectedModifier in expectedConvention.UnmanagedCallingConventionTypes)
+                        {
+                            if (!actualUnmanagedCallingConventionTypes.Contains(((CSharpCustomModifier)expectedModifier).ModifierSymbol))
+                            {
+                                results[i] = makeWrongCallingConvention(result);
+                                break;
+                            }
                         }
                     }
                 }
             }
+
             static MemberResolutionResult<TMember> makeWrongCallingConvention(MemberResolutionResult<TMember> result)
-            {
-                return new MemberResolutionResult<TMember>(result.Member, result.LeastOverriddenMember, MemberAnalysisResult.WrongCallingConvention());
-            }
+                => new MemberResolutionResult<TMember>(result.Member, result.LeastOverriddenMember, MemberAnalysisResult.WrongCallingConvention());
         }
+#nullable disable
 
         private bool FailsConstraintChecks(MethodSymbol method, out ArrayBuilder<TypeParameterDiagnosticInfo> constraintFailureDiagnosticsOpt, CompoundUseSiteInfo<AssemblySymbol> template)
         {

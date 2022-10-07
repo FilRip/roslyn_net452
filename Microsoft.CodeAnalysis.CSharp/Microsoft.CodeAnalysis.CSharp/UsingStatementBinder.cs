@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             ArrayBuilder<LocalSymbol> instance2 = ArrayBuilder<LocalSymbol>.GetInstance(declaration.Variables.Count);
             TypeSyntax type = declaration.Type;
-            Action<ArrayRankSpecifierSyntax, (UsingStatementBinder, ArrayBuilder<LocalSymbol>)> action = delegate (ArrayRankSpecifierSyntax rankSpecifier, (UsingStatementBinder binder, ArrayBuilder<LocalSymbol> locals) args)
+            static void action(ArrayRankSpecifierSyntax rankSpecifier, (UsingStatementBinder binder, ArrayBuilder<LocalSymbol> locals) args)
             {
                 SeparatedSyntaxList<ExpressionSyntax>.Enumerator enumerator2 = rankSpecifier.Sizes.GetEnumerator();
                 while (enumerator2.MoveNext())
@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         ExpressionVariableFinder.FindExpressionVariables(args.binder, args.locals, current2);
                     }
                 }
-            };
+            }
             (UsingStatementBinder, ArrayBuilder<LocalSymbol>) argument = (this, instance2);
             type.VisitRankSpecifiers(action, in argument);
             SeparatedSyntaxList<VariableDeclaratorSyntax>.Enumerator enumerator = declaration.Variables.GetEnumerator();

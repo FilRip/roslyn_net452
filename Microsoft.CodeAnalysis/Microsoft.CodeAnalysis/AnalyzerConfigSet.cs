@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis
     {
         private sealed class SequenceEqualComparer : IEqualityComparer<List<AnalyzerConfig.Section>>
         {
-            public static SequenceEqualComparer Instance { get; } = new SequenceEqualComparer();
+            public static SequenceEqualComparer Instance { get; } = new();
 
 
             public bool Equals(List<AnalyzerConfig.Section>? x, List<AnalyzerConfig.Section>? y)
@@ -106,12 +106,12 @@ namespace Microsoft.CodeAnalysis
                 _duplicates = null;
                 AnalyzerConfig.Section section = GetSection(string.Empty);
                 _values!.Remove(string.Empty);
-                ArrayBuilder<AnalyzerConfig.Section> arrayBuilder = new ArrayBuilder<AnalyzerConfig.Section>(_values!.Count);
+                ArrayBuilder<AnalyzerConfig.Section> arrayBuilder = new(_values!.Count);
                 foreach (string item4 in _values!.Keys.Order())
                 {
                     arrayBuilder.Add(GetSection(item4));
                 }
-                GlobalAnalyzerConfig result = new GlobalAnalyzerConfig(section, arrayBuilder.ToImmutableAndFree());
+                GlobalAnalyzerConfig result = new(section, arrayBuilder.ToImmutableAndFree());
                 _values = null;
                 return result;
             }
@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis
                         continue;
                     }
                     bool flag = value.TryGetValue(text3, out (string, string, int) value3);
-                    (int, ArrayBuilder<string>) value4 = default((int, ArrayBuilder<string>));
+                    (int, ArrayBuilder<string>) value4 = default;
                     bool flag2 = !flag && (value2?.TryGetValue(text3, out value4) ?? false);
                     if (!flag && !flag2)
                     {
@@ -202,23 +202,23 @@ namespace Microsoft.CodeAnalysis
 
         private readonly ImmutableArray<ImmutableArray<AnalyzerConfig.SectionNameMatcher?>> _analyzerMatchers;
 
-        private readonly ConcurrentDictionary<ReadOnlyMemory<char>, string> _diagnosticIdCache = new ConcurrentDictionary<ReadOnlyMemory<char>, string>(CharMemoryEqualityComparer.Instance);
+        private readonly ConcurrentDictionary<ReadOnlyMemory<char>, string> _diagnosticIdCache = new(CharMemoryEqualityComparer.Instance);
 
-        private readonly ConcurrentCache<List<AnalyzerConfig.Section>, AnalyzerConfigOptionsResult> _optionsCache = new ConcurrentCache<List<AnalyzerConfig.Section>, AnalyzerConfigOptionsResult>(50, SequenceEqualComparer.Instance);
+        private readonly ConcurrentCache<List<AnalyzerConfig.Section>, AnalyzerConfigOptionsResult> _optionsCache = new(50, SequenceEqualComparer.Instance);
 
-        private readonly ObjectPool<ImmutableDictionary<string, ReportDiagnostic>.Builder> _treeOptionsPool = new ObjectPool<ImmutableDictionary<string, ReportDiagnostic>.Builder>(() => ImmutableDictionary.CreateBuilder<string, ReportDiagnostic>(AnalyzerConfig.Section.PropertiesKeyComparer));
+        private readonly ObjectPool<ImmutableDictionary<string, ReportDiagnostic>.Builder> _treeOptionsPool = new(() => ImmutableDictionary.CreateBuilder<string, ReportDiagnostic>(AnalyzerConfig.Section.PropertiesKeyComparer));
 
-        private readonly ObjectPool<ImmutableDictionary<string, string>.Builder> _analyzerOptionsPool = new ObjectPool<ImmutableDictionary<string, string>.Builder>(() => ImmutableDictionary.CreateBuilder<string, string>(AnalyzerConfig.Section.PropertiesKeyComparer));
+        private readonly ObjectPool<ImmutableDictionary<string, string>.Builder> _analyzerOptionsPool = new(() => ImmutableDictionary.CreateBuilder<string, string>(AnalyzerConfig.Section.PropertiesKeyComparer));
 
-        private readonly ObjectPool<List<AnalyzerConfig.Section>> _sectionKeyPool = new ObjectPool<List<AnalyzerConfig.Section>>(() => new List<AnalyzerConfig.Section>());
+        private readonly ObjectPool<List<AnalyzerConfig.Section>> _sectionKeyPool = new(() => new List<AnalyzerConfig.Section>());
 
         private StrongBox<AnalyzerConfigOptionsResult>? _lazyConfigOptions;
 
-        private static readonly DiagnosticDescriptor InvalidAnalyzerConfigSeverityDescriptor = new DiagnosticDescriptor("InvalidSeverityInAnalyzerConfig", CodeAnalysisResources.WRN_InvalidSeverityInAnalyzerConfig_Title, CodeAnalysisResources.WRN_InvalidSeverityInAnalyzerConfig, "AnalyzerConfig", DiagnosticSeverity.Warning, true, null, null);
+        private static readonly DiagnosticDescriptor InvalidAnalyzerConfigSeverityDescriptor = new("InvalidSeverityInAnalyzerConfig", CodeAnalysisResources.WRN_InvalidSeverityInAnalyzerConfig_Title, CodeAnalysisResources.WRN_InvalidSeverityInAnalyzerConfig, "AnalyzerConfig", DiagnosticSeverity.Warning, true, null, null);
 
-        private static readonly DiagnosticDescriptor MultipleGlobalAnalyzerKeysDescriptor = new DiagnosticDescriptor("MultipleGlobalAnalyzerKeys", CodeAnalysisResources.WRN_MultipleGlobalAnalyzerKeys_Title, CodeAnalysisResources.WRN_MultipleGlobalAnalyzerKeys, "AnalyzerConfig", DiagnosticSeverity.Warning, true, null, null);
+        private static readonly DiagnosticDescriptor MultipleGlobalAnalyzerKeysDescriptor = new("MultipleGlobalAnalyzerKeys", CodeAnalysisResources.WRN_MultipleGlobalAnalyzerKeys_Title, CodeAnalysisResources.WRN_MultipleGlobalAnalyzerKeys, "AnalyzerConfig", DiagnosticSeverity.Warning, true, null, null);
 
-        private static readonly DiagnosticDescriptor InvalidGlobalAnalyzerSectionDescriptor = new DiagnosticDescriptor("InvalidGlobalSectionName", CodeAnalysisResources.WRN_InvalidGlobalSectionName_Title, CodeAnalysisResources.WRN_InvalidGlobalSectionName, "AnalyzerConfig", DiagnosticSeverity.Warning, true, null, null);
+        private static readonly DiagnosticDescriptor InvalidGlobalAnalyzerSectionDescriptor = new("InvalidGlobalSectionName", CodeAnalysisResources.WRN_InvalidGlobalSectionName_Title, CodeAnalysisResources.WRN_InvalidGlobalSectionName, "AnalyzerConfig", DiagnosticSeverity.Warning, true, null, null);
 
         public AnalyzerConfigOptionsResult GlobalConfigOptions
         {
@@ -419,7 +419,7 @@ namespace Microsoft.CodeAnalysis
             ImmutableDictionary<string, string>.Builder builder2 = _analyzerOptionsPool.Allocate();
             ArrayBuilder<Diagnostic> instance = ArrayBuilder<Diagnostic>.GetInstance();
             ParseSectionOptions(_globalConfig.GlobalSection, builder, builder2, instance, "<Global Config>", _diagnosticIdCache);
-            AnalyzerConfigOptionsResult result = new AnalyzerConfigOptionsResult(builder.ToImmutable(), builder2.ToImmutable(), instance.ToImmutableAndFree());
+            AnalyzerConfigOptionsResult result = new(builder.ToImmutable(), builder2.ToImmutable(), instance.ToImmutableAndFree());
             builder.Clear();
             builder2.Clear();
             _treeOptionsPool.Free(builder);
@@ -463,7 +463,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static GlobalAnalyzerConfig MergeGlobalConfigs(ArrayBuilder<AnalyzerConfig> analyzerConfigs, out ImmutableArray<Diagnostic> diagnostics)
         {
-            GlobalAnalyzerConfigBuilder globalAnalyzerConfigBuilder = default(GlobalAnalyzerConfigBuilder);
+            GlobalAnalyzerConfigBuilder globalAnalyzerConfigBuilder = default;
             DiagnosticBag instance = DiagnosticBag.GetInstance();
             for (int i = 0; i < analyzerConfigs.Count; i++)
             {

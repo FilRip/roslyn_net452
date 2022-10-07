@@ -134,7 +134,7 @@ namespace Roslyn.Utilities
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             return source.Cast<T?>().FirstOrDefault();
         }
@@ -144,9 +144,9 @@ namespace Roslyn.Utilities
             Func<T, bool> predicate2 = predicate;
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
-            return source.Cast<T?>().FirstOrDefault((T? v) => predicate2(v.Value));
+            return source.Cast<T?>().FirstOrDefault((T? v) => predicate2(v!.Value));
         }
 
         public static T? LastOrNull<T>(this IEnumerable<T> source) where T : struct
@@ -165,7 +165,7 @@ namespace Roslyn.Utilities
             {
                 throw new ArgumentNullException("source");
             }
-            return source.Cast<T?>().SingleOrDefault((T? v) => predicate2(v.Value));
+            return source.Cast<T?>().SingleOrDefault((T? v) => predicate2(v!.Value));
         }
 
         public static bool IsSingle<T>(this IEnumerable<T> list)

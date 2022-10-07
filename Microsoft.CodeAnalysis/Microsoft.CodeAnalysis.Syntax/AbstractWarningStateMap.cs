@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.Syntax
             public WarningStateMapEntry(int position)
             {
                 Position = position;
-                GeneralWarningOption = default(TWarningState);
+                GeneralWarningOption = default;
                 SpecificWarningOption = ImmutableDictionary.Create<string, TWarningState>();
             }
 

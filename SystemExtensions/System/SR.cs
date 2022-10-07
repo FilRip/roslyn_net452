@@ -7,7 +7,7 @@ namespace System
 	{
 		private static ResourceManager s_resourceManager;
 
-		private static ResourceManager ResourceManager => s_resourceManager ?? (s_resourceManager = new ResourceManager(ResourceType));
+		private static ResourceManager ResourceManager => s_resourceManager ??= new ResourceManager(ResourceType);
 
 		internal static Type ResourceType { get; } = typeof(SystemExtensions.Properties.Resources);
 

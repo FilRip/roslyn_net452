@@ -30,9 +30,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            if (obj is ClosureDebugInfo)
+            if (obj is ClosureDebugInfo info)
             {
-                return Equals((ClosureDebugInfo)obj);
+                return Equals(info);
             }
             return false;
         }

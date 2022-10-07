@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private LocalState _endOfRegionState;
 
-        private readonly HashSet<LabelSymbol> _labelsInside = new HashSet<LabelSymbol>();
+        private readonly HashSet<LabelSymbol> _labelsInside = new();
 
         private AlwaysAssignedWalker(CSharpCompilation compilation, Symbol member, BoundNode node, BoundNode firstInRegion, BoundNode lastInRegion)
             : base(compilation, member, node, firstInRegion, lastInRegion)
@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static IEnumerable<Symbol> Analyze(CSharpCompilation compilation, Symbol member, BoundNode node, BoundNode firstInRegion, BoundNode lastInRegion)
         {
-            AlwaysAssignedWalker alwaysAssignedWalker = new AlwaysAssignedWalker(compilation, member, node, firstInRegion, lastInRegion);
+            AlwaysAssignedWalker alwaysAssignedWalker = new(compilation, member, node, firstInRegion, lastInRegion);
             bool badRegion = false;
             try
             {
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private List<Symbol> Analyze(ref bool badRegion)
         {
             Analyze(ref badRegion, null);
-            List<Symbol> list = new List<Symbol>();
+            List<Symbol> list = new();
             if (_endOfRegionState.Reachable)
             {
                 foreach (int item in _endOfRegionState.Assigned.TrueBits())

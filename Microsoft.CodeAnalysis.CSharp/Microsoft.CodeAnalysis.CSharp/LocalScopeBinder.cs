@@ -181,7 +181,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         Binder binder2 = enclosingBinder.GetBinder(statementSyntax) ?? enclosingBinder;
                         LocalDeclarationStatementSyntax localDeclarationStatementSyntax = (LocalDeclarationStatementSyntax)statementSyntax;
                         TypeSyntax type = localDeclarationStatementSyntax.Declaration.Type;
-                        Action<ArrayRankSpecifierSyntax, (LocalScopeBinder, ArrayBuilder<LocalSymbol>, Binder)> action = delegate (ArrayRankSpecifierSyntax rankSpecifier, (LocalScopeBinder localScopeBinder, ArrayBuilder<LocalSymbol> locals, Binder localDeclarationBinder) args)
+                        static void action(ArrayRankSpecifierSyntax rankSpecifier, (LocalScopeBinder localScopeBinder, ArrayBuilder<LocalSymbol> locals, Binder localDeclarationBinder) args)
                         {
                             SeparatedSyntaxList<ExpressionSyntax>.Enumerator enumerator2 = rankSpecifier.Sizes.GetEnumerator();
                             while (enumerator2.MoveNext())
@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     ExpressionVariableFinder.FindExpressionVariables(args.localScopeBinder, args.locals, current2, args.localDeclarationBinder);
                                 }
                             }
-                        };
+                        }
                         (LocalScopeBinder, ArrayBuilder<LocalSymbol>, Binder) argument = (this, locals, binder2);
                         type.VisitRankSpecifiers(action, in argument);
                         LocalDeclarationKind kind = (localDeclarationStatementSyntax.IsConst ? LocalDeclarationKind.Constant : ((!(localDeclarationStatementSyntax.UsingKeyword != default(SyntaxToken))) ? LocalDeclarationKind.RegularVariable : LocalDeclarationKind.UsingVariable));

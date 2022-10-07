@@ -1263,7 +1263,6 @@
     <Compile Include="Roslyn.Utilities\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="Roslyn.Utilities\ReferenceEqualityComparer.cs" />
     <Compile Include="Roslyn.Utilities\ReflectionUtilities.cs" />
-    <Compile Include="Roslyn.Utilities\RoslynDebug.cs" />
     <Compile Include="Roslyn.Utilities\RoslynLazyInitializer.cs" />
     <Compile Include="Roslyn.Utilities\RoslynParallel.cs" />
     <Compile Include="Roslyn.Utilities\RoslynString.cs" />

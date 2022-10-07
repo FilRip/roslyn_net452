@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             if (Target is TypeSymbol type && Locations.Length > 0)
             {
-                TypeConversions conversions = new TypeConversions(ContainingAssembly.CorLibrary);
+                TypeConversions conversions = new(ContainingAssembly.CorLibrary);
                 type.CheckAllConstraints(DeclaringCompilation, conversions, Locations[0], diagnostics);
             }
         }

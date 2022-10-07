@@ -735,43 +735,83 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private MethodArgumentInfo FindForEachPatternMethodViaExtension(BoundExpression collectionExpr, string methodName, BindingDiagnosticBag diagnostics)
         {
-            AnalyzedArguments instance = AnalyzedArguments.GetInstance();
-            MethodGroupResolution methodGroupResolution = BindExtensionMethod(_syntax.Expression, methodName, instance, collectionExpr, default(ImmutableArray<TypeWithAnnotations>), isMethodGroupConversion: false, RefKind.None, null, diagnostics.AccumulatesDependencies);
-            diagnostics.AddRange(methodGroupResolution.Diagnostics);
-            OverloadResolutionResult<MethodSymbol> overloadResolutionResult = methodGroupResolution.OverloadResolutionResult;
-            if (overloadResolutionResult != null && overloadResolutionResult.Succeeded)
+            var analyzedArguments = AnalyzedArguments.GetInstance();
+
+            var methodGroupResolutionResult = this.BindExtensionMethod(
+                _syntax.Expression,
+                methodName,
+                analyzedArguments,
+                collectionExpr,
+                typeArgumentsWithAnnotations: default,
+                isMethodGroupConversion: false,
+                returnRefKind: default,
+                returnType: null,
+                withDependencies: diagnostics.AccumulatesDependencies);
+
+            diagnostics.AddRange(methodGroupResolutionResult.Diagnostics);
+
+            var overloadResolutionResult = methodGroupResolutionResult.OverloadResolutionResult;
+            if (overloadResolutionResult?.Succeeded ?? false)
             {
-                MethodSymbol member = overloadResolutionResult.ValidResult.Member;
-                if (member.CallsAreOmitted(_syntax.SyntaxTree))
+                var result = overloadResolutionResult.ValidResult.Member;
+
+                if (result.CallsAreOmitted(_syntax.SyntaxTree))
                 {
-                    methodGroupResolution.Free();
-                    instance.Free();
+                    // Calls to this method are omitted in the current syntax tree, i.e it is either a partial method with no implementation part OR a conditional method whose condition is not true in this source file.
+                    // We don't want to allow this case.
+                    methodGroupResolutionResult.Free();
+                    analyzedArguments.Free();
                     return null;
                 }
+
                 CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-                Conversion conversion = base.Conversions.ClassifyConversionFromExpression(collectionExpr, member.Parameters[0].Type, ref useSiteInfo);
+                var collectionConversion = this.Conversions.ClassifyConversionFromExpression(collectionExpr, result.Parameters[0].Type, ref useSiteInfo);
                 diagnostics.Add(_syntax, useSiteInfo);
-                collectionExpr = new BoundConversion(collectionExpr.Syntax, collectionExpr, conversion, base.CheckOverflowAtRuntime, explicitCastInCode: false, null, null, member.Parameters[0].Type);
-                MethodArgumentInfo result = BindDefaultArguments(member, collectionExpr, overloadResolutionResult.ValidResult.Result.Kind == MemberResolutionKind.ApplicableInExpandedForm, collectionExpr.Syntax, diagnostics);
-                methodGroupResolution.Free();
-                instance.Free();
-                return result;
+
+                // Unconditionally convert here, to match what we set the ConvertedExpression to in the main BoundForEachStatement node.
+                collectionExpr = new BoundConversion(
+                    collectionExpr.Syntax,
+                    collectionExpr,
+                    collectionConversion,
+                    @checked: CheckOverflowAtRuntime,
+                    explicitCastInCode: false,
+                    conversionGroupOpt: null,
+                    ConstantValue.NotAvailable,
+                    result.Parameters[0].Type);
+
+                var info = BindDefaultArguments(
+                    result,
+                    collectionExpr,
+                    expanded: overloadResolutionResult.ValidResult.Result.Kind == MemberResolutionKind.ApplicableInExpandedForm,
+                    collectionExpr.Syntax,
+                    diagnostics);
+                methodGroupResolutionResult.Free();
+                analyzedArguments.Free();
+                return info;
             }
-            ImmutableArray<MethodSymbol>? immutableArray = overloadResolutionResult?.GetAllApplicableMembers();
-            if (immutableArray.HasValue)
+            else if (overloadResolutionResult?.GetAllApplicableMembers() is { } applicableMembers && applicableMembers.Length > 1)
             {
-                ImmutableArray<MethodSymbol> valueOrDefault = immutableArray.GetValueOrDefault();
-                if (valueOrDefault.Length > 1)
-                {
-                    diagnostics.Add(ErrorCode.WRN_PatternIsAmbiguous, _syntax.Expression.Location, collectionExpr.Type, MessageID.IDS_Collection.Localize(), valueOrDefault[0], valueOrDefault[1]);
-                    goto IL_0210;
-                }
+                diagnostics.Add(ErrorCode.WRN_PatternIsAmbiguous, _syntax.Expression.Location, collectionExpr.Type, MessageID.IDS_Collection.Localize(),
+                    applicableMembers[0], applicableMembers[1]);
             }
-            overloadResolutionResult?.ReportDiagnostics(this, _syntax.Expression.Location, _syntax.Expression, diagnostics, methodName, null, _syntax.Expression, methodGroupResolution.AnalyzedArguments, methodGroupResolution.MethodGroup.Methods.ToImmutable(), null, null);
-            goto IL_0210;
-        IL_0210:
-            methodGroupResolution.Free();
-            instance.Free();
+            else if (overloadResolutionResult != null)
+            {
+                overloadResolutionResult.ReportDiagnostics(
+                    binder: this,
+                    location: _syntax.Expression.Location,
+                    nodeOpt: _syntax.Expression,
+                    diagnostics: diagnostics,
+                    name: methodName,
+                    receiver: null,
+                    invokedExpression: _syntax.Expression,
+                    arguments: methodGroupResolutionResult.AnalyzedArguments,
+                    memberGroup: methodGroupResolutionResult.MethodGroup.Methods.ToImmutable(),
+                    typeContainingConstructor: null,
+                    delegateTypeBeingInvoked: null);
+            }
+
+            methodGroupResolutionResult.Free();
+            analyzedArguments.Free();
             return null;
         }
 

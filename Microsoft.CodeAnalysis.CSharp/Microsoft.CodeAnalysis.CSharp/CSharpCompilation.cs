@@ -26,8 +26,6 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public sealed class CSharpCompilation : Compilation
@@ -47,13 +45,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal class EntryPoint
         {
-            public readonly Symbols.MethodSymbol? MethodSymbol;
+            public readonly MethodSymbol? MethodSymbol;
 
-            public readonly ImmutableBindingDiagnostic<Symbols.AssemblySymbol> Diagnostics;
+            public readonly ImmutableBindingDiagnostic<AssemblySymbol> Diagnostics;
 
-            public static readonly EntryPoint None = new EntryPoint(null, ImmutableBindingDiagnostic<Symbols.AssemblySymbol>.Empty);
+            public static readonly EntryPoint None = new(null, ImmutableBindingDiagnostic<AssemblySymbol>.Empty);
 
-            public EntryPoint(Symbols.MethodSymbol? methodSymbol, ImmutableBindingDiagnostic<Symbols.AssemblySymbol> diagnostics)
+            public EntryPoint(MethodSymbol? methodSymbol, ImmutableBindingDiagnostic<AssemblySymbol> diagnostics)
             {
                 MethodSymbol = methodSymbol;
                 Diagnostics = diagnostics;
@@ -77,9 +75,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override bool Equals(object? obj)
             {
-                if (obj is ImportInfo)
+                if (obj is ImportInfo info)
                 {
-                    return Equals((ImportInfo)obj);
+                    return Equals(info);
                 }
                 return false;
             }
@@ -101,7 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private abstract class AbstractSymbolSearcher
         {
-            private readonly PooledDictionary<Declaration, Symbols.NamespaceOrTypeSymbol> _cache;
+            private readonly PooledDictionary<Declaration, NamespaceOrTypeSymbol> _cache;
 
             private readonly CSharpCompilation _compilation;
 
@@ -115,7 +113,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             protected AbstractSymbolSearcher(CSharpCompilation compilation, SymbolFilter filter, CancellationToken cancellationToken)
             {
-                _cache = PooledDictionary<Declaration, Symbols.NamespaceOrTypeSymbol>.GetInstance();
+                _cache = PooledDictionary<Declaration, NamespaceOrTypeSymbol>.GetInstance();
                 _compilation = compilation;
                 _includeNamespace = (filter & SymbolFilter.Namespace) == SymbolFilter.Namespace;
                 _includeType = (filter & SymbolFilter.Type) == SymbolFilter.Type;
@@ -143,8 +141,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (_includeNamespace && Matches(current.Name))
                     {
-                        Symbols.NamespaceOrTypeSymbol spineSymbol = GetSpineSymbol(spine);
-                        Symbols.NamespaceOrTypeSymbol symbol = GetSymbol(spineSymbol, current);
+                        NamespaceOrTypeSymbol spineSymbol = GetSpineSymbol(spine);
+                        NamespaceOrTypeSymbol symbol = GetSymbol(spineSymbol, current);
                         if (symbol != null)
                         {
                             set.Add(symbol);
@@ -155,8 +153,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (_includeType && Matches(current.Name))
                     {
-                        Symbols.NamespaceOrTypeSymbol spineSymbol2 = GetSpineSymbol(spine);
-                        Symbols.NamespaceOrTypeSymbol symbol2 = GetSymbol(spineSymbol2, current);
+                        NamespaceOrTypeSymbol spineSymbol2 = GetSpineSymbol(spine);
+                        NamespaceOrTypeSymbol symbol2 = GetSymbol(spineSymbol2, current);
                         if (symbol2 != null)
                         {
                             set.Add(symbol2);
@@ -189,7 +187,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 CancellationToken cancellationToken = _cancellationToken;
                 cancellationToken.ThrowIfCancellationRequested();
                 spine.Add(current);
-                Symbols.NamespaceOrTypeSymbol spineSymbol = GetSpineSymbol(spine);
+                NamespaceOrTypeSymbol spineSymbol = GetSpineSymbol(spine);
                 if (spineSymbol != null)
                 {
                     ImmutableArray<Symbol>.Enumerator enumerator = spineSymbol.GetMembers().GetEnumerator();
@@ -205,18 +203,18 @@ namespace Microsoft.CodeAnalysis.CSharp
                 spine.RemoveAt(spine.Count - 1);
             }
 
-            protected Symbols.NamespaceOrTypeSymbol? GetSpineSymbol(ArrayBuilder<MergedNamespaceOrTypeDeclaration> spine)
+            protected NamespaceOrTypeSymbol? GetSpineSymbol(ArrayBuilder<MergedNamespaceOrTypeDeclaration> spine)
             {
                 if (spine.Count == 0)
                 {
                     return null;
                 }
-                Symbols.NamespaceOrTypeSymbol cachedSymbol = GetCachedSymbol(spine[spine.Count - 1]);
+                NamespaceOrTypeSymbol cachedSymbol = GetCachedSymbol(spine[spine.Count - 1]);
                 if (cachedSymbol != null)
                 {
                     return cachedSymbol;
                 }
-                Symbols.NamespaceOrTypeSymbol namespaceOrTypeSymbol = _compilation.GlobalNamespace;
+                NamespaceOrTypeSymbol namespaceOrTypeSymbol = _compilation.GlobalNamespace;
                 for (int i = 1; i < spine.Count; i++)
                 {
                     namespaceOrTypeSymbol = GetSymbol(namespaceOrTypeSymbol, spine[i]);
@@ -224,7 +222,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return namespaceOrTypeSymbol;
             }
 
-            private Symbols.NamespaceOrTypeSymbol? GetCachedSymbol(MergedNamespaceOrTypeDeclaration declaration)
+            private NamespaceOrTypeSymbol? GetCachedSymbol(MergedNamespaceOrTypeDeclaration declaration)
             {
                 if (!_cache.TryGetValue(declaration, out var value))
                 {
@@ -233,7 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return value;
             }
 
-            private Symbols.NamespaceOrTypeSymbol? GetSymbol(Symbols.NamespaceOrTypeSymbol? container, MergedNamespaceOrTypeDeclaration declaration)
+            private NamespaceOrTypeSymbol? GetSymbol(NamespaceOrTypeSymbol? container, MergedNamespaceOrTypeDeclaration declaration)
             {
                 if (container == null)
                 {
@@ -241,7 +239,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 if (declaration.Kind == DeclarationKind.Namespace)
                 {
-                    AddCache(container!.GetMembers(declaration.Name).OfType<Symbols.NamespaceOrTypeSymbol>());
+                    AddCache(container!.GetMembers(declaration.Name).OfType<NamespaceOrTypeSymbol>());
                 }
                 else
                 {
@@ -250,9 +248,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return GetCachedSymbol(declaration);
             }
 
-            private void AddCache(IEnumerable<Symbols.NamespaceOrTypeSymbol> symbols)
+            private void AddCache(IEnumerable<NamespaceOrTypeSymbol> symbols)
             {
-                foreach (Symbols.NamespaceOrTypeSymbol symbol in symbols)
+                foreach (NamespaceOrTypeSymbol symbol in symbols)
                 {
                     MergedNamespaceSymbol mergedNamespaceSymbol = symbol as MergedNamespaceSymbol;
                     if (mergedNamespaceSymbol != null)
@@ -347,7 +345,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 DiagnosticBag diagnosticBag = new DiagnosticBag();
                 InContainerBinder inContainerBinder = new InContainerBinder(compilation.GlobalNamespace, new BuckStopsHereBinder(compilation));
                 ArrayBuilder<NamespaceOrTypeAndUsingDirective> instance = ArrayBuilder<NamespaceOrTypeAndUsingDirective>.GetInstance();
-                PooledHashSet<Symbols.NamespaceOrTypeSymbol> instance2 = PooledHashSet<Symbols.NamespaceOrTypeSymbol>.GetInstance();
+                PooledHashSet<NamespaceOrTypeSymbol> instance2 = PooledHashSet<NamespaceOrTypeSymbol>.GetInstance();
                 ImmutableArray<string>.Enumerator enumerator = usings.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
@@ -361,7 +359,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             nameSyntax = SyntaxFactory.QualifiedName(nameSyntax, SyntaxFactory.IdentifierName(array[i]));
                         }
                         BindingDiagnosticBag instance3 = BindingDiagnosticBag.GetInstance();
-                        Symbols.NamespaceOrTypeSymbol namespaceOrTypeSymbol = inContainerBinder.BindNamespaceOrTypeSymbol(nameSyntax, instance3).NamespaceOrTypeSymbol;
+                        NamespaceOrTypeSymbol namespaceOrTypeSymbol = inContainerBinder.BindNamespaceOrTypeSymbol(nameSyntax, instance3).NamespaceOrTypeSymbol;
                         if (instance2.Add(namespaceOrTypeSymbol))
                         {
                             instance.Add(new NamespaceOrTypeAndUsingDirective(namespaceOrTypeSymbol, null, instance3.DependenciesBag.ToImmutableArray()));
@@ -431,10 +429,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     NamespaceOrTypeAndUsingDirective current = enumerator.Current;
                     diagnostics.Clear();
                     diagnostics.AddDependencies(current.Dependencies);
-                    Symbols.NamespaceOrTypeSymbol namespaceOrType = current.NamespaceOrType;
+                    NamespaceOrTypeSymbol namespaceOrType = current.NamespaceOrType;
                     if (namespaceOrType.IsType)
                     {
-                        ((Symbols.TypeSymbol)namespaceOrType).CheckAllConstraints(location: NoLocation.Singleton, compilation: compilation2, conversions: conversions, diagnostics: diagnostics);
+                        ((TypeSymbol)namespaceOrType).CheckAllConstraints(location: NoLocation.Singleton, compilation: compilation2, conversions: conversions, diagnostics: diagnostics);
                     }
                     declarationDiagnostics.AddRange(diagnostics.DiagnosticBag);
                     recordImportDependencies(namespaceOrType);
@@ -444,11 +442,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                     declarationDiagnostics.AddRange(Diagnostics!.AsEnumerable());
                 }
                 diagnostics.Free();
-                void recordImportDependencies(Symbols.NamespaceOrTypeSymbol target)
+                void recordImportDependencies(NamespaceOrTypeSymbol target)
                 {
                     if (target.IsNamespace)
                     {
-                        diagnostics.AddAssembliesUsedByNamespaceReference((Symbols.NamespaceSymbol)target);
+                        diagnostics.AddAssembliesUsedByNamespaceReference((NamespaceSymbol)target);
                     }
                     compilation2.AddUsedAssemblies(diagnostics.DependenciesBag);
                 }
@@ -457,7 +455,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static class TupleNamesEncoder
         {
-            public static ImmutableArray<string?> Encode(Symbols.TypeSymbol type)
+            public static ImmutableArray<string?> Encode(TypeSymbol type)
             {
                 ArrayBuilder<string> instance = ArrayBuilder<string>.GetInstance();
                 if (!TryGetNames(type, instance))
@@ -468,7 +466,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return instance.ToImmutableAndFree();
             }
 
-            public static ImmutableArray<TypedConstant> Encode(Symbols.TypeSymbol type, Symbols.TypeSymbol stringType)
+            public static ImmutableArray<TypedConstant> Encode(TypeSymbol type, TypeSymbol stringType)
             {
                 ArrayBuilder<string> instance = ArrayBuilder<string>.GetInstance();
                 if (!TryGetNames(type, instance))
@@ -476,18 +474,18 @@ namespace Microsoft.CodeAnalysis.CSharp
                     instance.Free();
                     return default(ImmutableArray<TypedConstant>);
                 }
-                ImmutableArray<TypedConstant> result = instance.SelectAsArray((string name, Symbols.TypeSymbol constantType) => new TypedConstant(constantType, TypedConstantKind.Primitive, name), stringType);
+                ImmutableArray<TypedConstant> result = instance.SelectAsArray((string name, TypeSymbol constantType) => new TypedConstant(constantType, TypedConstantKind.Primitive, name), stringType);
                 instance.Free();
                 return result;
             }
 
-            internal static bool TryGetNames(Symbols.TypeSymbol type, ArrayBuilder<string?> namesBuilder)
+            internal static bool TryGetNames(TypeSymbol type, ArrayBuilder<string?> namesBuilder)
             {
-                type.VisitType((Symbols.TypeSymbol t, ArrayBuilder<string> builder, bool _ignore) => AddNames(t, builder), namesBuilder);
+                type.VisitType((TypeSymbol t, ArrayBuilder<string> builder, bool _ignore) => AddNames(t, builder), namesBuilder);
                 return namesBuilder.Any<string>((string name) => name != null);
             }
 
-            private static bool AddNames(Symbols.TypeSymbol type, ArrayBuilder<string?> namesBuilder)
+            private static bool AddNames(TypeSymbol type, ArrayBuilder<string?> namesBuilder)
             {
                 if (type.IsTupleType)
                 {
@@ -506,30 +504,30 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static class DynamicTransformsEncoder
         {
-            internal static ImmutableArray<TypedConstant> Encode(Symbols.TypeSymbol type, RefKind refKind, int customModifiersCount, Symbols.TypeSymbol booleanType)
+            internal static ImmutableArray<TypedConstant> Encode(TypeSymbol type, RefKind refKind, int customModifiersCount, TypeSymbol booleanType)
             {
                 ArrayBuilder<bool> instance = ArrayBuilder<bool>.GetInstance();
                 Encode(type, customModifiersCount, refKind, instance, addCustomModifierFlags: true);
-                ImmutableArray<TypedConstant> result = instance.SelectAsArray((bool flag, Symbols.TypeSymbol constantType) => new TypedConstant(constantType, TypedConstantKind.Primitive, flag), booleanType);
+                ImmutableArray<TypedConstant> result = instance.SelectAsArray((bool flag, TypeSymbol constantType) => new TypedConstant(constantType, TypedConstantKind.Primitive, flag), booleanType);
                 instance.Free();
                 return result;
             }
 
-            internal static ImmutableArray<bool> Encode(Symbols.TypeSymbol type, RefKind refKind, int customModifiersCount)
+            internal static ImmutableArray<bool> Encode(TypeSymbol type, RefKind refKind, int customModifiersCount)
             {
                 ArrayBuilder<bool> instance = ArrayBuilder<bool>.GetInstance();
                 Encode(type, customModifiersCount, refKind, instance, addCustomModifierFlags: true);
                 return instance.ToImmutableAndFree();
             }
 
-            internal static ImmutableArray<bool> EncodeWithoutCustomModifierFlags(Symbols.TypeSymbol type, RefKind refKind)
+            internal static ImmutableArray<bool> EncodeWithoutCustomModifierFlags(TypeSymbol type, RefKind refKind)
             {
                 ArrayBuilder<bool> instance = ArrayBuilder<bool>.GetInstance();
                 Encode(type, -1, refKind, instance, addCustomModifierFlags: false);
                 return instance.ToImmutableAndFree();
             }
 
-            internal static void Encode(Symbols.TypeSymbol type, int customModifiersCount, RefKind refKind, ArrayBuilder<bool> transformFlagsBuilder, bool addCustomModifierFlags)
+            internal static void Encode(TypeSymbol type, int customModifiersCount, RefKind refKind, ArrayBuilder<bool> transformFlagsBuilder, bool addCustomModifierFlags)
             {
                 if (refKind != 0)
                 {
@@ -538,15 +536,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (addCustomModifierFlags)
                 {
                     HandleCustomModifiers(customModifiersCount, transformFlagsBuilder);
-                    type.VisitType((Symbols.TypeSymbol typeSymbol, ArrayBuilder<bool> builder, bool isNested) => AddFlags(typeSymbol, builder, isNested, addCustomModifierFlags: true), transformFlagsBuilder);
+                    type.VisitType((TypeSymbol typeSymbol, ArrayBuilder<bool> builder, bool isNested) => AddFlags(typeSymbol, builder, isNested, addCustomModifierFlags: true), transformFlagsBuilder);
                 }
                 else
                 {
-                    type.VisitType((Symbols.TypeSymbol typeSymbol, ArrayBuilder<bool> builder, bool isNested) => AddFlags(typeSymbol, builder, isNested, addCustomModifierFlags: false), transformFlagsBuilder);
+                    type.VisitType((TypeSymbol typeSymbol, ArrayBuilder<bool> builder, bool isNested) => AddFlags(typeSymbol, builder, isNested, addCustomModifierFlags: false), transformFlagsBuilder);
                 }
             }
 
-            private static bool AddFlags(Symbols.TypeSymbol type, ArrayBuilder<bool> transformFlagsBuilder, bool isNestedNamedType, bool addCustomModifierFlags)
+            private static bool AddFlags(TypeSymbol type, ArrayBuilder<bool> transformFlagsBuilder, bool isNestedNamedType, bool addCustomModifierFlags)
             {
                 switch (type.TypeKind)
                 {
@@ -556,19 +554,19 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case TypeKind.Array:
                         if (addCustomModifierFlags)
                         {
-                            HandleCustomModifiers(((Symbols.ArrayTypeSymbol)type).ElementTypeWithAnnotations.CustomModifiers.Length, transformFlagsBuilder);
+                            HandleCustomModifiers(((ArrayTypeSymbol)type).ElementTypeWithAnnotations.CustomModifiers.Length, transformFlagsBuilder);
                         }
                         transformFlagsBuilder.Add(item: false);
                         break;
                     case TypeKind.Pointer:
                         if (addCustomModifierFlags)
                         {
-                            HandleCustomModifiers(((Symbols.PointerTypeSymbol)type).PointedAtTypeWithAnnotations.CustomModifiers.Length, transformFlagsBuilder);
+                            HandleCustomModifiers(((PointerTypeSymbol)type).PointedAtTypeWithAnnotations.CustomModifiers.Length, transformFlagsBuilder);
                         }
                         transformFlagsBuilder.Add(item: false);
                         break;
                     case TypeKind.FunctionPointer:
-                        handleFunctionPointerType((Symbols.FunctionPointerTypeSymbol)type, transformFlagsBuilder, addCustomModifierFlags);
+                        handleFunctionPointerType((FunctionPointerTypeSymbol)type, transformFlagsBuilder, addCustomModifierFlags);
                         return true;
                     default:
                         if (!isNestedNamedType)
@@ -578,17 +576,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                         break;
                 }
                 return false;
-                static void handleFunctionPointerType(Symbols.FunctionPointerTypeSymbol funcPtr, ArrayBuilder<bool> transformFlagsBuilder, bool addCustomModifierFlags)
+                static void handleFunctionPointerType(FunctionPointerTypeSymbol funcPtr, ArrayBuilder<bool> transformFlagsBuilder, bool addCustomModifierFlags)
                 {
                     ArrayBuilder<bool> transformFlagsBuilder2 = transformFlagsBuilder;
-                    Func<Symbols.TypeSymbol, (ArrayBuilder<bool>, bool), bool, bool> visitor = (Symbols.TypeSymbol type, (ArrayBuilder<bool> builder, bool addCustomModifierFlags) param, bool isNestedNamedType) => AddFlags(type, param.builder, isNestedNamedType, param.addCustomModifierFlags);
+                    bool visitor(TypeSymbol type, (ArrayBuilder<bool> builder, bool addCustomModifierFlags) param, bool isNestedNamedType) => AddFlags(type, param.builder, isNestedNamedType, param.addCustomModifierFlags);
                     transformFlagsBuilder2.Add(item: false);
                     FunctionPointerMethodSymbol signature = funcPtr.Signature;
                     handle(signature.RefKind, signature.RefCustomModifiers, signature.ReturnTypeWithAnnotations);
-                    ImmutableArray<Symbols.ParameterSymbol>.Enumerator enumerator = signature.Parameters.GetEnumerator();
+                    ImmutableArray<ParameterSymbol>.Enumerator enumerator = signature.Parameters.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
-                        Symbols.ParameterSymbol current = enumerator.Current;
+                        ParameterSymbol current = enumerator.Current;
                         handle(current.RefKind, current.RefCustomModifiers, current.TypeWithAnnotations);
                     }
                     void handle(RefKind refKind, ImmutableArray<CustomModifier> customModifiers, TypeWithAnnotations twa)
@@ -605,7 +603,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             HandleCustomModifiers(twa.CustomModifiers.Length, transformFlagsBuilder2);
                         }
-                        twa.Type.VisitType(visitor, (transformFlagsBuilder2, addCustomModifierFlags));
+                        twa.Type.VisitType((Func<TypeSymbol, (ArrayBuilder<bool>, bool), bool, bool>)visitor, (transformFlagsBuilder2, addCustomModifierFlags));
                     }
                 }
             }
@@ -618,12 +616,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static class NativeIntegerTransformsEncoder
         {
-            internal static void Encode(ArrayBuilder<bool> builder, Symbols.TypeSymbol type)
+            internal static void Encode(ArrayBuilder<bool> builder, TypeSymbol type)
             {
-                type.VisitType((Symbols.TypeSymbol typeSymbol, ArrayBuilder<bool> builder, bool isNested) => AddFlags(typeSymbol, builder), builder);
+                type.VisitType((TypeSymbol typeSymbol, ArrayBuilder<bool> builder, bool isNested) => AddFlags(typeSymbol, builder), builder);
             }
 
-            private static bool AddFlags(Symbols.TypeSymbol type, ArrayBuilder<bool> builder)
+            private static bool AddFlags(TypeSymbol type, ArrayBuilder<bool> builder)
             {
                 SpecialType specialType = type.SpecialType;
                 if ((uint)(specialType - 21) <= 1u)
@@ -634,7 +632,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        public class SpecialMembersSignatureComparer : SignatureComparer<Symbols.MethodSymbol, Symbols.FieldSymbol, Symbols.PropertySymbol, Symbols.TypeSymbol, Symbols.ParameterSymbol>
+        public class SpecialMembersSignatureComparer : SignatureComparer<MethodSymbol, FieldSymbol, PropertySymbol, TypeSymbol, ParameterSymbol>
         {
             public static readonly SpecialMembersSignatureComparer Instance = new SpecialMembersSignatureComparer();
 
@@ -642,13 +640,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
             }
 
-            protected override Symbols.TypeSymbol? GetMDArrayElementType(Symbols.TypeSymbol type)
+            protected override TypeSymbol? GetMDArrayElementType(TypeSymbol type)
             {
                 if (type.Kind != SymbolKind.ArrayType)
                 {
                     return null;
                 }
-                Symbols.ArrayTypeSymbol arrayTypeSymbol = (Symbols.ArrayTypeSymbol)type;
+                ArrayTypeSymbol arrayTypeSymbol = (ArrayTypeSymbol)type;
                 if (arrayTypeSymbol.IsSZArray)
                 {
                     return null;
@@ -656,23 +654,23 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return arrayTypeSymbol.ElementType;
             }
 
-            protected override Symbols.TypeSymbol GetFieldType(Symbols.FieldSymbol field)
+            protected override TypeSymbol GetFieldType(FieldSymbol field)
             {
                 return field.Type;
             }
 
-            protected override Symbols.TypeSymbol GetPropertyType(Symbols.PropertySymbol property)
+            protected override TypeSymbol GetPropertyType(PropertySymbol property)
             {
                 return property.Type;
             }
 
-            protected override Symbols.TypeSymbol? GetGenericTypeArgument(Symbols.TypeSymbol type, int argumentIndex)
+            protected override TypeSymbol? GetGenericTypeArgument(TypeSymbol type, int argumentIndex)
             {
                 if (type.Kind != SymbolKind.NamedType)
                 {
                     return null;
                 }
-                Symbols.NamedTypeSymbol namedTypeSymbol = (Symbols.NamedTypeSymbol)type;
+                NamedTypeSymbol namedTypeSymbol = (NamedTypeSymbol)type;
                 if (namedTypeSymbol.Arity <= argumentIndex)
                 {
                     return null;
@@ -684,13 +682,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return namedTypeSymbol.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics[argumentIndex].Type;
             }
 
-            protected override Symbols.TypeSymbol? GetGenericTypeDefinition(Symbols.TypeSymbol type)
+            protected override TypeSymbol? GetGenericTypeDefinition(TypeSymbol type)
             {
                 if (type.Kind != SymbolKind.NamedType)
                 {
                     return null;
                 }
-                Symbols.NamedTypeSymbol namedTypeSymbol = (Symbols.NamedTypeSymbol)type;
+                NamedTypeSymbol namedTypeSymbol = (NamedTypeSymbol)type;
                 if ((object)namedTypeSymbol.ContainingType != null)
                 {
                     return null;
@@ -702,42 +700,42 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return namedTypeSymbol.OriginalDefinition;
             }
 
-            protected override ImmutableArray<Symbols.ParameterSymbol> GetParameters(Symbols.MethodSymbol method)
+            protected override ImmutableArray<ParameterSymbol> GetParameters(MethodSymbol method)
             {
                 return method.Parameters;
             }
 
-            protected override ImmutableArray<Symbols.ParameterSymbol> GetParameters(Symbols.PropertySymbol property)
+            protected override ImmutableArray<ParameterSymbol> GetParameters(PropertySymbol property)
             {
                 return property.Parameters;
             }
 
-            protected override Symbols.TypeSymbol GetParamType(Symbols.ParameterSymbol parameter)
+            protected override TypeSymbol GetParamType(ParameterSymbol parameter)
             {
                 return parameter.Type;
             }
 
-            protected override Symbols.TypeSymbol? GetPointedToType(Symbols.TypeSymbol type)
+            protected override TypeSymbol? GetPointedToType(TypeSymbol type)
             {
                 if (type.Kind != SymbolKind.PointerType)
                 {
                     return null;
                 }
-                return ((Symbols.PointerTypeSymbol)type).PointedAtType;
+                return ((PointerTypeSymbol)type).PointedAtType;
             }
 
-            protected override Symbols.TypeSymbol GetReturnType(Symbols.MethodSymbol method)
+            protected override TypeSymbol GetReturnType(MethodSymbol method)
             {
                 return method.ReturnType;
             }
 
-            protected override Symbols.TypeSymbol? GetSZArrayElementType(Symbols.TypeSymbol type)
+            protected override TypeSymbol? GetSZArrayElementType(TypeSymbol type)
             {
                 if (type.Kind != SymbolKind.ArrayType)
                 {
                     return null;
                 }
-                Symbols.ArrayTypeSymbol arrayTypeSymbol = (Symbols.ArrayTypeSymbol)type;
+                ArrayTypeSymbol arrayTypeSymbol = (ArrayTypeSymbol)type;
                 if (!arrayTypeSymbol.IsSZArray)
                 {
                     return null;
@@ -745,28 +743,28 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return arrayTypeSymbol.ElementType;
             }
 
-            protected override bool IsByRefParam(Symbols.ParameterSymbol parameter)
+            protected override bool IsByRefParam(ParameterSymbol parameter)
             {
                 return parameter.RefKind != RefKind.None;
             }
 
-            protected override bool IsByRefMethod(Symbols.MethodSymbol method)
+            protected override bool IsByRefMethod(MethodSymbol method)
             {
                 return method.RefKind != RefKind.None;
             }
 
-            protected override bool IsByRefProperty(Symbols.PropertySymbol property)
+            protected override bool IsByRefProperty(PropertySymbol property)
             {
                 return property.RefKind != RefKind.None;
             }
 
-            protected override bool IsGenericMethodTypeParam(Symbols.TypeSymbol type, int paramPosition)
+            protected override bool IsGenericMethodTypeParam(TypeSymbol type, int paramPosition)
             {
                 if (type.Kind != SymbolKind.TypeParameter)
                 {
                     return false;
                 }
-                Symbols.TypeParameterSymbol typeParameterSymbol = (Symbols.TypeParameterSymbol)type;
+                TypeParameterSymbol typeParameterSymbol = (TypeParameterSymbol)type;
                 if (typeParameterSymbol.ContainingSymbol.Kind != SymbolKind.Method)
                 {
                     return false;
@@ -774,13 +772,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return typeParameterSymbol.Ordinal == paramPosition;
             }
 
-            protected override bool IsGenericTypeParam(Symbols.TypeSymbol type, int paramPosition)
+            protected override bool IsGenericTypeParam(TypeSymbol type, int paramPosition)
             {
                 if (type.Kind != SymbolKind.TypeParameter)
                 {
                     return false;
                 }
-                Symbols.TypeParameterSymbol typeParameterSymbol = (Symbols.TypeParameterSymbol)type;
+                TypeParameterSymbol typeParameterSymbol = (TypeParameterSymbol)type;
                 if (typeParameterSymbol.ContainingSymbol.Kind != SymbolKind.NamedType)
                 {
                     return false;
@@ -788,16 +786,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return typeParameterSymbol.Ordinal == paramPosition;
             }
 
-            protected override bool MatchArrayRank(Symbols.TypeSymbol type, int countOfDimensions)
+            protected override bool MatchArrayRank(TypeSymbol type, int countOfDimensions)
             {
                 if (type.Kind != SymbolKind.ArrayType)
                 {
                     return false;
                 }
-                return ((Symbols.ArrayTypeSymbol)type).Rank == countOfDimensions;
+                return ((ArrayTypeSymbol)type).Rank == countOfDimensions;
             }
 
-            protected override bool MatchTypeToTypeId(Symbols.TypeSymbol type, int typeId)
+            protected override bool MatchTypeToTypeId(TypeSymbol type, int typeId)
             {
                 if ((int)type.OriginalDefinition.SpecialType == typeId)
                 {
@@ -820,7 +818,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _compilation = compilation;
             }
 
-            protected override bool MatchTypeToTypeId(Symbols.TypeSymbol type, int typeId)
+            protected override bool MatchTypeToTypeId(TypeSymbol type, int typeId)
             {
                 if (((WellKnownType)typeId).IsWellKnownType())
                 {
@@ -830,7 +828,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        public sealed class ReferenceManager : CommonReferenceManager<CSharpCompilation, Symbols.AssemblySymbol>
+        public sealed class ReferenceManager : CommonReferenceManager<CSharpCompilation, AssemblySymbol>
         {
             private abstract class AssemblyDataForMetadataOrCompilation : AssemblyData
             {
@@ -1034,7 +1032,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 public override bool IsMatchingAssembly(Symbols.AssemblySymbol? candidateAssembly)
                 {
-                    Symbols.AssemblySymbol assemblySymbol = ((!(candidateAssembly is RetargetingAssemblySymbol retargetingAssemblySymbol)) ? (candidateAssembly as Symbols.SourceAssemblySymbol) : retargetingAssemblySymbol.UnderlyingAssembly);
+                    Symbols.AssemblySymbol assemblySymbol = ((candidateAssembly is not RetargetingAssemblySymbol retargetingAssemblySymbol) ? (candidateAssembly as Symbols.SourceAssemblySymbol) : retargetingAssemblySymbol.UnderlyingAssembly);
                     return (object)assemblySymbol == Compilation.Assembly;
                 }
             }
@@ -1059,7 +1057,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             protected override CommonReferenceManager<CSharpCompilation, Symbols.AssemblySymbol>.AssemblyData CreateAssemblyDataForCompilation(CompilationReference compilationReference)
             {
-                if (!(compilationReference is CSharpCompilationReference cSharpCompilationReference))
+                if (compilationReference is not CSharpCompilationReference cSharpCompilationReference)
                 {
                     throw new NotSupportedException(string.Format(CSharpResources.CantReferenceCompilationOf, compilationReference.GetType(), "C#"));
                 }
@@ -2320,7 +2318,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (boundReferenceManager.AliasesOfReferencedAssemblies[i].Contains(aliasName))
                 {
-                    arrayBuilder = arrayBuilder ?? ArrayBuilder<Symbols.NamespaceSymbol>.GetInstance();
+                    arrayBuilder ??= ArrayBuilder<Symbols.NamespaceSymbol>.GetInstance();
                     arrayBuilder.Add(boundReferenceManager.ReferencedAssemblies[i].GlobalNamespace);
                 }
             }
@@ -2730,7 +2728,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return false;
             }
-            if (!(method.ReturnType is Symbols.NamedTypeSymbol namedTypeSymbol))
+            if (method.ReturnType is not Symbols.NamedTypeSymbol namedTypeSymbol)
             {
                 return false;
             }
@@ -3267,96 +3265,133 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ImmutableArray<Diagnostic> GetDiagnosticsForMethodBodiesInTree(SyntaxTree tree, TextSpan? span, CancellationToken cancellationToken)
         {
-            DiagnosticBag instance = DiagnosticBag.GetInstance();
-            BindingDiagnosticBag bindingDiagnosticBag = new BindingDiagnosticBag(instance);
-            bool flag = (!span.HasValue || span.Value == tree.GetRoot(cancellationToken).FullSpan) && Compilation.ReportUnusedImportsInTree(tree);
-            bool flag2 = false;
-            if (flag && UsageOfUsingsRecordedInTrees != null)
+            var diagnostics = DiagnosticBag.GetInstance();
+            var bindingDiagnostics = new BindingDiagnosticBag(diagnostics);
+
+            // Report unused directives only if computing diagnostics for the entire tree.
+            // Otherwise we cannot determine if a particular directive is used outside of the given sub-span within the tree.
+            bool reportUnusedUsings = (!span.HasValue || span.Value == tree.GetRoot(cancellationToken).FullSpan) && ReportUnusedImportsInTree(tree);
+            bool recordUsageOfUsingsInAllTrees = false;
+
+            if (reportUnusedUsings && UsageOfUsingsRecordedInTrees is not null)
             {
-                ImmutableArray<SingleNamespaceDeclaration>.Enumerator enumerator = ((SourceNamespaceSymbol)SourceModule.GlobalNamespace).MergedDeclaration.Declarations.GetEnumerator();
-                while (enumerator.MoveNext())
+                foreach (var singleDeclaration in ((SourceNamespaceSymbol)SourceModule.GlobalNamespace).MergedDeclaration.Declarations)
                 {
-                    SingleNamespaceDeclaration current = enumerator.Current;
-                    if (current.SyntaxReference.SyntaxTree == tree)
+                    if (singleDeclaration.SyntaxReference.SyntaxTree == tree)
                     {
-                        if (current.HasGlobalUsings)
+                        if (singleDeclaration.HasGlobalUsings)
                         {
-                            flag2 = true;
+                            // Global Using directives can be used in any tree. Make sure we collect usage information from all of them.
+                            recordUsageOfUsingsInAllTrees = true;
                         }
+
                         break;
                     }
                 }
             }
-            if (flag2)
+
+            if (recordUsageOfUsingsInAllTrees && UsageOfUsingsRecordedInTrees?.IsEmpty == true)
             {
-                ImmutableHashSet<SyntaxTree>? usageOfUsingsRecordedInTrees = UsageOfUsingsRecordedInTrees;
-                if (usageOfUsingsRecordedInTrees != null && usageOfUsingsRecordedInTrees!.IsEmpty)
+                Debug.Assert(reportUnusedUsings);
+
+                // Simply compile the world
+                compileMethodBodiesAndDocComments(filterTree: null, filterSpan: null, bindingDiagnostics, cancellationToken);
+                _usageOfUsingsRecordedInTrees = null;
+            }
+            else
+            {
+                // Always compile the target tree
+                compileMethodBodiesAndDocComments(filterTree: tree, filterSpan: span, bindingDiagnostics, cancellationToken);
+
+                if (reportUnusedUsings)
                 {
-                    compileMethodBodiesAndDocComments(null, null, bindingDiagnosticBag, cancellationToken);
-                    _usageOfUsingsRecordedInTrees = null;
-                    goto IL_0166;
+                    registeredUsageOfUsingsInTree(tree);
+                }
+
+                // Compile other trees if we need to, but discard diagnostics from them.
+                if (recordUsageOfUsingsInAllTrees)
+                {
+                    Debug.Assert(reportUnusedUsings);
+
+                    var discarded = new BindingDiagnosticBag(DiagnosticBag.GetInstance());
+                    Debug.Assert(discarded.DiagnosticBag is object);
+
+                    foreach (var otherTree in SyntaxTrees)
+                    {
+                        var trackingSet = UsageOfUsingsRecordedInTrees;
+
+                        if (trackingSet is null)
+                        {
+                            break;
+                        }
+
+                        if (!trackingSet.Contains(otherTree))
+                        {
+                            compileMethodBodiesAndDocComments(filterTree: otherTree, filterSpan: null, discarded, cancellationToken);
+                            registeredUsageOfUsingsInTree(otherTree);
+                            discarded.DiagnosticBag.Clear();
+                        }
+                    }
+
+                    discarded.DiagnosticBag.Free();
                 }
             }
-            compileMethodBodiesAndDocComments(tree, span, bindingDiagnosticBag, cancellationToken);
-            if (flag)
+
+            if (reportUnusedUsings)
             {
-                registeredUsageOfUsingsInTree(tree);
+                ReportUnusedImports(tree, bindingDiagnostics, cancellationToken);
             }
-            if (flag2)
-            {
-                BindingDiagnosticBag bindingDiagnosticBag2 = new BindingDiagnosticBag(DiagnosticBag.GetInstance());
-                ImmutableArray<SyntaxTree>.Enumerator enumerator2 = SyntaxTrees.GetEnumerator();
-                while (enumerator2.MoveNext())
-                {
-                    SyntaxTree current2 = enumerator2.Current;
-                    ImmutableHashSet<SyntaxTree> usageOfUsingsRecordedInTrees2 = UsageOfUsingsRecordedInTrees;
-                    if (usageOfUsingsRecordedInTrees2 == null)
-                    {
-                        break;
-                    }
-                    if (!usageOfUsingsRecordedInTrees2.Contains(current2))
-                    {
-                        compileMethodBodiesAndDocComments(current2, null, bindingDiagnosticBag2, cancellationToken);
-                        registeredUsageOfUsingsInTree(current2);
-                        bindingDiagnosticBag2.DiagnosticBag!.Clear();
-                    }
-                }
-                bindingDiagnosticBag2.DiagnosticBag!.Free();
-            }
-            goto IL_0166;
-        IL_0166:
-            if (flag)
-            {
-                ReportUnusedImports(tree, bindingDiagnosticBag, cancellationToken);
-            }
-            return instance.ToReadOnlyAndFree();
+
+            return diagnostics.ToReadOnlyAndFree();
+
             void compileMethodBodiesAndDocComments(SyntaxTree? filterTree, TextSpan? filterSpan, BindingDiagnosticBag bindingDiagnostics, CancellationToken cancellationToken)
             {
-                SyntaxTree filterTree2 = filterTree;
-                MethodCompiler.CompileMethodBodies(this, null, emittingPdb: false, emitTestCoverageData: false, hasDeclarationErrors: false, emitMethodBodies: false, bindingDiagnostics, (filterTree2 != null) ? ((Symbol s) => IsDefinedOrImplementedInSourceTree(s, filterTree2, filterSpan)) : null, cancellationToken);
-                DocumentationCommentCompiler.WriteDocumentationCommentXml(this, null, null, bindingDiagnostics, cancellationToken, filterTree2, filterSpan);
+                MethodCompiler.CompileMethodBodies(
+                                compilation: this,
+                                moduleBeingBuiltOpt: null,
+                                emittingPdb: false,
+                                emitTestCoverageData: false,
+                                hasDeclarationErrors: false,
+                                emitMethodBodies: false,
+                                diagnostics: bindingDiagnostics,
+                                filterOpt: filterTree is object ? (Predicate<Symbol>?)(s => IsDefinedOrImplementedInSourceTree(s, filterTree, filterSpan)) : (Predicate<Symbol>?)null,
+                                cancellationToken: cancellationToken);
+
+                DocumentationCommentCompiler.WriteDocumentationCommentXml(this, null, null, bindingDiagnostics, cancellationToken, filterTree, filterSpan);
             }
+
             void registeredUsageOfUsingsInTree(SyntaxTree tree)
             {
-                ImmutableHashSet<SyntaxTree> immutableHashSet = UsageOfUsingsRecordedInTrees;
-                while (immutableHashSet != null)
+                var current = UsageOfUsingsRecordedInTrees;
+
+                while (true)
                 {
-                    ImmutableHashSet<SyntaxTree> immutableHashSet2 = immutableHashSet.Add(tree);
-                    if (immutableHashSet2 == immutableHashSet)
+                    if (current is null)
                     {
                         break;
                     }
-                    if (immutableHashSet2.Count == SyntaxTrees.Length)
+
+                    var updated = current.Add(tree);
+
+                    if ((object)updated == current)
+                    {
+                        break;
+                    }
+
+                    if (updated.Count == SyntaxTrees.Length)
                     {
                         _usageOfUsingsRecordedInTrees = null;
                         break;
                     }
-                    ImmutableHashSet<SyntaxTree> immutableHashSet3 = Interlocked.CompareExchange(ref _usageOfUsingsRecordedInTrees, immutableHashSet2, immutableHashSet);
-                    if (immutableHashSet3 == immutableHashSet)
+
+                    var recent = Interlocked.CompareExchange(ref _usageOfUsingsRecordedInTrees, updated, current);
+
+                    if (recent == (object)current)
                     {
                         break;
                     }
-                    immutableHashSet = immutableHashSet3;
+
+                    current = recent;
                 }
             }
         }
@@ -4053,8 +4088,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override AnalyzerDriver CreateAnalyzerDriver(ImmutableArray<DiagnosticAnalyzer> analyzers, AnalyzerManager analyzerManager, SeverityFilter severityFilter)
         {
-            Func<SyntaxNode, SyntaxKind> getKind = (SyntaxNode node) => node.Kind();
-            Func<SyntaxTrivia, bool> isComment = (SyntaxTrivia trivia) => trivia.Kind() == SyntaxKind.SingleLineCommentTrivia || trivia.Kind() == SyntaxKind.MultiLineCommentTrivia;
+            static SyntaxKind getKind(SyntaxNode node) => node.Kind();
+            static bool isComment(SyntaxTrivia trivia) => trivia.Kind() == SyntaxKind.SingleLineCommentTrivia || trivia.Kind() == SyntaxKind.MultiLineCommentTrivia;
             return new AnalyzerDriver<SyntaxKind>(analyzers, getKind, analyzerManager, severityFilter, isComment);
         }
 
@@ -4210,7 +4245,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 while (instance.Count != 0)
                                 {
                                     Symbols.AssemblySymbol assemblySymbol = instance.Pop();
-                                    if (!(assemblySymbol is Symbols.SourceAssemblySymbol sourceAssemblySymbol))
+                                    if (assemblySymbol is not Symbols.SourceAssemblySymbol sourceAssemblySymbol)
                                     {
                                         if (assemblySymbol is RetargetingAssemblySymbol retargetingAssemblySymbol)
                                         {

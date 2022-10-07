@@ -59,42 +59,23 @@ namespace Microsoft.CodeAnalysis.Operations
             switch (previousSlot)
             {
                 case -1:
-                    if (!IgnoredDimensions.IsEmpty)
-                    {
-                        return (true, 0, 0);
-                    }
-                    goto IL_005a;
+                    if (!IgnoredDimensions.IsEmpty) return (true, 0, 0);
+                    else goto case 0;
+                case 0 when previousIndex + 1 < IgnoredDimensions.Length:
+                    return (true, 0, previousIndex + 1);
                 case 0:
-                    if (previousIndex + 1 < IgnoredDimensions.Length)
-                    {
-                        return (true, 0, previousIndex + 1);
-                    }
-                    goto IL_005a;
+                    if (!Declarators.IsEmpty) return (true, 1, 0);
+                    else goto case 1;
+                case 1 when previousIndex + 1 < Declarators.Length:
+                    return (true, 1, previousIndex + 1);
                 case 1:
-                    if (previousIndex + 1 < Declarators.Length)
-                    {
-                        return (true, 1, previousIndex + 1);
-                    }
-                    goto IL_0091;
+                    if (Initializer != null) return (true, 2, 0);
+                    else goto case 2;
                 case 2:
                 case 3:
                     return (false, 3, 0);
                 default:
-                    {
-                        throw ExceptionUtilities.UnexpectedValue((previousSlot, previousIndex));
-                    }
-                IL_005a:
-                    if (!Declarators.IsEmpty)
-                    {
-                        return (true, 1, 0);
-                    }
-                    goto IL_0091;
-                IL_0091:
-                    if (Initializer != null)
-                    {
-                        return (true, 2, 0);
-                    }
-                    goto case 2;
+                    throw ExceptionUtilities.UnexpectedValue((previousSlot, previousIndex));
             }
         }
 

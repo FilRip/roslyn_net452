@@ -270,7 +270,7 @@ namespace Microsoft.CodeAnalysis
 
         internal const int DefaultWarningLevel = 4;
 
-        internal const int InfoAndHiddenWarningLevel = 1;
+        public const int InfoAndHiddenWarningLevel = 1;
 
         internal const int MaxWarningLevel = 9999;
 

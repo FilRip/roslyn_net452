@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 symbol = symbol.ContainingType;
             }
-            while ((object)symbol != null);
+            while (symbol is object);
             return true;
         }
 
@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
             NamedTypeSymbol containingType = type.ContainingType;
-            if ((object)containingType != null)
+            if (containingType is object)
             {
                 return IsMemberAccessible(containingType, type.DeclaredAccessibility, within, null, out failedThroughTypeCheck, declaringCompilation, ref useSiteInfo, basesBeingResolved);
             }
@@ -200,7 +200,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             failedThroughTypeCheck = false;
             NamedTypeSymbol originalDefinition = containingType.OriginalDefinition;
             NamedTypeSymbol namedTypeSymbol = within as NamedTypeSymbol;
-            AssemblySymbol fromAssembly = (((object)namedTypeSymbol != null) ? namedTypeSymbol.ContainingAssembly : ((AssemblySymbol)within));
+            AssemblySymbol fromAssembly = ((namedTypeSymbol is object) ? namedTypeSymbol.ContainingAssembly : ((AssemblySymbol)within));
             switch (declaredAccessibility)
             {
                 case Accessibility.NotApplicable:
@@ -243,7 +243,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return true;
             }
-            if ((object)withinType == null)
+            if (withinType is null)
             {
                 return false;
             }
@@ -253,11 +253,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             NamedTypeSymbol namedTypeSymbol = withinType.OriginalDefinition;
             TypeSymbol typeSymbol = throughTypeOpt?.OriginalDefinition;
-            while ((object)namedTypeSymbol != null)
+            while (namedTypeSymbol is object)
             {
                 if (namedTypeSymbol.InheritsFromOrImplementsIgnoringConstruction(originalContainingType, compilation, ref useSiteInfo, basesBeingResolved))
                 {
-                    if ((object)typeSymbol == null || typeSymbol.InheritsFromOrImplementsIgnoringConstruction(namedTypeSymbol, compilation, ref useSiteInfo))
+                    if (typeSymbol is null || typeSymbol.InheritsFromOrImplementsIgnoringConstruction(namedTypeSymbol, compilation, ref useSiteInfo))
                     {
                         return true;
                     }
@@ -270,7 +270,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsPrivateSymbolAccessible(Symbol within, NamedTypeSymbol originalContainingType)
         {
-            if (!(within is NamedTypeSymbol withinType))
+            if (within is not NamedTypeSymbol withinType)
             {
                 return false;
             }
@@ -280,9 +280,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static bool IsNestedWithinOriginalContainingType(NamedTypeSymbol withinType, NamedTypeSymbol originalContainingType)
         {
             NamedTypeSymbol namedTypeSymbol = withinType.OriginalDefinition;
-            while ((object)namedTypeSymbol != null)
+            while (namedTypeSymbol is object currentObject)
             {
-                if ((object)namedTypeSymbol == originalContainingType)
+                if (currentObject == originalContainingType)
                 {
                     return true;
                 }
@@ -304,9 +304,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             PooledHashSet<NamedTypeSymbol> visited = null;
             TypeSymbol typeSymbol = type;
             bool flag = false;
-            while ((object)typeSymbol != null)
+            while (typeSymbol is object currentObject)
             {
-                if (isInterface == typeSymbol.IsInterfaceType() && (object)typeSymbol == baseType)
+                if (isInterface == typeSymbol.IsInterfaceType() && currentObject == baseType)
                 {
                     flag = true;
                     break;
@@ -316,7 +316,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     getBaseInterfaces(typeSymbol, arrayBuilder, pooledHashSet, basesBeingResolved);
                 }
                 TypeSymbol nextBaseTypeNoUseSiteDiagnostics = typeSymbol.GetNextBaseTypeNoUseSiteDiagnostics(basesBeingResolved, compilation, ref visited);
-                if ((object)nextBaseTypeNoUseSiteDiagnostics == null)
+                if (nextBaseTypeNoUseSiteDiagnostics is null)
                 {
                     typeSymbol = null;
                     continue;
@@ -355,7 +355,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (basesBeingResolved == null || !basesBeingResolved.ContainsReference(derived))
                 {
-                    ImmutableArray<NamedTypeSymbol>.Enumerator enumerator2 = ((derived is TypeParameterSymbol typeParameterSymbol) ? typeParameterSymbol.AllEffectiveInterfacesNoUseSiteDiagnostics : ((!(derived is NamedTypeSymbol namedTypeSymbol2)) ? derived.InterfacesNoUseSiteDiagnostics(basesBeingResolved) : namedTypeSymbol2.GetDeclaredInterfaces(basesBeingResolved))).GetEnumerator();
+                    ImmutableArray<NamedTypeSymbol>.Enumerator enumerator2 = ((derived is TypeParameterSymbol typeParameterSymbol) ? typeParameterSymbol.AllEffectiveInterfacesNoUseSiteDiagnostics : ((derived is not NamedTypeSymbol namedTypeSymbol2) ? derived.InterfacesNoUseSiteDiagnostics(basesBeingResolved) : namedTypeSymbol2.GetDeclaredInterfaces(basesBeingResolved))).GetEnumerator();
                     while (enumerator2.MoveNext())
                     {
                         NamedTypeSymbol originalDefinition = enumerator2.Current.OriginalDefinition;

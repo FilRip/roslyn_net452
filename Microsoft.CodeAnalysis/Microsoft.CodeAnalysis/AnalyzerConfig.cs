@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis
             public string? TryLexNumber()
             {
                 bool flag = true;
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new();
                 while (!IsDone)
                 {
                     char currentCharacter = CurrentCharacter;
@@ -196,9 +196,9 @@ namespace Microsoft.CodeAnalysis
             OpenBracket
         }
 
-        private static readonly Regex s_sectionMatcher = new Regex("^\\s*\\[(([^#;]|\\\\#|\\\\;)+)\\]\\s*([#;].*)?$", RegexOptions.Compiled);
+        private static readonly Regex s_sectionMatcher = new("^\\s*\\[(([^#;]|\\\\#|\\\\;)+)\\]\\s*([#;].*)?$", RegexOptions.Compiled);
 
-        private static readonly Regex s_propertyMatcher = new Regex("^\\s*([\\w\\.\\-_]+)\\s*[=:]\\s*(.*?)\\s*([#;].*)?$", RegexOptions.Compiled);
+        private static readonly Regex s_propertyMatcher = new("^\\s*([\\w\\.\\-_]+)\\s*[=:]\\s*(.*?)\\s*([#;].*)?$", RegexOptions.Compiled);
 
         internal const string GlobalKey = "is_global";
 
@@ -322,7 +322,7 @@ namespace Microsoft.CodeAnalysis
             return new AnalyzerConfig(globalSection, namedSectionBuilder.ToImmutable(), pathToFile);
             void addNewSection()
             {
-                Section section = new Section(activeSectionName, activeSectionProperties.ToImmutable());
+                Section section = new(activeSectionName, activeSectionProperties.ToImmutable());
                 if (activeSectionName == "")
                 {
                     globalSection = section;
@@ -352,7 +352,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static SectionNameMatcher? TryCreateSectionNameMatcher(string sectionName)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             stringBuilder.Append('^');
             if (!sectionName.Contains("/"))
             {
@@ -362,7 +362,7 @@ namespace Microsoft.CodeAnalysis
             {
                 stringBuilder.Append('/');
             }
-            SectionNameLexer lexer = new SectionNameLexer(sectionName);
+            SectionNameLexer lexer = new(sectionName);
             ArrayBuilder<(int, int)> instance = ArrayBuilder<(int, int)>.GetInstance();
             if (!TryCompilePathList(ref lexer, stringBuilder, parsingChoice: false, instance))
             {

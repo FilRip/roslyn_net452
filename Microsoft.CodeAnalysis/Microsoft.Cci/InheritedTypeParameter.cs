@@ -66,7 +66,7 @@ namespace Microsoft.Cci
 
         public IPointerTypeReference? AsPointerTypeReference => this as IPointerTypeReference;
 
-        public TypeDefinitionHandle TypeDef => default(TypeDefinitionHandle);
+        public TypeDefinitionHandle TypeDef => default;
 
         public bool IsAlias => false;
 

@@ -5,11 +5,11 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
-#nullable enable
+#nullable disable
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
-    internal abstract class Symbol : ISymbol, IEquatable<ISymbol?>
+    internal abstract class Symbol : ISymbol
     {
         internal abstract Microsoft.CodeAnalysis.CSharp.Symbol UnderlyingSymbol { get; }
 

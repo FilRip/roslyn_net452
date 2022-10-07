@@ -190,7 +190,7 @@ namespace Microsoft.Cci
                     typeReference = arrayTypeReference.GetElementType(context);
                     continue;
                 }
-                if (!(typeReference is IPointerTypeReference pointerTypeReference))
+                if (typeReference is not IPointerTypeReference pointerTypeReference)
                 {
                     break;
                 }

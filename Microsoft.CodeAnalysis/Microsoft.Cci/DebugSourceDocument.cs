@@ -55,7 +55,7 @@ namespace Microsoft.Cci
 
         public DebugSourceInfo GetSourceInfo()
         {
-            return _sourceInfo?.Result ?? default(DebugSourceInfo);
+            return _sourceInfo?.Result ?? default;
         }
     }
 }

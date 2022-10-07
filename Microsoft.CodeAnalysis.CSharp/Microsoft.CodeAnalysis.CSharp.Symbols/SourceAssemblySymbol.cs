@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
-#nullable enable
+#nullable disable
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {

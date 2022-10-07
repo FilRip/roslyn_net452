@@ -89,7 +89,7 @@ namespace System.Text
 
 		protected static Stream s_codePagesEncodingDataStream = GetEncodingDataStream("codepages.nlp");
 
-		protected static readonly object s_streamLock = new object();
+		protected static readonly object s_streamLock = new();
 
 		protected byte[] m_codePageHeader = new byte[48];
 

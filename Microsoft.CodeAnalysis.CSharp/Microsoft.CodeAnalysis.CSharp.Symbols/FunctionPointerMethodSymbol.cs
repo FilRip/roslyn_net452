@@ -368,63 +368,52 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal FunctionPointerMethodSymbol MergeEquivalentTypes(FunctionPointerMethodSymbol signature, VarianceKind variance)
         {
-            VarianceKind variance2 = ((RefKind == RefKind.None) ? variance : VarianceKind.None);
-            TypeWithAnnotations substitutedReturnType = ReturnTypeWithAnnotations.MergeEquivalentTypes(signature.ReturnTypeWithAnnotations, variance2);
-            ImmutableArray<TypeWithAnnotations> substitutedParameterTypes = ImmutableArray<TypeWithAnnotations>.Empty;
-            bool flag = false;
+            var returnVariance = RefKind == RefKind.None ? variance : VarianceKind.None;
+            var mergedReturnType = ReturnTypeWithAnnotations.MergeEquivalentTypes(signature.ReturnTypeWithAnnotations, returnVariance);
+
+            var mergedParameterTypes = ImmutableArray<TypeWithAnnotations>.Empty;
+            bool hasParamChanges = false;
             if (_parameters.Length > 0)
             {
-                ArrayBuilder<TypeWithAnnotations> instance = ArrayBuilder<TypeWithAnnotations>.GetInstance(_parameters.Length);
-                for (int num = 0; num < _parameters.Length; num++)
+                var paramMergedTypesBuilder = ArrayBuilder<TypeWithAnnotations>.GetInstance(_parameters.Length);
+                for (int i = 0; i < _parameters.Length; i++)
                 {
-                    FunctionPointerParameterSymbol functionPointerParameterSymbol = _parameters[num];
-                    FunctionPointerParameterSymbol functionPointerParameterSymbol2 = signature._parameters[num];
-                    RefKind refKind = functionPointerParameterSymbol.RefKind;
-                    VarianceKind varianceKind;
-                    if (variance != VarianceKind.Out)
+                    var thisParam = _parameters[i];
+                    var otherParam = signature._parameters[i];
+                    var paramVariance = (variance, thisParam.RefKind) switch
                     {
-                        if (variance != VarianceKind.In || refKind != 0)
-                        {
-                            goto IL_00ae;
-                        }
-                        varianceKind = VarianceKind.Out;
-                    }
-                    else
+                        (VarianceKind.In, RefKind.None) => VarianceKind.Out,
+                        (VarianceKind.Out, RefKind.None) => VarianceKind.In,
+                        _ => VarianceKind.None,
+                    };
+
+                    var mergedParameterType = thisParam.TypeWithAnnotations.MergeEquivalentTypes(otherParam.TypeWithAnnotations, paramVariance);
+                    paramMergedTypesBuilder.Add(mergedParameterType);
+                    if (!mergedParameterType.IsSameAs(thisParam.TypeWithAnnotations))
                     {
-                        if (refKind != 0)
-                        {
-                            goto IL_00ae;
-                        }
-                        varianceKind = VarianceKind.In;
-                    }
-                    goto IL_00b1;
-                IL_00ae:
-                    varianceKind = VarianceKind.None;
-                    goto IL_00b1;
-                IL_00b1:
-                    VarianceKind variance3 = varianceKind;
-                    TypeWithAnnotations item = functionPointerParameterSymbol.TypeWithAnnotations.MergeEquivalentTypes(functionPointerParameterSymbol2.TypeWithAnnotations, variance3);
-                    instance.Add(item);
-                    if (!item.IsSameAs(functionPointerParameterSymbol.TypeWithAnnotations))
-                    {
-                        flag = true;
+                        hasParamChanges = true;
                     }
                 }
-                if (flag)
+
+                if (hasParamChanges)
                 {
-                    substitutedParameterTypes = instance.ToImmutableAndFree();
+                    mergedParameterTypes = paramMergedTypesBuilder.ToImmutableAndFree();
                 }
                 else
                 {
-                    instance.Free();
-                    substitutedParameterTypes = base.ParameterTypesWithAnnotations;
+                    paramMergedTypesBuilder.Free();
+                    mergedParameterTypes = ParameterTypesWithAnnotations;
                 }
             }
-            if (flag || !substitutedReturnType.IsSameAs(ReturnTypeWithAnnotations))
+
+            if (hasParamChanges || !mergedReturnType.IsSameAs(ReturnTypeWithAnnotations))
             {
-                return SubstituteParameterSymbols(substitutedReturnType, substitutedParameterTypes);
+                return SubstituteParameterSymbols(mergedReturnType, mergedParameterTypes);
             }
-            return this;
+            else
+            {
+                return this;
+            }
         }
 
         public FunctionPointerMethodSymbol SetNullabilityForReferenceTypes(Func<TypeWithAnnotations, TypeWithAnnotations> transform)

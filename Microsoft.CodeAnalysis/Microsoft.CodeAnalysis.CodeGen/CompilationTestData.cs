@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     string methodName = GetMethodName(method.Key);
                     if (dictionary.ContainsKey(methodName))
                     {
-                        dictionary[methodName] = default(MethodData);
+                        dictionary[methodName] = default;
                     }
                     else
                     {

@@ -1295,7 +1295,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static bool IsIAsyncEnumeratorType(this TypeSymbol type, CSharpCompilation compilation)
         {
-            if (!(type is NamedTypeSymbol namedTypeSymbol) || namedTypeSymbol.Arity != 1)
+            if (type is not NamedTypeSymbol namedTypeSymbol || namedTypeSymbol.Arity != 1)
             {
                 return false;
             }
@@ -1304,19 +1304,22 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static bool IsCustomTaskType(this NamedTypeSymbol type, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out object? builderArgument)
         {
-            if (type.Arity < 2)
+            var arity = type.Arity;
+            if (arity < 2)
             {
-                ImmutableArray<CSharpAttributeData>.Enumerator enumerator = type.GetAttributes().GetEnumerator();
-                while (enumerator.MoveNext())
+                // Find the AsyncBuilder attribute.
+                foreach (var attr in type.GetAttributes())
                 {
-                    CSharpAttributeData current = enumerator.Current;
-                    if (current.IsTargetAttribute(type, AttributeDescription.AsyncMethodBuilderAttribute) && current.CommonConstructorArguments.Length == 1 && current.CommonConstructorArguments[0].Kind == TypedConstantKind.Type)
+                    if (attr.IsTargetAttribute(type, AttributeDescription.AsyncMethodBuilderAttribute)
+                        && attr.CommonConstructorArguments.Length == 1
+                        && attr.CommonConstructorArguments[0].Kind == TypedConstantKind.Type)
                     {
-                        builderArgument = current.CommonConstructorArguments[0].ValueInternal;
+                        builderArgument = attr.CommonConstructorArguments[0].ValueInternal!;
                         return true;
                     }
                 }
             }
+
             builderArgument = null;
             return false;
         }

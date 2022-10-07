@@ -18,35 +18,29 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
         {
             get
             {
-                GreenNode slot = base.Green.GetSlot(0);
-                if (slot == null)
-                {
-                    return default(SyntaxTokenList);
-                }
-                return new SyntaxTokenList(this, slot, base.Position, 0);
+                var slot = Green.GetSlot(0);
+                return slot != null ? new SyntaxTokenList(this, slot, Position, 0) : default;
             }
         }
 
-        public SyntaxToken DelegateKeyword => new SyntaxToken(this, ((Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax.AnonymousMethodExpressionSyntax)base.Green).delegateKeyword, GetChildPosition(1), GetChildIndex(1));
+        public SyntaxToken DelegateKeyword => new(this, ((InternalSyntax.AnonymousMethodExpressionSyntax)base.Green).delegateKeyword, GetChildPosition(1), GetChildIndex(1));
 
         public ParameterListSyntax? ParameterList => GetRed(ref parameterList, 2);
 
-        public override BlockSyntax Block => GetRed(ref block, 3);
+        public override BlockSyntax Block => GetRed(ref block, 3)!;
 
         public override ExpressionSyntax? ExpressionBody => GetRed(ref expressionBody, 4);
 
+#nullable disable
+
         public new AnonymousMethodExpressionSyntax WithBody(CSharpSyntaxNode body)
-        {
-            if (!(body is BlockSyntax blockSyntax))
-            {
-                return WithExpressionBody((ExpressionSyntax)body).WithBlock(null);
-            }
-            return WithBlock(blockSyntax).WithExpressionBody(null);
-        }
+            => body is BlockSyntax block
+                ? WithBlock(block).WithExpressionBody(null)
+                : WithExpressionBody((ExpressionSyntax)body).WithBlock(null);
 
         public AnonymousMethodExpressionSyntax Update(SyntaxToken asyncKeyword, SyntaxToken delegateKeyword, ParameterListSyntax parameterList, CSharpSyntaxNode body)
         {
-            if (!(body is BlockSyntax blockSyntax))
+            if (body is not BlockSyntax blockSyntax)
             {
                 return Update(asyncKeyword, delegateKeyword, parameterList, null, (ExpressionSyntax)body);
             }
@@ -62,6 +56,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
         {
             return Update(asyncKeyword, DelegateKeyword, ParameterList, Block, ExpressionBody);
         }
+
+#nullable enable
 
         public AnonymousMethodExpressionSyntax Update(SyntaxToken asyncKeyword, SyntaxToken delegateKeyword, ParameterListSyntax parameterList, BlockSyntax block, ExpressionSyntax expressionBody)
         {

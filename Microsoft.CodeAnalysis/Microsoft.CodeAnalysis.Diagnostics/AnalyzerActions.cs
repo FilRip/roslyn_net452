@@ -7,7 +7,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public struct AnalyzerActions
     {
-        public static readonly AnalyzerActions Empty = new AnalyzerActions(concurrent: false);
+        public static readonly AnalyzerActions Empty = new(concurrent: false);
 
         private ImmutableArray<CompilationStartAnalyzerAction> _compilationStartActions;
 
@@ -299,7 +299,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 throw new ArgumentNullException("otherActions");
             }
-            AnalyzerActions result = new AnalyzerActions(_concurrent || otherActions.Concurrent);
+            AnalyzerActions result = new(_concurrent || otherActions.Concurrent);
             result._compilationStartActions = _compilationStartActions.AddRange(otherActions._compilationStartActions);
             result._compilationEndActions = _compilationEndActions.AddRange(otherActions._compilationEndActions);
             result._compilationActions = _compilationActions.AddRange(otherActions._compilationActions);

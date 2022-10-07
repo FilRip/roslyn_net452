@@ -16,1014 +16,10 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed class LocalRewriter : BoundTreeRewriterWithStackGuard
     {
-        private abstract class DecisionDagRewriter : PatternLocalRewriter
-        {
-            protected sealed class WhenClauseMightAssignPatternVariableWalker : BoundTreeWalkerWithStackGuardWithoutRecursionOnTheLeftOfBinaryOperator
-            {
-                private bool _mightAssignSomething;
-
-                public bool MightAssignSomething(BoundExpression expr)
-                {
-                    if (expr == null)
-                    {
-                        return false;
-                    }
-                    _mightAssignSomething = false;
-                    Visit(expr);
-                    return _mightAssignSomething;
-                }
-
-                public override BoundNode Visit(BoundNode node)
-                {
-                    if (node is BoundExpression boundExpression && (object)boundExpression.ConstantValue != null)
-                    {
-                        return null;
-                    }
-                    if (!_mightAssignSomething)
-                    {
-                        return base.Visit(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitCall(BoundCall node)
-                {
-                    if (node.Method.MethodKind == MethodKind.LocalFunction || !node.ArgumentRefKindsOpt.IsDefault || MethodMayMutateReceiver(node.ReceiverOpt, node.Method))
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitCall(node);
-                    }
-                    return null;
-                }
-
-                private static bool MethodMayMutateReceiver(BoundExpression receiver, MethodSymbol method)
-                {
-                    if (method != null && !method.IsStatic && !method.IsEffectivelyReadOnly)
-                    {
-                        TypeSymbol? type = receiver.Type;
-                        if ((object)type != null && !type!.IsReferenceType)
-                        {
-                            return !method.ContainingType.SpecialType.IsPrimitiveRecursiveStruct();
-                        }
-                    }
-                    return false;
-                }
-
-                public override BoundNode VisitPropertyAccess(BoundPropertyAccess node)
-                {
-                    if (MethodMayMutateReceiver(node.ReceiverOpt, node.PropertySymbol.GetMethod))
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitPropertyAccess(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitAssignmentOperator(BoundAssignmentOperator node)
-                {
-                    _mightAssignSomething = true;
-                    return null;
-                }
-
-                public override BoundNode VisitCompoundAssignmentOperator(BoundCompoundAssignmentOperator node)
-                {
-                    _mightAssignSomething = true;
-                    return null;
-                }
-
-                public override BoundNode VisitConversion(BoundConversion node)
-                {
-                    visitConversion(node.Conversion);
-                    if (!_mightAssignSomething)
-                    {
-                        base.VisitConversion(node);
-                    }
-                    return null;
-                    void visitConversion(Conversion conversion)
-                    {
-                        if (conversion.Kind == ConversionKind.MethodGroup)
-                        {
-                            if (conversion.Method!.MethodKind == MethodKind.LocalFunction)
-                            {
-                                _mightAssignSomething = true;
-                            }
-                        }
-                        else if (!conversion.UnderlyingConversions.IsDefault)
-                        {
-                            ImmutableArray<Conversion>.Enumerator enumerator = conversion.UnderlyingConversions.GetEnumerator();
-                            while (enumerator.MoveNext())
-                            {
-                                Conversion current = enumerator.Current;
-                                visitConversion(current);
-                                if (_mightAssignSomething)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                public override BoundNode VisitDelegateCreationExpression(BoundDelegateCreationExpression node)
-                {
-                    MethodSymbol? methodOpt = node.MethodOpt;
-                    if ((object)methodOpt != null && methodOpt!.MethodKind == MethodKind.LocalFunction)
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitDelegateCreationExpression(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitAddressOfOperator(BoundAddressOfOperator node)
-                {
-                    _mightAssignSomething = true;
-                    return null;
-                }
-
-                public override BoundNode VisitDeconstructionAssignmentOperator(BoundDeconstructionAssignmentOperator node)
-                {
-                    _mightAssignSomething = true;
-                    return null;
-                }
-
-                public override BoundNode VisitIncrementOperator(BoundIncrementOperator node)
-                {
-                    _mightAssignSomething = true;
-                    return null;
-                }
-
-                public override BoundNode VisitDynamicInvocation(BoundDynamicInvocation node)
-                {
-                    if (!node.ArgumentRefKindsOpt.IsDefault)
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitDynamicInvocation(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitObjectCreationExpression(BoundObjectCreationExpression node)
-                {
-                    if (!node.ArgumentRefKindsOpt.IsDefault)
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitObjectCreationExpression(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitDynamicObjectCreationExpression(BoundDynamicObjectCreationExpression node)
-                {
-                    if (!node.ArgumentRefKindsOpt.IsDefault)
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitDynamicObjectCreationExpression(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitObjectInitializerMember(BoundObjectInitializerMember node)
-                {
-                    if (!node.ArgumentRefKindsOpt.IsDefault)
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitObjectInitializerMember(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitIndexerAccess(BoundIndexerAccess node)
-                {
-                    if (!node.ArgumentRefKindsOpt.IsDefault || MethodMayMutateReceiver(node.ReceiverOpt, node.Indexer.GetMethod))
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitIndexerAccess(node);
-                    }
-                    return null;
-                }
-
-                public override BoundNode VisitDynamicIndexerAccess(BoundDynamicIndexerAccess node)
-                {
-                    if (!node.ArgumentRefKindsOpt.IsDefault)
-                    {
-                        _mightAssignSomething = true;
-                    }
-                    else
-                    {
-                        base.VisitDynamicIndexerAccess(node);
-                    }
-                    return null;
-                }
-            }
-
-            private sealed class CasesComparer : IComparer<(ConstantValue value, LabelSymbol label)>
-            {
-                private readonly IValueSetFactory _fac;
-
-                public CasesComparer(TypeSymbol type)
-                {
-                    _fac = ValueSetFactory.ForType(type);
-                }
-
-                int IComparer<(ConstantValue value, LabelSymbol label)>.Compare((ConstantValue value, LabelSymbol label) left, (ConstantValue value, LabelSymbol label) right)
-                {
-                    var x = left.value;
-                    var y = right.value;
-                    // Sort NaN values into the "highest" position so they fall naturally into the last bucket
-                    // when partitioned using less-than.
-                    return
-                        isNaN(x) ? 1 :
-                        isNaN(y) ? -1 :
-                        _fac.Related(BinaryOperatorKind.LessThanOrEqual, x, y) ?
-                            (_fac.Related(BinaryOperatorKind.LessThanOrEqual, y, x) ? 0 : -1) :
-                        1;
-
-                    static bool isNaN(ConstantValue value) =>
-                        (value.Discriminator == ConstantValueTypeDiscriminator.Single || value.Discriminator == ConstantValueTypeDiscriminator.Double) &&
-                        double.IsNaN(value.DoubleValue);
-                }
-            }
-
-            private abstract class ValueDispatchNode
-            {
-                internal sealed class SwitchDispatch : ValueDispatchNode
-                {
-                    public readonly ImmutableArray<(ConstantValue value, LabelSymbol label)> Cases;
-
-                    public readonly LabelSymbol Otherwise;
-
-                    public SwitchDispatch(SyntaxNode syntax, ImmutableArray<(ConstantValue value, LabelSymbol label)> dispatches, LabelSymbol otherwise)
-                        : base(syntax)
-                    {
-                        Cases = dispatches;
-                        Otherwise = otherwise;
-                    }
-
-                    public override string ToString()
-                    {
-                        return "[" + string.Join(",", Cases.Select(((ConstantValue value, LabelSymbol label) c) => c.value)) + "]";
-                    }
-                }
-
-                internal sealed class LeafDispatchNode : ValueDispatchNode
-                {
-                    public readonly LabelSymbol Label;
-
-                    public LeafDispatchNode(SyntaxNode syntax, LabelSymbol Label)
-                        : base(syntax)
-                    {
-                        this.Label = Label;
-                    }
-
-                    public override string ToString()
-                    {
-                        return "Leaf";
-                    }
-                }
-
-                internal sealed class RelationalDispatch : ValueDispatchNode
-                {
-                    private int _height;
-
-                    public readonly ConstantValue Value;
-
-                    public readonly BinaryOperatorKind Operator;
-
-                    protected override int Height => _height;
-
-                    private ValueDispatchNode Left { get; set; }
-
-                    private ValueDispatchNode Right { get; set; }
-
-                    public ValueDispatchNode WhenTrue
-                    {
-                        get
-                        {
-                            if (!IsReversed(Operator))
-                            {
-                                return Left;
-                            }
-                            return Right;
-                        }
-                    }
-
-                    public ValueDispatchNode WhenFalse
-                    {
-                        get
-                        {
-                            if (!IsReversed(Operator))
-                            {
-                                return Right;
-                            }
-                            return Left;
-                        }
-                    }
-
-                    private RelationalDispatch(SyntaxNode syntax, ConstantValue value, BinaryOperatorKind op, ValueDispatchNode left, ValueDispatchNode right)
-                        : base(syntax)
-                    {
-                        Value = value;
-                        Operator = op;
-                        WithLeftAndRight(left, right);
-                    }
-
-                    public override string ToString()
-                    {
-                        return $"RelationalDispatch.{Height}({Left} {Operator.Operator()} {Value} {Right})";
-                    }
-
-                    private static bool IsReversed(BinaryOperatorKind op)
-                    {
-                        return op.Operator() switch
-                        {
-                            BinaryOperatorKind.GreaterThan => true,
-                            BinaryOperatorKind.GreaterThanOrEqual => true,
-                            _ => false,
-                        };
-                    }
-
-                    private RelationalDispatch WithLeftAndRight(ValueDispatchNode left, ValueDispatchNode right)
-                    {
-                        int height = left.Height;
-                        int height2 = right.Height;
-                        Left = left;
-                        Right = right;
-                        _height = Math.Max(height, height2) + 1;
-                        return this;
-                    }
-
-                    public RelationalDispatch WithTrueAndFalseChildren(ValueDispatchNode whenTrue, ValueDispatchNode whenFalse)
-                    {
-                        if (whenTrue == WhenTrue && whenFalse == WhenFalse)
-                        {
-                            return this;
-                        }
-                        ValueDispatchNode left;
-                        ValueDispatchNode right;
-                        if (!IsReversed(Operator))
-                        {
-                            ValueDispatchNode valueDispatchNode = whenFalse;
-                            left = whenTrue;
-                            right = valueDispatchNode;
-                        }
-                        else
-                        {
-                            ValueDispatchNode valueDispatchNode = whenTrue;
-                            left = whenFalse;
-                            right = valueDispatchNode;
-                        }
-                        return WithLeftAndRight(left, right);
-                    }
-
-                    public static ValueDispatchNode CreateBalanced(SyntaxNode syntax, ConstantValue value, BinaryOperatorKind op, ValueDispatchNode whenTrue, ValueDispatchNode whenFalse)
-                    {
-                        ValueDispatchNode left;
-                        ValueDispatchNode right;
-                        if (!IsReversed(op))
-                        {
-                            ValueDispatchNode valueDispatchNode = whenFalse;
-                            left = whenTrue;
-                            right = valueDispatchNode;
-                        }
-                        else
-                        {
-                            ValueDispatchNode valueDispatchNode = whenTrue;
-                            left = whenFalse;
-                            right = valueDispatchNode;
-                        }
-                        return CreateBalancedCore(syntax, value, op, left, right);
-                    }
-
-                    private static ValueDispatchNode CreateBalancedCore(SyntaxNode syntax, ConstantValue value, BinaryOperatorKind op, ValueDispatchNode left, ValueDispatchNode right)
-                    {
-                        if (left.Height > right.Height + 1)
-                        {
-                            RelationalDispatch relationalDispatch = (RelationalDispatch)left;
-                            ValueDispatchNode valueDispatchNode = CreateBalancedCore(syntax, value, op, relationalDispatch.Right, right);
-                            SyntaxNode syntax2 = relationalDispatch.Syntax;
-                            ConstantValue value2 = relationalDispatch.Value;
-                            BinaryOperatorKind @operator = relationalDispatch.Operator;
-                            ValueDispatchNode left2 = relationalDispatch.Left;
-                            ValueDispatchNode valueDispatchNode2 = valueDispatchNode;
-                            syntax = syntax2;
-                            value = value2;
-                            op = @operator;
-                            left = left2;
-                            right = valueDispatchNode2;
-                        }
-                        else if (right.Height > left.Height + 1)
-                        {
-                            RelationalDispatch relationalDispatch2 = (RelationalDispatch)right;
-                            ValueDispatchNode valueDispatchNode3 = CreateBalancedCore(syntax, value, op, left, relationalDispatch2.Left);
-                            SyntaxNode syntax2 = relationalDispatch2.Syntax;
-                            ConstantValue value2 = relationalDispatch2.Value;
-                            BinaryOperatorKind @operator = relationalDispatch2.Operator;
-                            ValueDispatchNode valueDispatchNode2 = valueDispatchNode3;
-                            ValueDispatchNode right2 = relationalDispatch2.Right;
-                            syntax = syntax2;
-                            value = value2;
-                            op = @operator;
-                            left = valueDispatchNode2;
-                            right = right2;
-                        }
-                        if (left.Height == right.Height + 2)
-                        {
-                            RelationalDispatch relationalDispatch3 = (RelationalDispatch)left;
-                            if (relationalDispatch3.Left.Height == right.Height)
-                            {
-                                RelationalDispatch relationalDispatch4 = relationalDispatch3;
-                                ValueDispatchNode left3 = relationalDispatch4.Left;
-                                RelationalDispatch obj = (RelationalDispatch)relationalDispatch4.Right;
-                                ValueDispatchNode left4 = obj.Left;
-                                ValueDispatchNode right3 = obj.Right;
-                                ValueDispatchNode right4 = right;
-                                return obj.WithLeftAndRight(relationalDispatch4.WithLeftAndRight(left3, left4), new RelationalDispatch(syntax, value, op, right3, right4));
-                            }
-                            ValueDispatchNode left5 = relationalDispatch3.Left;
-                            ValueDispatchNode right5 = relationalDispatch3.Right;
-                            ValueDispatchNode right6 = right;
-                            return relationalDispatch3.WithLeftAndRight(left5, new RelationalDispatch(syntax, value, op, right5, right6));
-                        }
-                        if (right.Height == left.Height + 2)
-                        {
-                            RelationalDispatch relationalDispatch5 = (RelationalDispatch)right;
-                            if (relationalDispatch5.Right.Height == left.Height)
-                            {
-                                ValueDispatchNode left6 = left;
-                                RelationalDispatch relationalDispatch6 = relationalDispatch5;
-                                RelationalDispatch obj2 = (RelationalDispatch)relationalDispatch6.Left;
-                                ValueDispatchNode left7 = obj2.Left;
-                                ValueDispatchNode right7 = obj2.Right;
-                                return obj2.WithLeftAndRight(right: relationalDispatch6.WithLeftAndRight(right7, relationalDispatch6.Right), left: new RelationalDispatch(syntax, value, op, left6, left7));
-                            }
-                            ValueDispatchNode left8 = left;
-                            ValueDispatchNode left9 = relationalDispatch5.Left;
-                            return relationalDispatch5.WithLeftAndRight(right: relationalDispatch5.Right, left: new RelationalDispatch(syntax, value, op, left8, left9));
-                        }
-                        return new RelationalDispatch(syntax, value, op, left, right);
-                    }
-                }
-
-                public readonly SyntaxNode Syntax;
-
-                protected virtual int Height => 1;
-
-                public ValueDispatchNode(SyntaxNode syntax)
-                {
-                    Syntax = syntax;
-                }
-            }
-
-            private ArrayBuilder<BoundStatement> _loweredDecisionDag;
-
-            protected readonly PooledDictionary<BoundDecisionDagNode, LabelSymbol> _dagNodeLabels = PooledDictionary<BoundDecisionDagNode, LabelSymbol>.GetInstance();
-
-            protected abstract ArrayBuilder<BoundStatement> BuilderForSection(SyntaxNode section);
-
-            protected DecisionDagRewriter(SyntaxNode node, LocalRewriter localRewriter, bool generateInstrumentation)
-                : base(node, localRewriter, generateInstrumentation)
-            {
-            }
-
-            private void ComputeLabelSet(BoundDecisionDag decisionDag)
-            {
-                PooledHashSet<BoundDecisionDagNode> hasPredecessor = PooledHashSet<BoundDecisionDagNode>.GetInstance();
-                ImmutableArray<BoundDecisionDagNode>.Enumerator enumerator = decisionDag.TopologicallySortedNodes.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    BoundDecisionDagNode current = enumerator.Current;
-                    if (!(current is BoundWhenDecisionDagNode boundWhenDecisionDagNode))
-                    {
-                        if (!(current is BoundLeafDecisionDagNode boundLeafDecisionDagNode))
-                        {
-                            if (!(current is BoundEvaluationDecisionDagNode boundEvaluationDecisionDagNode))
-                            {
-                                if (!(current is BoundTestDecisionDagNode boundTestDecisionDagNode))
-                                {
-                                    throw ExceptionUtilities.UnexpectedValue(current.Kind);
-                                }
-                                notePredecessor(boundTestDecisionDagNode.WhenTrue);
-                                notePredecessor(boundTestDecisionDagNode.WhenFalse);
-                            }
-                            else
-                            {
-                                notePredecessor(boundEvaluationDecisionDagNode.Next);
-                            }
-                        }
-                        else
-                        {
-                            _dagNodeLabels[current] = boundLeafDecisionDagNode.Label;
-                        }
-                    }
-                    else
-                    {
-                        GetDagNodeLabel(current);
-                        if (boundWhenDecisionDagNode.WhenFalse != null)
-                        {
-                            GetDagNodeLabel(boundWhenDecisionDagNode.WhenFalse);
-                        }
-                    }
-                }
-                hasPredecessor.Free();
-                void notePredecessor(BoundDecisionDagNode successor)
-                {
-                    if (successor != null && !hasPredecessor.Add(successor))
-                    {
-                        GetDagNodeLabel(successor);
-                    }
-                }
-            }
-
-            protected new void Free()
-            {
-                _dagNodeLabels.Free();
-                base.Free();
-            }
-
-            protected virtual LabelSymbol GetDagNodeLabel(BoundDecisionDagNode dag)
-            {
-                if (!_dagNodeLabels.TryGetValue(dag, out var value))
-                {
-                    _dagNodeLabels.Add(dag, value = ((dag is BoundLeafDecisionDagNode boundLeafDecisionDagNode) ? boundLeafDecisionDagNode.Label : _factory.GenerateLabel("dagNode")));
-                }
-                return value;
-            }
-
-            protected BoundDecisionDag ShareTempsIfPossibleAndEvaluateInput(BoundDecisionDag decisionDag, BoundExpression loweredSwitchGoverningExpression, ArrayBuilder<BoundStatement> result, out BoundExpression savedInputExpression)
-            {
-                WhenClauseMightAssignPatternVariableWalker mightAssignWalker = new WhenClauseMightAssignPatternVariableWalker();
-                if (!decisionDag.TopologicallySortedNodes.Any((BoundDecisionDagNode node) => node is BoundWhenDecisionDagNode boundWhenDecisionDagNode && mightAssignWalker.MightAssignSomething(boundWhenDecisionDagNode.WhenExpression)))
-                {
-                    decisionDag = ShareTempsAndEvaluateInput(loweredSwitchGoverningExpression, decisionDag, delegate (BoundExpression expr)
-                    {
-                        result.Add(_factory.ExpressionStatement(expr));
-                    }, out savedInputExpression);
-                }
-                else
-                {
-                    BoundExpression temp = _tempAllocator.GetTemp(BoundDagTemp.ForOriginalInput(loweredSwitchGoverningExpression));
-                    result.Add(_factory.Assignment(temp, loweredSwitchGoverningExpression));
-                    savedInputExpression = temp;
-                }
-                return decisionDag;
-            }
-
-            protected ImmutableArray<BoundStatement> LowerDecisionDagCore(BoundDecisionDag decisionDag)
-            {
-                _loweredDecisionDag = ArrayBuilder<BoundStatement>.GetInstance();
-                ComputeLabelSet(decisionDag);
-                ImmutableArray<BoundDecisionDagNode> topologicallySortedNodes = decisionDag.TopologicallySortedNodes;
-                BoundDecisionDagNode boundDecisionDagNode = topologicallySortedNodes[0];
-                if (boundDecisionDagNode is BoundWhenDecisionDagNode || boundDecisionDagNode is BoundLeafDecisionDagNode)
-                {
-                    _loweredDecisionDag.Add(_factory.Goto(GetDagNodeLabel(boundDecisionDagNode)));
-                }
-                ImmutableArray<BoundDecisionDagNode>.Enumerator enumerator = topologicallySortedNodes.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    if (enumerator.Current is BoundWhenDecisionDagNode whenClause)
-                    {
-                        LowerWhenClause(whenClause);
-                    }
-                }
-                ImmutableArray<BoundDecisionDagNode> nodesToLower = topologicallySortedNodes.WhereAsArray((BoundDecisionDagNode n) => n.Kind != BoundKind.WhenDecisionDagNode && n.Kind != BoundKind.LeafDecisionDagNode);
-                PooledHashSet<BoundDecisionDagNode> instance = PooledHashSet<BoundDecisionDagNode>.GetInstance();
-                int i = 0;
-                for (int length = nodesToLower.Length; i < length; i++)
-                {
-                    BoundDecisionDagNode boundDecisionDagNode2 = nodesToLower[i];
-                    bool flag = instance.Contains(boundDecisionDagNode2);
-                    if (flag && !_dagNodeLabels.TryGetValue(boundDecisionDagNode2, out var _))
-                    {
-                        continue;
-                    }
-                    if (_dagNodeLabels.TryGetValue(boundDecisionDagNode2, out var value2))
-                    {
-                        _loweredDecisionDag.Add(_factory.Label(value2));
-                    }
-                    if ((flag || !GenerateSwitchDispatch(boundDecisionDagNode2, instance)) && !GenerateTypeTestAndCast(boundDecisionDagNode2, instance, nodesToLower, i))
-                    {
-                        BoundDecisionDagNode boundDecisionDagNode3 = ((i + 1 < length) ? nodesToLower[i + 1] : null);
-                        if (boundDecisionDagNode3 != null && instance.Contains(boundDecisionDagNode3))
-                        {
-                            boundDecisionDagNode3 = null;
-                        }
-                        LowerDecisionDagNode(boundDecisionDagNode2, boundDecisionDagNode3);
-                    }
-                }
-                instance.Free();
-                ImmutableArray<BoundStatement> result = _loweredDecisionDag.ToImmutableAndFree();
-                _loweredDecisionDag = null;
-                return result;
-            }
-
-            private bool GenerateTypeTestAndCast(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes, ImmutableArray<BoundDecisionDagNode> nodesToLower, int indexOfNode)
-            {
-                if (node is BoundTestDecisionDagNode boundTestDecisionDagNode && boundTestDecisionDagNode.WhenTrue is BoundEvaluationDecisionDagNode boundEvaluationDecisionDagNode && TryLowerTypeTestAndCast(boundTestDecisionDagNode.Test, boundEvaluationDecisionDagNode.Evaluation, out var sideEffect, out var testExpression))
-                {
-                    BoundDecisionDagNode next = boundEvaluationDecisionDagNode.Next;
-                    BoundDecisionDagNode whenFalse = boundTestDecisionDagNode.WhenFalse;
-                    bool flag = !_dagNodeLabels.ContainsKey(boundEvaluationDecisionDagNode);
-                    if (flag)
-                    {
-                        loweredNodes.Add(boundEvaluationDecisionDagNode);
-                    }
-                    BoundDecisionDagNode nextNode = ((indexOfNode + 2 < nodesToLower.Length && flag && nodesToLower[indexOfNode + 1] == boundEvaluationDecisionDagNode && !loweredNodes.Contains(nodesToLower[indexOfNode + 2])) ? nodesToLower[indexOfNode + 2] : null);
-                    _loweredDecisionDag.Add(_factory.ExpressionStatement(sideEffect));
-                    GenerateTest(testExpression, next, whenFalse, nextNode);
-                    return true;
-                }
-                return false;
-            }
-
-            private void GenerateTest(BoundExpression test, BoundDecisionDagNode whenTrue, BoundDecisionDagNode whenFalse, BoundDecisionDagNode nextNode)
-            {
-                _factory.Syntax = test.Syntax;
-                if (nextNode == whenFalse)
-                {
-                    _loweredDecisionDag.Add(_factory.ConditionalGoto(test, GetDagNodeLabel(whenTrue), jumpIfTrue: true));
-                    return;
-                }
-                if (nextNode == whenTrue)
-                {
-                    _loweredDecisionDag.Add(_factory.ConditionalGoto(test, GetDagNodeLabel(whenFalse), jumpIfTrue: false));
-                    return;
-                }
-                _loweredDecisionDag.Add(_factory.ConditionalGoto(test, GetDagNodeLabel(whenTrue), jumpIfTrue: true));
-                _loweredDecisionDag.Add(_factory.Goto(GetDagNodeLabel(whenFalse)));
-            }
-
-            private bool GenerateSwitchDispatch(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes)
-            {
-                if (!canGenerateSwitchDispatch(node))
-                {
-                    return false;
-                }
-                BoundDagTemp input = ((BoundTestDecisionDagNode)node).Test.Input;
-                ValueDispatchNode n = GatherValueDispatchNodes(node, loweredNodes, input);
-                LowerValueDispatchNode(n, _tempAllocator.GetTemp(input));
-                return true;
-                bool canDispatch(BoundTestDecisionDagNode test1, BoundTestDecisionDagNode test2)
-                {
-                    if (_dagNodeLabels.ContainsKey(test2))
-                    {
-                        return false;
-                    }
-                    BoundDagTest test3 = test1.Test;
-                    BoundDagTest test4 = test2.Test;
-                    if (!(test3 is BoundDagValueTest) && !(test3 is BoundDagRelationalTest))
-                    {
-                        return false;
-                    }
-                    if (!(test4 is BoundDagValueTest) && !(test4 is BoundDagRelationalTest))
-                    {
-                        return false;
-                    }
-                    if (!test3.Input.Equals(test4.Input))
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-                bool canGenerateSwitchDispatch(BoundDecisionDagNode node)
-                {
-                    if (node is BoundTestDecisionDagNode boundTestDecisionDagNode)
-                    {
-                        if (boundTestDecisionDagNode.WhenFalse is BoundTestDecisionDagNode test5)
-                        {
-                            return canDispatch(boundTestDecisionDagNode, test5);
-                        }
-                        if (boundTestDecisionDagNode.WhenTrue is BoundTestDecisionDagNode test6)
-                        {
-                            BoundTestDecisionDagNode test7 = boundTestDecisionDagNode;
-                            return canDispatch(test7, test6);
-                        }
-                    }
-                    return false;
-                }
-            }
-
-            private ValueDispatchNode GatherValueDispatchNodes(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes, BoundDagTemp input)
-            {
-                IValueSetFactory fac = ValueSetFactory.ForType(input.Type);
-                return GatherValueDispatchNodes(node, loweredNodes, input, fac);
-            }
-
-            private ValueDispatchNode GatherValueDispatchNodes(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes, BoundDagTemp input, IValueSetFactory fac)
-            {
-                if (loweredNodes.Contains(node))
-                {
-                    _dagNodeLabels.TryGetValue(node, out var value);
-                    return new ValueDispatchNode.LeafDispatchNode(node.Syntax, value);
-                }
-                if (!(node is BoundTestDecisionDagNode boundTestDecisionDagNode) || !boundTestDecisionDagNode.Test.Input.Equals(input))
-                {
-                    LabelSymbol dagNodeLabel = GetDagNodeLabel(node);
-                    return new ValueDispatchNode.LeafDispatchNode(node.Syntax, dagNodeLabel);
-                }
-                BoundDagTest test = boundTestDecisionDagNode.Test;
-                if (!(test is BoundDagRelationalTest boundDagRelationalTest))
-                {
-                    if (test is BoundDagValueTest boundDagValueTest)
-                    {
-                        loweredNodes.Add(boundTestDecisionDagNode);
-                        ArrayBuilder<(ConstantValue, LabelSymbol)> instance = ArrayBuilder<(ConstantValue, LabelSymbol)>.GetInstance();
-                        instance.Add((boundDagValueTest.Value, GetDagNodeLabel(boundTestDecisionDagNode.WhenTrue)));
-                        BoundTestDecisionDagNode boundTestDecisionDagNode2 = boundTestDecisionDagNode;
-                        while (boundTestDecisionDagNode2.WhenFalse is BoundTestDecisionDagNode boundTestDecisionDagNode3 && boundTestDecisionDagNode3.Test is BoundDagValueTest boundDagValueTest2 && boundDagValueTest2.Input.Equals(input) && !_dagNodeLabels.ContainsKey(boundTestDecisionDagNode3) && !loweredNodes.Contains(boundTestDecisionDagNode3))
-                        {
-                            instance.Add((boundDagValueTest2.Value, GetDagNodeLabel(boundTestDecisionDagNode3.WhenTrue)));
-                            loweredNodes.Add(boundTestDecisionDagNode3);
-                            boundTestDecisionDagNode2 = boundTestDecisionDagNode3;
-                        }
-                        ValueDispatchNode otherwise = GatherValueDispatchNodes(boundTestDecisionDagNode2.WhenFalse, loweredNodes, input, fac);
-                        return PushEqualityTestsIntoTree(boundDagValueTest.Syntax, otherwise, instance.ToImmutableAndFree(), fac);
-                    }
-                    LabelSymbol dagNodeLabel2 = GetDagNodeLabel(node);
-                    return new ValueDispatchNode.LeafDispatchNode(node.Syntax, dagNodeLabel2);
-                }
-                loweredNodes.Add(boundTestDecisionDagNode);
-                ValueDispatchNode whenTrue = GatherValueDispatchNodes(boundTestDecisionDagNode.WhenTrue, loweredNodes, input, fac);
-                ValueDispatchNode whenFalse = GatherValueDispatchNodes(boundTestDecisionDagNode.WhenFalse, loweredNodes, input, fac);
-                return ValueDispatchNode.RelationalDispatch.CreateBalanced(boundTestDecisionDagNode.Syntax, boundDagRelationalTest.Value, boundDagRelationalTest.OperatorKind, whenTrue, whenFalse);
-            }
-
-            private ValueDispatchNode PushEqualityTestsIntoTree(SyntaxNode syntax, ValueDispatchNode otherwise, ImmutableArray<(ConstantValue value, LabelSymbol label)> cases, IValueSetFactory fac)
-            {
-                if (cases.IsEmpty)
-                {
-                    return otherwise;
-                }
-                if (!(otherwise is ValueDispatchNode.LeafDispatchNode leafDispatchNode))
-                {
-                    if (!(otherwise is ValueDispatchNode.SwitchDispatch switchDispatch))
-                    {
-                        if (otherwise is ValueDispatchNode.RelationalDispatch relationalDispatch)
-                        {
-                            BinaryOperatorKind @operator = relationalDispatch.Operator;
-                            ConstantValue value2 = relationalDispatch.Value;
-                            ValueDispatchNode whenTrue = relationalDispatch.WhenTrue;
-                            ValueDispatchNode whenFalse = relationalDispatch.WhenFalse;
-                            (ImmutableArray<(ConstantValue value, LabelSymbol label)> whenTrueCases, ImmutableArray<(ConstantValue value, LabelSymbol label)> whenFalseCases) tuple = splitCases(cases, @operator, value2);
-                            ImmutableArray<(ConstantValue, LabelSymbol)> item = tuple.whenTrueCases;
-                            ImmutableArray<(ConstantValue, LabelSymbol)> item2 = tuple.whenFalseCases;
-                            whenTrue = PushEqualityTestsIntoTree(syntax, whenTrue, item, fac);
-                            whenFalse = PushEqualityTestsIntoTree(syntax, whenFalse, item2, fac);
-                            return relationalDispatch.WithTrueAndFalseChildren(whenTrue, whenFalse);
-                        }
-                        throw ExceptionUtilities.UnexpectedValue(otherwise);
-                    }
-                    return new ValueDispatchNode.SwitchDispatch(switchDispatch.Syntax, switchDispatch.Cases.Concat(cases), switchDispatch.Otherwise);
-                }
-                return new ValueDispatchNode.SwitchDispatch(syntax, cases, leafDispatchNode.Label);
-                (ImmutableArray<(ConstantValue value, LabelSymbol label)> whenTrueCases, ImmutableArray<(ConstantValue value, LabelSymbol label)> whenFalseCases) splitCases(ImmutableArray<(ConstantValue value, LabelSymbol label)> cases, BinaryOperatorKind op, ConstantValue value)
-                {
-                    ArrayBuilder<(ConstantValue, LabelSymbol)> instance = ArrayBuilder<(ConstantValue, LabelSymbol)>.GetInstance();
-                    ArrayBuilder<(ConstantValue, LabelSymbol)> instance2 = ArrayBuilder<(ConstantValue, LabelSymbol)>.GetInstance();
-                    op = op.Operator();
-                    ImmutableArray<(ConstantValue, LabelSymbol)>.Enumerator enumerator = cases.GetEnumerator();
-                    while (enumerator.MoveNext())
-                    {
-                        (ConstantValue, LabelSymbol) current = enumerator.Current;
-                        (fac.Related(op, current.Item1, value) ? instance : instance2).Add(current);
-                    }
-                    return (instance.ToImmutableAndFree(), instance2.ToImmutableAndFree());
-                }
-            }
-
-            private void LowerValueDispatchNode(ValueDispatchNode n, BoundExpression input)
-            {
-                if (!(n is ValueDispatchNode.LeafDispatchNode leafDispatchNode))
-                {
-                    if (!(n is ValueDispatchNode.SwitchDispatch node))
-                    {
-                        if (!(n is ValueDispatchNode.RelationalDispatch rel))
-                        {
-                            throw ExceptionUtilities.UnexpectedValue(n);
-                        }
-                        LowerRelationalDispatchNode(rel, input);
-                    }
-                    else
-                    {
-                        LowerSwitchDispatchNode(node, input);
-                    }
-                }
-                else
-                {
-                    _loweredDecisionDag.Add(_factory.Goto(leafDispatchNode.Label));
-                }
-            }
-
-            private void LowerRelationalDispatchNode(ValueDispatchNode.RelationalDispatch rel, BoundExpression input)
-            {
-                BoundExpression condition = MakeRelationalTest(rel.Syntax, input, rel.Operator, rel.Value);
-                if (rel.WhenTrue is ValueDispatchNode.LeafDispatchNode leafDispatchNode)
-                {
-                    LabelSymbol label = leafDispatchNode.Label;
-                    _loweredDecisionDag.Add(_factory.ConditionalGoto(condition, label, jumpIfTrue: true));
-                    LowerValueDispatchNode(rel.WhenFalse, input);
-                }
-                else if (rel.WhenFalse is ValueDispatchNode.LeafDispatchNode leafDispatchNode2)
-                {
-                    LabelSymbol label2 = leafDispatchNode2.Label;
-                    _loweredDecisionDag.Add(_factory.ConditionalGoto(condition, label2, jumpIfTrue: false));
-                    LowerValueDispatchNode(rel.WhenTrue, input);
-                }
-                else
-                {
-                    LabelSymbol label3 = _factory.GenerateLabel("relationalDispatch");
-                    _loweredDecisionDag.Add(_factory.ConditionalGoto(condition, label3, jumpIfTrue: false));
-                    LowerValueDispatchNode(rel.WhenTrue, input);
-                    _loweredDecisionDag.Add(_factory.Label(label3));
-                    LowerValueDispatchNode(rel.WhenFalse, input);
-                }
-            }
-
-            private void LowerSwitchDispatchNode(ValueDispatchNode.SwitchDispatch node, BoundExpression input)
-            {
-                LabelSymbol defaultLabel = node.Otherwise;
-                BinaryOperatorKind lessThanOrEqualOperator;
-                ImmutableArray<(ConstantValue value, LabelSymbol label)> cases;
-                if (input.Type.IsValidV6SwitchGoverningType())
-                {
-                    MethodSymbol equalityMethod = null;
-                    if (input.Type!.SpecialType == SpecialType.System_String)
-                    {
-                        EnsureStringHashFunction(node.Cases.Length, node.Syntax);
-                        equalityMethod = _localRewriter.UnsafeGetSpecialTypeMethod(node.Syntax, SpecialMember.System_String__op_Equality);
-                    }
-                    BoundSwitchDispatch item = new BoundSwitchDispatch(node.Syntax, input, node.Cases, defaultLabel, equalityMethod);
-                    _loweredDecisionDag.Add(item);
-                }
-                else if (input.Type!.IsNativeIntegerType)
-                {
-                    ImmutableArray<(ConstantValue, LabelSymbol)> cases2;
-                    switch (input.Type!.SpecialType)
-                    {
-                        case SpecialType.System_IntPtr:
-                            input = _factory.Convert(_factory.SpecialType(SpecialType.System_Int64), input);
-                            cases2 = node.Cases.SelectAsArray(((ConstantValue value, LabelSymbol label) p) => (ConstantValue.Create((long)p.value.Int32Value), p.label));
-                            break;
-                        case SpecialType.System_UIntPtr:
-                            input = _factory.Convert(_factory.SpecialType(SpecialType.System_UInt64), input);
-                            cases2 = node.Cases.SelectAsArray(((ConstantValue value, LabelSymbol label) p) => (ConstantValue.Create((ulong)p.value.UInt32Value), p.label));
-                            break;
-                        default:
-                            throw ExceptionUtilities.UnexpectedValue(input.Type);
-                    }
-                    BoundSwitchDispatch item2 = new BoundSwitchDispatch(node.Syntax, input, cases2, defaultLabel, null);
-                    _loweredDecisionDag.Add(item2);
-                }
-                else
-                {
-                    lessThanOrEqualOperator = input.Type!.SpecialType switch
-                    {
-                        SpecialType.System_Single => BinaryOperatorKind.FloatLessThanOrEqual,
-                        SpecialType.System_Double => BinaryOperatorKind.DoubleLessThanOrEqual,
-                        SpecialType.System_Decimal => BinaryOperatorKind.DecimalLessThanOrEqual,
-                        _ => throw ExceptionUtilities.UnexpectedValue(input.Type!.SpecialType),
-                    };
-                    cases = node.Cases.Sort(new CasesComparer(input.Type));
-                    lowerFloatDispatch(0, cases.Length);
-                }
-                void lowerFloatDispatch(int firstIndex, int count)
-                {
-                    if (count <= 3)
-                    {
-                        int i = firstIndex;
-                        for (int num = firstIndex + count; i < num; i++)
-                        {
-                            _loweredDecisionDag.Add(_factory.ConditionalGoto(MakeValueTest(node.Syntax, input, cases[i].value), cases[i].label, jumpIfTrue: true));
-                        }
-                        _loweredDecisionDag.Add(_factory.Goto(defaultLabel));
-                    }
-                    else
-                    {
-                        int num2 = count / 2;
-                        GeneratedLabelSymbol label = _factory.GenerateLabel("greaterThanMidpoint");
-                        _loweredDecisionDag.Add(_factory.ConditionalGoto(MakeRelationalTest(node.Syntax, input, lessThanOrEqualOperator, cases[firstIndex + num2 - 1].value), label, jumpIfTrue: false));
-                        lowerFloatDispatch(firstIndex, num2);
-                        _loweredDecisionDag.Add(_factory.Label(label));
-                        lowerFloatDispatch(firstIndex + num2, count - num2);
-                    }
-                }
-            }
-
-            private void EnsureStringHashFunction(int labelsCount, SyntaxNode syntaxNode)
-            {
-                PEModuleBuilder emitModule = _localRewriter.EmitModule;
-                if (emitModule == null || !SwitchStringJumpTableEmitter.ShouldGenerateHashTableSwitch(emitModule, labelsCount))
-                {
-                    return;
-                }
-                PrivateImplementationDetails privateImplClass = emitModule.GetPrivateImplClass(syntaxNode, _localRewriter._diagnostics.DiagnosticBag);
-                if (privateImplClass.GetMethod("ComputeStringHash") == null)
-                {
-                    Symbol specialTypeMember = _localRewriter._compilation.GetSpecialTypeMember(SpecialMember.System_String__Chars);
-                    if ((object)specialTypeMember != null && !specialTypeMember.HasUseSiteError)
-                    {
-                        TypeSymbol returnType = _factory.SpecialType(SpecialType.System_UInt32);
-                        TypeSymbol paramType = _factory.SpecialType(SpecialType.System_String);
-                        SynthesizedStringSwitchHashMethod synthesizedStringSwitchHashMethod = new SynthesizedStringSwitchHashMethod(emitModule.SourceModule, privateImplClass, returnType, paramType);
-                        privateImplClass.TryAddSynthesizedMethod(synthesizedStringSwitchHashMethod.GetCciAdapter());
-                    }
-                }
-            }
-
-            private void LowerWhenClause(BoundWhenDecisionDagNode whenClause)
-            {
-                BoundLeafDecisionDagNode dag = (BoundLeafDecisionDagNode)whenClause.WhenTrue;
-                LabelSymbol dagNodeLabel = GetDagNodeLabel(whenClause);
-                ArrayBuilder<BoundStatement> arrayBuilder = BuilderForSection(whenClause.Syntax);
-                arrayBuilder.Add(_factory.Label(dagNodeLabel));
-                ImmutableArray<BoundPatternBinding>.Enumerator enumerator = whenClause.Bindings.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    BoundPatternBinding current = enumerator.Current;
-                    BoundExpression boundExpression = _localRewriter.VisitExpression(current.VariableAccess);
-                    BoundExpression temp = _tempAllocator.GetTemp(current.TempContainingValue);
-                    if (boundExpression != temp)
-                    {
-                        arrayBuilder.Add(_factory.Assignment(boundExpression, temp));
-                    }
-                }
-                BoundDecisionDagNode whenFalse = whenClause.WhenFalse;
-                LabelSymbol dagNodeLabel2 = GetDagNodeLabel(dag);
-                if (whenClause.WhenExpression != null && whenClause.WhenExpression!.ConstantValue != ConstantValue.True)
-                {
-                    _factory.Syntax = whenClause.Syntax;
-                    BoundStatement boundStatement = _factory.ConditionalGoto(_localRewriter.VisitExpression(whenClause.WhenExpression), dagNodeLabel2, jumpIfTrue: true);
-                    if (base.GenerateInstrumentation && !whenClause.WhenExpression!.WasCompilerGenerated)
-                    {
-                        boundStatement = _localRewriter._instrumenter.InstrumentSwitchWhenClauseConditionalGotoBody(whenClause.WhenExpression, boundStatement);
-                    }
-                    arrayBuilder.Add(boundStatement);
-                    BoundStatement boundStatement2 = _factory.Goto(GetDagNodeLabel(whenFalse));
-                    arrayBuilder.Add(base.GenerateInstrumentation ? _factory.HiddenSequencePoint(boundStatement2) : boundStatement2);
-                }
-                else
-                {
-                    arrayBuilder.Add(_factory.Goto(dagNodeLabel2));
-                }
-            }
-
-            private void LowerDecisionDagNode(BoundDecisionDagNode node, BoundDecisionDagNode nextNode)
-            {
-                _factory.Syntax = node.Syntax;
-                if (!(node is BoundEvaluationDecisionDagNode boundEvaluationDecisionDagNode))
-                {
-                    if (node is BoundTestDecisionDagNode boundTestDecisionDagNode)
-                    {
-                        BoundExpression test = LowerTest(boundTestDecisionDagNode.Test);
-                        GenerateTest(test, boundTestDecisionDagNode.WhenTrue, boundTestDecisionDagNode.WhenFalse, nextNode);
-                        return;
-                    }
-                    throw ExceptionUtilities.UnexpectedValue(node.Kind);
-                }
-                BoundExpression expr = LowerEvaluation(boundEvaluationDecisionDagNode.Evaluation);
-                _loweredDecisionDag.Add(_factory.ExpressionStatement(expr));
-                if (base.GenerateInstrumentation)
-                {
-                    _loweredDecisionDag.Add(_factory.HiddenSequencePoint());
-                }
-                if (nextNode != boundEvaluationDecisionDagNode.Next)
-                {
-                    _loweredDecisionDag.Add(_factory.Goto(GetDagNodeLabel(boundEvaluationDecisionDagNode.Next)));
-                }
-            }
-        }
-
         private abstract class PatternLocalRewriter
         {
             public sealed class DagTempAllocator
@@ -2389,45 +1385,45 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static bool IsFieldOrPropertyInitializer(BoundStatement initializer)
         {
-            SyntaxNode syntax = initializer.Syntax;
+            var syntax = initializer.Syntax;
+
             if (syntax.IsKind(SyntaxKind.Parameter))
             {
+                // This is an initialization of a generated property based on record parameter.
                 return true;
             }
-            if (syntax is ExpressionSyntax expressionSyntax)
+
+            if (syntax is ExpressionSyntax { Parent: { } parent } && parent.Kind() == SyntaxKind.EqualsValueClause) // Should be the initial value.
             {
-                CSharpSyntaxNode parent = expressionSyntax.Parent;
-                if (parent != null && parent.Kind() == SyntaxKind.EqualsValueClause)
+                Debug.Assert(parent.Parent is { });
+                switch (parent.Parent.Kind())
                 {
-                    SyntaxKind syntaxKind = parent.Parent!.Kind();
-                    if (syntaxKind == SyntaxKind.VariableDeclarator || syntaxKind == SyntaxKind.PropertyDeclaration)
-                    {
-                        BoundKind kind = initializer.Kind;
-                        if (kind != BoundKind.Block)
+                    case SyntaxKind.VariableDeclarator:
+                    case SyntaxKind.PropertyDeclaration:
+
+                        switch (initializer.Kind)
                         {
-                            if (kind == BoundKind.ExpressionStatement)
-                            {
-                                goto IL_00a2;
-                            }
-                        }
-                        else
-                        {
-                            BoundBlock boundBlock = (BoundBlock)initializer;
-                            if (boundBlock.Statements.Length == 1)
-                            {
-                                initializer = boundBlock.Statements.First();
-                                if (initializer.Kind == BoundKind.ExpressionStatement)
+                            case BoundKind.Block:
+                                var block = (BoundBlock)initializer;
+                                if (block.Statements.Length == 1)
                                 {
-                                    goto IL_00a2;
+                                    initializer = (BoundStatement)block.Statements.First();
+                                    if (initializer.Kind == BoundKind.ExpressionStatement)
+                                    {
+                                        goto case BoundKind.ExpressionStatement;
+                                    }
                                 }
-                            }
+                                break;
+
+                            case BoundKind.ExpressionStatement:
+                                return ((BoundExpressionStatement)initializer).Expression.Kind == BoundKind.AssignmentOperator;
+
                         }
-                    }
+                        break;
                 }
             }
+
             return false;
-        IL_00a2:
-            return ((BoundExpressionStatement)initializer).Expression.Kind == BoundKind.AssignmentOperator;
         }
 
         private static bool ShouldOptimizeOutInitializer(BoundStatement initializer)
@@ -3126,41 +2122,51 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression RewriteLiftedBinaryOperator(SyntaxNode syntax, BinaryOperatorKind operatorKind, BoundExpression loweredLeft, BoundExpression loweredRight, TypeSymbol type, MethodSymbol? method)
         {
-            BoundLoweredConditionalAccess boundLoweredConditionalAccess = loweredLeft as BoundLoweredConditionalAccess;
-            int num;
-            if (boundLoweredConditionalAccess != null && operatorKind != BinaryOperatorKind.LiftedBoolOr && operatorKind != BinaryOperatorKind.LiftedBoolAnd && !ReadIsSideeffecting(loweredRight))
+            var conditionalLeft = loweredLeft as BoundLoweredConditionalAccess;
+
+            // NOTE: we could in theory handle side-effecting loweredRight here too
+            //       by including it as a part of whenNull, but there is a concern 
+            //       that it can lead to code duplication
+            var optimize = conditionalLeft != null &&
+                operatorKind != BinaryOperatorKind.LiftedBoolOr && operatorKind != BinaryOperatorKind.LiftedBoolAnd &&
+                !ReadIsSideeffecting(loweredRight) &&
+                (conditionalLeft.WhenNullOpt == null || conditionalLeft.WhenNullOpt.IsDefaultValue());
+
+            if (optimize)
             {
-                if (boundLoweredConditionalAccess.WhenNullOpt != null)
-                {
-                    num = (boundLoweredConditionalAccess.WhenNullOpt.IsDefaultValue() ? 1 : 0);
-                    if (num == 0)
-                    {
-                        goto IL_0047;
-                    }
-                }
-                else
-                {
-                    num = 1;
-                }
-                loweredLeft = boundLoweredConditionalAccess.WhenNotNull;
+                loweredLeft = conditionalLeft!.WhenNotNull;
             }
-            else
+
+            var result = operatorKind.IsComparison() ?
+                            operatorKind.IsUserDefined() ?
+                                LowerLiftedUserDefinedComparisonOperator(syntax, operatorKind, loweredLeft, loweredRight, method) :
+                                LowerLiftedBuiltInComparisonOperator(syntax, operatorKind, loweredLeft, loweredRight) :
+                            LowerLiftedBinaryArithmeticOperator(syntax, operatorKind, loweredLeft, loweredRight, type, method);
+
+            if (optimize)
             {
-                num = 0;
-            }
-            goto IL_0047;
-        IL_0047:
-            BoundExpression boundExpression = ((!operatorKind.IsComparison()) ? LowerLiftedBinaryArithmeticOperator(syntax, operatorKind, loweredLeft, loweredRight, type, method) : (operatorKind.IsUserDefined() ? LowerLiftedUserDefinedComparisonOperator(syntax, operatorKind, loweredLeft, loweredRight, method) : LowerLiftedBuiltInComparisonOperator(syntax, operatorKind, loweredLeft, loweredRight)));
-            if (num != 0)
-            {
-                BoundExpression whenNullOpt = null;
-                if (operatorKind.Operator() == BinaryOperatorKind.NotEqual || operatorKind.Operator() == BinaryOperatorKind.Equal)
+                BoundExpression? whenNullOpt = null;
+
+                // for all operators null-in means null-out
+                // except for the Equal/NotEqual since null == null ==> true
+                if (operatorKind.Operator() == BinaryOperatorKind.NotEqual ||
+                    operatorKind.Operator() == BinaryOperatorKind.Equal)
                 {
+                    Debug.Assert(loweredLeft.Type is { });
                     whenNullOpt = RewriteLiftedBinaryOperator(syntax, operatorKind, _factory.Default(loweredLeft.Type), loweredRight, type, method);
                 }
-                boundExpression = boundLoweredConditionalAccess.Update(boundLoweredConditionalAccess.Receiver, boundLoweredConditionalAccess.HasValueMethodOpt, boundExpression, whenNullOpt, boundLoweredConditionalAccess.Id, boundExpression.Type);
+
+                result = conditionalLeft!.Update(
+                    conditionalLeft.Receiver,
+                    conditionalLeft.HasValueMethodOpt,
+                    whenNotNull: result,
+                    whenNullOpt: whenNullOpt,
+                    id: conditionalLeft.Id,
+                    type: result.Type!
+                );
             }
-            return boundExpression;
+
+            return result;
         }
 
         private BoundExpression UnconvertArrayLength(BoundArrayLength arrLength)
@@ -3987,57 +2993,73 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression VisitDynamicInvocation(BoundDynamicInvocation node, bool resultDiscarded)
         {
-            ImmutableArray<BoundExpression> loweredArguments = VisitList(node.Arguments);
-            BoundMethodGroup boundMethodGroup;
-            ImmutableArray<TypeWithAnnotations> typeArgumentsOpt;
+            var loweredArguments = VisitList(node.Arguments);
+
+            bool hasImplicitReceiver;
+            BoundExpression loweredReceiver;
+            ImmutableArray<TypeWithAnnotations> typeArguments;
             string name;
-            bool flag;
-            BoundExpression boundExpression;
             switch (node.Expression.Kind)
             {
                 case BoundKind.MethodGroup:
-                    boundMethodGroup = (BoundMethodGroup)node.Expression;
-                    typeArgumentsOpt = boundMethodGroup.TypeArgumentsOpt;
-                    name = boundMethodGroup.Name;
-                    flag = ((uint?)boundMethodGroup.Flags & 2u) != 0;
-                    if (boundMethodGroup.ReceiverOpt == null)
+                    // method invocation
+                    BoundMethodGroup methodGroup = (BoundMethodGroup)node.Expression;
+                    typeArguments = methodGroup.TypeArgumentsOpt;
+                    name = methodGroup.Name;
+                    hasImplicitReceiver = (methodGroup.Flags & BoundMethodGroupFlags.HasImplicitReceiver) != 0;
+
+                    // Should have been eliminated during binding of dynamic invocation:
+                    Debug.Assert(methodGroup.ReceiverOpt == null || methodGroup.ReceiverOpt.Kind != BoundKind.TypeOrValueExpression);
+
+                    if (methodGroup.ReceiverOpt == null)
                     {
-                        NamedTypeSymbol containingType = node.ApplicableMethods.First().ContainingType;
-                        boundExpression = new BoundTypeExpression(node.Syntax, null, containingType);
+                        // Calling a static method defined on an outer class via its simple name.
+                        NamedTypeSymbol firstContainer = node.ApplicableMethods.First().ContainingType;
+                        Debug.Assert(node.ApplicableMethods.All(m => !m.RequiresInstanceReceiver && TypeSymbol.Equals(m.ContainingType, firstContainer, TypeCompareKind.ConsiderEverything2)));
+
+                        loweredReceiver = new BoundTypeExpression(node.Syntax, null, firstContainer);
+                    }
+                    else if (hasImplicitReceiver && _factory.TopLevelMethod is { RequiresInstanceReceiver: false })
+                    {
+                        // Calling a static method defined on the current class via its simple name.
+                        Debug.Assert(_factory.CurrentType is { });
+                        loweredReceiver = new BoundTypeExpression(node.Syntax, null, _factory.CurrentType);
                     }
                     else
                     {
-                        if (flag)
-                        {
-                            MethodSymbol topLevelMethod = _factory.TopLevelMethod;
-                            if ((object)topLevelMethod != null && !topLevelMethod.RequiresInstanceReceiver)
-                            {
-                                boundExpression = new BoundTypeExpression(node.Syntax, null, _factory.CurrentType);
-                                goto IL_010b;
-                            }
-                        }
-                        boundExpression = VisitExpression(boundMethodGroup.ReceiverOpt);
+                        loweredReceiver = VisitExpression(methodGroup.ReceiverOpt);
                     }
-                    goto IL_010b;
-                case BoundKind.DynamicMemberAccess:
-                    {
-                        BoundDynamicMemberAccess boundDynamicMemberAccess = (BoundDynamicMemberAccess)node.Expression;
-                        name = boundDynamicMemberAccess.Name;
-                        typeArgumentsOpt = boundDynamicMemberAccess.TypeArgumentsOpt;
-                        boundExpression = VisitExpression(boundDynamicMemberAccess.Receiver);
-                        flag = false;
-                        break;
-                    }
-                default:
-                    {
-                        BoundExpression loweredReceiver = VisitExpression(node.Expression);
-                        return _dynamicFactory.MakeDynamicInvocation(loweredReceiver, loweredArguments, node.ArgumentNamesOpt, node.ArgumentRefKindsOpt, resultDiscarded).ToExpression();
-                    }
-                IL_010b:
-                    EmbedIfNeedTo(boundExpression, boundMethodGroup.Methods, node.Syntax);
+
+                    // If we are calling a method on a NoPIA type, we need to embed all methods/properties
+                    // with the matching name of this dynamic invocation.
+                    EmbedIfNeedTo(loweredReceiver, methodGroup.Methods, node.Syntax);
+
                     break;
+
+                case BoundKind.DynamicMemberAccess:
+                    // method invocation
+                    var memberAccess = (BoundDynamicMemberAccess)node.Expression;
+                    name = memberAccess.Name;
+                    typeArguments = memberAccess.TypeArgumentsOpt;
+                    loweredReceiver = VisitExpression(memberAccess.Receiver);
+                    hasImplicitReceiver = false;
+                    break;
+
+                default:
+                    // delegate invocation
+                    var loweredExpression = VisitExpression(node.Expression);
+                    return _dynamicFactory.MakeDynamicInvocation(loweredExpression, loweredArguments, node.ArgumentNamesOpt, node.ArgumentRefKindsOpt, resultDiscarded).ToExpression();
             }
-            return _dynamicFactory.MakeDynamicMemberInvocation(name, boundExpression, typeArgumentsOpt, loweredArguments, node.ArgumentNamesOpt, node.ArgumentRefKindsOpt, flag, resultDiscarded).ToExpression();
+
+            return _dynamicFactory.MakeDynamicMemberInvocation(
+                name,
+                loweredReceiver,
+                typeArguments,
+                loweredArguments,
+                node.ArgumentNamesOpt,
+                node.ArgumentRefKindsOpt,
+                hasImplicitReceiver,
+                resultDiscarded).ToExpression();
         }
 
         private void EmbedIfNeedTo(BoundExpression receiver, ImmutableArray<MethodSymbol> methods, SyntaxNode syntaxNode)
@@ -7257,6 +6279,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new BoundBlock(syntax, node.OuterLocals, statements, node.HasErrors);
         }
 
+#nullable enable
+
         public override BoundNode? VisitFunctionPointerInvocation(BoundFunctionPointerInvocation node)
         {
             BoundExpression invokedExpression = VisitExpression(node.InvokedExpression);
@@ -7271,6 +6295,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             return new BoundSequence(node.Syntax, temps, ImmutableArray<BoundExpression>.Empty, node, node.Type);
         }
+
+#nullable disable
 
         public override BoundNode VisitGotoStatement(BoundGotoStatement node)
         {
@@ -8731,41 +7757,26 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitReturnStatement(BoundReturnStatement node)
         {
-            BoundStatement boundStatement = (BoundStatement)base.VisitReturnStatement(node);
-            bool num;
-            if (Instrument)
+            BoundStatement rewritten = (BoundStatement)base.VisitReturnStatement(node)!;
+
+            // NOTE: we will apply sequence points to synthesized return 
+            // statements if they are contained in lambdas and have expressions
+            // or if they are expression-bodied properties.
+            // We do this to ensure that expression lambdas and expression-bodied
+            // properties have sequence points.
+            // We also add sequence points for the implicit "return" statement at the end of the method body
+            // (added by FlowAnalysisPass.AppendImplicitReturn). Implicitly added return for async method 
+            // does not need sequence points added here since it would be done later (presumably during Async rewrite).
+            if (this.Instrument &&
+                (!node.WasCompilerGenerated ||
+                 (node.ExpressionOpt != null ?
+                        IsLambdaOrExpressionBodiedMember :
+                        (node.Syntax.Kind() == SyntaxKind.Block && _factory.CurrentFunction?.IsAsync == false))))
             {
-                if (!node.WasCompilerGenerated)
-                {
-                    goto IL_005e;
-                }
-                if (node.ExpressionOpt != null)
-                {
-                    num = IsLambdaOrExpressionBodiedMember;
-                    goto IL_005c;
-                }
-                if (node.Syntax.Kind() == SyntaxKind.Block)
-                {
-                    MethodSymbol? currentFunction = _factory.CurrentFunction;
-                    if ((object)currentFunction != null)
-                    {
-                        num = !currentFunction!.IsAsync;
-                        goto IL_005c;
-                    }
-                }
+                rewritten = _instrumenter.InstrumentReturnStatement(node, rewritten);
             }
-            goto IL_006c;
-        IL_005e:
-            boundStatement = _instrumenter.InstrumentReturnStatement(node, boundStatement);
-            goto IL_006c;
-        IL_006c:
-            return boundStatement;
-        IL_005c:
-            if (num)
-            {
-                goto IL_005e;
-            }
-            goto IL_006c;
+
+            return rewritten;
         }
 
         public override BoundNode VisitConvertedStackAllocExpression(BoundConvertedStackAllocExpression stackAllocNode)
@@ -10566,28 +9577,18 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitYieldBreakStatement(BoundYieldBreakStatement node)
         {
-            BoundStatement boundStatement = (BoundStatement)base.VisitYieldBreakStatement(node);
-            if (Instrument)
+            var result = (BoundStatement)base.VisitYieldBreakStatement(node)!;
+
+            // We also add sequence points for the implicit "yield break" statement at the end of the method body
+            // (added by FlowAnalysisPass.AppendImplicitReturn). Implicitly added "yield break" for async method 
+            // does not need sequence points added here since it would be done later (presumably during Async rewrite).
+            if (this.Instrument &&
+                (!node.WasCompilerGenerated || (node.Syntax.Kind() == SyntaxKind.Block && _factory.CurrentFunction?.IsAsync == false)))
             {
-                if (!node.WasCompilerGenerated)
-                {
-                    goto IL_004b;
-                }
-                if (node.Syntax.Kind() == SyntaxKind.Block)
-                {
-                    MethodSymbol? currentFunction = _factory.CurrentFunction;
-                    if ((object)currentFunction != null && !currentFunction!.IsAsync)
-                    {
-                        goto IL_004b;
-                    }
-                }
+                result = _instrumenter.InstrumentYieldBreakStatement(node, result);
             }
-            goto IL_0059;
-        IL_004b:
-            boundStatement = _instrumenter.InstrumentYieldBreakStatement(node, boundStatement);
-            goto IL_0059;
-        IL_0059:
-            return boundStatement;
+
+            return result;
         }
 
         public override BoundNode VisitYieldReturnStatement(BoundYieldReturnStatement node)
@@ -10598,6 +9599,1010 @@ namespace Microsoft.CodeAnalysis.CSharp
                 boundStatement = _instrumenter.InstrumentYieldReturnStatement(node, boundStatement);
             }
             return boundStatement;
+        }
+
+#nullable disable
+
+        private abstract class DecisionDagRewriter : PatternLocalRewriter
+        {
+            protected sealed class WhenClauseMightAssignPatternVariableWalker : BoundTreeWalkerWithStackGuardWithoutRecursionOnTheLeftOfBinaryOperator
+            {
+                private bool _mightAssignSomething;
+
+                public bool MightAssignSomething(BoundExpression expr)
+                {
+                    if (expr == null)
+                    {
+                        return false;
+                    }
+                    _mightAssignSomething = false;
+                    Visit(expr);
+                    return _mightAssignSomething;
+                }
+
+                public override BoundNode Visit(BoundNode node)
+                {
+                    if (node is BoundExpression boundExpression && (object)boundExpression.ConstantValue != null)
+                    {
+                        return null;
+                    }
+                    if (!_mightAssignSomething)
+                    {
+                        return base.Visit(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitCall(BoundCall node)
+                {
+                    if (node.Method.MethodKind == MethodKind.LocalFunction || !node.ArgumentRefKindsOpt.IsDefault || MethodMayMutateReceiver(node.ReceiverOpt, node.Method))
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitCall(node);
+                    }
+                    return null;
+                }
+
+                private static bool MethodMayMutateReceiver(BoundExpression receiver, MethodSymbol method)
+                {
+                    if (method != null && !method.IsStatic && !method.IsEffectivelyReadOnly)
+                    {
+                        TypeSymbol? type = receiver.Type;
+                        if ((object)type != null && !type!.IsReferenceType)
+                        {
+                            return !method.ContainingType.SpecialType.IsPrimitiveRecursiveStruct();
+                        }
+                    }
+                    return false;
+                }
+
+                public override BoundNode VisitPropertyAccess(BoundPropertyAccess node)
+                {
+                    if (MethodMayMutateReceiver(node.ReceiverOpt, node.PropertySymbol.GetMethod))
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitPropertyAccess(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitAssignmentOperator(BoundAssignmentOperator node)
+                {
+                    _mightAssignSomething = true;
+                    return null;
+                }
+
+                public override BoundNode VisitCompoundAssignmentOperator(BoundCompoundAssignmentOperator node)
+                {
+                    _mightAssignSomething = true;
+                    return null;
+                }
+
+                public override BoundNode VisitConversion(BoundConversion node)
+                {
+                    visitConversion(node.Conversion);
+                    if (!_mightAssignSomething)
+                    {
+                        base.VisitConversion(node);
+                    }
+                    return null;
+                    void visitConversion(Conversion conversion)
+                    {
+                        if (conversion.Kind == ConversionKind.MethodGroup)
+                        {
+                            if (conversion.Method!.MethodKind == MethodKind.LocalFunction)
+                            {
+                                _mightAssignSomething = true;
+                            }
+                        }
+                        else if (!conversion.UnderlyingConversions.IsDefault)
+                        {
+                            ImmutableArray<Conversion>.Enumerator enumerator = conversion.UnderlyingConversions.GetEnumerator();
+                            while (enumerator.MoveNext())
+                            {
+                                Conversion current = enumerator.Current;
+                                visitConversion(current);
+                                if (_mightAssignSomething)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                public override BoundNode VisitDelegateCreationExpression(BoundDelegateCreationExpression node)
+                {
+                    MethodSymbol? methodOpt = node.MethodOpt;
+                    if ((object)methodOpt != null && methodOpt!.MethodKind == MethodKind.LocalFunction)
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitDelegateCreationExpression(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitAddressOfOperator(BoundAddressOfOperator node)
+                {
+                    _mightAssignSomething = true;
+                    return null;
+                }
+
+                public override BoundNode VisitDeconstructionAssignmentOperator(BoundDeconstructionAssignmentOperator node)
+                {
+                    _mightAssignSomething = true;
+                    return null;
+                }
+
+                public override BoundNode VisitIncrementOperator(BoundIncrementOperator node)
+                {
+                    _mightAssignSomething = true;
+                    return null;
+                }
+
+                public override BoundNode VisitDynamicInvocation(BoundDynamicInvocation node)
+                {
+                    if (!node.ArgumentRefKindsOpt.IsDefault)
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitDynamicInvocation(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitObjectCreationExpression(BoundObjectCreationExpression node)
+                {
+                    if (!node.ArgumentRefKindsOpt.IsDefault)
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitObjectCreationExpression(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitDynamicObjectCreationExpression(BoundDynamicObjectCreationExpression node)
+                {
+                    if (!node.ArgumentRefKindsOpt.IsDefault)
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitDynamicObjectCreationExpression(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitObjectInitializerMember(BoundObjectInitializerMember node)
+                {
+                    if (!node.ArgumentRefKindsOpt.IsDefault)
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitObjectInitializerMember(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitIndexerAccess(BoundIndexerAccess node)
+                {
+                    if (!node.ArgumentRefKindsOpt.IsDefault || MethodMayMutateReceiver(node.ReceiverOpt, node.Indexer.GetMethod))
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitIndexerAccess(node);
+                    }
+                    return null;
+                }
+
+                public override BoundNode VisitDynamicIndexerAccess(BoundDynamicIndexerAccess node)
+                {
+                    if (!node.ArgumentRefKindsOpt.IsDefault)
+                    {
+                        _mightAssignSomething = true;
+                    }
+                    else
+                    {
+                        base.VisitDynamicIndexerAccess(node);
+                    }
+                    return null;
+                }
+            }
+
+            private sealed class CasesComparer : IComparer<(ConstantValue value, LabelSymbol label)>
+            {
+                private readonly IValueSetFactory _fac;
+
+                public CasesComparer(TypeSymbol type)
+                {
+                    _fac = ValueSetFactory.ForType(type);
+                }
+
+                int IComparer<(ConstantValue value, LabelSymbol label)>.Compare((ConstantValue value, LabelSymbol label) left, (ConstantValue value, LabelSymbol label) right)
+                {
+                    var x = left.value;
+                    var y = right.value;
+                    // Sort NaN values into the "highest" position so they fall naturally into the last bucket
+                    // when partitioned using less-than.
+                    return
+                        isNaN(x) ? 1 :
+                        isNaN(y) ? -1 :
+                        _fac.Related(BinaryOperatorKind.LessThanOrEqual, x, y) ?
+                            (_fac.Related(BinaryOperatorKind.LessThanOrEqual, y, x) ? 0 : -1) :
+                        1;
+
+                    static bool isNaN(ConstantValue value) =>
+                        (value.Discriminator == ConstantValueTypeDiscriminator.Single || value.Discriminator == ConstantValueTypeDiscriminator.Double) &&
+                        double.IsNaN(value.DoubleValue);
+                }
+            }
+
+            private abstract class ValueDispatchNode
+            {
+                internal sealed class SwitchDispatch : ValueDispatchNode
+                {
+                    public readonly ImmutableArray<(ConstantValue value, LabelSymbol label)> Cases;
+
+                    public readonly LabelSymbol Otherwise;
+
+                    public SwitchDispatch(SyntaxNode syntax, ImmutableArray<(ConstantValue value, LabelSymbol label)> dispatches, LabelSymbol otherwise)
+                        : base(syntax)
+                    {
+                        Cases = dispatches;
+                        Otherwise = otherwise;
+                    }
+
+                    public override string ToString()
+                    {
+                        return "[" + string.Join(",", Cases.Select(((ConstantValue value, LabelSymbol label) c) => c.value)) + "]";
+                    }
+                }
+
+                internal sealed class LeafDispatchNode : ValueDispatchNode
+                {
+                    public readonly LabelSymbol Label;
+
+                    public LeafDispatchNode(SyntaxNode syntax, LabelSymbol Label)
+                        : base(syntax)
+                    {
+                        this.Label = Label;
+                    }
+
+                    public override string ToString()
+                    {
+                        return "Leaf";
+                    }
+                }
+
+                internal sealed class RelationalDispatch : ValueDispatchNode
+                {
+                    private int _height;
+
+                    public readonly ConstantValue Value;
+
+                    public readonly BinaryOperatorKind Operator;
+
+                    protected override int Height => _height;
+
+                    private ValueDispatchNode Left { get; set; }
+
+                    private ValueDispatchNode Right { get; set; }
+
+                    public ValueDispatchNode WhenTrue
+                    {
+                        get
+                        {
+                            if (!IsReversed(Operator))
+                            {
+                                return Left;
+                            }
+                            return Right;
+                        }
+                    }
+
+                    public ValueDispatchNode WhenFalse
+                    {
+                        get
+                        {
+                            if (!IsReversed(Operator))
+                            {
+                                return Right;
+                            }
+                            return Left;
+                        }
+                    }
+
+                    private RelationalDispatch(SyntaxNode syntax, ConstantValue value, BinaryOperatorKind op, ValueDispatchNode left, ValueDispatchNode right)
+                        : base(syntax)
+                    {
+                        Value = value;
+                        Operator = op;
+                        WithLeftAndRight(left, right);
+                    }
+
+                    public override string ToString()
+                    {
+                        return $"RelationalDispatch.{Height}({Left} {Operator.Operator()} {Value} {Right})";
+                    }
+
+                    private static bool IsReversed(BinaryOperatorKind op)
+                    {
+                        return op.Operator() switch
+                        {
+                            BinaryOperatorKind.GreaterThan => true,
+                            BinaryOperatorKind.GreaterThanOrEqual => true,
+                            _ => false,
+                        };
+                    }
+
+                    private RelationalDispatch WithLeftAndRight(ValueDispatchNode left, ValueDispatchNode right)
+                    {
+                        int height = left.Height;
+                        int height2 = right.Height;
+                        Left = left;
+                        Right = right;
+                        _height = Math.Max(height, height2) + 1;
+                        return this;
+                    }
+
+                    public RelationalDispatch WithTrueAndFalseChildren(ValueDispatchNode whenTrue, ValueDispatchNode whenFalse)
+                    {
+                        if (whenTrue == WhenTrue && whenFalse == WhenFalse)
+                        {
+                            return this;
+                        }
+                        ValueDispatchNode left;
+                        ValueDispatchNode right;
+                        if (!IsReversed(Operator))
+                        {
+                            ValueDispatchNode valueDispatchNode = whenFalse;
+                            left = whenTrue;
+                            right = valueDispatchNode;
+                        }
+                        else
+                        {
+                            ValueDispatchNode valueDispatchNode = whenTrue;
+                            left = whenFalse;
+                            right = valueDispatchNode;
+                        }
+                        return WithLeftAndRight(left, right);
+                    }
+
+                    public static ValueDispatchNode CreateBalanced(SyntaxNode syntax, ConstantValue value, BinaryOperatorKind op, ValueDispatchNode whenTrue, ValueDispatchNode whenFalse)
+                    {
+                        ValueDispatchNode left;
+                        ValueDispatchNode right;
+                        if (!IsReversed(op))
+                        {
+                            ValueDispatchNode valueDispatchNode = whenFalse;
+                            left = whenTrue;
+                            right = valueDispatchNode;
+                        }
+                        else
+                        {
+                            ValueDispatchNode valueDispatchNode = whenTrue;
+                            left = whenFalse;
+                            right = valueDispatchNode;
+                        }
+                        return CreateBalancedCore(syntax, value, op, left, right);
+                    }
+
+                    private static ValueDispatchNode CreateBalancedCore(SyntaxNode syntax, ConstantValue value, BinaryOperatorKind op, ValueDispatchNode left, ValueDispatchNode right)
+                    {
+                        if (left.Height > right.Height + 1)
+                        {
+                            RelationalDispatch relationalDispatch = (RelationalDispatch)left;
+                            ValueDispatchNode valueDispatchNode = CreateBalancedCore(syntax, value, op, relationalDispatch.Right, right);
+                            SyntaxNode syntax2 = relationalDispatch.Syntax;
+                            ConstantValue value2 = relationalDispatch.Value;
+                            BinaryOperatorKind @operator = relationalDispatch.Operator;
+                            ValueDispatchNode left2 = relationalDispatch.Left;
+                            ValueDispatchNode valueDispatchNode2 = valueDispatchNode;
+                            syntax = syntax2;
+                            value = value2;
+                            op = @operator;
+                            left = left2;
+                            right = valueDispatchNode2;
+                        }
+                        else if (right.Height > left.Height + 1)
+                        {
+                            RelationalDispatch relationalDispatch2 = (RelationalDispatch)right;
+                            ValueDispatchNode valueDispatchNode3 = CreateBalancedCore(syntax, value, op, left, relationalDispatch2.Left);
+                            SyntaxNode syntax2 = relationalDispatch2.Syntax;
+                            ConstantValue value2 = relationalDispatch2.Value;
+                            BinaryOperatorKind @operator = relationalDispatch2.Operator;
+                            ValueDispatchNode valueDispatchNode2 = valueDispatchNode3;
+                            ValueDispatchNode right2 = relationalDispatch2.Right;
+                            syntax = syntax2;
+                            value = value2;
+                            op = @operator;
+                            left = valueDispatchNode2;
+                            right = right2;
+                        }
+                        if (left.Height == right.Height + 2)
+                        {
+                            RelationalDispatch relationalDispatch3 = (RelationalDispatch)left;
+                            if (relationalDispatch3.Left.Height == right.Height)
+                            {
+                                RelationalDispatch relationalDispatch4 = relationalDispatch3;
+                                ValueDispatchNode left3 = relationalDispatch4.Left;
+                                RelationalDispatch obj = (RelationalDispatch)relationalDispatch4.Right;
+                                ValueDispatchNode left4 = obj.Left;
+                                ValueDispatchNode right3 = obj.Right;
+                                ValueDispatchNode right4 = right;
+                                return obj.WithLeftAndRight(relationalDispatch4.WithLeftAndRight(left3, left4), new RelationalDispatch(syntax, value, op, right3, right4));
+                            }
+                            ValueDispatchNode left5 = relationalDispatch3.Left;
+                            ValueDispatchNode right5 = relationalDispatch3.Right;
+                            ValueDispatchNode right6 = right;
+                            return relationalDispatch3.WithLeftAndRight(left5, new RelationalDispatch(syntax, value, op, right5, right6));
+                        }
+                        if (right.Height == left.Height + 2)
+                        {
+                            RelationalDispatch relationalDispatch5 = (RelationalDispatch)right;
+                            if (relationalDispatch5.Right.Height == left.Height)
+                            {
+                                ValueDispatchNode left6 = left;
+                                RelationalDispatch relationalDispatch6 = relationalDispatch5;
+                                RelationalDispatch obj2 = (RelationalDispatch)relationalDispatch6.Left;
+                                ValueDispatchNode left7 = obj2.Left;
+                                ValueDispatchNode right7 = obj2.Right;
+                                return obj2.WithLeftAndRight(right: relationalDispatch6.WithLeftAndRight(right7, relationalDispatch6.Right), left: new RelationalDispatch(syntax, value, op, left6, left7));
+                            }
+                            ValueDispatchNode left8 = left;
+                            ValueDispatchNode left9 = relationalDispatch5.Left;
+                            return relationalDispatch5.WithLeftAndRight(right: relationalDispatch5.Right, left: new RelationalDispatch(syntax, value, op, left8, left9));
+                        }
+                        return new RelationalDispatch(syntax, value, op, left, right);
+                    }
+                }
+
+                public readonly SyntaxNode Syntax;
+
+                protected virtual int Height => 1;
+
+                public ValueDispatchNode(SyntaxNode syntax)
+                {
+                    Syntax = syntax;
+                }
+            }
+
+            private ArrayBuilder<BoundStatement> _loweredDecisionDag;
+
+            protected readonly PooledDictionary<BoundDecisionDagNode, LabelSymbol> _dagNodeLabels = PooledDictionary<BoundDecisionDagNode, LabelSymbol>.GetInstance();
+
+            protected abstract ArrayBuilder<BoundStatement> BuilderForSection(SyntaxNode section);
+
+            protected DecisionDagRewriter(SyntaxNode node, LocalRewriter localRewriter, bool generateInstrumentation)
+                : base(node, localRewriter, generateInstrumentation)
+            {
+            }
+
+            private void ComputeLabelSet(BoundDecisionDag decisionDag)
+            {
+                PooledHashSet<BoundDecisionDagNode> hasPredecessor = PooledHashSet<BoundDecisionDagNode>.GetInstance();
+                ImmutableArray<BoundDecisionDagNode>.Enumerator enumerator = decisionDag.TopologicallySortedNodes.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    BoundDecisionDagNode current = enumerator.Current;
+                    if (!(current is BoundWhenDecisionDagNode boundWhenDecisionDagNode))
+                    {
+                        if (!(current is BoundLeafDecisionDagNode boundLeafDecisionDagNode))
+                        {
+                            if (!(current is BoundEvaluationDecisionDagNode boundEvaluationDecisionDagNode))
+                            {
+                                if (!(current is BoundTestDecisionDagNode boundTestDecisionDagNode))
+                                {
+                                    throw ExceptionUtilities.UnexpectedValue(current.Kind);
+                                }
+                                notePredecessor(boundTestDecisionDagNode.WhenTrue);
+                                notePredecessor(boundTestDecisionDagNode.WhenFalse);
+                            }
+                            else
+                            {
+                                notePredecessor(boundEvaluationDecisionDagNode.Next);
+                            }
+                        }
+                        else
+                        {
+                            _dagNodeLabels[current] = boundLeafDecisionDagNode.Label;
+                        }
+                    }
+                    else
+                    {
+                        GetDagNodeLabel(current);
+                        if (boundWhenDecisionDagNode.WhenFalse != null)
+                        {
+                            GetDagNodeLabel(boundWhenDecisionDagNode.WhenFalse);
+                        }
+                    }
+                }
+                hasPredecessor.Free();
+                void notePredecessor(BoundDecisionDagNode successor)
+                {
+                    if (successor != null && !hasPredecessor.Add(successor))
+                    {
+                        GetDagNodeLabel(successor);
+                    }
+                }
+            }
+
+            protected new void Free()
+            {
+                _dagNodeLabels.Free();
+                base.Free();
+            }
+
+            protected virtual LabelSymbol GetDagNodeLabel(BoundDecisionDagNode dag)
+            {
+                if (!_dagNodeLabels.TryGetValue(dag, out var value))
+                {
+                    _dagNodeLabels.Add(dag, value = ((dag is BoundLeafDecisionDagNode boundLeafDecisionDagNode) ? boundLeafDecisionDagNode.Label : _factory.GenerateLabel("dagNode")));
+                }
+                return value;
+            }
+
+            protected BoundDecisionDag ShareTempsIfPossibleAndEvaluateInput(BoundDecisionDag decisionDag, BoundExpression loweredSwitchGoverningExpression, ArrayBuilder<BoundStatement> result, out BoundExpression savedInputExpression)
+            {
+                WhenClauseMightAssignPatternVariableWalker mightAssignWalker = new WhenClauseMightAssignPatternVariableWalker();
+                if (!decisionDag.TopologicallySortedNodes.Any((BoundDecisionDagNode node) => node is BoundWhenDecisionDagNode boundWhenDecisionDagNode && mightAssignWalker.MightAssignSomething(boundWhenDecisionDagNode.WhenExpression)))
+                {
+                    decisionDag = ShareTempsAndEvaluateInput(loweredSwitchGoverningExpression, decisionDag, delegate (BoundExpression expr)
+                    {
+                        result.Add(_factory.ExpressionStatement(expr));
+                    }, out savedInputExpression);
+                }
+                else
+                {
+                    BoundExpression temp = _tempAllocator.GetTemp(BoundDagTemp.ForOriginalInput(loweredSwitchGoverningExpression));
+                    result.Add(_factory.Assignment(temp, loweredSwitchGoverningExpression));
+                    savedInputExpression = temp;
+                }
+                return decisionDag;
+            }
+
+            protected ImmutableArray<BoundStatement> LowerDecisionDagCore(BoundDecisionDag decisionDag)
+            {
+                _loweredDecisionDag = ArrayBuilder<BoundStatement>.GetInstance();
+                ComputeLabelSet(decisionDag);
+                ImmutableArray<BoundDecisionDagNode> topologicallySortedNodes = decisionDag.TopologicallySortedNodes;
+                BoundDecisionDagNode boundDecisionDagNode = topologicallySortedNodes[0];
+                if (boundDecisionDagNode is BoundWhenDecisionDagNode || boundDecisionDagNode is BoundLeafDecisionDagNode)
+                {
+                    _loweredDecisionDag.Add(_factory.Goto(GetDagNodeLabel(boundDecisionDagNode)));
+                }
+                ImmutableArray<BoundDecisionDagNode>.Enumerator enumerator = topologicallySortedNodes.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (enumerator.Current is BoundWhenDecisionDagNode whenClause)
+                    {
+                        LowerWhenClause(whenClause);
+                    }
+                }
+                ImmutableArray<BoundDecisionDagNode> nodesToLower = topologicallySortedNodes.WhereAsArray((BoundDecisionDagNode n) => n.Kind != BoundKind.WhenDecisionDagNode && n.Kind != BoundKind.LeafDecisionDagNode);
+                PooledHashSet<BoundDecisionDagNode> instance = PooledHashSet<BoundDecisionDagNode>.GetInstance();
+                int i = 0;
+                for (int length = nodesToLower.Length; i < length; i++)
+                {
+                    BoundDecisionDagNode boundDecisionDagNode2 = nodesToLower[i];
+                    bool flag = instance.Contains(boundDecisionDagNode2);
+                    if (flag && !_dagNodeLabels.TryGetValue(boundDecisionDagNode2, out var _))
+                    {
+                        continue;
+                    }
+                    if (_dagNodeLabels.TryGetValue(boundDecisionDagNode2, out var value2))
+                    {
+                        _loweredDecisionDag.Add(_factory.Label(value2));
+                    }
+                    if ((flag || !GenerateSwitchDispatch(boundDecisionDagNode2, instance)) && !GenerateTypeTestAndCast(boundDecisionDagNode2, instance, nodesToLower, i))
+                    {
+                        BoundDecisionDagNode boundDecisionDagNode3 = ((i + 1 < length) ? nodesToLower[i + 1] : null);
+                        if (boundDecisionDagNode3 != null && instance.Contains(boundDecisionDagNode3))
+                        {
+                            boundDecisionDagNode3 = null;
+                        }
+                        LowerDecisionDagNode(boundDecisionDagNode2, boundDecisionDagNode3);
+                    }
+                }
+                instance.Free();
+                ImmutableArray<BoundStatement> result = _loweredDecisionDag.ToImmutableAndFree();
+                _loweredDecisionDag = null;
+                return result;
+            }
+
+            private bool GenerateTypeTestAndCast(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes, ImmutableArray<BoundDecisionDagNode> nodesToLower, int indexOfNode)
+            {
+                if (node is BoundTestDecisionDagNode boundTestDecisionDagNode && boundTestDecisionDagNode.WhenTrue is BoundEvaluationDecisionDagNode boundEvaluationDecisionDagNode && TryLowerTypeTestAndCast(boundTestDecisionDagNode.Test, boundEvaluationDecisionDagNode.Evaluation, out var sideEffect, out var testExpression))
+                {
+                    BoundDecisionDagNode next = boundEvaluationDecisionDagNode.Next;
+                    BoundDecisionDagNode whenFalse = boundTestDecisionDagNode.WhenFalse;
+                    bool flag = !_dagNodeLabels.ContainsKey(boundEvaluationDecisionDagNode);
+                    if (flag)
+                    {
+                        loweredNodes.Add(boundEvaluationDecisionDagNode);
+                    }
+                    BoundDecisionDagNode nextNode = ((indexOfNode + 2 < nodesToLower.Length && flag && nodesToLower[indexOfNode + 1] == boundEvaluationDecisionDagNode && !loweredNodes.Contains(nodesToLower[indexOfNode + 2])) ? nodesToLower[indexOfNode + 2] : null);
+                    _loweredDecisionDag.Add(_factory.ExpressionStatement(sideEffect));
+                    GenerateTest(testExpression, next, whenFalse, nextNode);
+                    return true;
+                }
+                return false;
+            }
+
+            private void GenerateTest(BoundExpression test, BoundDecisionDagNode whenTrue, BoundDecisionDagNode whenFalse, BoundDecisionDagNode nextNode)
+            {
+                _factory.Syntax = test.Syntax;
+                if (nextNode == whenFalse)
+                {
+                    _loweredDecisionDag.Add(_factory.ConditionalGoto(test, GetDagNodeLabel(whenTrue), jumpIfTrue: true));
+                    return;
+                }
+                if (nextNode == whenTrue)
+                {
+                    _loweredDecisionDag.Add(_factory.ConditionalGoto(test, GetDagNodeLabel(whenFalse), jumpIfTrue: false));
+                    return;
+                }
+                _loweredDecisionDag.Add(_factory.ConditionalGoto(test, GetDagNodeLabel(whenTrue), jumpIfTrue: true));
+                _loweredDecisionDag.Add(_factory.Goto(GetDagNodeLabel(whenFalse)));
+            }
+
+            private bool GenerateSwitchDispatch(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes)
+            {
+                if (!canGenerateSwitchDispatch(node))
+                {
+                    return false;
+                }
+                BoundDagTemp input = ((BoundTestDecisionDagNode)node).Test.Input;
+                ValueDispatchNode n = GatherValueDispatchNodes(node, loweredNodes, input);
+                LowerValueDispatchNode(n, _tempAllocator.GetTemp(input));
+                return true;
+                bool canDispatch(BoundTestDecisionDagNode test1, BoundTestDecisionDagNode test2)
+                {
+                    if (_dagNodeLabels.ContainsKey(test2))
+                    {
+                        return false;
+                    }
+                    BoundDagTest test3 = test1.Test;
+                    BoundDagTest test4 = test2.Test;
+                    if (!(test3 is BoundDagValueTest) && !(test3 is BoundDagRelationalTest))
+                    {
+                        return false;
+                    }
+                    if (!(test4 is BoundDagValueTest) && !(test4 is BoundDagRelationalTest))
+                    {
+                        return false;
+                    }
+                    if (!test3.Input.Equals(test4.Input))
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                bool canGenerateSwitchDispatch(BoundDecisionDagNode node)
+                {
+                    if (node is BoundTestDecisionDagNode boundTestDecisionDagNode)
+                    {
+                        if (boundTestDecisionDagNode.WhenFalse is BoundTestDecisionDagNode test5)
+                        {
+                            return canDispatch(boundTestDecisionDagNode, test5);
+                        }
+                        if (boundTestDecisionDagNode.WhenTrue is BoundTestDecisionDagNode test6)
+                        {
+                            BoundTestDecisionDagNode test7 = boundTestDecisionDagNode;
+                            return canDispatch(test7, test6);
+                        }
+                    }
+                    return false;
+                }
+            }
+
+            private ValueDispatchNode GatherValueDispatchNodes(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes, BoundDagTemp input)
+            {
+                IValueSetFactory fac = ValueSetFactory.ForType(input.Type);
+                return GatherValueDispatchNodes(node, loweredNodes, input, fac);
+            }
+
+            private ValueDispatchNode GatherValueDispatchNodes(BoundDecisionDagNode node, HashSet<BoundDecisionDagNode> loweredNodes, BoundDagTemp input, IValueSetFactory fac)
+            {
+                if (loweredNodes.Contains(node))
+                {
+                    _dagNodeLabels.TryGetValue(node, out var value);
+                    return new ValueDispatchNode.LeafDispatchNode(node.Syntax, value);
+                }
+                if (!(node is BoundTestDecisionDagNode boundTestDecisionDagNode) || !boundTestDecisionDagNode.Test.Input.Equals(input))
+                {
+                    LabelSymbol dagNodeLabel = GetDagNodeLabel(node);
+                    return new ValueDispatchNode.LeafDispatchNode(node.Syntax, dagNodeLabel);
+                }
+                BoundDagTest test = boundTestDecisionDagNode.Test;
+                if (!(test is BoundDagRelationalTest boundDagRelationalTest))
+                {
+                    if (test is BoundDagValueTest boundDagValueTest)
+                    {
+                        loweredNodes.Add(boundTestDecisionDagNode);
+                        ArrayBuilder<(ConstantValue, LabelSymbol)> instance = ArrayBuilder<(ConstantValue, LabelSymbol)>.GetInstance();
+                        instance.Add((boundDagValueTest.Value, GetDagNodeLabel(boundTestDecisionDagNode.WhenTrue)));
+                        BoundTestDecisionDagNode boundTestDecisionDagNode2 = boundTestDecisionDagNode;
+                        while (boundTestDecisionDagNode2.WhenFalse is BoundTestDecisionDagNode boundTestDecisionDagNode3 && boundTestDecisionDagNode3.Test is BoundDagValueTest boundDagValueTest2 && boundDagValueTest2.Input.Equals(input) && !_dagNodeLabels.ContainsKey(boundTestDecisionDagNode3) && !loweredNodes.Contains(boundTestDecisionDagNode3))
+                        {
+                            instance.Add((boundDagValueTest2.Value, GetDagNodeLabel(boundTestDecisionDagNode3.WhenTrue)));
+                            loweredNodes.Add(boundTestDecisionDagNode3);
+                            boundTestDecisionDagNode2 = boundTestDecisionDagNode3;
+                        }
+                        ValueDispatchNode otherwise = GatherValueDispatchNodes(boundTestDecisionDagNode2.WhenFalse, loweredNodes, input, fac);
+                        return PushEqualityTestsIntoTree(boundDagValueTest.Syntax, otherwise, instance.ToImmutableAndFree(), fac);
+                    }
+                    LabelSymbol dagNodeLabel2 = GetDagNodeLabel(node);
+                    return new ValueDispatchNode.LeafDispatchNode(node.Syntax, dagNodeLabel2);
+                }
+                loweredNodes.Add(boundTestDecisionDagNode);
+                ValueDispatchNode whenTrue = GatherValueDispatchNodes(boundTestDecisionDagNode.WhenTrue, loweredNodes, input, fac);
+                ValueDispatchNode whenFalse = GatherValueDispatchNodes(boundTestDecisionDagNode.WhenFalse, loweredNodes, input, fac);
+                return ValueDispatchNode.RelationalDispatch.CreateBalanced(boundTestDecisionDagNode.Syntax, boundDagRelationalTest.Value, boundDagRelationalTest.OperatorKind, whenTrue, whenFalse);
+            }
+
+            private ValueDispatchNode PushEqualityTestsIntoTree(SyntaxNode syntax, ValueDispatchNode otherwise, ImmutableArray<(ConstantValue value, LabelSymbol label)> cases, IValueSetFactory fac)
+            {
+                if (cases.IsEmpty)
+                {
+                    return otherwise;
+                }
+                if (!(otherwise is ValueDispatchNode.LeafDispatchNode leafDispatchNode))
+                {
+                    if (!(otherwise is ValueDispatchNode.SwitchDispatch switchDispatch))
+                    {
+                        if (otherwise is ValueDispatchNode.RelationalDispatch relationalDispatch)
+                        {
+                            BinaryOperatorKind @operator = relationalDispatch.Operator;
+                            ConstantValue value2 = relationalDispatch.Value;
+                            ValueDispatchNode whenTrue = relationalDispatch.WhenTrue;
+                            ValueDispatchNode whenFalse = relationalDispatch.WhenFalse;
+                            (ImmutableArray<(ConstantValue value, LabelSymbol label)> whenTrueCases, ImmutableArray<(ConstantValue value, LabelSymbol label)> whenFalseCases) tuple = splitCases(cases, @operator, value2);
+                            ImmutableArray<(ConstantValue, LabelSymbol)> item = tuple.whenTrueCases;
+                            ImmutableArray<(ConstantValue, LabelSymbol)> item2 = tuple.whenFalseCases;
+                            whenTrue = PushEqualityTestsIntoTree(syntax, whenTrue, item, fac);
+                            whenFalse = PushEqualityTestsIntoTree(syntax, whenFalse, item2, fac);
+                            return relationalDispatch.WithTrueAndFalseChildren(whenTrue, whenFalse);
+                        }
+                        throw ExceptionUtilities.UnexpectedValue(otherwise);
+                    }
+                    return new ValueDispatchNode.SwitchDispatch(switchDispatch.Syntax, switchDispatch.Cases.Concat(cases), switchDispatch.Otherwise);
+                }
+                return new ValueDispatchNode.SwitchDispatch(syntax, cases, leafDispatchNode.Label);
+                (ImmutableArray<(ConstantValue value, LabelSymbol label)> whenTrueCases, ImmutableArray<(ConstantValue value, LabelSymbol label)> whenFalseCases) splitCases(ImmutableArray<(ConstantValue value, LabelSymbol label)> cases, BinaryOperatorKind op, ConstantValue value)
+                {
+                    ArrayBuilder<(ConstantValue, LabelSymbol)> instance = ArrayBuilder<(ConstantValue, LabelSymbol)>.GetInstance();
+                    ArrayBuilder<(ConstantValue, LabelSymbol)> instance2 = ArrayBuilder<(ConstantValue, LabelSymbol)>.GetInstance();
+                    op = op.Operator();
+                    ImmutableArray<(ConstantValue, LabelSymbol)>.Enumerator enumerator = cases.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        (ConstantValue, LabelSymbol) current = enumerator.Current;
+                        (fac.Related(op, current.Item1, value) ? instance : instance2).Add(current);
+                    }
+                    return (instance.ToImmutableAndFree(), instance2.ToImmutableAndFree());
+                }
+            }
+
+            private void LowerValueDispatchNode(ValueDispatchNode n, BoundExpression input)
+            {
+                if (!(n is ValueDispatchNode.LeafDispatchNode leafDispatchNode))
+                {
+                    if (!(n is ValueDispatchNode.SwitchDispatch node))
+                    {
+                        if (!(n is ValueDispatchNode.RelationalDispatch rel))
+                        {
+                            throw ExceptionUtilities.UnexpectedValue(n);
+                        }
+                        LowerRelationalDispatchNode(rel, input);
+                    }
+                    else
+                    {
+                        LowerSwitchDispatchNode(node, input);
+                    }
+                }
+                else
+                {
+                    _loweredDecisionDag.Add(_factory.Goto(leafDispatchNode.Label));
+                }
+            }
+
+            private void LowerRelationalDispatchNode(ValueDispatchNode.RelationalDispatch rel, BoundExpression input)
+            {
+                BoundExpression condition = MakeRelationalTest(rel.Syntax, input, rel.Operator, rel.Value);
+                if (rel.WhenTrue is ValueDispatchNode.LeafDispatchNode leafDispatchNode)
+                {
+                    LabelSymbol label = leafDispatchNode.Label;
+                    _loweredDecisionDag.Add(_factory.ConditionalGoto(condition, label, jumpIfTrue: true));
+                    LowerValueDispatchNode(rel.WhenFalse, input);
+                }
+                else if (rel.WhenFalse is ValueDispatchNode.LeafDispatchNode leafDispatchNode2)
+                {
+                    LabelSymbol label2 = leafDispatchNode2.Label;
+                    _loweredDecisionDag.Add(_factory.ConditionalGoto(condition, label2, jumpIfTrue: false));
+                    LowerValueDispatchNode(rel.WhenTrue, input);
+                }
+                else
+                {
+                    LabelSymbol label3 = _factory.GenerateLabel("relationalDispatch");
+                    _loweredDecisionDag.Add(_factory.ConditionalGoto(condition, label3, jumpIfTrue: false));
+                    LowerValueDispatchNode(rel.WhenTrue, input);
+                    _loweredDecisionDag.Add(_factory.Label(label3));
+                    LowerValueDispatchNode(rel.WhenFalse, input);
+                }
+            }
+
+            private void LowerSwitchDispatchNode(ValueDispatchNode.SwitchDispatch node, BoundExpression input)
+            {
+                LabelSymbol defaultLabel = node.Otherwise;
+                BinaryOperatorKind lessThanOrEqualOperator;
+                ImmutableArray<(ConstantValue value, LabelSymbol label)> cases;
+                if (input.Type.IsValidV6SwitchGoverningType())
+                {
+                    MethodSymbol equalityMethod = null;
+                    if (input.Type!.SpecialType == SpecialType.System_String)
+                    {
+                        EnsureStringHashFunction(node.Cases.Length, node.Syntax);
+                        equalityMethod = _localRewriter.UnsafeGetSpecialTypeMethod(node.Syntax, SpecialMember.System_String__op_Equality);
+                    }
+                    BoundSwitchDispatch item = new BoundSwitchDispatch(node.Syntax, input, node.Cases, defaultLabel, equalityMethod);
+                    _loweredDecisionDag.Add(item);
+                }
+                else if (input.Type!.IsNativeIntegerType)
+                {
+                    ImmutableArray<(ConstantValue, LabelSymbol)> cases2;
+                    switch (input.Type!.SpecialType)
+                    {
+                        case SpecialType.System_IntPtr:
+                            input = _factory.Convert(_factory.SpecialType(SpecialType.System_Int64), input);
+                            cases2 = node.Cases.SelectAsArray(((ConstantValue value, LabelSymbol label) p) => (ConstantValue.Create((long)p.value.Int32Value), p.label));
+                            break;
+                        case SpecialType.System_UIntPtr:
+                            input = _factory.Convert(_factory.SpecialType(SpecialType.System_UInt64), input);
+                            cases2 = node.Cases.SelectAsArray(((ConstantValue value, LabelSymbol label) p) => (ConstantValue.Create((ulong)p.value.UInt32Value), p.label));
+                            break;
+                        default:
+                            throw ExceptionUtilities.UnexpectedValue(input.Type);
+                    }
+                    BoundSwitchDispatch item2 = new BoundSwitchDispatch(node.Syntax, input, cases2, defaultLabel, null);
+                    _loweredDecisionDag.Add(item2);
+                }
+                else
+                {
+                    lessThanOrEqualOperator = input.Type!.SpecialType switch
+                    {
+                        SpecialType.System_Single => BinaryOperatorKind.FloatLessThanOrEqual,
+                        SpecialType.System_Double => BinaryOperatorKind.DoubleLessThanOrEqual,
+                        SpecialType.System_Decimal => BinaryOperatorKind.DecimalLessThanOrEqual,
+                        _ => throw ExceptionUtilities.UnexpectedValue(input.Type!.SpecialType),
+                    };
+                    cases = node.Cases.Sort(new CasesComparer(input.Type));
+                    lowerFloatDispatch(0, cases.Length);
+                }
+                void lowerFloatDispatch(int firstIndex, int count)
+                {
+                    if (count <= 3)
+                    {
+                        int i = firstIndex;
+                        for (int num = firstIndex + count; i < num; i++)
+                        {
+                            _loweredDecisionDag.Add(_factory.ConditionalGoto(MakeValueTest(node.Syntax, input, cases[i].value), cases[i].label, jumpIfTrue: true));
+                        }
+                        _loweredDecisionDag.Add(_factory.Goto(defaultLabel));
+                    }
+                    else
+                    {
+                        int num2 = count / 2;
+                        GeneratedLabelSymbol label = _factory.GenerateLabel("greaterThanMidpoint");
+                        _loweredDecisionDag.Add(_factory.ConditionalGoto(MakeRelationalTest(node.Syntax, input, lessThanOrEqualOperator, cases[firstIndex + num2 - 1].value), label, jumpIfTrue: false));
+                        lowerFloatDispatch(firstIndex, num2);
+                        _loweredDecisionDag.Add(_factory.Label(label));
+                        lowerFloatDispatch(firstIndex + num2, count - num2);
+                    }
+                }
+            }
+
+            private void EnsureStringHashFunction(int labelsCount, SyntaxNode syntaxNode)
+            {
+                PEModuleBuilder emitModule = _localRewriter.EmitModule;
+                if (emitModule == null || !SwitchStringJumpTableEmitter.ShouldGenerateHashTableSwitch(emitModule, labelsCount))
+                {
+                    return;
+                }
+                PrivateImplementationDetails privateImplClass = emitModule.GetPrivateImplClass(syntaxNode, _localRewriter._diagnostics.DiagnosticBag);
+                if (privateImplClass.GetMethod("ComputeStringHash") == null)
+                {
+                    Symbol specialTypeMember = _localRewriter._compilation.GetSpecialTypeMember(SpecialMember.System_String__Chars);
+                    if ((object)specialTypeMember != null && !specialTypeMember.HasUseSiteError)
+                    {
+                        TypeSymbol returnType = _factory.SpecialType(SpecialType.System_UInt32);
+                        TypeSymbol paramType = _factory.SpecialType(SpecialType.System_String);
+                        SynthesizedStringSwitchHashMethod synthesizedStringSwitchHashMethod = new SynthesizedStringSwitchHashMethod(emitModule.SourceModule, privateImplClass, returnType, paramType);
+                        privateImplClass.TryAddSynthesizedMethod(synthesizedStringSwitchHashMethod.GetCciAdapter());
+                    }
+                }
+            }
+
+            private void LowerWhenClause(BoundWhenDecisionDagNode whenClause)
+            {
+                BoundLeafDecisionDagNode dag = (BoundLeafDecisionDagNode)whenClause.WhenTrue;
+                LabelSymbol dagNodeLabel = GetDagNodeLabel(whenClause);
+                ArrayBuilder<BoundStatement> arrayBuilder = BuilderForSection(whenClause.Syntax);
+                arrayBuilder.Add(_factory.Label(dagNodeLabel));
+                ImmutableArray<BoundPatternBinding>.Enumerator enumerator = whenClause.Bindings.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    BoundPatternBinding current = enumerator.Current;
+                    BoundExpression boundExpression = _localRewriter.VisitExpression(current.VariableAccess);
+                    BoundExpression temp = _tempAllocator.GetTemp(current.TempContainingValue);
+                    if (boundExpression != temp)
+                    {
+                        arrayBuilder.Add(_factory.Assignment(boundExpression, temp));
+                    }
+                }
+                BoundDecisionDagNode whenFalse = whenClause.WhenFalse;
+                LabelSymbol dagNodeLabel2 = GetDagNodeLabel(dag);
+                if (whenClause.WhenExpression != null && whenClause.WhenExpression!.ConstantValue != ConstantValue.True)
+                {
+                    _factory.Syntax = whenClause.Syntax;
+                    BoundStatement boundStatement = _factory.ConditionalGoto(_localRewriter.VisitExpression(whenClause.WhenExpression), dagNodeLabel2, jumpIfTrue: true);
+                    if (base.GenerateInstrumentation && !whenClause.WhenExpression!.WasCompilerGenerated)
+                    {
+                        boundStatement = _localRewriter._instrumenter.InstrumentSwitchWhenClauseConditionalGotoBody(whenClause.WhenExpression, boundStatement);
+                    }
+                    arrayBuilder.Add(boundStatement);
+                    BoundStatement boundStatement2 = _factory.Goto(GetDagNodeLabel(whenFalse));
+                    arrayBuilder.Add(base.GenerateInstrumentation ? _factory.HiddenSequencePoint(boundStatement2) : boundStatement2);
+                }
+                else
+                {
+                    arrayBuilder.Add(_factory.Goto(dagNodeLabel2));
+                }
+            }
+
+            private void LowerDecisionDagNode(BoundDecisionDagNode node, BoundDecisionDagNode nextNode)
+            {
+                _factory.Syntax = node.Syntax;
+                if (!(node is BoundEvaluationDecisionDagNode boundEvaluationDecisionDagNode))
+                {
+                    if (node is BoundTestDecisionDagNode boundTestDecisionDagNode)
+                    {
+                        BoundExpression test = LowerTest(boundTestDecisionDagNode.Test);
+                        GenerateTest(test, boundTestDecisionDagNode.WhenTrue, boundTestDecisionDagNode.WhenFalse, nextNode);
+                        return;
+                    }
+                    throw ExceptionUtilities.UnexpectedValue(node.Kind);
+                }
+                BoundExpression expr = LowerEvaluation(boundEvaluationDecisionDagNode.Evaluation);
+                _loweredDecisionDag.Add(_factory.ExpressionStatement(expr));
+                if (base.GenerateInstrumentation)
+                {
+                    _loweredDecisionDag.Add(_factory.HiddenSequencePoint());
+                }
+                if (nextNode != boundEvaluationDecisionDagNode.Next)
+                {
+                    _loweredDecisionDag.Add(_factory.Goto(GetDagNodeLabel(boundEvaluationDecisionDagNode.Next)));
+                }
+            }
         }
     }
 }

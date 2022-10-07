@@ -16,7 +16,7 @@ namespace Microsoft.Cci
     {
         private IReadOnlyList<IMethodDefinition>? _methods;
 
-        public TypeDefinitionHandle TypeDef => default(TypeDefinitionHandle);
+        public TypeDefinitionHandle TypeDef => default;
 
         public ITypeDefinition ResolvedType => this;
 
@@ -131,7 +131,7 @@ namespace Microsoft.Cci
 
         public IEnumerable<IMethodDefinition> GetMethods(EmitContext context)
         {
-            return _methods ?? (_methods = SpecializedCollections.EmptyReadOnlyList<IMethodDefinition>());
+            return _methods ??= SpecializedCollections.EmptyReadOnlyList<IMethodDefinition>();
         }
 
         public IEnumerable<ICustomAttribute> GetAttributes(EmitContext context)

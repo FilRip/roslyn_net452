@@ -319,7 +319,7 @@ namespace Microsoft.CodeAnalysis.Collections
 
             private SegmentedDictionary<TKey, TValue> GetOrCreateMutableDictionary()
             {
-                return _mutableDictionary ?? (_mutableDictionary = new SegmentedDictionary<TKey, TValue>(_dictionary._dictionary, _dictionary.KeyComparer));
+                return _mutableDictionary ??= new SegmentedDictionary<TKey, TValue>(_dictionary._dictionary, _dictionary.KeyComparer);
             }
 
             public void Add(TKey key, TValue value)
@@ -392,7 +392,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 {
                     return value;
                 }
-                return default(TValue);
+                return default;
             }
 
             public TValue GetValueOrDefault(TKey key, TValue defaultValue)
@@ -658,7 +658,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 SegmentedDictionary<TKey, TValue> segmentedDictionary = Volatile.Read(ref Unsafe.AsRef(in location._dictionary));
                 if (segmentedDictionary == null)
                 {
-                    return default(ImmutableSegmentedDictionary<TKey, TValue>);
+                    return default;
                 }
                 return new ImmutableSegmentedDictionary<TKey, TValue>(segmentedDictionary);
             }
@@ -668,7 +668,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 SegmentedDictionary<TKey, TValue> segmentedDictionary = Interlocked.Exchange(ref Unsafe.AsRef(in location._dictionary), value._dictionary);
                 if (segmentedDictionary == null)
                 {
-                    return default(ImmutableSegmentedDictionary<TKey, TValue>);
+                    return default;
                 }
                 return new ImmutableSegmentedDictionary<TKey, TValue>(segmentedDictionary);
             }
@@ -678,7 +678,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 SegmentedDictionary<TKey, TValue> segmentedDictionary = Interlocked.CompareExchange(ref Unsafe.AsRef(in location._dictionary), value._dictionary, comparand._dictionary);
                 if (segmentedDictionary == null)
                 {
-                    return default(ImmutableSegmentedDictionary<TKey, TValue>);
+                    return default;
                 }
                 return new ImmutableSegmentedDictionary<TKey, TValue>(segmentedDictionary);
             }
@@ -1174,7 +1174,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 other = builder.ToImmutable();
                 return true;
             }
-            other = default(ImmutableSegmentedDictionary<TKey, TValue>);
+            other = default;
             return false;
         }
     }

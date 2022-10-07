@@ -138,87 +138,111 @@ namespace Microsoft.CodeAnalysis.CSharp
             }).ToImmutableArray());
         }
 
+        /// <summary>
+        /// Translate a statement that declares a given set of locals.  Also allocates and frees hoisted temps as
+        /// required for the translation.
+        /// </summary>
+        /// <param name="locals">The set of locals declared in the original version of this statement</param>
+        /// <param name="wrapped">A delegate to return the translation of the body of this statement</param>
         private BoundStatement PossibleIteratorScope(ImmutableArray<LocalSymbol> locals, Func<BoundStatement> wrapped)
         {
             if (locals.IsDefaultOrEmpty)
             {
                 return wrapped();
             }
-            ArrayBuilder<StateMachineFieldSymbol> instance = ArrayBuilder<StateMachineFieldSymbol>.GetInstance();
-            ImmutableArray<LocalSymbol>.Enumerator enumerator = locals.GetEnumerator();
-            while (enumerator.MoveNext())
+
+            var hoistedLocalsWithDebugScopes = ArrayBuilder<StateMachineFieldSymbol>.GetInstance();
+            foreach (var local in locals)
             {
-                LocalSymbol current = enumerator.Current;
-                if (!NeedsProxy(current) || current.RefKind != 0)
+                if (!NeedsProxy(local))
                 {
                     continue;
                 }
+
+                // Ref synthesized variables have proxies that are allocated in VisitAssignmentOperator.
+                if (local.RefKind != RefKind.None)
+                {
+                    continue;
+                }
+
+                CapturedSymbolReplacement proxy;
                 bool reused = false;
-                if (!proxies.TryGetValue(current, out var value))
+                if (!proxies.TryGetValue(local, out proxy))
                 {
-                    value = new CapturedToStateMachineFieldReplacement(GetOrAllocateReusableHoistedField(TypeMap.SubstituteType(current.Type).Type, out reused, current), isReusable: true);
-                    proxies.Add(current, value);
+                    proxy = new CapturedToStateMachineFieldReplacement(GetOrAllocateReusableHoistedField(TypeMap.SubstituteType(local.Type).Type, out reused, local), isReusable: true);
+                    proxies.Add(local, proxy);
                 }
-                if (current.SynthesizedKind == SynthesizedLocalKind.UserDefined)
+
+                // We need to produce hoisted local scope debug information for user locals as well as 
+                // lambda display classes, since Dev12 EE uses them to determine which variables are displayed 
+                // in Locals window.
+                if ((local.SynthesizedKind == SynthesizedLocalKind.UserDefined && local.ScopeDesignatorOpt?.Kind() != SyntaxKind.SwitchSection) ||
+                    local.SynthesizedKind == SynthesizedLocalKind.LambdaDisplayClass)
                 {
-                    SyntaxNode scopeDesignatorOpt = current.ScopeDesignatorOpt;
-                    if (scopeDesignatorOpt == null || scopeDesignatorOpt.Kind() != SyntaxKind.SwitchSection)
+                    // NB: This is the case when the local backed by recycled field will not be visible in debugger.
+                    //     It may be possible in the future, but for now a backing field can be mapped only to a single local.
+                    if (!reused)
                     {
-                        goto IL_00c8;
-                    }
-                }
-                if (current.SynthesizedKind != SynthesizedLocalKind.LambdaDisplayClass)
-                {
-                    continue;
-                }
-                goto IL_00c8;
-            IL_00c8:
-                if (!reused)
-                {
-                    instance.Add(((CapturedToStateMachineFieldReplacement)value).HoistedField);
-                }
-            }
-            BoundStatement boundStatement = wrapped();
-            ArrayBuilder<BoundAssignmentOperator> instance2 = ArrayBuilder<BoundAssignmentOperator>.GetInstance();
-            enumerator = locals.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                LocalSymbol current2 = enumerator.Current;
-                if (!proxies.TryGetValue(current2, out var value2))
-                {
-                    continue;
-                }
-                if (value2 is CapturedToStateMachineFieldReplacement capturedToStateMachineFieldReplacement)
-                {
-                    AddVariableCleanup(instance2, capturedToStateMachineFieldReplacement.HoistedField);
-                    if (value2.IsReusable)
-                    {
-                        FreeReusableHoistedField(capturedToStateMachineFieldReplacement.HoistedField);
-                    }
-                    continue;
-                }
-                ImmutableArray<StateMachineFieldSymbol>.Enumerator enumerator2 = ((CapturedToExpressionSymbolReplacement)value2).HoistedFields.GetEnumerator();
-                while (enumerator2.MoveNext())
-                {
-                    StateMachineFieldSymbol current3 = enumerator2.Current;
-                    AddVariableCleanup(instance2, current3);
-                    if (value2.IsReusable)
-                    {
-                        FreeReusableHoistedField(current3);
+                        hoistedLocalsWithDebugScopes.Add(((CapturedToStateMachineFieldReplacement)proxy).HoistedField);
                     }
                 }
             }
-            if (instance2.Count != 0)
+
+            var translatedStatement = wrapped();
+            var variableCleanup = ArrayBuilder<BoundAssignmentOperator>.GetInstance();
+
+            // produce cleanup code for all fields of locals defined by this block 
+            // as well as all proxies allocated by VisitAssignmentOperator within this block:
+            foreach (var local in locals)
             {
-                boundStatement = F.Block(boundStatement, F.Block(instance2.SelectAsArray((Func<BoundAssignmentOperator, SyntheticBoundNodeFactory, BoundStatement>)((BoundAssignmentOperator e, SyntheticBoundNodeFactory f) => f.ExpressionStatement(e)), F)));
+                CapturedSymbolReplacement proxy;
+                if (!proxies.TryGetValue(local, out proxy))
+                {
+                    continue;
+                }
+
+                var simpleProxy = proxy as CapturedToStateMachineFieldReplacement;
+                if (simpleProxy != null)
+                {
+                    AddVariableCleanup(variableCleanup, simpleProxy.HoistedField);
+
+                    if (proxy.IsReusable)
+                    {
+                        FreeReusableHoistedField(simpleProxy.HoistedField);
+                    }
+                }
+                else
+                {
+                    foreach (var field in ((CapturedToExpressionSymbolReplacement)proxy).HoistedFields)
+                    {
+                        AddVariableCleanup(variableCleanup, field);
+
+                        if (proxy.IsReusable)
+                        {
+                            FreeReusableHoistedField(field);
+                        }
+                    }
+                }
             }
-            instance2.Free();
-            if (instance.Count != 0)
+
+            if (variableCleanup.Count != 0)
             {
-                boundStatement = MakeStateMachineScope(instance.ToImmutable(), boundStatement);
+                translatedStatement = F.Block(
+                    translatedStatement,
+                    F.Block(variableCleanup.SelectAsArray((e, f) => (BoundStatement)f.ExpressionStatement(e), F)));
             }
-            instance.Free();
-            return boundStatement;
+
+            variableCleanup.Free();
+
+            // wrap the node in an iterator scope for debugging
+            if (hoistedLocalsWithDebugScopes.Count != 0)
+            {
+                translatedStatement = MakeStateMachineScope(hoistedLocalsWithDebugScopes.ToImmutable(), translatedStatement);
+            }
+
+            hoistedLocalsWithDebugScopes.Free();
+
+            return translatedStatement;
         }
 
         internal BoundBlock MakeStateMachineScope(ImmutableArray<StateMachineFieldSymbol> hoistedLocals, BoundStatement statement)

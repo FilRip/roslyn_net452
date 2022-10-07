@@ -934,83 +934,69 @@ namespace Microsoft.CodeAnalysis
 
         internal static SyntaxTrivia FindTriviaByOffset(SyntaxNode node, int textOffset, Func<SyntaxTrivia, bool>? stepInto = null)
         {
-            while (textOffset >= 0)
+        recurse:
+            if (textOffset >= 0)
             {
-                SyntaxNodeOrToken current;
-                int fullWidth;
-                SyntaxNode node2;
-                for (ChildSyntaxList.Enumerator enumerator = node.ChildNodesAndTokens().GetEnumerator(); enumerator.MoveNext(); textOffset -= fullWidth)
+                foreach (var element in node.ChildNodesAndTokens())
                 {
-                    current = enumerator.Current;
-                    fullWidth = current.FullWidth;
-                    if (textOffset >= fullWidth)
+                    var fullWidth = element.FullWidth;
+                    if (textOffset < fullWidth)
                     {
-                        continue;
-                    }
-                    if (current.AsNode(out node2))
-                    {
-                        goto IL_003d;
-                    }
-                    if (!current.IsToken)
-                    {
-                        continue;
-                    }
-                    goto IL_004f;
-                }
-                break;
-            IL_0111:
-                SyntaxTrivia current2;
-                if (current2.HasStructure && stepInto != null && stepInto!(current2))
-                {
-                    node = current2.GetStructure();
-                    continue;
-                }
-                return current2;
-            IL_0092:
-                SyntaxTrivia current3;
-                if (current3.HasStructure && stepInto != null && stepInto!(current3))
-                {
-                    node = current3.GetStructure();
-                    continue;
-                }
-                return current3;
-            IL_003d:
-                node = node2;
-                continue;
-            IL_004f:
-                SyntaxToken syntaxToken = current.AsToken();
-                int leadingWidth = syntaxToken.LeadingWidth;
-                if (textOffset < syntaxToken.LeadingWidth)
-                {
-                    SyntaxTriviaList.Enumerator enumerator2 = syntaxToken.LeadingTrivia.GetEnumerator();
-                    while (enumerator2.MoveNext())
-                    {
-                        current3 = enumerator2.Current;
-                        if (textOffset >= current3.FullWidth)
+                        if (element.AsNode(out var elementNode))
                         {
-                            textOffset -= current3.FullWidth;
-                            continue;
+                            node = elementNode;
+                            goto recurse;
                         }
-                        goto IL_0092;
-                    }
-                }
-                else if (textOffset >= leadingWidth + syntaxToken.Width)
-                {
-                    textOffset -= leadingWidth + syntaxToken.Width;
-                    SyntaxTriviaList.Enumerator enumerator2 = syntaxToken.TrailingTrivia.GetEnumerator();
-                    while (enumerator2.MoveNext())
-                    {
-                        current2 = enumerator2.Current;
-                        if (textOffset >= current2.FullWidth)
+                        else if (element.IsToken)
                         {
-                            textOffset -= current2.FullWidth;
-                            continue;
+                            var token = element.AsToken();
+                            var leading = token.LeadingWidth;
+                            if (textOffset < token.LeadingWidth)
+                            {
+                                foreach (var trivia in token.LeadingTrivia)
+                                {
+                                    if (textOffset < trivia.FullWidth)
+                                    {
+                                        if (trivia.HasStructure && stepInto != null && stepInto(trivia))
+                                        {
+                                            node = trivia.GetStructure()!;
+                                            goto recurse;
+                                        }
+
+                                        return trivia;
+                                    }
+
+                                    textOffset -= trivia.FullWidth;
+                                }
+                            }
+                            else if (textOffset >= leading + token.Width)
+                            {
+                                textOffset -= leading + token.Width;
+                                foreach (var trivia in token.TrailingTrivia)
+                                {
+                                    if (textOffset < trivia.FullWidth)
+                                    {
+                                        if (trivia.HasStructure && stepInto != null && stepInto(trivia))
+                                        {
+                                            node = trivia.GetStructure()!;
+                                            goto recurse;
+                                        }
+
+                                        return trivia;
+                                    }
+
+                                    textOffset -= trivia.FullWidth;
+                                }
+                            }
+
+                            return default(SyntaxTrivia);
                         }
-                        goto IL_0111;
                     }
+
+                    textOffset -= fullWidth;
                 }
-                return default(SyntaxTrivia);
             }
+
             return default(SyntaxTrivia);
         }
 

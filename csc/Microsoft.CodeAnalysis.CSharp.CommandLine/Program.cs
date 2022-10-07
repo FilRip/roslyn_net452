@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CommandLine
 		private static int MainCore(string[] args)
 		{
 			Guid guid = Guid.NewGuid();
-			using CompilerServerLogger logger = new CompilerServerLogger($"csc {guid}");
+			using CompilerServerLogger logger = new($"csc {guid}");
 			return BuildClient.Run(args, RequestLanguage.CSharpCompile, Csc.Run, logger, guid);
 		}
 

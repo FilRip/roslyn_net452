@@ -1145,205 +1145,233 @@ namespace Microsoft.CodeAnalysis.CSharp
             return true;
         }
 
-        internal CSharpTypeInfo GetTypeInfoForNode(BoundNode lowestBoundNode, BoundNode highestBoundNode, BoundNode boundNodeForSyntacticParent)
+        // Gets the semantic info from a specific bound node and a set of diagnostics
+        // lowestBoundNode: The lowest node in the bound tree associated with node
+        // highestBoundNode: The highest node in the bound tree associated with node
+        // boundNodeForSyntacticParent: The lowest node in the bound tree associated with node.Parent.
+        internal CSharpTypeInfo GetTypeInfoForNode(
+            BoundNode lowestBoundNode,
+            BoundNode highestBoundNode,
+            BoundNode boundNodeForSyntacticParent)
         {
-            BoundPattern boundPattern = (lowestBoundNode as BoundPattern) ?? (highestBoundNode as BoundPattern) ?? ((highestBoundNode is BoundSubpattern boundSubpattern) ? boundSubpattern.Pattern : null);
-            if (boundPattern != null)
+            BoundPattern pattern = lowestBoundNode as BoundPattern ?? highestBoundNode as BoundPattern ?? (highestBoundNode is BoundSubpattern sp ? sp.Pattern : null);
+            if (pattern != null)
             {
-                CompoundUseSiteInfo<Microsoft.CodeAnalysis.CSharp.Symbols.AssemblySymbol> useSiteInfo = CompoundUseSiteInfo<Microsoft.CodeAnalysis.CSharp.Symbols.AssemblySymbol>.Discarded;
-                return new CSharpTypeInfo(boundPattern.InputType, boundPattern.NarrowedType, default(NullabilityInfo), default(NullabilityInfo), Compilation.Conversions.ClassifyBuiltInConversion(boundPattern.InputType, boundPattern.NarrowedType, ref useSiteInfo));
+                var discardedUseSiteInfo = CompoundUseSiteInfo<Symbols.AssemblySymbol>.Discarded;
+                // https://github.com/dotnet/roslyn/issues/35032: support patterns
+                return new CSharpTypeInfo(
+                    pattern.InputType, pattern.NarrowedType, nullability: default, convertedNullability: default,
+                    Compilation.Conversions.ClassifyBuiltInConversion(pattern.InputType, pattern.NarrowedType, ref discardedUseSiteInfo));
             }
-            BoundExpression boundExpression = lowestBoundNode as BoundExpression;
-            BoundExpression boundExpression2 = highestBoundNode as BoundExpression;
-            Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol typeSymbol;
-            NullabilityInfo nullabilityInfo;
-            Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol typeSymbol2;
-            NullabilityInfo convertedNullability;
-            Conversion implicitConversion;
-            if (boundExpression != null && (boundNodeForSyntacticParent == null || boundNodeForSyntacticParent.Syntax.Kind() != SyntaxKind.ObjectCreationExpression || ((ObjectCreationExpressionSyntax)boundNodeForSyntacticParent.Syntax).Type != boundExpression.Syntax))
+
+            var highestBoundExpr = highestBoundNode as BoundExpression;
+
+            if (lowestBoundNode is BoundExpression boundExpr &&
+                !(boundNodeForSyntacticParent != null &&
+                  boundNodeForSyntacticParent.Syntax.Kind() == SyntaxKind.ObjectCreationExpression &&
+                  ((ObjectCreationExpressionSyntax)boundNodeForSyntacticParent.Syntax).Type == boundExpr.Syntax)) // Do not return any type information for a ObjectCreationExpressionSyntax.Type node.
             {
-                typeSymbol = null;
-                nullabilityInfo = boundExpression.TopLevelNullability;
-                if (boundExpression.HasExpressionType())
+                // TODO: Should parenthesized expression really not have symbols? At least for C#, I'm not sure that 
+                // is right. For example, C# allows the assignment statement:
+                //    (i) = 9;  
+                // So I don't assume this code should special case parenthesized expressions.
+                Symbols.TypeSymbol type = null;
+                NullabilityInfo nullability = boundExpr.TopLevelNullability;
+
+                if (boundExpr.HasExpressionType())
                 {
-                    typeSymbol = boundExpression.Type;
-                    if (!(boundExpression is BoundLocal boundLocal))
+                    type = boundExpr.Type;
+
+                    switch (boundExpr)
                     {
-                        if (boundExpression is BoundConvertedTupleLiteral boundConvertedTupleLiteral)
-                        {
-                            BoundTupleLiteral sourceTuple = boundConvertedTupleLiteral.SourceTuple;
-                            if (sourceTuple != null)
+                        case BoundLocal local:
                             {
-                                typeSymbol = sourceTuple.Type;
+                                // Use of local before declaration requires some additional fixup.
+                                // Due to complications around implicit locals and type inference, we do not
+                                // try to obtain a type of a local when it is used before declaration, we use
+                                // a special error type symbol. However, semantic model should return the same
+                                // type information for usage of a local before and after its declaration.
+                                // We will detect the use before declaration cases and replace the error type
+                                // symbol with the one obtained from the local. It should be safe to get the type
+                                // from the local at this point.
+                                if (type is ExtendedErrorTypeSymbol extended && extended.VariableUsedBeforeDeclaration)
+                                {
+                                    type = local.LocalSymbol.Type;
+                                    nullability = local.LocalSymbol.TypeWithAnnotations.NullableAnnotation.ToNullabilityInfo(type);
+                                }
+                                break;
                             }
-                        }
-                    }
-                    else if (typeSymbol is ExtendedErrorTypeSymbol extendedErrorTypeSymbol && extendedErrorTypeSymbol.VariableUsedBeforeDeclaration)
-                    {
-                        typeSymbol = boundLocal.LocalSymbol.Type;
-                        nullabilityInfo = boundLocal.LocalSymbol.TypeWithAnnotations.NullableAnnotation.ToNullabilityInfo(typeSymbol);
+                        case BoundConvertedTupleLiteral { SourceTuple: BoundTupleLiteral original }:
+                            {
+                                // The bound tree fully binds tuple literals. From the language point of
+                                // view, however, converted tuple literals represent tuple conversions
+                                // from tuple literal expressions which may or may not have types
+                                type = original.Type;
+                                break;
+                            }
                     }
                 }
-                BoundKind boundKind = boundExpression2?.Kind ?? BoundKind.NoOpStatement;
-                if (boundKind == BoundKind.Lambda)
+
+                // we match highestBoundExpr.Kind to various kind frequently, so cache it here.
+                // use NoOp kind for the case when highestBoundExpr == null - NoOp will not match anything below.
+                var highestBoundExprKind = highestBoundExpr?.Kind ?? BoundKind.NoOpStatement;
+                Symbols.TypeSymbol convertedType;
+                NullabilityInfo convertedNullability;
+                Conversion conversion;
+
+                if (highestBoundExprKind == BoundKind.Lambda) // the enclosing conversion is explicit
                 {
-                    BoundLambda boundLambda = (BoundLambda)boundExpression2;
-                    typeSymbol2 = boundLambda.Type;
-                    typeSymbol = null;
-                    nullabilityInfo = default(NullabilityInfo);
-                    convertedNullability = new NullabilityInfo(Microsoft.CodeAnalysis.NullableAnnotation.NotAnnotated, Microsoft.CodeAnalysis.NullableFlowState.NotNull);
-                    implicitConversion = new Conversion(ConversionKind.AnonymousFunction, boundLambda.Symbol, isExtensionMethod: false);
+                    var lambda = (BoundLambda)highestBoundExpr;
+                    convertedType = lambda.Type;
+                    // The bound tree always fully binds lambda and anonymous functions. From the language point of
+                    // view, however, anonymous functions converted to a real delegate type should only have a 
+                    // ConvertedType, not a Type. So set Type to null here. Otherwise you get the edge case where both
+                    // Type and ConvertedType are the same, but the conversion isn't Identity.
+                    type = null;
+                    nullability = default;
+                    convertedNullability = new NullabilityInfo(CodeAnalysis.NullableAnnotation.NotAnnotated, CodeAnalysis.NullableFlowState.NotNull);
+                    conversion = new Conversion(ConversionKind.AnonymousFunction, lambda.Symbol, false);
                 }
-                else
+                else if ((highestBoundExpr as BoundConversion)?.Conversion.IsTupleLiteralConversion == true)
                 {
-                    BoundConversion obj = boundExpression2 as BoundConversion;
-                    if (obj != null && obj.Conversion.IsTupleLiteralConversion)
+                    var tupleLiteralConversion = (BoundConversion)highestBoundExpr;
+                    if (tupleLiteralConversion.Operand.Kind == BoundKind.ConvertedTupleLiteral)
                     {
-                        BoundConversion boundConversion = (BoundConversion)boundExpression2;
-                        if (boundConversion.Operand.Kind != BoundKind.ConvertedTupleLiteral)
-                        {
-                            (typeSymbol, nullabilityInfo) = getTypeAndNullability(boundConversion.Operand);
-                        }
-                        else
-                        {
-                            BoundConvertedTupleLiteral obj2 = (BoundConvertedTupleLiteral)boundConversion.Operand;
-                            typeSymbol = obj2.SourceTuple!.Type;
-                            nullabilityInfo = obj2.TopLevelNullability;
-                        }
-                        (Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol, NullabilityInfo) tuple2 = getTypeAndNullability(boundConversion);
-                        typeSymbol2 = tuple2.Item1;
-                        convertedNullability = tuple2.Item2;
-                        implicitConversion = boundConversion.Conversion;
+                        var convertedTuple = (BoundConvertedTupleLiteral)tupleLiteralConversion.Operand;
+                        type = convertedTuple.SourceTuple.Type;
+                        nullability = convertedTuple.TopLevelNullability;
                     }
-                    else if (boundKind == BoundKind.FixedLocalCollectionInitializer)
+                    else
                     {
-                        BoundFixedLocalCollectionInitializer obj3 = (BoundFixedLocalCollectionInitializer)boundExpression2;
-                        (Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol, NullabilityInfo) tuple3 = getTypeAndNullability(obj3);
-                        typeSymbol2 = tuple3.Item1;
-                        convertedNullability = tuple3.Item2;
-                        (Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol, NullabilityInfo) tuple4 = getTypeAndNullability(obj3.Expression);
-                        typeSymbol = tuple4.Item1;
-                        nullabilityInfo = tuple4.Item2;
-                        implicitConversion = obj3.ElementPointerTypeConversion;
+                        (type, nullability) = getTypeAndNullability(tupleLiteralConversion.Operand);
                     }
-                    else if (boundExpression is BoundConvertedSwitchExpression boundConvertedSwitchExpression && boundConvertedSwitchExpression.WasTargetTyped)
+
+                    (convertedType, convertedNullability) = getTypeAndNullability(tupleLiteralConversion);
+                    conversion = tupleLiteralConversion.Conversion;
+                }
+                else if (highestBoundExprKind == BoundKind.FixedLocalCollectionInitializer)
+                {
+                    var initializer = (BoundFixedLocalCollectionInitializer)highestBoundExpr;
+                    (convertedType, convertedNullability) = getTypeAndNullability(initializer);
+                    (type, nullability) = getTypeAndNullability(initializer.Expression);
+
+                    // the most pertinent conversion is the pointer conversion 
+                    conversion = initializer.ElementPointerTypeConversion;
+                }
+                else if (boundExpr is BoundConvertedSwitchExpression { WasTargetTyped: true } convertedSwitch)
+                {
+                    if (highestBoundExpr is BoundConversion { ConversionKind: ConversionKind.SwitchExpression })
                     {
-                        if (boundExpression2 is BoundConversion boundConversion2 && boundConversion2.ConversionKind == ConversionKind.SwitchExpression)
-                        {
-                            typeSymbol = boundConvertedSwitchExpression.NaturalTypeOpt;
-                            typeSymbol2 = boundConvertedSwitchExpression.Type;
-                            convertedNullability = boundConvertedSwitchExpression.TopLevelNullability;
-                            implicitConversion = (boundConvertedSwitchExpression.Conversion.IsValid ? boundConvertedSwitchExpression.Conversion : Conversion.NoConversion);
-                        }
-                        else
-                        {
-                            typeSymbol = boundConvertedSwitchExpression.NaturalTypeOpt;
-                            Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol typeSymbol3 = typeSymbol;
-                            NullabilityInfo nullabilityInfo2 = nullabilityInfo;
-                            typeSymbol2 = typeSymbol3;
-                            convertedNullability = nullabilityInfo2;
-                            implicitConversion = Conversion.Identity;
-                        }
+                        // There was an implicit cast.
+                        type = convertedSwitch.NaturalTypeOpt;
+                        convertedType = convertedSwitch.Type;
+                        convertedNullability = convertedSwitch.TopLevelNullability;
+                        conversion = convertedSwitch.Conversion.IsValid ? convertedSwitch.Conversion : Conversion.NoConversion;
                     }
-                    else if (boundExpression is BoundConditionalOperator boundConditionalOperator && boundConditionalOperator.WasTargetTyped)
+                    else
                     {
-                        if (boundExpression2 is BoundConversion boundConversion3 && boundConversion3.ConversionKind == ConversionKind.ConditionalExpression)
-                        {
-                            typeSymbol = boundConditionalOperator.NaturalTypeOpt;
-                            typeSymbol2 = boundConditionalOperator.Type;
-                            convertedNullability = nullabilityInfo;
-                            implicitConversion = Conversion.MakeConditionalExpression(ImmutableArray<Conversion>.Empty);
-                        }
-                        else
-                        {
-                            typeSymbol = boundConditionalOperator.NaturalTypeOpt;
-                            Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol typeSymbol4 = typeSymbol;
-                            NullabilityInfo nullabilityInfo2 = nullabilityInfo;
-                            typeSymbol2 = typeSymbol4;
-                            convertedNullability = nullabilityInfo2;
-                            implicitConversion = Conversion.Identity;
-                        }
+                        // There was an explicit cast on top of this
+                        type = convertedSwitch.NaturalTypeOpt;
+                        (convertedType, convertedNullability) = (type, nullability);
+                        conversion = Conversion.Identity;
                     }
-                    else if (boundExpression2 != null && boundExpression2 != boundExpression && boundExpression2.HasExpressionType())
+                }
+                else if (boundExpr is BoundConditionalOperator { WasTargetTyped: true } cond)
+                {
+                    if (highestBoundExpr is BoundConversion { ConversionKind: ConversionKind.ConditionalExpression })
                     {
-                        (typeSymbol2, convertedNullability) = getTypeAndNullability(boundExpression2);
-                        if (boundKind != BoundKind.Conversion)
-                        {
-                            implicitConversion = Conversion.Identity;
-                        }
-                        else if (((BoundConversion)boundExpression2).Operand.Kind != BoundKind.Conversion)
-                        {
-                            implicitConversion = boundExpression2.GetConversion();
-                            if (implicitConversion.Kind == ConversionKind.AnonymousFunction)
-                            {
-                                typeSymbol = null;
-                                nullabilityInfo = default(NullabilityInfo);
-                            }
-                        }
-                        else
-                        {
-                            Binder enclosingBinder = GetEnclosingBinder(boundExpression.Syntax.Span.Start);
-                            CompoundUseSiteInfo<Microsoft.CodeAnalysis.CSharp.Symbols.AssemblySymbol> useSiteInfo2 = CompoundUseSiteInfo<Microsoft.CodeAnalysis.CSharp.Symbols.AssemblySymbol>.Discarded;
-                            implicitConversion = enclosingBinder.Conversions.ClassifyConversionFromExpression(boundExpression, typeSymbol2, ref useSiteInfo2);
-                        }
+                        // There was an implicit cast.
+                        type = cond.NaturalTypeOpt;
+                        convertedType = cond.Type;
+                        convertedNullability = nullability;
+                        conversion = Conversion.MakeConditionalExpression(ImmutableArray<Conversion>.Empty);
                     }
-                    else if (boundNodeForSyntacticParent != null && boundNodeForSyntacticParent.Kind == BoundKind.DelegateCreationExpression)
+                    else
                     {
-                        BoundDelegateCreationExpression boundDelegateCreationExpression = (BoundDelegateCreationExpression)boundNodeForSyntacticParent;
-                        (typeSymbol2, convertedNullability) = getTypeAndNullability(boundDelegateCreationExpression);
-                        switch (boundExpression.Kind)
+                        // There was an explicit cast on top of this.
+                        type = cond.NaturalTypeOpt;
+                        (convertedType, convertedNullability) = (type, nullability);
+                        conversion = Conversion.Identity;
+                    }
+                }
+                else if (highestBoundExpr != null && highestBoundExpr != boundExpr && highestBoundExpr.HasExpressionType())
+                {
+                    (convertedType, convertedNullability) = getTypeAndNullability(highestBoundExpr);
+                    if (highestBoundExprKind != BoundKind.Conversion)
+                    {
+                        conversion = Conversion.Identity;
+                    }
+                    else if (((BoundConversion)highestBoundExpr).Operand.Kind != BoundKind.Conversion)
+                    {
+                        conversion = highestBoundExpr.GetConversion();
+                        if (conversion.Kind == ConversionKind.AnonymousFunction)
                         {
-                            case BoundKind.MethodGroup:
-                                implicitConversion = new Conversion(ConversionKind.MethodGroup, boundDelegateCreationExpression.MethodOpt, boundDelegateCreationExpression.IsExtensionMethod);
-                                break;
-                            case BoundKind.Lambda:
-                                {
-                                    BoundLambda boundLambda3 = (BoundLambda)boundExpression;
-                                    implicitConversion = new Conversion(ConversionKind.AnonymousFunction, boundLambda3.Symbol, boundDelegateCreationExpression.IsExtensionMethod);
-                                    break;
-                                }
-                            case BoundKind.UnboundLambda:
-                                {
-                                    BoundLambda boundLambda2 = ((UnboundLambda)boundExpression).BindForErrorRecovery();
-                                    implicitConversion = new Conversion(ConversionKind.AnonymousFunction, boundLambda2.Symbol, boundDelegateCreationExpression.IsExtensionMethod);
-                                    break;
-                                }
-                            default:
-                                implicitConversion = Conversion.Identity;
-                                break;
+                            // See comment above: anonymous functions do not have a type
+                            type = null;
+                            nullability = default;
                         }
                     }
                     else
                     {
-                        if (boundExpression is BoundConversion boundConversion4 && boundConversion4.ConversionKind == ConversionKind.MethodGroup)
-                        {
-                            Conversion conversion = boundConversion4.Conversion;
-                            Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol type = boundConversion4.Type;
-                            if ((object)type != null && type.TypeKind == TypeKind.FunctionPointer)
-                            {
-                                _ = boundConversion4.SymbolOpt;
-                                typeSymbol2 = typeSymbol;
-                                convertedNullability = nullabilityInfo;
-                                implicitConversion = conversion;
-                                typeSymbol = null;
-                                nullabilityInfo = new NullabilityInfo(Microsoft.CodeAnalysis.NullableAnnotation.NotAnnotated, Microsoft.CodeAnalysis.NullableFlowState.NotNull);
-                                goto IL_0560;
-                            }
-                        }
-                        typeSymbol2 = typeSymbol;
-                        convertedNullability = nullabilityInfo;
-                        implicitConversion = Conversion.Identity;
+                        // There is a sequence of conversions; we use ClassifyConversionFromExpression to report the most pertinent.
+                        var binder = this.GetEnclosingBinder(boundExpr.Syntax.Span.Start);
+                        var discardedUseSiteInfo = CompoundUseSiteInfo<Symbols.AssemblySymbol>.Discarded;
+                        conversion = binder.Conversions.ClassifyConversionFromExpression(boundExpr, convertedType, ref discardedUseSiteInfo);
                     }
                 }
-                goto IL_0560;
+                else if (boundNodeForSyntacticParent?.Kind == BoundKind.DelegateCreationExpression)
+                {
+                    // A delegate creation expression takes the place of a method group or anonymous function conversion.
+                    var delegateCreation = (BoundDelegateCreationExpression)boundNodeForSyntacticParent;
+                    (convertedType, convertedNullability) = getTypeAndNullability(delegateCreation);
+                    switch (boundExpr.Kind)
+                    {
+                        case BoundKind.MethodGroup:
+                            {
+                                conversion = new Conversion(ConversionKind.MethodGroup, delegateCreation.MethodOpt, delegateCreation.IsExtensionMethod);
+                                break;
+                            }
+                        case BoundKind.Lambda:
+                            {
+                                var lambda = (BoundLambda)boundExpr;
+                                conversion = new Conversion(ConversionKind.AnonymousFunction, lambda.Symbol, delegateCreation.IsExtensionMethod);
+                                break;
+                            }
+                        case BoundKind.UnboundLambda:
+                            {
+                                var lambda = ((UnboundLambda)boundExpr).BindForErrorRecovery();
+                                conversion = new Conversion(ConversionKind.AnonymousFunction, lambda.Symbol, delegateCreation.IsExtensionMethod);
+                                break;
+                            }
+                        default:
+                            conversion = Conversion.Identity;
+                            break;
+                    }
+                }
+                else if (boundExpr is BoundConversion { ConversionKind: ConversionKind.MethodGroup, Conversion: var exprConversion, Type: { TypeKind: TypeKind.FunctionPointer }, SymbolOpt: var symbol })
+                {
+                    // Because the method group is a separate syntax node from the &, the lowest bound node here is the BoundConversion. However,
+                    // the conversion represents an implicit method group conversion from a typeless method group to a function pointer type, so
+                    // we should reflect that in the types and conversion we return.
+                    convertedType = type;
+                    convertedNullability = nullability;
+                    conversion = exprConversion;
+                    type = null;
+                    nullability = new NullabilityInfo(CodeAnalysis.NullableAnnotation.NotAnnotated, CodeAnalysis.NullableFlowState.NotNull);
+                }
+                else
+                {
+                    convertedType = type;
+                    convertedNullability = nullability;
+                    conversion = Conversion.Identity;
+                }
+
+                return new CSharpTypeInfo(type, convertedType, nullability, convertedNullability, conversion);
             }
+
             return CSharpTypeInfo.None;
-        IL_0560:
-            return new CSharpTypeInfo(typeSymbol, typeSymbol2, nullabilityInfo, convertedNullability, implicitConversion);
-            static (Microsoft.CodeAnalysis.CSharp.Symbols.TypeSymbol, NullabilityInfo) getTypeAndNullability(BoundExpression expr)
-            {
-                return (expr.Type, expr.TopLevelNullability);
-            }
+
+            static (Symbols.TypeSymbol, NullabilityInfo) getTypeAndNullability(BoundExpression expr) => (expr.Type, expr.TopLevelNullability);
         }
 
         internal ImmutableArray<Symbol> GetMemberGroupForNode(SymbolInfoOptions options, BoundNode lowestBoundNode, BoundNode boundNodeForSyntacticParent, Binder binderOpt)
@@ -2383,123 +2411,156 @@ namespace Microsoft.CodeAnalysis.CSharp
             return methods.WhereAsArray((Microsoft.CodeAnalysis.CSharp.Symbols.MethodSymbol m, HashSet<Symbol> hiddenSymbols) => !hiddenSymbols.Contains(m), hashSet);
         }
 
-        private ImmutableArray<Symbol> GetMethodGroupSemanticSymbols(BoundMethodGroup boundNode, BoundNode boundNodeForSyntacticParent, Binder binderOpt, out LookupResultKind resultKind, out bool isDynamic, out ImmutableArray<Symbol> methodGroup)
+        // Get the symbols and possible method group associated with a method group bound node, as
+        // they should be exposed through GetSemanticInfo.
+        // NB: It is not safe to pass a null binderOpt during speculative binding.
+        // 
+        // If the parent node of the method group syntax node provides information (such as arguments) 
+        // that allows us to return more specific symbols (a specific overload or applicable candidates)
+        // we return these. The complete set of symbols of the method group is then returned in methodGroup parameter.
+        private ImmutableArray<Symbol> GetMethodGroupSemanticSymbols(
+            BoundMethodGroup boundNode,
+            BoundNode boundNodeForSyntacticParent,
+            Binder binderOpt,
+            out LookupResultKind resultKind,
+            out bool isDynamic,
+            out ImmutableArray<Symbol> methodGroup)
         {
-            ImmutableArray<Symbol> immutableArray = ImmutableArray<Symbol>.Empty;
+            Debug.Assert(binderOpt != null || IsInTree(boundNode.Syntax));
+
+            ImmutableArray<Symbol> symbols = ImmutableArray<Symbol>.Empty;
+
             resultKind = boundNode.ResultKind;
             if (resultKind == LookupResultKind.Empty)
             {
                 resultKind = LookupResultKind.Viable;
             }
+
             isDynamic = false;
+
+            // The method group needs filtering.
             Binder binder = binderOpt ?? GetEnclosingBinder(GetAdjustedNodePosition(boundNode.Syntax));
-            methodGroup = GetReducedAndFilteredMethodGroupSymbols(binder, boundNode).Cast<Microsoft.CodeAnalysis.CSharp.Symbols.MethodSymbol, Symbol>();
+            methodGroup = GetReducedAndFilteredMethodGroupSymbols(binder, boundNode).Cast<Symbols.MethodSymbol, Symbol>();
+
+            // We want to get the actual node chosen by overload resolution, if possible. 
             if (boundNodeForSyntacticParent != null)
             {
-                BoundKind kind = boundNodeForSyntacticParent.Kind;
-                if (kind <= BoundKind.DynamicInvocation)
+                switch (boundNodeForSyntacticParent.Kind)
                 {
-                    if (kind != BoundKind.BadExpression)
-                    {
-                        if (kind != BoundKind.Conversion)
+                    case BoundKind.Call:
+                        // If we are looking for info on M in M(args), we want the symbol that overload resolution
+                        // chose for M.
+                        var call = (BoundCall)boundNodeForSyntacticParent;
+                        InvocationExpressionSyntax invocation = call.Syntax as InvocationExpressionSyntax;
+                        if (invocation != null && invocation.Expression.SkipParens() == ((ExpressionSyntax)boundNode.Syntax).SkipParens() && (object)call.Method != null)
                         {
-                            if (kind != BoundKind.DynamicInvocation)
+                            if (call.OriginalMethodsOpt.IsDefault)
                             {
-                                goto IL_0230;
+                                // Overload resolution succeeded.
+                                symbols = CreateReducedExtensionMethodIfPossible(call);
+                                resultKind = LookupResultKind.Viable;
                             }
-                            immutableArray = ((BoundDynamicInvocation)boundNodeForSyntacticParent).ApplicableMethods.Cast<Microsoft.CodeAnalysis.CSharp.Symbols.MethodSymbol, Symbol>();
-                            isDynamic = true;
+                            else
+                            {
+                                resultKind = call.ResultKind.WorseResultKind(LookupResultKind.OverloadResolutionFailure);
+                                symbols = StaticCast<Symbol>.From(CreateReducedExtensionMethodsFromOriginalsIfNecessary(call, Compilation));
+                            }
+                        }
+                        break;
+
+                    case BoundKind.DelegateCreationExpression:
+                        // If we are looking for info on "M" in "new Action(M)" 
+                        // we want to get the symbol that overload resolution chose for M, not the whole method group M.
+                        var delegateCreation = (BoundDelegateCreationExpression)boundNodeForSyntacticParent;
+                        if (delegateCreation.Argument == boundNode && (object)delegateCreation.MethodOpt != null)
+                        {
+                            symbols = CreateReducedExtensionMethodIfPossible(delegateCreation, boundNode.ReceiverOpt);
+                        }
+                        break;
+
+                    case BoundKind.Conversion:
+                        // If we are looking for info on "M" in "(Action)M" 
+                        // we want to get the symbol that overload resolution chose for M, not the whole method group M.
+                        var conversion = (BoundConversion)boundNodeForSyntacticParent;
+
+                        var method = conversion.SymbolOpt;
+                        if ((object)method != null)
+                        {
+                            Debug.Assert(conversion.ConversionKind == ConversionKind.MethodGroup);
+
+                            if (conversion.IsExtensionMethod)
+                            {
+                                method = ReducedExtensionMethodSymbol.Create(method);
+                            }
+
+                            symbols = ImmutableArray.Create((Symbol)method);
+                            resultKind = conversion.ResultKind;
                         }
                         else
                         {
-                            BoundConversion boundConversion = (BoundConversion)boundNodeForSyntacticParent;
-                            Microsoft.CodeAnalysis.CSharp.Symbols.MethodSymbol methodSymbol = boundConversion.SymbolOpt;
-                            if ((object)methodSymbol == null)
-                            {
-                                goto IL_0230;
-                            }
-                            if (boundConversion.IsExtensionMethod)
-                            {
-                                methodSymbol = ReducedExtensionMethodSymbol.Create(methodSymbol);
-                            }
-                            immutableArray = ImmutableArray.Create((Symbol)methodSymbol);
-                            resultKind = boundConversion.ResultKind;
+                            goto default;
                         }
-                    }
-                    else
-                    {
-                        ImmutableArray<Symbol> arg = methodGroup;
-                        immutableArray = ((BoundBadExpression)boundNodeForSyntacticParent).Symbols.WhereAsArray<Symbol, ImmutableArray<Symbol>>((Symbol sym, ImmutableArray<Symbol> myMethodGroup) => myMethodGroup.Contains(sym), arg);
-                        if (immutableArray.Any())
+
+                        break;
+
+                    case BoundKind.DynamicInvocation:
+                        var dynamicInvocation = (BoundDynamicInvocation)boundNodeForSyntacticParent;
+                        symbols = dynamicInvocation.ApplicableMethods.Cast<Symbols.MethodSymbol, Symbol>();
+                        isDynamic = true;
+                        break;
+
+                    case BoundKind.BadExpression:
+                        // If the bad expression has symbol(s) from this method group, it better indicates any problems.
+                        ImmutableArray<Symbol> myMethodGroup = methodGroup;
+
+                        symbols = ((BoundBadExpression)boundNodeForSyntacticParent).Symbols.WhereAsArray((sym, myMethodGroup) => myMethodGroup.Contains(sym), myMethodGroup);
+                        if (symbols.Any())
                         {
                             resultKind = ((BoundBadExpression)boundNodeForSyntacticParent).ResultKind;
                         }
-                    }
-                }
-                else if (kind != BoundKind.Call)
-                {
-                    if (kind != BoundKind.DelegateCreationExpression)
-                    {
-                        if (kind != BoundKind.NameOfOperator)
-                        {
-                            goto IL_0230;
-                        }
-                        immutableArray = methodGroup;
+                        break;
+
+                    case BoundKind.NameOfOperator:
+                        symbols = methodGroup;
                         resultKind = resultKind.WorseResultKind(LookupResultKind.MemberGroup);
-                    }
-                    else
-                    {
-                        BoundDelegateCreationExpression boundDelegateCreationExpression = (BoundDelegateCreationExpression)boundNodeForSyntacticParent;
-                        if (boundDelegateCreationExpression.Argument == boundNode && (object)boundDelegateCreationExpression.MethodOpt != null)
+                        break;
+
+                    default:
+                        symbols = methodGroup;
+                        if (symbols.Length > 0)
                         {
-                            immutableArray = CreateReducedExtensionMethodIfPossible(boundDelegateCreationExpression, boundNode.ReceiverOpt);
+                            resultKind = resultKind.WorseResultKind(LookupResultKind.OverloadResolutionFailure);
                         }
-                    }
-                }
-                else
-                {
-                    BoundCall boundCall = (BoundCall)boundNodeForSyntacticParent;
-                    if (boundCall.Syntax is InvocationExpressionSyntax invocationExpressionSyntax && invocationExpressionSyntax.Expression.SkipParens() == ((ExpressionSyntax)boundNode.Syntax).SkipParens() && (object)boundCall.Method != null)
-                    {
-                        if (boundCall.OriginalMethodsOpt.IsDefault)
-                        {
-                            immutableArray = CreateReducedExtensionMethodIfPossible(boundCall);
-                            resultKind = LookupResultKind.Viable;
-                        }
-                        else
-                        {
-                            resultKind = boundCall.ResultKind.WorseResultKind(LookupResultKind.OverloadResolutionFailure);
-                            immutableArray = StaticCast<Symbol>.From(CreateReducedExtensionMethodsFromOriginalsIfNecessary(boundCall, Compilation));
-                        }
-                    }
+                        break;
                 }
             }
             else if (methodGroup.Length == 1 && !boundNode.HasAnyErrors)
             {
-                immutableArray = methodGroup;
-                if (immutableArray.Length > 0)
+                // During speculative binding, there won't be a parent bound node. The parent bound
+                // node may also be absent if the syntactic parent has errors or if one is simply
+                // not specified (see SemanticModel.GetSymbolInfoForNode). However, if there's exactly
+                // one candidate, then we should probably succeed.
+
+                symbols = methodGroup;
+                if (symbols.Length > 0)
                 {
                     resultKind = resultKind.WorseResultKind(LookupResultKind.OverloadResolutionFailure);
                 }
             }
-            goto IL_0282;
-        IL_0282:
-            if (!immutableArray.Any())
+
+            if (!symbols.Any())
             {
-                immutableArray = methodGroup;
-                if (!isDynamic && (int)resultKind > 12)
+                // If we didn't find a better set of symbols, then assume this is a method group that didn't
+                // get resolved. Return all members of the method group, with a resultKind of OverloadResolutionFailure
+                // (unless the method group already has a worse result kind).
+                symbols = methodGroup;
+                if (!isDynamic && resultKind > LookupResultKind.OverloadResolutionFailure)
                 {
                     resultKind = LookupResultKind.OverloadResolutionFailure;
                 }
             }
-            return immutableArray;
-        IL_0230:
-            immutableArray = methodGroup;
-            if (immutableArray.Length > 0)
-            {
-                resultKind = resultKind.WorseResultKind(LookupResultKind.OverloadResolutionFailure);
-            }
-            goto IL_0282;
+
+            return symbols;
         }
 
         private ImmutableArray<Symbol> GetPropertyGroupSemanticSymbols(BoundPropertyGroup boundNode, BoundNode boundNodeForSyntacticParent, Binder binderOpt, out LookupResultKind resultKind, out ImmutableArray<Symbol> propertyGroup)
@@ -2805,19 +2866,19 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node != null)
             {
-                if (!(node is ExpressionSyntax expression))
+                if (node is not ExpressionSyntax expression)
                 {
-                    if (!(node is ConstructorInitializerSyntax constructorInitializer))
+                    if (node is not ConstructorInitializerSyntax constructorInitializer)
                     {
-                        if (!(node is PrimaryConstructorBaseTypeSyntax constructorInitializer2))
+                        if (node is not PrimaryConstructorBaseTypeSyntax constructorInitializer2)
                         {
-                            if (!(node is AttributeSyntax attributeSyntax))
+                            if (node is not AttributeSyntax attributeSyntax)
                             {
-                                if (!(node is CrefSyntax crefSyntax))
+                                if (node is not CrefSyntax crefSyntax)
                                 {
-                                    if (!(node is SelectOrGroupClauseSyntax node2))
+                                    if (node is not SelectOrGroupClauseSyntax node2)
                                     {
-                                        if (!(node is OrderingSyntax node3))
+                                        if (node is not OrderingSyntax node3)
                                         {
                                             if (node is PositionalPatternClauseSyntax node4)
                                             {
@@ -2846,13 +2907,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node != null)
             {
-                if (!(node is ExpressionSyntax expression))
+                if (node is not ExpressionSyntax expression)
                 {
-                    if (!(node is ConstructorInitializerSyntax constructorInitializer))
+                    if (node is not ConstructorInitializerSyntax constructorInitializer)
                     {
-                        if (!(node is AttributeSyntax attributeSyntax))
+                        if (node is not AttributeSyntax attributeSyntax)
                         {
-                            if (!(node is SelectOrGroupClauseSyntax node2))
+                            if (node is not SelectOrGroupClauseSyntax node2)
                             {
                                 if (node is PatternSyntax pattern)
                                 {
@@ -2875,9 +2936,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node != null)
             {
-                if (!(node is ExpressionSyntax expression))
+                if (node is not ExpressionSyntax expression)
                 {
-                    if (!(node is ConstructorInitializerSyntax initializer))
+                    if (node is not ConstructorInitializerSyntax initializer)
                     {
                         if (node is AttributeSyntax attribute)
                         {
@@ -2971,11 +3032,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected sealed override ISymbol GetDeclaredSymbolCore(SyntaxNode node, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (!(node is AccessorDeclarationSyntax declarationSyntax))
+            if (node is not AccessorDeclarationSyntax declarationSyntax)
             {
-                if (!(node is BaseTypeDeclarationSyntax declarationSyntax2))
+                if (node is not BaseTypeDeclarationSyntax declarationSyntax2)
                 {
-                    if (!(node is QueryClauseSyntax queryClause))
+                    if (node is not QueryClauseSyntax queryClause)
                     {
                         if (node is MemberDeclarationSyntax declarationSyntax3)
                         {
@@ -3125,11 +3186,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 throw new ArgumentNullException("lastStatement");
             }
-            if (!(firstStatement is StatementSyntax firstStatement2))
+            if (firstStatement is not StatementSyntax firstStatement2)
             {
                 throw new ArgumentException("firstStatement is not a StatementSyntax.");
             }
-            if (!(lastStatement is StatementSyntax lastStatement2))
+            if (lastStatement is not StatementSyntax lastStatement2)
             {
                 throw new ArgumentException("firstStatement is a StatementSyntax but lastStatement isn't.");
             }
@@ -3142,7 +3203,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 throw new ArgumentNullException("statement");
             }
-            if (!(statement is StatementSyntax statement2))
+            if (statement is not StatementSyntax statement2)
             {
                 throw new ArgumentException("statement is not a StatementSyntax.");
             }
@@ -3159,11 +3220,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 throw new ArgumentNullException("lastStatement");
             }
-            if (!(firstStatement is StatementSyntax firstStatement2))
+            if (firstStatement is not StatementSyntax firstStatement2)
             {
                 throw new ArgumentException("firstStatement is not a StatementSyntax.");
             }
-            if (!(lastStatement is StatementSyntax lastStatement2))
+            if (lastStatement is not StatementSyntax lastStatement2)
             {
                 throw new ArgumentException("lastStatement is not a StatementSyntax.");
             }
@@ -3174,7 +3235,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (statementOrExpression != null)
             {
-                if (!(statementOrExpression is StatementSyntax statement))
+                if (statementOrExpression is not StatementSyntax statement)
                 {
                     if (statementOrExpression is ExpressionSyntax expression)
                     {
@@ -3193,9 +3254,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 throw new ArgumentNullException("node");
             }
-            if (!(node is ExpressionSyntax expression))
+            if (node is not ExpressionSyntax expression)
             {
-                return default(Optional<object>);
+                return default;
             }
             return GetConstantValue(expression, cancellationToken);
         }
