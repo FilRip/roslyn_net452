@@ -97,39 +97,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public TypeWithAnnotations ToTypeWithAnnotations(CSharpCompilation compilation, bool asAnnotatedType = false)
         {
-            TypeSymbol? type = Type;
-            if ((object)type != null && type.IsTypeParameterDisallowingAnnotationInCSharp8())
+            if (Type?.IsTypeParameterDisallowingAnnotationInCSharp8() == true)
             {
-                TypeWithAnnotations result = TypeWithAnnotations.Create(Type, NullableAnnotation.NotAnnotated);
-                if (!(State == NullableFlowState.MaybeDefault || asAnnotatedType))
-                {
-                    return result;
-                }
-                return result.SetIsAnnotated(compilation);
+                var type = TypeWithAnnotations.Create(Type, NullableAnnotation.NotAnnotated);
+                return (State == NullableFlowState.MaybeDefault || asAnnotatedType) ? type.SetIsAnnotated(compilation) : type;
             }
-            int num;
-            if (!asAnnotatedType)
-            {
-                if (!State.IsNotNull())
-                {
-                    TypeSymbol? type2 = Type;
-                    if ((object)type2 == null || type2.CanContainNull())
-                    {
-                        num = 2;
-                        goto IL_0087;
-                    }
-                }
-                num = 0;
-            }
-            else
-            {
-                TypeSymbol? type3 = Type;
-                num = (((object)type3 == null || !type3!.IsValueType) ? 2 : 0);
-            }
-            goto IL_0087;
-        IL_0087:
-            NullableAnnotation nullableAnnotation = (NullableAnnotation)num;
-            return TypeWithAnnotations.Create(Type, nullableAnnotation);
+            NullableAnnotation annotation = asAnnotatedType ?
+                (Type?.IsValueType == true ? NullableAnnotation.NotAnnotated : NullableAnnotation.Annotated) :
+                (State.IsNotNull() || Type?.CanContainNull() == false ? NullableAnnotation.NotAnnotated : NullableAnnotation.Annotated);
+            return TypeWithAnnotations.Create(this.Type, annotation);
         }
 
         public TypeWithAnnotations ToAnnotatedTypeWithAnnotations(CSharpCompilation compilation)

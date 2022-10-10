@@ -1256,50 +1256,55 @@ namespace Microsoft.CodeAnalysis.Operations
 
         internal ForEachLoopOperationInfo? GetForEachLoopOperatorInfo(BoundForEachStatement boundForEachStatement)
         {
-            ForEachEnumeratorInfo enumeratorInfoOpt = boundForEachStatement.EnumeratorInfoOpt;
-            ITypeSymbol? publicSymbol;
-            IMethodSymbol? publicSymbol2;
-            IPropertySymbol? publicSymbol3;
-            IMethodSymbol? publicSymbol4;
-            bool isAsync;
-            bool needsDisposal;
-            bool knownToImplementIDisposable;
-            IMethodSymbol? patternDisposeMethod;
-            object currentConversion;
-            object elementConversion;
-            ImmutableArray<IArgumentOperation> getEnumeratorArguments;
+            ForEachEnumeratorInfo? enumeratorInfoOpt = boundForEachStatement.EnumeratorInfoOpt;
+            ForEachLoopOperationInfo? info;
+
             if (enumeratorInfoOpt != null)
             {
-                CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                CSharpCompilation cSharpCompilation = (CSharpCompilation)_semanticModel.Compilation;
-                NamedTypeSymbol destination = (enumeratorInfoOpt.IsAsync ? cSharpCompilation.GetWellKnownType(WellKnownType.System_IAsyncDisposable) : cSharpCompilation.GetSpecialType(SpecialType.System_IDisposable));
-                publicSymbol = enumeratorInfoOpt.ElementType.GetPublicSymbol();
-                publicSymbol2 = enumeratorInfoOpt.GetEnumeratorInfo.Method.GetPublicSymbol();
-                publicSymbol3 = ((PropertySymbol)enumeratorInfoOpt.CurrentPropertyGetter.AssociatedSymbol).GetPublicSymbol();
-                publicSymbol4 = enumeratorInfoOpt.MoveNextInfo.Method.GetPublicSymbol();
-                isAsync = enumeratorInfoOpt.IsAsync;
-                needsDisposal = enumeratorInfoOpt.NeedsDisposal;
-                knownToImplementIDisposable = enumeratorInfoOpt.NeedsDisposal && cSharpCompilation.Conversions.ClassifyImplicitConversionFromType(enumeratorInfoOpt.GetEnumeratorInfo.Method.ReturnType, destination, ref useSiteInfo).IsImplicit;
-                patternDisposeMethod = enumeratorInfoOpt.PatternDisposeInfo?.Method.GetPublicSymbol();
-                currentConversion = enumeratorInfoOpt.CurrentConversion;
-                elementConversion = boundForEachStatement.ElementConversion;
-                MethodArgumentInfo getEnumeratorInfo = enumeratorInfoOpt.GetEnumeratorInfo;
-                if ((object)getEnumeratorInfo != null)
-                {
-                    MethodSymbol method = getEnumeratorInfo.Method;
-                    if ((object)method != null && method.IsExtensionMethod)
-                    {
-                        getEnumeratorArguments = Operation.SetParentOperation(DeriveArguments(getEnumeratorInfo.Method, getEnumeratorInfo.Arguments, default(ImmutableArray<int>), getEnumeratorInfo.DefaultArguments, getEnumeratorInfo.Expanded, boundForEachStatement.Expression.Syntax, invokedAsExtensionMethod: true), null);
-                        goto IL_015b;
-                    }
-                }
-                getEnumeratorArguments = default(ImmutableArray<IArgumentOperation>);
-                goto IL_015b;
+                var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
+                var compilation = (CSharpCompilation)_semanticModel.Compilation;
+
+                var iDisposable = enumeratorInfoOpt.IsAsync
+                                    ? compilation.GetWellKnownType(WellKnownType.System_IAsyncDisposable)
+                                    : compilation.GetSpecialType(SpecialType.System_IDisposable);
+
+                info = new ForEachLoopOperationInfo(enumeratorInfoOpt.ElementType.GetPublicSymbol(),
+                                                    enumeratorInfoOpt.GetEnumeratorInfo.Method.GetPublicSymbol(),
+                                                    ((PropertySymbol)enumeratorInfoOpt.CurrentPropertyGetter.AssociatedSymbol).GetPublicSymbol(),
+                                                    enumeratorInfoOpt.MoveNextInfo.Method.GetPublicSymbol(),
+                                                    isAsynchronous: enumeratorInfoOpt.IsAsync,
+                                                    needsDispose: enumeratorInfoOpt.NeedsDisposal,
+                                                    knownToImplementIDisposable: enumeratorInfoOpt.NeedsDisposal ?
+                                                                                     compilation.Conversions.
+                                                                                         ClassifyImplicitConversionFromType(enumeratorInfoOpt.GetEnumeratorInfo.Method.ReturnType,
+                                                                                                                            iDisposable,
+                                                                                                                            ref discardedUseSiteInfo).IsImplicit :
+                                                                                     false,
+                                                    enumeratorInfoOpt.PatternDisposeInfo?.Method.GetPublicSymbol(),
+                                                    enumeratorInfoOpt.CurrentConversion,
+                                                    boundForEachStatement.ElementConversion,
+                                                    getEnumeratorArguments: enumeratorInfoOpt.GetEnumeratorInfo is { Method: { IsExtensionMethod: true } } getEnumeratorInfo
+                                                        ? Operation.SetParentOperation(
+                                                            DeriveArguments(
+                                                                getEnumeratorInfo.Method,
+                                                                getEnumeratorInfo.Arguments,
+                                                                argumentsToParametersOpt: default,
+                                                                getEnumeratorInfo.DefaultArguments,
+                                                                getEnumeratorInfo.Expanded,
+                                                                boundForEachStatement.Expression.Syntax,
+                                                                invokedAsExtensionMethod: true),
+                                                            null)
+                                                        : default,
+                                                    disposeArguments: enumeratorInfoOpt.PatternDisposeInfo is object
+                                                        ? CreateDisposeArguments(enumeratorInfoOpt.PatternDisposeInfo, boundForEachStatement.Syntax)
+                                                        : default);
             }
-            return null;
-        IL_015b:
-            ImmutableArray<IArgumentOperation> disposeArguments = (((object)enumeratorInfoOpt.PatternDisposeInfo != null) ? CreateDisposeArguments(enumeratorInfoOpt.PatternDisposeInfo, boundForEachStatement.Syntax) : default(ImmutableArray<IArgumentOperation>));
-            return new ForEachLoopOperationInfo(publicSymbol, publicSymbol2, publicSymbol3, publicSymbol4, isAsync, needsDisposal, knownToImplementIDisposable, patternDisposeMethod, (IConvertibleConversion)currentConversion, (IConvertibleConversion)elementConversion, getEnumeratorArguments, default(ImmutableArray<IArgumentOperation>), default(ImmutableArray<IArgumentOperation>), disposeArguments);
+            else
+            {
+                info = null;
+            }
+
+            return info;
         }
 
         internal IOperation CreateBoundForEachStatementLoopControlVariable(BoundForEachStatement boundForEachStatement)

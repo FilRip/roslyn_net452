@@ -1139,66 +1139,73 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static void CheckMembers(NamespaceSymbol @namespace, Dictionary<string, ImmutableArray<NamespaceOrTypeSymbol>> result, BindingDiagnosticBag diagnostics)
         {
-            Symbol[] array = new Symbol[10];
-            MergedNamespaceSymbol mergedNamespaceSymbol = null;
+            var memberOfArity = new Symbol[10];
+            MergedNamespaceSymbol mergedAssemblyNamespace = null;
+
             if (@namespace.ContainingAssembly.Modules.Length > 1)
             {
-                mergedNamespaceSymbol = @namespace.ContainingAssembly.GetAssemblyNamespace(@namespace) as MergedNamespaceSymbol;
+                mergedAssemblyNamespace = @namespace.ContainingAssembly.GetAssemblyNamespace(@namespace) as MergedNamespaceSymbol;
             }
-            foreach (string key in result.Keys)
+
+            foreach (var name in result.Keys)
             {
-                Array.Clear(array, 0, array.Length);
-                ImmutableArray<NamespaceOrTypeSymbol>.Enumerator enumerator2 = result[key].GetEnumerator();
-                while (enumerator2.MoveNext())
+                Array.Clear(memberOfArity, 0, memberOfArity.Length);
+                foreach (var symbol in result[name])
                 {
-                    NamespaceOrTypeSymbol current2 = enumerator2.Current;
-                    NamedTypeSymbol namedTypeSymbol = current2 as NamedTypeSymbol;
-                    int num = namedTypeSymbol?.Arity ?? 0;
-                    if (num >= array.Length)
+                    var nts = symbol as NamedTypeSymbol;
+                    var arity = ((object)nts != null) ? nts.Arity : 0;
+                    if (arity >= memberOfArity.Length)
                     {
-                        Array.Resize(ref array, num + 1);
+                        Array.Resize(ref memberOfArity, arity + 1);
                     }
-                    Symbol symbol = array[num];
-                    if ((object)symbol == null && (object)mergedNamespaceSymbol != null)
+
+                    var other = memberOfArity[arity];
+
+                    if ((object)other == null && (object)mergedAssemblyNamespace != null)
                     {
-                        ImmutableArray<NamespaceSymbol>.Enumerator enumerator3 = mergedNamespaceSymbol.ConstituentNamespaces.GetEnumerator();
-                        while (enumerator3.MoveNext())
+                        // Check for collision with declarations from added modules.
+                        foreach (NamespaceSymbol constituent in mergedAssemblyNamespace.ConstituentNamespaces)
                         {
-                            NamespaceSymbol current3 = enumerator3.Current;
-                            if ((object)current3 != @namespace)
+                            if ((object)constituent != (object)@namespace)
                             {
-                                ImmutableArray<NamedTypeSymbol> typeMembers = current3.GetTypeMembers(current2.Name, num);
-                                if (typeMembers.Length > 0)
+                                // For whatever reason native compiler only detects conflicts against types.
+                                // It doesn't complain when source declares a type with the same name as 
+                                // a namespace in added module, but complains when source declares a namespace 
+                                // with the same name as a type in added module.
+                                var types = constituent.GetTypeMembers(symbol.Name, arity);
+
+                                if (types.Length > 0)
                                 {
-                                    symbol = typeMembers[0];
+                                    other = types[0];
+                                    // Since the error doesn't specify what added module this type belongs to, we can stop searching
+                                    // at the first match.
                                     break;
                                 }
                             }
                         }
                     }
-                    if ((object)symbol != null)
+
+                    if ((object)other != null)
                     {
-                        SourceNamedTypeSymbol obj = namedTypeSymbol as SourceNamedTypeSymbol;
-                        if ((object)obj != null && obj.IsPartial)
+                        if ((nts as SourceNamedTypeSymbol)?.IsPartial == true && (other as SourceNamedTypeSymbol)?.IsPartial == true)
                         {
-                            SourceNamedTypeSymbol obj2 = symbol as SourceNamedTypeSymbol;
-                            if ((object)obj2 != null && obj2.IsPartial)
-                            {
-                                diagnostics.Add(ErrorCode.ERR_PartialTypeKindConflict, current2.Locations.FirstOrNone(), current2);
-                                goto IL_0178;
-                            }
+                            diagnostics.Add(ErrorCode.ERR_PartialTypeKindConflict, symbol.Locations.FirstOrNone(), symbol);
                         }
-                        diagnostics.Add(ErrorCode.ERR_DuplicateNameInNS, current2.Locations.FirstOrNone(), key, @namespace);
+                        else
+                        {
+                            diagnostics.Add(ErrorCode.ERR_DuplicateNameInNS, symbol.Locations.FirstOrNone(), name, @namespace);
+                        }
                     }
-                    goto IL_0178;
-                IL_0178:
-                    array[num] = current2;
-                    if ((object)namedTypeSymbol != null)
+
+                    memberOfArity[arity] = symbol;
+
+                    if ((object)nts != null)
                     {
-                        Accessibility declaredAccessibility = namedTypeSymbol.DeclaredAccessibility;
+                        //types declared at the namespace level may only have declared accessibility of public or internal (Section 3.5.1)
+                        Accessibility declaredAccessibility = nts.DeclaredAccessibility;
                         if (declaredAccessibility != Accessibility.Public && declaredAccessibility != Accessibility.Internal)
                         {
-                            diagnostics.Add(ErrorCode.ERR_NoNamespacePrivate, current2.Locations.FirstOrNone());
+                            diagnostics.Add(ErrorCode.ERR_NoNamespacePrivate, symbol.Locations.FirstOrNone());
                         }
                     }
                 }

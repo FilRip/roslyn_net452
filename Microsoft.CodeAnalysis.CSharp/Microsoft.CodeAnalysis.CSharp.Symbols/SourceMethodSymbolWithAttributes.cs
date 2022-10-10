@@ -627,99 +627,127 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
+#nullable enable
         private void DecodeDllImportAttribute(ref DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation> arguments)
         {
-            CSharpAttributeData attribute = arguments.Attribute;
-            BindingDiagnosticBag bindingDiagnosticBag = (BindingDiagnosticBag)arguments.Diagnostics;
-            bool flag = false;
-            MethodSymbol methodSymbol = PartialImplementationPart ?? this;
-            if (!methodSymbol.IsExtern || !methodSymbol.IsStatic)
+            var attribute = arguments.Attribute;
+            var diagnostics = (BindingDiagnosticBag)arguments.Diagnostics;
+            bool hasErrors = false;
+
+            var implementationPart = this.PartialImplementationPart ?? this;
+            if (!implementationPart.IsExtern || !implementationPart.IsStatic)
             {
-                bindingDiagnosticBag.Add(ErrorCode.ERR_DllImportOnInvalidMethod, arguments.AttributeSyntaxOpt!.Name.Location);
-                flag = true;
+                diagnostics.Add(ErrorCode.ERR_DllImportOnInvalidMethod, arguments.AttributeSyntaxOpt.Name.Location);
+                hasErrors = true;
             }
-            bool flag2 = false;
-            MethodSymbol methodSymbol2 = this;
-            while ((object)methodSymbol2 != null)
+
+            var isAnyNestedMethodGeneric = false;
+            for (MethodSymbol? current = this; current is object; current = current.ContainingSymbol as MethodSymbol)
             {
-                if (methodSymbol2.IsGenericMethod)
+                if (current.IsGenericMethod)
                 {
-                    flag2 = true;
+                    isAnyNestedMethodGeneric = true;
                     break;
                 }
-                methodSymbol2 = methodSymbol2.ContainingSymbol as MethodSymbol;
             }
-            if (!flag2)
+
+            if (isAnyNestedMethodGeneric || ContainingType?.IsGenericType == true)
             {
-                NamedTypeSymbol containingType = ContainingType;
-                if ((object)containingType == null || !containingType.IsGenericType)
-                {
-                    goto IL_00ad;
-                }
+                diagnostics.Add(ErrorCode.ERR_DllImportOnGenericMethod, arguments.AttributeSyntaxOpt.Name.Location);
+                hasErrors = true;
             }
-            bindingDiagnosticBag.Add(ErrorCode.ERR_DllImportOnGenericMethod, arguments.AttributeSyntaxOpt!.Name.Location);
-            flag = true;
-            goto IL_00ad;
-        IL_00ad:
-            string text = attribute.GetConstructorArgument<string>(0, SpecialType.System_String);
-            if (!MetadataHelpers.IsValidMetadataIdentifier(text))
+
+            string? moduleName = attribute.GetConstructorArgument<string>(0, SpecialType.System_String);
+            if (!MetadataHelpers.IsValidMetadataIdentifier(moduleName))
             {
+                // Dev10 reports CS0647: "Error emitting attribute ..."
                 CSharpSyntaxNode attributeArgumentSyntax = attribute.GetAttributeArgumentSyntax(0, arguments.AttributeSyntaxOpt);
-                bindingDiagnosticBag.Add(ErrorCode.ERR_InvalidAttributeArgument, attributeArgumentSyntax.Location, arguments.AttributeSyntaxOpt!.GetErrorDisplayName());
-                flag = true;
-                text = null;
+                diagnostics.Add(ErrorCode.ERR_InvalidAttributeArgument, attributeArgumentSyntax.Location, arguments.AttributeSyntaxOpt.GetErrorDisplayName());
+                hasErrors = true;
+                moduleName = null;
             }
-            CharSet charSet = GetEffectiveDefaultMarshallingCharSet() ?? CharSet.None;
-            string text2 = null;
+
+            // Default value of charset is inherited from the module (only if specified).
+            // This might be different from ContainingType.DefaultMarshallingCharSet. If the charset is not specified on module
+            // ContainingType.DefaultMarshallingCharSet would be Ansi (the class is emitted with "Ansi" charset metadata flag) 
+            // while the charset in P/Invoke metadata should be "None".
+            CharSet charSet = this.GetEffectiveDefaultMarshallingCharSet() ?? Cci.Constants.CharSet_None;
+
+            string? importName = null;
             bool preserveSig = true;
             System.Runtime.InteropServices.CallingConvention callingConvention = System.Runtime.InteropServices.CallingConvention.Winapi;
             bool setLastError = false;
-            bool exactSpelling = false;
-            bool? useBestFit = null;
+            bool exactSpelling = false;  // C#: ExactSpelling=false for any charset
+            bool? bestFitMapping = null;
             bool? throwOnUnmappable = null;
-            int num = 1;
-            ImmutableArray<KeyValuePair<string, TypedConstant>>.Enumerator enumerator = attribute.CommonNamedArguments.GetEnumerator();
-            while (enumerator.MoveNext())
+
+            int position = 1;
+            foreach (var namedArg in attribute.CommonNamedArguments)
             {
-                KeyValuePair<string, TypedConstant> current = enumerator.Current;
-                switch (current.Key)
+                switch (namedArg.Key)
                 {
                     case "EntryPoint":
-                        text2 = current.Value.ValueInternal as string;
-                        if (!MetadataHelpers.IsValidMetadataIdentifier(text2))
+                        importName = namedArg.Value.ValueInternal as string;
+                        if (!MetadataHelpers.IsValidMetadataIdentifier(importName))
                         {
-                            bindingDiagnosticBag.Add(ErrorCode.ERR_InvalidNamedArgument, arguments.AttributeSyntaxOpt!.ArgumentList!.Arguments[num].Location, current.Key);
-                            flag = true;
-                            text2 = null;
+                            // Dev10 reports CS0647: "Error emitting attribute ..."
+                            diagnostics.Add(ErrorCode.ERR_InvalidNamedArgument, arguments.AttributeSyntaxOpt.ArgumentList.Arguments[position].Location, namedArg.Key);
+                            hasErrors = true;
+                            importName = null;
                         }
+
                         break;
+
                     case "CharSet":
-                        charSet = current.Value.DecodeValue<CharSet>(SpecialType.System_Enum);
+                        // invalid values will be ignored
+                        charSet = namedArg.Value.DecodeValue<CharSet>(SpecialType.System_Enum);
                         break;
+
                     case "SetLastError":
-                        setLastError = current.Value.DecodeValue<bool>(SpecialType.System_Boolean);
+                        // invalid values will be ignored
+                        setLastError = namedArg.Value.DecodeValue<bool>(SpecialType.System_Boolean);
                         break;
+
                     case "ExactSpelling":
-                        exactSpelling = current.Value.DecodeValue<bool>(SpecialType.System_Boolean);
+                        // invalid values will be ignored
+                        exactSpelling = namedArg.Value.DecodeValue<bool>(SpecialType.System_Boolean);
                         break;
+
                     case "PreserveSig":
-                        preserveSig = current.Value.DecodeValue<bool>(SpecialType.System_Boolean);
+                        preserveSig = namedArg.Value.DecodeValue<bool>(SpecialType.System_Boolean);
                         break;
+
                     case "CallingConvention":
-                        callingConvention = current.Value.DecodeValue<System.Runtime.InteropServices.CallingConvention>(SpecialType.System_Enum);
+                        // invalid values will be ignored
+                        callingConvention = namedArg.Value.DecodeValue<System.Runtime.InteropServices.CallingConvention>(SpecialType.System_Enum);
                         break;
+
                     case "BestFitMapping":
-                        useBestFit = current.Value.DecodeValue<bool>(SpecialType.System_Boolean);
+                        bestFitMapping = namedArg.Value.DecodeValue<bool>(SpecialType.System_Boolean);
                         break;
+
                     case "ThrowOnUnmappableChar":
-                        throwOnUnmappable = current.Value.DecodeValue<bool>(SpecialType.System_Boolean);
+                        throwOnUnmappable = namedArg.Value.DecodeValue<bool>(SpecialType.System_Boolean);
                         break;
                 }
-                num++;
+
+                position++;
             }
-            if (!flag)
+
+            if (!hasErrors)
             {
-                arguments.GetOrCreateData<MethodWellKnownAttributeData>().SetDllImport(arguments.Index, text, text2 ?? Name, DllImportData.MakeFlags(exactSpelling, charSet, setLastError, callingConvention, useBestFit, throwOnUnmappable), preserveSig);
+                arguments.GetOrCreateData<MethodWellKnownAttributeData>().SetDllImport(
+                    arguments.Index,
+                    moduleName,
+                    importName ?? Name,
+                    DllImportData.MakeFlags(
+                        exactSpelling,
+                        charSet,
+                        setLastError,
+                        callingConvention,
+                        bestFitMapping,
+                        throwOnUnmappable),
+                    preserveSig);
             }
         }
 

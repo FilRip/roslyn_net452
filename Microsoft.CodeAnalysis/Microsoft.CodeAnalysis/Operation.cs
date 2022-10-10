@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis
 
         public abstract void Accept(OperationVisitor visitor);
 
-        public abstract TResult Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument); // FilRip : Change return type from TResult? to TResult
+        public abstract TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument);
 
         protected void SetParentOperation(IOperation? parent)
         {

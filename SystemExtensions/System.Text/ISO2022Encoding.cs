@@ -285,162 +285,251 @@ namespace System.Text
 			return result;
 		}
 
-		private unsafe int GetBytesCP5022xJP(char* chars, int charCount, byte* bytes, int byteCount, ISO2022Encoder encoder)
+		// ISO 2022 Code pages for JP.
+		//  50220 - No halfwidth Katakana, convert to full width
+		//  50221 - Use escape sequence for half width Katakana
+		//  50222 - Use shift-in/shift-out for half width Katakana
+		//
+		// These are the JIS code pages, superset of ISO-2022 / ISO-2022-JP-1
+		//  0E          Shift Out (following bytes are Katakana)
+		//  0F          Shift In  (back to "normal" behavior)
+		//  21-7E       Byte ranges (1 or 2 bytes)
+		//  <ESC> $ @   To Double Byte 0208 Mode (actually older code page, but subset of 0208)
+		//  <ESC> $ B   To Double Byte 0208 Mode (duplicate)
+		//  <ESC> $ ( D To Double Byte 0212 Mode (previously we misinterpreted this)
+		//  <ESC> $ I   To half width Katakana
+		//  <ESC> ( J   To JIS-Roman
+		//  <ESC> ( H   To JIS-Roman (swedish character set)
+		//  <ESC> ( B   To ASCII
+		//  <ESC> & @   Alternate lead in to <ESC> $ B so just ignore it.
+		//
+		// So in Katakana mode we add 0x8e as a lead byte and use CP 20932 to convert it
+		// In ASCII mode we just spit out the single byte.
+		// In Roman mode we should change 0x5c (\) -> Yen sign and 0x7e (~) to Overline, however
+		//      we didn't in mLang, otherwise roman is like ASCII.
+		// In 0208 double byte mode we have to |= with 0x8080 and use CP 20932 to convert it.
+		// In 0212 double byte mode we have to |= with 0x8000 and use CP 20932 to convert it.
+		//
+		// Note that JIS Shift In/Shift Out is different than the other ISO2022 encodings.  For JIS
+		// Shift out always shifts to half-width Katakana.  Chinese encodings use designator sequences
+		// instead of escape sequences and shift out to the designated sequence or back in to ASCII.
+		//
+		// When decoding JIS 0208, MLang used a '*' (0x2a) character in JIS 0208 mode to map the trailing byte
+		// to halfwidth katakana.  I found no description of that behavior, however that block of 0208 is
+		// undefined, so we maintain that behavior when decoding.  We will never generate characters using
+		// that technique, but the decoder will process them.
+		//
+		private unsafe int GetBytesCP5022xJP(char* chars, int charCount,
+												  byte* bytes, int byteCount, ISO2022Encoder? encoder)
 		{
-			EncodingByteBuffer encodingByteBuffer = new EncodingByteBuffer(this, encoder, bytes, byteCount, chars, charCount);
-			ISO2022Modes iSO2022Modes = ISO2022Modes.ModeASCII;
-			ISO2022Modes iSO2022Modes2 = ISO2022Modes.ModeASCII;
+			// prepare our helpers
+			EncodingByteBuffer buffer = new EncodingByteBuffer(this, encoder, bytes, byteCount, chars, charCount);
+
+			// Get our mode
+			ISO2022Modes currentMode = ISO2022Modes.ModeASCII;      // Mode
+			ISO2022Modes shiftInMode = ISO2022Modes.ModeASCII;      // Mode that shift in will go back to (only used by CP 50222)
+
+			// Check our encoder
 			if (encoder != null)
 			{
 				char charLeftOver = encoder.charLeftOver;
-				iSO2022Modes = encoder.currentMode;
-				iSO2022Modes2 = encoder.shiftInOutMode;
-				if (charLeftOver > '\0')
+
+				currentMode = encoder.currentMode;
+				shiftInMode = encoder.shiftInOutMode;
+
+				// We may have a left over character from last time, try and process it.
+				if (charLeftOver > 0)
 				{
-					encodingByteBuffer.Fallback(charLeftOver);
+					// It has to be a high surrogate, which we don't support, so it has to be a fallback
+					buffer.Fallback(charLeftOver);
 				}
 			}
-			while (encodingByteBuffer.MoreData)
+
+			while (buffer.MoreData)
 			{
-				char nextChar = encodingByteBuffer.GetNextChar();
-				ushort num = mapUnicodeToBytes[(int)nextChar];
-				byte b;
-				byte b2;
-				while (true)
+				// Get our char
+				char ch = buffer.GetNextChar();
+
+				// Get our bytes
+				ushort iBytes = mapUnicodeToBytes[ch];
+
+			StartConvert:
+				// Check for halfwidth bytes
+				byte bLeadByte = (byte)(iBytes >> 8);
+				byte bTrailByte = (byte)(iBytes & 0xff);
+
+				if (bLeadByte == LEADBYTE_HALFWIDTH)
 				{
-					b = (byte)(num >> 8);
-					b2 = (byte)(num & 0xFFu);
-					if (b != 16)
-					{
-						break;
-					}
+					// Its Halfwidth Katakana
 					if (CodePage == 50220)
 					{
-						if (b2 >= 33 && b2 < 33 + s_HalfToFullWidthKanaTable.Length)
+						// CodePage 50220 doesn't use halfwidth Katakana, convert to fullwidth
+						// See if its out of range, fallback if so, throws if recursive fallback
+						if (bTrailByte < 0x21 || bTrailByte >= 0x21 + s_HalfToFullWidthKanaTable.Length)
 						{
-							num = (ushort)(s_HalfToFullWidthKanaTable[b2 - 33] & 0x7F7Fu);
+							buffer.Fallback(ch);
 							continue;
 						}
-						goto IL_009a;
+
+						// Get the full width katakana char to use.
+						iBytes = unchecked((ushort)(s_HalfToFullWidthKanaTable[bTrailByte - 0x21] & 0x7F7F));
+
+						// May have to do all sorts of fun stuff for mode, go back to start convert
+						goto StartConvert;
 					}
-					goto IL_00be;
+
+					// Can use halfwidth Katakana, make sure we're in right mode
+
+					// Make sure we're in right mode
+					if (currentMode != ISO2022Modes.ModeHalfwidthKatakana)
+					{
+						// 50222 or 50221, either shift in/out or escape to get to Katakana mode
+						if (CodePage == 50222)
+						{
+							// Shift Out
+							if (!buffer.AddByte(SHIFT_OUT))
+								break;  // convert out of space, stop
+
+							// Don't change modes until after AddByte in case it fails for convert
+							// We get to shift out to Katakana, make sure we'll go back to the right mode
+							// (This ends up always being ASCII)
+							shiftInMode = currentMode;
+							currentMode = ISO2022Modes.ModeHalfwidthKatakana;
+						}
+						else
+						{
+							// Add our escape sequence
+							if (!buffer.AddByte(ESCAPE, unchecked((byte)'('), unchecked((byte)'I')))
+								break;  // convert out of space, stop
+
+							currentMode = ISO2022Modes.ModeHalfwidthKatakana;
+						}
+					}
+
+					// We know we're in Katakana mode now, so add it.
+					// Go ahead and add the Katakana byte.  Our table tail bytes are 0x80 too big.
+					if (!buffer.AddByte(unchecked((byte)(bTrailByte & 0x7F))))
+						break;  // convert out of space, stop
+
+					// Done with this one
+					continue;
 				}
-				if (b != 0)
+				else if (bLeadByte != 0)
 				{
-					if (CodePage == 50222 && iSO2022Modes == ISO2022Modes.ModeHalfwidthKatakana)
+					//
+					//  It's a double byte character.
+					//
+
+					// If we're CP 50222 we may have to shift in from Katakana mode first
+					if (CodePage == 50222 && currentMode == ISO2022Modes.ModeHalfwidthKatakana)
 					{
-						if (!encodingByteBuffer.AddByte(15))
-						{
-							break;
-						}
-						iSO2022Modes = iSO2022Modes2;
+						// Shift In
+						if (!buffer.AddByte(SHIFT_IN))
+							break;    // convert out of space, stop
+
+						// Need to shift in from katakana.  (Still might not be right, but won't be shifted out anyway)
+						currentMode = shiftInMode;
 					}
-					if (iSO2022Modes != ISO2022Modes.ModeJIS0208)
+
+					// Make sure we're in the right mode (JIS 0208 or JIS 0212)
+					// Note: Right now we don't use JIS 0212.  Also this table would be wrong
+
+					// Its JIS extension 0208
+					if (currentMode != ISO2022Modes.ModeJIS0208)
 					{
-						if (!encodingByteBuffer.AddByte((byte)27, (byte)36, (byte)66))
-						{
-							break;
-						}
-						iSO2022Modes = ISO2022Modes.ModeJIS0208;
+						// Escape sequence, we can fail after this, mode will be correct for convert
+						if (!buffer.AddByte(ESCAPE, unchecked((byte)'$'), unchecked((byte)'B')))
+							break;  // Convert out of space, stop
+
+						currentMode = ISO2022Modes.ModeJIS0208;
 					}
-					if (!encodingByteBuffer.AddByte(b, b2))
-					{
-						break;
-					}
+
+					// Add our double bytes
+					if (!buffer.AddByte(unchecked((byte)(bLeadByte)), unchecked((byte)(bTrailByte))))
+						break; // Convert out of space, stop
+					continue;
 				}
-				else if (num != 0 || nextChar == '\0')
+				else if (iBytes != 0 || ch == 0)
 				{
-					if (CodePage == 50222 && iSO2022Modes == ISO2022Modes.ModeHalfwidthKatakana)
+					// Single byte Char
+					// If we're CP 50222 we may have to shift in from Katakana mode first
+					if (CodePage == 50222 && currentMode == ISO2022Modes.ModeHalfwidthKatakana)
 					{
-						if (!encodingByteBuffer.AddByte(15))
-						{
-							break;
-						}
-						iSO2022Modes = iSO2022Modes2;
+						// Shift IN
+						if (!buffer.AddByte(SHIFT_IN))
+							break; // convert ran out of room
+
+						// Need to shift in from katakana.  (Still might not be right, but won't be shifted out anyway)
+						currentMode = shiftInMode;
 					}
-					if (iSO2022Modes != ISO2022Modes.ModeASCII)
+
+					// Its a single byte character, switch to ASCII if we have to
+					if (currentMode != ISO2022Modes.ModeASCII)
 					{
-						if (!encodingByteBuffer.AddByte((byte)27, (byte)40, (byte)66))
-						{
-							break;
-						}
-						iSO2022Modes = ISO2022Modes.ModeASCII;
+						if (!buffer.AddByte(ESCAPE, unchecked((byte)'('), unchecked((byte)'B')))
+							break; // convert ran out of room
+
+						currentMode = ISO2022Modes.ModeASCII;
 					}
-					if (!encodingByteBuffer.AddByte(b2))
-					{
-						break;
-					}
+
+					// Add the ASCII char
+					if (!buffer.AddByte(bTrailByte))
+						break; // convert had no room left
+					continue;
 				}
-				else
-				{
-					encodingByteBuffer.Fallback(nextChar);
-				}
-				continue;
-				IL_009a:
-				encodingByteBuffer.Fallback(nextChar);
-				continue;
-				IL_00be:
-				if (iSO2022Modes != 0)
-				{
-					if (CodePage == 50222)
-					{
-						if (!encodingByteBuffer.AddByte(14))
-						{
-							break;
-						}
-						iSO2022Modes2 = iSO2022Modes;
-						iSO2022Modes = ISO2022Modes.ModeHalfwidthKatakana;
-					}
-					else
-					{
-						if (!encodingByteBuffer.AddByte((byte)27, (byte)40, (byte)73))
-						{
-							break;
-						}
-						iSO2022Modes = ISO2022Modes.ModeHalfwidthKatakana;
-					}
-				}
-				if (!encodingByteBuffer.AddByte((byte)(b2 & 0x7Fu)))
-				{
-					break;
-				}
+
+				// Its unknown, do fallback, throws if recursive (knows because we called InternalGetNextChar)
+				buffer.Fallback(ch);
 			}
-			if (iSO2022Modes != ISO2022Modes.ModeASCII && (encoder == null || encoder.MustFlush))
+
+			// Switch back to ASCII if MustFlush or no encoder
+			if (currentMode != ISO2022Modes.ModeASCII &&
+				(encoder == null || encoder.MustFlush))
 			{
-				if (CodePage == 50222 && iSO2022Modes == ISO2022Modes.ModeHalfwidthKatakana)
+				// If we're CP 50222 we may have to shift in from Katakana mode first
+				if (CodePage == 50222 && currentMode == ISO2022Modes.ModeHalfwidthKatakana)
 				{
-					if (encodingByteBuffer.AddByte(15))
-					{
-						iSO2022Modes = iSO2022Modes2;
-					}
+					// Shift IN, only shift mode if necessary.
+					if (buffer.AddByte(SHIFT_IN))
+						// Need to shift in from katakana.  (Still might not be right, but won't be shifted out anyway)
+						currentMode = shiftInMode;
 					else
-					{
-						encodingByteBuffer.GetNextChar();
-					}
+						// If not successful, convert will maintain state for next time, also
+						// AddByte will have decremented our char count, however we need it to remain the same
+						buffer.GetNextChar();
 				}
-				if (iSO2022Modes != ISO2022Modes.ModeASCII && (CodePage != 50222 || iSO2022Modes != 0))
+
+				// switch back to ASCII to finish neatly
+				if (currentMode != ISO2022Modes.ModeASCII &&
+					(CodePage != 50222 || currentMode != ISO2022Modes.ModeHalfwidthKatakana))
 				{
-					if (encodingByteBuffer.AddByte((byte)27, (byte)40, (byte)66))
-					{
-						iSO2022Modes = ISO2022Modes.ModeASCII;
-					}
+					// only shift if it was successful
+					if (buffer.AddByte(ESCAPE, unchecked((byte)'('), unchecked((byte)'B')))
+						currentMode = ISO2022Modes.ModeASCII;
 					else
-					{
-						encodingByteBuffer.GetNextChar();
-					}
+						// If not successful, convert will maintain state for next time, also
+						// AddByte will have decremented our char count, however we need it to remain the same
+						buffer.GetNextChar();
 				}
 			}
+
+			// Remember our encoder state
 			if (bytes != null && encoder != null)
 			{
-				encoder.currentMode = iSO2022Modes;
-				encoder.shiftInOutMode = iSO2022Modes2;
-				if (!encodingByteBuffer.fallbackBufferHelper.bUsedEncoder)
+				// This is ASCII if we had to flush
+				encoder.currentMode = currentMode;
+				encoder.shiftInOutMode = shiftInMode;
+
+				if (!buffer.fallbackBufferHelper.bUsedEncoder)
 				{
-					encoder.charLeftOver = '\0';
+					encoder.charLeftOver = (char)0;
 				}
-				encoder.m_charsUsed = encodingByteBuffer.CharsUsed;
+
+				encoder.m_charsUsed = buffer.CharsUsed;
 			}
-			return encodingByteBuffer.Count;
+
+			// Return our length
+			return buffer.Count;
 		}
 
 		private unsafe int GetBytesCP50225KR(char* chars, int charCount, byte* bytes, int byteCount, ISO2022Encoder encoder)

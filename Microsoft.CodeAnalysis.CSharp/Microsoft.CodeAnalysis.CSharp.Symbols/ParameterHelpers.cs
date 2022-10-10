@@ -157,152 +157,143 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static void CheckParameterModifiers(BaseParameterSyntax parameter, BindingDiagnosticBag diagnostics, bool parsingFunctionPointerParams)
         {
-            bool flag = false;
-            bool flag2 = false;
-            bool flag3 = false;
-            bool flag4 = false;
-            bool flag5 = false;
-            SyntaxTokenList.Enumerator enumerator = parameter.Modifiers.GetEnumerator();
-            while (enumerator.MoveNext())
+            var seenThis = false;
+            var seenRef = false;
+            var seenOut = false;
+            var seenParams = false;
+            var seenIn = false;
+
+            foreach (var modifier in parameter.Modifiers)
             {
-                SyntaxToken current = enumerator.Current;
-                switch (current.Kind())
+                switch (modifier.Kind())
                 {
                     case SyntaxKind.ThisKeyword:
-                        if (flag)
+                        if (seenThis)
                         {
-                            diagnostics.Add(ErrorCode.ERR_DupParamMod, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ThisKeyword));
+                            diagnostics.Add(ErrorCode.ERR_DupParamMod, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ThisKeyword));
                         }
-                        else if (flag3)
+                        else if (seenOut)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ThisKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ThisKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
                         }
-                        else if (flag4)
+                        else if (seenParams)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParamModThis, current.GetLocation());
+                            diagnostics.Add(ErrorCode.ERR_BadParamModThis, modifier.GetLocation());
                         }
                         else
                         {
-                            flag = true;
+                            seenThis = true;
                         }
-                        continue;
+                        break;
+
                     case SyntaxKind.RefKeyword:
-                        if (flag2)
+                        if (seenRef)
                         {
-                            diagnostics.Add(ErrorCode.ERR_DupParamMod, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
+                            diagnostics.Add(ErrorCode.ERR_DupParamMod, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
                         }
-                        else if (flag4)
+                        else if (seenParams)
                         {
-                            diagnostics.Add(ErrorCode.ERR_ParamsCantBeWithModifier, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
+                            diagnostics.Add(ErrorCode.ERR_ParamsCantBeWithModifier, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
                         }
-                        else if (flag3)
+                        else if (seenOut)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
                         }
-                        else if (flag5)
+                        else if (seenIn)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword), SyntaxFacts.GetText(SyntaxKind.InKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.RefKeyword), SyntaxFacts.GetText(SyntaxKind.InKeyword));
                         }
                         else
                         {
-                            flag2 = true;
+                            seenRef = true;
                         }
-                        continue;
+                        break;
+
                     case SyntaxKind.OutKeyword:
-                        if (flag3)
+                        if (seenOut)
                         {
-                            diagnostics.Add(ErrorCode.ERR_DupParamMod, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
+                            diagnostics.Add(ErrorCode.ERR_DupParamMod, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
                         }
-                        else if (flag)
+                        else if (seenThis)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword), SyntaxFacts.GetText(SyntaxKind.ThisKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword), SyntaxFacts.GetText(SyntaxKind.ThisKeyword));
                         }
-                        else if (flag4)
+                        else if (seenParams)
                         {
-                            diagnostics.Add(ErrorCode.ERR_ParamsCantBeWithModifier, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
+                            diagnostics.Add(ErrorCode.ERR_ParamsCantBeWithModifier, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
                         }
-                        else if (flag2)
+                        else if (seenRef)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
                         }
-                        else if (flag5)
+                        else if (seenIn)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword), SyntaxFacts.GetText(SyntaxKind.InKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.OutKeyword), SyntaxFacts.GetText(SyntaxKind.InKeyword));
                         }
                         else
                         {
-                            flag3 = true;
+                            seenOut = true;
                         }
-                        continue;
-                    case SyntaxKind.ParamsKeyword:
-                        if (!parsingFunctionPointerParams)
+                        break;
+
+                    case SyntaxKind.ParamsKeyword when !parsingFunctionPointerParams:
+                        if (seenParams)
                         {
-                            if (flag4)
-                            {
-                                diagnostics.Add(ErrorCode.ERR_DupParamMod, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword));
-                            }
-                            else if (flag)
-                            {
-                                diagnostics.Add(ErrorCode.ERR_BadParamModThis, current.GetLocation());
-                            }
-                            else if (flag2)
-                            {
-                                diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
-                            }
-                            else if (flag5)
-                            {
-                                diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword), SyntaxFacts.GetText(SyntaxKind.InKeyword));
-                            }
-                            else if (flag3)
-                            {
-                                diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
-                            }
-                            else
-                            {
-                                flag4 = true;
-                            }
-                            continue;
+                            diagnostics.Add(ErrorCode.ERR_DupParamMod, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword));
                         }
-                        if (!parsingFunctionPointerParams)
+                        else if (seenThis)
                         {
-                            break;
+                            diagnostics.Add(ErrorCode.ERR_BadParamModThis, modifier.GetLocation());
                         }
-                        goto IL_04cc;
+                        else if (seenRef)
+                        {
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
+                        }
+                        else if (seenIn)
+                        {
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword), SyntaxFacts.GetText(SyntaxKind.InKeyword));
+                        }
+                        else if (seenOut)
+                        {
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.ParamsKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
+                        }
+                        else
+                        {
+                            seenParams = true;
+                        }
+                        break;
+
                     case SyntaxKind.InKeyword:
-                        if (flag5)
+                        if (seenIn)
                         {
-                            diagnostics.Add(ErrorCode.ERR_DupParamMod, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword));
+                            diagnostics.Add(ErrorCode.ERR_DupParamMod, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword));
                         }
-                        else if (flag3)
+                        else if (seenOut)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword), SyntaxFacts.GetText(SyntaxKind.OutKeyword));
                         }
-                        else if (flag2)
+                        else if (seenRef)
                         {
-                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
+                            diagnostics.Add(ErrorCode.ERR_BadParameterModifiers, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword), SyntaxFacts.GetText(SyntaxKind.RefKeyword));
                         }
-                        else if (flag4)
+                        else if (seenParams)
                         {
-                            diagnostics.Add(ErrorCode.ERR_ParamsCantBeWithModifier, current.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword));
+                            diagnostics.Add(ErrorCode.ERR_ParamsCantBeWithModifier, modifier.GetLocation(), SyntaxFacts.GetText(SyntaxKind.InKeyword));
                         }
                         else
                         {
-                            flag5 = true;
+                            seenIn = true;
                         }
-                        continue;
-                    case SyntaxKind.ReadOnlyKeyword:
-                        {
-                            if (!parsingFunctionPointerParams)
-                            {
-                                break;
-                            }
-                            goto IL_04cc;
-                        }
-                    IL_04cc:
-                        diagnostics.Add(ErrorCode.ERR_BadFuncPointerParamModifier, current.GetLocation(), SyntaxFacts.GetText(current.Kind()));
-                        continue;
+                        break;
+
+                    case SyntaxKind.ParamsKeyword when parsingFunctionPointerParams:
+                    case SyntaxKind.ReadOnlyKeyword when parsingFunctionPointerParams:
+                        diagnostics.Add(ErrorCode.ERR_BadFuncPointerParamModifier, modifier.GetLocation(), SyntaxFacts.GetText(modifier.Kind()));
+                        break;
+
+                    default:
+                        throw ExceptionUtilities.UnexpectedValue(modifier.Kind());
                 }
-                throw ExceptionUtilities.UnexpectedValue(current.Kind());
             }
         }
 
@@ -373,7 +364,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 diagnostics.Add(ErrorCode.ERR_NoConversionForDefaultParam, parameterSyntax.Identifier.GetLocation(), defaultExpression.Display, type);
                 result = true;
             }
-            else if ((conversion.IsReference && (type.SpecialType == SpecialType.System_Object || type.Kind == SymbolKind.DynamicType) && (object)defaultExpression.Type != null && defaultExpression.Type!.SpecialType == SpecialType.System_String) || conversion.IsBoxing)
+            else if ((conversion.IsReference && (type.SpecialType == SpecialType.System_Object || type.Kind == SymbolKind.DynamicType) && defaultExpression.Type is not null && defaultExpression.Type!.SpecialType == SpecialType.System_String) || conversion.IsBoxing)
             {
                 diagnostics.Add(ErrorCode.ERR_NotNullRefDefaultParameter, parameterSyntax.Identifier.GetLocation(), parameterSyntax.Identifier.ValueText, type);
                 result = true;
@@ -397,16 +388,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 return true;
             }
-            switch (expression.Kind)
+            return expression.Kind switch
             {
-                case BoundKind.DefaultLiteral:
-                case BoundKind.DefaultExpression:
-                    return true;
-                case BoundKind.ObjectCreationExpression:
-                    return IsValidDefaultValue((BoundObjectCreationExpression)expression);
-                default:
-                    return false;
-            }
+                BoundKind.DefaultLiteral or BoundKind.DefaultExpression => true,
+                BoundKind.ObjectCreationExpression => IsValidDefaultValue((BoundObjectCreationExpression)expression),
+                _ => false,
+            };
         }
 
         private static bool IsValidDefaultValue(BoundObjectCreationExpression expression)
@@ -421,7 +408,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static MethodSymbol FindContainingGenericMethod(Symbol symbol)
         {
             Symbol symbol2 = symbol;
-            while ((object)symbol2 != null)
+            while (symbol2 is not null)
             {
                 if (symbol2.Kind == SymbolKind.Method)
                 {
@@ -443,9 +430,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static RefKind GetModifiers(SyntaxTokenList modifiers, out SyntaxToken refnessKeyword, out SyntaxToken paramsKeyword, out SyntaxToken thisKeyword)
         {
             RefKind refKind = RefKind.None;
-            refnessKeyword = default(SyntaxToken);
-            paramsKeyword = default(SyntaxToken);
-            thisKeyword = default(SyntaxToken);
+            refnessKeyword = default;
+            paramsKeyword = default;
+            thisKeyword = default;
             SyntaxTokenList.Enumerator enumerator = modifiers.GetEnumerator();
             while (enumerator.MoveNext())
             {

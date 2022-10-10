@@ -11,7 +11,7 @@ namespace Roslyn.Utilities
 {
     public static class Hash
     {
-        internal const int FnvOffsetBias = -2128831035;
+        public const int FnvOffsetBias = -2128831035;
 
         internal const int FnvPrime = 16777619;
 

@@ -679,37 +679,43 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static ParameterSymbol? EnclosingThisSymbol(this Symbol containingMember)
         {
             Symbol symbol = containingMember;
-            NamedTypeSymbol namedTypeSymbol;
             while (true)
             {
-                MethodSymbol methodSymbol;
+                NamedTypeSymbol type;
+
                 switch (symbol.Kind)
                 {
                     case SymbolKind.Method:
-                        methodSymbol = (MethodSymbol)symbol;
-                        if (methodSymbol.MethodKind == MethodKind.AnonymousFunction || methodSymbol.MethodKind == MethodKind.LocalFunction)
+                        MethodSymbol method = (MethodSymbol)symbol;
+
+                        // skip lambdas:
+                        if (method.MethodKind == MethodKind.AnonymousFunction || method.MethodKind == MethodKind.LocalFunction)
                         {
-                            goto IL_0032;
+                            symbol = method.ContainingSymbol;
+                            continue;
                         }
-                        return methodSymbol.ThisParameter;
+
+                        return method.ThisParameter;
+
                     case SymbolKind.Field:
-                        namedTypeSymbol = symbol.ContainingType;
+                        // "this" in field initializer:
+                        type = symbol.ContainingType;
                         break;
+
                     case SymbolKind.NamedType:
-                        namedTypeSymbol = (NamedTypeSymbol)symbol;
+                        // "this" in global statement:
+                        type = (NamedTypeSymbol)symbol;
                         break;
+
                     default:
                         return null;
                 }
-                break;
-            IL_0032:
-                symbol = methodSymbol.ContainingSymbol;
+
+                // "this" can be accessed in a lambda in a field initializer if the initializer is 
+                // a script field initializer or global statement because these are initialized 
+                // after the call to the base constructor.
+                return type.IsScriptClass ? type.InstanceConstructors.Single().ThisParameter : null;
             }
-            if (!namedTypeSymbol.IsScriptClass)
-            {
-                return null;
-            }
-            return namedTypeSymbol.InstanceConstructors.Single().ThisParameter;
         }
 
         public static Symbol ConstructedFrom(this Symbol symbol)

@@ -1644,64 +1644,52 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
+        // Report a name conflict; the error is reported on the location of method1.
+        // UNDONE: Consider adding a secondary location pointing to the second method.
         private void ReportMethodSignatureCollision(BindingDiagnosticBag diagnostics, SourceMemberMethodSymbol method1, SourceMemberMethodSymbol method2)
         {
-            SourceOrdinaryMethodSymbol sourceOrdinaryMethodSymbol2;
-            if (method1 is SourceOrdinaryMethodSymbol sourceOrdinaryMethodSymbol)
+            switch (method1, method2)
             {
-                if (sourceOrdinaryMethodSymbol.IsPartialDefinition)
-                {
-                    sourceOrdinaryMethodSymbol2 = method2 as SourceOrdinaryMethodSymbol;
-                    if ((object)sourceOrdinaryMethodSymbol2 != null)
-                    {
-                        if (sourceOrdinaryMethodSymbol2.IsPartialImplementation)
-                        {
-                            return;
-                        }
-                        if (sourceOrdinaryMethodSymbol.IsPartialImplementation)
-                        {
-                            goto IL_0040;
-                        }
-                    }
-                }
-                else if (sourceOrdinaryMethodSymbol.IsPartialImplementation)
-                {
-                    sourceOrdinaryMethodSymbol2 = method2 as SourceOrdinaryMethodSymbol;
-                    if ((object)sourceOrdinaryMethodSymbol2 != null)
-                    {
-                        goto IL_0040;
-                    }
-                }
+                case (SourceOrdinaryMethodSymbol { IsPartialDefinition: true }, SourceOrdinaryMethodSymbol { IsPartialImplementation: true }):
+                case (SourceOrdinaryMethodSymbol { IsPartialImplementation: true }, SourceOrdinaryMethodSymbol { IsPartialDefinition: true }):
+                    // these could be 2 parts of the same partial method.
+                    // Partial methods are allowed to collide by signature.
+                    return;
+                case (SynthesizedSimpleProgramEntryPointSymbol { }, SynthesizedSimpleProgramEntryPointSymbol { }):
+                    return;
             }
-            else if (method1 is SynthesizedSimpleProgramEntryPointSymbol && method2 is SynthesizedSimpleProgramEntryPointSymbol)
+
+            // If method1 is a constructor only because its return type is missing, then
+            // we've already produced a diagnostic for the missing return type and we suppress the
+            // diagnostic about duplicate signature.
+            if (method1.MethodKind == MethodKind.Constructor &&
+                ((ConstructorDeclarationSyntax)method1.SyntaxRef.GetSyntax()).Identifier.ValueText != this.Name)
             {
                 return;
             }
-            goto IL_005e;
-        IL_0040:
-            if (!sourceOrdinaryMethodSymbol2.IsPartialDefinition)
-            {
-                goto IL_005e;
-            }
-            return;
-        IL_005e:
-            if (method1.MethodKind == MethodKind.Constructor && ((ConstructorDeclarationSyntax)method1.SyntaxRef.GetSyntax()).Identifier.ValueText != Name)
-            {
-                return;
-            }
+
             for (int i = 0; i < method1.ParameterCount; i++)
             {
-                RefKind refKind = method1.Parameters[i].RefKind;
-                RefKind refKind2 = method2.Parameters[i].RefKind;
-                if (refKind != refKind2)
+                var refKind1 = method1.Parameters[i].RefKind;
+                var refKind2 = method2.Parameters[i].RefKind;
+
+                if (refKind1 != refKind2)
                 {
-                    MessageID id = ((method1.MethodKind == MethodKind.Constructor) ? MessageID.IDS_SK_CONSTRUCTOR : MessageID.IDS_SK_METHOD);
-                    diagnostics.Add(ErrorCode.ERR_OverloadRefKind, method1.Locations[0], this, id.Localize(), refKind.ToParameterDisplayString(), refKind2.ToParameterDisplayString());
+                    // '{0}' cannot define an overloaded {1} that differs only on parameter modifiers '{2}' and '{3}'
+                    var methodKind = method1.MethodKind == MethodKind.Constructor ? MessageID.IDS_SK_CONSTRUCTOR : MessageID.IDS_SK_METHOD;
+                    diagnostics.Add(ErrorCode.ERR_OverloadRefKind, method1.Locations[0], this, methodKind.Localize(), refKind1.ToParameterDisplayString(), refKind2.ToParameterDisplayString());
+
                     return;
                 }
             }
-            string text = ((method1.MethodKind == MethodKind.Destructor && method2.MethodKind == MethodKind.Destructor) ? ("~" + Name) : (method1.IsConstructor() ? Name : method1.Name));
-            diagnostics.Add(ErrorCode.ERR_MemberAlreadyExists, method1.Locations[0], text, this);
+
+            // Special case: if there are two destructors, use the destructor syntax instead of "Finalize"
+            var methodName = (method1.MethodKind == MethodKind.Destructor && method2.MethodKind == MethodKind.Destructor) ?
+                "~" + this.Name :
+                (method1.IsConstructor() ? this.Name : method1.Name);
+
+            // Type '{1}' already defines a member called '{0}' with the same parameter types
+            diagnostics.Add(ErrorCode.ERR_MemberAlreadyExists, method1.Locations[0], methodName, this);
         }
 
         private void CheckIndexerNameConflicts(BindingDiagnosticBag diagnostics, Dictionary<string, ImmutableArray<Symbol>> membersByName)
@@ -2349,87 +2337,80 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return DeclaringCompilation.GetBinder(syntaxNode);
         }
 
-        private void MergePartialMembers(ref Dictionary<string, ImmutableArray<Symbol>> membersByName, BindingDiagnosticBag diagnostics)
+        private void MergePartialMembers(
+            ref Dictionary<string, ImmutableArray<Symbol>> membersByName,
+            BindingDiagnosticBag diagnostics)
         {
-            ArrayBuilder<string> instance = ArrayBuilder<string>.GetInstance(membersByName.Count);
-            instance.AddRange(membersByName.Keys);
-            Dictionary<MethodSymbol, SourceMemberMethodSymbol> dictionary = new Dictionary<MethodSymbol, SourceMemberMethodSymbol>(MemberSignatureComparer.PartialMethodsComparer);
-            ArrayBuilder<string>.Enumerator enumerator = instance.GetEnumerator();
-            while (enumerator.MoveNext())
+            var memberNames = ArrayBuilder<string>.GetInstance(membersByName.Count);
+            memberNames.AddRange(membersByName.Keys);
+
+            //key and value will be the same object
+            var methodsBySignature = new Dictionary<MethodSymbol, SourceMemberMethodSymbol>(MemberSignatureComparer.PartialMethodsComparer);
+
+            foreach (var name in memberNames)
             {
-                string current = enumerator.Current;
-                dictionary.Clear();
-                ImmutableArray<Symbol>.Enumerator enumerator2 = membersByName[current].GetEnumerator();
-                while (enumerator2.MoveNext())
+                methodsBySignature.Clear();
+                foreach (var symbol in membersByName[name])
                 {
-                    if (!(enumerator2.Current is SourceMemberMethodSymbol sourceMemberMethodSymbol) || !sourceMemberMethodSymbol.IsPartial)
+                    var method = symbol as SourceMemberMethodSymbol;
+                    if (method is null || !method.IsPartial)
                     {
-                        continue;
+                        continue; // only partial methods need to be merged
                     }
-                    SourceOrdinaryMethodSymbol sourceOrdinaryMethodSymbol;
-                    SourceOrdinaryMethodSymbol sourceOrdinaryMethodSymbol2;
-                    if (dictionary.TryGetValue(sourceMemberMethodSymbol, out var value))
+
+                    if (methodsBySignature.TryGetValue(method, out var prev))
                     {
-                        sourceOrdinaryMethodSymbol = (SourceOrdinaryMethodSymbol)value;
-                        sourceOrdinaryMethodSymbol2 = (SourceOrdinaryMethodSymbol)sourceMemberMethodSymbol;
-                        if (sourceOrdinaryMethodSymbol2.IsPartialImplementation)
+                        var prevPart = (SourceOrdinaryMethodSymbol)prev;
+                        var methodPart = (SourceOrdinaryMethodSymbol)method;
+
+                        if (methodPart.IsPartialImplementation &&
+                            (prevPart.IsPartialImplementation || (prevPart.OtherPartOfPartial is MethodSymbol otherImplementation && (object)otherImplementation != methodPart)))
                         {
-                            if (!sourceOrdinaryMethodSymbol.IsPartialImplementation)
-                            {
-                                MethodSymbol otherPartOfPartial = sourceOrdinaryMethodSymbol.OtherPartOfPartial;
-                                if ((object)otherPartOfPartial == null || (object)otherPartOfPartial == sourceOrdinaryMethodSymbol2)
-                                {
-                                    goto IL_00dd;
-                                }
-                            }
-                            diagnostics.Add(ErrorCode.ERR_PartialMethodOnlyOneActual, sourceOrdinaryMethodSymbol2.Locations[0]);
-                            continue;
+                            // A partial method may not have multiple implementing declarations
+                            diagnostics.Add(ErrorCode.ERR_PartialMethodOnlyOneActual, methodPart.Locations[0]);
                         }
-                        goto IL_00dd;
-                    }
-                    dictionary.Add(sourceMemberMethodSymbol, sourceMemberMethodSymbol);
-                    continue;
-                IL_00dd:
-                    if (sourceOrdinaryMethodSymbol2.IsPartialDefinition)
-                    {
-                        if (!sourceOrdinaryMethodSymbol.IsPartialDefinition)
+                        else if (methodPart.IsPartialDefinition &&
+                                 (prevPart.IsPartialDefinition || (prevPart.OtherPartOfPartial is MethodSymbol otherDefinition && (object)otherDefinition != methodPart)))
                         {
-                            MethodSymbol otherPartOfPartial2 = sourceOrdinaryMethodSymbol.OtherPartOfPartial;
-                            if ((object)otherPartOfPartial2 == null || (object)otherPartOfPartial2 == sourceOrdinaryMethodSymbol2)
-                            {
-                                goto IL_0121;
-                            }
+                            // A partial method may not have multiple defining declarations
+                            diagnostics.Add(ErrorCode.ERR_PartialMethodOnlyOneLatent, methodPart.Locations[0]);
                         }
-                        diagnostics.Add(ErrorCode.ERR_PartialMethodOnlyOneLatent, sourceOrdinaryMethodSymbol2.Locations[0]);
-                        continue;
+                        else
+                        {
+                            if ((object)membersByName == _lazyEarlyAttributeDecodingMembersDictionary)
+                            {
+                                // Avoid mutating the cached dictionary and especially avoid doing this possibly on multiple threads in parallel.
+                                membersByName = new Dictionary<string, ImmutableArray<Symbol>>(membersByName);
+                            }
+
+                            membersByName[name] = FixPartialMember(membersByName[name], prevPart, methodPart);
+                        }
                     }
-                    goto IL_0121;
-                IL_0121:
-                    if (membersByName == _lazyEarlyAttributeDecodingMembersDictionary)
+                    else
                     {
-                        membersByName = new Dictionary<string, ImmutableArray<Symbol>>(membersByName);
+                        methodsBySignature.Add(method, method);
                     }
-                    membersByName[current] = FixPartialMember(membersByName[current], sourceOrdinaryMethodSymbol, sourceOrdinaryMethodSymbol2);
                 }
-                foreach (SourceOrdinaryMethodSymbol value2 in dictionary.Values)
+
+                foreach (SourceOrdinaryMethodSymbol method in methodsBySignature.Values)
                 {
-                    if (value2.IsPartialImplementation && (object)value2.OtherPartOfPartial == null)
+                    // partial implementations not paired with a definition
+                    if (method.IsPartialImplementation && method.OtherPartOfPartial is null)
                     {
-                        diagnostics.Add(ErrorCode.ERR_PartialMethodMustHaveLatent, value2.Locations[0], value2);
-                        continue;
+                        diagnostics.Add(ErrorCode.ERR_PartialMethodMustHaveLatent, method.Locations[0], method);
                     }
-                    MethodSymbol otherPartOfPartial3 = value2.OtherPartOfPartial;
-                    if ((object)otherPartOfPartial3 != null && MemberSignatureComparer.ConsideringTupleNamesCreatesDifference(value2, otherPartOfPartial3))
+                    else if (method.OtherPartOfPartial is MethodSymbol otherPart && MemberSignatureComparer.ConsideringTupleNamesCreatesDifference(method, otherPart))
                     {
-                        diagnostics.Add(ErrorCode.ERR_PartialMethodInconsistentTupleNames, value2.Locations[0], value2, value2.OtherPartOfPartial);
+                        diagnostics.Add(ErrorCode.ERR_PartialMethodInconsistentTupleNames, method.Locations[0], method, method.OtherPartOfPartial);
                     }
-                    else if ((object)value2 != null && value2.IsPartialDefinition && (object)value2.OtherPartOfPartial == null && value2.HasExplicitAccessModifier)
+                    else if (method is { IsPartialDefinition: true, OtherPartOfPartial: null, HasExplicitAccessModifier: true })
                     {
-                        diagnostics.Add(ErrorCode.ERR_PartialMethodWithAccessibilityModsMustHaveImplementation, value2.Locations[0], value2);
+                        diagnostics.Add(ErrorCode.ERR_PartialMethodWithAccessibilityModsMustHaveImplementation, method.Locations[0], method);
                     }
                 }
             }
-            instance.Free();
+
+            memberNames.Free();
         }
 
         private static ImmutableArray<Symbol> FixPartialMember(ImmutableArray<Symbol> symbols, SourceOrdinaryMethodSymbol part1, SourceOrdinaryMethodSymbol part2)
@@ -4451,61 +4432,74 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return true;
         }
 
+        /// <summary>
+        /// If necessary, report a diagnostic for a hidden abstract member.
+        /// </summary>
+        /// <returns>True if a diagnostic was reported.</returns>
         private static bool AddHidingAbstractDiagnostic(Symbol hidingMember, Location hidingMemberLocation, Symbol hiddenMember, BindingDiagnosticBag diagnostics, ref bool suppressAccessors)
         {
-            SymbolKind kind = hiddenMember.Kind;
-            if (kind != SymbolKind.Event && kind != SymbolKind.Method && kind != SymbolKind.Property)
+            switch (hiddenMember.Kind)
             {
-                return false;
+                case SymbolKind.Method:
+                case SymbolKind.Property:
+                case SymbolKind.Event:
+                    break; // Can result in diagnostic
+                default:
+                    return false; // Cannot result in diagnostic
             }
+
+            // If the hidden member isn't abstract, the diagnostic doesn't apply.
+            // If the hiding member is in a non-abstract type, then suppress this cascading error.
             if (!hiddenMember.IsAbstract || !hidingMember.ContainingType.IsAbstract)
             {
                 return false;
             }
+
             switch (hidingMember.DeclaredAccessibility)
             {
-                case Accessibility.Protected:
-                case Accessibility.ProtectedOrInternal:
-                case Accessibility.Public:
-                    kind = hidingMember.Kind;
-                    if (kind == SymbolKind.Event)
-                    {
-                        goto IL_00a8;
-                    }
-                    if (kind != SymbolKind.Method)
-                    {
-                        if (kind == SymbolKind.Property)
-                        {
-                            goto IL_00a8;
-                        }
-                    }
-                    else
-                    {
-                        Symbol associatedSymbol = ((MethodSymbol)hidingMember).AssociatedSymbol;
-                        if ((object)associatedSymbol != null)
-                        {
-                            diagnostics.Add(ErrorCode.ERR_HidingAbstractMethod, associatedSymbol.Locations[0], associatedSymbol, hiddenMember);
-                            goto IL_00c7;
-                        }
-                    }
-                    goto IL_00ac;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(hidingMember.DeclaredAccessibility);
+                case Accessibility.Internal:
                 case Accessibility.Private:
                 case Accessibility.ProtectedAndInternal:
-                case Accessibility.Internal:
+                    break;
+                case Accessibility.Public:
+                case Accessibility.ProtectedOrInternal:
+                case Accessibility.Protected:
                     {
-                        return false;
+                        // At this point we know we're going to report ERR_HidingAbstractMethod, we just have to
+                        // figure out the substitutions.
+
+                        switch (hidingMember.Kind)
+                        {
+                            case SymbolKind.Method:
+                                var associatedPropertyOrEvent = ((MethodSymbol)hidingMember).AssociatedSymbol;
+                                if ((object)associatedPropertyOrEvent != null)
+                                {
+                                    //Dev10 reports that the property/event is doing the hiding, rather than the method
+                                    diagnostics.Add(ErrorCode.ERR_HidingAbstractMethod, associatedPropertyOrEvent.Locations[0], associatedPropertyOrEvent, hiddenMember);
+                                    break;
+                                }
+
+                                goto default;
+                            case SymbolKind.Property:
+                            case SymbolKind.Event:
+                                // NOTE: We used to let the accessors take care of this case, but then we weren't handling the case
+                                // where a hiding and hidden properties did not have any accessors in common.
+
+                                // CONSIDER: Dev10 actually reports an error for each accessor of a hidden property/event, but that seems unnecessary.
+                                suppressAccessors = true;
+
+                                goto default;
+                            default:
+                                diagnostics.Add(ErrorCode.ERR_HidingAbstractMethod, hidingMemberLocation, hidingMember, hiddenMember);
+                                break;
+                        }
+
+                        return true;
                     }
-                IL_00c7:
-                    return true;
-                IL_00a8:
-                    suppressAccessors = true;
-                    goto IL_00ac;
-                IL_00ac:
-                    diagnostics.Add(ErrorCode.ERR_HidingAbstractMethod, hidingMemberLocation, hidingMember, hiddenMember);
-                    goto IL_00c7;
+                default:
+                    throw ExceptionUtilities.UnexpectedValue(hidingMember.DeclaredAccessibility);
             }
+            return false;
         }
 
         private static bool OverrideHasCorrectAccessibility(Symbol overridden, Symbol overriding)

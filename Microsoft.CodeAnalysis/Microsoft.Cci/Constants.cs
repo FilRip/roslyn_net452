@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Cci
 {
-    internal static class Constants
+    public static class Constants
     {
         public const CharSet CharSet_None = CharSet.None;
 

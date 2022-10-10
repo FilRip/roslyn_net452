@@ -340,116 +340,159 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             {
                 return false;
             }
-            if (IsAccessorListWithoutAccessorsWithBlockBody(next.Parent) || IsAccessorListWithoutAccessorsWithBlockBody(next.Parent!.Parent))
+
+            if (IsAccessorListWithoutAccessorsWithBlockBody(next.Parent) ||
+                IsAccessorListWithoutAccessorsWithBlockBody(next.Parent.Parent))
             {
+                // when the accessors are formatted inline, the separator is needed
+                // unless there is a semicolon. For example: "{ get; set; }" 
                 return !next.IsKind(SyntaxKind.SemicolonToken);
             }
+
             if (IsXmlTextToken(token.Kind()) || IsXmlTextToken(next.Kind()))
             {
                 return false;
             }
+
             if (next.Kind() == SyntaxKind.EndOfDirectiveToken)
             {
-                if (IsKeyword(token.Kind()))
+                // In a directive, there's often no token between the directive keyword and 
+                // the end-of-directive, so we may need a separator.
+                return IsKeyword(token.Kind()) && next.LeadingWidth > 0;
+            }
+
+            if ((token.Parent is AssignmentExpressionSyntax && AssignmentTokenNeedsSeparator(token.Kind())) ||
+                (next.Parent is AssignmentExpressionSyntax && AssignmentTokenNeedsSeparator(next.Kind())) ||
+                (token.Parent is BinaryExpressionSyntax && BinaryTokenNeedsSeparator(token.Kind())) ||
+                (next.Parent is BinaryExpressionSyntax && BinaryTokenNeedsSeparator(next.Kind())))
+            {
+                return true;
+            }
+
+            if (token.IsKind(SyntaxKind.GreaterThanToken) && token.Parent.IsKind(SyntaxKind.TypeArgumentList))
+            {
+                if (!SyntaxFacts.IsPunctuation(next.Kind()))
                 {
-                    return next.LeadingWidth > 0;
+                    return true;
                 }
-                return false;
             }
-            if ((token.Parent is AssignmentExpressionSyntax && AssignmentTokenNeedsSeparator(token.Kind())) || (next.Parent is AssignmentExpressionSyntax && AssignmentTokenNeedsSeparator(next.Kind())) || (token.Parent is BinaryExpressionSyntax && BinaryTokenNeedsSeparator(token.Kind())) || (next.Parent is BinaryExpressionSyntax && BinaryTokenNeedsSeparator(next.Kind())))
-            {
-                return true;
-            }
-            if (token.IsKind(SyntaxKind.GreaterThanToken) && token.Parent.IsKind(SyntaxKind.TypeArgumentList) && !SyntaxFacts.IsPunctuation(next.Kind()))
-            {
-                return true;
-            }
+
             if (token.IsKind(SyntaxKind.GreaterThanToken) && token.Parent.IsKind(SyntaxKind.FunctionPointerParameterList))
             {
                 return true;
             }
-            if (token.IsKind(SyntaxKind.CommaToken) && !next.IsKind(SyntaxKind.CommaToken) && !token.Parent.IsKind(SyntaxKind.EnumDeclaration))
+
+            if (token.IsKind(SyntaxKind.CommaToken) &&
+                !next.IsKind(SyntaxKind.CommaToken) &&
+                !token.Parent.IsKind(SyntaxKind.EnumDeclaration))
             {
                 return true;
             }
-            if (token.Kind() == SyntaxKind.SemicolonToken && next.Kind() != SyntaxKind.SemicolonToken && next.Kind() != SyntaxKind.CloseParenToken)
+
+            if (token.Kind() == SyntaxKind.SemicolonToken
+                && !(next.Kind() == SyntaxKind.SemicolonToken || next.Kind() == SyntaxKind.CloseParenToken))
             {
                 return true;
             }
-            if (token.IsKind(SyntaxKind.QuestionToken) && (token.Parent.IsKind(SyntaxKind.ConditionalExpression) || token.Parent is TypeSyntax) && !token.Parent!.Parent.IsKind(SyntaxKind.TypeArgumentList))
+
+            if (token.IsKind(SyntaxKind.QuestionToken)
+                && (token.Parent.IsKind(SyntaxKind.ConditionalExpression) || token.Parent is TypeSyntax)
+                && !token.Parent.Parent.IsKind(SyntaxKind.TypeArgumentList))
             {
                 return true;
             }
+
             if (token.IsKind(SyntaxKind.ColonToken))
             {
-                if (!token.Parent.IsKind(SyntaxKind.InterpolationFormatClause))
-                {
-                    return !token.Parent.IsKind(SyntaxKind.XmlPrefix);
-                }
-                return false;
+                return !token.Parent.IsKind(SyntaxKind.InterpolationFormatClause) &&
+                    !token.Parent.IsKind(SyntaxKind.XmlPrefix);
             }
-            if (next.IsKind(SyntaxKind.ColonToken) && (next.Parent.IsKind(SyntaxKind.BaseList) || next.Parent.IsKind(SyntaxKind.TypeParameterConstraintClause)))
+
+            if (next.IsKind(SyntaxKind.ColonToken))
             {
-                return true;
+                if (next.Parent.IsKind(SyntaxKind.BaseList) ||
+                    next.Parent.IsKind(SyntaxKind.TypeParameterConstraintClause))
+                {
+                    return true;
+                }
             }
+
             if (token.IsKind(SyntaxKind.CloseBracketToken) && IsWord(next.Kind()))
             {
                 return true;
             }
-            if (token.IsKind(SyntaxKind.CloseParenToken) && IsWord(next.Kind()) && token.Parent.IsKind(SyntaxKind.TupleType))
+
+            // We don't want to add extra space after cast, we want space only after tuple
+            if (token.IsKind(SyntaxKind.CloseParenToken) && IsWord(next.Kind()) && token.Parent.IsKind(SyntaxKind.TupleType) == true)
             {
                 return true;
             }
-            if ((next.IsKind(SyntaxKind.QuestionToken) || next.IsKind(SyntaxKind.ColonToken)) && next.Parent.IsKind(SyntaxKind.ConditionalExpression))
+
+            if ((next.IsKind(SyntaxKind.QuestionToken) || next.IsKind(SyntaxKind.ColonToken))
+                && (next.Parent.IsKind(SyntaxKind.ConditionalExpression)))
             {
                 return true;
             }
+
             if (token.IsKind(SyntaxKind.EqualsToken))
             {
                 return !token.Parent.IsKind(SyntaxKind.XmlTextAttribute);
             }
+
             if (next.IsKind(SyntaxKind.EqualsToken))
             {
                 return !next.Parent.IsKind(SyntaxKind.XmlTextAttribute);
             }
+
+            // Rules for function pointer below are taken from:
+            // https://github.com/dotnet/roslyn/blob/1cca63b5d8ea170f8d8e88e1574aa3ebe354c23b/src/Workspaces/SharedUtilitiesAndExtensions/Compiler/CSharp/Formatting/Rules/SpacingFormattingRule.cs#L321-L413
             if (token.Parent.IsKind(SyntaxKind.FunctionPointerType))
             {
+                // No spacing between delegate and *
                 if (next.IsKind(SyntaxKind.AsteriskToken) && token.IsKind(SyntaxKind.DelegateKeyword))
                 {
                     return false;
                 }
+
+                // Force a space between * and the calling convention
                 if (token.IsKind(SyntaxKind.AsteriskToken) && next.Parent.IsKind(SyntaxKind.FunctionPointerCallingConvention))
                 {
-                    SyntaxKind syntaxKind = next.Kind();
-                    if (syntaxKind - 8445 <= SyntaxKind.List || syntaxKind == SyntaxKind.IdentifierToken)
+                    switch (next.Kind())
                     {
-                        return true;
+                        case SyntaxKind.IdentifierToken:
+                        case SyntaxKind.ManagedKeyword:
+                        case SyntaxKind.UnmanagedKeyword:
+                            return true;
                     }
                 }
             }
+
             if (next.Parent.IsKind(SyntaxKind.FunctionPointerParameterList) && next.IsKind(SyntaxKind.LessThanToken))
             {
-                SyntaxKind syntaxKind = token.Kind();
-                if (syntaxKind == SyntaxKind.AsteriskToken)
+                switch (token.Kind())
                 {
-                    goto IL_03d0;
-                }
-                if (syntaxKind != SyntaxKind.CloseBracketToken)
-                {
-                    if (syntaxKind - 8445 <= SyntaxKind.List)
-                    {
-                        goto IL_03d0;
-                    }
-                }
-                else if (token.Parent.IsKind(SyntaxKind.FunctionPointerUnmanagedCallingConventionList))
-                {
-                    goto IL_03d0;
+                    // No spacing between the * and < tokens if there is no calling convention
+                    case SyntaxKind.AsteriskToken:
+                    // No spacing between the calling convention and opening angle bracket of function pointer types:
+                    // delegate* managed<
+                    case SyntaxKind.ManagedKeyword:
+                    case SyntaxKind.UnmanagedKeyword:
+                    // No spacing between the calling convention specifier and the opening angle
+                    // delegate* unmanaged[Cdecl]<
+                    case SyntaxKind.CloseBracketToken when token.Parent.IsKind(SyntaxKind.FunctionPointerUnmanagedCallingConventionList):
+                        return false;
                 }
             }
-            if (token.Parent.IsKind(SyntaxKind.FunctionPointerCallingConvention) && next.Parent.IsKind(SyntaxKind.FunctionPointerUnmanagedCallingConventionList) && next.IsKind(SyntaxKind.OpenBracketToken))
+
+            // No space between unmanaged and the [
+            // delegate* unmanaged[
+            if (token.Parent.IsKind(SyntaxKind.FunctionPointerCallingConvention) && next.Parent.IsKind(SyntaxKind.FunctionPointerUnmanagedCallingConventionList) &&
+                next.IsKind(SyntaxKind.OpenBracketToken))
             {
                 return false;
             }
+
+            // Function pointer calling convention adjustments
             if (next.Parent.IsKind(SyntaxKind.FunctionPointerUnmanagedCallingConventionList) && token.Parent.IsKind(SyntaxKind.FunctionPointerUnmanagedCallingConventionList))
             {
                 if (next.IsKind(SyntaxKind.IdentifierToken))
@@ -458,63 +501,99 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     {
                         return false;
                     }
-                    if (token.IsKind(SyntaxKind.CommaToken))
+                    // Space after the ,
+                    // unmanaged[Cdecl, Thiscall
+                    else if (token.IsKind(SyntaxKind.CommaToken))
                     {
                         return true;
                     }
                 }
+
+                // No space between identifier and comma
+                // unmanaged[Cdecl,
                 if (next.IsKind(SyntaxKind.CommaToken))
                 {
                     return false;
                 }
+
+                // No space before the ]
+                // unmanaged[Cdecl]
                 if (next.IsKind(SyntaxKind.CloseBracketToken))
                 {
                     return false;
                 }
             }
+
+            // No space after the < in function pointer parameter lists
+            // delegate*<void
             if (token.IsKind(SyntaxKind.LessThanToken) && token.Parent.IsKind(SyntaxKind.FunctionPointerParameterList))
             {
                 return false;
             }
+
+            // No space before the > in function pointer parameter lists
+            // delegate*<void>
             if (next.IsKind(SyntaxKind.GreaterThanToken) && next.Parent.IsKind(SyntaxKind.FunctionPointerParameterList))
             {
                 return false;
             }
+
             if (token.IsKind(SyntaxKind.EqualsGreaterThanToken) || next.IsKind(SyntaxKind.EqualsGreaterThanToken))
             {
                 return true;
             }
+
+            // Can happen in directives (e.g. #line 1 "file")
             if (SyntaxFacts.IsLiteral(token.Kind()) && SyntaxFacts.IsLiteral(next.Kind()))
             {
                 return true;
             }
+
+            // No space before an asterisk that's part of a PointerTypeSyntax.
             if (next.IsKind(SyntaxKind.AsteriskToken) && next.Parent is PointerTypeSyntax)
             {
                 return false;
             }
-            if (token.IsKind(SyntaxKind.AsteriskToken) && token.Parent is PointerTypeSyntax && (next.IsKind(SyntaxKind.IdentifierToken) || next.Parent.IsKind(SyntaxKind.IndexerDeclaration)))
+
+            // The last asterisk of a pointer declaration should be followed by a space.
+            if (token.IsKind(SyntaxKind.AsteriskToken) && token.Parent is PointerTypeSyntax &&
+                (next.IsKind(SyntaxKind.IdentifierToken) || next.Parent.IsKind(SyntaxKind.IndexerDeclaration)))
             {
                 return true;
             }
-            if (IsKeyword(token.Kind()) && !next.IsKind(SyntaxKind.ColonToken) && !next.IsKind(SyntaxKind.DotToken) && !next.IsKind(SyntaxKind.QuestionToken) && !next.IsKind(SyntaxKind.SemicolonToken) && !next.IsKind(SyntaxKind.OpenBracketToken) && (!next.IsKind(SyntaxKind.OpenParenToken) || KeywordNeedsSeparatorBeforeOpenParen(token.Kind()) || next.Parent.IsKind(SyntaxKind.TupleType)) && !next.IsKind(SyntaxKind.CloseParenToken) && !next.IsKind(SyntaxKind.CloseBraceToken) && !next.IsKind(SyntaxKind.ColonColonToken) && !next.IsKind(SyntaxKind.GreaterThanToken) && !next.IsKind(SyntaxKind.CommaToken))
+
+            if (IsKeyword(token.Kind()))
             {
-                return true;
-            }
-            if (IsWord(token.Kind()) && IsWord(next.Kind()))
-            {
-                return true;
-            }
-            if (token.Width > 1 && next.Width > 1)
-            {
-                char c = token.Text.Last();
-                char c2 = next.Text.First();
-                if (c == c2 && TokenCharacterCanBeDoubled(c))
+                if (!next.IsKind(SyntaxKind.ColonToken) &&
+                    !next.IsKind(SyntaxKind.DotToken) &&
+                    !next.IsKind(SyntaxKind.QuestionToken) &&
+                    !next.IsKind(SyntaxKind.SemicolonToken) &&
+                    !next.IsKind(SyntaxKind.OpenBracketToken) &&
+                    (!next.IsKind(SyntaxKind.OpenParenToken) || KeywordNeedsSeparatorBeforeOpenParen(token.Kind()) || next.Parent.IsKind(SyntaxKind.TupleType)) &&
+                    !next.IsKind(SyntaxKind.CloseParenToken) &&
+                    !next.IsKind(SyntaxKind.CloseBraceToken) &&
+                    !next.IsKind(SyntaxKind.ColonColonToken) &&
+                    !next.IsKind(SyntaxKind.GreaterThanToken) &&
+                    !next.IsKind(SyntaxKind.CommaToken))
                 {
                     return true;
                 }
             }
-            return false;
-        IL_03d0:
+
+            if (IsWord(token.Kind()) && IsWord(next.Kind()))
+            {
+                return true;
+            }
+            else if (token.Width > 1 && next.Width > 1)
+            {
+                var tokenLastChar = token.Text.Last();
+                var nextFirstChar = next.Text.First();
+                if (tokenLastChar == nextFirstChar && TokenCharacterCanBeDoubled(tokenLastChar))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
