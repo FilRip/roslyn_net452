@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis
 
         protected abstract Metadata GetMetadataImpl();
 
-        internal Metadata GetMetadataNoCopy()
+        public Metadata GetMetadataNoCopy()
         {
             return GetMetadataImpl();
         }

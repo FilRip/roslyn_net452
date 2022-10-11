@@ -1,6 +1,6 @@
 namespace Microsoft.CodeAnalysis
 {
-    internal static class InternalSymbolDisplayPartKind
+    public static class InternalSymbolDisplayPartKind
     {
         private const SymbolDisplayPartKind @base = (SymbolDisplayPartKind)33;
 

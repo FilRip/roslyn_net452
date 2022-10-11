@@ -6,9 +6,9 @@ namespace Microsoft.CodeAnalysis
 
         public override string Display => CodeAnalysisResources.Unresolved + Reference;
 
-        internal override bool IsUnresolved => true;
+        public override bool IsUnresolved => true;
 
-        internal UnresolvedMetadataReference(string reference, MetadataReferenceProperties properties)
+        public UnresolvedMetadataReference(string reference, MetadataReferenceProperties properties)
             : base(properties)
         {
             Reference = reference;

@@ -590,7 +590,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             }
         }
 
-        internal TNode[] Nodes
+        public TNode[] Nodes
         {
             get
             {

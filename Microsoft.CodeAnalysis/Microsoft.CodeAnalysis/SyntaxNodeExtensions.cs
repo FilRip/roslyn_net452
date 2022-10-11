@@ -47,9 +47,9 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal const string DefaultIndentation = "    ";
+        public const string DefaultIndentation = "    ";
 
-        internal const string DefaultEOL = "\r\n";
+        public const string DefaultEOL = "\r\n";
 
         private static readonly ConditionalWeakTable<SyntaxNode, SyntaxAnnotation> s_nodeToIdMap = new ConditionalWeakTable<SyntaxNode, SyntaxAnnotation>();
 

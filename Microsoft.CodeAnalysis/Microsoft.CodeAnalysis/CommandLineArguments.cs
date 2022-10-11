@@ -166,14 +166,14 @@ namespace Microsoft.CodeAnalysis
             return ResolveMetadataReferences(metadataResolver, null, null);
         }
 
-        internal IEnumerable<MetadataReference> ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
+        public IEnumerable<MetadataReference> ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
         {
             List<MetadataReference> list = new List<MetadataReference>();
             ResolveMetadataReferences(metadataResolver, diagnosticsOpt, messageProviderOpt, list);
             return list;
         }
 
-        internal virtual bool ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt, List<MetadataReference> resolved)
+        public virtual bool ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt, List<MetadataReference> resolved)
         {
             bool result = true;
             ImmutableArray<CommandLineReference>.Enumerator enumerator = MetadataReferences.GetEnumerator();
@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis
             return result;
         }
 
-        internal static ImmutableArray<PortableExecutableReference> ResolveMetadataReference(CommandLineReference cmdReference, MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
+        public static ImmutableArray<PortableExecutableReference> ResolveMetadataReference(CommandLineReference cmdReference, MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
         {
             ImmutableArray<PortableExecutableReference> result;
             try

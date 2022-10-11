@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis
             _marshalArrayElementCount = elementCount;
         }
 
-        internal void SetMarshalAsSimpleType(UnmanagedType type)
+        public void SetMarshalAsSimpleType(UnmanagedType type)
         {
             _marshalType = type;
         }

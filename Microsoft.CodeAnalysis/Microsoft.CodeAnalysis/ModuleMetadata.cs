@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal PEModule Module
+        public PEModule Module
         {
             get
             {

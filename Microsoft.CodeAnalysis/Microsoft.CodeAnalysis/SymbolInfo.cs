@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis
 
         public CandidateReason CandidateReason { get; }
 
-        internal bool IsEmpty
+        public bool IsEmpty
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal ImmutableArray<ISymbol> GetAllSymbols()
+        public ImmutableArray<ISymbol> GetAllSymbols()
         {
             if (Symbol != null)
             {

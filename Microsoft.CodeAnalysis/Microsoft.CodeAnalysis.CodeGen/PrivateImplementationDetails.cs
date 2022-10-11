@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             }
         }
 
-        internal const string SynthesizedStringHashFunctionName = "ComputeStringHash";
+        public const string SynthesizedStringHashFunctionName = "ComputeStringHash";
 
         private readonly CommonPEModuleBuilder _moduleBuilder;
 

@@ -12,11 +12,11 @@ namespace Microsoft.CodeAnalysis.Operations
 
         public IOperation Value { get; }
 
-        internal IConvertibleConversion InConversionConvertible { get; }
+        public IConvertibleConversion InConversionConvertible { get; }
 
         public CommonConversion InConversion => InConversionConvertible.ToCommonConversion();
 
-        internal IConvertibleConversion OutConversionConvertible { get; }
+        public IConvertibleConversion OutConversionConvertible { get; }
 
         public CommonConversion OutConversion => OutConversionConvertible.ToCommonConversion();
 

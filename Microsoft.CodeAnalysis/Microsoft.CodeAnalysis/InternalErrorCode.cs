@@ -1,6 +1,6 @@
 namespace Microsoft.CodeAnalysis
 {
-    internal static class InternalErrorCode
+    public static class InternalErrorCode
     {
         public const int Unknown = -1;
 

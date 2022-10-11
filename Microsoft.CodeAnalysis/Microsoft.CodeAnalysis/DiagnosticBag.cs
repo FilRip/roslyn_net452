@@ -202,7 +202,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal IEnumerable<Diagnostic> AsEnumerableWithoutResolution()
+        public IEnumerable<Diagnostic> AsEnumerableWithoutResolution()
         {
             IEnumerable<Diagnostic> lazyBag = _lazyBag;
             return lazyBag ?? SpecializedCollections.EmptyEnumerable<Diagnostic>();

@@ -250,7 +250,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool IsValidAssembly()
+        public bool IsValidAssembly()
         {
             ImmutableArray<ModuleMetadata> modules = GetModules();
             if (!modules[0].Module.IsManifestModule)

@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         [Conditional("DEBUG")]
-        internal static void AssertMessageSerializable(object[] args)
+        public static void AssertMessageSerializable(object[] args)
         {
             foreach (object obj in args)
             {

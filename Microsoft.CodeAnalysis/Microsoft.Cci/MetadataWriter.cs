@@ -273,9 +273,9 @@ namespace Microsoft.Cci
 
         private readonly Dictionary<IGenericMethodInstanceReference, BlobHandle> _methodInstanceSignatureIndex = new Dictionary<IGenericMethodInstanceReference, BlobHandle>(ReferenceEqualityComparer.Instance);
 
-        internal const string dummyAssemblyAttributeParentNamespace = "System.Runtime.CompilerServices";
+        public const string dummyAssemblyAttributeParentNamespace = "System.Runtime.CompilerServices";
 
-        internal const string dummyAssemblyAttributeParentName = "AssemblyAttributesGoHere";
+        public const string dummyAssemblyAttributeParentName = "AssemblyAttributesGoHere";
 
         public static readonly string[,] dummyAssemblyAttributeParentQualifier = new string[2, 2]
         {
@@ -987,7 +987,7 @@ namespace Microsoft.Cci
             return GetMethodSignatureHandleAndBlob(methodReference, out ImmutableArray<byte> signatureBlob);
         }
 
-        internal byte[] GetMethodSignature(IMethodReference methodReference)
+        public byte[] GetMethodSignature(IMethodReference methodReference)
         {
             GetMethodSignatureHandleAndBlob(methodReference, out var signatureBlob);
             return signatureBlob.ToArray();

@@ -290,7 +290,7 @@ namespace Microsoft.CodeAnalysis
 
         public static readonly AttributeDescription ConditionalAttribute;
 
-        internal static readonly AttributeDescription CaseInsensitiveExtensionAttribute;
+        public static readonly AttributeDescription CaseInsensitiveExtensionAttribute;
 
         public static readonly AttributeDescription CaseSensitiveExtensionAttribute;
 
@@ -420,29 +420,29 @@ namespace Microsoft.CodeAnalysis
 
         public static readonly AttributeDescription TypeIdentifierAttribute;
 
-        internal static readonly AttributeDescription VisualBasicEmbeddedAttribute;
+        public static readonly AttributeDescription VisualBasicEmbeddedAttribute;
 
         public static readonly AttributeDescription CodeAnalysisEmbeddedAttribute;
 
-        internal static readonly AttributeDescription VisualBasicComClassAttribute;
+        public static readonly AttributeDescription VisualBasicComClassAttribute;
 
-        internal static readonly AttributeDescription StandardModuleAttribute;
+        public static readonly AttributeDescription StandardModuleAttribute;
 
-        internal static readonly AttributeDescription OptionCompareAttribute;
+        public static readonly AttributeDescription OptionCompareAttribute;
 
-        internal static readonly AttributeDescription AccessedThroughPropertyAttribute;
+        public static readonly AttributeDescription AccessedThroughPropertyAttribute;
 
-        internal static readonly AttributeDescription WebMethodAttribute;
+        public static readonly AttributeDescription WebMethodAttribute;
 
         public static readonly AttributeDescription DateTimeConstantAttribute;
 
         public static readonly AttributeDescription ClassInterfaceAttribute;
 
-        internal static readonly AttributeDescription ComSourceInterfacesAttribute;
+        public static readonly AttributeDescription ComSourceInterfacesAttribute;
 
-        internal static readonly AttributeDescription ComVisibleAttribute;
+        public static readonly AttributeDescription ComVisibleAttribute;
 
-        internal static readonly AttributeDescription DispIdAttribute;
+        public static readonly AttributeDescription DispIdAttribute;
 
         public static readonly AttributeDescription TypeLibVersionAttribute;
 
@@ -472,13 +472,13 @@ namespace Microsoft.CodeAnalysis
 
         public static readonly AttributeDescription TypeForwardedToAttribute;
 
-        internal static readonly AttributeDescription STAThreadAttribute;
+        public static readonly AttributeDescription STAThreadAttribute;
 
-        internal static readonly AttributeDescription MTAThreadAttribute;
+        public static readonly AttributeDescription MTAThreadAttribute;
 
         public static readonly AttributeDescription ObsoleteAttribute;
 
-        internal static readonly AttributeDescription TypeLibTypeAttribute;
+        public static readonly AttributeDescription TypeLibTypeAttribute;
 
         public static readonly AttributeDescription DynamicAttribute;
 
@@ -498,9 +498,9 @@ namespace Microsoft.CodeAnalysis
 
         public static readonly AttributeDescription SecuritySafeCriticalAttribute;
 
-        internal static readonly AttributeDescription DesignerGeneratedAttribute;
+        public static readonly AttributeDescription DesignerGeneratedAttribute;
 
-        internal static readonly AttributeDescription MyGroupCollectionAttribute;
+        public static readonly AttributeDescription MyGroupCollectionAttribute;
 
         public static readonly AttributeDescription ComEventInterfaceAttribute;
 
@@ -516,7 +516,7 @@ namespace Microsoft.CodeAnalysis
 
         public static readonly AttributeDescription ImportedFromTypeLibAttribute;
 
-        internal static readonly AttributeDescription DefaultEventAttribute;
+        public static readonly AttributeDescription DefaultEventAttribute;
 
         public static readonly AttributeDescription AssemblyConfigurationAttribute;
 

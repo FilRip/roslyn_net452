@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool HasLazyInfo
+        public bool HasLazyInfo
         {
             get
             {

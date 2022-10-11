@@ -198,7 +198,7 @@ namespace Microsoft.CodeAnalysis
 
         protected readonly IReadOnlyDictionary<string, string> _features;
 
-        internal const string UnspecifiedModuleAssemblyName = "?";
+        public const string UnspecifiedModuleAssemblyName = "?";
 
         private int _lazySubmissionSlotIndex;
 
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis
 
         private readonly ConcurrentCache<string, INamedTypeSymbol?> _getTypeCache = new ConcurrentCache<string, INamedTypeSymbol>(50, ReferenceEqualityComparer.Instance);
 
-        internal const CompilationStage DefaultDiagnosticsStage = CompilationStage.Compile;
+        public const CompilationStage DefaultDiagnosticsStage = CompilationStage.Compile;
 
         private ConcurrentDictionary<SyntaxTree, SmallConcurrentSetOfInts>? _lazyTreeToUsedImportDirectivesMap;
 
@@ -1973,7 +1973,7 @@ namespace Microsoft.CodeAnalysis
 
         public abstract int CompareSourceLocations(SyntaxReference loc1, SyntaxReference loc2);
 
-        internal TLocation FirstSourceLocation<TLocation>(TLocation first, TLocation second) where TLocation : Location
+        public TLocation FirstSourceLocation<TLocation>(TLocation first, TLocation second) where TLocation : Location
         {
             if (CompareSourceLocations(first, second) <= 0)
             {
@@ -1982,7 +1982,7 @@ namespace Microsoft.CodeAnalysis
             return second;
         }
 
-        internal TLocation? FirstSourceLocation<TLocation>(ImmutableArray<TLocation> locations) where TLocation : Location
+        public TLocation? FirstSourceLocation<TLocation>(ImmutableArray<TLocation> locations) where TLocation : Location
         {
             if (locations.IsEmpty)
             {

@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis
             InheritMask = 0x3F
         }
 
-        internal const int ListKind = 1;
+        public const int ListKind = 1;
 
         private readonly ushort _kind;
 
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal NodeFlags Flags => flags;
+        public NodeFlags Flags => flags;
 
         public bool IsMissing => (flags & NodeFlags.IsNotMissing) == 0;
 
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis
 
         public bool ParsedInQuery => (flags & NodeFlags.FactoryContextIsInQuery) != 0;
 
-        internal bool ParsedInIterator => (flags & NodeFlags.FactoryContextIsInQuery) != 0;
+        public bool ParsedInIterator => (flags & NodeFlags.FactoryContextIsInQuery) != 0;
 
         public bool ContainsSkippedText => (flags & NodeFlags.ContainsSkippedText) != 0;
 
@@ -301,12 +301,12 @@ namespace Microsoft.CodeAnalysis
             return num2;
         }
 
-        internal void SetFlags(NodeFlags flags)
+        public void SetFlags(NodeFlags flags)
         {
             this.flags |= flags;
         }
 
-        internal void ClearFlags(NodeFlags flags)
+        public void ClearFlags(NodeFlags flags)
         {
             this.flags &= (NodeFlags)(byte)(~(int)flags);
         }

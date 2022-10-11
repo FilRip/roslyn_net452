@@ -198,12 +198,12 @@ namespace Microsoft.CodeAnalysis
             return Add(node.Location, useSiteInfo);
         }
 
-        internal bool AddDiagnostics(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
+        public bool AddDiagnostics(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
         {
             return AddDiagnostics(node.Location, useSiteInfo);
         }
 
-        internal bool AddDiagnostics(Location location, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
+        public bool AddDiagnostics(Location location, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
         {
             DiagnosticBag diagnosticBag = DiagnosticBag;
             if (diagnosticBag != null)

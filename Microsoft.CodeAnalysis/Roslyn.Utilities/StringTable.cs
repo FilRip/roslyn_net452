@@ -471,7 +471,7 @@ namespace Roslyn.Utilities
             return Interlocked.Increment(ref s_sharedRandom);
         }
 
-        internal static bool TextEquals(string array, string text, int start, int length)
+        public static bool TextEquals(string array, string text, int start, int length)
         {
             if (array.Length != length)
             {
@@ -487,7 +487,7 @@ namespace Roslyn.Utilities
             return true;
         }
 
-        internal static bool TextEquals(string array, StringBuilder text)
+        public static bool TextEquals(string array, StringBuilder text)
         {
             if (array.Length != text.Length)
             {
@@ -503,7 +503,7 @@ namespace Roslyn.Utilities
             return true;
         }
 
-        internal static bool TextEqualsASCII(string text, ReadOnlySpan<byte> ascii)
+        public static bool TextEqualsASCII(string text, ReadOnlySpan<byte> ascii)
         {
             if (ascii.Length != text.Length)
             {
@@ -519,7 +519,7 @@ namespace Roslyn.Utilities
             return true;
         }
 
-        internal static bool TextEquals(string array, ReadOnlySpan<char> text)
+        public static bool TextEquals(string array, ReadOnlySpan<char> text)
         {
             return MemoryExtensions.Equals(text, MemoryExtensions.AsSpan(array), StringComparison.Ordinal);
         }

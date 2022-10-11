@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
 
         public readonly string? UrlFormat;
 
-        internal bool IsUninitialized => this == Uninitialized;
+        public bool IsUninitialized => this == Uninitialized;
 
         public ObsoleteAttributeData(ObsoleteAttributeKind kind, string? message, bool isError, string? diagnosticId, string? urlFormat)
         {

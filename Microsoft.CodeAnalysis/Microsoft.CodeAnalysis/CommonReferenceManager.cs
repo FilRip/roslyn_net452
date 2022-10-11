@@ -1383,18 +1383,18 @@ namespace Microsoft.CodeAnalysis
         }
 
         [Conditional("DEBUG")]
-        internal void AssertUnbound()
+        public void AssertUnbound()
         {
         }
 
         [Conditional("DEBUG")]
         [System.Diagnostics.CodeAnalysis.MemberNotNull(new string[] { "_lazyReferencedAssembliesMap", "_lazyReferencedModuleIndexMap", "_lazyReferenceDirectiveMap", "_lazyImplicitReferenceResolutions" })]
-        internal void AssertBound()
+        public void AssertBound()
         {
         }
 
         [Conditional("DEBUG")]
-        internal void AssertCanReuseForCompilation(TCompilation compilation)
+        public void AssertCanReuseForCompilation(TCompilation compilation)
         {
         }
 

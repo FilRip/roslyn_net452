@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         internal EmitOptions EmitOptions { get; }
 
-        internal DebugInformationFormat DebugInformationFormat => EmitOptions.DebugInformationFormat;
+        public DebugInformationFormat DebugInformationFormat => EmitOptions.DebugInformationFormat;
 
         internal SourceHashAlgorithm PdbChecksumAlgorithm => EmitOptions.PdbChecksumAlgorithm;
 

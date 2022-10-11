@@ -364,7 +364,7 @@ namespace Microsoft.CodeAnalysis
 
         private readonly SyntaxNode? _parent;
 
-        protected SyntaxTree? _syntaxTree;
+        public SyntaxTree? _syntaxTree;
 
         public int RawKind => Green.RawKind;
 

@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis
             return CommonConstructorArguments[i].DecodeValue<T>(specialType);
         }
 
-        internal T? DecodeNamedArgument<T>(string name, SpecialType specialType, T? defaultValue = default(T?))
+        public T? DecodeNamedArgument<T>(string name, SpecialType specialType, T? defaultValue = default(T?))
         {
             return DecodeNamedArgument(CommonNamedArguments, name, specialType, defaultValue);
         }

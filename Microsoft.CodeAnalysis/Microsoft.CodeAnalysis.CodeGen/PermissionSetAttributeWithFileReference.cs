@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    internal class PermissionSetAttributeWithFileReference : ICustomAttribute
+    public class PermissionSetAttributeWithFileReference : ICustomAttribute
     {
         private struct HexPropertyMetadataNamedArgument : IMetadataNamedArgument, IMetadataExpression
         {
@@ -40,9 +40,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         private readonly string _resolvedPermissionSetFilePath;
 
-        internal const string FilePropertyName = "File";
+        public const string FilePropertyName = "File";
 
-        internal const string HexPropertyName = "Hex";
+        public const string HexPropertyName = "Hex";
 
         public int ArgumentCount => _sourceAttribute.ArgumentCount;
 

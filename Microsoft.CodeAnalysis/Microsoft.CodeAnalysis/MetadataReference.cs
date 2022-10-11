@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis
 
         public virtual string? Display => null;
 
-        internal virtual bool IsUnresolved => false;
+        public virtual bool IsUnresolved => false;
 
         protected MetadataReference(MetadataReferenceProperties properties)
         {

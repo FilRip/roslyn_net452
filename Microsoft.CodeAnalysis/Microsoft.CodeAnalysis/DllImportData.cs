@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis
             _ => null,
         };
 
-        internal DllImportData(string? moduleName, string? entryPointName, MethodImportAttributes flags)
+        public DllImportData(string? moduleName, string? entryPointName, MethodImportAttributes flags)
         {
             _moduleName = moduleName;
             _entryPointName = entryPointName;

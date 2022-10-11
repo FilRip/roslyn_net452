@@ -1018,7 +1018,7 @@ namespace Microsoft.CodeAnalysis
             return (uint)(value - start) <= (uint)(end - start);
         }
 
-        internal static bool InRange(char value, char start, char end)
+        public static bool InRange(char value, char start, char end)
         {
             return (uint)(value - start) <= (uint)(end - start);
         }

@@ -13,7 +13,7 @@ namespace Roslyn.Utilities
     {
         public const int FnvOffsetBias = -2128831035;
 
-        internal const int FnvPrime = 16777619;
+        public const int FnvPrime = 16777619;
 
         public static int Combine(int newKey, int currentKey)
         {

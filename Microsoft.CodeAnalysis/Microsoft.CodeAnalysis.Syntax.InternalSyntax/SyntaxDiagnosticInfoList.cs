@@ -4,7 +4,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal struct SyntaxDiagnosticInfoList
+    public struct SyntaxDiagnosticInfoList
     {
         public struct Enumerator
         {
@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
         private readonly GreenNode _node;
 
-        internal SyntaxDiagnosticInfoList(GreenNode node)
+        public SyntaxDiagnosticInfoList(GreenNode node)
         {
             _node = node;
         }

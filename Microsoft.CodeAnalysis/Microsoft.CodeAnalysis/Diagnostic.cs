@@ -266,7 +266,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal const string CompilerDiagnosticCategory = "Compiler";
+        public const string CompilerDiagnosticCategory = "Compiler";
 
         internal const int DefaultWarningLevel = 4;
 

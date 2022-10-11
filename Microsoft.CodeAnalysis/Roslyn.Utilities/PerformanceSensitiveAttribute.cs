@@ -5,7 +5,7 @@ namespace Roslyn.Utilities
 {
     [Conditional("EMIT_CODE_ANALYSIS_ATTRIBUTES")]
     [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true, Inherited = false)]
-    internal sealed class PerformanceSensitiveAttribute : Attribute
+    public sealed class PerformanceSensitiveAttribute : Attribute
     {
         public string Uri { get; }
 

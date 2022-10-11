@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.Emit
 {
     public struct AnonymousTypeKey : IEquatable<AnonymousTypeKey>
     {
-        internal readonly bool IsDelegate;
+        public readonly bool IsDelegate;
 
         public readonly ImmutableArray<AnonymousTypeKeyField> Fields;
 

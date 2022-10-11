@@ -1,6 +1,6 @@
 namespace Microsoft.Cci
 {
-    internal static class CompilationOptionNames
+    public static class CompilationOptionNames
     {
         public const string CompilationOptionsVersion = "version";
 

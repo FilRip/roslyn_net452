@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.Collections
 {
-    internal class KeyedStack<T, R> where T : notnull
+    public class KeyedStack<T, R> where T : notnull
     {
-        private readonly Dictionary<T, Stack<R>> _dict = new Dictionary<T, Stack<R>>();
+        private readonly Dictionary<T, Stack<R>> _dict = new();
 
         public void Push(T key, R value)
         {

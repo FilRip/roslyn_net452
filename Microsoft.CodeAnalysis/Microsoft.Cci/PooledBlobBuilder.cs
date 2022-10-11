@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.Cci
 {
-    internal sealed class PooledBlobBuilder : BlobBuilder, IDisposable
+    public sealed class PooledBlobBuilder : BlobBuilder, IDisposable
     {
         private const int PoolSize = 128;
 

@@ -654,7 +654,7 @@ namespace Microsoft.CodeAnalysis
             return Hash.Combine(Token.GetHashCode(), Hash.Combine(Node, Index));
         }
 
-        internal void CopyTo(int offset, SyntaxTrivia[] array, int arrayOffset, int count)
+        public void CopyTo(int offset, SyntaxTrivia[] array, int arrayOffset, int count)
         {
             if (offset < 0 || count < 0 || Count < offset + count)
             {

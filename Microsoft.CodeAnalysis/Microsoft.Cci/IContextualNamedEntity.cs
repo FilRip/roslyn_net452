@@ -1,6 +1,6 @@
 namespace Microsoft.Cci
 {
-    internal interface IContextualNamedEntity : INamedEntity
+    public interface IContextualNamedEntity : INamedEntity
     {
         void AssociateWithMetadataWriter(MetadataWriter metadataWriter);
     }

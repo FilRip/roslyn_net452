@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis
 
         internal bool IsManifestModule => MetadataReader.IsAssembly;
 
-        internal bool IsLinkedModule => !MetadataReader.IsAssembly;
+        public bool IsLinkedModule => !MetadataReader.IsAssembly;
 
         public bool IsCOFFOnly
         {
@@ -954,7 +954,7 @@ namespace Microsoft.CodeAnalysis
             return FindTargetAttribute(token, AttributeDescription.AttributeUsageAttribute).Handle;
         }
 
-        internal bool HasInterfaceTypeAttribute(EntityHandle token, out ComInterfaceType interfaceType)
+        public bool HasInterfaceTypeAttribute(EntityHandle token, out ComInterfaceType interfaceType)
         {
             AttributeInfo attributeInfo = FindTargetAttribute(token, AttributeDescription.InterfaceTypeAttribute);
             if (attributeInfo.HasValue && TryExtractInterfaceTypeFromAttribute(attributeInfo, out interfaceType))
@@ -1630,7 +1630,7 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal List<AttributeInfo> FindTargetAttributes(EntityHandle hasAttribute, AttributeDescription description)
+        public List<AttributeInfo> FindTargetAttributes(EntityHandle hasAttribute, AttributeDescription description)
         {
             List<AttributeInfo> list = null;
             try
@@ -1655,12 +1655,12 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal AttributeInfo FindTargetAttribute(EntityHandle hasAttribute, AttributeDescription description)
+        public AttributeInfo FindTargetAttribute(EntityHandle hasAttribute, AttributeDescription description)
         {
             return FindTargetAttribute(MetadataReader, hasAttribute, description);
         }
 
-        internal static AttributeInfo FindTargetAttribute(MetadataReader metadataReader, EntityHandle hasAttribute, AttributeDescription description)
+        public static AttributeInfo FindTargetAttribute(MetadataReader metadataReader, EntityHandle hasAttribute, AttributeDescription description)
         {
             try
             {
@@ -2556,7 +2556,7 @@ namespace Microsoft.CodeAnalysis
             return MetadataReader.GetEventDefinition(eventDef).GetAccessors();
         }
 
-        internal int GetAssemblyReferenceIndexOrThrow(AssemblyReferenceHandle assemblyRef)
+        public int GetAssemblyReferenceIndexOrThrow(AssemblyReferenceHandle assemblyRef)
         {
             return MetadataReader.GetRowNumber(assemblyRef) - 1;
         }

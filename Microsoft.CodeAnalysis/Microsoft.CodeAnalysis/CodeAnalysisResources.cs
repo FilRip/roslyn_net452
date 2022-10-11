@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static string ResourceDataProviderShouldReturnNonNullStream => GetResourceString("ResourceDataProviderShouldReturnNonNullStream");
 
-        internal static string FileNotFound => GetResourceString("FileNotFound");
+        public static string FileNotFound => GetResourceString("FileNotFound");
 
         internal static string PathReturnedByResolveStrongNameKeyFileMustBeAbsolute => GetResourceString("PathReturnedByResolveStrongNameKeyFileMustBeAbsolute");
 
@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static string AssemblySigningNotSupported => GetResourceString("AssemblySigningNotSupported");
 
-        internal static string XmlReferencesNotSupported => GetResourceString("XmlReferencesNotSupported");
+        public static string XmlReferencesNotSupported => GetResourceString("XmlReferencesNotSupported");
 
         internal static string FailedToResolveRuleSetName => GetResourceString("FailedToResolveRuleSetName");
 
@@ -378,9 +378,9 @@ namespace Microsoft.CodeAnalysis
 
         internal static string SuppressionDiagnosticDescriptorMessage => GetResourceString("SuppressionDiagnosticDescriptorMessage");
 
-        internal static string ModuleHasInvalidAttributes => GetResourceString("ModuleHasInvalidAttributes");
+        public static string ModuleHasInvalidAttributes => GetResourceString("ModuleHasInvalidAttributes");
 
-        internal static string UnableToDetermineSpecificCauseOfFailure => GetResourceString("UnableToDetermineSpecificCauseOfFailure");
+        public static string UnableToDetermineSpecificCauseOfFailure => GetResourceString("UnableToDetermineSpecificCauseOfFailure");
 
         public static string ChangingVersionOfAssemblyReferenceIsNotAllowedDuringDebugging => GetResourceString("ChangingVersionOfAssemblyReferenceIsNotAllowedDuringDebugging");
 

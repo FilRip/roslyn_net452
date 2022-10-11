@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal sealed class CustomModifiersTuple
+    public sealed class CustomModifiersTuple
     {
         private readonly ImmutableArray<CustomModifier> _typeCustomModifiers;
 

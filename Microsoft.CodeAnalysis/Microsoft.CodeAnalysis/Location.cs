@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
 
         public static Location None => NoLocation.Singleton;
 
-        internal Location()
+        public Location()
         {
         }
 

@@ -1974,7 +1974,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         }
 
         [Conditional("DEBUG")]
-        internal void AssertStackEmpty()
+        public void AssertStackEmpty()
         {
         }
 
@@ -2579,7 +2579,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             new SwitchIntegralJumpTableEmitter(this, caseLabels, fallThroughLabel, keyTypeCode, key).EmitJumpTable();
         }
 
-        internal void EmitSwitch(object[] labels)
+        public void EmitSwitch(object[] labels)
         {
             _emitState.AdjustStack(-1);
             int curStack = _emitState.CurStack;

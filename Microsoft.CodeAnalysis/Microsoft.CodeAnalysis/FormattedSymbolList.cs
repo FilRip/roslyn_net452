@@ -6,13 +6,13 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal sealed class FormattedSymbolList : IFormattable
+    public sealed class FormattedSymbolList : IFormattable
     {
         private readonly IEnumerable<ISymbol> _symbols;
 
         private readonly SymbolDisplayFormat _symbolDisplayFormat;
 
-        internal FormattedSymbolList(IEnumerable<ISymbol> symbols, SymbolDisplayFormat symbolDisplayFormat = null)
+        public FormattedSymbolList(IEnumerable<ISymbol> symbols, SymbolDisplayFormat symbolDisplayFormat = null)
         {
             _symbols = symbols;
             _symbolDisplayFormat = symbolDisplayFormat;

@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis
 
         private static readonly char[] s_searchPatternTrimChars = new char[8] { '\t', '\n', '\v', '\f', '\r', ' ', '\u0085', '\u00a0' };
 
-        internal const string ErrorLogOptionFormat = "<file>[,version={1|1.0|2|2.1}]";
+        public const string ErrorLogOptionFormat = "<file>[,version={1|1.0|2|2.1}]";
 
         private static readonly char[] s_resourceSeparators = new char[1] { ',' };
 
