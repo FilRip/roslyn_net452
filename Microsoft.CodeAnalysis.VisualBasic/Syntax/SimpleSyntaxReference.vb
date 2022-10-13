@@ -3,9 +3,8 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Threading
-Imports System.Threading.Tasks
+
 Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
     ' this is a basic implementation of a syntax reference

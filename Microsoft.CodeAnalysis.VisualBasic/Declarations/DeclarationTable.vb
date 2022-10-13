@@ -4,7 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Threading
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -114,7 +114,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Function
 
         Private Sub GetOlderNamespaces(builder As ArrayBuilder(Of RootSingleNamespaceDeclaration))
-            For Each olderRootDeclaration In _allOlderRootDeclarations.InInsertionOrder
+            For Each olderRootDeclaration As DeclarationTableEntry In _allOlderRootDeclarations.InInsertionOrder
                 Dim declOpt = olderRootDeclaration.Root.Value
                 If declOpt IsNot Nothing Then
                     builder.Add(declOpt)

@@ -13,12 +13,13 @@ Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Text
+
 Imports Microsoft.CodeAnalysis.PooledObjects
+Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic
 Imports Microsoft.CodeAnalysis.VisualBasic.SyntaxFacts
-Imports Microsoft.CodeAnalysis.Collections
-Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
+
 Imports CoreInternalSyntax = Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
@@ -2015,7 +2016,7 @@ FullWidthRepeat2:
                             Overflows = True
                         End If
                     Else
-                        Dim Shift As Integer = If(base = LiteralBase.Hexadecimal, 4, If(Base = LiteralBase.Octal, 3, 1))
+                        Dim Shift As Integer = If(base = LiteralBase.Hexadecimal, 4, If(base = LiteralBase.Octal, 3, 1))
                         Dim OverflowMask As UInt64 = If(base = LiteralBase.Hexadecimal, &HF000000000000000UL, If(base = LiteralBase.Octal, &HE000000000000000UL, &H8000000000000000UL))
 
                         ' Init For loop
@@ -2102,7 +2103,7 @@ FullWidthRepeat2:
             Dim result As SyntaxToken
             Select Case literalKind
                 Case NumericLiteralKind.Integral
-                    result = MakeIntegerLiteralToken(precedingTrivia, base, TypeCharacter, If(Overflows Or UnderscoreInWrongPlace, 0UL, IntegralValue), here)
+                    result = MakeIntegerLiteralToken(precedingTrivia, base, TypeCharacter, If(Overflows Or UnderscoreInWrongPlace, 0UL, integralValue), here)
                 Case NumericLiteralKind.Float
                     result = MakeFloatingLiteralToken(precedingTrivia, TypeCharacter, If(Overflows Or UnderscoreInWrongPlace, 0.0F, floatingValue), here)
                 Case NumericLiteralKind.Decimal
@@ -2702,7 +2703,7 @@ baddate:
 
             Dim required = feature.GetLanguageVersion()
             Dim actual = parseOptions.LanguageVersion
-            Return CInt(required) <= CInt(actual)
+            Return required <= actual
         End Function
     End Class
 End Namespace

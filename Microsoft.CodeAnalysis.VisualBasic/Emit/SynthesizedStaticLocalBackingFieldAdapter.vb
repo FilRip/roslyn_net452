@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Threading
+
 Imports Microsoft.Cci
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols

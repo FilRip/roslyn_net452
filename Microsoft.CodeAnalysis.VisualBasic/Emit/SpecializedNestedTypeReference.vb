@@ -30,7 +30,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         End Function
 
         Public Overrides Sub Dispatch(visitor As Cci.MetadataVisitor)
-            visitor.Visit(DirectCast(Me, Cci.ISpecializedNestedTypeReference))
+            visitor.Visit(Me)
         End Sub
 
         Private Function ITypeMemberReferenceGetContainingType(context As EmitContext) As Cci.ITypeReference Implements Cci.ITypeMemberReference.GetContainingType

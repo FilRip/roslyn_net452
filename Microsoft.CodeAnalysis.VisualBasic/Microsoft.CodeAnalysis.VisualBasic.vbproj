@@ -24,6 +24,7 @@
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -391,6 +392,7 @@
     <Compile Include="DocumentationComments\DocumentationCommentIDVisitor.vb" />
     <Compile Include="DocumentationComments\PEDocumenationCommentUtils.vb" />
     <Compile Include="DocumentationComments\SourceDocumentationCommentUtils.vb" />
+    <EmbeddedResource Include="Embedded.vb" />
     <Compile Include="Emit\ArrayTypeSymbolAdapter.vb" />
     <Compile Include="Emit\AssemblyReference.vb" />
     <Compile Include="Emit\AttributeDataAdapter.vb" />
@@ -457,6 +459,7 @@
     <Compile Include="GlobalImport.ImportDiagnosticInfo.vb" />
     <Compile Include="GlobalImport.vb" />
     <Compile Include="GlobalSuppressions.vb" />
+    <EmbeddedResource Include="InternalXmlHelper.vb" />
     <Compile Include="LanguageVersion.vb" />
     <Compile Include="Locations\EmbeddedTreeLocation.vb" />
     <Compile Include="Locations\LocationExtensions.vb" />
@@ -995,6 +998,8 @@
     <Compile Include="Syntax\VisualBasicWarningStateMap.vb" />
     <Compile Include="Utilities\TypeUnification.vb" />
     <Compile Include="Utilities\VarianceAmbiguity.vb" />
+    <EmbeddedResource Include="VbCoreSourceText.vb" />
+    <EmbeddedResource Include="VbMyTemplateText.vb" />
     <Compile Include="VisualBasicCompilationOptions.vb" />
     <Compile Include="VisualBasicExtensions.vb" />
     <Compile Include="VisualBasicFileSystemExtensions.vb" />

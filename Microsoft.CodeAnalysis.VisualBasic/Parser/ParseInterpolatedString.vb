@@ -3,7 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
+
 Imports InternalSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.SyntaxFactory
 
 '
@@ -317,7 +319,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                              <Out> ByRef excessText As String
                          ) As VisualBasicSyntaxNode
 
-            Dim lastNonMissing = DirectCast(node.GetLastToken(), SyntaxToken)
+            Dim lastNonMissing = node.GetLastToken()
 
             Dim newLastNonMissing = RemoveTrailingColonTriviaAndConvertToColonToken(lastNonMissing, colonToken, excessText)
 

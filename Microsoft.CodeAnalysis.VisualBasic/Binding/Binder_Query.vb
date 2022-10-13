@@ -4,7 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -3999,7 +3999,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' Should look for group's methods only. 
                 AddMemberLookupSymbolsInfo(nameSet,
                                   m_GroupReference.Type,
-                                  options Or CType(LookupOptions.MethodsOnly Or LookupOptions.MustBeInstance, LookupOptions))
+                                  options Or LookupOptions.MethodsOnly Or LookupOptions.MustBeInstance)
             End Sub
 
             Public Overrides Sub Lookup(lookupResult As LookupResult, name As String, arity As Integer, options As LookupOptions, <[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol))
@@ -4012,7 +4012,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                              m_GroupReference.Type,
                              name,
                              arity,
-                             options Or CType(LookupOptions.MethodsOnly Or LookupOptions.MustBeInstance, LookupOptions),
+                             options Or LookupOptions.MethodsOnly Or LookupOptions.MustBeInstance,
                              useSiteInfo)
             End Sub
 

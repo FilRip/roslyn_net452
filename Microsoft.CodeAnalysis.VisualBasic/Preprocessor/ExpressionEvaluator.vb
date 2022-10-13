@@ -9,6 +9,7 @@
 Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Reflection
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.TypeHelpers
 
@@ -752,7 +753,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
                 Case SpecialType.System_String
                     Dim tv = DirectCast(value, CConst(Of String))
-                    Dim ch = If(tv.Value Is Nothing, CChar(Nothing), CChar(tv.Value))
+                    Dim ch = If(tv.Value Is Nothing, Nothing, CChar(tv.Value))
                     Return CConst.Create(ch)
 
                 Case Else
@@ -1231,7 +1232,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                                 ResultValue = CompileTimeCalculations.UncheckedCLng(UncheckedCULng(LeftValue) Mod UncheckedCULng(RightValue))
 
                                 ' // 64-bit processors crash on 0, -1 (Bug: dd71694)
-                            ElseIf RightValue <> Not CType(0, Int64) Then
+                            ElseIf RightValue <> Not 0 Then
                                 ResultValue = LeftValue Mod RightValue
                             Else
                                 ResultValue = 0

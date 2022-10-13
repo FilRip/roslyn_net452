@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Reflection.Metadata
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE

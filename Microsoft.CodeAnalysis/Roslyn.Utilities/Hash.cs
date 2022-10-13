@@ -11,13 +11,13 @@ namespace Roslyn.Utilities
 {
     public static class Hash
     {
-        public const int FnvOffsetBias = -2128831035;
+        public const int FnvOffsetBias = unchecked((int)2166136261);
 
         public const int FnvPrime = 16777619;
 
         public static int Combine(int newKey, int currentKey)
         {
-            return currentKey * -1521134295 + newKey;
+            return unchecked((currentKey * (int)0xA5555529) + newKey);
         }
 
         public static int Combine(bool newKeyPart, int currentKey)
@@ -27,12 +27,12 @@ namespace Roslyn.Utilities
 
         public static int Combine<T>(T newKeyPart, int currentKey) where T : class?
         {
-            int num = currentKey * -1521134295;
+            int hash = unchecked(currentKey * (int)0xA5555529);
             if (newKeyPart != null)
             {
-                return num + newKeyPart.GetHashCode();
+                return unchecked(hash + newKeyPart.GetHashCode());
             }
-            return num;
+            return hash;
         }
 
         public static int CombineValues<T>(IEnumerable<T>? values, int maxItemsToHash = int.MaxValue)
@@ -41,21 +41,24 @@ namespace Roslyn.Utilities
             {
                 return 0;
             }
-            int num = 0;
-            int num2 = 0;
-            foreach (T item in values!)
+
+            var hashCode = 0;
+            var count = 0;
+            foreach (var value in values)
             {
-                if (num2++ < maxItemsToHash)
+                if (count++ >= maxItemsToHash)
                 {
-                    if (item != null)
-                    {
-                        num = Combine(item.GetHashCode(), num);
-                    }
-                    continue;
+                    break;
                 }
-                return num;
+
+                // Should end up with a constrained virtual call to object.GetHashCode (i.e. avoid boxing where possible).
+                if (value != null)
+                {
+                    hashCode = Hash.Combine(value.GetHashCode(), hashCode);
+                }
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int CombineValues<T>(T[]? values, int maxItemsToHash = int.MaxValue)
@@ -64,17 +67,22 @@ namespace Roslyn.Utilities
             {
                 return 0;
             }
-            int num = Math.Min(maxItemsToHash, values!.Length);
-            int num2 = 0;
-            for (int i = 0; i < num; i++)
+
+            var maxSize = Math.Min(maxItemsToHash, values.Length);
+            var hashCode = 0;
+
+            for (int i = 0; i < maxSize; i++)
             {
-                T val = values[i];
-                if (val != null)
+                T value = values[i];
+
+                // Should end up with a constrained virtual call to object.GetHashCode (i.e. avoid boxing where possible).
+                if (value != null)
                 {
-                    num2 = Combine(val.GetHashCode(), num2);
+                    hashCode = Hash.Combine(value.GetHashCode(), hashCode);
                 }
             }
-            return num2;
+
+            return hashCode;
         }
 
         public static int CombineValues<T>(ImmutableArray<T> values, int maxItemsToHash = int.MaxValue)
@@ -83,22 +91,24 @@ namespace Roslyn.Utilities
             {
                 return 0;
             }
-            int num = 0;
-            int num2 = 0;
-            ImmutableArray<T>.Enumerator enumerator = values.GetEnumerator();
-            while (enumerator.MoveNext())
+
+            var hashCode = 0;
+            var count = 0;
+            foreach (var value in values)
             {
-                T current = enumerator.Current;
-                if (num2++ >= maxItemsToHash)
+                if (count++ >= maxItemsToHash)
                 {
                     break;
                 }
-                if (current != null)
+
+                // Should end up with a constrained virtual call to object.GetHashCode (i.e. avoid boxing where possible).
+                if (value != null)
                 {
-                    num = Combine(current.GetHashCode(), num);
+                    hashCode = Hash.Combine(value.GetHashCode(), hashCode);
                 }
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int CombineValues(IEnumerable<string?>? values, StringComparer stringComparer, int maxItemsToHash = int.MaxValue)
@@ -107,65 +117,76 @@ namespace Roslyn.Utilities
             {
                 return 0;
             }
-            int num = 0;
-            int num2 = 0;
-            foreach (string item in values!)
+
+            var hashCode = 0;
+            var count = 0;
+            foreach (var value in values)
             {
-                if (num2++ < maxItemsToHash)
+                if (count++ >= maxItemsToHash)
                 {
-                    if (item != null)
-                    {
-                        num = Combine(stringComparer.GetHashCode(item), num);
-                    }
-                    continue;
+                    break;
                 }
-                return num;
+
+                if (value != null)
+                {
+                    hashCode = Hash.Combine(stringComparer.GetHashCode(value), hashCode);
+                }
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(byte[] data)
         {
-            int num = -2128831035;
+            int hashCode = Hash.FnvOffsetBias;
+
             for (int i = 0; i < data.Length; i++)
             {
-                num = (num ^ data[i]) * 16777619;
+                hashCode = unchecked((hashCode ^ data[i]) * Hash.FnvPrime);
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(ReadOnlySpan<byte> data, out bool isAscii)
         {
-            int num = -2128831035;
-            byte b = 0;
+            int hashCode = Hash.FnvOffsetBias;
+
+            byte asciiMask = 0;
+
             for (int i = 0; i < data.Length; i++)
             {
-                byte b2 = data[i];
-                b = (byte)(b | b2);
-                num = (num ^ b2) * 16777619;
+                byte b = data[i];
+                asciiMask |= b;
+                hashCode = unchecked((hashCode ^ b) * Hash.FnvPrime);
             }
-            isAscii = (b & 0x80) == 0;
-            return num;
+
+            isAscii = (asciiMask & 0x80) == 0;
+            return hashCode;
         }
 
         public static int GetFNVHashCode(ImmutableArray<byte> data)
         {
-            int num = -2128831035;
+            int hashCode = Hash.FnvOffsetBias;
+
             for (int i = 0; i < data.Length; i++)
             {
-                num = (num ^ data[i]) * 16777619;
+                hashCode = unchecked((hashCode ^ data[i]) * Hash.FnvPrime);
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(ReadOnlySpan<char> data)
         {
-            int num = -2128831035;
+            int hashCode = Hash.FnvOffsetBias;
+
             for (int i = 0; i < data.Length; i++)
             {
-                num = (num ^ data[i]) * 16777619;
+                hashCode = unchecked((hashCode ^ data[i]) * Hash.FnvPrime);
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(string text, int start, int length)
@@ -180,12 +201,14 @@ namespace Roslyn.Utilities
 
         public static int GetCaseInsensitiveFNVHashCode(ReadOnlySpan<char> data)
         {
-            int num = -2128831035;
+            int hashCode = Hash.FnvOffsetBias;
+
             for (int i = 0; i < data.Length; i++)
             {
-                num = (num ^ CaseInsensitiveComparison.ToLower(data[i])) * 16777619;
+                hashCode = unchecked((hashCode ^ CaseInsensitiveComparison.ToLower(data[i])) * Hash.FnvPrime);
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(string text, int start)
@@ -195,48 +218,53 @@ namespace Roslyn.Utilities
 
         public static int GetFNVHashCode(string text)
         {
-            return CombineFNVHash(-2128831035, text);
+            return CombineFNVHash(Hash.FnvOffsetBias, text);
         }
 
         public static int GetFNVHashCode(StringBuilder text)
         {
-            int num = -2128831035;
-            int length = text.Length;
-            for (int i = 0; i < length; i++)
+            int hashCode = Hash.FnvOffsetBias;
+            int end = text.Length;
+
+            for (int i = 0; i < end; i++)
             {
-                num = (num ^ text[i]) * 16777619;
+                hashCode = unchecked((hashCode ^ text[i]) * Hash.FnvPrime);
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(char[] text, int start, int length)
         {
-            int num = -2128831035;
-            int num2 = start + length;
-            for (int i = start; i < num2; i++)
+            int hashCode = Hash.FnvOffsetBias;
+            int end = start + length;
+
+            for (int i = start; i < end; i++)
             {
-                num = (num ^ text[i]) * 16777619;
+                hashCode = unchecked((hashCode ^ text[i]) * Hash.FnvPrime);
             }
-            return num;
+
+            return hashCode;
         }
 
         public static int GetFNVHashCode(char ch)
         {
-            return CombineFNVHash(-2128831035, ch);
+            return Hash.CombineFNVHash(Hash.FnvOffsetBias, ch);
         }
 
         public static int CombineFNVHash(int hashCode, string text)
         {
-            foreach (char c in text)
+            foreach (char ch in text)
             {
-                hashCode = (hashCode ^ c) * 16777619;
+                hashCode = unchecked((hashCode ^ ch) * Hash.FnvPrime);
             }
+
             return hashCode;
         }
 
         public static int CombineFNVHash(int hashCode, char ch)
         {
-            return (hashCode ^ ch) * 16777619;
+            return unchecked((hashCode ^ ch) * Hash.FnvPrime);
         }
     }
 }

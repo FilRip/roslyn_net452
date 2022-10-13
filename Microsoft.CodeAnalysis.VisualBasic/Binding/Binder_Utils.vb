@@ -5,6 +5,7 @@
 Imports System.Collections.Immutable
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -292,7 +293,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                          syntaxTypeArgument As VisualBasicSyntaxNode,
                                          diagBag As BindingDiagnosticBag) As NamedTypeSymbol
             ' Get the Nullable type
-            Dim nullableType As NamedTypeSymbol = DirectCast(GetSpecialType(SpecialType.System_Nullable_T, syntax, diagBag), NamedTypeSymbol)
+            Dim nullableType As NamedTypeSymbol = GetSpecialType(SpecialType.System_Nullable_T, syntax, diagBag)
 
             ' Construct the Nullable(Of T).
             Dim constructedType = nullableType.Construct(ImmutableArray.Create(typeArgument))

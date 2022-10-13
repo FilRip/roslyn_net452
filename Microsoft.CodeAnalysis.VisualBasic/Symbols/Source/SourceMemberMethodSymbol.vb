@@ -5,8 +5,8 @@
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
@@ -947,7 +947,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' // how the previous impl. was.
             ' // Given that this is not a user feature, we don't bother doing
             ' // this extra work.
-            Dim options = CType(LookupOptions.IgnoreExtensionMethods Or LookupOptions.NoBaseClassLookup, LookupOptions)
+            Dim options = LookupOptions.IgnoreExtensionMethods Or LookupOptions.NoBaseClassLookup
 
             Dim propertyLookup = LookupResult.GetInstance
             binder.LookupMember(propertyLookup, containingType, name, 0, options, useSiteInfo)

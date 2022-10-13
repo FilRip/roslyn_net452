@@ -3,8 +3,6 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
     ''' <summary>
@@ -50,7 +48,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' region boundaries; we avoid this additional cost by passing the original text span as 
         ''' a separate parameter because we do have it anyways)
         ''' </summary>
-        Friend Sub New(compilation As VisualBasicCompilation, member As Symbol, boundNode As BoundNode, firstInRegion As BoundNode, lastInRegion As BoundNode, region As textspan)
+        Friend Sub New(compilation As VisualBasicCompilation, member As Symbol, boundNode As BoundNode, firstInRegion As BoundNode, lastInRegion As BoundNode, region As TextSpan)
             Me._compilation = compilation
             Me._symbol = member
             Me._boundNode = boundNode

@@ -3,12 +3,12 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
+Imports Microsoft.CodeAnalysis.PooledObjects
+Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
+Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -749,7 +749,7 @@ lAgain:
             Debug.Assert(Not String.IsNullOrEmpty(name))
             Debug.Assert(arity >= 0)
 
-            Dim lookupResult As LookupResult = lookupResult.GetInstance()
+            Dim lookupResult As LookupResult = LookupResult.GetInstance()
 
             Dim options As LookupOptions = LookupOptions.UseBaseReferenceAccessibility Or
                                            LookupOptions.MustNotBeReturnValueVariable Or

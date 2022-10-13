@@ -2,16 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Linq
-Imports System.Runtime.CompilerServices
-Imports System.Text
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
     Partial Friend MustInherit Class StructuredTriviaSyntax

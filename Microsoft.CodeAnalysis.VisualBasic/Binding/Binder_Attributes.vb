@@ -2,17 +2,12 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports System.Threading
-Imports Microsoft.CodeAnalysis.CodeGen
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Emit
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
     Partial Friend Class Binder
@@ -73,7 +68,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
 #Region "Get Single Attribute"
         Friend Function GetAttribute(node As AttributeSyntax, boundAttributeType As NamedTypeSymbol, diagnostics As BindingDiagnosticBag) As SourceAttributeData
-            Dim boundAttribute As boundAttribute = BindAttribute(node, boundAttributeType, diagnostics)
+            Dim boundAttribute As BoundAttribute = BindAttribute(node, boundAttributeType, diagnostics)
 
             Dim visitor As New AttributeExpressionVisitor(Me, boundAttribute.HasErrors)
             Dim args As ImmutableArray(Of TypedConstant) = visitor.VisitPositionalArguments(boundAttribute.ConstructorArguments, diagnostics)

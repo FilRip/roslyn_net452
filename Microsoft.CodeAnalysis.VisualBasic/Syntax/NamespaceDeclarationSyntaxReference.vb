@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Syntax
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 

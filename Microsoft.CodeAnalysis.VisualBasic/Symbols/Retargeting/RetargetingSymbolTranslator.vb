@@ -3,15 +3,12 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Collections.ObjectModel
+
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
+Imports Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Retargeting
 
@@ -137,7 +134,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Retargeting
 
                 ' Retarget by type code - primitive types are encoded in short form in an attribute signature:
                 Return marshallingInfo.WithTranslatedTypes(Of TypeSymbol, RetargetingSymbolTranslator)(
-                    Function(type, translator) translator.Retarget(DirectCast(type, TypeSymbol), RetargetOptions.RetargetPrimitiveTypesByTypeCode), Me)
+                    Function(type, translator) translator.Retarget(type, RetargetOptions.RetargetPrimitiveTypesByTypeCode), Me)
             End Function
 
 
@@ -498,7 +495,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Retargeting
                     constructedType = New NoPiaIllegalGenericInstantiationSymbol(constructedType)
                 End If
 
-                Return DirectCast(constructedType, NamedTypeSymbol)
+                Return constructedType
             End Function
 
             Private Function IsNoPiaIllegalGenericInstantiation(oldArguments As ArrayBuilder(Of TypeWithModifiers), newArguments As ArrayBuilder(Of TypeWithModifiers), startOfNonInterfaceArguments As Integer) As Boolean

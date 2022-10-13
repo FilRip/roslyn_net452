@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
@@ -44,15 +45,15 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' CONSIDER: Do we want to ensure that speculated method and the original method have identical signatures?
 
             ' Create a speculative binder for the method body.
-            Dim methodSymbol = DirectCast(Me.MemberSymbol, methodSymbol)
+            Dim methodSymbol = DirectCast(Me.MemberSymbol, MethodSymbol)
 
-            Dim containingBinder As binder = Me.RootBinder
+            Dim containingBinder As Binder = Me.RootBinder
 
             ' Get up to the NamedTypeBinder
-            Dim namedTypeBinder As namedTypeBinder
+            Dim namedTypeBinder As NamedTypeBinder
 
             Do
-                namedTypeBinder = TryCast(containingBinder, namedTypeBinder)
+                namedTypeBinder = TryCast(containingBinder, NamedTypeBinder)
 
                 If namedTypeBinder IsNot Nothing Then
                     Exit Do

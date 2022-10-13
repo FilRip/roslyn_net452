@@ -2,17 +2,10 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports Microsoft.Cci
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic
-Imports Microsoft.CodeAnalysis.VisualBasic.Emit
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 Imports System.Reflection.Metadata
+
+Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -167,7 +160,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                             Exit For
                         End If
 
-                        targetType = CByte(targetInfo.Underlying)
+                        targetType = targetInfo.Underlying
 
                     ElseIf parameterType.IsArrayType Then
                         specType = DirectCast(parameterType, ArrayTypeSymbol).ElementType.SpecialType
@@ -175,63 +168,63 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     End If
 
                     Select Case targetType
-                        Case CByte(SignatureTypeCode.Boolean)
-                            foundMatch = specType = SpecialType.System_Boolean
+                        Case SignatureTypeCode.Boolean
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Boolean
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Char)
-                            foundMatch = specType = SpecialType.System_Char
+                        Case SignatureTypeCode.Char
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Char
                             k += 1
 
-                        Case CByte(SignatureTypeCode.SByte)
-                            foundMatch = specType = SpecialType.System_SByte
+                        Case SignatureTypeCode.SByte
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_SByte
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Byte)
-                            foundMatch = specType = SpecialType.System_Byte
+                        Case SignatureTypeCode.Byte
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Byte
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Int16)
-                            foundMatch = specType = SpecialType.System_Int16
+                        Case SignatureTypeCode.Int16
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Int16
                             k += 1
 
-                        Case CByte(SignatureTypeCode.UInt16)
-                            foundMatch = specType = SpecialType.System_UInt16
+                        Case SignatureTypeCode.UInt16
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_UInt16
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Int32)
-                            foundMatch = specType = SpecialType.System_Int32
+                        Case SignatureTypeCode.Int32
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Int32
                             k += 1
 
-                        Case CByte(SignatureTypeCode.UInt32)
-                            foundMatch = specType = SpecialType.System_UInt32
+                        Case SignatureTypeCode.UInt32
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_UInt32
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Int64)
-                            foundMatch = specType = SpecialType.System_Int64
+                        Case SignatureTypeCode.Int64
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Int64
                             k += 1
 
-                        Case CByte(SignatureTypeCode.UInt64)
-                            foundMatch = specType = SpecialType.System_UInt64
+                        Case SignatureTypeCode.UInt64
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_UInt64
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Single)
-                            foundMatch = specType = SpecialType.System_Single
+                        Case SignatureTypeCode.Single
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Single
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Double)
-                            foundMatch = specType = SpecialType.System_Double
+                        Case SignatureTypeCode.Double
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Double
                             k += 1
 
-                        Case CByte(SignatureTypeCode.String)
-                            foundMatch = specType = SpecialType.System_String
+                        Case SignatureTypeCode.String
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_String
                             k += 1
 
-                        Case CByte(SignatureTypeCode.Object)
-                            foundMatch = specType = SpecialType.System_Object
+                        Case SignatureTypeCode.Object
+                            foundMatch = specType = Global.Microsoft.CodeAnalysis.SpecialType.System_Object
                             k += 1
 
-                        Case CByte(SerializationTypeCode.Type)
+                        Case SerializationTypeCode.Type
                             If lazySystemType Is Nothing Then
                                 lazySystemType = GetSystemType(targetSymbol)
                             End If
@@ -239,7 +232,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                             foundMatch = TypeSymbol.Equals(parameterType, lazySystemType, TypeCompareKind.ConsiderEverything)
                             k += 1
 
-                        Case CByte(SignatureTypeCode.SZArray)
+                        Case SignatureTypeCode.SZArray
                             ' skip over and check the next byte
                             foundMatch = parameterType.IsArrayType
 

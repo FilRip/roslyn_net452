@@ -44,7 +44,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
                 Return False
             End If
 
-            Select Case CType(before.RawKind, SyntaxKind)
+            Select Case before.RawKind
                 Case SyntaxKind.IdentifierToken,
                      SyntaxKind.CharacterLiteralToken,
                      SyntaxKind.DateLiteralToken,

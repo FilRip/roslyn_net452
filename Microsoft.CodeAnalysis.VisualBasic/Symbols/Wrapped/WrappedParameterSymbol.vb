@@ -6,6 +6,7 @@ Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols

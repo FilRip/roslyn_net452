@@ -3,12 +3,10 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Diagnostics
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Roslyn.Utilities
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -199,7 +197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 ' the implements clause to a private member.
                 Dim options As LookupOptions = LookupOptions.AllMethodsOfAnyArity Or LookupOptions.IgnoreAccessibility Or LookupOptions.IgnoreExtensionMethods
                 If implementingSym.Kind = SymbolKind.Event Then
-                    options = CType(options Or LookupOptions.EventsOnly, LookupOptions)
+                    options = options Or LookupOptions.EventsOnly
                 End If
 
                 Dim useSiteInfo = binder.GetNewCompoundUseSiteInfo(diagBag)

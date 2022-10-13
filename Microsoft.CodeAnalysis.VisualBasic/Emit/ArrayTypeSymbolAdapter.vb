@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Reflection.Metadata
+
 Imports Microsoft.CodeAnalysis.Emit
 Imports Microsoft.CodeAnalysis.VisualBasic.Emit
 
@@ -129,7 +130,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Function
 
         Friend NotOverridable Overrides Sub IReferenceDispatch(visitor As Cci.MetadataVisitor) ' Implements IReference.Dispatch
-            visitor.Visit(DirectCast(Me, Cci.IArrayTypeReference))
+            visitor.Visit(Me)
         End Sub
 
         Friend NotOverridable Overrides Function IReferenceAsDefinition(context As EmitContext) As Cci.IDefinition ' Implements IReference.AsDefinition

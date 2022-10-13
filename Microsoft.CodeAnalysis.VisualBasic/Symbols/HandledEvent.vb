@@ -3,11 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 
-Imports System.Collections.Generic
-Imports System.Threading
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 

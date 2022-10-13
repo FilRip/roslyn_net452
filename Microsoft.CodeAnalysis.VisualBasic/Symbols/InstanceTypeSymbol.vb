@@ -2,11 +2,9 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports Microsoft.CodeAnalysis.Text
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     ''' <summary>
@@ -102,11 +100,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             If Me.Arity = 0 Then
                 Debug.Assert(Not newContainer.IsDefinition)
-                Return SubstitutedNamedType.SpecializedNonGenericType.Create(DirectCast(newContainer, NamedTypeSymbol), Me, substitution)
+                Return SubstitutedNamedType.SpecializedNonGenericType.Create(newContainer, Me, substitution)
             End If
 
             ' First we need to create SpecializedGenericType to construct this guy from.
-            Dim constructFrom = SubstitutedNamedType.SpecializedGenericType.Create(DirectCast(newContainer, NamedTypeSymbol), Me)
+            Dim constructFrom = SubstitutedNamedType.SpecializedGenericType.Create(newContainer, Me)
 
             If substitution.TargetGenericDefinition Is Me Then
                 Debug.Assert(newContainer.TypeSubstitution Is substitution.Parent) ' How can it be otherwise? The contained type didn't have any substitution before.

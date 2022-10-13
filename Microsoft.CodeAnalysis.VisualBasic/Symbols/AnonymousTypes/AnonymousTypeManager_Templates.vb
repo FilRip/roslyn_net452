@@ -3,10 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Diagnostics
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.PooledObjects
 

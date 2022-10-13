@@ -4,12 +4,10 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -1162,7 +1160,7 @@ DoneWithDiagnostics:
             argument = New BoundUserDefinedConversion(tree, argument, inOutConversionFlags, originalArgumentType).MakeCompilerGenerated()
 
             diagnostics.Add(tree, useSiteInfo)
-            Return New BoundConversion(tree, argument, convKind.Key, CheckOverflow, isExplicit, DirectCast(Nothing, ConstantValue), targetType)
+            Return New BoundConversion(tree, argument, convKind.Key, CheckOverflow, isExplicit, Nothing, targetType)
         End Function
 
 
@@ -1370,8 +1368,8 @@ DoneWithDiagnostics:
                     ReportDiagnostic(diagnostics,
                                      unboundLambda.Syntax,
                                      If(unboundLambda.IsFunctionLambda, ERRID.ERR_LambdaBindingMismatch1, ERRID.ERR_LambdaBindingMismatch2),
-                                     If(targetDelegateType.TypeKind = TypeKind.Delegate AndAlso targetDelegateType.IsFromCompilation(Me.Compilation),
-                                        CType(CustomSymbolDisplayFormatter.DelegateSignature(targetDelegateType), Object),
+                                     If(targetDelegateType.TypeKind = Global.Microsoft.CodeAnalysis.TypeKind.Delegate AndAlso targetDelegateType.IsFromCompilation(Me.Compilation),
+                                        CustomSymbolDisplayFormatter.DelegateSignature(targetDelegateType),
                                         CType(targetDelegateType, Object)))
                 End If
             End If
@@ -1422,8 +1420,8 @@ DoneWithDiagnostics:
                     ReportDiagnostic(diagnostics,
                                      unboundLambda.Syntax,
                                      err,
-                                     If(targetDelegateType.TypeKind = TypeKind.Delegate AndAlso targetDelegateType.IsFromCompilation(Me.Compilation),
-                                        CType(CustomSymbolDisplayFormatter.DelegateSignature(targetDelegateType), Object),
+                                     If(targetDelegateType.TypeKind = Global.Microsoft.CodeAnalysis.TypeKind.Delegate AndAlso targetDelegateType.IsFromCompilation(Me.Compilation),
+                                        CustomSymbolDisplayFormatter.DelegateSignature(targetDelegateType),
                                         CType(targetDelegateType, Object)))
                 End If
             ElseIf Conversions.IsStubRequiredForMethodConversion(boundLambda.MethodConversionKind) Then

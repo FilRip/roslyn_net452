@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Runtime.CompilerServices
+
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
@@ -140,32 +141,32 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Function
 
         Protected Sub New(kind As SyntaxKind)
-            MyBase.New(CType(kind, UInt16))
+            MyBase.New(kind)
             GreenStats.NoteGreen(Me)
         End Sub
 
         Protected Sub New(kind As SyntaxKind, width As Integer)
-            MyBase.New(CType(kind, UInt16), width)
+            MyBase.New(kind, width)
             GreenStats.NoteGreen(Me)
         End Sub
 
         Protected Sub New(kind As SyntaxKind, errors As DiagnosticInfo())
-            MyBase.New(CType(kind, UInt16), errors)
+            MyBase.New(kind, errors)
             GreenStats.NoteGreen(Me)
         End Sub
 
         Protected Sub New(kind As SyntaxKind, errors As DiagnosticInfo(), width As Integer)
-            MyBase.New(CType(kind, UInt16), errors, width)
+            MyBase.New(kind, errors, width)
             GreenStats.NoteGreen(Me)
         End Sub
 
         Friend Sub New(kind As SyntaxKind, diagnostics As DiagnosticInfo(), annotations As SyntaxAnnotation())
-            MyBase.New(CType(kind, UInt16), diagnostics, annotations)
+            MyBase.New(kind, diagnostics, annotations)
             GreenStats.NoteGreen(Me)
         End Sub
 
         Friend Sub New(kind As SyntaxKind, diagnostics As DiagnosticInfo(), annotations As SyntaxAnnotation(), fullWidth As Integer)
-            MyBase.New(CType(kind, UInt16), diagnostics, annotations, fullWidth)
+            MyBase.New(kind, diagnostics, annotations, fullWidth)
             GreenStats.NoteGreen(Me)
         End Sub
 

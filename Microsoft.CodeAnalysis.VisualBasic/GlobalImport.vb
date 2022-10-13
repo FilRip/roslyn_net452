@@ -5,6 +5,7 @@
 Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 

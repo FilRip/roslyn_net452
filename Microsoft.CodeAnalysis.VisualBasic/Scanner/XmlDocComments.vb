@@ -10,6 +10,7 @@ Option Strict On
 
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
 Imports Microsoft.CodeAnalysis.VisualBasic.SyntaxFacts
+
 Imports CoreInternalSyntax = Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

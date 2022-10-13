@@ -4,12 +4,10 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -34,7 +32,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim expressionStmt = New BoundExpressionStatement(selectExprStatementSyntax, expression)
 
             ' Get the binder for the select block. This defines the exit label.
-            Dim selectBinder = GetBinder(DirectCast(node, VisualBasicSyntaxNode))
+            Dim selectBinder = GetBinder(node)
 
             ' Flag to determine if we need to generate switch table based code or If list based code.
             ' See OptimizeSelectStatement method for more details.

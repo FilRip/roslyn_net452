@@ -5,16 +5,15 @@
 Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
 Imports System.Reflection
-Imports System.Reflection.Metadata
-Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
-Imports System.Security.Cryptography
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
+
 Imports CommonAssemblyWellKnownAttributeData = Microsoft.CodeAnalysis.CommonAssemblyWellKnownAttributeData(Of Microsoft.CodeAnalysis.VisualBasic.Symbols.NamedTypeSymbol)
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols

@@ -4,8 +4,6 @@
 
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
-Imports Roslyn.Utilities
-
 Imports CoreInternalSyntax = Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

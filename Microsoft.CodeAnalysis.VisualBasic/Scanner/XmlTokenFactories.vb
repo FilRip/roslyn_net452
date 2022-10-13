@@ -8,7 +8,9 @@
 Option Compare Binary
 
 Imports System.Text
+
 Imports Microsoft.CodeAnalysis.VisualBasic.SyntaxFacts
+
 Imports CoreInternalSyntax = Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

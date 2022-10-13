@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.Operations
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -267,7 +268,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' Returns a hash code for the current object.
         ''' </summary>
         Public Overrides Function GetHashCode() As Integer
-            Return Hash.Combine(Method, CInt(_convKind))
+            Return Hash.Combine(Method, _convKind)
         End Function
 
         ''' <summary>

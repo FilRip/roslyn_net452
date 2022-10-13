@@ -6,7 +6,6 @@ Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.IO
 Imports System.Runtime.InteropServices
-Imports System.Security.Cryptography
 Imports System.Text
 
 Imports Microsoft.CodeAnalysis.Emit
@@ -14,8 +13,6 @@ Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 Imports Microsoft.CodeAnalysis.VisualBasic.SyntaxFacts
-
-Imports Roslyn.Utilities
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
     ''' <summary>
@@ -2212,7 +2209,7 @@ lVbRuntimePlus:
                     ' The id refers to a compiler warning.
                     ' Only accept real warnings from the compiler not including the command line warnings.
                     ' Also only accept the numbers that are actually declared in the enum.
-                    results.Add(VisualBasic.MessageProvider.Instance.GetIdForErrorCode(CInt(number)))
+                    results.Add(VisualBasic.MessageProvider.Instance.GetIdForErrorCode(number))
                 Else
                     ' Previous versions of the compiler used to report warnings (BC2026, BC2014)
                     ' whenever unrecognized warning codes were supplied in /nowarn or 
@@ -2248,7 +2245,7 @@ lVbRuntimePlus:
         End Sub
 
         Private Shared Sub AddDiagnostic(diagnostics As IList(Of Diagnostic), errorCode As ERRID, ParamArray arguments As Object())
-            diagnostics.Add(Diagnostic.Create(VisualBasic.MessageProvider.Instance, CInt(errorCode), arguments))
+            diagnostics.Add(Diagnostic.Create(VisualBasic.MessageProvider.Instance, errorCode, arguments))
         End Sub
 
         ''' <summary>

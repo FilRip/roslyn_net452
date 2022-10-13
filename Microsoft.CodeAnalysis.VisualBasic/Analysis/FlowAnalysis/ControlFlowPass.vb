@@ -2,12 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections.Generic
-Imports System.Linq
-Imports System.Text
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
@@ -137,7 +131,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             MyBase.VisitCatchBlock(node, finallyState)
 
             For Each branch In Me.PendingBranches
-                if branch.Branch.Kind = BoundKind.YieldStatement
+                If branch.Branch.Kind = BoundKind.YieldStatement Then
                     Me.diagnostics.Add(ERRID.ERR_BadYieldInTryHandler, branch.Branch.Syntax.GetLocation)
                 End If
             Next
@@ -159,12 +153,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim errorLocation As SyntaxNodeOrToken
                 Dim errId As ERRID
 
-                If branch.Branch.Kind = BoundKind.YieldStatement
-                    errId = errId.ERR_BadYieldInTryHandler
+                If branch.Branch.Kind = BoundKind.YieldStatement Then
+                    errId = ERRID.ERR_BadYieldInTryHandler
                     errorLocation = syntax
 
-                else
-                    errId = errId.ERR_BranchOutOfFinally
+                Else
+                    errId = ERRID.ERR_BranchOutOfFinally
 
                     If syntax.Kind = SyntaxKind.GoToStatement Then
                         errorLocation = DirectCast(syntax, GoToStatementSyntax).Label

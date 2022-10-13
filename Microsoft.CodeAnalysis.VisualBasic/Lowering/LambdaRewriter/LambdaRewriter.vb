@@ -3,7 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.CodeGen
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -684,14 +684,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return If(_currentMethod Is _topLevelMethod, node,
                       If(_currentMethod.ContainingType Is _topLevelMethod.ContainingType,
                          New BoundMyClassReference(node.Syntax, node.Type),
-                         FramePointer(node.Syntax, TryCast(_topLevelMethod.ContainingType, NamedTypeSymbol))))
+                         FramePointer(node.Syntax, _topLevelMethod.ContainingType)))
         End Function
 
         Public Overrides Function VisitMyBaseReference(node As BoundMyBaseReference) As BoundNode
             Return If(_currentMethod Is _topLevelMethod, node,
                       If(_currentMethod.ContainingType Is _topLevelMethod.ContainingType,
                          New BoundMyBaseReference(node.Syntax, node.Type),
-                         FramePointer(node.Syntax, TryCast(_topLevelMethod.ContainingType, NamedTypeSymbol))))
+                         FramePointer(node.Syntax, _topLevelMethod.ContainingType)))
         End Function
 
         Public Overrides Function VisitRangeVariable(node As BoundRangeVariable) As BoundNode

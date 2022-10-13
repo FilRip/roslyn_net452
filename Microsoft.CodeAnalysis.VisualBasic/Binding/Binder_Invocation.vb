@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -1733,7 +1734,7 @@ ProduceBoundNode:
                     Dim method = DirectCast(underlyingSymbol, MethodSymbol)
 
                     If method.IsGenericMethod AndAlso commonReturnType.ReferencesMethodsTypeParameter(method) Then
-                        Select Case CInt(bestCandidates(0).State)
+                        Select Case bestCandidates(0).State
                             Case TypeInferenceFailed, HasUseSiteError, HasUnsupportedMetadata, BadGenericArity, ArgumentCountMismatch
                                 commonReturnType = Nothing
                         End Select
@@ -2885,8 +2886,8 @@ ProduceBoundNode:
                 Dim copyBackExpression = BindAssignment(argument.Syntax, argument, outConversion, diagnostics)
 
                 Debug.Assert(copyBackExpression.HasErrors OrElse
-                             (copyBackExpression.Kind = BoundKind.AssignmentOperator AndAlso
-                              DirectCast(copyBackExpression, BoundAssignmentOperator).Right Is outConversion))
+                             (copyBackExpression.Kind = Global.Microsoft.CodeAnalysis.VisualBasic.BoundKind.AssignmentOperator AndAlso
+                              copyBackExpression.Right Is outConversion))
 
                 If Not isLValue Then
                     If argument.IsLateBound() Then

@@ -3,16 +3,14 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     ''' <summary>
@@ -1083,7 +1081,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim baseClassSyntax As TypeSyntax = Nothing
             For Each baseDeclaration In inheritsSyntax
                 If baseDeclaration.Kind = SyntaxKind.InheritsStatement Then
-                    Dim inheritsDeclaration = DirectCast(baseDeclaration, InheritsStatementSyntax)
+                    Dim inheritsDeclaration = baseDeclaration
                     If baseClassSyntax IsNot Nothing OrElse inheritsDeclaration.Types.Count > 1 Then
                         Binder.ReportDiagnostic(diagBag, inheritsDeclaration, ERRID.ERR_MultipleExtends)
                     End If
@@ -1162,7 +1160,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim interfacesInThisPartial As New HashSet(Of NamedTypeSymbol)()
 
             For Each baseDeclaration In baseSyntax
-                Dim types = DirectCast(baseDeclaration, InheritsStatementSyntax).Types
+                Dim types = baseDeclaration.Types
 
                 For Each baseClassSyntax In types
                     Dim typeSymbol = binder.BindTypeSyntax(baseClassSyntax, diagBag, suppressUseSiteError:=True)
@@ -1219,7 +1217,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim interfacesInThisPartial As New HashSet(Of TypeSymbol)()
 
             For Each baseDeclaration In baseSyntax
-                Dim types = DirectCast(baseDeclaration, ImplementsStatementSyntax).Types
+                Dim types = baseDeclaration.Types
                 For Each baseClassSyntax In types
                     Dim typeSymbol = binder.BindTypeSyntax(baseClassSyntax, diagBag, suppressUseSiteError:=True)
 
@@ -1321,7 +1319,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             For Each part In SyntaxReferences
                 Dim typeBlock = DirectCast(part.GetSyntax(), TypeBlockSyntax)
                 Dim inhDecl = If(getInherits,
-                                   DirectCast(typeBlock.Inherits, IEnumerable(Of InheritsOrImplementsStatementSyntax)),
+                                   typeBlock.Inherits,
                                    DirectCast(typeBlock.Implements, IEnumerable(Of InheritsOrImplementsStatementSyntax)))
                 Dim binder As Binder = CreateLocationSpecificBinderForType(part.SyntaxTree, BindingLocation.BaseTypes)
 
@@ -1905,14 +1903,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Get
                 If _lazyCoClassType Is ErrorTypeSymbol.UnknownResultType Then
                     If Not Me.IsInterface Then
-                        Interlocked.CompareExchange(_lazyCoClassType, Nothing, DirectCast(ErrorTypeSymbol.UnknownResultType, TypeSymbol))
+                        Interlocked.CompareExchange(_lazyCoClassType, Nothing, ErrorTypeSymbol.UnknownResultType)
                     Else
                         Dim dummy As CommonTypeWellKnownAttributeData = GetDecodedWellKnownAttributeData()
                         If _lazyCoClassType Is ErrorTypeSymbol.UnknownResultType Then
                             ' if this is still ErrorTypeSymbol.UnknownResultType, interface 
                             ' does not have the attribute applied
                             Interlocked.CompareExchange(_lazyCoClassType, Nothing,
-                                                        DirectCast(ErrorTypeSymbol.UnknownResultType, TypeSymbol))
+                                                        ErrorTypeSymbol.UnknownResultType)
                         End If
                     End If
                 End If
@@ -2199,7 +2197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                         ' revise it later
                         Interlocked.CompareExchange(Me._lazyCoClassType,
                                                     DirectCast(argument.ValueInternal, TypeSymbol),
-                                                    DirectCast(ErrorTypeSymbol.UnknownResultType, TypeSymbol))
+                                                    ErrorTypeSymbol.UnknownResultType)
 
                         decoded = True
                     End If

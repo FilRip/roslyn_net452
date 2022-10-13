@@ -4,8 +4,6 @@
 
 Imports System.Collections.Immutable
 Imports System.Text
-Imports Microsoft.CodeAnalysis.CodeGen
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 

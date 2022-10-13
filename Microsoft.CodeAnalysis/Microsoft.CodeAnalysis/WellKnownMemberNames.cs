@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis
 
         public const string SliceMethodName = "Slice";
 
-        internal const string CloneMethodName = "<Clone>$";
+        public const string CloneMethodName = "<Clone>$";
 
         public const string PrintMembersMethodName = "PrintMembers";
 

@@ -3,9 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis.CodeGen
-Imports Microsoft.CodeAnalysis.Collections
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax

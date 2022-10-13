@@ -20,7 +20,7 @@ namespace SystemExtensions
 			return ToString(formatProvider);
 		}
 
-		public static string Invariant(FormattableString formattable)
+		public static string Invariant(string formattable)
 		{
 			if (formattable == null)
 			{

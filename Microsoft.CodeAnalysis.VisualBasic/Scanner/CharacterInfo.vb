@@ -70,7 +70,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Select
         End Function
 
-        Private Const s_fullwidth = CInt(&HFF00L - &H0020L)
+        Private Const s_fullwidth = &HFF00L - &H0020L
 
         Friend Const CHARACTER_TABULATION As Char = ChrW(&H0009)
         Friend Const LINE_FEED As Char = ChrW(&H000A)

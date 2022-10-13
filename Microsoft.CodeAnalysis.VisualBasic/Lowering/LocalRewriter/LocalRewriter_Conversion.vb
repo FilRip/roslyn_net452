@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -989,7 +990,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         Dim conv = ConversionKind.NarrowingNumeric Or ConversionKind.InvolvesEnumTypeConversions
                         Debug.Assert(conv = Conversions.ClassifyConversion(memberSymbol.ReturnType, targetResultType, CompoundUseSiteInfo(Of AssemblySymbol).Discarded).Key)
 
-                        result = New BoundConversion(node.Syntax, DirectCast(result, BoundExpression),
+                        result = New BoundConversion(node.Syntax, result,
                                                      conv, node.Checked, node.ExplicitCastInCode, targetResultType, Nothing)
                     End If
                 End If
@@ -1134,7 +1135,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                         Debug.Assert(conv = Conversions.ClassifyConversion(memberSymbol.ReturnType, targetResultType, CompoundUseSiteInfo(Of AssemblySymbol).Discarded).Key)
 
-                        result = New BoundConversion(node.Syntax, DirectCast(result, BoundExpression),
+                        result = New BoundConversion(node.Syntax, result,
                                                      conv, node.Checked, node.ExplicitCastInCode, targetResultType, Nothing)
                     End If
                 End If
@@ -1271,7 +1272,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     Debug.Assert(conv = Conversions.ClassifyConversion(memberSymbol.ReturnType, targetResultType, CompoundUseSiteInfo(Of AssemblySymbol).Discarded).Key)
 
-                    result = New BoundConversion(node.Syntax, DirectCast(result, BoundExpression),
+                    result = New BoundConversion(node.Syntax, result,
                                                  conv, node.Checked, node.ExplicitCastInCode, targetResultType, Nothing)
                 End If
             End If

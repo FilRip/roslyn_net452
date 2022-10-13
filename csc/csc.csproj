@@ -91,6 +91,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="csc.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="FilRip.snk" />
     <None Include="packages.config" />
   </ItemGroup>

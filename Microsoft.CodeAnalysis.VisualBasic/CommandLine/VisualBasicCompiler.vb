@@ -5,13 +5,14 @@
 Imports System.Collections.Immutable
 Imports System.IO
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Collections
 Imports Microsoft.CodeAnalysis.Diagnostics
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
-    Friend MustInherit Class VisualBasicCompiler
+    Public MustInherit Class VisualBasicCompiler
         Inherits CommonCompiler
 
         Friend Const ResponseFileName As String = "vbc.rsp"

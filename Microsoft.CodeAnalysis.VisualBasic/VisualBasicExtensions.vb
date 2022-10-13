@@ -7,6 +7,7 @@ Imports System.Collections.ObjectModel
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Operations
 Imports Microsoft.CodeAnalysis.Syntax
 Imports Microsoft.CodeAnalysis.VisualBasic
@@ -71,7 +72,7 @@ Namespace Microsoft.CodeAnalysis
         ''' <returns>Returns non-negative index if the list contains a node which matches <paramref name="kind"/>, -1 otherwise.</returns>
         <Extension>
         Public Function IndexOf(Of TNode As SyntaxNode)(list As SyntaxList(Of TNode), kind As SyntaxKind) As Integer
-            Return list.IndexOf(CType(kind, Integer))
+            Return list.IndexOf(kind)
         End Function
 
         ''' <summary>
@@ -92,7 +93,7 @@ Namespace Microsoft.CodeAnalysis
         ''' <returns>Returns non-negative index if the list contains a node which matches <paramref name="kind"/>, -1 otherwise.</returns>
         <Extension>
         Public Function IndexOf(Of TNode As SyntaxNode)(list As SeparatedSyntaxList(Of TNode), kind As SyntaxKind) As Integer
-            Return list.IndexOf(CType(kind, Integer))
+            Return list.IndexOf(kind)
         End Function
 
         ''' <summary>
@@ -113,7 +114,7 @@ Namespace Microsoft.CodeAnalysis
         ''' <returns>Returns non-negative index if the list contains a trivia which matches <paramref name="kind"/>, -1 otherwise.</returns>
         <Extension>
         Public Function IndexOf(list As SyntaxTriviaList, kind As SyntaxKind) As Integer
-            Return list.IndexOf(CType(kind, Integer))
+            Return list.IndexOf(kind)
         End Function
 
         ''' <summary>
@@ -134,7 +135,7 @@ Namespace Microsoft.CodeAnalysis
         ''' <returns>Returns non-negative index if the list contains a token which matches <paramref name="kind"/>, -1 otherwise.</returns>
         <Extension>
         Public Function IndexOf(list As SyntaxTokenList, kind As SyntaxKind) As Integer
-            Return list.IndexOf(CType(kind, Integer))
+            Return list.IndexOf(kind)
         End Function
 
         ''' <summary>
@@ -449,7 +450,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             For Each i In list
                 Dim node = i.AsNode
                 If node IsNot Nothing Then
-                    builder.Add(DirectCast(DirectCast(node, SyntaxNode), TOther))
+                    builder.Add(DirectCast(node, TOther))
                 Else
                     builder.AddSeparator(i.AsToken)
                 End If

@@ -6,10 +6,11 @@ Imports System.Collections.Immutable
 Imports System.ComponentModel
 Imports System.Text
 Imports System.Threading
-Imports System.Threading.Tasks
+
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
+
 Imports Blender = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.Blender
 Imports Parser = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.Parser
 Imports Scanner = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.Scanner
@@ -384,7 +385,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Private Function InDocumentationComment(trivia As SyntaxTrivia) As Boolean
-            Return InDocumentationComment(CType(trivia.Token, SyntaxToken))
+            Return InDocumentationComment(trivia.Token)
         End Function
 
         ''' <summary>

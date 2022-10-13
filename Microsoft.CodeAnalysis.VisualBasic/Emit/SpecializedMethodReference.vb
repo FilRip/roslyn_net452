@@ -2,13 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections.Generic
-Imports System.Linq
-Imports System.Text
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
 
@@ -27,7 +21,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         End Sub
 
         Public Overrides Sub Dispatch(visitor As Microsoft.Cci.MetadataVisitor)
-            visitor.Visit(DirectCast(Me, Microsoft.Cci.ISpecializedMethodReference))
+            visitor.Visit(Me)
         End Sub
 
         Private ReadOnly Property ISpecializedMethodReferenceUnspecializedVersion As Microsoft.Cci.IMethodReference Implements Microsoft.Cci.ISpecializedMethodReference.UnspecializedVersion

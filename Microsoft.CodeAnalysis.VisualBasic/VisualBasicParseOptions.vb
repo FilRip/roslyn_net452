@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
@@ -307,7 +308,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' </summary>
         ''' <returns>A hashcode representing this instance.</returns>
         Public Overrides Function GetHashCode() As Integer
-            Return Hash.Combine(MyBase.GetHashCodeHelper(), CInt(Me.SpecifiedLanguageVersion))
+            Return Hash.Combine(MyBase.GetHashCodeHelper(), Me.SpecifiedLanguageVersion)
         End Function
     End Class
 End Namespace

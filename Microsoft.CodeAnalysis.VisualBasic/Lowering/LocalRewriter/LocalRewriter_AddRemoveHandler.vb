@@ -3,11 +3,8 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports Microsoft.CodeAnalysis.CodeGen
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
     Partial Friend NotInheritable Class LocalRewriter
@@ -155,7 +152,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim marshalCall As BoundExpression =
                 New BoundCall(
                     syntax:=syntax,
-                    method:=DirectCast(marshalMethod, MethodSymbol),
+                    method:=marshalMethod,
                     methodGroupOpt:=Nothing,
                     receiverOpt:=Nothing,
                     arguments:=marshalArguments,

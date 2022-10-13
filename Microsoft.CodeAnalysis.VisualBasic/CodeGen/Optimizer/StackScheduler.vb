@@ -3,11 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
     Partial Friend Class StackScheduler

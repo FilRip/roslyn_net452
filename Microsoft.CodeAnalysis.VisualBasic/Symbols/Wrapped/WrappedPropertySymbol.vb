@@ -5,6 +5,7 @@
 Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Threading
+
 Imports Microsoft.Cci
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols

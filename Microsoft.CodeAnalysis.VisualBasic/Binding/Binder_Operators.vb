@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
@@ -1148,7 +1149,7 @@ Done:
             If operatorKind = UnaryOperatorKind.Error Then
                 ReportUndefinedOperatorError(node, operand, diagnostics)
 
-                Return New BoundUnaryOperator(node, preliminaryOperatorKind Or UnaryOperatorKind.Error, operand, CheckOverflow, ErrorTypeSymbol.UnknownResultType, HasErrors:=True)
+                Return New BoundUnaryOperator(node, preliminaryOperatorKind Or UnaryOperatorKind.Error, operand, CheckOverflow, ErrorTypeSymbol.UnknownResultType, hasErrors:=True)
             End If
 
             ' We are dealing with intrinsic operator 
@@ -1196,7 +1197,7 @@ Done:
 
                     ' there should be no constant value in case of overflows.
                     If Not constantValue.IsBad Then
-                        constantValue = constantValue.Bad
+                        constantValue = ConstantValue.Bad
                     End If
                 End If
             End If

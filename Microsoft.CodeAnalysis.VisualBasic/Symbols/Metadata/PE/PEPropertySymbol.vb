@@ -4,9 +4,10 @@
 
 Imports System.Collections.Immutable
 Imports System.Globalization
-Imports System.Threading
 Imports System.Reflection
 Imports System.Reflection.Metadata
+Imports System.Threading
+
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis.PooledObjects
 

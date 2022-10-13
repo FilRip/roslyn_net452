@@ -6,9 +6,7 @@ Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
 Imports System.IO
 Imports System.Reflection.Metadata
-Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports System.Threading.Tasks
 
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis

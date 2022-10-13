@@ -5,6 +5,7 @@
 Imports System.Collections.Immutable
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols

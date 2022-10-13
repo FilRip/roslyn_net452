@@ -3,15 +3,10 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Diagnostics
-Imports System.Linq
 Imports System.Runtime.InteropServices
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -1517,7 +1512,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim leftValue As Rope = If(left.IsNothing, Rope.Empty, left.RopeValue)
                     Dim rightValue As Rope = If(right.IsNothing, Rope.Empty, right.RopeValue)
 
-                    Dim newLength = CLng(leftValue.Length) + CLng(rightValue.Length)
+                    Dim newLength = leftValue.Length + CLng(rightValue.Length)
 
                     If newLength > Integer.MaxValue Then
                         Return ConstantValue.Bad

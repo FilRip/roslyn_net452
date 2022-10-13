@@ -5,7 +5,6 @@
 '-----------------------------------------------------------------------------
 ' Contains the definition of the BlockContext
 '-----------------------------------------------------------------------------
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 Imports InternalSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.SyntaxFactory
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
@@ -36,7 +35,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 reportRequiresSingleStatement = True
             Else
                 Debug.Assert(statements.Count = 1)
-                statement = DirectCast(statements(0), StatementSyntax)
+                statement = statements(0)
                 reportRequiresSingleStatement = Not statement.ContainsDiagnostics() AndAlso Not IsSingleStatement(statement)
             End If
 

@@ -2,12 +2,8 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Collections.ObjectModel
-Imports System.Threading
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -101,11 +97,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 #Region "ISymbol"
 
         Public Overrides Sub Accept(visitor As SymbolVisitor)
-            visitor.VisitRangeVariable(DirectCast(Me, IRangeVariableSymbol))
+            visitor.VisitRangeVariable(Me)
         End Sub
 
         Public Overrides Function Accept(Of TResult)(visitor As SymbolVisitor(Of TResult)) As TResult
-            Return visitor.VisitRangeVariable(DirectCast(Me, IRangeVariableSymbol))
+            Return visitor.VisitRangeVariable(Me)
         End Function
 
         Public Overrides Sub Accept(visitor As VisualBasicSymbolVisitor)

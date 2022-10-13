@@ -4,7 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols

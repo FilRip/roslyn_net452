@@ -2,17 +2,13 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
 Imports System.Collections.Immutable
 Imports System.Globalization
-Imports System.Threading
 Imports System.Reflection
 Imports System.Reflection.Metadata
+Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Roslyn.Utilities
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
@@ -158,7 +154,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
             Get
                 If Me._lazyDeclaredAccessibility = s_unsetAccessibility Then
                     Dim accessibility As Accessibility = PEPropertyOrEventHelpers.GetDeclaredAccessibilityFromAccessors(Me.AddMethod, Me.RemoveMethod)
-                    Interlocked.CompareExchange(Me._lazyDeclaredAccessibility, DirectCast(accessibility, Integer), s_unsetAccessibility)
+                    Interlocked.CompareExchange(Me._lazyDeclaredAccessibility, accessibility, s_unsetAccessibility)
                 End If
 
                 Return DirectCast(Me._lazyDeclaredAccessibility, Accessibility)

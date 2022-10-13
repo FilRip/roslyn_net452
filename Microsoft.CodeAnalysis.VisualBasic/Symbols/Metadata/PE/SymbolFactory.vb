@@ -3,7 +3,6 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Diagnostics
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
@@ -137,7 +136,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 constructedType = New NoPiaIllegalGenericInstantiationSymbol(constructedType)
             End If
 
-            Return DirectCast(constructedType, TypeSymbol)
+            Return constructedType
         End Function
 
         Public Overrides Function MakeUnboundIfGeneric(moduleSymbol As PEModuleSymbol, type As TypeSymbol) As TypeSymbol

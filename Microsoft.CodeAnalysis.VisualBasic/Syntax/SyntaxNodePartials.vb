@@ -7,11 +7,6 @@
 ' base node SyntaxNode, which is in a different file.)
 '-----------------------------------------------------------------------------------------------------------
 
-Imports System.Threading
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
 
     Partial Public Class DocumentationCommentTriviaSyntax
@@ -25,7 +20,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
         Private Shared ReadOnly s_hasDirectivesFunction As Func(Of SyntaxToken, Boolean) = Function(n) n.ContainsDirectives
 
         Public Function GetNextDirective(Optional predicate As Func(Of DirectiveTriviaSyntax, Boolean) = Nothing) As DirectiveTriviaSyntax
-            Dim token = CType(MyBase.ParentTrivia.Token, SyntaxToken)
+            Dim token = MyBase.ParentTrivia.Token
 
             Dim [next] As Boolean = False
             Do While (token.Kind <> SyntaxKind.None)
@@ -50,7 +45,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
         End Function
 
         Public Function GetPreviousDirective(Optional predicate As Func(Of DirectiveTriviaSyntax, Boolean) = Nothing) As DirectiveTriviaSyntax
-            Dim token As SyntaxToken = CType(MyBase.ParentTrivia.Token, SyntaxToken)
+            Dim token As SyntaxToken = MyBase.ParentTrivia.Token
 
             Dim [next] As Boolean = False
             Do While (token.Kind <> SyntaxKind.None)

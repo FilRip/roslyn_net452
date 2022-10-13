@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
@@ -221,7 +222,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                        diagBag As BindingDiagnosticBag) As TypeSymbol
             Select Case MethodKind
                 Case MethodKind.PropertyGet
-                    Dim accessorSym = DirectCast(Me, SourcePropertyAccessorSymbol)
+                    Dim accessorSym = Me
                     Dim prop = DirectCast(accessorSym.AssociatedSymbol, PropertySymbol)
 
                     Dim result = prop.Type

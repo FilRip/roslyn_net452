@@ -5,6 +5,7 @@
 Imports System.Collections.Immutable
 Imports System.Text
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Text
 
 Namespace Microsoft.CodeAnalysis.VisualBasic

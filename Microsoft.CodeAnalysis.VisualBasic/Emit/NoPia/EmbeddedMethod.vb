@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis.Emit
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -152,7 +153,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit.NoPia
 
         Protected Overrides ReadOnly Property UnderlyingMethodSignature As Cci.ISignature
             Get
-                Return DirectCast(UnderlyingMethod, Cci.ISignature)
+                Return UnderlyingMethod
             End Get
         End Property
 

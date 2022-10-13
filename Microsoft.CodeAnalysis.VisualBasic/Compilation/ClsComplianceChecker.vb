@@ -5,10 +5,11 @@
 Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
 Imports System.Threading
-Imports System.Threading.Tasks
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
+
 Imports Out = System.Runtime.InteropServices.OutAttribute
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
@@ -727,7 +728,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Function GetInheritedCompliance(symbol As Symbol) As Compliance
             Debug.Assert(symbol.Kind <> SymbolKind.Assembly)
             Debug.Assert(symbol.Kind <> SymbolKind.NetModule)
-            Dim containing As Symbol = If(DirectCast(symbol.ContainingType, Symbol), GetContainingModuleOrAssembly(symbol))
+            Dim containing As Symbol = If(symbol.ContainingType, GetContainingModuleOrAssembly(symbol))
             Debug.Assert(containing IsNot Nothing)
             Return GetDeclaredOrInheritedCompliance(containing)
         End Function

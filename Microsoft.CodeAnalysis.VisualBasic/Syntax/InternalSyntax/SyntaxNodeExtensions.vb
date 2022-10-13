@@ -8,8 +8,10 @@
 '-----------------------------------------------------------------------------------------------------------
 
 Imports System.Runtime.CompilerServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
+
 Imports CoreInternalSyntax = Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

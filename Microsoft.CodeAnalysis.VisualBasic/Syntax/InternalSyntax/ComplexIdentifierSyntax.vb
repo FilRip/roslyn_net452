@@ -2,13 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.ObjectModel
-Imports System.Text
-Imports System.Threading
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
     Friend NotInheritable Class ComplexIdentifierSyntax
@@ -43,7 +36,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Public Overrides Sub WriteTo(writer As ObjectWriter)
             MyBase.WriteTo(writer)
-            writer.WriteUInt16(CType(_possibleKeywordKind, UInt16))
+            writer.WriteUInt16(_possibleKeywordKind)
             writer.WriteBoolean(_isBracketed)
             writer.WriteString(_identifierText)
             writer.WriteByte(CType(_typeCharacter, Byte))

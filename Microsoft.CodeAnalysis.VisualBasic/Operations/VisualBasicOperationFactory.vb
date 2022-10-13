@@ -4,6 +4,7 @@
 
 Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols

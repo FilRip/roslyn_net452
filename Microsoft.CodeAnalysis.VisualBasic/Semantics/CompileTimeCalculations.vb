@@ -5,11 +5,7 @@
 Option Strict On
 Option Explicit On
 Option Infer On
-
-Imports System.Runtime.CompilerServices
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -324,7 +320,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             If ConstantValue.IsFloatingType(targetType) Then
                 Return ConvertFloatingValue(
-                            If(ConstantValue.IsUnsignedIntegralType(sourceType), CType(UncheckedCULng(sourceValue), Double), CType(sourceValue, Double)),
+                            If(ConstantValue.IsUnsignedIntegralType(sourceType), UncheckedCULng(sourceValue), CType(sourceValue, Double)),
                             targetType,
                             integerOverflow)
             End If

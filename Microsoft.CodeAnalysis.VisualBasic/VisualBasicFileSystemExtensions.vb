@@ -5,6 +5,7 @@
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Emit
 
 Namespace Microsoft.CodeAnalysis.VisualBasic

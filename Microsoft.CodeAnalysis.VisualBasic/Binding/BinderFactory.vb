@@ -3,11 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
@@ -443,7 +441,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Note that we actually don't need field/module/enum symbols, because they 
             ' do not have type parameters or parameters
             Dim trivia As SyntaxTrivia = node.ParentTrivia
-            Dim token As SyntaxToken = CType(trivia.Token, SyntaxToken)
+            Dim token As SyntaxToken = trivia.Token
             Dim parent = DirectCast(token.Parent, VisualBasicSyntaxNode)
             Debug.Assert(parent IsNot Nothing)
 
@@ -601,7 +599,7 @@ lAgain:
             Select Case childName.Kind
                 Case SyntaxKind.GlobalName
                     If globalNamespaceAllowed Then
-                        Return DirectCast(BinderBuilder.CreateBinderForNamespace(_sourceModule, _tree, _sourceModule.GlobalNamespace), NamespaceBinder)
+                        Return BinderBuilder.CreateBinderForNamespace(_sourceModule, _tree, _sourceModule.GlobalNamespace)
                     Else
                         ' Global namespace isn't allowed here. Use a namespace named "Global" as error recovery (see corresponding code in DeclarationTreeBuilder)
                         name = "Global"

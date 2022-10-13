@@ -2,18 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Diagnostics
-Imports System.Linq
-Imports System.Text
-Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Roslyn.Utilities
 Imports System.Runtime.InteropServices
+
+Imports Microsoft.CodeAnalysis.PooledObjects
+Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 ' NOTE: VB does not support constant expressions in flow analysis during command-line compilation, but supports them when 
 '       analysis is being called via public API. This distinction is governed by 'suppressConstantExpressions' flag
@@ -1330,7 +1323,7 @@ lUnsplitAndFinish:
             ' suppresses warnings about unused locals. 
 
             For Each child In node.ChildBoundNodes
-                VisitRvalue(TryCast(child, BoundExpression))
+                VisitRvalue(child)
             Next
 
             Return Nothing

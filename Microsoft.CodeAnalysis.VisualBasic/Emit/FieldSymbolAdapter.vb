@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis.CodeGen
 Imports Microsoft.CodeAnalysis.Emit
@@ -72,7 +73,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 visitor.Visit(DirectCast(Me, ISpecializedFieldReference))
             Else
                 If AdaptedFieldSymbol.ContainingModule = (DirectCast(visitor.Context.Module, PEModuleBuilder)).SourceModule Then
-                    visitor.Visit(DirectCast(Me, IFieldDefinition))
+                    visitor.Visit(Me)
                 Else
                     visitor.Visit(DirectCast(Me, IFieldReference))
                 End If

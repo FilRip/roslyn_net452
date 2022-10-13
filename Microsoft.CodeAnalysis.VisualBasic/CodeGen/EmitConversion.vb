@@ -4,7 +4,9 @@
 
 Imports System.Collections.Immutable
 Imports System.Reflection.Metadata
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
+
 Imports PrimitiveTypeCode = Microsoft.Cci.PrimitiveTypeCode
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen

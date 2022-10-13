@@ -2,8 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Immutable
-Imports System.Reflection
 Imports Microsoft.CodeAnalysis.Emit
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -32,7 +30,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         End Property
 
         Private Sub IReferenceDispatch(visitor As Cci.MetadataVisitor) Implements Cci.IReference.Dispatch
-            visitor.Visit(DirectCast(Me, Cci.IAssemblyReference))
+            visitor.Visit(Me)
         End Sub
 
         Private ReadOnly Property INamedEntityName As String Implements Cci.INamedEntity.Name

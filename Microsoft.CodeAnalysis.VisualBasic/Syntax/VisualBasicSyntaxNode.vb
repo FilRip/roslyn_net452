@@ -4,9 +4,8 @@
 
 Imports System.Collections.Immutable
 Imports System.Collections.ObjectModel
-Imports System.ComponentModel
-Imports System.Reflection
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -327,14 +326,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                               Optional includeSkipped As Boolean = False,
                                               Optional includeDirectives As Boolean = False,
                                               Optional includeDocumentationComments As Boolean = False) As SyntaxToken
-            Return CType(MyBase.GetFirstToken(includeZeroWidth, includeSkipped, includeDirectives, includeDocumentationComments), SyntaxToken)
+            Return MyBase.GetFirstToken(includeZeroWidth, includeSkipped, includeDirectives, includeDocumentationComments)
         End Function
 
         Public Shadows Function GetLastToken(Optional includeZeroWidth As Boolean = False,
                                              Optional includeSkipped As Boolean = False,
                                              Optional includeDirectives As Boolean = False,
                                              Optional includeDocumentationComments As Boolean = False) As SyntaxToken
-            Return CType(MyBase.GetLastToken(includeZeroWidth, includeSkipped, includeDirectives, includeDocumentationComments), SyntaxToken)
+            Return MyBase.GetLastToken(includeZeroWidth, includeSkipped, includeDirectives, includeDocumentationComments)
         End Function
 
         Public Function GetDirectives(Optional filter As Func(Of DirectiveTriviaSyntax, Boolean) = Nothing) As IList(Of DirectiveTriviaSyntax)

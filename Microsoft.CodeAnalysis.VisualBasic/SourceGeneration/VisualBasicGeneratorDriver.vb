@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Diagnostics
 
 Namespace Microsoft.CodeAnalysis.VisualBasic

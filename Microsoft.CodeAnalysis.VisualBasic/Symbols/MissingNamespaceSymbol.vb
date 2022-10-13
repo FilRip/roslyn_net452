@@ -2,16 +2,9 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
 Imports System.Collections.Immutable
-Imports System.Reflection
-Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Roslyn.Utilities
-Imports Binder = Microsoft.CodeAnalysis.VisualBasic.Binder
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 

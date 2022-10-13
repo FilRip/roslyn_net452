@@ -6,6 +6,7 @@
 ' Contains the definition of the Parser
 '-----------------------------------------------------------------------------
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
+
 Imports InternalSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.SyntaxFactory
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

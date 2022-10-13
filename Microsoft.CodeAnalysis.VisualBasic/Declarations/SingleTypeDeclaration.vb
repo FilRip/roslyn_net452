@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -119,7 +120,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End Function
 
             Private Shadows Function GetHashCode(decl1 As SingleTypeDeclaration) As Integer Implements IEqualityComparer(Of SingleTypeDeclaration).GetHashCode
-                Return Hash.Combine(CaseInsensitiveComparison.GetHashCode(decl1.Name), Hash.Combine(decl1.Arity.GetHashCode(), CType(decl1.Kind, Integer)))
+                Return Hash.Combine(CaseInsensitiveComparison.GetHashCode(decl1.Name), Hash.Combine(decl1.Arity.GetHashCode(), decl1.Kind))
             End Function
         End Class
 

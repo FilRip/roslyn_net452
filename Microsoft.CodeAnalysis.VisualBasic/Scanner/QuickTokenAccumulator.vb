@@ -9,12 +9,6 @@
 Option Compare Binary
 Option Strict On
 
-Imports System.Text
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
     '' The QuickTokenAccumulator is a small mini-tokenizer that may fail. It consumes characters and
     '' eventually either decides that either it found a complete token (including the trivia on either
@@ -335,7 +329,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
                 'FNV-like hash should work here 
                 'since these strings are short and mostly ASCII
-                hashCode = (hashCode Xor unicodeValue) * Hash.FnvPrime
+                hashCode = ((hashCode Xor unicodeValue) * Hash.FnvPrime)
             End While
 
             If state = AccumulatorState.Done AndAlso (terminatorLength = 0 OrElse Not Me._IsScanningXmlDoc) Then

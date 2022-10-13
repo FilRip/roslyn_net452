@@ -4,7 +4,9 @@
 
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
+
 Imports InternalSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.SyntaxFactory
 
 '

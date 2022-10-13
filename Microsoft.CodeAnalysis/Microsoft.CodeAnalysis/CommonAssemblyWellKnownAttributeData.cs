@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis
 
         private bool? _runtimeCompatibilityWrapNonExceptionThrows;
 
-        internal const bool WrapNonExceptionThrowsDefault = true;
+        public const bool WrapNonExceptionThrowsDefault = true;
 
         private bool _hasDebuggableAttribute;
 

@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis
 
         public const string CompilerDiagnosticCategory = "Compiler";
 
-        internal const int DefaultWarningLevel = 4;
+        public const int DefaultWarningLevel = 4;
 
         public const int InfoAndHiddenWarningLevel = 1;
 

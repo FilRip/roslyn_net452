@@ -4,8 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Globalization
-Imports System.Reflection
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -86,7 +85,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Friend Shared ReadOnly Property ResourceManager As Resources.ResourceManager
             Get
                 If s_resourceManager Is Nothing Then
-                    s_resourceManager = New Resources.ResourceManager(GetType(My.Resources.Resources).FullName, GetType(ERRID).GetTypeInfo().Assembly)
+                    s_resourceManager = My.Resources.ResourceManager
                 End If
 
                 Return s_resourceManager
@@ -116,7 +115,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Public Shared Function GetHelpLink(id As ERRID) As String
-            Dim idWithLanguagePrefix As String = MessageProvider.Instance.GetIdForErrorCode(CInt(id))
+            Dim idWithLanguagePrefix As String = MessageProvider.Instance.GetIdForErrorCode(id)
             Return $"https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k({idWithLanguagePrefix})"
         End Function
 

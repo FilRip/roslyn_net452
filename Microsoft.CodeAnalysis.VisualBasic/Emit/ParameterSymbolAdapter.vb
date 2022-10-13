@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.Cci
 Imports Microsoft.CodeAnalysis.CodeGen
 Imports Microsoft.CodeAnalysis.Emit
@@ -117,7 +118,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 visitor.Visit(DirectCast(Me, IParameterTypeInformation))
             Else
                 If AdaptedParameterSymbol.ContainingModule = (DirectCast(visitor.Context.Module, PEModuleBuilder)).SourceModule Then
-                    visitor.Visit(DirectCast(Me, IParameterDefinition))
+                    visitor.Visit(Me)
                 Else
                     visitor.Visit(DirectCast(Me, IParameterTypeInformation))
                 End If

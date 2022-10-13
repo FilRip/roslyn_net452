@@ -4,11 +4,7 @@
 
 Imports System.Runtime.CompilerServices
 
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-
-Imports Roslyn.Utilities
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -104,8 +100,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <returns>The given simple name updated with the given identifier.</returns>
         <Extension>
         Public Function WithIdentifier(simpleName As SimpleNameSyntax, identifier As SyntaxToken) As SimpleNameSyntax
-            Return If(simpleName.Kind = SyntaxKind.IdentifierName,
-                      DirectCast(DirectCast(simpleName, IdentifierNameSyntax).WithIdentifier(identifier), SimpleNameSyntax),
+            Return If(simpleName.Kind = Global.Microsoft.CodeAnalysis.VisualBasic.SyntaxKind.IdentifierName,
+                      DirectCast(simpleName, IdentifierNameSyntax).WithIdentifier(identifier),
                       DirectCast(DirectCast(simpleName, GenericNameSyntax).WithIdentifier(identifier), SimpleNameSyntax))
         End Function
 

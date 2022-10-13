@@ -4,6 +4,7 @@
 
 Imports System.Globalization
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.VisualBasic
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
@@ -378,14 +379,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Public Overrides Sub ReportDuplicateMetadataReferenceStrong(diagnostics As DiagnosticBag, location As Location, reference As MetadataReference, identity As AssemblyIdentity, equivalentReference As MetadataReference, equivalentIdentity As AssemblyIdentity)
             diagnostics.Add(ERRID.ERR_DuplicateReferenceStrong,
-                            DirectCast(location, Location),
+                            location,
                             If(reference.Display, identity.GetDisplayName()),
                             If(equivalentReference.Display, equivalentIdentity.GetDisplayName()))
         End Sub
 
         Public Overrides Sub ReportDuplicateMetadataReferenceWeak(diagnostics As DiagnosticBag, location As Location, reference As MetadataReference, identity As AssemblyIdentity, equivalentReference As MetadataReference, equivalentIdentity As AssemblyIdentity)
             diagnostics.Add(ERRID.ERR_DuplicateReference2,
-                            DirectCast(location, Location),
+                            location,
                             identity.Name,
                             If(equivalentReference.Display, equivalentIdentity.GetDisplayName()))
         End Sub

@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Interop.cs" />
     <Compile Include="Microsoft.Win32.SafeHandles\SafeAllocHHandle.cs" />
+    <Compile Include="System.Runtime.CompilerServices\ExternalInit.cs" />
     <Compile Include="System.Runtime.CompilerServices\__BlockReflectionAttribute.cs" />
     <Compile Include="System.Text\BaseCodePageEncoding.cs" />
     <Compile Include="System.Text\CodePagesEncodingProvider.cs" />

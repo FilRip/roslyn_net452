@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.CodeAnalysis.CodeGen
 Imports Microsoft.CodeAnalysis.Emit
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -79,7 +80,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit.NoPia
 
         Protected Overrides ReadOnly Property UnderlyingParameterTypeInformation As Cci.IParameterTypeInformation
             Get
-                Return DirectCast(UnderlyingParameter, Cci.IParameterTypeInformation)
+                Return UnderlyingParameter
             End Get
         End Property
 

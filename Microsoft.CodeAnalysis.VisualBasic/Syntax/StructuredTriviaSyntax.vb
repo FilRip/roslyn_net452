@@ -2,9 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 '-----------------------------------------------------------------------------------------------------------
 ' Contains hand-written Partial class extensions to certain of the syntax nodes (other that the 
 ' base node SyntaxNode, which is in a different file.)

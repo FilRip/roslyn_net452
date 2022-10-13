@@ -2,11 +2,12 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
+Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
+Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.Emit
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports System.Collections.Concurrent
-Imports System.Threading
 
 #If Not DEBUG Then
 Imports SymbolAdapter = Microsoft.CodeAnalysis.VisualBasic.Symbol
@@ -60,7 +61,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit.NoPia
         End Function
 
         Public Function GetWellKnownMethod(method As WellKnownMember, syntaxNodeOpt As SyntaxNode, diagnostics As DiagnosticBag) As MethodSymbol
-            Return LazyGetWellKnownTypeMethod(_lazyWellKnownTypeMethods(CInt(method)), method, syntaxNodeOpt, diagnostics)
+            Return LazyGetWellKnownTypeMethod(_lazyWellKnownTypeMethods(method), method, syntaxNodeOpt, diagnostics)
         End Function
 
         Private Function LazyGetWellKnownTypeMethod(ByRef lazyMethod As MethodSymbol, method As WellKnownMember, syntaxNodeOpt As SyntaxNode, diagnostics As DiagnosticBag) As MethodSymbol

@@ -6,12 +6,13 @@ Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis
-Imports Microsoft.CodeAnalysis.Collections
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.Symbols
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
+
 Imports Display = Microsoft.CodeAnalysis.VisualBasic.SymbolDisplay
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
@@ -301,7 +302,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim builder As ArrayBuilder(Of VisualBasicSyntaxNode) = ArrayBuilder(Of VisualBasicSyntaxNode).GetInstance()
                 For Each location In locations
                     If location.IsInSource AndAlso location.SourceTree IsNot Nothing Then
-                        Dim token = CType(location.SourceTree.GetRoot().FindToken(location.SourceSpan.Start), SyntaxToken)
+                        Dim token = location.SourceTree.GetRoot().FindToken(location.SourceSpan.Start)
                         If token.Kind <> SyntaxKind.None Then
                             Dim node As VisualBasicSyntaxNode = token.Parent.FirstAncestorOrSelf(Of TNode)()
                             If node IsNot Nothing Then

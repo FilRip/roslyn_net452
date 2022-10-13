@@ -2,9 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 '-----------------------------------------------------------------------------
 ' Contains the definition of the BlockContext
 '-----------------------------------------------------------------------------
@@ -39,7 +36,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 Dim keyword = Parser.ReportSyntaxError(whileUntilClause.WhileOrUntilKeyword, ERRID.ERR_LoopDoubleCondition)
                 Dim errors = whileUntilClause.GetDiagnostics
 
-                whileUntilClause = SyntaxFactory.WhileOrUntilClause(whileUntilClause.Kind, DirectCast(keyword, KeywordSyntax), whileUntilClause.Condition)
+                whileUntilClause = SyntaxFactory.WhileOrUntilClause(whileUntilClause.Kind, keyword, whileUntilClause.Condition)
 
                 If errors IsNot Nothing Then
                     whileUntilClause = DirectCast(whileUntilClause.SetDiagnostics(errors), WhileOrUntilClauseSyntax)

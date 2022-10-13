@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
+
 Imports InternalSyntaxFactory = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.SyntaxFactory
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
@@ -931,7 +932,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                                    SyntaxKind.AggregateKeyword, SyntaxKind.IntoKeyword, SyntaxKind.OnKeyword, SyntaxKind.SkipKeyword,
                                    SyntaxKind.TakeKeyword, SyntaxKind.LetKeyword)
 
-                result = New CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of JoinConditionSyntax)(CType(New CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of JoinConditionSyntax)(CType(elements, GreenNode)), CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of GreenNode)))
+                result = New CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of JoinConditionSyntax)(New CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of JoinConditionSyntax)(elements))
             End If
 
             Return result

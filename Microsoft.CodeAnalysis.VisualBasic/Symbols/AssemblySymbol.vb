@@ -2,16 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Threading
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Microsoft.CodeAnalysis.Collections
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.Symbols
+Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 

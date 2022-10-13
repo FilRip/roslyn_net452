@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         [Conditional("DEBUG")]
-        internal static void Seal(WellKnownAttributeData data)
+        public static void Seal(WellKnownAttributeData data)
         {
         }
     }

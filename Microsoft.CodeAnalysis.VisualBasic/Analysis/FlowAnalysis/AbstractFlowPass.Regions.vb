@@ -2,14 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections.Generic
-Imports System.Diagnostics
-Imports System.Linq
-Imports System.Text
 Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 ' NOTE: VB does not support constant expressions in flow analysis during command-line compilation, but supports them when 
 '       analysis is being called via public API. This distinction is governed by 'suppressConstantExpressions' flag

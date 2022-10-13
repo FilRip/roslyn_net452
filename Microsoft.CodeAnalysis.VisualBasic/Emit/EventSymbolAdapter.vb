@@ -107,7 +107,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Friend Overrides Sub IReferenceDispatch(visitor As Cci.MetadataVisitor) ' Implements Cci.IReference.Dispatch
             CheckDefinitionInvariant()
-            visitor.Visit(DirectCast(Me, Cci.IEventDefinition))
+            visitor.Visit(Me)
         End Sub
 
         Friend Overrides Function IReferenceAsDefinition(context As EmitContext) As Cci.IDefinition 'Implements Cci.IReference.AsDefinition

@@ -3,6 +3,7 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -20,7 +21,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             Dim propertySymbol = DirectCast(accessor.AssociatedSymbol, PropertySymbol)
 
-            Dim syntax = DirectCast(VisualBasic.VisualBasicSyntaxTree.Dummy.GetRoot(), VisualBasicSyntaxNode)
+            Dim syntax = VisualBasic.VisualBasicSyntaxTree.Dummy.GetRoot()
 
             If propertySymbol.Type.IsVoidType Then
                 ' An error is reported elsewhere

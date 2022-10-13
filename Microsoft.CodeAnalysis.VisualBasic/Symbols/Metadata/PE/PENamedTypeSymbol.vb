@@ -2,23 +2,17 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Collections.ObjectModel
 Imports System.Globalization
-Imports System.Reflection
 Imports System.Reflection.Metadata
-Imports System.Linq
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports Microsoft.CodeAnalysis.CodeGen
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
-Imports TypeAttributes = System.Reflection.TypeAttributes
+
 Imports FieldAttributes = System.Reflection.FieldAttributes
+Imports TypeAttributes = System.Reflection.TypeAttributes
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
@@ -1050,7 +1044,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 If _lazyCoClassType Is ErrorTypeSymbol.UnknownResultType Then
                     Interlocked.CompareExchange(_lazyCoClassType,
                                                 MakeComImportCoClassType(),
-                                                DirectCast(ErrorTypeSymbol.UnknownResultType, TypeSymbol))
+                                                ErrorTypeSymbol.UnknownResultType)
                 End If
 
                 Return _lazyCoClassType

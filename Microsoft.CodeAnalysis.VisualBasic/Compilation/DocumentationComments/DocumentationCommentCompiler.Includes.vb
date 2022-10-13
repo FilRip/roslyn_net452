@@ -8,13 +8,12 @@ Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports System.Xml
-Imports System.Xml.Linq
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
+Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports Microsoft.CodeAnalysis.Text
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
     Partial Public Class VisualBasicCompilation
@@ -120,7 +119,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 Dim namedType = DirectCast(symbol, NamedTypeSymbol)
                                 Dim invokeMethod As MethodSymbol = namedType.DelegateInvokeMethod
 
-                                If namedType.TypeKind = TYPEKIND.Delegate Then
+                                If namedType.TypeKind = TypeKind.Delegate Then
                                     If invokeMethod IsNot Nothing AndAlso Not invokeMethod.IsSub Then
                                         Me.ReturnsSupported = True
                                     Else
@@ -128,9 +127,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                     End If
                                 End If
 
-                                Me.ParamAndParamRefSupported = namedType.TypeKind = TYPEKIND.Delegate
-                                Me.TypeParamSupported = namedType.TypeKind <> TYPEKIND.Enum AndAlso namedType.TypeKind <> TYPEKIND.Module
-                                Me.TypeParamRefSupported = namedType.TypeKind <> TYPEKIND.Module
+                                Me.ParamAndParamRefSupported = namedType.TypeKind = TypeKind.Delegate
+                                Me.TypeParamSupported = namedType.TypeKind <> TypeKind.Enum AndAlso namedType.TypeKind <> TypeKind.Module
+                                Me.TypeParamRefSupported = namedType.TypeKind <> TypeKind.Module
 
                             Case SymbolKind.Property
                                 Dim prop = DirectCast(symbol, PropertySymbol)
@@ -439,7 +438,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End Function
 
                 Private Function RewriteIncludeElement(includeElement As XElement, currentXmlFilePath As String, originatingSyntax As XmlNodeSyntax, <Out> ByRef commentMessage As String) As XNode()
-                    Dim location As location = GetIncludeElementLocation(includeElement, currentXmlFilePath, originatingSyntax)
+                    Dim location As Location = GetIncludeElementLocation(includeElement, currentXmlFilePath, originatingSyntax)
                     Debug.Assert(originatingSyntax IsNot Nothing)
 
                     If Not AddIncludeElementLocation(location) Then
@@ -563,7 +562,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Private Function AddIncludeElementLocation(location As Location) As Boolean
                     If Me._inProgressIncludeElementNodes Is Nothing Then
-                        Me._inProgressIncludeElementNodes = New HashSet(Of location)()
+                        Me._inProgressIncludeElementNodes = New HashSet(Of Location)()
                     End If
 
                     Return Me._inProgressIncludeElementNodes.Add(location)
@@ -577,7 +576,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End Function
 
                 Private Function GetIncludeElementLocation(includeElement As XElement, ByRef currentXmlFilePath As String, ByRef originatingSyntax As XmlNodeSyntax) As Location
-                    Dim location As location = includeElement.Annotation(Of location)()
+                    Dim location As Location = includeElement.Annotation(Of Location)()
 
                     If location IsNot Nothing Then
                         Return location
@@ -618,7 +617,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Select Case attr.Kind
 
                         Case SyntaxKind.XmlCrefAttribute
-                            Dim binder As binder = Me.GetOrCreateBinder(DocumentationCommentBinder.BinderType.Cref)
+                            Dim binder As Binder = Me.GetOrCreateBinder(DocumentationCommentBinder.BinderType.Cref)
                             Dim reference As CrefReferenceSyntax = DirectCast(attr, XmlCrefAttributeSyntax).Reference
                             Dim useSiteInfo = binder.GetNewCompoundUseSiteInfo(_diagnostics)
                             Dim diagnostics = BindingDiagnosticBag.GetInstance(_diagnostics)
@@ -648,11 +647,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 ' those out, from the rest we take the symbol with 'smallest' location
                                 Dim symbolCommentId As String = Nothing
                                 Dim smallestSymbol As Symbol = Nothing
-                                Dim errid As ERRID = errid.WRN_XMLDocCrefAttributeNotFound1
+                                Dim errid As ERRID = ERRID.WRN_XMLDocCrefAttributeNotFound1
 
                                 For Each symbol In bindResult
                                     If symbol.Kind = SymbolKind.TypeParameter Then
-                                        errid = errid.WRN_XMLDocCrefToTypeParameter
+                                        errid = ERRID.WRN_XMLDocCrefToTypeParameter
                                         Continue For
                                     End If
 
@@ -756,7 +755,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Select Case attr.Kind
 
                         Case SyntaxKind.XmlNameAttribute
-                            Dim binder As binder = Me.GetOrCreateBinder(type)
+                            Dim binder As Binder = Me.GetOrCreateBinder(type)
                             Dim identifier As IdentifierNameSyntax = DirectCast(attr, XmlNameAttributeSyntax).Reference
                             Dim useSiteInfo = binder.GetNewCompoundUseSiteInfo(Me._diagnostics)
                             Dim bindResult As ImmutableArray(Of Symbol) = binder.BindXmlNameAttributeValue(identifier, useSiteInfo)

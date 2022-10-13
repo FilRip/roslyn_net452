@@ -2,11 +2,10 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
 Imports System.Collections.Concurrent
 Imports System.Collections.Immutable
 Imports System.Threading
-Imports System.Threading.Tasks
+
 Imports Microsoft.CodeAnalysis.CodeGen
 Imports Microsoft.CodeAnalysis.Diagnostics
 Imports Microsoft.CodeAnalysis.Emit
@@ -835,7 +834,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         End If
 
                         f.CloseMethod(body)
-                        _moduleBeingBuiltOpt.AddSynthesizedDefinition(method.ContainingType, DirectCast(matchingStub.GetCciAdapter(), Microsoft.Cci.IMethodDefinition))
+                        _moduleBeingBuiltOpt.AddSynthesizedDefinition(method.ContainingType, matchingStub.GetCciAdapter())
                     End If
 
                     matchingStub.AddImplementedMethod(implemented)

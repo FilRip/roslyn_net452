@@ -2,11 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Xml.Linq
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports VbObjectDisplay = Microsoft.CodeAnalysis.VisualBasic.ObjectDisplay.ObjectDisplay
-Imports Parser = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.Parser
+
 Imports Feature = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.Feature
+Imports Parser = Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax.Parser
+Imports VbObjectDisplay = Microsoft.CodeAnalysis.VisualBasic.ObjectDisplay.ObjectDisplay
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -132,7 +132,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' This method returns the appropriate parent of name syntax nodes that are on right of these constructs.
         ''' </summary> 
         Public Shared Function GetStandaloneExpression(node As ExpressionSyntax) As ExpressionSyntax
-            Dim expr = TryCast(node, ExpressionSyntax)
+            Dim expr = node
             If expr IsNot Nothing Then
                 Dim parent = TryCast(node.Parent, ExpressionSyntax)
                 If parent IsNot Nothing Then
@@ -1079,7 +1079,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim compilationUnit As CompilationUnitSyntax = DirectCast(tree.GetRoot(), CompilationUnitSyntax)
 
             For Each err As Diagnostic In compilationUnit.GetDiagnostics()
-                Select Case DirectCast(err.Code, ERRID)
+                Select Case err.Code
                     Case ERRID.ERR_LbExpectedEndIf,
                          ERRID.ERR_ExpectedEndRegion
                         Return False
@@ -1111,7 +1111,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             For Each err As Diagnostic In lastToken.GetDiagnostics()
-                Select Case DirectCast(err.Code, ERRID)
+                Select Case err.Code
                     Case ERRID.ERR_UnterminatedStringLiteral
                         If Parser.CheckFeatureAvailability(languageVersion, Feature.MultilineStringLiterals) Then
                             Return False

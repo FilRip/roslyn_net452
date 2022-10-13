@@ -3,7 +3,6 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Threading
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 

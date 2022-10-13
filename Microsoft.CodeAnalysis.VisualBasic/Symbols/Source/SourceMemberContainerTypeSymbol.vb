@@ -5,9 +5,11 @@
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
+
 Imports Roslyn.Utilities
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
@@ -2158,7 +2160,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                         Debug.Assert(firstField IsNot Nothing)
 
                                         '  Report an error
-                                        Dim symbolToReportErrorOn As Symbol = If(firstField.AssociatedSymbol, DirectCast(firstField, Symbol))
+                                        Dim symbolToReportErrorOn As Symbol = If(firstField.AssociatedSymbol, firstField)
                                         Debug.Assert(symbolToReportErrorOn.Locations.Length > 0)
                                         diagnostics.Add(ERRID.ERR_RecordCycle2,
                                                         symbolToReportErrorOn.Locations(0),

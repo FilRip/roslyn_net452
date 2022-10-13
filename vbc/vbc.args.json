@@ -1,0 +1,10 @@
+{
+  "FileVersion": 2,
+  "Id": "7b7e820c-ea29-4d89-b183-69988bb302fa",
+  "Items": [
+    {
+      "Id": "b5b3289c-2892-4597-9f1f-7db47daa7e71",
+      "Command": "test.vb"
+    }
+  ]
+}

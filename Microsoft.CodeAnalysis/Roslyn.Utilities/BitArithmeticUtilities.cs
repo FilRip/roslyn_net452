@@ -1,6 +1,6 @@
 namespace Roslyn.Utilities
 {
-    internal static class BitArithmeticUtilities
+    public static class BitArithmeticUtilities
     {
         public static int CountBits(int v)
         {

@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
@@ -311,7 +312,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 statements.Add(localDeclaration)
             End If
 
-            Dim blockBinder = Me.GetBinder(DirectCast(methodBlock, VisualBasicSyntaxNode))
+            Dim blockBinder = Me.GetBinder(methodBlock)
             Dim body = blockBinder.BindBlock(methodBlock, methodBlock.Statements, diagnostics)
 
             ' Implicit label to branch to for Exit Sub/Exit Function statements.
@@ -475,7 +476,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 If (containsOnError OrElse containsResume) AndAlso walker._containsTry Then
                     For Each node In walker._tryOnErrorResume
-                        binder.ReportDiagnostic(diagnostics, node.Syntax, ERRID.ERR_TryAndOnErrorDoNotMix)
+                        Binder.ReportDiagnostic(diagnostics, node.Syntax, ERRID.ERR_TryAndOnErrorDoNotMix)
                     Next
 
                     reportedAnError = True
@@ -800,7 +801,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim boundLabelExpression As BoundExpression = BindExpression(node.Label, diagnostics)
 
             If boundLabelExpression.Kind = BoundKind.Label Then
-                Dim boundLabel = DirectCast(boundLabelExpression, boundLabel)
+                Dim boundLabel = DirectCast(boundLabelExpression, BoundLabel)
                 symbol = boundLabel.Label
 
                 Dim hasErrors As Boolean = boundLabel.HasErrors
@@ -967,7 +968,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ElseIf (foundModifiers And SourceMemberFlags.Static) <> 0 Then
 
                 ' 'Static' keyword is only allowed in class methods, but not in structure methods
-                If Me.ContainingType IsNot Nothing AndAlso Me.ContainingType.TypeKind = TYPEKIND.Structure Then
+                If Me.ContainingType IsNot Nothing AndAlso Me.ContainingType.TypeKind = TypeKind.Structure Then
                     '  Local variables within methods of structures cannot be declared 'Static'
                     ReportDiagnostic(diagBag, firstStatic, ERRID.ERR_BadStaticLocalInStruct)
                 ElseIf Me.IsInLambda Then
@@ -2092,7 +2093,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Case BoundKind.AsNewLocalDeclarations
                     For Each decl In DirectCast(localDecl, BoundAsNewLocalDeclarations).LocalDeclarations
-                        locals.Add(DirectCast(decl, BoundLocalDeclaration).LocalSymbol)
+                        locals.Add(decl.LocalSymbol)
                     Next
 
                 Case Else
@@ -2800,7 +2801,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             ' Get the binder for the body of the loop. This defines the break and continue labels.
-            Dim loopBodyBinder = GetBinder(DirectCast(node, VisualBasicSyntaxNode))
+            Dim loopBodyBinder = GetBinder(node)
 
             ' Bind the body of the loop.
             Dim loopBody As BoundBlock = loopBodyBinder.BindBlock(node, node.Statements, diagnostics).MakeCompilerGenerated()
@@ -4377,7 +4378,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Sub
 
         Public Function BindWithBlock(node As WithBlockSyntax, diagnostics As BindingDiagnosticBag) As BoundStatement
-            Dim binder As Binder = Me.GetBinder(DirectCast(node, VisualBasicSyntaxNode))
+            Dim binder As Binder = Me.GetBinder(node)
             Return binder.CreateBoundWithBlock(node, binder, diagnostics)
         End Function
 
@@ -5233,7 +5234,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim boundLabelExpression As BoundExpression = BindExpression(node.Label, diagnostics)
 
                     If boundLabelExpression.Kind = BoundKind.Label Then
-                        Dim boundLabel = DirectCast(boundLabelExpression, boundLabel)
+                        Dim boundLabel = DirectCast(boundLabelExpression, BoundLabel)
                         symbol = boundLabel.Label
 
                         Return New BoundResumeStatement(node, symbol, boundLabel, hasErrors:=Not IsValidLabelForGoto(symbol, node.Label, diagnostics))
@@ -5272,7 +5273,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim boundLabelExpression As BoundExpression = BindExpression(onError.Label, diagnostics)
 
                     If boundLabelExpression.Kind = BoundKind.Label Then
-                        Dim boundLabel = DirectCast(boundLabelExpression, boundLabel)
+                        Dim boundLabel = DirectCast(boundLabelExpression, BoundLabel)
                         symbol = boundLabel.Label
 
                         Return New BoundOnErrorStatement(node, symbol, boundLabel, hasErrors:=Not IsValidLabelForGoto(symbol, onError.Label, diagnostics))

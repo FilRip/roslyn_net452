@@ -2,9 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports Microsoft.CodeAnalysis.Text
-Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 ' TODO: this is not in Preprocessor namespace as it may be generally useful.
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

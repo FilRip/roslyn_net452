@@ -6,7 +6,6 @@
 ' Contains the definition of the Scanner, which produces tokens from text 
 '-----------------------------------------------------------------------------
 
-Imports Microsoft.CodeAnalysis.Syntax.InternalSyntax
 Imports Microsoft.CodeAnalysis.VisualBasic.SyntaxFacts
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax

@@ -3,18 +3,14 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
-Imports System.Collections.ObjectModel
-Imports System.IO
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Operations
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -163,7 +159,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Friend Function GetMemberSemanticModel(position As Integer) As MemberSemanticModel
-            Dim binder As binder = _binderFactory.GetBinderForPosition(FindInitialNodeFromPosition(position), position)
+            Dim binder As Binder = _binderFactory.GetBinderForPosition(FindInitialNodeFromPosition(position), position)
             Dim model = GetMemberSemanticModel(binder) ' Depends on the runtime type, so don't wrap in a SemanticModelBinder.
             Debug.Assert(model Is Nothing OrElse model.RootBinder.IsSemanticModelBinder)
             Return model
@@ -181,7 +177,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' to find more nested binders.
                 Return model.GetEnclosingBinder(position)
             Else
-                Dim binder As binder = _binderFactory.GetBinderForPosition(FindInitialNodeFromPosition(position), position)
+                Dim binder As Binder = _binderFactory.GetBinderForPosition(FindInitialNodeFromPosition(position), position)
                 Return SemanticModelBinder.Mark(binder, IgnoresAccessibility)
             End If
         End Function
@@ -204,7 +200,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Friend Overrides Function GetExpressionSymbolInfo(node As ExpressionSyntax, options As SymbolInfoOptions, Optional cancellationToken As CancellationToken = Nothing) As SymbolInfo
             ValidateSymbolInfoOptions(options)
 
-            node = SyntaxFactory.GetStandaloneExpression(DirectCast(node, ExpressionSyntax))
+            node = SyntaxFactory.GetStandaloneExpression(node)
 
             Dim model As MemberSemanticModel = Me.GetMemberSemanticModel(node)
             Dim result As SymbolInfo
@@ -284,7 +280,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Friend Overrides Function GetExpressionTypeInfo(node As ExpressionSyntax, Optional cancellationToken As CancellationToken = Nothing) As VisualBasicTypeInfo
-            node = SyntaxFactory.GetStandaloneExpression(DirectCast(node, ExpressionSyntax))
+            node = SyntaxFactory.GetStandaloneExpression(node)
 
             Dim model As MemberSemanticModel = Me.GetMemberSemanticModel(node)
 
@@ -328,7 +324,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Friend Overrides Function GetExpressionMemberGroup(node As ExpressionSyntax, Optional cancellationToken As CancellationToken = Nothing) As ImmutableArray(Of Symbol)
-            node = SyntaxFactory.GetStandaloneExpression(DirectCast(node, ExpressionSyntax))
+            node = SyntaxFactory.GetStandaloneExpression(node)
 
             Dim model As MemberSemanticModel = Me.GetMemberSemanticModel(node)
 
@@ -340,7 +336,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Friend Overrides Function GetExpressionConstantValue(node As ExpressionSyntax, Optional cancellationToken As CancellationToken = Nothing) As ConstantValue
-            node = SyntaxFactory.GetStandaloneExpression(DirectCast(node, ExpressionSyntax))
+            node = SyntaxFactory.GetStandaloneExpression(node)
 
             Dim model As MemberSemanticModel = Me.GetMemberSemanticModel(node)
 
@@ -588,8 +584,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Return Nothing
             End If
 
-            Dim token As SyntaxToken = CType(trivia.Token, SyntaxToken)
-            If token.Kind = SyntaxKind.None Then
+            Dim token As SyntaxToken = trivia.Token
+            If token.Kind = Global.Microsoft.CodeAnalysis.VisualBasic.SyntaxKind.None Then
                 Return Nothing
             End If
 
@@ -884,7 +880,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim binder As Binder = _binderFactory.GetNamedTypeBinder(declarationSyntax)
 
             If binder IsNot Nothing AndAlso TypeOf binder Is NamedTypeBinder Then
-                Return CheckSymbolLocationsAgainstSyntax(DirectCast(binder.ContainingType, NamedTypeSymbol), declarationSyntax)
+                Return CheckSymbolLocationsAgainstSyntax(binder.ContainingType, declarationSyntax)
             Else
                 Return Nothing  ' Can this happen? Maybe in some edge case error cases.
             End If
@@ -904,7 +900,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim binder As Binder = _binderFactory.GetNamedTypeBinder(declarationSyntax)
 
             If binder IsNot Nothing AndAlso TypeOf binder Is NamedTypeBinder Then
-                Return CheckSymbolLocationsAgainstSyntax(DirectCast(binder.ContainingType, NamedTypeSymbol), declarationSyntax)
+                Return CheckSymbolLocationsAgainstSyntax(binder.ContainingType, declarationSyntax)
             Else
                 Return Nothing  ' Can this happen? Maybe in some edge case error cases.
             End If
@@ -923,7 +919,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim binder As Binder = _binderFactory.GetNamedTypeBinder(declarationSyntax)
 
             If binder IsNot Nothing AndAlso TypeOf binder Is NamedTypeBinder Then
-                Return CheckSymbolLocationsAgainstSyntax(DirectCast(binder.ContainingType, NamedTypeSymbol), declarationSyntax)
+                Return CheckSymbolLocationsAgainstSyntax(binder.ContainingType, declarationSyntax)
             Else
                 Return Nothing  ' Can this happen? Maybe in some edge case with errors
             End If
@@ -1077,7 +1073,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             Case SymbolKind.NamedType
                                 '  check for being delegate 
                                 Dim typeSymbol = DirectCast(symbol, NamedTypeSymbol)
-                                Debug.Assert(typeSymbol.TypeKind = TYPEKIND.Delegate)
+                                Debug.Assert(typeSymbol.TypeKind = TypeKind.Delegate)
                                 If typeSymbol.DelegateInvokeMethod IsNot Nothing Then
                                     Return GetParameterSymbol(typeSymbol.DelegateInvokeMethod.Parameters, parameter)
                                 End If

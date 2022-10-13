@@ -2,18 +2,12 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Concurrent
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports System.Threading
+
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
     ' Handler the parts of binding for member lookup.
@@ -40,7 +34,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(options.IsValid())
 
             options = BinderSpecificLookupOptions(options)
-            Dim tempResult = lookupResult.GetInstance()
+            Dim tempResult = LookupResult.GetInstance()
             MemberLookup.Lookup(lookupResult, container, name, arity, options, Me, tempResult, useSiteInfo)
             tempResult.Free()
         End Sub
@@ -340,7 +334,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 If container.IsNamespace Then
                     Lookup(lookupResult, DirectCast(container, NamespaceSymbol), name, arity, options, binder, useSiteInfo)
                 Else
-                    Dim tempResult = lookupResult.GetInstance()
+                    Dim tempResult = LookupResult.GetInstance()
                     Lookup(lookupResult, DirectCast(container, TypeSymbol), name, arity, options, binder, tempResult, useSiteInfo)
                     tempResult.Free()
                 End If
@@ -382,7 +376,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return
                 End If
 
-                Dim currentResult = lookupResult.GetInstance()
+                Dim currentResult = LookupResult.GetInstance()
 
                 LookupInModules(currentResult, container, name, arity, options, binder, useSiteInfo)
                 lookupResult.MergeAmbiguous(currentResult, s_ambiguousInModuleError)
@@ -416,7 +410,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     If containingNs IsNot Nothing AndAlso containingNs.IsGlobalNamespace AndAlso CaseInsensitiveComparison.Equals(container.Name, MetadataHelpers.SystemString) Then
                         Dim specialType = GetTypeForIntrinsicAlias(name)
 
-                        If specialType <> specialType.None Then
+                        If specialType <> SpecialType.None Then
                             Dim candidate = binder.Compilation.GetSpecialType(specialType)
 
                             ' Intrinsic alias works only if type is available
@@ -489,7 +483,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' NOTE: while looking up the symbol in modules we should ignore base class
                 options = options Or LookupOptions.IgnoreExtensionMethods Or LookupOptions.NoBaseClassLookup
                 Dim currentResult As LookupResult = Nothing
-                Dim tempResult = lookupResult.GetInstance()
+                Dim tempResult = LookupResult.GetInstance()
 
                 ' Next, do a lookup in each contained module and merge the results.
                 For Each containedModule As NamedTypeSymbol In container.GetModuleMembers()
@@ -498,7 +492,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         firstModule = False
                     Else
                         If currentResult Is Nothing Then
-                            currentResult = lookupResult.GetInstance()
+                            currentResult = LookupResult.GetInstance()
                         Else
                             currentResult.Clear()
                         End If
@@ -1274,9 +1268,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 If symbol Is Nothing Then
                     ' Match the native compiler which reports ERR_XmlFeaturesNotAvailable in this case.
                     Dim useSiteError = ErrorFactory.ErrorInfo(ERRID.ERR_XmlFeaturesNotAvailable)
-                    singleResult = New SingleLookupResult(LookupResultKind.NotReferencable, binder.GetErrorSymbol(name, useSiteError), useSiteError)
+                    singleResult = New SingleLookupResult(LookupResultKind.NotReferencable, Binder.GetErrorSymbol(name, useSiteError), useSiteError)
                 Else
-                    Dim reduced = New ReducedExtensionPropertySymbol(DirectCast(symbol, PropertySymbol))
+                    Dim reduced = New ReducedExtensionPropertySymbol(symbol)
                     singleResult = binder.CheckViability(reduced, arity, options, reduced.ContainingType, useSiteInfo)
                 End If
 
@@ -1469,7 +1463,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 ' If no viable or ambiguous results, look in Object.
                 If Not lookupResult.IsGoodOrAmbiguous AndAlso (options And LookupOptions.NoSystemObjectLookupForInterfaces) = 0 Then
-                    Dim currentResult = lookupResult.GetInstance()
+                    Dim currentResult = LookupResult.GetInstance()
                     Dim obj As NamedTypeSymbol = binder.SourceModule.ContainingAssembly.GetSpecialType(SpecialType.System_Object)
 
                     LookupInClass(currentResult,
@@ -1507,7 +1501,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Dim isEventsOnlySpecified As Boolean = (options And LookupOptions.EventsOnly) <> 0
 
-                Dim currentResult = lookupResult.GetInstance()
+                Dim currentResult = LookupResult.GetInstance()
                 Do
                     Dim info As InterfaceInfo = lookIn.Dequeue()
                     Debug.Assert(processed.Contains(info))
@@ -1555,11 +1549,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim symbols As ArrayBuilder(Of Symbol) = lookupResult.Symbols
 
                     For i As Integer = 0 To symbols.Count - 2
-                        Dim interface1 = DirectCast(symbols(i).ContainingType, NamedTypeSymbol)
+                        Dim interface1 = symbols(i).ContainingType
 
                         For j As Integer = i + 1 To symbols.Count - 1
 
-                            If Not lookupResult.CanOverload(symbols(i), symbols(j)) Then
+                            If Not LookupResult.CanOverload(symbols(i), symbols(j)) Then
                                 ' Symbols cannot overload each other.
                                 ' If they were from the same interface, LookupWithoutInheritance would make the result ambiguous.
                                 ' If they were from interfaces related through inheritance, one of them would shadow another,
@@ -1676,7 +1670,7 @@ ExitForFor:
 
             Private Shared Function CheckAndClearMethodsOnlyOption(ByRef options As LookupOptions) As Boolean
                 If (options And LookupOptions.MethodsOnly) <> 0 Then
-                    options = CType(options And (Not LookupOptions.MethodsOnly), LookupOptions)
+                    options = options And (Not LookupOptions.MethodsOnly)
                     Return True
                 End If
                 Return False

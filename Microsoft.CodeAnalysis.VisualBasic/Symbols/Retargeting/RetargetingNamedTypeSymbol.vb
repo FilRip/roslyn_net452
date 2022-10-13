@@ -2,18 +2,13 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
 Imports System.Globalization
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports Microsoft.CodeAnalysis.Collections
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Retargeting
 
@@ -160,7 +155,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Retargeting
                     If coClass IsNot Nothing Then
                         coClass = RetargetingTranslator.Retarget(coClass, RetargetOptions.RetargetPrimitiveTypesByName)
                     End If
-                    Interlocked.CompareExchange(_lazyCoClass, coClass, DirectCast(ErrorTypeSymbol.UnknownResultType, TypeSymbol))
+                    Interlocked.CompareExchange(_lazyCoClass, coClass, ErrorTypeSymbol.UnknownResultType)
                 End If
                 Return _lazyCoClass
             End Get

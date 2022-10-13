@@ -3,10 +3,10 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports Microsoft.CodeAnalysis.Text
+Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports System.Runtime.InteropServices
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -33,7 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     LookupOptions.IgnoreExtensionMethods Or
                     LookupOptions.MustNotBeLocalOrParameter
 
-            Dim lookupResult As LookupResult = lookupResult.GetInstance()
+            Dim lookupResult As LookupResult = LookupResult.GetInstance()
             Me.Lookup(lookupResult, identifier.Identifier.ValueText, 0, options, useSiteInfo)
 
             If Not lookupResult.HasSingleSymbol Then

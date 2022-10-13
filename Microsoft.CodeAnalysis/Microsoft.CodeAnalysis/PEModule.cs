@@ -228,7 +228,7 @@ namespace Microsoft.CodeAnalysis
 
         private static readonly ImmutableArray<bool> s_simpleTransformFlags = ImmutableArray.Create(item: true);
 
-        internal const string ByRefLikeMarker = "Types with embedded references are not supported in this version of your compiler.";
+        public const string ByRefLikeMarker = "Types with embedded references are not supported in this version of your compiler.";
 
         internal bool IsDisposed => _isDisposed;
 

@@ -59,5 +59,4225 @@ namespace Microsoft.CodeAnalysis.CSharp.Properties {
                 resourceCulture = value;
             }
         }
+
+        internal static string IDS_NULL => ResourceManager.GetString("IDS_NULL");
+
+        internal static string IDS_ThrowExpression => ResourceManager.GetString("IDS_ThrowExpression");
+
+        internal static string IDS_FeatureSwitchExpression => ResourceManager.GetString("IDS_FeatureSwitchExpression");
+
+        internal static string IDS_FeatureLocalFunctionAttributes => ResourceManager.GetString("IDS_FeatureLocalFunctionAttributes");
+
+        internal static string IDS_FeatureExternLocalFunctions => ResourceManager.GetString("IDS_FeatureExternLocalFunctions");
+
+        internal static string IDS_RELATEDERROR => ResourceManager.GetString("IDS_RELATEDERROR");
+
+        internal static string IDS_RELATEDWARNING => ResourceManager.GetString("IDS_RELATEDWARNING");
+
+        internal static string IDS_XMLIGNORED => ResourceManager.GetString("IDS_XMLIGNORED");
+
+        internal static string IDS_XMLIGNORED2 => ResourceManager.GetString("IDS_XMLIGNORED2");
+
+        internal static string IDS_XMLFAILEDINCLUDE => ResourceManager.GetString("IDS_XMLFAILEDINCLUDE");
+
+        internal static string IDS_XMLBADINCLUDE => ResourceManager.GetString("IDS_XMLBADINCLUDE");
+
+        internal static string IDS_XMLNOINCLUDE => ResourceManager.GetString("IDS_XMLNOINCLUDE");
+
+        internal static string IDS_XMLMISSINGINCLUDEFILE => ResourceManager.GetString("IDS_XMLMISSINGINCLUDEFILE");
+
+        internal static string IDS_XMLMISSINGINCLUDEPATH => ResourceManager.GetString("IDS_XMLMISSINGINCLUDEPATH");
+
+        internal static string IDS_GlobalNamespace => ResourceManager.GetString("IDS_GlobalNamespace");
+
+        internal static string IDS_FeatureGenerics => ResourceManager.GetString("IDS_FeatureGenerics");
+
+        internal static string IDS_FeatureAnonDelegates => ResourceManager.GetString("IDS_FeatureAnonDelegates");
+
+        internal static string IDS_FeatureModuleAttrLoc => ResourceManager.GetString("IDS_FeatureModuleAttrLoc");
+
+        internal static string IDS_FeatureGlobalNamespace => ResourceManager.GetString("IDS_FeatureGlobalNamespace");
+
+        internal static string IDS_FeatureFixedBuffer => ResourceManager.GetString("IDS_FeatureFixedBuffer");
+
+        internal static string IDS_FeaturePragma => ResourceManager.GetString("IDS_FeaturePragma");
+
+        internal static string IDS_FeatureStaticClasses => ResourceManager.GetString("IDS_FeatureStaticClasses");
+
+        internal static string IDS_FeatureReadOnlyStructs => ResourceManager.GetString("IDS_FeatureReadOnlyStructs");
+
+        internal static string IDS_FeaturePartialTypes => ResourceManager.GetString("IDS_FeaturePartialTypes");
+
+        internal static string IDS_FeatureAsync => ResourceManager.GetString("IDS_FeatureAsync");
+
+        internal static string IDS_FeatureSwitchOnBool => ResourceManager.GetString("IDS_FeatureSwitchOnBool");
+
+        internal static string IDS_MethodGroup => ResourceManager.GetString("IDS_MethodGroup");
+
+        internal static string IDS_AnonMethod => ResourceManager.GetString("IDS_AnonMethod");
+
+        internal static string IDS_Lambda => ResourceManager.GetString("IDS_Lambda");
+
+        internal static string IDS_Collection => ResourceManager.GetString("IDS_Collection");
+
+        internal static string IDS_Disposable => ResourceManager.GetString("IDS_Disposable");
+
+        internal static string IDS_FeaturePropertyAccessorMods => ResourceManager.GetString("IDS_FeaturePropertyAccessorMods");
+
+        internal static string IDS_FeatureExternAlias => ResourceManager.GetString("IDS_FeatureExternAlias");
+
+        internal static string IDS_FeatureIterators => ResourceManager.GetString("IDS_FeatureIterators");
+
+        internal static string IDS_FeatureDefault => ResourceManager.GetString("IDS_FeatureDefault");
+
+        internal static string IDS_FeatureAsyncStreams => ResourceManager.GetString("IDS_FeatureAsyncStreams");
+
+        internal static string IDS_FeatureUnmanagedConstructedTypes => ResourceManager.GetString("IDS_FeatureUnmanagedConstructedTypes");
+
+        internal static string IDS_FeatureReadOnlyMembers => ResourceManager.GetString("IDS_FeatureReadOnlyMembers");
+
+        internal static string IDS_FeatureDefaultLiteral => ResourceManager.GetString("IDS_FeatureDefaultLiteral");
+
+        internal static string IDS_FeaturePrivateProtected => ResourceManager.GetString("IDS_FeaturePrivateProtected");
+
+        internal static string IDS_FeatureTupleEquality => ResourceManager.GetString("IDS_FeatureTupleEquality");
+
+        internal static string IDS_FeatureNullable => ResourceManager.GetString("IDS_FeatureNullable");
+
+        internal static string IDS_FeaturePatternMatching => ResourceManager.GetString("IDS_FeaturePatternMatching");
+
+        internal static string IDS_FeatureExpressionBodiedAccessor => ResourceManager.GetString("IDS_FeatureExpressionBodiedAccessor");
+
+        internal static string IDS_FeatureExpressionBodiedDeOrConstructor => ResourceManager.GetString("IDS_FeatureExpressionBodiedDeOrConstructor");
+
+        internal static string IDS_FeatureThrowExpression => ResourceManager.GetString("IDS_FeatureThrowExpression");
+
+        internal static string IDS_FeatureImplicitArray => ResourceManager.GetString("IDS_FeatureImplicitArray");
+
+        internal static string IDS_FeatureImplicitLocal => ResourceManager.GetString("IDS_FeatureImplicitLocal");
+
+        internal static string IDS_FeatureAnonymousTypes => ResourceManager.GetString("IDS_FeatureAnonymousTypes");
+
+        internal static string IDS_FeatureAutoImplementedProperties => ResourceManager.GetString("IDS_FeatureAutoImplementedProperties");
+
+        internal static string IDS_FeatureReadonlyAutoImplementedProperties => ResourceManager.GetString("IDS_FeatureReadonlyAutoImplementedProperties");
+
+        internal static string IDS_FeatureObjectInitializer => ResourceManager.GetString("IDS_FeatureObjectInitializer");
+
+        internal static string IDS_FeatureCollectionInitializer => ResourceManager.GetString("IDS_FeatureCollectionInitializer");
+
+        internal static string IDS_FeatureQueryExpression => ResourceManager.GetString("IDS_FeatureQueryExpression");
+
+        internal static string IDS_FeatureExtensionMethod => ResourceManager.GetString("IDS_FeatureExtensionMethod");
+
+        internal static string IDS_FeaturePartialMethod => ResourceManager.GetString("IDS_FeaturePartialMethod");
+
+        internal static string IDS_SK_METHOD => ResourceManager.GetString("IDS_SK_METHOD");
+
+        internal static string IDS_SK_TYPE => ResourceManager.GetString("IDS_SK_TYPE");
+
+        internal static string IDS_SK_NAMESPACE => ResourceManager.GetString("IDS_SK_NAMESPACE");
+
+        internal static string IDS_SK_FIELD => ResourceManager.GetString("IDS_SK_FIELD");
+
+        internal static string IDS_SK_PROPERTY => ResourceManager.GetString("IDS_SK_PROPERTY");
+
+        internal static string IDS_SK_UNKNOWN => ResourceManager.GetString("IDS_SK_UNKNOWN");
+
+        internal static string IDS_SK_VARIABLE => ResourceManager.GetString("IDS_SK_VARIABLE");
+
+        internal static string IDS_SK_LABEL => ResourceManager.GetString("IDS_SK_LABEL");
+
+        internal static string IDS_SK_EVENT => ResourceManager.GetString("IDS_SK_EVENT");
+
+        internal static string IDS_SK_TYVAR => ResourceManager.GetString("IDS_SK_TYVAR");
+
+        internal static string IDS_SK_ALIAS => ResourceManager.GetString("IDS_SK_ALIAS");
+
+        internal static string IDS_SK_EXTERNALIAS => ResourceManager.GetString("IDS_SK_EXTERNALIAS");
+
+        internal static string IDS_SK_CONSTRUCTOR => ResourceManager.GetString("IDS_SK_CONSTRUCTOR");
+
+        internal static string IDS_FOREACHLOCAL => ResourceManager.GetString("IDS_FOREACHLOCAL");
+
+        internal static string IDS_FIXEDLOCAL => ResourceManager.GetString("IDS_FIXEDLOCAL");
+
+        internal static string IDS_USINGLOCAL => ResourceManager.GetString("IDS_USINGLOCAL");
+
+        internal static string IDS_Contravariant => ResourceManager.GetString("IDS_Contravariant");
+
+        internal static string IDS_Contravariantly => ResourceManager.GetString("IDS_Contravariantly");
+
+        internal static string IDS_Covariant => ResourceManager.GetString("IDS_Covariant");
+
+        internal static string IDS_Covariantly => ResourceManager.GetString("IDS_Covariantly");
+
+        internal static string IDS_Invariantly => ResourceManager.GetString("IDS_Invariantly");
+
+        internal static string IDS_FeatureDynamic => ResourceManager.GetString("IDS_FeatureDynamic");
+
+        internal static string IDS_FeatureNamedArgument => ResourceManager.GetString("IDS_FeatureNamedArgument");
+
+        internal static string IDS_FeatureOptionalParameter => ResourceManager.GetString("IDS_FeatureOptionalParameter");
+
+        internal static string IDS_FeatureExceptionFilter => ResourceManager.GetString("IDS_FeatureExceptionFilter");
+
+        internal static string IDS_FeatureTypeVariance => ResourceManager.GetString("IDS_FeatureTypeVariance");
+
+        internal static string IDS_Parameter => ResourceManager.GetString("IDS_Parameter");
+
+        internal static string IDS_Return => ResourceManager.GetString("IDS_Return");
+
+        internal static string XML_InvalidToken => ResourceManager.GetString("XML_InvalidToken");
+
+        internal static string XML_IncorrectComment => ResourceManager.GetString("XML_IncorrectComment");
+
+        internal static string XML_InvalidCharEntity => ResourceManager.GetString("XML_InvalidCharEntity");
+
+        internal static string XML_ExpectedEndOfTag => ResourceManager.GetString("XML_ExpectedEndOfTag");
+
+        internal static string XML_ExpectedIdentifier => ResourceManager.GetString("XML_ExpectedIdentifier");
+
+        internal static string XML_InvalidUnicodeChar => ResourceManager.GetString("XML_InvalidUnicodeChar");
+
+        internal static string XML_InvalidWhitespace => ResourceManager.GetString("XML_InvalidWhitespace");
+
+        internal static string XML_LessThanInAttributeValue => ResourceManager.GetString("XML_LessThanInAttributeValue");
+
+        internal static string XML_MissingEqualsAttribute => ResourceManager.GetString("XML_MissingEqualsAttribute");
+
+        internal static string XML_RefUndefinedEntity_1 => ResourceManager.GetString("XML_RefUndefinedEntity_1");
+
+        internal static string XML_StringLiteralNoStartQuote => ResourceManager.GetString("XML_StringLiteralNoStartQuote");
+
+        internal static string XML_StringLiteralNoEndQuote => ResourceManager.GetString("XML_StringLiteralNoEndQuote");
+
+        internal static string XML_StringLiteralNonAsciiQuote => ResourceManager.GetString("XML_StringLiteralNonAsciiQuote");
+
+        internal static string XML_EndTagNotExpected => ResourceManager.GetString("XML_EndTagNotExpected");
+
+        internal static string XML_ElementTypeMatch => ResourceManager.GetString("XML_ElementTypeMatch");
+
+        internal static string XML_EndTagExpected => ResourceManager.GetString("XML_EndTagExpected");
+
+        internal static string XML_WhitespaceMissing => ResourceManager.GetString("XML_WhitespaceMissing");
+
+        internal static string XML_ExpectedEndOfXml => ResourceManager.GetString("XML_ExpectedEndOfXml");
+
+        internal static string XML_CDataEndTagNotAllowed => ResourceManager.GetString("XML_CDataEndTagNotAllowed");
+
+        internal static string XML_DuplicateAttribute => ResourceManager.GetString("XML_DuplicateAttribute");
+
+        internal static string ERR_NoMetadataFile => ResourceManager.GetString("ERR_NoMetadataFile");
+
+        internal static string ERR_MetadataReferencesNotSupported => ResourceManager.GetString("ERR_MetadataReferencesNotSupported");
+
+        internal static string FTL_MetadataCantOpenFile => ResourceManager.GetString("FTL_MetadataCantOpenFile");
+
+        internal static string ERR_NoTypeDef => ResourceManager.GetString("ERR_NoTypeDef");
+
+        internal static string ERR_NoTypeDefFromModule => ResourceManager.GetString("ERR_NoTypeDefFromModule");
+
+        internal static string ERR_OutputWriteFailed => ResourceManager.GetString("ERR_OutputWriteFailed");
+
+        internal static string ERR_MultipleEntryPoints => ResourceManager.GetString("ERR_MultipleEntryPoints");
+
+        internal static string ERR_BadBinaryOps => ResourceManager.GetString("ERR_BadBinaryOps");
+
+        internal static string ERR_AmbigBinaryOpsOnUnconstrainedDefault => ResourceManager.GetString("ERR_AmbigBinaryOpsOnUnconstrainedDefault");
+
+        internal static string ERR_IntDivByZero => ResourceManager.GetString("ERR_IntDivByZero");
+
+        internal static string ERR_BadIndexLHS => ResourceManager.GetString("ERR_BadIndexLHS");
+
+        internal static string ERR_BadIndexCount => ResourceManager.GetString("ERR_BadIndexCount");
+
+        internal static string ERR_BadUnaryOp => ResourceManager.GetString("ERR_BadUnaryOp");
+
+        internal static string ERR_BadOpOnNullOrDefaultOrNew => ResourceManager.GetString("ERR_BadOpOnNullOrDefaultOrNew");
+
+        internal static string ERR_ThisInStaticMeth => ResourceManager.GetString("ERR_ThisInStaticMeth");
+
+        internal static string ERR_ThisInBadContext => ResourceManager.GetString("ERR_ThisInBadContext");
+
+        internal static string ERR_OmittedTypeArgument => ResourceManager.GetString("ERR_OmittedTypeArgument");
+
+        internal static string WRN_InvalidMainSig => ResourceManager.GetString("WRN_InvalidMainSig");
+
+        internal static string WRN_InvalidMainSig_Title => ResourceManager.GetString("WRN_InvalidMainSig_Title");
+
+        internal static string ERR_NoImplicitConv => ResourceManager.GetString("ERR_NoImplicitConv");
+
+        internal static string ERR_NoExplicitConv => ResourceManager.GetString("ERR_NoExplicitConv");
+
+        internal static string ERR_ConstOutOfRange => ResourceManager.GetString("ERR_ConstOutOfRange");
+
+        internal static string ERR_AmbigBinaryOps => ResourceManager.GetString("ERR_AmbigBinaryOps");
+
+        internal static string ERR_AmbigBinaryOpsOnDefault => ResourceManager.GetString("ERR_AmbigBinaryOpsOnDefault");
+
+        internal static string ERR_AmbigUnaryOp => ResourceManager.GetString("ERR_AmbigUnaryOp");
+
+        internal static string ERR_InAttrOnOutParam => ResourceManager.GetString("ERR_InAttrOnOutParam");
+
+        internal static string ERR_ValueCantBeNull => ResourceManager.GetString("ERR_ValueCantBeNull");
+
+        internal static string ERR_NoExplicitBuiltinConv => ResourceManager.GetString("ERR_NoExplicitBuiltinConv");
+
+        internal static string FTL_DebugEmitFailure => ResourceManager.GetString("FTL_DebugEmitFailure");
+
+        internal static string ERR_BadVisReturnType => ResourceManager.GetString("ERR_BadVisReturnType");
+
+        internal static string ERR_BadVisParamType => ResourceManager.GetString("ERR_BadVisParamType");
+
+        internal static string ERR_BadVisFieldType => ResourceManager.GetString("ERR_BadVisFieldType");
+
+        internal static string ERR_BadVisPropertyType => ResourceManager.GetString("ERR_BadVisPropertyType");
+
+        internal static string ERR_BadVisIndexerReturn => ResourceManager.GetString("ERR_BadVisIndexerReturn");
+
+        internal static string ERR_BadVisIndexerParam => ResourceManager.GetString("ERR_BadVisIndexerParam");
+
+        internal static string ERR_BadVisOpReturn => ResourceManager.GetString("ERR_BadVisOpReturn");
+
+        internal static string ERR_BadVisOpParam => ResourceManager.GetString("ERR_BadVisOpParam");
+
+        internal static string ERR_BadVisDelegateReturn => ResourceManager.GetString("ERR_BadVisDelegateReturn");
+
+        internal static string ERR_BadVisDelegateParam => ResourceManager.GetString("ERR_BadVisDelegateParam");
+
+        internal static string ERR_BadVisBaseClass => ResourceManager.GetString("ERR_BadVisBaseClass");
+
+        internal static string ERR_BadVisBaseInterface => ResourceManager.GetString("ERR_BadVisBaseInterface");
+
+        internal static string ERR_EventNeedsBothAccessors => ResourceManager.GetString("ERR_EventNeedsBothAccessors");
+
+        internal static string ERR_AbstractEventHasAccessors => ResourceManager.GetString("ERR_AbstractEventHasAccessors");
+
+        internal static string ERR_EventNotDelegate => ResourceManager.GetString("ERR_EventNotDelegate");
+
+        internal static string WRN_UnreferencedEvent => ResourceManager.GetString("WRN_UnreferencedEvent");
+
+        internal static string WRN_UnreferencedEvent_Title => ResourceManager.GetString("WRN_UnreferencedEvent_Title");
+
+        internal static string ERR_InterfaceEventInitializer => ResourceManager.GetString("ERR_InterfaceEventInitializer");
+
+        internal static string ERR_BadEventUsage => ResourceManager.GetString("ERR_BadEventUsage");
+
+        internal static string ERR_ExplicitEventFieldImpl => ResourceManager.GetString("ERR_ExplicitEventFieldImpl");
+
+        internal static string ERR_CantOverrideNonEvent => ResourceManager.GetString("ERR_CantOverrideNonEvent");
+
+        internal static string ERR_AddRemoveMustHaveBody => ResourceManager.GetString("ERR_AddRemoveMustHaveBody");
+
+        internal static string ERR_AbstractEventInitializer => ResourceManager.GetString("ERR_AbstractEventInitializer");
+
+        internal static string ERR_ReservedAssemblyName => ResourceManager.GetString("ERR_ReservedAssemblyName");
+
+        internal static string ERR_ReservedEnumerator => ResourceManager.GetString("ERR_ReservedEnumerator");
+
+        internal static string ERR_AsMustHaveReferenceType => ResourceManager.GetString("ERR_AsMustHaveReferenceType");
+
+        internal static string WRN_LowercaseEllSuffix => ResourceManager.GetString("WRN_LowercaseEllSuffix");
+
+        internal static string WRN_LowercaseEllSuffix_Title => ResourceManager.GetString("WRN_LowercaseEllSuffix_Title");
+
+        internal static string ERR_BadEventUsageNoField => ResourceManager.GetString("ERR_BadEventUsageNoField");
+
+        internal static string ERR_ConstraintOnlyAllowedOnGenericDecl => ResourceManager.GetString("ERR_ConstraintOnlyAllowedOnGenericDecl");
+
+        internal static string ERR_TypeParamMustBeIdentifier => ResourceManager.GetString("ERR_TypeParamMustBeIdentifier");
+
+        internal static string ERR_MemberReserved => ResourceManager.GetString("ERR_MemberReserved");
+
+        internal static string ERR_DuplicateParamName => ResourceManager.GetString("ERR_DuplicateParamName");
+
+        internal static string ERR_DuplicateNameInNS => ResourceManager.GetString("ERR_DuplicateNameInNS");
+
+        internal static string ERR_DuplicateNameInClass => ResourceManager.GetString("ERR_DuplicateNameInClass");
+
+        internal static string ERR_NameNotInContext => ResourceManager.GetString("ERR_NameNotInContext");
+
+        internal static string ERR_NameNotInContextPossibleMissingReference => ResourceManager.GetString("ERR_NameNotInContextPossibleMissingReference");
+
+        internal static string ERR_AmbigContext => ResourceManager.GetString("ERR_AmbigContext");
+
+        internal static string WRN_DuplicateUsing => ResourceManager.GetString("WRN_DuplicateUsing");
+
+        internal static string WRN_DuplicateUsing_Title => ResourceManager.GetString("WRN_DuplicateUsing_Title");
+
+        internal static string ERR_BadMemberFlag => ResourceManager.GetString("ERR_BadMemberFlag");
+
+        internal static string ERR_BadInitAccessor => ResourceManager.GetString("ERR_BadInitAccessor");
+
+        internal static string ERR_BadMemberProtection => ResourceManager.GetString("ERR_BadMemberProtection");
+
+        internal static string WRN_NewRequired => ResourceManager.GetString("WRN_NewRequired");
+
+        internal static string WRN_NewRequired_Title => ResourceManager.GetString("WRN_NewRequired_Title");
+
+        internal static string WRN_NewRequired_Description => ResourceManager.GetString("WRN_NewRequired_Description");
+
+        internal static string WRN_NewNotRequired => ResourceManager.GetString("WRN_NewNotRequired");
+
+        internal static string WRN_NewNotRequired_Title => ResourceManager.GetString("WRN_NewNotRequired_Title");
+
+        internal static string ERR_CircConstValue => ResourceManager.GetString("ERR_CircConstValue");
+
+        internal static string ERR_MemberAlreadyExists => ResourceManager.GetString("ERR_MemberAlreadyExists");
+
+        internal static string ERR_StaticNotVirtual => ResourceManager.GetString("ERR_StaticNotVirtual");
+
+        internal static string ERR_OverrideNotNew => ResourceManager.GetString("ERR_OverrideNotNew");
+
+        internal static string WRN_NewOrOverrideExpected => ResourceManager.GetString("WRN_NewOrOverrideExpected");
+
+        internal static string WRN_NewOrOverrideExpected_Title => ResourceManager.GetString("WRN_NewOrOverrideExpected_Title");
+
+        internal static string ERR_OverrideNotExpected => ResourceManager.GetString("ERR_OverrideNotExpected");
+
+        internal static string ERR_NamespaceUnexpected => ResourceManager.GetString("ERR_NamespaceUnexpected");
+
+        internal static string ERR_NoSuchMember => ResourceManager.GetString("ERR_NoSuchMember");
+
+        internal static string ERR_BadSKknown => ResourceManager.GetString("ERR_BadSKknown");
+
+        internal static string ERR_BadSKunknown => ResourceManager.GetString("ERR_BadSKunknown");
+
+        internal static string ERR_ObjectRequired => ResourceManager.GetString("ERR_ObjectRequired");
+
+        internal static string ERR_AmbigCall => ResourceManager.GetString("ERR_AmbigCall");
+
+        internal static string ERR_BadAccess => ResourceManager.GetString("ERR_BadAccess");
+
+        internal static string ERR_MethDelegateMismatch => ResourceManager.GetString("ERR_MethDelegateMismatch");
+
+        internal static string ERR_RetObjectRequired => ResourceManager.GetString("ERR_RetObjectRequired");
+
+        internal static string ERR_RetNoObjectRequired => ResourceManager.GetString("ERR_RetNoObjectRequired");
+
+        internal static string ERR_LocalDuplicate => ResourceManager.GetString("ERR_LocalDuplicate");
+
+        internal static string ERR_AssgLvalueExpected => ResourceManager.GetString("ERR_AssgLvalueExpected");
+
+        internal static string ERR_StaticConstParam => ResourceManager.GetString("ERR_StaticConstParam");
+
+        internal static string ERR_NotConstantExpression => ResourceManager.GetString("ERR_NotConstantExpression");
+
+        internal static string ERR_NotNullConstRefField => ResourceManager.GetString("ERR_NotNullConstRefField");
+
+        internal static string ERR_LocalIllegallyOverrides => ResourceManager.GetString("ERR_LocalIllegallyOverrides");
+
+        internal static string ERR_BadUsingNamespace => ResourceManager.GetString("ERR_BadUsingNamespace");
+
+        internal static string ERR_BadUsingType => ResourceManager.GetString("ERR_BadUsingType");
+
+        internal static string ERR_NoAliasHere => ResourceManager.GetString("ERR_NoAliasHere");
+
+        internal static string ERR_NoBreakOrCont => ResourceManager.GetString("ERR_NoBreakOrCont");
+
+        internal static string ERR_DuplicateLabel => ResourceManager.GetString("ERR_DuplicateLabel");
+
+        internal static string ERR_NoConstructors => ResourceManager.GetString("ERR_NoConstructors");
+
+        internal static string ERR_NoNewAbstract => ResourceManager.GetString("ERR_NoNewAbstract");
+
+        internal static string ERR_ConstValueRequired => ResourceManager.GetString("ERR_ConstValueRequired");
+
+        internal static string ERR_CircularBase => ResourceManager.GetString("ERR_CircularBase");
+
+        internal static string ERR_BadDelegateConstructor => ResourceManager.GetString("ERR_BadDelegateConstructor");
+
+        internal static string ERR_MethodNameExpected => ResourceManager.GetString("ERR_MethodNameExpected");
+
+        internal static string ERR_ConstantExpected => ResourceManager.GetString("ERR_ConstantExpected");
+
+        internal static string ERR_V6SwitchGoverningTypeValueExpected => ResourceManager.GetString("ERR_V6SwitchGoverningTypeValueExpected");
+
+        internal static string ERR_IntegralTypeValueExpected => ResourceManager.GetString("ERR_IntegralTypeValueExpected");
+
+        internal static string ERR_DuplicateCaseLabel => ResourceManager.GetString("ERR_DuplicateCaseLabel");
+
+        internal static string ERR_InvalidGotoCase => ResourceManager.GetString("ERR_InvalidGotoCase");
+
+        internal static string ERR_PropertyLacksGet => ResourceManager.GetString("ERR_PropertyLacksGet");
+
+        internal static string ERR_BadExceptionType => ResourceManager.GetString("ERR_BadExceptionType");
+
+        internal static string ERR_BadEmptyThrow => ResourceManager.GetString("ERR_BadEmptyThrow");
+
+        internal static string ERR_BadFinallyLeave => ResourceManager.GetString("ERR_BadFinallyLeave");
+
+        internal static string ERR_LabelShadow => ResourceManager.GetString("ERR_LabelShadow");
+
+        internal static string ERR_LabelNotFound => ResourceManager.GetString("ERR_LabelNotFound");
+
+        internal static string ERR_UnreachableCatch => ResourceManager.GetString("ERR_UnreachableCatch");
+
+        internal static string WRN_FilterIsConstantTrue => ResourceManager.GetString("WRN_FilterIsConstantTrue");
+
+        internal static string WRN_FilterIsConstantTrue_Title => ResourceManager.GetString("WRN_FilterIsConstantTrue_Title");
+
+        internal static string ERR_ReturnExpected => ResourceManager.GetString("ERR_ReturnExpected");
+
+        internal static string WRN_UnreachableCode => ResourceManager.GetString("WRN_UnreachableCode");
+
+        internal static string WRN_UnreachableCode_Title => ResourceManager.GetString("WRN_UnreachableCode_Title");
+
+        internal static string ERR_SwitchFallThrough => ResourceManager.GetString("ERR_SwitchFallThrough");
+
+        internal static string WRN_UnreferencedLabel => ResourceManager.GetString("WRN_UnreferencedLabel");
+
+        internal static string WRN_UnreferencedLabel_Title => ResourceManager.GetString("WRN_UnreferencedLabel_Title");
+
+        internal static string ERR_UseDefViolation => ResourceManager.GetString("ERR_UseDefViolation");
+
+        internal static string WRN_UseDefViolation => ResourceManager.GetString("WRN_UseDefViolation");
+
+        internal static string WRN_UseDefViolation_Title => ResourceManager.GetString("WRN_UseDefViolation_Title");
+
+        internal static string WRN_UnreferencedVar => ResourceManager.GetString("WRN_UnreferencedVar");
+
+        internal static string WRN_UnreferencedVar_Title => ResourceManager.GetString("WRN_UnreferencedVar_Title");
+
+        internal static string WRN_UnreferencedField => ResourceManager.GetString("WRN_UnreferencedField");
+
+        internal static string WRN_UnreferencedField_Title => ResourceManager.GetString("WRN_UnreferencedField_Title");
+
+        internal static string ERR_UseDefViolationField => ResourceManager.GetString("ERR_UseDefViolationField");
+
+        internal static string WRN_UseDefViolationField => ResourceManager.GetString("WRN_UseDefViolationField");
+
+        internal static string WRN_UseDefViolationField_Title => ResourceManager.GetString("WRN_UseDefViolationField_Title");
+
+        internal static string ERR_UseDefViolationProperty => ResourceManager.GetString("ERR_UseDefViolationProperty");
+
+        internal static string WRN_UseDefViolationProperty => ResourceManager.GetString("WRN_UseDefViolationProperty");
+
+        internal static string WRN_UseDefViolationProperty_Title => ResourceManager.GetString("WRN_UseDefViolationProperty_Title");
+
+        internal static string ERR_UnassignedThis => ResourceManager.GetString("ERR_UnassignedThis");
+
+        internal static string WRN_UnassignedThis => ResourceManager.GetString("WRN_UnassignedThis");
+
+        internal static string WRN_UnassignedThis_Title => ResourceManager.GetString("WRN_UnassignedThis_Title");
+
+        internal static string ERR_AmbigQM => ResourceManager.GetString("ERR_AmbigQM");
+
+        internal static string ERR_InvalidQM => ResourceManager.GetString("ERR_InvalidQM");
+
+        internal static string ERR_NoBaseClass => ResourceManager.GetString("ERR_NoBaseClass");
+
+        internal static string ERR_BaseIllegal => ResourceManager.GetString("ERR_BaseIllegal");
+
+        internal static string ERR_ObjectProhibited => ResourceManager.GetString("ERR_ObjectProhibited");
+
+        internal static string ERR_ParamUnassigned => ResourceManager.GetString("ERR_ParamUnassigned");
+
+        internal static string WRN_ParamUnassigned => ResourceManager.GetString("WRN_ParamUnassigned");
+
+        internal static string WRN_ParamUnassigned_Title => ResourceManager.GetString("WRN_ParamUnassigned_Title");
+
+        internal static string ERR_InvalidArray => ResourceManager.GetString("ERR_InvalidArray");
+
+        internal static string ERR_ExternHasBody => ResourceManager.GetString("ERR_ExternHasBody");
+
+        internal static string ERR_ExternHasConstructorInitializer => ResourceManager.GetString("ERR_ExternHasConstructorInitializer");
+
+        internal static string ERR_AbstractAndExtern => ResourceManager.GetString("ERR_AbstractAndExtern");
+
+        internal static string ERR_BadAttributeParamType => ResourceManager.GetString("ERR_BadAttributeParamType");
+
+        internal static string ERR_BadAttributeArgument => ResourceManager.GetString("ERR_BadAttributeArgument");
+
+        internal static string ERR_BadAttributeParamDefaultArgument => ResourceManager.GetString("ERR_BadAttributeParamDefaultArgument");
+
+        internal static string WRN_IsAlwaysTrue => ResourceManager.GetString("WRN_IsAlwaysTrue");
+
+        internal static string WRN_IsAlwaysTrue_Title => ResourceManager.GetString("WRN_IsAlwaysTrue_Title");
+
+        internal static string WRN_IsAlwaysFalse => ResourceManager.GetString("WRN_IsAlwaysFalse");
+
+        internal static string WRN_IsAlwaysFalse_Title => ResourceManager.GetString("WRN_IsAlwaysFalse_Title");
+
+        internal static string ERR_LockNeedsReference => ResourceManager.GetString("ERR_LockNeedsReference");
+
+        internal static string ERR_NullNotValid => ResourceManager.GetString("ERR_NullNotValid");
+
+        internal static string ERR_DefaultLiteralNotValid => ResourceManager.GetString("ERR_DefaultLiteralNotValid");
+
+        internal static string ERR_UseDefViolationThis => ResourceManager.GetString("ERR_UseDefViolationThis");
+
+        internal static string WRN_UseDefViolationThis => ResourceManager.GetString("WRN_UseDefViolationThis");
+
+        internal static string WRN_UseDefViolationThis_Title => ResourceManager.GetString("WRN_UseDefViolationThis_Title");
+
+        internal static string ERR_ArgsInvalid => ResourceManager.GetString("ERR_ArgsInvalid");
+
+        internal static string ERR_PtrExpected => ResourceManager.GetString("ERR_PtrExpected");
+
+        internal static string ERR_PtrIndexSingle => ResourceManager.GetString("ERR_PtrIndexSingle");
+
+        internal static string WRN_ByRefNonAgileField => ResourceManager.GetString("WRN_ByRefNonAgileField");
+
+        internal static string WRN_ByRefNonAgileField_Title => ResourceManager.GetString("WRN_ByRefNonAgileField_Title");
+
+        internal static string ERR_AssgReadonlyStatic => ResourceManager.GetString("ERR_AssgReadonlyStatic");
+
+        internal static string ERR_RefReadonlyStatic => ResourceManager.GetString("ERR_RefReadonlyStatic");
+
+        internal static string ERR_AssgReadonlyProp => ResourceManager.GetString("ERR_AssgReadonlyProp");
+
+        internal static string ERR_IllegalStatement => ResourceManager.GetString("ERR_IllegalStatement");
+
+        internal static string ERR_BadGetEnumerator => ResourceManager.GetString("ERR_BadGetEnumerator");
+
+        internal static string ERR_BadGetAsyncEnumerator => ResourceManager.GetString("ERR_BadGetAsyncEnumerator");
+
+        internal static string ERR_TooManyLocals => ResourceManager.GetString("ERR_TooManyLocals");
+
+        internal static string ERR_AbstractBaseCall => ResourceManager.GetString("ERR_AbstractBaseCall");
+
+        internal static string ERR_RefProperty => ResourceManager.GetString("ERR_RefProperty");
+
+        internal static string ERR_ManagedAddr => ResourceManager.GetString("ERR_ManagedAddr");
+
+        internal static string ERR_BadFixedInitType => ResourceManager.GetString("ERR_BadFixedInitType");
+
+        internal static string ERR_FixedMustInit => ResourceManager.GetString("ERR_FixedMustInit");
+
+        internal static string ERR_InvalidAddrOp => ResourceManager.GetString("ERR_InvalidAddrOp");
+
+        internal static string ERR_FixedNeeded => ResourceManager.GetString("ERR_FixedNeeded");
+
+        internal static string ERR_FixedNotNeeded => ResourceManager.GetString("ERR_FixedNotNeeded");
+
+        internal static string ERR_ExprCannotBeFixed => ResourceManager.GetString("ERR_ExprCannotBeFixed");
+
+        internal static string ERR_UnsafeNeeded => ResourceManager.GetString("ERR_UnsafeNeeded");
+
+        internal static string ERR_OpTFRetType => ResourceManager.GetString("ERR_OpTFRetType");
+
+        internal static string ERR_OperatorNeedsMatch => ResourceManager.GetString("ERR_OperatorNeedsMatch");
+
+        internal static string ERR_BadBoolOp => ResourceManager.GetString("ERR_BadBoolOp");
+
+        internal static string ERR_MustHaveOpTF => ResourceManager.GetString("ERR_MustHaveOpTF");
+
+        internal static string WRN_UnreferencedVarAssg => ResourceManager.GetString("WRN_UnreferencedVarAssg");
+
+        internal static string WRN_UnreferencedVarAssg_Title => ResourceManager.GetString("WRN_UnreferencedVarAssg_Title");
+
+        internal static string ERR_CheckedOverflow => ResourceManager.GetString("ERR_CheckedOverflow");
+
+        internal static string ERR_ConstOutOfRangeChecked => ResourceManager.GetString("ERR_ConstOutOfRangeChecked");
+
+        internal static string ERR_BadVarargs => ResourceManager.GetString("ERR_BadVarargs");
+
+        internal static string ERR_ParamsMustBeArray => ResourceManager.GetString("ERR_ParamsMustBeArray");
+
+        internal static string ERR_IllegalArglist => ResourceManager.GetString("ERR_IllegalArglist");
+
+        internal static string ERR_IllegalUnsafe => ResourceManager.GetString("ERR_IllegalUnsafe");
+
+        internal static string ERR_AmbigMember => ResourceManager.GetString("ERR_AmbigMember");
+
+        internal static string ERR_BadForeachDecl => ResourceManager.GetString("ERR_BadForeachDecl");
+
+        internal static string ERR_ParamsLast => ResourceManager.GetString("ERR_ParamsLast");
+
+        internal static string ERR_SizeofUnsafe => ResourceManager.GetString("ERR_SizeofUnsafe");
+
+        internal static string ERR_DottedTypeNameNotFoundInNS => ResourceManager.GetString("ERR_DottedTypeNameNotFoundInNS");
+
+        internal static string ERR_FieldInitRefNonstatic => ResourceManager.GetString("ERR_FieldInitRefNonstatic");
+
+        internal static string ERR_SealedNonOverride => ResourceManager.GetString("ERR_SealedNonOverride");
+
+        internal static string ERR_CantOverrideSealed => ResourceManager.GetString("ERR_CantOverrideSealed");
+
+        internal static string ERR_VoidError => ResourceManager.GetString("ERR_VoidError");
+
+        internal static string ERR_ConditionalOnOverride => ResourceManager.GetString("ERR_ConditionalOnOverride");
+
+        internal static string ERR_ConditionalOnLocalFunction => ResourceManager.GetString("ERR_ConditionalOnLocalFunction");
+
+        internal static string ERR_PointerInAsOrIs => ResourceManager.GetString("ERR_PointerInAsOrIs");
+
+        internal static string ERR_CallingFinalizeDeprecated => ResourceManager.GetString("ERR_CallingFinalizeDeprecated");
+
+        internal static string ERR_SingleTypeNameNotFound => ResourceManager.GetString("ERR_SingleTypeNameNotFound");
+
+        internal static string ERR_NegativeStackAllocSize => ResourceManager.GetString("ERR_NegativeStackAllocSize");
+
+        internal static string ERR_NegativeArraySize => ResourceManager.GetString("ERR_NegativeArraySize");
+
+        internal static string ERR_OverrideFinalizeDeprecated => ResourceManager.GetString("ERR_OverrideFinalizeDeprecated");
+
+        internal static string ERR_CallingBaseFinalizeDeprecated => ResourceManager.GetString("ERR_CallingBaseFinalizeDeprecated");
+
+        internal static string WRN_NegativeArrayIndex => ResourceManager.GetString("WRN_NegativeArrayIndex");
+
+        internal static string WRN_NegativeArrayIndex_Title => ResourceManager.GetString("WRN_NegativeArrayIndex_Title");
+
+        internal static string WRN_BadRefCompareLeft => ResourceManager.GetString("WRN_BadRefCompareLeft");
+
+        internal static string WRN_BadRefCompareLeft_Title => ResourceManager.GetString("WRN_BadRefCompareLeft_Title");
+
+        internal static string WRN_BadRefCompareRight => ResourceManager.GetString("WRN_BadRefCompareRight");
+
+        internal static string WRN_BadRefCompareRight_Title => ResourceManager.GetString("WRN_BadRefCompareRight_Title");
+
+        internal static string ERR_BadCastInFixed => ResourceManager.GetString("ERR_BadCastInFixed");
+
+        internal static string ERR_StackallocInCatchFinally => ResourceManager.GetString("ERR_StackallocInCatchFinally");
+
+        internal static string ERR_VarargsLast => ResourceManager.GetString("ERR_VarargsLast");
+
+        internal static string ERR_MissingPartial => ResourceManager.GetString("ERR_MissingPartial");
+
+        internal static string ERR_PartialTypeKindConflict => ResourceManager.GetString("ERR_PartialTypeKindConflict");
+
+        internal static string ERR_PartialModifierConflict => ResourceManager.GetString("ERR_PartialModifierConflict");
+
+        internal static string ERR_PartialMultipleBases => ResourceManager.GetString("ERR_PartialMultipleBases");
+
+        internal static string ERR_PartialWrongTypeParams => ResourceManager.GetString("ERR_PartialWrongTypeParams");
+
+        internal static string ERR_PartialWrongConstraints => ResourceManager.GetString("ERR_PartialWrongConstraints");
+
+        internal static string ERR_NoImplicitConvCast => ResourceManager.GetString("ERR_NoImplicitConvCast");
+
+        internal static string ERR_PartialMisplaced => ResourceManager.GetString("ERR_PartialMisplaced");
+
+        internal static string ERR_ImportedCircularBase => ResourceManager.GetString("ERR_ImportedCircularBase");
+
+        internal static string ERR_UseDefViolationOut => ResourceManager.GetString("ERR_UseDefViolationOut");
+
+        internal static string WRN_UseDefViolationOut => ResourceManager.GetString("WRN_UseDefViolationOut");
+
+        internal static string WRN_UseDefViolationOut_Title => ResourceManager.GetString("WRN_UseDefViolationOut_Title");
+
+        internal static string ERR_ArraySizeInDeclaration => ResourceManager.GetString("ERR_ArraySizeInDeclaration");
+
+        internal static string ERR_InaccessibleGetter => ResourceManager.GetString("ERR_InaccessibleGetter");
+
+        internal static string ERR_InaccessibleSetter => ResourceManager.GetString("ERR_InaccessibleSetter");
+
+        internal static string ERR_InvalidPropertyAccessMod => ResourceManager.GetString("ERR_InvalidPropertyAccessMod");
+
+        internal static string ERR_DuplicatePropertyAccessMods => ResourceManager.GetString("ERR_DuplicatePropertyAccessMods");
+
+        internal static string ERR_AccessModMissingAccessor => ResourceManager.GetString("ERR_AccessModMissingAccessor");
+
+        internal static string ERR_UnimplementedInterfaceAccessor => ResourceManager.GetString("ERR_UnimplementedInterfaceAccessor");
+
+        internal static string WRN_PatternIsAmbiguous => ResourceManager.GetString("WRN_PatternIsAmbiguous");
+
+        internal static string WRN_PatternIsAmbiguous_Title => ResourceManager.GetString("WRN_PatternIsAmbiguous_Title");
+
+        internal static string WRN_PatternNotPublicOrNotInstance => ResourceManager.GetString("WRN_PatternNotPublicOrNotInstance");
+
+        internal static string WRN_PatternNotPublicOrNotInstance_Title => ResourceManager.GetString("WRN_PatternNotPublicOrNotInstance_Title");
+
+        internal static string WRN_PatternBadSignature => ResourceManager.GetString("WRN_PatternBadSignature");
+
+        internal static string WRN_PatternBadSignature_Title => ResourceManager.GetString("WRN_PatternBadSignature_Title");
+
+        internal static string ERR_FriendRefNotEqualToThis => ResourceManager.GetString("ERR_FriendRefNotEqualToThis");
+
+        internal static string ERR_FriendRefSigningMismatch => ResourceManager.GetString("ERR_FriendRefSigningMismatch");
+
+        internal static string WRN_SequentialOnPartialClass => ResourceManager.GetString("WRN_SequentialOnPartialClass");
+
+        internal static string WRN_SequentialOnPartialClass_Title => ResourceManager.GetString("WRN_SequentialOnPartialClass_Title");
+
+        internal static string ERR_BadConstType => ResourceManager.GetString("ERR_BadConstType");
+
+        internal static string ERR_NoNewTyvar => ResourceManager.GetString("ERR_NoNewTyvar");
+
+        internal static string ERR_BadArity => ResourceManager.GetString("ERR_BadArity");
+
+        internal static string ERR_BadTypeArgument => ResourceManager.GetString("ERR_BadTypeArgument");
+
+        internal static string ERR_TypeArgsNotAllowed => ResourceManager.GetString("ERR_TypeArgsNotAllowed");
+
+        internal static string ERR_HasNoTypeVars => ResourceManager.GetString("ERR_HasNoTypeVars");
+
+        internal static string ERR_NewConstraintNotSatisfied => ResourceManager.GetString("ERR_NewConstraintNotSatisfied");
+
+        internal static string ERR_GenericConstraintNotSatisfiedRefType => ResourceManager.GetString("ERR_GenericConstraintNotSatisfiedRefType");
+
+        internal static string ERR_GenericConstraintNotSatisfiedNullableEnum => ResourceManager.GetString("ERR_GenericConstraintNotSatisfiedNullableEnum");
+
+        internal static string ERR_GenericConstraintNotSatisfiedNullableInterface => ResourceManager.GetString("ERR_GenericConstraintNotSatisfiedNullableInterface");
+
+        internal static string ERR_GenericConstraintNotSatisfiedTyVar => ResourceManager.GetString("ERR_GenericConstraintNotSatisfiedTyVar");
+
+        internal static string ERR_GenericConstraintNotSatisfiedValType => ResourceManager.GetString("ERR_GenericConstraintNotSatisfiedValType");
+
+        internal static string ERR_DuplicateGeneratedName => ResourceManager.GetString("ERR_DuplicateGeneratedName");
+
+        internal static string ERR_GlobalSingleTypeNameNotFound => ResourceManager.GetString("ERR_GlobalSingleTypeNameNotFound");
+
+        internal static string ERR_NewBoundMustBeLast => ResourceManager.GetString("ERR_NewBoundMustBeLast");
+
+        internal static string WRN_MainCantBeGeneric => ResourceManager.GetString("WRN_MainCantBeGeneric");
+
+        internal static string WRN_MainCantBeGeneric_Title => ResourceManager.GetString("WRN_MainCantBeGeneric_Title");
+
+        internal static string ERR_TypeVarCantBeNull => ResourceManager.GetString("ERR_TypeVarCantBeNull");
+
+        internal static string ERR_AttributeCantBeGeneric => ResourceManager.GetString("ERR_AttributeCantBeGeneric");
+
+        internal static string ERR_DuplicateBound => ResourceManager.GetString("ERR_DuplicateBound");
+
+        internal static string ERR_ClassBoundNotFirst => ResourceManager.GetString("ERR_ClassBoundNotFirst");
+
+        internal static string ERR_BadRetType => ResourceManager.GetString("ERR_BadRetType");
+
+        internal static string ERR_DelegateRefMismatch => ResourceManager.GetString("ERR_DelegateRefMismatch");
+
+        internal static string ERR_DuplicateConstraintClause => ResourceManager.GetString("ERR_DuplicateConstraintClause");
+
+        internal static string ERR_CantInferMethTypeArgs => ResourceManager.GetString("ERR_CantInferMethTypeArgs");
+
+        internal static string ERR_LocalSameNameAsTypeParam => ResourceManager.GetString("ERR_LocalSameNameAsTypeParam");
+
+        internal static string ERR_AsWithTypeVar => ResourceManager.GetString("ERR_AsWithTypeVar");
+
+        internal static string WRN_UnreferencedFieldAssg => ResourceManager.GetString("WRN_UnreferencedFieldAssg");
+
+        internal static string WRN_UnreferencedFieldAssg_Title => ResourceManager.GetString("WRN_UnreferencedFieldAssg_Title");
+
+        internal static string ERR_BadIndexerNameAttr => ResourceManager.GetString("ERR_BadIndexerNameAttr");
+
+        internal static string ERR_AttrArgWithTypeVars => ResourceManager.GetString("ERR_AttrArgWithTypeVars");
+
+        internal static string ERR_NewTyvarWithArgs => ResourceManager.GetString("ERR_NewTyvarWithArgs");
+
+        internal static string ERR_AbstractSealedStatic => ResourceManager.GetString("ERR_AbstractSealedStatic");
+
+        internal static string WRN_AmbiguousXMLReference => ResourceManager.GetString("WRN_AmbiguousXMLReference");
+
+        internal static string WRN_AmbiguousXMLReference_Title => ResourceManager.GetString("WRN_AmbiguousXMLReference_Title");
+
+        internal static string WRN_VolatileByRef => ResourceManager.GetString("WRN_VolatileByRef");
+
+        internal static string WRN_VolatileByRef_Title => ResourceManager.GetString("WRN_VolatileByRef_Title");
+
+        internal static string WRN_VolatileByRef_Description => ResourceManager.GetString("WRN_VolatileByRef_Description");
+
+        internal static string ERR_ComImportWithImpl => ResourceManager.GetString("ERR_ComImportWithImpl");
+
+        internal static string ERR_ComImportWithBase => ResourceManager.GetString("ERR_ComImportWithBase");
+
+        internal static string ERR_ImplBadConstraints => ResourceManager.GetString("ERR_ImplBadConstraints");
+
+        internal static string ERR_ImplBadTupleNames => ResourceManager.GetString("ERR_ImplBadTupleNames");
+
+        internal static string ERR_DottedTypeNameNotFoundInAgg => ResourceManager.GetString("ERR_DottedTypeNameNotFoundInAgg");
+
+        internal static string ERR_MethGrpToNonDel => ResourceManager.GetString("ERR_MethGrpToNonDel");
+
+        internal static string ERR_BadExternAlias => ResourceManager.GetString("ERR_BadExternAlias");
+
+        internal static string ERR_ColColWithTypeAlias => ResourceManager.GetString("ERR_ColColWithTypeAlias");
+
+        internal static string ERR_AliasNotFound => ResourceManager.GetString("ERR_AliasNotFound");
+
+        internal static string ERR_SameFullNameAggAgg => ResourceManager.GetString("ERR_SameFullNameAggAgg");
+
+        internal static string ERR_SameFullNameNsAgg => ResourceManager.GetString("ERR_SameFullNameNsAgg");
+
+        internal static string WRN_SameFullNameThisNsAgg => ResourceManager.GetString("WRN_SameFullNameThisNsAgg");
+
+        internal static string WRN_SameFullNameThisNsAgg_Title => ResourceManager.GetString("WRN_SameFullNameThisNsAgg_Title");
+
+        internal static string WRN_SameFullNameThisAggAgg => ResourceManager.GetString("WRN_SameFullNameThisAggAgg");
+
+        internal static string WRN_SameFullNameThisAggAgg_Title => ResourceManager.GetString("WRN_SameFullNameThisAggAgg_Title");
+
+        internal static string WRN_SameFullNameThisAggNs => ResourceManager.GetString("WRN_SameFullNameThisAggNs");
+
+        internal static string WRN_SameFullNameThisAggNs_Title => ResourceManager.GetString("WRN_SameFullNameThisAggNs_Title");
+
+        internal static string ERR_SameFullNameThisAggThisNs => ResourceManager.GetString("ERR_SameFullNameThisAggThisNs");
+
+        internal static string ERR_ExternAfterElements => ResourceManager.GetString("ERR_ExternAfterElements");
+
+        internal static string WRN_GlobalAliasDefn => ResourceManager.GetString("WRN_GlobalAliasDefn");
+
+        internal static string WRN_GlobalAliasDefn_Title => ResourceManager.GetString("WRN_GlobalAliasDefn_Title");
+
+        internal static string ERR_SealedStaticClass => ResourceManager.GetString("ERR_SealedStaticClass");
+
+        internal static string ERR_PrivateAbstractAccessor => ResourceManager.GetString("ERR_PrivateAbstractAccessor");
+
+        internal static string ERR_ValueExpected => ResourceManager.GetString("ERR_ValueExpected");
+
+        internal static string ERR_UnboxNotLValue => ResourceManager.GetString("ERR_UnboxNotLValue");
+
+        internal static string ERR_AnonMethGrpInForEach => ResourceManager.GetString("ERR_AnonMethGrpInForEach");
+
+        internal static string ERR_BadIncDecRetType => ResourceManager.GetString("ERR_BadIncDecRetType");
+
+        internal static string ERR_TypeConstraintsMustBeUniqueAndFirst => ResourceManager.GetString("ERR_TypeConstraintsMustBeUniqueAndFirst");
+
+        internal static string ERR_RefValBoundWithClass => ResourceManager.GetString("ERR_RefValBoundWithClass");
+
+        internal static string ERR_UnmanagedBoundWithClass => ResourceManager.GetString("ERR_UnmanagedBoundWithClass");
+
+        internal static string ERR_NewBoundWithVal => ResourceManager.GetString("ERR_NewBoundWithVal");
+
+        internal static string ERR_RefConstraintNotSatisfied => ResourceManager.GetString("ERR_RefConstraintNotSatisfied");
+
+        internal static string ERR_ValConstraintNotSatisfied => ResourceManager.GetString("ERR_ValConstraintNotSatisfied");
+
+        internal static string ERR_CircularConstraint => ResourceManager.GetString("ERR_CircularConstraint");
+
+        internal static string ERR_BaseConstraintConflict => ResourceManager.GetString("ERR_BaseConstraintConflict");
+
+        internal static string ERR_ConWithValCon => ResourceManager.GetString("ERR_ConWithValCon");
+
+        internal static string ERR_AmbigUDConv => ResourceManager.GetString("ERR_AmbigUDConv");
+
+        internal static string WRN_AlwaysNull => ResourceManager.GetString("WRN_AlwaysNull");
+
+        internal static string WRN_AlwaysNull_Title => ResourceManager.GetString("WRN_AlwaysNull_Title");
+
+        internal static string ERR_RefReturnThis => ResourceManager.GetString("ERR_RefReturnThis");
+
+        internal static string ERR_AttributeCtorInParameter => ResourceManager.GetString("ERR_AttributeCtorInParameter");
+
+        internal static string ERR_OverrideWithConstraints => ResourceManager.GetString("ERR_OverrideWithConstraints");
+
+        internal static string ERR_AmbigOverride => ResourceManager.GetString("ERR_AmbigOverride");
+
+        internal static string ERR_DecConstError => ResourceManager.GetString("ERR_DecConstError");
+
+        internal static string WRN_CmpAlwaysFalse => ResourceManager.GetString("WRN_CmpAlwaysFalse");
+
+        internal static string WRN_CmpAlwaysFalse_Title => ResourceManager.GetString("WRN_CmpAlwaysFalse_Title");
+
+        internal static string WRN_FinalizeMethod => ResourceManager.GetString("WRN_FinalizeMethod");
+
+        internal static string WRN_FinalizeMethod_Title => ResourceManager.GetString("WRN_FinalizeMethod_Title");
+
+        internal static string WRN_FinalizeMethod_Description => ResourceManager.GetString("WRN_FinalizeMethod_Description");
+
+        internal static string ERR_ExplicitImplParams => ResourceManager.GetString("ERR_ExplicitImplParams");
+
+        internal static string WRN_GotoCaseShouldConvert => ResourceManager.GetString("WRN_GotoCaseShouldConvert");
+
+        internal static string WRN_GotoCaseShouldConvert_Title => ResourceManager.GetString("WRN_GotoCaseShouldConvert_Title");
+
+        internal static string ERR_MethodImplementingAccessor => ResourceManager.GetString("ERR_MethodImplementingAccessor");
+
+        internal static string WRN_NubExprIsConstBool => ResourceManager.GetString("WRN_NubExprIsConstBool");
+
+        internal static string WRN_NubExprIsConstBool_Title => ResourceManager.GetString("WRN_NubExprIsConstBool_Title");
+
+        internal static string WRN_NubExprIsConstBool2 => ResourceManager.GetString("WRN_NubExprIsConstBool2");
+
+        internal static string WRN_NubExprIsConstBool2_Title => ResourceManager.GetString("WRN_NubExprIsConstBool2_Title");
+
+        internal static string WRN_ExplicitImplCollision => ResourceManager.GetString("WRN_ExplicitImplCollision");
+
+        internal static string WRN_ExplicitImplCollision_Title => ResourceManager.GetString("WRN_ExplicitImplCollision_Title");
+
+        internal static string ERR_AbstractHasBody => ResourceManager.GetString("ERR_AbstractHasBody");
+
+        internal static string ERR_ConcreteMissingBody => ResourceManager.GetString("ERR_ConcreteMissingBody");
+
+        internal static string ERR_AbstractAndSealed => ResourceManager.GetString("ERR_AbstractAndSealed");
+
+        internal static string ERR_AbstractNotVirtual => ResourceManager.GetString("ERR_AbstractNotVirtual");
+
+        internal static string ERR_StaticConstant => ResourceManager.GetString("ERR_StaticConstant");
+
+        internal static string ERR_CantOverrideNonFunction => ResourceManager.GetString("ERR_CantOverrideNonFunction");
+
+        internal static string ERR_CantOverrideNonVirtual => ResourceManager.GetString("ERR_CantOverrideNonVirtual");
+
+        internal static string ERR_CantChangeAccessOnOverride => ResourceManager.GetString("ERR_CantChangeAccessOnOverride");
+
+        internal static string ERR_CantChangeTupleNamesOnOverride => ResourceManager.GetString("ERR_CantChangeTupleNamesOnOverride");
+
+        internal static string ERR_CantChangeReturnTypeOnOverride => ResourceManager.GetString("ERR_CantChangeReturnTypeOnOverride");
+
+        internal static string ERR_CantDeriveFromSealedType => ResourceManager.GetString("ERR_CantDeriveFromSealedType");
+
+        internal static string ERR_AbstractInConcreteClass => ResourceManager.GetString("ERR_AbstractInConcreteClass");
+
+        internal static string ERR_StaticConstructorWithExplicitConstructorCall => ResourceManager.GetString("ERR_StaticConstructorWithExplicitConstructorCall");
+
+        internal static string ERR_StaticConstructorWithAccessModifiers => ResourceManager.GetString("ERR_StaticConstructorWithAccessModifiers");
+
+        internal static string ERR_RecursiveConstructorCall => ResourceManager.GetString("ERR_RecursiveConstructorCall");
+
+        internal static string ERR_IndirectRecursiveConstructorCall => ResourceManager.GetString("ERR_IndirectRecursiveConstructorCall");
+
+        internal static string ERR_ObjectCallingBaseConstructor => ResourceManager.GetString("ERR_ObjectCallingBaseConstructor");
+
+        internal static string ERR_PredefinedTypeNotFound => ResourceManager.GetString("ERR_PredefinedTypeNotFound");
+
+        internal static string ERR_PredefinedValueTupleTypeNotFound => ResourceManager.GetString("ERR_PredefinedValueTupleTypeNotFound");
+
+        internal static string ERR_PredefinedValueTupleTypeAmbiguous3 => ResourceManager.GetString("ERR_PredefinedValueTupleTypeAmbiguous3");
+
+        internal static string ERR_StructWithBaseConstructorCall => ResourceManager.GetString("ERR_StructWithBaseConstructorCall");
+
+        internal static string ERR_StructLayoutCycle => ResourceManager.GetString("ERR_StructLayoutCycle");
+
+        internal static string ERR_InterfacesCantContainFields => ResourceManager.GetString("ERR_InterfacesCantContainFields");
+
+        internal static string ERR_InterfacesCantContainConstructors => ResourceManager.GetString("ERR_InterfacesCantContainConstructors");
+
+        internal static string ERR_NonInterfaceInInterfaceList => ResourceManager.GetString("ERR_NonInterfaceInInterfaceList");
+
+        internal static string ERR_DuplicateInterfaceInBaseList => ResourceManager.GetString("ERR_DuplicateInterfaceInBaseList");
+
+        internal static string ERR_DuplicateInterfaceWithTupleNamesInBaseList => ResourceManager.GetString("ERR_DuplicateInterfaceWithTupleNamesInBaseList");
+
+        internal static string ERR_DuplicateInterfaceWithDifferencesInBaseList => ResourceManager.GetString("ERR_DuplicateInterfaceWithDifferencesInBaseList");
+
+        internal static string ERR_CycleInInterfaceInheritance => ResourceManager.GetString("ERR_CycleInInterfaceInheritance");
+
+        internal static string ERR_HidingAbstractMethod => ResourceManager.GetString("ERR_HidingAbstractMethod");
+
+        internal static string ERR_UnimplementedAbstractMethod => ResourceManager.GetString("ERR_UnimplementedAbstractMethod");
+
+        internal static string ERR_UnimplementedInterfaceMember => ResourceManager.GetString("ERR_UnimplementedInterfaceMember");
+
+        internal static string ERR_ObjectCantHaveBases => ResourceManager.GetString("ERR_ObjectCantHaveBases");
+
+        internal static string ERR_ExplicitInterfaceImplementationNotInterface => ResourceManager.GetString("ERR_ExplicitInterfaceImplementationNotInterface");
+
+        internal static string ERR_InterfaceMemberNotFound => ResourceManager.GetString("ERR_InterfaceMemberNotFound");
+
+        internal static string ERR_ClassDoesntImplementInterface => ResourceManager.GetString("ERR_ClassDoesntImplementInterface");
+
+        internal static string ERR_ExplicitInterfaceImplementationInNonClassOrStruct => ResourceManager.GetString("ERR_ExplicitInterfaceImplementationInNonClassOrStruct");
+
+        internal static string ERR_MemberNameSameAsType => ResourceManager.GetString("ERR_MemberNameSameAsType");
+
+        internal static string ERR_EnumeratorOverflow => ResourceManager.GetString("ERR_EnumeratorOverflow");
+
+        internal static string ERR_CantOverrideNonProperty => ResourceManager.GetString("ERR_CantOverrideNonProperty");
+
+        internal static string ERR_NoGetToOverride => ResourceManager.GetString("ERR_NoGetToOverride");
+
+        internal static string ERR_NoSetToOverride => ResourceManager.GetString("ERR_NoSetToOverride");
+
+        internal static string ERR_PropertyCantHaveVoidType => ResourceManager.GetString("ERR_PropertyCantHaveVoidType");
+
+        internal static string ERR_PropertyWithNoAccessors => ResourceManager.GetString("ERR_PropertyWithNoAccessors");
+
+        internal static string ERR_CantUseVoidInArglist => ResourceManager.GetString("ERR_CantUseVoidInArglist");
+
+        internal static string ERR_NewVirtualInSealed => ResourceManager.GetString("ERR_NewVirtualInSealed");
+
+        internal static string ERR_ExplicitPropertyAddingAccessor => ResourceManager.GetString("ERR_ExplicitPropertyAddingAccessor");
+
+        internal static string ERR_ExplicitPropertyMismatchInitOnly => ResourceManager.GetString("ERR_ExplicitPropertyMismatchInitOnly");
+
+        internal static string ERR_ExplicitPropertyMissingAccessor => ResourceManager.GetString("ERR_ExplicitPropertyMissingAccessor");
+
+        internal static string ERR_ConversionWithInterface => ResourceManager.GetString("ERR_ConversionWithInterface");
+
+        internal static string ERR_ConversionWithBase => ResourceManager.GetString("ERR_ConversionWithBase");
+
+        internal static string ERR_ConversionWithDerived => ResourceManager.GetString("ERR_ConversionWithDerived");
+
+        internal static string ERR_IdentityConversion => ResourceManager.GetString("ERR_IdentityConversion");
+
+        internal static string ERR_ConversionNotInvolvingContainedType => ResourceManager.GetString("ERR_ConversionNotInvolvingContainedType");
+
+        internal static string ERR_DuplicateConversionInClass => ResourceManager.GetString("ERR_DuplicateConversionInClass");
+
+        internal static string ERR_OperatorsMustBeStatic => ResourceManager.GetString("ERR_OperatorsMustBeStatic");
+
+        internal static string ERR_BadIncDecSignature => ResourceManager.GetString("ERR_BadIncDecSignature");
+
+        internal static string ERR_BadUnaryOperatorSignature => ResourceManager.GetString("ERR_BadUnaryOperatorSignature");
+
+        internal static string ERR_BadBinaryOperatorSignature => ResourceManager.GetString("ERR_BadBinaryOperatorSignature");
+
+        internal static string ERR_BadShiftOperatorSignature => ResourceManager.GetString("ERR_BadShiftOperatorSignature");
+
+        internal static string ERR_InterfacesCantContainConversionOrEqualityOperators => ResourceManager.GetString("ERR_InterfacesCantContainConversionOrEqualityOperators");
+
+        internal static string ERR_StructsCantContainDefaultConstructor => ResourceManager.GetString("ERR_StructsCantContainDefaultConstructor");
+
+        internal static string ERR_EnumsCantContainDefaultConstructor => ResourceManager.GetString("ERR_EnumsCantContainDefaultConstructor");
+
+        internal static string ERR_CantOverrideBogusMethod => ResourceManager.GetString("ERR_CantOverrideBogusMethod");
+
+        internal static string ERR_BindToBogus => ResourceManager.GetString("ERR_BindToBogus");
+
+        internal static string ERR_CantCallSpecialMethod => ResourceManager.GetString("ERR_CantCallSpecialMethod");
+
+        internal static string ERR_BadTypeReference => ResourceManager.GetString("ERR_BadTypeReference");
+
+        internal static string ERR_FieldInitializerInStruct => ResourceManager.GetString("ERR_FieldInitializerInStruct");
+
+        internal static string ERR_BadDestructorName => ResourceManager.GetString("ERR_BadDestructorName");
+
+        internal static string ERR_OnlyClassesCanContainDestructors => ResourceManager.GetString("ERR_OnlyClassesCanContainDestructors");
+
+        internal static string ERR_ConflictAliasAndMember => ResourceManager.GetString("ERR_ConflictAliasAndMember");
+
+        internal static string ERR_ConflictingAliasAndDefinition => ResourceManager.GetString("ERR_ConflictingAliasAndDefinition");
+
+        internal static string ERR_ConditionalOnSpecialMethod => ResourceManager.GetString("ERR_ConditionalOnSpecialMethod");
+
+        internal static string ERR_ConditionalMustReturnVoid => ResourceManager.GetString("ERR_ConditionalMustReturnVoid");
+
+        internal static string ERR_DuplicateAttribute => ResourceManager.GetString("ERR_DuplicateAttribute");
+
+        internal static string ERR_DuplicateAttributeInNetModule => ResourceManager.GetString("ERR_DuplicateAttributeInNetModule");
+
+        internal static string ERR_ConditionalOnInterfaceMethod => ResourceManager.GetString("ERR_ConditionalOnInterfaceMethod");
+
+        internal static string ERR_OperatorCantReturnVoid => ResourceManager.GetString("ERR_OperatorCantReturnVoid");
+
+        internal static string ERR_BadDynamicConversion => ResourceManager.GetString("ERR_BadDynamicConversion");
+
+        internal static string ERR_InvalidAttributeArgument => ResourceManager.GetString("ERR_InvalidAttributeArgument");
+
+        internal static string ERR_ParameterNotValidForType => ResourceManager.GetString("ERR_ParameterNotValidForType");
+
+        internal static string ERR_AttributeParameterRequired1 => ResourceManager.GetString("ERR_AttributeParameterRequired1");
+
+        internal static string ERR_AttributeParameterRequired2 => ResourceManager.GetString("ERR_AttributeParameterRequired2");
+
+        internal static string ERR_MarshalUnmanagedTypeNotValidForFields => ResourceManager.GetString("ERR_MarshalUnmanagedTypeNotValidForFields");
+
+        internal static string ERR_MarshalUnmanagedTypeOnlyValidForFields => ResourceManager.GetString("ERR_MarshalUnmanagedTypeOnlyValidForFields");
+
+        internal static string ERR_AttributeOnBadSymbolType => ResourceManager.GetString("ERR_AttributeOnBadSymbolType");
+
+        internal static string ERR_FloatOverflow => ResourceManager.GetString("ERR_FloatOverflow");
+
+        internal static string ERR_ComImportWithoutUuidAttribute => ResourceManager.GetString("ERR_ComImportWithoutUuidAttribute");
+
+        internal static string ERR_InvalidNamedArgument => ResourceManager.GetString("ERR_InvalidNamedArgument");
+
+        internal static string ERR_DllImportOnInvalidMethod => ResourceManager.GetString("ERR_DllImportOnInvalidMethod");
+
+        internal static string ERR_EncUpdateFailedMissingAttribute => ResourceManager.GetString("ERR_EncUpdateFailedMissingAttribute");
+
+        internal static string ERR_DllImportOnGenericMethod => ResourceManager.GetString("ERR_DllImportOnGenericMethod");
+
+        internal static string ERR_FieldCantBeRefAny => ResourceManager.GetString("ERR_FieldCantBeRefAny");
+
+        internal static string ERR_FieldAutoPropCantBeByRefLike => ResourceManager.GetString("ERR_FieldAutoPropCantBeByRefLike");
+
+        internal static string ERR_ArrayElementCantBeRefAny => ResourceManager.GetString("ERR_ArrayElementCantBeRefAny");
+
+        internal static string WRN_DeprecatedSymbol => ResourceManager.GetString("WRN_DeprecatedSymbol");
+
+        internal static string WRN_DeprecatedSymbol_Title => ResourceManager.GetString("WRN_DeprecatedSymbol_Title");
+
+        internal static string ERR_NotAnAttributeClass => ResourceManager.GetString("ERR_NotAnAttributeClass");
+
+        internal static string ERR_BadNamedAttributeArgument => ResourceManager.GetString("ERR_BadNamedAttributeArgument");
+
+        internal static string WRN_DeprecatedSymbolStr => ResourceManager.GetString("WRN_DeprecatedSymbolStr");
+
+        internal static string WRN_DeprecatedSymbolStr_Title => ResourceManager.GetString("WRN_DeprecatedSymbolStr_Title");
+
+        internal static string ERR_DeprecatedSymbolStr => ResourceManager.GetString("ERR_DeprecatedSymbolStr");
+
+        internal static string ERR_IndexerCantHaveVoidType => ResourceManager.GetString("ERR_IndexerCantHaveVoidType");
+
+        internal static string ERR_VirtualPrivate => ResourceManager.GetString("ERR_VirtualPrivate");
+
+        internal static string ERR_ArrayInitToNonArrayType => ResourceManager.GetString("ERR_ArrayInitToNonArrayType");
+
+        internal static string ERR_ArrayInitInBadPlace => ResourceManager.GetString("ERR_ArrayInitInBadPlace");
+
+        internal static string ERR_MissingStructOffset => ResourceManager.GetString("ERR_MissingStructOffset");
+
+        internal static string WRN_ExternMethodNoImplementation => ResourceManager.GetString("WRN_ExternMethodNoImplementation");
+
+        internal static string WRN_ExternMethodNoImplementation_Title => ResourceManager.GetString("WRN_ExternMethodNoImplementation_Title");
+
+        internal static string WRN_ProtectedInSealed => ResourceManager.GetString("WRN_ProtectedInSealed");
+
+        internal static string WRN_ProtectedInSealed_Title => ResourceManager.GetString("WRN_ProtectedInSealed_Title");
+
+        internal static string ERR_InterfaceImplementedByConditional => ResourceManager.GetString("ERR_InterfaceImplementedByConditional");
+
+        internal static string ERR_InterfaceImplementedImplicitlyByVariadic => ResourceManager.GetString("ERR_InterfaceImplementedImplicitlyByVariadic");
+
+        internal static string ERR_IllegalRefParam => ResourceManager.GetString("ERR_IllegalRefParam");
+
+        internal static string ERR_BadArgumentToAttribute => ResourceManager.GetString("ERR_BadArgumentToAttribute");
+
+        internal static string ERR_StructOffsetOnBadStruct => ResourceManager.GetString("ERR_StructOffsetOnBadStruct");
+
+        internal static string ERR_StructOffsetOnBadField => ResourceManager.GetString("ERR_StructOffsetOnBadField");
+
+        internal static string ERR_AttributeUsageOnNonAttributeClass => ResourceManager.GetString("ERR_AttributeUsageOnNonAttributeClass");
+
+        internal static string WRN_PossibleMistakenNullStatement => ResourceManager.GetString("WRN_PossibleMistakenNullStatement");
+
+        internal static string WRN_PossibleMistakenNullStatement_Title => ResourceManager.GetString("WRN_PossibleMistakenNullStatement_Title");
+
+        internal static string ERR_DuplicateNamedAttributeArgument => ResourceManager.GetString("ERR_DuplicateNamedAttributeArgument");
+
+        internal static string ERR_DeriveFromEnumOrValueType => ResourceManager.GetString("ERR_DeriveFromEnumOrValueType");
+
+        internal static string ERR_DefaultMemberOnIndexedType => ResourceManager.GetString("ERR_DefaultMemberOnIndexedType");
+
+        internal static string ERR_BogusType => ResourceManager.GetString("ERR_BogusType");
+
+        internal static string WRN_UnassignedInternalField => ResourceManager.GetString("WRN_UnassignedInternalField");
+
+        internal static string WRN_UnassignedInternalField_Title => ResourceManager.GetString("WRN_UnassignedInternalField_Title");
+
+        internal static string ERR_CStyleArray => ResourceManager.GetString("ERR_CStyleArray");
+
+        internal static string WRN_VacuousIntegralComp => ResourceManager.GetString("WRN_VacuousIntegralComp");
+
+        internal static string WRN_VacuousIntegralComp_Title => ResourceManager.GetString("WRN_VacuousIntegralComp_Title");
+
+        internal static string ERR_AbstractAttributeClass => ResourceManager.GetString("ERR_AbstractAttributeClass");
+
+        internal static string ERR_BadNamedAttributeArgumentType => ResourceManager.GetString("ERR_BadNamedAttributeArgumentType");
+
+        internal static string ERR_MissingPredefinedMember => ResourceManager.GetString("ERR_MissingPredefinedMember");
+
+        internal static string WRN_AttributeLocationOnBadDeclaration => ResourceManager.GetString("WRN_AttributeLocationOnBadDeclaration");
+
+        internal static string WRN_AttributeLocationOnBadDeclaration_Title => ResourceManager.GetString("WRN_AttributeLocationOnBadDeclaration_Title");
+
+        internal static string WRN_InvalidAttributeLocation => ResourceManager.GetString("WRN_InvalidAttributeLocation");
+
+        internal static string WRN_InvalidAttributeLocation_Title => ResourceManager.GetString("WRN_InvalidAttributeLocation_Title");
+
+        internal static string WRN_EqualsWithoutGetHashCode => ResourceManager.GetString("WRN_EqualsWithoutGetHashCode");
+
+        internal static string WRN_EqualsWithoutGetHashCode_Title => ResourceManager.GetString("WRN_EqualsWithoutGetHashCode_Title");
+
+        internal static string WRN_EqualityOpWithoutEquals => ResourceManager.GetString("WRN_EqualityOpWithoutEquals");
+
+        internal static string WRN_EqualityOpWithoutEquals_Title => ResourceManager.GetString("WRN_EqualityOpWithoutEquals_Title");
+
+        internal static string WRN_EqualityOpWithoutGetHashCode => ResourceManager.GetString("WRN_EqualityOpWithoutGetHashCode");
+
+        internal static string WRN_EqualityOpWithoutGetHashCode_Title => ResourceManager.GetString("WRN_EqualityOpWithoutGetHashCode_Title");
+
+        internal static string ERR_OutAttrOnRefParam => ResourceManager.GetString("ERR_OutAttrOnRefParam");
+
+        internal static string ERR_OverloadRefKind => ResourceManager.GetString("ERR_OverloadRefKind");
+
+        internal static string ERR_LiteralDoubleCast => ResourceManager.GetString("ERR_LiteralDoubleCast");
+
+        internal static string WRN_IncorrectBooleanAssg => ResourceManager.GetString("WRN_IncorrectBooleanAssg");
+
+        internal static string WRN_IncorrectBooleanAssg_Title => ResourceManager.GetString("WRN_IncorrectBooleanAssg_Title");
+
+        internal static string ERR_ProtectedInStruct => ResourceManager.GetString("ERR_ProtectedInStruct");
+
+        internal static string ERR_InconsistentIndexerNames => ResourceManager.GetString("ERR_InconsistentIndexerNames");
+
+        internal static string ERR_ComImportWithUserCtor => ResourceManager.GetString("ERR_ComImportWithUserCtor");
+
+        internal static string ERR_FieldCantHaveVoidType => ResourceManager.GetString("ERR_FieldCantHaveVoidType");
+
+        internal static string WRN_NonObsoleteOverridingObsolete => ResourceManager.GetString("WRN_NonObsoleteOverridingObsolete");
+
+        internal static string WRN_NonObsoleteOverridingObsolete_Title => ResourceManager.GetString("WRN_NonObsoleteOverridingObsolete_Title");
+
+        internal static string ERR_SystemVoid => ResourceManager.GetString("ERR_SystemVoid");
+
+        internal static string ERR_ExplicitParamArray => ResourceManager.GetString("ERR_ExplicitParamArray");
+
+        internal static string WRN_BitwiseOrSignExtend => ResourceManager.GetString("WRN_BitwiseOrSignExtend");
+
+        internal static string WRN_BitwiseOrSignExtend_Title => ResourceManager.GetString("WRN_BitwiseOrSignExtend_Title");
+
+        internal static string WRN_BitwiseOrSignExtend_Description => ResourceManager.GetString("WRN_BitwiseOrSignExtend_Description");
+
+        internal static string ERR_VolatileStruct => ResourceManager.GetString("ERR_VolatileStruct");
+
+        internal static string ERR_VolatileAndReadonly => ResourceManager.GetString("ERR_VolatileAndReadonly");
+
+        internal static string ERR_AbstractField => ResourceManager.GetString("ERR_AbstractField");
+
+        internal static string ERR_BogusExplicitImpl => ResourceManager.GetString("ERR_BogusExplicitImpl");
+
+        internal static string ERR_ExplicitMethodImplAccessor => ResourceManager.GetString("ERR_ExplicitMethodImplAccessor");
+
+        internal static string WRN_CoClassWithoutComImport => ResourceManager.GetString("WRN_CoClassWithoutComImport");
+
+        internal static string WRN_CoClassWithoutComImport_Title => ResourceManager.GetString("WRN_CoClassWithoutComImport_Title");
+
+        internal static string ERR_ConditionalWithOutParam => ResourceManager.GetString("ERR_ConditionalWithOutParam");
+
+        internal static string ERR_AccessorImplementingMethod => ResourceManager.GetString("ERR_AccessorImplementingMethod");
+
+        internal static string ERR_AliasQualAsExpression => ResourceManager.GetString("ERR_AliasQualAsExpression");
+
+        internal static string ERR_DerivingFromATyVar => ResourceManager.GetString("ERR_DerivingFromATyVar");
+
+        internal static string ERR_DuplicateTypeParameter => ResourceManager.GetString("ERR_DuplicateTypeParameter");
+
+        internal static string WRN_TypeParameterSameAsOuterTypeParameter => ResourceManager.GetString("WRN_TypeParameterSameAsOuterTypeParameter");
+
+        internal static string WRN_TypeParameterSameAsOuterTypeParameter_Title => ResourceManager.GetString("WRN_TypeParameterSameAsOuterTypeParameter_Title");
+
+        internal static string WRN_TypeParameterSameAsOuterMethodTypeParameter => ResourceManager.GetString("WRN_TypeParameterSameAsOuterMethodTypeParameter");
+
+        internal static string WRN_TypeParameterSameAsOuterMethodTypeParameter_Title => ResourceManager.GetString("WRN_TypeParameterSameAsOuterMethodTypeParameter_Title");
+
+        internal static string ERR_TypeVariableSameAsParent => ResourceManager.GetString("ERR_TypeVariableSameAsParent");
+
+        internal static string ERR_UnifyingInterfaceInstantiations => ResourceManager.GetString("ERR_UnifyingInterfaceInstantiations");
+
+        internal static string ERR_GenericDerivingFromAttribute => ResourceManager.GetString("ERR_GenericDerivingFromAttribute");
+
+        internal static string ERR_TyVarNotFoundInConstraint => ResourceManager.GetString("ERR_TyVarNotFoundInConstraint");
+
+        internal static string ERR_BadBoundType => ResourceManager.GetString("ERR_BadBoundType");
+
+        internal static string ERR_SpecialTypeAsBound => ResourceManager.GetString("ERR_SpecialTypeAsBound");
+
+        internal static string ERR_BadVisBound => ResourceManager.GetString("ERR_BadVisBound");
+
+        internal static string ERR_LookupInTypeVariable => ResourceManager.GetString("ERR_LookupInTypeVariable");
+
+        internal static string ERR_BadConstraintType => ResourceManager.GetString("ERR_BadConstraintType");
+
+        internal static string ERR_InstanceMemberInStaticClass => ResourceManager.GetString("ERR_InstanceMemberInStaticClass");
+
+        internal static string ERR_StaticBaseClass => ResourceManager.GetString("ERR_StaticBaseClass");
+
+        internal static string ERR_ConstructorInStaticClass => ResourceManager.GetString("ERR_ConstructorInStaticClass");
+
+        internal static string ERR_DestructorInStaticClass => ResourceManager.GetString("ERR_DestructorInStaticClass");
+
+        internal static string ERR_InstantiatingStaticClass => ResourceManager.GetString("ERR_InstantiatingStaticClass");
+
+        internal static string ERR_StaticDerivedFromNonObject => ResourceManager.GetString("ERR_StaticDerivedFromNonObject");
+
+        internal static string ERR_StaticClassInterfaceImpl => ResourceManager.GetString("ERR_StaticClassInterfaceImpl");
+
+        internal static string ERR_RefStructInterfaceImpl => ResourceManager.GetString("ERR_RefStructInterfaceImpl");
+
+        internal static string ERR_OperatorInStaticClass => ResourceManager.GetString("ERR_OperatorInStaticClass");
+
+        internal static string ERR_ConvertToStaticClass => ResourceManager.GetString("ERR_ConvertToStaticClass");
+
+        internal static string ERR_ConstraintIsStaticClass => ResourceManager.GetString("ERR_ConstraintIsStaticClass");
+
+        internal static string ERR_GenericArgIsStaticClass => ResourceManager.GetString("ERR_GenericArgIsStaticClass");
+
+        internal static string ERR_ArrayOfStaticClass => ResourceManager.GetString("ERR_ArrayOfStaticClass");
+
+        internal static string ERR_IndexerInStaticClass => ResourceManager.GetString("ERR_IndexerInStaticClass");
+
+        internal static string ERR_ParameterIsStaticClass => ResourceManager.GetString("ERR_ParameterIsStaticClass");
+
+        internal static string WRN_ParameterIsStaticClass => ResourceManager.GetString("WRN_ParameterIsStaticClass");
+
+        internal static string WRN_ParameterIsStaticClass_Title => ResourceManager.GetString("WRN_ParameterIsStaticClass_Title");
+
+        internal static string ERR_ReturnTypeIsStaticClass => ResourceManager.GetString("ERR_ReturnTypeIsStaticClass");
+
+        internal static string WRN_ReturnTypeIsStaticClass => ResourceManager.GetString("WRN_ReturnTypeIsStaticClass");
+
+        internal static string WRN_ReturnTypeIsStaticClass_Title => ResourceManager.GetString("WRN_ReturnTypeIsStaticClass_Title");
+
+        internal static string ERR_VarDeclIsStaticClass => ResourceManager.GetString("ERR_VarDeclIsStaticClass");
+
+        internal static string ERR_BadEmptyThrowInFinally => ResourceManager.GetString("ERR_BadEmptyThrowInFinally");
+
+        internal static string ERR_InvalidSpecifier => ResourceManager.GetString("ERR_InvalidSpecifier");
+
+        internal static string WRN_AssignmentToLockOrDispose => ResourceManager.GetString("WRN_AssignmentToLockOrDispose");
+
+        internal static string WRN_AssignmentToLockOrDispose_Title => ResourceManager.GetString("WRN_AssignmentToLockOrDispose_Title");
+
+        internal static string ERR_ForwardedTypeInThisAssembly => ResourceManager.GetString("ERR_ForwardedTypeInThisAssembly");
+
+        internal static string ERR_ForwardedTypeIsNested => ResourceManager.GetString("ERR_ForwardedTypeIsNested");
+
+        internal static string ERR_CycleInTypeForwarder => ResourceManager.GetString("ERR_CycleInTypeForwarder");
+
+        internal static string ERR_AssemblyNameOnNonModule => ResourceManager.GetString("ERR_AssemblyNameOnNonModule");
+
+        internal static string ERR_InvalidAssemblyName => ResourceManager.GetString("ERR_InvalidAssemblyName");
+
+        internal static string ERR_InvalidFwdType => ResourceManager.GetString("ERR_InvalidFwdType");
+
+        internal static string ERR_CloseUnimplementedInterfaceMemberStatic => ResourceManager.GetString("ERR_CloseUnimplementedInterfaceMemberStatic");
+
+        internal static string ERR_CloseUnimplementedInterfaceMemberNotPublic => ResourceManager.GetString("ERR_CloseUnimplementedInterfaceMemberNotPublic");
+
+        internal static string ERR_CloseUnimplementedInterfaceMemberWrongReturnType => ResourceManager.GetString("ERR_CloseUnimplementedInterfaceMemberWrongReturnType");
+
+        internal static string ERR_DuplicateTypeForwarder => ResourceManager.GetString("ERR_DuplicateTypeForwarder");
+
+        internal static string ERR_ExpectedSelectOrGroup => ResourceManager.GetString("ERR_ExpectedSelectOrGroup");
+
+        internal static string ERR_ExpectedContextualKeywordOn => ResourceManager.GetString("ERR_ExpectedContextualKeywordOn");
+
+        internal static string ERR_ExpectedContextualKeywordEquals => ResourceManager.GetString("ERR_ExpectedContextualKeywordEquals");
+
+        internal static string ERR_ExpectedContextualKeywordBy => ResourceManager.GetString("ERR_ExpectedContextualKeywordBy");
+
+        internal static string ERR_InvalidAnonymousTypeMemberDeclarator => ResourceManager.GetString("ERR_InvalidAnonymousTypeMemberDeclarator");
+
+        internal static string ERR_InvalidInitializerElementInitializer => ResourceManager.GetString("ERR_InvalidInitializerElementInitializer");
+
+        internal static string ERR_InconsistentLambdaParameterUsage => ResourceManager.GetString("ERR_InconsistentLambdaParameterUsage");
+
+        internal static string ERR_PartialMethodInvalidModifier => ResourceManager.GetString("ERR_PartialMethodInvalidModifier");
+
+        internal static string ERR_PartialMethodOnlyInPartialClass => ResourceManager.GetString("ERR_PartialMethodOnlyInPartialClass");
+
+        internal static string ERR_PartialMethodNotExplicit => ResourceManager.GetString("ERR_PartialMethodNotExplicit");
+
+        internal static string ERR_PartialMethodExtensionDifference => ResourceManager.GetString("ERR_PartialMethodExtensionDifference");
+
+        internal static string ERR_PartialMethodOnlyOneLatent => ResourceManager.GetString("ERR_PartialMethodOnlyOneLatent");
+
+        internal static string ERR_PartialMethodOnlyOneActual => ResourceManager.GetString("ERR_PartialMethodOnlyOneActual");
+
+        internal static string ERR_PartialMethodParamsDifference => ResourceManager.GetString("ERR_PartialMethodParamsDifference");
+
+        internal static string ERR_PartialMethodMustHaveLatent => ResourceManager.GetString("ERR_PartialMethodMustHaveLatent");
+
+        internal static string ERR_PartialMethodInconsistentTupleNames => ResourceManager.GetString("ERR_PartialMethodInconsistentTupleNames");
+
+        internal static string ERR_PartialMethodInconsistentConstraints => ResourceManager.GetString("ERR_PartialMethodInconsistentConstraints");
+
+        internal static string ERR_PartialMethodToDelegate => ResourceManager.GetString("ERR_PartialMethodToDelegate");
+
+        internal static string ERR_PartialMethodStaticDifference => ResourceManager.GetString("ERR_PartialMethodStaticDifference");
+
+        internal static string ERR_PartialMethodUnsafeDifference => ResourceManager.GetString("ERR_PartialMethodUnsafeDifference");
+
+        internal static string ERR_PartialMethodInExpressionTree => ResourceManager.GetString("ERR_PartialMethodInExpressionTree");
+
+        internal static string WRN_ObsoleteOverridingNonObsolete => ResourceManager.GetString("WRN_ObsoleteOverridingNonObsolete");
+
+        internal static string WRN_ObsoleteOverridingNonObsolete_Title => ResourceManager.GetString("WRN_ObsoleteOverridingNonObsolete_Title");
+
+        internal static string WRN_DebugFullNameTooLong => ResourceManager.GetString("WRN_DebugFullNameTooLong");
+
+        internal static string WRN_DebugFullNameTooLong_Title => ResourceManager.GetString("WRN_DebugFullNameTooLong_Title");
+
+        internal static string ERR_ImplicitlyTypedVariableAssignedBadValue => ResourceManager.GetString("ERR_ImplicitlyTypedVariableAssignedBadValue");
+
+        internal static string ERR_ImplicitlyTypedVariableWithNoInitializer => ResourceManager.GetString("ERR_ImplicitlyTypedVariableWithNoInitializer");
+
+        internal static string ERR_ImplicitlyTypedVariableMultipleDeclarator => ResourceManager.GetString("ERR_ImplicitlyTypedVariableMultipleDeclarator");
+
+        internal static string ERR_ImplicitlyTypedVariableAssignedArrayInitializer => ResourceManager.GetString("ERR_ImplicitlyTypedVariableAssignedArrayInitializer");
+
+        internal static string ERR_ImplicitlyTypedLocalCannotBeFixed => ResourceManager.GetString("ERR_ImplicitlyTypedLocalCannotBeFixed");
+
+        internal static string ERR_ImplicitlyTypedVariableCannotBeConst => ResourceManager.GetString("ERR_ImplicitlyTypedVariableCannotBeConst");
+
+        internal static string WRN_ExternCtorNoImplementation => ResourceManager.GetString("WRN_ExternCtorNoImplementation");
+
+        internal static string WRN_ExternCtorNoImplementation_Title => ResourceManager.GetString("WRN_ExternCtorNoImplementation_Title");
+
+        internal static string ERR_TypeVarNotFound => ResourceManager.GetString("ERR_TypeVarNotFound");
+
+        internal static string ERR_ImplicitlyTypedArrayNoBestType => ResourceManager.GetString("ERR_ImplicitlyTypedArrayNoBestType");
+
+        internal static string ERR_AnonymousTypePropertyAssignedBadValue => ResourceManager.GetString("ERR_AnonymousTypePropertyAssignedBadValue");
+
+        internal static string ERR_ExpressionTreeContainsBaseAccess => ResourceManager.GetString("ERR_ExpressionTreeContainsBaseAccess");
+
+        internal static string ERR_ExpressionTreeContainsTupleBinOp => ResourceManager.GetString("ERR_ExpressionTreeContainsTupleBinOp");
+
+        internal static string ERR_ExpressionTreeContainsAssignment => ResourceManager.GetString("ERR_ExpressionTreeContainsAssignment");
+
+        internal static string ERR_AnonymousTypeDuplicatePropertyName => ResourceManager.GetString("ERR_AnonymousTypeDuplicatePropertyName");
+
+        internal static string ERR_StatementLambdaToExpressionTree => ResourceManager.GetString("ERR_StatementLambdaToExpressionTree");
+
+        internal static string ERR_ExpressionTreeMustHaveDelegate => ResourceManager.GetString("ERR_ExpressionTreeMustHaveDelegate");
+
+        internal static string ERR_AnonymousTypeNotAvailable => ResourceManager.GetString("ERR_AnonymousTypeNotAvailable");
+
+        internal static string ERR_LambdaInIsAs => ResourceManager.GetString("ERR_LambdaInIsAs");
+
+        internal static string ERR_TypelessTupleInAs => ResourceManager.GetString("ERR_TypelessTupleInAs");
+
+        internal static string ERR_ExpressionTreeContainsMultiDimensionalArrayInitializer => ResourceManager.GetString("ERR_ExpressionTreeContainsMultiDimensionalArrayInitializer");
+
+        internal static string ERR_MissingArgument => ResourceManager.GetString("ERR_MissingArgument");
+
+        internal static string ERR_VariableUsedBeforeDeclaration => ResourceManager.GetString("ERR_VariableUsedBeforeDeclaration");
+
+        internal static string ERR_RecursivelyTypedVariable => ResourceManager.GetString("ERR_RecursivelyTypedVariable");
+
+        internal static string ERR_UnassignedThisAutoProperty => ResourceManager.GetString("ERR_UnassignedThisAutoProperty");
+
+        internal static string WRN_UnassignedThisAutoProperty => ResourceManager.GetString("WRN_UnassignedThisAutoProperty");
+
+        internal static string WRN_UnassignedThisAutoProperty_Title => ResourceManager.GetString("WRN_UnassignedThisAutoProperty_Title");
+
+        internal static string ERR_VariableUsedBeforeDeclarationAndHidesField => ResourceManager.GetString("ERR_VariableUsedBeforeDeclarationAndHidesField");
+
+        internal static string ERR_ExpressionTreeContainsBadCoalesce => ResourceManager.GetString("ERR_ExpressionTreeContainsBadCoalesce");
+
+        internal static string ERR_IdentifierExpected => ResourceManager.GetString("ERR_IdentifierExpected");
+
+        internal static string ERR_SemicolonExpected => ResourceManager.GetString("ERR_SemicolonExpected");
+
+        internal static string ERR_SyntaxError => ResourceManager.GetString("ERR_SyntaxError");
+
+        internal static string ERR_DuplicateModifier => ResourceManager.GetString("ERR_DuplicateModifier");
+
+        internal static string ERR_DuplicateAccessor => ResourceManager.GetString("ERR_DuplicateAccessor");
+
+        internal static string ERR_IntegralTypeExpected => ResourceManager.GetString("ERR_IntegralTypeExpected");
+
+        internal static string ERR_IllegalEscape => ResourceManager.GetString("ERR_IllegalEscape");
+
+        internal static string ERR_NewlineInConst => ResourceManager.GetString("ERR_NewlineInConst");
+
+        internal static string ERR_EmptyCharConst => ResourceManager.GetString("ERR_EmptyCharConst");
+
+        internal static string ERR_TooManyCharsInConst => ResourceManager.GetString("ERR_TooManyCharsInConst");
+
+        internal static string ERR_InvalidNumber => ResourceManager.GetString("ERR_InvalidNumber");
+
+        internal static string ERR_GetOrSetExpected => ResourceManager.GetString("ERR_GetOrSetExpected");
+
+        internal static string ERR_ClassTypeExpected => ResourceManager.GetString("ERR_ClassTypeExpected");
+
+        internal static string ERR_NamedArgumentExpected => ResourceManager.GetString("ERR_NamedArgumentExpected");
+
+        internal static string ERR_TooManyCatches => ResourceManager.GetString("ERR_TooManyCatches");
+
+        internal static string ERR_ThisOrBaseExpected => ResourceManager.GetString("ERR_ThisOrBaseExpected");
+
+        internal static string ERR_OvlUnaryOperatorExpected => ResourceManager.GetString("ERR_OvlUnaryOperatorExpected");
+
+        internal static string ERR_OvlBinaryOperatorExpected => ResourceManager.GetString("ERR_OvlBinaryOperatorExpected");
+
+        internal static string ERR_IntOverflow => ResourceManager.GetString("ERR_IntOverflow");
+
+        internal static string ERR_EOFExpected => ResourceManager.GetString("ERR_EOFExpected");
+
+        internal static string ERR_GlobalDefinitionOrStatementExpected => ResourceManager.GetString("ERR_GlobalDefinitionOrStatementExpected");
+
+        internal static string ERR_BadEmbeddedStmt => ResourceManager.GetString("ERR_BadEmbeddedStmt");
+
+        internal static string ERR_PPDirectiveExpected => ResourceManager.GetString("ERR_PPDirectiveExpected");
+
+        internal static string ERR_EndOfPPLineExpected => ResourceManager.GetString("ERR_EndOfPPLineExpected");
+
+        internal static string ERR_CloseParenExpected => ResourceManager.GetString("ERR_CloseParenExpected");
+
+        internal static string ERR_EndifDirectiveExpected => ResourceManager.GetString("ERR_EndifDirectiveExpected");
+
+        internal static string ERR_UnexpectedDirective => ResourceManager.GetString("ERR_UnexpectedDirective");
+
+        internal static string ERR_ErrorDirective => ResourceManager.GetString("ERR_ErrorDirective");
+
+        internal static string WRN_WarningDirective => ResourceManager.GetString("WRN_WarningDirective");
+
+        internal static string WRN_WarningDirective_Title => ResourceManager.GetString("WRN_WarningDirective_Title");
+
+        internal static string ERR_TypeExpected => ResourceManager.GetString("ERR_TypeExpected");
+
+        internal static string ERR_PPDefFollowsToken => ResourceManager.GetString("ERR_PPDefFollowsToken");
+
+        internal static string ERR_PPReferenceFollowsToken => ResourceManager.GetString("ERR_PPReferenceFollowsToken");
+
+        internal static string ERR_OpenEndedComment => ResourceManager.GetString("ERR_OpenEndedComment");
+
+        internal static string ERR_Merge_conflict_marker_encountered => ResourceManager.GetString("ERR_Merge_conflict_marker_encountered");
+
+        internal static string ERR_NoRefOutWhenRefOnly => ResourceManager.GetString("ERR_NoRefOutWhenRefOnly");
+
+        internal static string ERR_NoNetModuleOutputWhenRefOutOrRefOnly => ResourceManager.GetString("ERR_NoNetModuleOutputWhenRefOutOrRefOnly");
+
+        internal static string ERR_OvlOperatorExpected => ResourceManager.GetString("ERR_OvlOperatorExpected");
+
+        internal static string ERR_EndRegionDirectiveExpected => ResourceManager.GetString("ERR_EndRegionDirectiveExpected");
+
+        internal static string ERR_UnterminatedStringLit => ResourceManager.GetString("ERR_UnterminatedStringLit");
+
+        internal static string ERR_BadDirectivePlacement => ResourceManager.GetString("ERR_BadDirectivePlacement");
+
+        internal static string ERR_IdentifierExpectedKW => ResourceManager.GetString("ERR_IdentifierExpectedKW");
+
+        internal static string ERR_SemiOrLBraceExpected => ResourceManager.GetString("ERR_SemiOrLBraceExpected");
+
+        internal static string ERR_MultiTypeInDeclaration => ResourceManager.GetString("ERR_MultiTypeInDeclaration");
+
+        internal static string ERR_AddOrRemoveExpected => ResourceManager.GetString("ERR_AddOrRemoveExpected");
+
+        internal static string ERR_UnexpectedCharacter => ResourceManager.GetString("ERR_UnexpectedCharacter");
+
+        internal static string ERR_UnexpectedToken => ResourceManager.GetString("ERR_UnexpectedToken");
+
+        internal static string ERR_ProtectedInStatic => ResourceManager.GetString("ERR_ProtectedInStatic");
+
+        internal static string WRN_UnreachableGeneralCatch => ResourceManager.GetString("WRN_UnreachableGeneralCatch");
+
+        internal static string WRN_UnreachableGeneralCatch_Title => ResourceManager.GetString("WRN_UnreachableGeneralCatch_Title");
+
+        internal static string WRN_UnreachableGeneralCatch_Description => ResourceManager.GetString("WRN_UnreachableGeneralCatch_Description");
+
+        internal static string ERR_IncrementLvalueExpected => ResourceManager.GetString("ERR_IncrementLvalueExpected");
+
+        internal static string ERR_NoSuchMemberOrExtension => ResourceManager.GetString("ERR_NoSuchMemberOrExtension");
+
+        internal static string ERR_NoSuchMemberOrExtensionNeedUsing => ResourceManager.GetString("ERR_NoSuchMemberOrExtensionNeedUsing");
+
+        internal static string ERR_BadThisParam => ResourceManager.GetString("ERR_BadThisParam");
+
+        internal static string ERR_BadParameterModifiers => ResourceManager.GetString("ERR_BadParameterModifiers");
+
+        internal static string ERR_BadTypeforThis => ResourceManager.GetString("ERR_BadTypeforThis");
+
+        internal static string ERR_BadParamModThis => ResourceManager.GetString("ERR_BadParamModThis");
+
+        internal static string ERR_BadExtensionMeth => ResourceManager.GetString("ERR_BadExtensionMeth");
+
+        internal static string ERR_BadExtensionAgg => ResourceManager.GetString("ERR_BadExtensionAgg");
+
+        internal static string ERR_DupParamMod => ResourceManager.GetString("ERR_DupParamMod");
+
+        internal static string ERR_ExtensionMethodsDecl => ResourceManager.GetString("ERR_ExtensionMethodsDecl");
+
+        internal static string ERR_ExtensionAttrNotFound => ResourceManager.GetString("ERR_ExtensionAttrNotFound");
+
+        internal static string ERR_ExplicitExtension => ResourceManager.GetString("ERR_ExplicitExtension");
+
+        internal static string ERR_ExplicitDynamicAttr => ResourceManager.GetString("ERR_ExplicitDynamicAttr");
+
+        internal static string ERR_NoDynamicPhantomOnBaseCtor => ResourceManager.GetString("ERR_NoDynamicPhantomOnBaseCtor");
+
+        internal static string ERR_ValueTypeExtDelegate => ResourceManager.GetString("ERR_ValueTypeExtDelegate");
+
+        internal static string ERR_BadArgCount => ResourceManager.GetString("ERR_BadArgCount");
+
+        internal static string ERR_BadArgType => ResourceManager.GetString("ERR_BadArgType");
+
+        internal static string ERR_NoSourceFile => ResourceManager.GetString("ERR_NoSourceFile");
+
+        internal static string ERR_CantRefResource => ResourceManager.GetString("ERR_CantRefResource");
+
+        internal static string ERR_ResourceNotUnique => ResourceManager.GetString("ERR_ResourceNotUnique");
+
+        internal static string ERR_ResourceFileNameNotUnique => ResourceManager.GetString("ERR_ResourceFileNameNotUnique");
+
+        internal static string ERR_ImportNonAssembly => ResourceManager.GetString("ERR_ImportNonAssembly");
+
+        internal static string ERR_RefLvalueExpected => ResourceManager.GetString("ERR_RefLvalueExpected");
+
+        internal static string ERR_BaseInStaticMeth => ResourceManager.GetString("ERR_BaseInStaticMeth");
+
+        internal static string ERR_BaseInBadContext => ResourceManager.GetString("ERR_BaseInBadContext");
+
+        internal static string ERR_RbraceExpected => ResourceManager.GetString("ERR_RbraceExpected");
+
+        internal static string ERR_LbraceExpected => ResourceManager.GetString("ERR_LbraceExpected");
+
+        internal static string ERR_InExpected => ResourceManager.GetString("ERR_InExpected");
+
+        internal static string ERR_InvalidPreprocExpr => ResourceManager.GetString("ERR_InvalidPreprocExpr");
+
+        internal static string ERR_InvalidMemberDecl => ResourceManager.GetString("ERR_InvalidMemberDecl");
+
+        internal static string ERR_MemberNeedsType => ResourceManager.GetString("ERR_MemberNeedsType");
+
+        internal static string ERR_BadBaseType => ResourceManager.GetString("ERR_BadBaseType");
+
+        internal static string WRN_EmptySwitch => ResourceManager.GetString("WRN_EmptySwitch");
+
+        internal static string WRN_EmptySwitch_Title => ResourceManager.GetString("WRN_EmptySwitch_Title");
+
+        internal static string ERR_ExpectedEndTry => ResourceManager.GetString("ERR_ExpectedEndTry");
+
+        internal static string ERR_InvalidExprTerm => ResourceManager.GetString("ERR_InvalidExprTerm");
+
+        internal static string ERR_BadNewExpr => ResourceManager.GetString("ERR_BadNewExpr");
+
+        internal static string ERR_NoNamespacePrivate => ResourceManager.GetString("ERR_NoNamespacePrivate");
+
+        internal static string ERR_BadVarDecl => ResourceManager.GetString("ERR_BadVarDecl");
+
+        internal static string ERR_UsingAfterElements => ResourceManager.GetString("ERR_UsingAfterElements");
+
+        internal static string ERR_BadBinOpArgs => ResourceManager.GetString("ERR_BadBinOpArgs");
+
+        internal static string ERR_BadUnOpArgs => ResourceManager.GetString("ERR_BadUnOpArgs");
+
+        internal static string ERR_NoVoidParameter => ResourceManager.GetString("ERR_NoVoidParameter");
+
+        internal static string ERR_DuplicateAlias => ResourceManager.GetString("ERR_DuplicateAlias");
+
+        internal static string ERR_BadProtectedAccess => ResourceManager.GetString("ERR_BadProtectedAccess");
+
+        internal static string ERR_AddModuleAssembly => ResourceManager.GetString("ERR_AddModuleAssembly");
+
+        internal static string ERR_BindToBogusProp2 => ResourceManager.GetString("ERR_BindToBogusProp2");
+
+        internal static string ERR_BindToBogusProp1 => ResourceManager.GetString("ERR_BindToBogusProp1");
+
+        internal static string ERR_NoVoidHere => ResourceManager.GetString("ERR_NoVoidHere");
+
+        internal static string ERR_IndexerNeedsParam => ResourceManager.GetString("ERR_IndexerNeedsParam");
+
+        internal static string ERR_BadArraySyntax => ResourceManager.GetString("ERR_BadArraySyntax");
+
+        internal static string ERR_BadOperatorSyntax => ResourceManager.GetString("ERR_BadOperatorSyntax");
+
+        internal static string ERR_MainClassNotFound => ResourceManager.GetString("ERR_MainClassNotFound");
+
+        internal static string ERR_MainClassNotClass => ResourceManager.GetString("ERR_MainClassNotClass");
+
+        internal static string ERR_NoMainInClass => ResourceManager.GetString("ERR_NoMainInClass");
+
+        internal static string ERR_MainClassIsImport => ResourceManager.GetString("ERR_MainClassIsImport");
+
+        internal static string ERR_OutputNeedsName => ResourceManager.GetString("ERR_OutputNeedsName");
+
+        internal static string ERR_NoOutputDirectory => ResourceManager.GetString("ERR_NoOutputDirectory");
+
+        internal static string ERR_CantHaveWin32ResAndManifest => ResourceManager.GetString("ERR_CantHaveWin32ResAndManifest");
+
+        internal static string ERR_CantHaveWin32ResAndIcon => ResourceManager.GetString("ERR_CantHaveWin32ResAndIcon");
+
+        internal static string ERR_CantReadResource => ResourceManager.GetString("ERR_CantReadResource");
+
+        internal static string ERR_DocFileGen => ResourceManager.GetString("ERR_DocFileGen");
+
+        internal static string WRN_XMLParseError => ResourceManager.GetString("WRN_XMLParseError");
+
+        internal static string WRN_XMLParseError_Title => ResourceManager.GetString("WRN_XMLParseError_Title");
+
+        internal static string WRN_DuplicateParamTag => ResourceManager.GetString("WRN_DuplicateParamTag");
+
+        internal static string WRN_DuplicateParamTag_Title => ResourceManager.GetString("WRN_DuplicateParamTag_Title");
+
+        internal static string WRN_UnmatchedParamTag => ResourceManager.GetString("WRN_UnmatchedParamTag");
+
+        internal static string WRN_UnmatchedParamTag_Title => ResourceManager.GetString("WRN_UnmatchedParamTag_Title");
+
+        internal static string WRN_UnmatchedParamRefTag => ResourceManager.GetString("WRN_UnmatchedParamRefTag");
+
+        internal static string WRN_UnmatchedParamRefTag_Title => ResourceManager.GetString("WRN_UnmatchedParamRefTag_Title");
+
+        internal static string WRN_MissingParamTag => ResourceManager.GetString("WRN_MissingParamTag");
+
+        internal static string WRN_MissingParamTag_Title => ResourceManager.GetString("WRN_MissingParamTag_Title");
+
+        internal static string WRN_BadXMLRef => ResourceManager.GetString("WRN_BadXMLRef");
+
+        internal static string WRN_BadXMLRef_Title => ResourceManager.GetString("WRN_BadXMLRef_Title");
+
+        internal static string ERR_BadStackAllocExpr => ResourceManager.GetString("ERR_BadStackAllocExpr");
+
+        internal static string ERR_InvalidLineNumber => ResourceManager.GetString("ERR_InvalidLineNumber");
+
+        internal static string ERR_MissingPPFile => ResourceManager.GetString("ERR_MissingPPFile");
+
+        internal static string ERR_ExpectedPPFile => ResourceManager.GetString("ERR_ExpectedPPFile");
+
+        internal static string ERR_ReferenceDirectiveOnlyAllowedInScripts => ResourceManager.GetString("ERR_ReferenceDirectiveOnlyAllowedInScripts");
+
+        internal static string ERR_ForEachMissingMember => ResourceManager.GetString("ERR_ForEachMissingMember");
+
+        internal static string ERR_AwaitForEachMissingMember => ResourceManager.GetString("ERR_AwaitForEachMissingMember");
+
+        internal static string ERR_ForEachMissingMemberWrongAsync => ResourceManager.GetString("ERR_ForEachMissingMemberWrongAsync");
+
+        internal static string ERR_AwaitForEachMissingMemberWrongAsync => ResourceManager.GetString("ERR_AwaitForEachMissingMemberWrongAsync");
+
+        internal static string ERR_PossibleAsyncIteratorWithoutYield => ResourceManager.GetString("ERR_PossibleAsyncIteratorWithoutYield");
+
+        internal static string ERR_PossibleAsyncIteratorWithoutYieldOrAwait => ResourceManager.GetString("ERR_PossibleAsyncIteratorWithoutYieldOrAwait");
+
+        internal static string ERR_StaticLocalFunctionCannotCaptureVariable => ResourceManager.GetString("ERR_StaticLocalFunctionCannotCaptureVariable");
+
+        internal static string ERR_StaticLocalFunctionCannotCaptureThis => ResourceManager.GetString("ERR_StaticLocalFunctionCannotCaptureThis");
+
+        internal static string WRN_BadXMLRefParamType => ResourceManager.GetString("WRN_BadXMLRefParamType");
+
+        internal static string WRN_BadXMLRefParamType_Title => ResourceManager.GetString("WRN_BadXMLRefParamType_Title");
+
+        internal static string WRN_BadXMLRefReturnType => ResourceManager.GetString("WRN_BadXMLRefReturnType");
+
+        internal static string WRN_BadXMLRefReturnType_Title => ResourceManager.GetString("WRN_BadXMLRefReturnType_Title");
+
+        internal static string ERR_BadWin32Res => ResourceManager.GetString("ERR_BadWin32Res");
+
+        internal static string WRN_BadXMLRefSyntax => ResourceManager.GetString("WRN_BadXMLRefSyntax");
+
+        internal static string WRN_BadXMLRefSyntax_Title => ResourceManager.GetString("WRN_BadXMLRefSyntax_Title");
+
+        internal static string ERR_BadModifierLocation => ResourceManager.GetString("ERR_BadModifierLocation");
+
+        internal static string ERR_MissingArraySize => ResourceManager.GetString("ERR_MissingArraySize");
+
+        internal static string WRN_UnprocessedXMLComment => ResourceManager.GetString("WRN_UnprocessedXMLComment");
+
+        internal static string WRN_UnprocessedXMLComment_Title => ResourceManager.GetString("WRN_UnprocessedXMLComment_Title");
+
+        internal static string WRN_FailedInclude => ResourceManager.GetString("WRN_FailedInclude");
+
+        internal static string WRN_FailedInclude_Title => ResourceManager.GetString("WRN_FailedInclude_Title");
+
+        internal static string WRN_InvalidInclude => ResourceManager.GetString("WRN_InvalidInclude");
+
+        internal static string WRN_InvalidInclude_Title => ResourceManager.GetString("WRN_InvalidInclude_Title");
+
+        internal static string WRN_MissingXMLComment => ResourceManager.GetString("WRN_MissingXMLComment");
+
+        internal static string WRN_MissingXMLComment_Title => ResourceManager.GetString("WRN_MissingXMLComment_Title");
+
+        internal static string WRN_MissingXMLComment_Description => ResourceManager.GetString("WRN_MissingXMLComment_Description");
+
+        internal static string WRN_XMLParseIncludeError => ResourceManager.GetString("WRN_XMLParseIncludeError");
+
+        internal static string WRN_XMLParseIncludeError_Title => ResourceManager.GetString("WRN_XMLParseIncludeError_Title");
+
+        internal static string ERR_BadDelArgCount => ResourceManager.GetString("ERR_BadDelArgCount");
+
+        internal static string ERR_UnexpectedSemicolon => ResourceManager.GetString("ERR_UnexpectedSemicolon");
+
+        internal static string ERR_MethodReturnCantBeRefAny => ResourceManager.GetString("ERR_MethodReturnCantBeRefAny");
+
+        internal static string ERR_CompileCancelled => ResourceManager.GetString("ERR_CompileCancelled");
+
+        internal static string ERR_MethodArgCantBeRefAny => ResourceManager.GetString("ERR_MethodArgCantBeRefAny");
+
+        internal static string ERR_AssgReadonlyLocal => ResourceManager.GetString("ERR_AssgReadonlyLocal");
+
+        internal static string ERR_RefReadonlyLocal => ResourceManager.GetString("ERR_RefReadonlyLocal");
+
+        internal static string ERR_CantUseRequiredAttribute => ResourceManager.GetString("ERR_CantUseRequiredAttribute");
+
+        internal static string ERR_NoModifiersOnAccessor => ResourceManager.GetString("ERR_NoModifiersOnAccessor");
+
+        internal static string ERR_ParamsCantBeWithModifier => ResourceManager.GetString("ERR_ParamsCantBeWithModifier");
+
+        internal static string ERR_ReturnNotLValue => ResourceManager.GetString("ERR_ReturnNotLValue");
+
+        internal static string ERR_MissingCoClass => ResourceManager.GetString("ERR_MissingCoClass");
+
+        internal static string ERR_AmbiguousAttribute => ResourceManager.GetString("ERR_AmbiguousAttribute");
+
+        internal static string ERR_BadArgExtraRef => ResourceManager.GetString("ERR_BadArgExtraRef");
+
+        internal static string WRN_CmdOptionConflictsSource => ResourceManager.GetString("WRN_CmdOptionConflictsSource");
+
+        internal static string WRN_CmdOptionConflictsSource_Title => ResourceManager.GetString("WRN_CmdOptionConflictsSource_Title");
+
+        internal static string WRN_CmdOptionConflictsSource_Description => ResourceManager.GetString("WRN_CmdOptionConflictsSource_Description");
+
+        internal static string ERR_BadCompatMode => ResourceManager.GetString("ERR_BadCompatMode");
+
+        internal static string ERR_DelegateOnConditional => ResourceManager.GetString("ERR_DelegateOnConditional");
+
+        internal static string ERR_CantMakeTempFile => ResourceManager.GetString("ERR_CantMakeTempFile");
+
+        internal static string ERR_BadArgRef => ResourceManager.GetString("ERR_BadArgRef");
+
+        internal static string ERR_YieldInAnonMeth => ResourceManager.GetString("ERR_YieldInAnonMeth");
+
+        internal static string ERR_ReturnInIterator => ResourceManager.GetString("ERR_ReturnInIterator");
+
+        internal static string ERR_BadIteratorArgType => ResourceManager.GetString("ERR_BadIteratorArgType");
+
+        internal static string ERR_BadIteratorReturn => ResourceManager.GetString("ERR_BadIteratorReturn");
+
+        internal static string ERR_BadYieldInFinally => ResourceManager.GetString("ERR_BadYieldInFinally");
+
+        internal static string ERR_IteratorMustBeAsync => ResourceManager.GetString("ERR_IteratorMustBeAsync");
+
+        internal static string ERR_BadYieldInTryOfCatch => ResourceManager.GetString("ERR_BadYieldInTryOfCatch");
+
+        internal static string ERR_EmptyYield => ResourceManager.GetString("ERR_EmptyYield");
+
+        internal static string ERR_AnonDelegateCantUse => ResourceManager.GetString("ERR_AnonDelegateCantUse");
+
+        internal static string ERR_IllegalInnerUnsafe => ResourceManager.GetString("ERR_IllegalInnerUnsafe");
+
+        internal static string ERR_BadYieldInCatch => ResourceManager.GetString("ERR_BadYieldInCatch");
+
+        internal static string ERR_BadDelegateLeave => ResourceManager.GetString("ERR_BadDelegateLeave");
+
+        internal static string ERR_IllegalSuppression => ResourceManager.GetString("ERR_IllegalSuppression");
+
+        internal static string WRN_IllegalPragma => ResourceManager.GetString("WRN_IllegalPragma");
+
+        internal static string WRN_IllegalPragma_Title => ResourceManager.GetString("WRN_IllegalPragma_Title");
+
+        internal static string WRN_IllegalPPWarning => ResourceManager.GetString("WRN_IllegalPPWarning");
+
+        internal static string WRN_IllegalPPWarning_Title => ResourceManager.GetString("WRN_IllegalPPWarning_Title");
+
+        internal static string WRN_BadRestoreNumber => ResourceManager.GetString("WRN_BadRestoreNumber");
+
+        internal static string WRN_BadRestoreNumber_Title => ResourceManager.GetString("WRN_BadRestoreNumber_Title");
+
+        internal static string ERR_VarargsIterator => ResourceManager.GetString("ERR_VarargsIterator");
+
+        internal static string ERR_UnsafeIteratorArgType => ResourceManager.GetString("ERR_UnsafeIteratorArgType");
+
+        internal static string ERR_BadCoClassSig => ResourceManager.GetString("ERR_BadCoClassSig");
+
+        internal static string ERR_MultipleIEnumOfT => ResourceManager.GetString("ERR_MultipleIEnumOfT");
+
+        internal static string ERR_MultipleIAsyncEnumOfT => ResourceManager.GetString("ERR_MultipleIAsyncEnumOfT");
+
+        internal static string ERR_FixedDimsRequired => ResourceManager.GetString("ERR_FixedDimsRequired");
+
+        internal static string ERR_FixedNotInStruct => ResourceManager.GetString("ERR_FixedNotInStruct");
+
+        internal static string ERR_AnonymousReturnExpected => ResourceManager.GetString("ERR_AnonymousReturnExpected");
+
+        internal static string WRN_NonECMAFeature => ResourceManager.GetString("WRN_NonECMAFeature");
+
+        internal static string WRN_NonECMAFeature_Title => ResourceManager.GetString("WRN_NonECMAFeature_Title");
+
+        internal static string ERR_ExpectedVerbatimLiteral => ResourceManager.GetString("ERR_ExpectedVerbatimLiteral");
+
+        internal static string ERR_RefReadonly => ResourceManager.GetString("ERR_RefReadonly");
+
+        internal static string ERR_RefReadonly2 => ResourceManager.GetString("ERR_RefReadonly2");
+
+        internal static string ERR_AssgReadonly => ResourceManager.GetString("ERR_AssgReadonly");
+
+        internal static string ERR_AssgReadonly2 => ResourceManager.GetString("ERR_AssgReadonly2");
+
+        internal static string ERR_RefReadonlyNotField => ResourceManager.GetString("ERR_RefReadonlyNotField");
+
+        internal static string ERR_RefReadonlyNotField2 => ResourceManager.GetString("ERR_RefReadonlyNotField2");
+
+        internal static string ERR_AssignReadonlyNotField => ResourceManager.GetString("ERR_AssignReadonlyNotField");
+
+        internal static string ERR_AssignReadonlyNotField2 => ResourceManager.GetString("ERR_AssignReadonlyNotField2");
+
+        internal static string ERR_RefReturnReadonlyNotField => ResourceManager.GetString("ERR_RefReturnReadonlyNotField");
+
+        internal static string ERR_RefReturnReadonlyNotField2 => ResourceManager.GetString("ERR_RefReturnReadonlyNotField2");
+
+        internal static string ERR_AssgReadonlyStatic2 => ResourceManager.GetString("ERR_AssgReadonlyStatic2");
+
+        internal static string ERR_RefReadonlyStatic2 => ResourceManager.GetString("ERR_RefReadonlyStatic2");
+
+        internal static string ERR_AssgReadonlyLocal2Cause => ResourceManager.GetString("ERR_AssgReadonlyLocal2Cause");
+
+        internal static string ERR_RefReadonlyLocal2Cause => ResourceManager.GetString("ERR_RefReadonlyLocal2Cause");
+
+        internal static string ERR_AssgReadonlyLocalCause => ResourceManager.GetString("ERR_AssgReadonlyLocalCause");
+
+        internal static string ERR_RefReadonlyLocalCause => ResourceManager.GetString("ERR_RefReadonlyLocalCause");
+
+        internal static string WRN_ErrorOverride => ResourceManager.GetString("WRN_ErrorOverride");
+
+        internal static string WRN_ErrorOverride_Title => ResourceManager.GetString("WRN_ErrorOverride_Title");
+
+        internal static string WRN_ErrorOverride_Description => ResourceManager.GetString("WRN_ErrorOverride_Description");
+
+        internal static string ERR_AnonMethToNonDel => ResourceManager.GetString("ERR_AnonMethToNonDel");
+
+        internal static string ERR_CantConvAnonMethParams => ResourceManager.GetString("ERR_CantConvAnonMethParams");
+
+        internal static string ERR_CantConvAnonMethReturns => ResourceManager.GetString("ERR_CantConvAnonMethReturns");
+
+        internal static string ERR_BadAsyncReturnExpression => ResourceManager.GetString("ERR_BadAsyncReturnExpression");
+
+        internal static string ERR_CantConvAsyncAnonFuncReturns => ResourceManager.GetString("ERR_CantConvAsyncAnonFuncReturns");
+
+        internal static string ERR_IllegalFixedType => ResourceManager.GetString("ERR_IllegalFixedType");
+
+        internal static string ERR_FixedOverflow => ResourceManager.GetString("ERR_FixedOverflow");
+
+        internal static string ERR_InvalidFixedArraySize => ResourceManager.GetString("ERR_InvalidFixedArraySize");
+
+        internal static string ERR_FixedBufferNotFixed => ResourceManager.GetString("ERR_FixedBufferNotFixed");
+
+        internal static string ERR_AttributeNotOnAccessor => ResourceManager.GetString("ERR_AttributeNotOnAccessor");
+
+        internal static string WRN_InvalidSearchPathDir => ResourceManager.GetString("WRN_InvalidSearchPathDir");
+
+        internal static string WRN_InvalidSearchPathDir_Title => ResourceManager.GetString("WRN_InvalidSearchPathDir_Title");
+
+        internal static string ERR_IllegalVarArgs => ResourceManager.GetString("ERR_IllegalVarArgs");
+
+        internal static string ERR_IllegalParams => ResourceManager.GetString("ERR_IllegalParams");
+
+        internal static string ERR_BadModifiersOnNamespace => ResourceManager.GetString("ERR_BadModifiersOnNamespace");
+
+        internal static string ERR_BadPlatformType => ResourceManager.GetString("ERR_BadPlatformType");
+
+        internal static string ERR_ThisStructNotInAnonMeth => ResourceManager.GetString("ERR_ThisStructNotInAnonMeth");
+
+        internal static string ERR_NoConvToIDisp => ResourceManager.GetString("ERR_NoConvToIDisp");
+
+        internal static string ERR_NoConvToIDispWrongAsync => ResourceManager.GetString("ERR_NoConvToIDispWrongAsync");
+
+        internal static string ERR_NoConvToIAsyncDisp => ResourceManager.GetString("ERR_NoConvToIAsyncDisp");
+
+        internal static string ERR_NoConvToIAsyncDispWrongAsync => ResourceManager.GetString("ERR_NoConvToIAsyncDispWrongAsync");
+
+        internal static string ERR_BadParamRef => ResourceManager.GetString("ERR_BadParamRef");
+
+        internal static string ERR_BadParamExtraRef => ResourceManager.GetString("ERR_BadParamExtraRef");
+
+        internal static string ERR_BadParamType => ResourceManager.GetString("ERR_BadParamType");
+
+        internal static string ERR_BadExternIdentifier => ResourceManager.GetString("ERR_BadExternIdentifier");
+
+        internal static string ERR_AliasMissingFile => ResourceManager.GetString("ERR_AliasMissingFile");
+
+        internal static string ERR_GlobalExternAlias => ResourceManager.GetString("ERR_GlobalExternAlias");
+
+        internal static string ERR_MissingTypeInSource => ResourceManager.GetString("ERR_MissingTypeInSource");
+
+        internal static string ERR_MissingTypeInAssembly => ResourceManager.GetString("ERR_MissingTypeInAssembly");
+
+        internal static string WRN_MultiplePredefTypes => ResourceManager.GetString("WRN_MultiplePredefTypes");
+
+        internal static string WRN_MultiplePredefTypes_Title => ResourceManager.GetString("WRN_MultiplePredefTypes_Title");
+
+        internal static string WRN_MultiplePredefTypes_Description => ResourceManager.GetString("WRN_MultiplePredefTypes_Description");
+
+        internal static string ERR_LocalCantBeFixedAndHoisted => ResourceManager.GetString("ERR_LocalCantBeFixedAndHoisted");
+
+        internal static string WRN_TooManyLinesForDebugger => ResourceManager.GetString("WRN_TooManyLinesForDebugger");
+
+        internal static string WRN_TooManyLinesForDebugger_Title => ResourceManager.GetString("WRN_TooManyLinesForDebugger_Title");
+
+        internal static string ERR_CantConvAnonMethNoParams => ResourceManager.GetString("ERR_CantConvAnonMethNoParams");
+
+        internal static string ERR_ConditionalOnNonAttributeClass => ResourceManager.GetString("ERR_ConditionalOnNonAttributeClass");
+
+        internal static string WRN_CallOnNonAgileField => ResourceManager.GetString("WRN_CallOnNonAgileField");
+
+        internal static string WRN_CallOnNonAgileField_Title => ResourceManager.GetString("WRN_CallOnNonAgileField_Title");
+
+        internal static string WRN_CallOnNonAgileField_Description => ResourceManager.GetString("WRN_CallOnNonAgileField_Description");
+
+        internal static string WRN_BadWarningNumber => ResourceManager.GetString("WRN_BadWarningNumber");
+
+        internal static string WRN_BadWarningNumber_Title => ResourceManager.GetString("WRN_BadWarningNumber_Title");
+
+        internal static string WRN_BadWarningNumber_Description => ResourceManager.GetString("WRN_BadWarningNumber_Description");
+
+        internal static string WRN_InvalidNumber => ResourceManager.GetString("WRN_InvalidNumber");
+
+        internal static string WRN_InvalidNumber_Title => ResourceManager.GetString("WRN_InvalidNumber_Title");
+
+        internal static string WRN_FileNameTooLong => ResourceManager.GetString("WRN_FileNameTooLong");
+
+        internal static string WRN_FileNameTooLong_Title => ResourceManager.GetString("WRN_FileNameTooLong_Title");
+
+        internal static string WRN_IllegalPPChecksum => ResourceManager.GetString("WRN_IllegalPPChecksum");
+
+        internal static string WRN_IllegalPPChecksum_Title => ResourceManager.GetString("WRN_IllegalPPChecksum_Title");
+
+        internal static string WRN_EndOfPPLineExpected => ResourceManager.GetString("WRN_EndOfPPLineExpected");
+
+        internal static string WRN_EndOfPPLineExpected_Title => ResourceManager.GetString("WRN_EndOfPPLineExpected_Title");
+
+        internal static string WRN_ConflictingChecksum => ResourceManager.GetString("WRN_ConflictingChecksum");
+
+        internal static string WRN_ConflictingChecksum_Title => ResourceManager.GetString("WRN_ConflictingChecksum_Title");
+
+        internal static string WRN_InvalidAssemblyName => ResourceManager.GetString("WRN_InvalidAssemblyName");
+
+        internal static string WRN_InvalidAssemblyName_Title => ResourceManager.GetString("WRN_InvalidAssemblyName_Title");
+
+        internal static string WRN_InvalidAssemblyName_Description => ResourceManager.GetString("WRN_InvalidAssemblyName_Description");
+
+        internal static string WRN_UnifyReferenceMajMin => ResourceManager.GetString("WRN_UnifyReferenceMajMin");
+
+        internal static string WRN_UnifyReferenceMajMin_Title => ResourceManager.GetString("WRN_UnifyReferenceMajMin_Title");
+
+        internal static string WRN_UnifyReferenceMajMin_Description => ResourceManager.GetString("WRN_UnifyReferenceMajMin_Description");
+
+        internal static string WRN_UnifyReferenceBldRev => ResourceManager.GetString("WRN_UnifyReferenceBldRev");
+
+        internal static string WRN_UnifyReferenceBldRev_Title => ResourceManager.GetString("WRN_UnifyReferenceBldRev_Title");
+
+        internal static string WRN_UnifyReferenceBldRev_Description => ResourceManager.GetString("WRN_UnifyReferenceBldRev_Description");
+
+        internal static string ERR_DuplicateImport => ResourceManager.GetString("ERR_DuplicateImport");
+
+        internal static string ERR_DuplicateImportSimple => ResourceManager.GetString("ERR_DuplicateImportSimple");
+
+        internal static string ERR_AssemblyMatchBadVersion => ResourceManager.GetString("ERR_AssemblyMatchBadVersion");
+
+        internal static string ERR_FixedNeedsLvalue => ResourceManager.GetString("ERR_FixedNeedsLvalue");
+
+        internal static string WRN_DuplicateTypeParamTag => ResourceManager.GetString("WRN_DuplicateTypeParamTag");
+
+        internal static string WRN_DuplicateTypeParamTag_Title => ResourceManager.GetString("WRN_DuplicateTypeParamTag_Title");
+
+        internal static string WRN_UnmatchedTypeParamTag => ResourceManager.GetString("WRN_UnmatchedTypeParamTag");
+
+        internal static string WRN_UnmatchedTypeParamTag_Title => ResourceManager.GetString("WRN_UnmatchedTypeParamTag_Title");
+
+        internal static string WRN_UnmatchedTypeParamRefTag => ResourceManager.GetString("WRN_UnmatchedTypeParamRefTag");
+
+        internal static string WRN_UnmatchedTypeParamRefTag_Title => ResourceManager.GetString("WRN_UnmatchedTypeParamRefTag_Title");
+
+        internal static string WRN_MissingTypeParamTag => ResourceManager.GetString("WRN_MissingTypeParamTag");
+
+        internal static string WRN_MissingTypeParamTag_Title => ResourceManager.GetString("WRN_MissingTypeParamTag_Title");
+
+        internal static string ERR_CantChangeTypeOnOverride => ResourceManager.GetString("ERR_CantChangeTypeOnOverride");
+
+        internal static string ERR_DoNotUseFixedBufferAttr => ResourceManager.GetString("ERR_DoNotUseFixedBufferAttr");
+
+        internal static string ERR_DoNotUseFixedBufferAttrOnProperty => ResourceManager.GetString("ERR_DoNotUseFixedBufferAttrOnProperty");
+
+        internal static string WRN_AssignmentToSelf => ResourceManager.GetString("WRN_AssignmentToSelf");
+
+        internal static string WRN_AssignmentToSelf_Title => ResourceManager.GetString("WRN_AssignmentToSelf_Title");
+
+        internal static string WRN_ComparisonToSelf => ResourceManager.GetString("WRN_ComparisonToSelf");
+
+        internal static string WRN_ComparisonToSelf_Title => ResourceManager.GetString("WRN_ComparisonToSelf_Title");
+
+        internal static string ERR_CantOpenWin32Res => ResourceManager.GetString("ERR_CantOpenWin32Res");
+
+        internal static string WRN_DotOnDefault => ResourceManager.GetString("WRN_DotOnDefault");
+
+        internal static string WRN_DotOnDefault_Title => ResourceManager.GetString("WRN_DotOnDefault_Title");
+
+        internal static string ERR_NoMultipleInheritance => ResourceManager.GetString("ERR_NoMultipleInheritance");
+
+        internal static string ERR_BaseClassMustBeFirst => ResourceManager.GetString("ERR_BaseClassMustBeFirst");
+
+        internal static string WRN_BadXMLRefTypeVar => ResourceManager.GetString("WRN_BadXMLRefTypeVar");
+
+        internal static string WRN_BadXMLRefTypeVar_Title => ResourceManager.GetString("WRN_BadXMLRefTypeVar_Title");
+
+        internal static string ERR_FriendAssemblyBadArgs => ResourceManager.GetString("ERR_FriendAssemblyBadArgs");
+
+        internal static string ERR_FriendAssemblySNReq => ResourceManager.GetString("ERR_FriendAssemblySNReq");
+
+        internal static string ERR_DelegateOnNullable => ResourceManager.GetString("ERR_DelegateOnNullable");
+
+        internal static string ERR_BadCtorArgCount => ResourceManager.GetString("ERR_BadCtorArgCount");
+
+        internal static string ERR_GlobalAttributesNotFirst => ResourceManager.GetString("ERR_GlobalAttributesNotFirst");
+
+        internal static string ERR_ExpressionExpected => ResourceManager.GetString("ERR_ExpressionExpected");
+
+        internal static string ERR_InvalidSubsystemVersion => ResourceManager.GetString("ERR_InvalidSubsystemVersion");
+
+        internal static string ERR_InteropMethodWithBody => ResourceManager.GetString("ERR_InteropMethodWithBody");
+
+        internal static string ERR_BadWarningLevel => ResourceManager.GetString("ERR_BadWarningLevel");
+
+        internal static string ERR_BadDebugType => ResourceManager.GetString("ERR_BadDebugType");
+
+        internal static string ERR_BadResourceVis => ResourceManager.GetString("ERR_BadResourceVis");
+
+        internal static string ERR_DefaultValueTypeMustMatch => ResourceManager.GetString("ERR_DefaultValueTypeMustMatch");
+
+        internal static string ERR_DefaultValueBadValueType => ResourceManager.GetString("ERR_DefaultValueBadValueType");
+
+        internal static string ERR_MemberAlreadyInitialized => ResourceManager.GetString("ERR_MemberAlreadyInitialized");
+
+        internal static string ERR_MemberCannotBeInitialized => ResourceManager.GetString("ERR_MemberCannotBeInitialized");
+
+        internal static string ERR_StaticMemberInObjectInitializer => ResourceManager.GetString("ERR_StaticMemberInObjectInitializer");
+
+        internal static string ERR_ReadonlyValueTypeInObjectInitializer => ResourceManager.GetString("ERR_ReadonlyValueTypeInObjectInitializer");
+
+        internal static string ERR_ValueTypePropertyInObjectInitializer => ResourceManager.GetString("ERR_ValueTypePropertyInObjectInitializer");
+
+        internal static string ERR_UnsafeTypeInObjectCreation => ResourceManager.GetString("ERR_UnsafeTypeInObjectCreation");
+
+        internal static string ERR_EmptyElementInitializer => ResourceManager.GetString("ERR_EmptyElementInitializer");
+
+        internal static string ERR_InitializerAddHasWrongSignature => ResourceManager.GetString("ERR_InitializerAddHasWrongSignature");
+
+        internal static string ERR_CollectionInitRequiresIEnumerable => ResourceManager.GetString("ERR_CollectionInitRequiresIEnumerable");
+
+        internal static string ERR_CantSetWin32Manifest => ResourceManager.GetString("ERR_CantSetWin32Manifest");
+
+        internal static string WRN_CantHaveManifestForModule => ResourceManager.GetString("WRN_CantHaveManifestForModule");
+
+        internal static string WRN_CantHaveManifestForModule_Title => ResourceManager.GetString("WRN_CantHaveManifestForModule_Title");
+
+        internal static string ERR_BadInstanceArgType => ResourceManager.GetString("ERR_BadInstanceArgType");
+
+        internal static string ERR_QueryDuplicateRangeVariable => ResourceManager.GetString("ERR_QueryDuplicateRangeVariable");
+
+        internal static string ERR_QueryRangeVariableOverrides => ResourceManager.GetString("ERR_QueryRangeVariableOverrides");
+
+        internal static string ERR_QueryRangeVariableAssignedBadValue => ResourceManager.GetString("ERR_QueryRangeVariableAssignedBadValue");
+
+        internal static string ERR_QueryNoProviderCastable => ResourceManager.GetString("ERR_QueryNoProviderCastable");
+
+        internal static string ERR_QueryNoProviderStandard => ResourceManager.GetString("ERR_QueryNoProviderStandard");
+
+        internal static string ERR_QueryNoProvider => ResourceManager.GetString("ERR_QueryNoProvider");
+
+        internal static string ERR_QueryOuterKey => ResourceManager.GetString("ERR_QueryOuterKey");
+
+        internal static string ERR_QueryInnerKey => ResourceManager.GetString("ERR_QueryInnerKey");
+
+        internal static string ERR_QueryOutRefRangeVariable => ResourceManager.GetString("ERR_QueryOutRefRangeVariable");
+
+        internal static string ERR_QueryMultipleProviders => ResourceManager.GetString("ERR_QueryMultipleProviders");
+
+        internal static string ERR_QueryTypeInferenceFailedMulti => ResourceManager.GetString("ERR_QueryTypeInferenceFailedMulti");
+
+        internal static string ERR_QueryTypeInferenceFailed => ResourceManager.GetString("ERR_QueryTypeInferenceFailed");
+
+        internal static string ERR_QueryTypeInferenceFailedSelectMany => ResourceManager.GetString("ERR_QueryTypeInferenceFailedSelectMany");
+
+        internal static string ERR_ExpressionTreeContainsPointerOp => ResourceManager.GetString("ERR_ExpressionTreeContainsPointerOp");
+
+        internal static string ERR_ExpressionTreeContainsAnonymousMethod => ResourceManager.GetString("ERR_ExpressionTreeContainsAnonymousMethod");
+
+        internal static string ERR_AnonymousMethodToExpressionTree => ResourceManager.GetString("ERR_AnonymousMethodToExpressionTree");
+
+        internal static string ERR_QueryRangeVariableReadOnly => ResourceManager.GetString("ERR_QueryRangeVariableReadOnly");
+
+        internal static string ERR_QueryRangeVariableSameAsTypeParam => ResourceManager.GetString("ERR_QueryRangeVariableSameAsTypeParam");
+
+        internal static string ERR_TypeVarNotFoundRangeVariable => ResourceManager.GetString("ERR_TypeVarNotFoundRangeVariable");
+
+        internal static string ERR_BadArgTypesForCollectionAdd => ResourceManager.GetString("ERR_BadArgTypesForCollectionAdd");
+
+        internal static string ERR_ByRefParameterInExpressionTree => ResourceManager.GetString("ERR_ByRefParameterInExpressionTree");
+
+        internal static string ERR_VarArgsInExpressionTree => ResourceManager.GetString("ERR_VarArgsInExpressionTree");
+
+        internal static string ERR_MemGroupInExpressionTree => ResourceManager.GetString("ERR_MemGroupInExpressionTree");
+
+        internal static string ERR_InitializerAddHasParamModifiers => ResourceManager.GetString("ERR_InitializerAddHasParamModifiers");
+
+        internal static string ERR_NonInvocableMemberCalled => ResourceManager.GetString("ERR_NonInvocableMemberCalled");
+
+        internal static string WRN_MultipleRuntimeImplementationMatches => ResourceManager.GetString("WRN_MultipleRuntimeImplementationMatches");
+
+        internal static string WRN_MultipleRuntimeImplementationMatches_Title => ResourceManager.GetString("WRN_MultipleRuntimeImplementationMatches_Title");
+
+        internal static string WRN_MultipleRuntimeImplementationMatches_Description => ResourceManager.GetString("WRN_MultipleRuntimeImplementationMatches_Description");
+
+        internal static string WRN_MultipleRuntimeOverrideMatches => ResourceManager.GetString("WRN_MultipleRuntimeOverrideMatches");
+
+        internal static string WRN_MultipleRuntimeOverrideMatches_Title => ResourceManager.GetString("WRN_MultipleRuntimeOverrideMatches_Title");
+
+        internal static string ERR_ObjectOrCollectionInitializerWithDelegateCreation => ResourceManager.GetString("ERR_ObjectOrCollectionInitializerWithDelegateCreation");
+
+        internal static string ERR_InvalidConstantDeclarationType => ResourceManager.GetString("ERR_InvalidConstantDeclarationType");
+
+        internal static string ERR_FileNotFound => ResourceManager.GetString("ERR_FileNotFound");
+
+        internal static string WRN_FileAlreadyIncluded => ResourceManager.GetString("WRN_FileAlreadyIncluded");
+
+        internal static string WRN_FileAlreadyIncluded_Title => ResourceManager.GetString("WRN_FileAlreadyIncluded_Title");
+
+        internal static string ERR_NoFileSpec => ResourceManager.GetString("ERR_NoFileSpec");
+
+        internal static string ERR_SwitchNeedsString => ResourceManager.GetString("ERR_SwitchNeedsString");
+
+        internal static string ERR_BadSwitch => ResourceManager.GetString("ERR_BadSwitch");
+
+        internal static string WRN_NoSources => ResourceManager.GetString("WRN_NoSources");
+
+        internal static string WRN_NoSources_Title => ResourceManager.GetString("WRN_NoSources_Title");
+
+        internal static string ERR_ExpectedSingleScript => ResourceManager.GetString("ERR_ExpectedSingleScript");
+
+        internal static string ERR_OpenResponseFile => ResourceManager.GetString("ERR_OpenResponseFile");
+
+        internal static string ERR_CantOpenFileWrite => ResourceManager.GetString("ERR_CantOpenFileWrite");
+
+        internal static string ERR_BadBaseNumber => ResourceManager.GetString("ERR_BadBaseNumber");
+
+        internal static string ERR_BinaryFile => ResourceManager.GetString("ERR_BinaryFile");
+
+        internal static string FTL_BadCodepage => ResourceManager.GetString("FTL_BadCodepage");
+
+        internal static string FTL_BadChecksumAlgorithm => ResourceManager.GetString("FTL_BadChecksumAlgorithm");
+
+        internal static string ERR_NoMainOnDLL => ResourceManager.GetString("ERR_NoMainOnDLL");
+
+        internal static string FTL_InvalidTarget => ResourceManager.GetString("FTL_InvalidTarget");
+
+        internal static string FTL_InvalidInputFileName => ResourceManager.GetString("FTL_InvalidInputFileName");
+
+        internal static string WRN_NoConfigNotOnCommandLine => ResourceManager.GetString("WRN_NoConfigNotOnCommandLine");
+
+        internal static string WRN_NoConfigNotOnCommandLine_Title => ResourceManager.GetString("WRN_NoConfigNotOnCommandLine_Title");
+
+        internal static string ERR_InvalidFileAlignment => ResourceManager.GetString("ERR_InvalidFileAlignment");
+
+        internal static string ERR_InvalidOutputName => ResourceManager.GetString("ERR_InvalidOutputName");
+
+        internal static string ERR_InvalidDebugInformationFormat => ResourceManager.GetString("ERR_InvalidDebugInformationFormat");
+
+        internal static string ERR_LegacyObjectIdSyntax => ResourceManager.GetString("ERR_LegacyObjectIdSyntax");
+
+        internal static string WRN_DefineIdentifierRequired => ResourceManager.GetString("WRN_DefineIdentifierRequired");
+
+        internal static string WRN_DefineIdentifierRequired_Title => ResourceManager.GetString("WRN_DefineIdentifierRequired_Title");
+
+        internal static string FTL_OutputFileExists => ResourceManager.GetString("FTL_OutputFileExists");
+
+        internal static string ERR_OneAliasPerReference => ResourceManager.GetString("ERR_OneAliasPerReference");
+
+        internal static string ERR_SwitchNeedsNumber => ResourceManager.GetString("ERR_SwitchNeedsNumber");
+
+        internal static string ERR_MissingDebugSwitch => ResourceManager.GetString("ERR_MissingDebugSwitch");
+
+        internal static string ERR_ComRefCallInExpressionTree => ResourceManager.GetString("ERR_ComRefCallInExpressionTree");
+
+        internal static string ERR_InvalidFormatForGuidForOption => ResourceManager.GetString("ERR_InvalidFormatForGuidForOption");
+
+        internal static string ERR_MissingGuidForOption => ResourceManager.GetString("ERR_MissingGuidForOption");
+
+        internal static string WRN_CLS_NoVarArgs => ResourceManager.GetString("WRN_CLS_NoVarArgs");
+
+        internal static string WRN_CLS_NoVarArgs_Title => ResourceManager.GetString("WRN_CLS_NoVarArgs_Title");
+
+        internal static string WRN_CLS_BadArgType => ResourceManager.GetString("WRN_CLS_BadArgType");
+
+        internal static string WRN_CLS_BadArgType_Title => ResourceManager.GetString("WRN_CLS_BadArgType_Title");
+
+        internal static string WRN_CLS_BadReturnType => ResourceManager.GetString("WRN_CLS_BadReturnType");
+
+        internal static string WRN_CLS_BadReturnType_Title => ResourceManager.GetString("WRN_CLS_BadReturnType_Title");
+
+        internal static string WRN_CLS_BadFieldPropType => ResourceManager.GetString("WRN_CLS_BadFieldPropType");
+
+        internal static string WRN_CLS_BadFieldPropType_Title => ResourceManager.GetString("WRN_CLS_BadFieldPropType_Title");
+
+        internal static string WRN_CLS_BadFieldPropType_Description => ResourceManager.GetString("WRN_CLS_BadFieldPropType_Description");
+
+        internal static string WRN_CLS_BadIdentifierCase => ResourceManager.GetString("WRN_CLS_BadIdentifierCase");
+
+        internal static string WRN_CLS_BadIdentifierCase_Title => ResourceManager.GetString("WRN_CLS_BadIdentifierCase_Title");
+
+        internal static string WRN_CLS_OverloadRefOut => ResourceManager.GetString("WRN_CLS_OverloadRefOut");
+
+        internal static string WRN_CLS_OverloadRefOut_Title => ResourceManager.GetString("WRN_CLS_OverloadRefOut_Title");
+
+        internal static string WRN_CLS_OverloadUnnamed => ResourceManager.GetString("WRN_CLS_OverloadUnnamed");
+
+        internal static string WRN_CLS_OverloadUnnamed_Title => ResourceManager.GetString("WRN_CLS_OverloadUnnamed_Title");
+
+        internal static string WRN_CLS_OverloadUnnamed_Description => ResourceManager.GetString("WRN_CLS_OverloadUnnamed_Description");
+
+        internal static string WRN_CLS_BadIdentifier => ResourceManager.GetString("WRN_CLS_BadIdentifier");
+
+        internal static string WRN_CLS_BadIdentifier_Title => ResourceManager.GetString("WRN_CLS_BadIdentifier_Title");
+
+        internal static string WRN_CLS_BadBase => ResourceManager.GetString("WRN_CLS_BadBase");
+
+        internal static string WRN_CLS_BadBase_Title => ResourceManager.GetString("WRN_CLS_BadBase_Title");
+
+        internal static string WRN_CLS_BadBase_Description => ResourceManager.GetString("WRN_CLS_BadBase_Description");
+
+        internal static string WRN_CLS_BadInterfaceMember => ResourceManager.GetString("WRN_CLS_BadInterfaceMember");
+
+        internal static string WRN_CLS_BadInterfaceMember_Title => ResourceManager.GetString("WRN_CLS_BadInterfaceMember_Title");
+
+        internal static string WRN_CLS_NoAbstractMembers => ResourceManager.GetString("WRN_CLS_NoAbstractMembers");
+
+        internal static string WRN_CLS_NoAbstractMembers_Title => ResourceManager.GetString("WRN_CLS_NoAbstractMembers_Title");
+
+        internal static string WRN_CLS_NotOnModules => ResourceManager.GetString("WRN_CLS_NotOnModules");
+
+        internal static string WRN_CLS_NotOnModules_Title => ResourceManager.GetString("WRN_CLS_NotOnModules_Title");
+
+        internal static string WRN_CLS_ModuleMissingCLS => ResourceManager.GetString("WRN_CLS_ModuleMissingCLS");
+
+        internal static string WRN_CLS_ModuleMissingCLS_Title => ResourceManager.GetString("WRN_CLS_ModuleMissingCLS_Title");
+
+        internal static string WRN_CLS_AssemblyNotCLS => ResourceManager.GetString("WRN_CLS_AssemblyNotCLS");
+
+        internal static string WRN_CLS_AssemblyNotCLS_Title => ResourceManager.GetString("WRN_CLS_AssemblyNotCLS_Title");
+
+        internal static string WRN_CLS_BadAttributeType => ResourceManager.GetString("WRN_CLS_BadAttributeType");
+
+        internal static string WRN_CLS_BadAttributeType_Title => ResourceManager.GetString("WRN_CLS_BadAttributeType_Title");
+
+        internal static string WRN_CLS_ArrayArgumentToAttribute => ResourceManager.GetString("WRN_CLS_ArrayArgumentToAttribute");
+
+        internal static string WRN_CLS_ArrayArgumentToAttribute_Title => ResourceManager.GetString("WRN_CLS_ArrayArgumentToAttribute_Title");
+
+        internal static string WRN_CLS_NotOnModules2 => ResourceManager.GetString("WRN_CLS_NotOnModules2");
+
+        internal static string WRN_CLS_NotOnModules2_Title => ResourceManager.GetString("WRN_CLS_NotOnModules2_Title");
+
+        internal static string WRN_CLS_IllegalTrueInFalse => ResourceManager.GetString("WRN_CLS_IllegalTrueInFalse");
+
+        internal static string WRN_CLS_IllegalTrueInFalse_Title => ResourceManager.GetString("WRN_CLS_IllegalTrueInFalse_Title");
+
+        internal static string WRN_CLS_MeaninglessOnPrivateType => ResourceManager.GetString("WRN_CLS_MeaninglessOnPrivateType");
+
+        internal static string WRN_CLS_MeaninglessOnPrivateType_Title => ResourceManager.GetString("WRN_CLS_MeaninglessOnPrivateType_Title");
+
+        internal static string WRN_CLS_AssemblyNotCLS2 => ResourceManager.GetString("WRN_CLS_AssemblyNotCLS2");
+
+        internal static string WRN_CLS_AssemblyNotCLS2_Title => ResourceManager.GetString("WRN_CLS_AssemblyNotCLS2_Title");
+
+        internal static string WRN_CLS_MeaninglessOnParam => ResourceManager.GetString("WRN_CLS_MeaninglessOnParam");
+
+        internal static string WRN_CLS_MeaninglessOnParam_Title => ResourceManager.GetString("WRN_CLS_MeaninglessOnParam_Title");
+
+        internal static string WRN_CLS_MeaninglessOnReturn => ResourceManager.GetString("WRN_CLS_MeaninglessOnReturn");
+
+        internal static string WRN_CLS_MeaninglessOnReturn_Title => ResourceManager.GetString("WRN_CLS_MeaninglessOnReturn_Title");
+
+        internal static string WRN_CLS_BadTypeVar => ResourceManager.GetString("WRN_CLS_BadTypeVar");
+
+        internal static string WRN_CLS_BadTypeVar_Title => ResourceManager.GetString("WRN_CLS_BadTypeVar_Title");
+
+        internal static string WRN_CLS_VolatileField => ResourceManager.GetString("WRN_CLS_VolatileField");
+
+        internal static string WRN_CLS_VolatileField_Title => ResourceManager.GetString("WRN_CLS_VolatileField_Title");
+
+        internal static string WRN_CLS_BadInterface => ResourceManager.GetString("WRN_CLS_BadInterface");
+
+        internal static string WRN_CLS_BadInterface_Title => ResourceManager.GetString("WRN_CLS_BadInterface_Title");
+
+        internal static string ERR_BadAwaitArg => ResourceManager.GetString("ERR_BadAwaitArg");
+
+        internal static string ERR_BadAwaitArgIntrinsic => ResourceManager.GetString("ERR_BadAwaitArgIntrinsic");
+
+        internal static string ERR_BadAwaiterPattern => ResourceManager.GetString("ERR_BadAwaiterPattern");
+
+        internal static string ERR_BadAwaitArg_NeedSystem => ResourceManager.GetString("ERR_BadAwaitArg_NeedSystem");
+
+        internal static string ERR_BadAwaitArgVoidCall => ResourceManager.GetString("ERR_BadAwaitArgVoidCall");
+
+        internal static string ERR_BadAwaitAsIdentifier => ResourceManager.GetString("ERR_BadAwaitAsIdentifier");
+
+        internal static string ERR_DoesntImplementAwaitInterface => ResourceManager.GetString("ERR_DoesntImplementAwaitInterface");
+
+        internal static string ERR_TaskRetNoObjectRequired => ResourceManager.GetString("ERR_TaskRetNoObjectRequired");
+
+        internal static string ERR_BadAsyncReturn => ResourceManager.GetString("ERR_BadAsyncReturn");
+
+        internal static string ERR_CantReturnVoid => ResourceManager.GetString("ERR_CantReturnVoid");
+
+        internal static string ERR_VarargsAsync => ResourceManager.GetString("ERR_VarargsAsync");
+
+        internal static string ERR_ByRefTypeAndAwait => ResourceManager.GetString("ERR_ByRefTypeAndAwait");
+
+        internal static string ERR_UnsafeAsyncArgType => ResourceManager.GetString("ERR_UnsafeAsyncArgType");
+
+        internal static string ERR_BadAsyncArgType => ResourceManager.GetString("ERR_BadAsyncArgType");
+
+        internal static string ERR_BadAwaitWithoutAsync => ResourceManager.GetString("ERR_BadAwaitWithoutAsync");
+
+        internal static string ERR_BadAwaitWithoutAsyncLambda => ResourceManager.GetString("ERR_BadAwaitWithoutAsyncLambda");
+
+        internal static string ERR_BadAwaitWithoutAsyncMethod => ResourceManager.GetString("ERR_BadAwaitWithoutAsyncMethod");
+
+        internal static string ERR_BadAwaitWithoutVoidAsyncMethod => ResourceManager.GetString("ERR_BadAwaitWithoutVoidAsyncMethod");
+
+        internal static string ERR_BadAwaitInFinally => ResourceManager.GetString("ERR_BadAwaitInFinally");
+
+        internal static string ERR_BadAwaitInCatch => ResourceManager.GetString("ERR_BadAwaitInCatch");
+
+        internal static string ERR_BadAwaitInCatchFilter => ResourceManager.GetString("ERR_BadAwaitInCatchFilter");
+
+        internal static string ERR_BadAwaitInLock => ResourceManager.GetString("ERR_BadAwaitInLock");
+
+        internal static string ERR_BadAwaitInStaticVariableInitializer => ResourceManager.GetString("ERR_BadAwaitInStaticVariableInitializer");
+
+        internal static string ERR_AwaitInUnsafeContext => ResourceManager.GetString("ERR_AwaitInUnsafeContext");
+
+        internal static string ERR_BadAsyncLacksBody => ResourceManager.GetString("ERR_BadAsyncLacksBody");
+
+        internal static string ERR_BadSpecialByRefLocal => ResourceManager.GetString("ERR_BadSpecialByRefLocal");
+
+        internal static string ERR_BadSpecialByRefIterator => ResourceManager.GetString("ERR_BadSpecialByRefIterator");
+
+        internal static string ERR_SecurityCriticalOrSecuritySafeCriticalOnAsync => ResourceManager.GetString("ERR_SecurityCriticalOrSecuritySafeCriticalOnAsync");
+
+        internal static string ERR_SecurityCriticalOrSecuritySafeCriticalOnAsyncInClassOrStruct => ResourceManager.GetString("ERR_SecurityCriticalOrSecuritySafeCriticalOnAsyncInClassOrStruct");
+
+        internal static string ERR_BadAwaitInQuery => ResourceManager.GetString("ERR_BadAwaitInQuery");
+
+        internal static string WRN_AsyncLacksAwaits => ResourceManager.GetString("WRN_AsyncLacksAwaits");
+
+        internal static string WRN_AsyncLacksAwaits_Title => ResourceManager.GetString("WRN_AsyncLacksAwaits_Title");
+
+        internal static string WRN_UnobservedAwaitableExpression => ResourceManager.GetString("WRN_UnobservedAwaitableExpression");
+
+        internal static string WRN_UnobservedAwaitableExpression_Title => ResourceManager.GetString("WRN_UnobservedAwaitableExpression_Title");
+
+        internal static string WRN_UnobservedAwaitableExpression_Description => ResourceManager.GetString("WRN_UnobservedAwaitableExpression_Description");
+
+        internal static string ERR_SynchronizedAsyncMethod => ResourceManager.GetString("ERR_SynchronizedAsyncMethod");
+
+        internal static string ERR_NoConversionForCallerLineNumberParam => ResourceManager.GetString("ERR_NoConversionForCallerLineNumberParam");
+
+        internal static string ERR_NoConversionForCallerFilePathParam => ResourceManager.GetString("ERR_NoConversionForCallerFilePathParam");
+
+        internal static string ERR_NoConversionForCallerMemberNameParam => ResourceManager.GetString("ERR_NoConversionForCallerMemberNameParam");
+
+        internal static string ERR_BadCallerLineNumberParamWithoutDefaultValue => ResourceManager.GetString("ERR_BadCallerLineNumberParamWithoutDefaultValue");
+
+        internal static string ERR_BadCallerFilePathParamWithoutDefaultValue => ResourceManager.GetString("ERR_BadCallerFilePathParamWithoutDefaultValue");
+
+        internal static string ERR_BadCallerMemberNameParamWithoutDefaultValue => ResourceManager.GetString("ERR_BadCallerMemberNameParamWithoutDefaultValue");
+
+        internal static string WRN_CallerLineNumberParamForUnconsumedLocation => ResourceManager.GetString("WRN_CallerLineNumberParamForUnconsumedLocation");
+
+        internal static string WRN_CallerLineNumberParamForUnconsumedLocation_Title => ResourceManager.GetString("WRN_CallerLineNumberParamForUnconsumedLocation_Title");
+
+        internal static string WRN_CallerFilePathParamForUnconsumedLocation => ResourceManager.GetString("WRN_CallerFilePathParamForUnconsumedLocation");
+
+        internal static string WRN_CallerFilePathParamForUnconsumedLocation_Title => ResourceManager.GetString("WRN_CallerFilePathParamForUnconsumedLocation_Title");
+
+        internal static string WRN_CallerMemberNameParamForUnconsumedLocation => ResourceManager.GetString("WRN_CallerMemberNameParamForUnconsumedLocation");
+
+        internal static string WRN_CallerMemberNameParamForUnconsumedLocation_Title => ResourceManager.GetString("WRN_CallerMemberNameParamForUnconsumedLocation_Title");
+
+        internal static string ERR_NoEntryPoint => ResourceManager.GetString("ERR_NoEntryPoint");
+
+        internal static string ERR_ArrayInitializerIncorrectLength => ResourceManager.GetString("ERR_ArrayInitializerIncorrectLength");
+
+        internal static string ERR_ArrayInitializerExpected => ResourceManager.GetString("ERR_ArrayInitializerExpected");
+
+        internal static string ERR_IllegalVarianceSyntax => ResourceManager.GetString("ERR_IllegalVarianceSyntax");
+
+        internal static string ERR_UnexpectedAliasedName => ResourceManager.GetString("ERR_UnexpectedAliasedName");
+
+        internal static string ERR_UnexpectedGenericName => ResourceManager.GetString("ERR_UnexpectedGenericName");
+
+        internal static string ERR_UnexpectedUnboundGenericName => ResourceManager.GetString("ERR_UnexpectedUnboundGenericName");
+
+        internal static string ERR_GlobalStatement => ResourceManager.GetString("ERR_GlobalStatement");
+
+        internal static string ERR_NamedArgumentForArray => ResourceManager.GetString("ERR_NamedArgumentForArray");
+
+        internal static string ERR_NotYetImplementedInRoslyn => ResourceManager.GetString("ERR_NotYetImplementedInRoslyn");
+
+        internal static string ERR_DefaultValueNotAllowed => ResourceManager.GetString("ERR_DefaultValueNotAllowed");
+
+        internal static string ERR_CantOpenIcon => ResourceManager.GetString("ERR_CantOpenIcon");
+
+        internal static string ERR_CantOpenWin32Manifest => ResourceManager.GetString("ERR_CantOpenWin32Manifest");
+
+        internal static string ERR_ErrorBuildingWin32Resources => ResourceManager.GetString("ERR_ErrorBuildingWin32Resources");
+
+        internal static string ERR_DefaultValueBeforeRequiredValue => ResourceManager.GetString("ERR_DefaultValueBeforeRequiredValue");
+
+        internal static string ERR_ExplicitImplCollisionOnRefOut => ResourceManager.GetString("ERR_ExplicitImplCollisionOnRefOut");
+
+        internal static string ERR_PartialWrongTypeParamsVariance => ResourceManager.GetString("ERR_PartialWrongTypeParamsVariance");
+
+        internal static string ERR_UnexpectedVariance => ResourceManager.GetString("ERR_UnexpectedVariance");
+
+        internal static string ERR_UnexpectedVarianceStaticMember => ResourceManager.GetString("ERR_UnexpectedVarianceStaticMember");
+
+        internal static string ERR_DeriveFromDynamic => ResourceManager.GetString("ERR_DeriveFromDynamic");
+
+        internal static string ERR_DeriveFromConstructedDynamic => ResourceManager.GetString("ERR_DeriveFromConstructedDynamic");
+
+        internal static string ERR_DynamicTypeAsBound => ResourceManager.GetString("ERR_DynamicTypeAsBound");
+
+        internal static string ERR_ConstructedDynamicTypeAsBound => ResourceManager.GetString("ERR_ConstructedDynamicTypeAsBound");
+
+        internal static string ERR_DynamicRequiredTypesMissing => ResourceManager.GetString("ERR_DynamicRequiredTypesMissing");
+
+        internal static string ERR_MetadataNameTooLong => ResourceManager.GetString("ERR_MetadataNameTooLong");
+
+        internal static string ERR_AttributesNotAllowed => ResourceManager.GetString("ERR_AttributesNotAllowed");
+
+        internal static string ERR_AttributesRequireParenthesizedLambdaExpression => ResourceManager.GetString("ERR_AttributesRequireParenthesizedLambdaExpression");
+
+        internal static string ERR_ExternAliasNotAllowed => ResourceManager.GetString("ERR_ExternAliasNotAllowed");
+
+        internal static string WRN_IsDynamicIsConfusing => ResourceManager.GetString("WRN_IsDynamicIsConfusing");
+
+        internal static string WRN_IsDynamicIsConfusing_Title => ResourceManager.GetString("WRN_IsDynamicIsConfusing_Title");
+
+        internal static string ERR_YieldNotAllowedInScript => ResourceManager.GetString("ERR_YieldNotAllowedInScript");
+
+        internal static string ERR_NamespaceNotAllowedInScript => ResourceManager.GetString("ERR_NamespaceNotAllowedInScript");
+
+        internal static string ERR_GlobalAttributesNotAllowed => ResourceManager.GetString("ERR_GlobalAttributesNotAllowed");
+
+        internal static string ERR_InvalidDelegateType => ResourceManager.GetString("ERR_InvalidDelegateType");
+
+        internal static string WRN_MainIgnored => ResourceManager.GetString("WRN_MainIgnored");
+
+        internal static string WRN_MainIgnored_Title => ResourceManager.GetString("WRN_MainIgnored_Title");
+
+        internal static string WRN_StaticInAsOrIs => ResourceManager.GetString("WRN_StaticInAsOrIs");
+
+        internal static string WRN_StaticInAsOrIs_Title => ResourceManager.GetString("WRN_StaticInAsOrIs_Title");
+
+        internal static string ERR_BadVisEventType => ResourceManager.GetString("ERR_BadVisEventType");
+
+        internal static string ERR_NamedArgumentSpecificationBeforeFixedArgument => ResourceManager.GetString("ERR_NamedArgumentSpecificationBeforeFixedArgument");
+
+        internal static string ERR_NamedArgumentSpecificationBeforeFixedArgumentInDynamicInvocation => ResourceManager.GetString("ERR_NamedArgumentSpecificationBeforeFixedArgumentInDynamicInvocation");
+
+        internal static string ERR_BadNamedArgument => ResourceManager.GetString("ERR_BadNamedArgument");
+
+        internal static string ERR_BadNamedArgumentForDelegateInvoke => ResourceManager.GetString("ERR_BadNamedArgumentForDelegateInvoke");
+
+        internal static string ERR_DuplicateNamedArgument => ResourceManager.GetString("ERR_DuplicateNamedArgument");
+
+        internal static string ERR_NamedArgumentUsedInPositional => ResourceManager.GetString("ERR_NamedArgumentUsedInPositional");
+
+        internal static string ERR_BadNonTrailingNamedArgument => ResourceManager.GetString("ERR_BadNonTrailingNamedArgument");
+
+        internal static string ERR_DefaultValueUsedWithAttributes => ResourceManager.GetString("ERR_DefaultValueUsedWithAttributes");
+
+        internal static string ERR_DefaultValueMustBeConstant => ResourceManager.GetString("ERR_DefaultValueMustBeConstant");
+
+        internal static string ERR_RefOutDefaultValue => ResourceManager.GetString("ERR_RefOutDefaultValue");
+
+        internal static string ERR_DefaultValueForExtensionParameter => ResourceManager.GetString("ERR_DefaultValueForExtensionParameter");
+
+        internal static string ERR_DefaultValueForParamsParameter => ResourceManager.GetString("ERR_DefaultValueForParamsParameter");
+
+        internal static string ERR_NoConversionForDefaultParam => ResourceManager.GetString("ERR_NoConversionForDefaultParam");
+
+        internal static string ERR_NoConversionForNubDefaultParam => ResourceManager.GetString("ERR_NoConversionForNubDefaultParam");
+
+        internal static string ERR_NotNullRefDefaultParameter => ResourceManager.GetString("ERR_NotNullRefDefaultParameter");
+
+        internal static string WRN_DefaultValueForUnconsumedLocation => ResourceManager.GetString("WRN_DefaultValueForUnconsumedLocation");
+
+        internal static string WRN_DefaultValueForUnconsumedLocation_Title => ResourceManager.GetString("WRN_DefaultValueForUnconsumedLocation_Title");
+
+        internal static string ERR_PublicKeyFileFailure => ResourceManager.GetString("ERR_PublicKeyFileFailure");
+
+        internal static string ERR_PublicKeyContainerFailure => ResourceManager.GetString("ERR_PublicKeyContainerFailure");
+
+        internal static string ERR_BadDynamicTypeof => ResourceManager.GetString("ERR_BadDynamicTypeof");
+
+        internal static string ERR_BadNullableTypeof => ResourceManager.GetString("ERR_BadNullableTypeof");
+
+        internal static string ERR_ExpressionTreeContainsDynamicOperation => ResourceManager.GetString("ERR_ExpressionTreeContainsDynamicOperation");
+
+        internal static string ERR_BadAsyncExpressionTree => ResourceManager.GetString("ERR_BadAsyncExpressionTree");
+
+        internal static string ERR_DynamicAttributeMissing => ResourceManager.GetString("ERR_DynamicAttributeMissing");
+
+        internal static string ERR_CannotPassNullForFriendAssembly => ResourceManager.GetString("ERR_CannotPassNullForFriendAssembly");
+
+        internal static string ERR_SignButNoPrivateKey => ResourceManager.GetString("ERR_SignButNoPrivateKey");
+
+        internal static string ERR_PublicSignButNoKey => ResourceManager.GetString("ERR_PublicSignButNoKey");
+
+        internal static string ERR_PublicSignNetModule => ResourceManager.GetString("ERR_PublicSignNetModule");
+
+        internal static string WRN_DelaySignButNoKey => ResourceManager.GetString("WRN_DelaySignButNoKey");
+
+        internal static string WRN_DelaySignButNoKey_Title => ResourceManager.GetString("WRN_DelaySignButNoKey_Title");
+
+        internal static string ERR_InvalidVersionFormat => ResourceManager.GetString("ERR_InvalidVersionFormat");
+
+        internal static string ERR_InvalidVersionFormatDeterministic => ResourceManager.GetString("ERR_InvalidVersionFormatDeterministic");
+
+        internal static string ERR_InvalidVersionFormat2 => ResourceManager.GetString("ERR_InvalidVersionFormat2");
+
+        internal static string WRN_InvalidVersionFormat => ResourceManager.GetString("WRN_InvalidVersionFormat");
+
+        internal static string WRN_InvalidVersionFormat_Title => ResourceManager.GetString("WRN_InvalidVersionFormat_Title");
+
+        internal static string ERR_InvalidAssemblyCultureForExe => ResourceManager.GetString("ERR_InvalidAssemblyCultureForExe");
+
+        internal static string ERR_NoCorrespondingArgument => ResourceManager.GetString("ERR_NoCorrespondingArgument");
+
+        internal static string WRN_UnimplementedCommandLineSwitch => ResourceManager.GetString("WRN_UnimplementedCommandLineSwitch");
+
+        internal static string WRN_UnimplementedCommandLineSwitch_Title => ResourceManager.GetString("WRN_UnimplementedCommandLineSwitch_Title");
+
+        internal static string ERR_ModuleEmitFailure => ResourceManager.GetString("ERR_ModuleEmitFailure");
+
+        internal static string ERR_FixedLocalInLambda => ResourceManager.GetString("ERR_FixedLocalInLambda");
+
+        internal static string ERR_ExpressionTreeContainsNamedArgument => ResourceManager.GetString("ERR_ExpressionTreeContainsNamedArgument");
+
+        internal static string ERR_ExpressionTreeContainsOptionalArgument => ResourceManager.GetString("ERR_ExpressionTreeContainsOptionalArgument");
+
+        internal static string ERR_ExpressionTreeContainsIndexedProperty => ResourceManager.GetString("ERR_ExpressionTreeContainsIndexedProperty");
+
+        internal static string ERR_IndexedPropertyRequiresParams => ResourceManager.GetString("ERR_IndexedPropertyRequiresParams");
+
+        internal static string ERR_IndexedPropertyMustHaveAllOptionalParams => ResourceManager.GetString("ERR_IndexedPropertyMustHaveAllOptionalParams");
+
+        internal static string ERR_SpecialByRefInLambda => ResourceManager.GetString("ERR_SpecialByRefInLambda");
+
+        internal static string ERR_SecurityAttributeMissingAction => ResourceManager.GetString("ERR_SecurityAttributeMissingAction");
+
+        internal static string ERR_SecurityAttributeInvalidAction => ResourceManager.GetString("ERR_SecurityAttributeInvalidAction");
+
+        internal static string ERR_SecurityAttributeInvalidActionAssembly => ResourceManager.GetString("ERR_SecurityAttributeInvalidActionAssembly");
+
+        internal static string ERR_SecurityAttributeInvalidActionTypeOrMethod => ResourceManager.GetString("ERR_SecurityAttributeInvalidActionTypeOrMethod");
+
+        internal static string ERR_PrincipalPermissionInvalidAction => ResourceManager.GetString("ERR_PrincipalPermissionInvalidAction");
+
+        internal static string ERR_FeatureNotValidInExpressionTree => ResourceManager.GetString("ERR_FeatureNotValidInExpressionTree");
+
+        internal static string ERR_PermissionSetAttributeInvalidFile => ResourceManager.GetString("ERR_PermissionSetAttributeInvalidFile");
+
+        internal static string ERR_PermissionSetAttributeFileReadError => ResourceManager.GetString("ERR_PermissionSetAttributeFileReadError");
+
+        internal static string ERR_GlobalSingleTypeNameNotFoundFwd => ResourceManager.GetString("ERR_GlobalSingleTypeNameNotFoundFwd");
+
+        internal static string ERR_DottedTypeNameNotFoundInNSFwd => ResourceManager.GetString("ERR_DottedTypeNameNotFoundInNSFwd");
+
+        internal static string ERR_SingleTypeNameNotFoundFwd => ResourceManager.GetString("ERR_SingleTypeNameNotFoundFwd");
+
+        internal static string ERR_AssemblySpecifiedForLinkAndRef => ResourceManager.GetString("ERR_AssemblySpecifiedForLinkAndRef");
+
+        internal static string WRN_DeprecatedCollectionInitAdd => ResourceManager.GetString("WRN_DeprecatedCollectionInitAdd");
+
+        internal static string WRN_DeprecatedCollectionInitAdd_Title => ResourceManager.GetString("WRN_DeprecatedCollectionInitAdd_Title");
+
+        internal static string WRN_DeprecatedCollectionInitAddStr => ResourceManager.GetString("WRN_DeprecatedCollectionInitAddStr");
+
+        internal static string WRN_DeprecatedCollectionInitAddStr_Title => ResourceManager.GetString("WRN_DeprecatedCollectionInitAddStr_Title");
+
+        internal static string ERR_DeprecatedCollectionInitAddStr => ResourceManager.GetString("ERR_DeprecatedCollectionInitAddStr");
+
+        internal static string ERR_IteratorInInteractive => ResourceManager.GetString("ERR_IteratorInInteractive");
+
+        internal static string ERR_SecurityAttributeInvalidTarget => ResourceManager.GetString("ERR_SecurityAttributeInvalidTarget");
+
+        internal static string ERR_BadDynamicMethodArg => ResourceManager.GetString("ERR_BadDynamicMethodArg");
+
+        internal static string ERR_BadDynamicMethodArgLambda => ResourceManager.GetString("ERR_BadDynamicMethodArgLambda");
+
+        internal static string ERR_BadDynamicMethodArgMemgrp => ResourceManager.GetString("ERR_BadDynamicMethodArgMemgrp");
+
+        internal static string ERR_NoDynamicPhantomOnBase => ResourceManager.GetString("ERR_NoDynamicPhantomOnBase");
+
+        internal static string ERR_BadDynamicQuery => ResourceManager.GetString("ERR_BadDynamicQuery");
+
+        internal static string ERR_NoDynamicPhantomOnBaseIndexer => ResourceManager.GetString("ERR_NoDynamicPhantomOnBaseIndexer");
+
+        internal static string WRN_DynamicDispatchToConditionalMethod => ResourceManager.GetString("WRN_DynamicDispatchToConditionalMethod");
+
+        internal static string WRN_DynamicDispatchToConditionalMethod_Title => ResourceManager.GetString("WRN_DynamicDispatchToConditionalMethod_Title");
+
+        internal static string ERR_BadArgTypeDynamicExtension => ResourceManager.GetString("ERR_BadArgTypeDynamicExtension");
+
+        internal static string WRN_CallerFilePathPreferredOverCallerMemberName => ResourceManager.GetString("WRN_CallerFilePathPreferredOverCallerMemberName");
+
+        internal static string WRN_CallerFilePathPreferredOverCallerMemberName_Title => ResourceManager.GetString("WRN_CallerFilePathPreferredOverCallerMemberName_Title");
+
+        internal static string WRN_CallerLineNumberPreferredOverCallerMemberName => ResourceManager.GetString("WRN_CallerLineNumberPreferredOverCallerMemberName");
+
+        internal static string WRN_CallerLineNumberPreferredOverCallerMemberName_Title => ResourceManager.GetString("WRN_CallerLineNumberPreferredOverCallerMemberName_Title");
+
+        internal static string WRN_CallerLineNumberPreferredOverCallerFilePath => ResourceManager.GetString("WRN_CallerLineNumberPreferredOverCallerFilePath");
+
+        internal static string WRN_CallerLineNumberPreferredOverCallerFilePath_Title => ResourceManager.GetString("WRN_CallerLineNumberPreferredOverCallerFilePath_Title");
+
+        internal static string ERR_InvalidDynamicCondition => ResourceManager.GetString("ERR_InvalidDynamicCondition");
+
+        internal static string ERR_MixingWinRTEventWithRegular => ResourceManager.GetString("ERR_MixingWinRTEventWithRegular");
+
+        internal static string WRN_CA2000_DisposeObjectsBeforeLosingScope1 => ResourceManager.GetString("WRN_CA2000_DisposeObjectsBeforeLosingScope1");
+
+        internal static string WRN_CA2000_DisposeObjectsBeforeLosingScope1_Title => ResourceManager.GetString("WRN_CA2000_DisposeObjectsBeforeLosingScope1_Title");
+
+        internal static string WRN_CA2000_DisposeObjectsBeforeLosingScope2 => ResourceManager.GetString("WRN_CA2000_DisposeObjectsBeforeLosingScope2");
+
+        internal static string WRN_CA2000_DisposeObjectsBeforeLosingScope2_Title => ResourceManager.GetString("WRN_CA2000_DisposeObjectsBeforeLosingScope2_Title");
+
+        internal static string WRN_CA2202_DoNotDisposeObjectsMultipleTimes => ResourceManager.GetString("WRN_CA2202_DoNotDisposeObjectsMultipleTimes");
+
+        internal static string WRN_CA2202_DoNotDisposeObjectsMultipleTimes_Title => ResourceManager.GetString("WRN_CA2202_DoNotDisposeObjectsMultipleTimes_Title");
+
+        internal static string ERR_NewCoClassOnLink => ResourceManager.GetString("ERR_NewCoClassOnLink");
+
+        internal static string ERR_NoPIANestedType => ResourceManager.GetString("ERR_NoPIANestedType");
+
+        internal static string ERR_GenericsUsedInNoPIAType => ResourceManager.GetString("ERR_GenericsUsedInNoPIAType");
+
+        internal static string ERR_InteropStructContainsMethods => ResourceManager.GetString("ERR_InteropStructContainsMethods");
+
+        internal static string ERR_WinRtEventPassedByRef => ResourceManager.GetString("ERR_WinRtEventPassedByRef");
+
+        internal static string ERR_MissingMethodOnSourceInterface => ResourceManager.GetString("ERR_MissingMethodOnSourceInterface");
+
+        internal static string ERR_MissingSourceInterface => ResourceManager.GetString("ERR_MissingSourceInterface");
+
+        internal static string ERR_InteropTypeMissingAttribute => ResourceManager.GetString("ERR_InteropTypeMissingAttribute");
+
+        internal static string ERR_NoPIAAssemblyMissingAttribute => ResourceManager.GetString("ERR_NoPIAAssemblyMissingAttribute");
+
+        internal static string ERR_NoPIAAssemblyMissingAttributes => ResourceManager.GetString("ERR_NoPIAAssemblyMissingAttributes");
+
+        internal static string ERR_InteropTypesWithSameNameAndGuid => ResourceManager.GetString("ERR_InteropTypesWithSameNameAndGuid");
+
+        internal static string ERR_LocalTypeNameClash => ResourceManager.GetString("ERR_LocalTypeNameClash");
+
+        internal static string WRN_ReferencedAssemblyReferencesLinkedPIA => ResourceManager.GetString("WRN_ReferencedAssemblyReferencesLinkedPIA");
+
+        internal static string WRN_ReferencedAssemblyReferencesLinkedPIA_Title => ResourceManager.GetString("WRN_ReferencedAssemblyReferencesLinkedPIA_Title");
+
+        internal static string WRN_ReferencedAssemblyReferencesLinkedPIA_Description => ResourceManager.GetString("WRN_ReferencedAssemblyReferencesLinkedPIA_Description");
+
+        internal static string ERR_GenericsUsedAcrossAssemblies => ResourceManager.GetString("ERR_GenericsUsedAcrossAssemblies");
+
+        internal static string ERR_NoCanonicalView => ResourceManager.GetString("ERR_NoCanonicalView");
+
+        internal static string ERR_NetModuleNameMismatch => ResourceManager.GetString("ERR_NetModuleNameMismatch");
+
+        internal static string ERR_BadModuleName => ResourceManager.GetString("ERR_BadModuleName");
+
+        internal static string ERR_BadCompilationOptionValue => ResourceManager.GetString("ERR_BadCompilationOptionValue");
+
+        internal static string ERR_BadAppConfigPath => ResourceManager.GetString("ERR_BadAppConfigPath");
+
+        internal static string WRN_AssemblyAttributeFromModuleIsOverridden => ResourceManager.GetString("WRN_AssemblyAttributeFromModuleIsOverridden");
+
+        internal static string WRN_AssemblyAttributeFromModuleIsOverridden_Title => ResourceManager.GetString("WRN_AssemblyAttributeFromModuleIsOverridden_Title");
+
+        internal static string ERR_CmdOptionConflictsSource => ResourceManager.GetString("ERR_CmdOptionConflictsSource");
+
+        internal static string ERR_FixedBufferTooManyDimensions => ResourceManager.GetString("ERR_FixedBufferTooManyDimensions");
+
+        internal static string WRN_ReferencedAssemblyDoesNotHaveStrongName => ResourceManager.GetString("WRN_ReferencedAssemblyDoesNotHaveStrongName");
+
+        internal static string WRN_ReferencedAssemblyDoesNotHaveStrongName_Title => ResourceManager.GetString("WRN_ReferencedAssemblyDoesNotHaveStrongName_Title");
+
+        internal static string ERR_InvalidSignaturePublicKey => ResourceManager.GetString("ERR_InvalidSignaturePublicKey");
+
+        internal static string ERR_ExportedTypeConflictsWithDeclaration => ResourceManager.GetString("ERR_ExportedTypeConflictsWithDeclaration");
+
+        internal static string ERR_ExportedTypesConflict => ResourceManager.GetString("ERR_ExportedTypesConflict");
+
+        internal static string ERR_ForwardedTypeConflictsWithDeclaration => ResourceManager.GetString("ERR_ForwardedTypeConflictsWithDeclaration");
+
+        internal static string ERR_ForwardedTypesConflict => ResourceManager.GetString("ERR_ForwardedTypesConflict");
+
+        internal static string ERR_ForwardedTypeConflictsWithExportedType => ResourceManager.GetString("ERR_ForwardedTypeConflictsWithExportedType");
+
+        internal static string WRN_RefCultureMismatch => ResourceManager.GetString("WRN_RefCultureMismatch");
+
+        internal static string WRN_RefCultureMismatch_Title => ResourceManager.GetString("WRN_RefCultureMismatch_Title");
+
+        internal static string ERR_AgnosticToMachineModule => ResourceManager.GetString("ERR_AgnosticToMachineModule");
+
+        internal static string ERR_ConflictingMachineModule => ResourceManager.GetString("ERR_ConflictingMachineModule");
+
+        internal static string WRN_ConflictingMachineAssembly => ResourceManager.GetString("WRN_ConflictingMachineAssembly");
+
+        internal static string WRN_ConflictingMachineAssembly_Title => ResourceManager.GetString("WRN_ConflictingMachineAssembly_Title");
+
+        internal static string ERR_CryptoHashFailed => ResourceManager.GetString("ERR_CryptoHashFailed");
+
+        internal static string ERR_MissingNetModuleReference => ResourceManager.GetString("ERR_MissingNetModuleReference");
+
+        internal static string ERR_NetModuleNameMustBeUnique => ResourceManager.GetString("ERR_NetModuleNameMustBeUnique");
+
+        internal static string ERR_CantReadConfigFile => ResourceManager.GetString("ERR_CantReadConfigFile");
+
+        internal static string ERR_EncNoPIAReference => ResourceManager.GetString("ERR_EncNoPIAReference");
+
+        internal static string ERR_EncReferenceToAddedMember => ResourceManager.GetString("ERR_EncReferenceToAddedMember");
+
+        internal static string ERR_MutuallyExclusiveOptions => ResourceManager.GetString("ERR_MutuallyExclusiveOptions");
+
+        internal static string ERR_LinkedNetmoduleMetadataMustProvideFullPEImage => ResourceManager.GetString("ERR_LinkedNetmoduleMetadataMustProvideFullPEImage");
+
+        internal static string ERR_BadPrefer32OnLib => ResourceManager.GetString("ERR_BadPrefer32OnLib");
+
+        internal static string IDS_PathList => ResourceManager.GetString("IDS_PathList");
+
+        internal static string IDS_Text => ResourceManager.GetString("IDS_Text");
+
+        internal static string IDS_FeatureNullPropagatingOperator => ResourceManager.GetString("IDS_FeatureNullPropagatingOperator");
+
+        internal static string IDS_FeatureExpressionBodiedMethod => ResourceManager.GetString("IDS_FeatureExpressionBodiedMethod");
+
+        internal static string IDS_FeatureExpressionBodiedProperty => ResourceManager.GetString("IDS_FeatureExpressionBodiedProperty");
+
+        internal static string IDS_FeatureExpressionBodiedIndexer => ResourceManager.GetString("IDS_FeatureExpressionBodiedIndexer");
+
+        internal static string IDS_FeatureAutoPropertyInitializer => ResourceManager.GetString("IDS_FeatureAutoPropertyInitializer");
+
+        internal static string IDS_Namespace1 => ResourceManager.GetString("IDS_Namespace1");
+
+        internal static string IDS_FeatureRefLocalsReturns => ResourceManager.GetString("IDS_FeatureRefLocalsReturns");
+
+        internal static string IDS_FeatureReadOnlyReferences => ResourceManager.GetString("IDS_FeatureReadOnlyReferences");
+
+        internal static string IDS_FeatureRefStructs => ResourceManager.GetString("IDS_FeatureRefStructs");
+
+        internal static string IDS_FeatureRefConditional => ResourceManager.GetString("IDS_FeatureRefConditional");
+
+        internal static string IDS_FeatureRefReassignment => ResourceManager.GetString("IDS_FeatureRefReassignment");
+
+        internal static string IDS_FeatureRefFor => ResourceManager.GetString("IDS_FeatureRefFor");
+
+        internal static string IDS_FeatureRefForEach => ResourceManager.GetString("IDS_FeatureRefForEach");
+
+        internal static string IDS_FeatureExtensibleFixedStatement => ResourceManager.GetString("IDS_FeatureExtensibleFixedStatement");
+
+        internal static string CompilationC => ResourceManager.GetString("CompilationC");
+
+        internal static string SyntaxNodeIsNotWithinSynt => ResourceManager.GetString("SyntaxNodeIsNotWithinSynt");
+
+        internal static string LocationMustBeProvided => ResourceManager.GetString("LocationMustBeProvided");
+
+        internal static string SyntaxTreeSemanticModelMust => ResourceManager.GetString("SyntaxTreeSemanticModelMust");
+
+        internal static string CantReferenceCompilationOf => ResourceManager.GetString("CantReferenceCompilationOf");
+
+        internal static string SyntaxTreeAlreadyPresent => ResourceManager.GetString("SyntaxTreeAlreadyPresent");
+
+        internal static string SubmissionCanOnlyInclude => ResourceManager.GetString("SubmissionCanOnlyInclude");
+
+        internal static string SubmissionCanHaveAtMostOne => ResourceManager.GetString("SubmissionCanHaveAtMostOne");
+
+        internal static string SyntaxTreeNotFoundToRemove => ResourceManager.GetString("SyntaxTreeNotFoundToRemove");
+
+        internal static string TreeMustHaveARootNodeWith => ResourceManager.GetString("TreeMustHaveARootNodeWith");
+
+        internal static string TypeArgumentCannotBeNull => ResourceManager.GetString("TypeArgumentCannotBeNull");
+
+        internal static string WrongNumberOfTypeArguments => ResourceManager.GetString("WrongNumberOfTypeArguments");
+
+        internal static string NameConflictForName => ResourceManager.GetString("NameConflictForName");
+
+        internal static string LookupOptionsHasInvalidCombo => ResourceManager.GetString("LookupOptionsHasInvalidCombo");
+
+        internal static string ItemsMustBeNonEmpty => ResourceManager.GetString("ItemsMustBeNonEmpty");
+
+        internal static string UseVerbatimIdentifier => ResourceManager.GetString("UseVerbatimIdentifier");
+
+        internal static string UseLiteralForTokens => ResourceManager.GetString("UseLiteralForTokens");
+
+        internal static string UseLiteralForNumeric => ResourceManager.GetString("UseLiteralForNumeric");
+
+        internal static string ThisMethodCanOnlyBeUsedToCreateTokens => ResourceManager.GetString("ThisMethodCanOnlyBeUsedToCreateTokens");
+
+        internal static string GenericParameterDefinition => ResourceManager.GetString("GenericParameterDefinition");
+
+        internal static string InvalidGetDeclarationNameMultipleDeclarators => ResourceManager.GetString("InvalidGetDeclarationNameMultipleDeclarators");
+
+        internal static string TreeNotPartOfCompilation => ResourceManager.GetString("TreeNotPartOfCompilation");
+
+        internal static string PositionIsNotWithinSyntax => ResourceManager.GetString("PositionIsNotWithinSyntax");
+
+        internal static string WRN_BadUILang => ResourceManager.GetString("WRN_BadUILang");
+
+        internal static string WRN_BadUILang_Title => ResourceManager.GetString("WRN_BadUILang_Title");
+
+        internal static string ERR_UnsupportedTransparentIdentifierAccess => ResourceManager.GetString("ERR_UnsupportedTransparentIdentifierAccess");
+
+        internal static string ERR_ParamDefaultValueDiffersFromAttribute => ResourceManager.GetString("ERR_ParamDefaultValueDiffersFromAttribute");
+
+        internal static string ERR_FieldHasMultipleDistinctConstantValues => ResourceManager.GetString("ERR_FieldHasMultipleDistinctConstantValues");
+
+        internal static string WRN_UnqualifiedNestedTypeInCref => ResourceManager.GetString("WRN_UnqualifiedNestedTypeInCref");
+
+        internal static string WRN_UnqualifiedNestedTypeInCref_Title => ResourceManager.GetString("WRN_UnqualifiedNestedTypeInCref_Title");
+
+        internal static string NotACSharpSymbol => ResourceManager.GetString("NotACSharpSymbol");
+
+        internal static string HDN_UnusedUsingDirective => ResourceManager.GetString("HDN_UnusedUsingDirective");
+
+        internal static string HDN_UnusedExternAlias => ResourceManager.GetString("HDN_UnusedExternAlias");
+
+        internal static string ElementsCannotBeNull => ResourceManager.GetString("ElementsCannotBeNull");
+
+        internal static string IDS_LIB_ENV => ResourceManager.GetString("IDS_LIB_ENV");
+
+        internal static string IDS_LIB_OPTION => ResourceManager.GetString("IDS_LIB_OPTION");
+
+        internal static string IDS_REFERENCEPATH_OPTION => ResourceManager.GetString("IDS_REFERENCEPATH_OPTION");
+
+        internal static string IDS_DirectoryDoesNotExist => ResourceManager.GetString("IDS_DirectoryDoesNotExist");
+
+        internal static string IDS_DirectoryHasInvalidPath => ResourceManager.GetString("IDS_DirectoryHasInvalidPath");
+
+        internal static string WRN_NoRuntimeMetadataVersion => ResourceManager.GetString("WRN_NoRuntimeMetadataVersion");
+
+        internal static string WRN_NoRuntimeMetadataVersion_Title => ResourceManager.GetString("WRN_NoRuntimeMetadataVersion_Title");
+
+        internal static string WrongSemanticModelType => ResourceManager.GetString("WrongSemanticModelType");
+
+        internal static string IDS_FeatureLambda => ResourceManager.GetString("IDS_FeatureLambda");
+
+        internal static string ERR_FeatureNotAvailableInVersion1 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion1");
+
+        internal static string ERR_FeatureNotAvailableInVersion2 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion2");
+
+        internal static string ERR_FeatureNotAvailableInVersion3 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion3");
+
+        internal static string ERR_FeatureNotAvailableInVersion4 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion4");
+
+        internal static string ERR_FeatureNotAvailableInVersion5 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion5");
+
+        internal static string ERR_FeatureNotAvailableInVersion6 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion6");
+
+        internal static string ERR_FeatureNotAvailableInVersion7 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion7");
+
+        internal static string ERR_FeatureIsExperimental => ResourceManager.GetString("ERR_FeatureIsExperimental");
+
+        internal static string IDS_VersionExperimental => ResourceManager.GetString("IDS_VersionExperimental");
+
+        internal static string PositionNotWithinTree => ResourceManager.GetString("PositionNotWithinTree");
+
+        internal static string SpeculatedSyntaxNodeCannotBelongToCurrentCompilation => ResourceManager.GetString("SpeculatedSyntaxNodeCannotBelongToCurrentCompilation");
+
+        internal static string ChainingSpeculativeModelIsNotSupported => ResourceManager.GetString("ChainingSpeculativeModelIsNotSupported");
+
+        internal static string IDS_ToolName => ResourceManager.GetString("IDS_ToolName");
+
+        internal static string IDS_LogoLine1 => ResourceManager.GetString("IDS_LogoLine1");
+
+        internal static string IDS_LogoLine2 => ResourceManager.GetString("IDS_LogoLine2");
+
+        internal static string IDS_LangVersions => ResourceManager.GetString("IDS_LangVersions");
+
+        internal static string IDS_CSCHelp => ResourceManager.GetString("IDS_CSCHelp");
+
+        internal static string ERR_ComImportWithInitializers => ResourceManager.GetString("ERR_ComImportWithInitializers");
+
+        internal static string WRN_PdbLocalNameTooLong => ResourceManager.GetString("WRN_PdbLocalNameTooLong");
+
+        internal static string WRN_PdbLocalNameTooLong_Title => ResourceManager.GetString("WRN_PdbLocalNameTooLong_Title");
+
+        internal static string ERR_RetNoObjectRequiredLambda => ResourceManager.GetString("ERR_RetNoObjectRequiredLambda");
+
+        internal static string ERR_TaskRetNoObjectRequiredLambda => ResourceManager.GetString("ERR_TaskRetNoObjectRequiredLambda");
+
+        internal static string WRN_AnalyzerCannotBeCreated => ResourceManager.GetString("WRN_AnalyzerCannotBeCreated");
+
+        internal static string WRN_AnalyzerCannotBeCreated_Title => ResourceManager.GetString("WRN_AnalyzerCannotBeCreated_Title");
+
+        internal static string WRN_NoAnalyzerInAssembly => ResourceManager.GetString("WRN_NoAnalyzerInAssembly");
+
+        internal static string WRN_NoAnalyzerInAssembly_Title => ResourceManager.GetString("WRN_NoAnalyzerInAssembly_Title");
+
+        internal static string WRN_UnableToLoadAnalyzer => ResourceManager.GetString("WRN_UnableToLoadAnalyzer");
+
+        internal static string WRN_UnableToLoadAnalyzer_Title => ResourceManager.GetString("WRN_UnableToLoadAnalyzer_Title");
+
+        internal static string INF_UnableToLoadSomeTypesInAnalyzer => ResourceManager.GetString("INF_UnableToLoadSomeTypesInAnalyzer");
+
+        internal static string ERR_CantReadRulesetFile => ResourceManager.GetString("ERR_CantReadRulesetFile");
+
+        internal static string ERR_BadPdbData => ResourceManager.GetString("ERR_BadPdbData");
+
+        internal static string IDS_OperationCausedStackOverflow => ResourceManager.GetString("IDS_OperationCausedStackOverflow");
+
+        internal static string WRN_IdentifierOrNumericLiteralExpected => ResourceManager.GetString("WRN_IdentifierOrNumericLiteralExpected");
+
+        internal static string WRN_IdentifierOrNumericLiteralExpected_Title => ResourceManager.GetString("WRN_IdentifierOrNumericLiteralExpected_Title");
+
+        internal static string ERR_InitializerOnNonAutoProperty => ResourceManager.GetString("ERR_InitializerOnNonAutoProperty");
+
+        internal static string ERR_InstancePropertyInitializerInInterface => ResourceManager.GetString("ERR_InstancePropertyInitializerInInterface");
+
+        internal static string ERR_AutoPropertyMustHaveGetAccessor => ResourceManager.GetString("ERR_AutoPropertyMustHaveGetAccessor");
+
+        internal static string ERR_AutoPropertyMustOverrideSet => ResourceManager.GetString("ERR_AutoPropertyMustOverrideSet");
+
+        internal static string ERR_InitializerInStructWithoutExplicitConstructor => ResourceManager.GetString("ERR_InitializerInStructWithoutExplicitConstructor");
+
+        internal static string ERR_EncodinglessSyntaxTree => ResourceManager.GetString("ERR_EncodinglessSyntaxTree");
+
+        internal static string ERR_BlockBodyAndExpressionBody => ResourceManager.GetString("ERR_BlockBodyAndExpressionBody");
+
+        internal static string ERR_SwitchFallOut => ResourceManager.GetString("ERR_SwitchFallOut");
+
+        internal static string ERR_UnexpectedBoundGenericName => ResourceManager.GetString("ERR_UnexpectedBoundGenericName");
+
+        internal static string ERR_NullPropagatingOpInExpressionTree => ResourceManager.GetString("ERR_NullPropagatingOpInExpressionTree");
+
+        internal static string ERR_DictionaryInitializerInExpressionTree => ResourceManager.GetString("ERR_DictionaryInitializerInExpressionTree");
+
+        internal static string ERR_ExtensionCollectionElementInitializerInExpressionTree => ResourceManager.GetString("ERR_ExtensionCollectionElementInitializerInExpressionTree");
+
+        internal static string IDS_FeatureNameof => ResourceManager.GetString("IDS_FeatureNameof");
+
+        internal static string IDS_FeatureDictionaryInitializer => ResourceManager.GetString("IDS_FeatureDictionaryInitializer");
+
+        internal static string ERR_UnclosedExpressionHole => ResourceManager.GetString("ERR_UnclosedExpressionHole");
+
+        internal static string ERR_SingleLineCommentInExpressionHole => ResourceManager.GetString("ERR_SingleLineCommentInExpressionHole");
+
+        internal static string ERR_InsufficientStack => ResourceManager.GetString("ERR_InsufficientStack");
+
+        internal static string ERR_ExpressionHasNoName => ResourceManager.GetString("ERR_ExpressionHasNoName");
+
+        internal static string ERR_SubexpressionNotInNameof => ResourceManager.GetString("ERR_SubexpressionNotInNameof");
+
+        internal static string ERR_AliasQualifiedNameNotAnExpression => ResourceManager.GetString("ERR_AliasQualifiedNameNotAnExpression");
+
+        internal static string ERR_NameofMethodGroupWithTypeParameters => ResourceManager.GetString("ERR_NameofMethodGroupWithTypeParameters");
+
+        internal static string NoNoneSearchCriteria => ResourceManager.GetString("NoNoneSearchCriteria");
+
+        internal static string ERR_InvalidAssemblyCulture => ResourceManager.GetString("ERR_InvalidAssemblyCulture");
+
+        internal static string IDS_FeatureUsingStatic => ResourceManager.GetString("IDS_FeatureUsingStatic");
+
+        internal static string IDS_FeatureInterpolatedStrings => ResourceManager.GetString("IDS_FeatureInterpolatedStrings");
+
+        internal static string IDS_FeatureAltInterpolatedVerbatimStrings => ResourceManager.GetString("IDS_FeatureAltInterpolatedVerbatimStrings");
+
+        internal static string IDS_AwaitInCatchAndFinally => ResourceManager.GetString("IDS_AwaitInCatchAndFinally");
+
+        internal static string IDS_FeatureBinaryLiteral => ResourceManager.GetString("IDS_FeatureBinaryLiteral");
+
+        internal static string IDS_FeatureDigitSeparator => ResourceManager.GetString("IDS_FeatureDigitSeparator");
+
+        internal static string IDS_FeatureLocalFunctions => ResourceManager.GetString("IDS_FeatureLocalFunctions");
+
+        internal static string ERR_UnescapedCurly => ResourceManager.GetString("ERR_UnescapedCurly");
+
+        internal static string ERR_EscapedCurly => ResourceManager.GetString("ERR_EscapedCurly");
+
+        internal static string ERR_TrailingWhitespaceInFormatSpecifier => ResourceManager.GetString("ERR_TrailingWhitespaceInFormatSpecifier");
+
+        internal static string ERR_EmptyFormatSpecifier => ResourceManager.GetString("ERR_EmptyFormatSpecifier");
+
+        internal static string ERR_ErrorInReferencedAssembly => ResourceManager.GetString("ERR_ErrorInReferencedAssembly");
+
+        internal static string ERR_ExpressionOrDeclarationExpected => ResourceManager.GetString("ERR_ExpressionOrDeclarationExpected");
+
+        internal static string ERR_NameofExtensionMethod => ResourceManager.GetString("ERR_NameofExtensionMethod");
+
+        internal static string WRN_AlignmentMagnitude => ResourceManager.GetString("WRN_AlignmentMagnitude");
+
+        internal static string HDN_UnusedExternAlias_Title => ResourceManager.GetString("HDN_UnusedExternAlias_Title");
+
+        internal static string HDN_UnusedUsingDirective_Title => ResourceManager.GetString("HDN_UnusedUsingDirective_Title");
+
+        internal static string INF_UnableToLoadSomeTypesInAnalyzer_Title => ResourceManager.GetString("INF_UnableToLoadSomeTypesInAnalyzer_Title");
+
+        internal static string WRN_AlignmentMagnitude_Title => ResourceManager.GetString("WRN_AlignmentMagnitude_Title");
+
+        internal static string ERR_ConstantStringTooLong => ResourceManager.GetString("ERR_ConstantStringTooLong");
+
+        internal static string ERR_TupleTooFewElements => ResourceManager.GetString("ERR_TupleTooFewElements");
+
+        internal static string ERR_DebugEntryPointNotSourceMethodDefinition => ResourceManager.GetString("ERR_DebugEntryPointNotSourceMethodDefinition");
+
+        internal static string ERR_LoadDirectiveOnlyAllowedInScripts => ResourceManager.GetString("ERR_LoadDirectiveOnlyAllowedInScripts");
+
+        internal static string ERR_PPLoadFollowsToken => ResourceManager.GetString("ERR_PPLoadFollowsToken");
+
+        internal static string CouldNotFindFile => ResourceManager.GetString("CouldNotFindFile");
+
+        internal static string SyntaxTreeFromLoadNoRemoveReplace => ResourceManager.GetString("SyntaxTreeFromLoadNoRemoveReplace");
+
+        internal static string ERR_SourceFileReferencesNotSupported => ResourceManager.GetString("ERR_SourceFileReferencesNotSupported");
+
+        internal static string ERR_InvalidPathMap => ResourceManager.GetString("ERR_InvalidPathMap");
+
+        internal static string ERR_InvalidReal => ResourceManager.GetString("ERR_InvalidReal");
+
+        internal static string ERR_AutoPropertyCannotBeRefReturning => ResourceManager.GetString("ERR_AutoPropertyCannotBeRefReturning");
+
+        internal static string ERR_RefPropertyMustHaveGetAccessor => ResourceManager.GetString("ERR_RefPropertyMustHaveGetAccessor");
+
+        internal static string ERR_RefPropertyCannotHaveSetAccessor => ResourceManager.GetString("ERR_RefPropertyCannotHaveSetAccessor");
+
+        internal static string ERR_CantChangeRefReturnOnOverride => ResourceManager.GetString("ERR_CantChangeRefReturnOnOverride");
+
+        internal static string ERR_CantChangeInitOnlyOnOverride => ResourceManager.GetString("ERR_CantChangeInitOnlyOnOverride");
+
+        internal static string ERR_MustNotHaveRefReturn => ResourceManager.GetString("ERR_MustNotHaveRefReturn");
+
+        internal static string ERR_MustHaveRefReturn => ResourceManager.GetString("ERR_MustHaveRefReturn");
+
+        internal static string ERR_RefReturnMustHaveIdentityConversion => ResourceManager.GetString("ERR_RefReturnMustHaveIdentityConversion");
+
+        internal static string ERR_CloseUnimplementedInterfaceMemberWrongRefReturn => ResourceManager.GetString("ERR_CloseUnimplementedInterfaceMemberWrongRefReturn");
+
+        internal static string ERR_CloseUnimplementedInterfaceMemberWrongInitOnly => ResourceManager.GetString("ERR_CloseUnimplementedInterfaceMemberWrongInitOnly");
+
+        internal static string ERR_BadIteratorReturnRef => ResourceManager.GetString("ERR_BadIteratorReturnRef");
+
+        internal static string ERR_BadRefReturnExpressionTree => ResourceManager.GetString("ERR_BadRefReturnExpressionTree");
+
+        internal static string ERR_RefReturningCallInExpressionTree => ResourceManager.GetString("ERR_RefReturningCallInExpressionTree");
+
+        internal static string ERR_RefReturnLvalueExpected => ResourceManager.GetString("ERR_RefReturnLvalueExpected");
+
+        internal static string ERR_RefReturnNonreturnableLocal => ResourceManager.GetString("ERR_RefReturnNonreturnableLocal");
+
+        internal static string ERR_RefReturnNonreturnableLocal2 => ResourceManager.GetString("ERR_RefReturnNonreturnableLocal2");
+
+        internal static string ERR_RefReturnReadonlyLocal => ResourceManager.GetString("ERR_RefReturnReadonlyLocal");
+
+        internal static string ERR_RefReturnRangeVariable => ResourceManager.GetString("ERR_RefReturnRangeVariable");
+
+        internal static string ERR_RefReturnReadonlyLocalCause => ResourceManager.GetString("ERR_RefReturnReadonlyLocalCause");
+
+        internal static string ERR_RefReturnReadonlyLocal2Cause => ResourceManager.GetString("ERR_RefReturnReadonlyLocal2Cause");
+
+        internal static string ERR_RefReturnReadonly => ResourceManager.GetString("ERR_RefReturnReadonly");
+
+        internal static string ERR_RefReturnReadonlyStatic => ResourceManager.GetString("ERR_RefReturnReadonlyStatic");
+
+        internal static string ERR_RefReturnReadonly2 => ResourceManager.GetString("ERR_RefReturnReadonly2");
+
+        internal static string ERR_RefReturnReadonlyStatic2 => ResourceManager.GetString("ERR_RefReturnReadonlyStatic2");
+
+        internal static string ERR_RefReturnParameter => ResourceManager.GetString("ERR_RefReturnParameter");
+
+        internal static string ERR_RefReturnParameter2 => ResourceManager.GetString("ERR_RefReturnParameter2");
+
+        internal static string ERR_RefReturnLocal => ResourceManager.GetString("ERR_RefReturnLocal");
+
+        internal static string ERR_RefReturnLocal2 => ResourceManager.GetString("ERR_RefReturnLocal2");
+
+        internal static string ERR_RefReturnStructThis => ResourceManager.GetString("ERR_RefReturnStructThis");
+
+        internal static string ERR_EscapeOther => ResourceManager.GetString("ERR_EscapeOther");
+
+        internal static string ERR_EscapeLocal => ResourceManager.GetString("ERR_EscapeLocal");
+
+        internal static string ERR_EscapeCall => ResourceManager.GetString("ERR_EscapeCall");
+
+        internal static string ERR_EscapeCall2 => ResourceManager.GetString("ERR_EscapeCall2");
+
+        internal static string ERR_CallArgMixing => ResourceManager.GetString("ERR_CallArgMixing");
+
+        internal static string ERR_MismatchedRefEscapeInTernary => ResourceManager.GetString("ERR_MismatchedRefEscapeInTernary");
+
+        internal static string ERR_EscapeStackAlloc => ResourceManager.GetString("ERR_EscapeStackAlloc");
+
+        internal static string ERR_InitializeByValueVariableWithReference => ResourceManager.GetString("ERR_InitializeByValueVariableWithReference");
+
+        internal static string ERR_InitializeByReferenceVariableWithValue => ResourceManager.GetString("ERR_InitializeByReferenceVariableWithValue");
+
+        internal static string ERR_RefAssignmentMustHaveIdentityConversion => ResourceManager.GetString("ERR_RefAssignmentMustHaveIdentityConversion");
+
+        internal static string ERR_ByReferenceVariableMustBeInitialized => ResourceManager.GetString("ERR_ByReferenceVariableMustBeInitialized");
+
+        internal static string ERR_AnonDelegateCantUseLocal => ResourceManager.GetString("ERR_AnonDelegateCantUseLocal");
+
+        internal static string ERR_BadIteratorLocalType => ResourceManager.GetString("ERR_BadIteratorLocalType");
+
+        internal static string ERR_BadAsyncLocalType => ResourceManager.GetString("ERR_BadAsyncLocalType");
+
+        internal static string ERR_RefReturningCallAndAwait => ResourceManager.GetString("ERR_RefReturningCallAndAwait");
+
+        internal static string ERR_RefConditionalAndAwait => ResourceManager.GetString("ERR_RefConditionalAndAwait");
+
+        internal static string ERR_RefConditionalNeedsTwoRefs => ResourceManager.GetString("ERR_RefConditionalNeedsTwoRefs");
+
+        internal static string ERR_RefConditionalDifferentTypes => ResourceManager.GetString("ERR_RefConditionalDifferentTypes");
+
+        internal static string ERR_ExpressionTreeContainsLocalFunction => ResourceManager.GetString("ERR_ExpressionTreeContainsLocalFunction");
+
+        internal static string ERR_DynamicLocalFunctionParamsParameter => ResourceManager.GetString("ERR_DynamicLocalFunctionParamsParameter");
+
+        internal static string SyntaxTreeIsNotASubmission => ResourceManager.GetString("SyntaxTreeIsNotASubmission");
+
+        internal static string ERR_TooManyUserStrings => ResourceManager.GetString("ERR_TooManyUserStrings");
+
+        internal static string ERR_PatternNullableType => ResourceManager.GetString("ERR_PatternNullableType");
+
+        internal static string ERR_IsNullableType => ResourceManager.GetString("ERR_IsNullableType");
+
+        internal static string ERR_AsNullableType => ResourceManager.GetString("ERR_AsNullableType");
+
+        internal static string ERR_BadPatternExpression => ResourceManager.GetString("ERR_BadPatternExpression");
+
+        internal static string ERR_PeWritingFailure => ResourceManager.GetString("ERR_PeWritingFailure");
+
+        internal static string ERR_TupleDuplicateElementName => ResourceManager.GetString("ERR_TupleDuplicateElementName");
+
+        internal static string ERR_TupleReservedElementName => ResourceManager.GetString("ERR_TupleReservedElementName");
+
+        internal static string ERR_TupleReservedElementNameAnyPosition => ResourceManager.GetString("ERR_TupleReservedElementNameAnyPosition");
+
+        internal static string ERR_PredefinedTypeMemberNotFoundInAssembly => ResourceManager.GetString("ERR_PredefinedTypeMemberNotFoundInAssembly");
+
+        internal static string IDS_FeatureTuples => ResourceManager.GetString("IDS_FeatureTuples");
+
+        internal static string ERR_MissingDeconstruct => ResourceManager.GetString("ERR_MissingDeconstruct");
+
+        internal static string ERR_DeconstructRequiresExpression => ResourceManager.GetString("ERR_DeconstructRequiresExpression");
+
+        internal static string ERR_SwitchExpressionValueExpected => ResourceManager.GetString("ERR_SwitchExpressionValueExpected");
+
+        internal static string ERR_SwitchCaseSubsumed => ResourceManager.GetString("ERR_SwitchCaseSubsumed");
+
+        internal static string ERR_StdInOptionProvidedButConsoleInputIsNotRedirected => ResourceManager.GetString("ERR_StdInOptionProvidedButConsoleInputIsNotRedirected");
+
+        internal static string ERR_SwitchArmSubsumed => ResourceManager.GetString("ERR_SwitchArmSubsumed");
+
+        internal static string ERR_PatternWrongType => ResourceManager.GetString("ERR_PatternWrongType");
+
+        internal static string ERR_ConstantPatternVsOpenType => ResourceManager.GetString("ERR_ConstantPatternVsOpenType");
+
+        internal static string WRN_AttributeIgnoredWhenPublicSigning => ResourceManager.GetString("WRN_AttributeIgnoredWhenPublicSigning");
+
+        internal static string WRN_AttributeIgnoredWhenPublicSigning_Title => ResourceManager.GetString("WRN_AttributeIgnoredWhenPublicSigning_Title");
+
+        internal static string ERR_OptionMustBeAbsolutePath => ResourceManager.GetString("ERR_OptionMustBeAbsolutePath");
+
+        internal static string ERR_ConversionNotTupleCompatible => ResourceManager.GetString("ERR_ConversionNotTupleCompatible");
+
+        internal static string IDS_FeatureOutVar => ResourceManager.GetString("IDS_FeatureOutVar");
+
+        internal static string ERR_ImplicitlyTypedOutVariableUsedInTheSameArgumentList => ResourceManager.GetString("ERR_ImplicitlyTypedOutVariableUsedInTheSameArgumentList");
+
+        internal static string ERR_TypeInferenceFailedForImplicitlyTypedOutVariable => ResourceManager.GetString("ERR_TypeInferenceFailedForImplicitlyTypedOutVariable");
+
+        internal static string ERR_TypeInferenceFailedForImplicitlyTypedDeconstructionVariable => ResourceManager.GetString("ERR_TypeInferenceFailedForImplicitlyTypedDeconstructionVariable");
+
+        internal static string ERR_DiscardTypeInferenceFailed => ResourceManager.GetString("ERR_DiscardTypeInferenceFailed");
+
+        internal static string ERR_DeconstructWrongCardinality => ResourceManager.GetString("ERR_DeconstructWrongCardinality");
+
+        internal static string ERR_CannotDeconstructDynamic => ResourceManager.GetString("ERR_CannotDeconstructDynamic");
+
+        internal static string ERR_DeconstructTooFewElements => ResourceManager.GetString("ERR_DeconstructTooFewElements");
+
+        internal static string WRN_TupleLiteralNameMismatch => ResourceManager.GetString("WRN_TupleLiteralNameMismatch");
+
+        internal static string WRN_TupleLiteralNameMismatch_Title => ResourceManager.GetString("WRN_TupleLiteralNameMismatch_Title");
+
+        internal static string WRN_TupleBinopLiteralNameMismatch => ResourceManager.GetString("WRN_TupleBinopLiteralNameMismatch");
+
+        internal static string WRN_TupleBinopLiteralNameMismatch_Title => ResourceManager.GetString("WRN_TupleBinopLiteralNameMismatch_Title");
+
+        internal static string ERR_PredefinedValueTupleTypeMustBeStruct => ResourceManager.GetString("ERR_PredefinedValueTupleTypeMustBeStruct");
+
+        internal static string ERR_NewWithTupleTypeSyntax => ResourceManager.GetString("ERR_NewWithTupleTypeSyntax");
+
+        internal static string ERR_DeconstructionVarFormDisallowsSpecificType => ResourceManager.GetString("ERR_DeconstructionVarFormDisallowsSpecificType");
+
+        internal static string ERR_TupleElementNamesAttributeMissing => ResourceManager.GetString("ERR_TupleElementNamesAttributeMissing");
+
+        internal static string ERR_ExplicitTupleElementNamesAttribute => ResourceManager.GetString("ERR_ExplicitTupleElementNamesAttribute");
+
+        internal static string ERR_ExpressionTreeContainsOutVariable => ResourceManager.GetString("ERR_ExpressionTreeContainsOutVariable");
+
+        internal static string ERR_ExpressionTreeContainsDiscard => ResourceManager.GetString("ERR_ExpressionTreeContainsDiscard");
+
+        internal static string ERR_ExpressionTreeContainsIsMatch => ResourceManager.GetString("ERR_ExpressionTreeContainsIsMatch");
+
+        internal static string ERR_ExpressionTreeContainsTupleLiteral => ResourceManager.GetString("ERR_ExpressionTreeContainsTupleLiteral");
+
+        internal static string ERR_ExpressionTreeContainsTupleConversion => ResourceManager.GetString("ERR_ExpressionTreeContainsTupleConversion");
+
+        internal static string ERR_SourceLinkRequiresPdb => ResourceManager.GetString("ERR_SourceLinkRequiresPdb");
+
+        internal static string ERR_CannotEmbedWithoutPdb => ResourceManager.GetString("ERR_CannotEmbedWithoutPdb");
+
+        internal static string ERR_InvalidInstrumentationKind => ResourceManager.GetString("ERR_InvalidInstrumentationKind");
+
+        internal static string ERR_InvalidHashAlgorithmName => ResourceManager.GetString("ERR_InvalidHashAlgorithmName");
+
+        internal static string ERR_VarInvocationLvalueReserved => ResourceManager.GetString("ERR_VarInvocationLvalueReserved");
+
+        internal static string ERR_SemiOrLBraceOrArrowExpected => ResourceManager.GetString("ERR_SemiOrLBraceOrArrowExpected");
+
+        internal static string ERR_ThrowMisplaced => ResourceManager.GetString("ERR_ThrowMisplaced");
+
+        internal static string ERR_DeclarationExpressionNotPermitted => ResourceManager.GetString("ERR_DeclarationExpressionNotPermitted");
+
+        internal static string ERR_MustDeclareForeachIteration => ResourceManager.GetString("ERR_MustDeclareForeachIteration");
+
+        internal static string ERR_TupleElementNamesInDeconstruction => ResourceManager.GetString("ERR_TupleElementNamesInDeconstruction");
+
+        internal static string ERR_PossibleBadNegCast => ResourceManager.GetString("ERR_PossibleBadNegCast");
+
+        internal static string ERR_ExpressionTreeContainsThrowExpression => ResourceManager.GetString("ERR_ExpressionTreeContainsThrowExpression");
+
+        internal static string ERR_ExpressionTreeContainsWithExpression => ResourceManager.GetString("ERR_ExpressionTreeContainsWithExpression");
+
+        internal static string ERR_BadAssemblyName => ResourceManager.GetString("ERR_BadAssemblyName");
+
+        internal static string ERR_BadAsyncMethodBuilderTaskProperty => ResourceManager.GetString("ERR_BadAsyncMethodBuilderTaskProperty");
+
+        internal static string ERR_AttributesInLocalFuncDecl => ResourceManager.GetString("ERR_AttributesInLocalFuncDecl");
+
+        internal static string ERR_TypeForwardedToMultipleAssemblies => ResourceManager.GetString("ERR_TypeForwardedToMultipleAssemblies");
+
+        internal static string ERR_PatternDynamicType => ResourceManager.GetString("ERR_PatternDynamicType");
+
+        internal static string ERR_BadDocumentationMode => ResourceManager.GetString("ERR_BadDocumentationMode");
+
+        internal static string ERR_BadSourceCodeKind => ResourceManager.GetString("ERR_BadSourceCodeKind");
+
+        internal static string ERR_BadLanguageVersion => ResourceManager.GetString("ERR_BadLanguageVersion");
+
+        internal static string ERR_InvalidPreprocessingSymbol => ResourceManager.GetString("ERR_InvalidPreprocessingSymbol");
+
+        internal static string ERR_FeatureNotAvailableInVersion7_1 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion7_1");
+
+        internal static string ERR_FeatureNotAvailableInVersion7_2 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion7_2");
+
+        internal static string ERR_FeatureNotAvailableInVersion7_3 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion7_3");
+
+        internal static string ERR_FeatureNotAvailableInVersion8 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion8");
+
+        internal static string ERR_LanguageVersionCannotHaveLeadingZeroes => ResourceManager.GetString("ERR_LanguageVersionCannotHaveLeadingZeroes");
+
+        internal static string ERR_VoidAssignment => ResourceManager.GetString("ERR_VoidAssignment");
+
+        internal static string WRN_Experimental => ResourceManager.GetString("WRN_Experimental");
+
+        internal static string WRN_Experimental_Title => ResourceManager.GetString("WRN_Experimental_Title");
+
+        internal static string ERR_CompilerAndLanguageVersion => ResourceManager.GetString("ERR_CompilerAndLanguageVersion");
+
+        internal static string IDS_FeatureAsyncMain => ResourceManager.GetString("IDS_FeatureAsyncMain");
+
+        internal static string ERR_TupleInferredNamesNotAvailable => ResourceManager.GetString("ERR_TupleInferredNamesNotAvailable");
+
+        internal static string ERR_AltInterpolatedVerbatimStringsNotAvailable => ResourceManager.GetString("ERR_AltInterpolatedVerbatimStringsNotAvailable");
+
+        internal static string WRN_AttributesOnBackingFieldsNotAvailable => ResourceManager.GetString("WRN_AttributesOnBackingFieldsNotAvailable");
+
+        internal static string WRN_AttributesOnBackingFieldsNotAvailable_Title => ResourceManager.GetString("WRN_AttributesOnBackingFieldsNotAvailable_Title");
+
+        internal static string ERR_VoidInTuple => ResourceManager.GetString("ERR_VoidInTuple");
+
+        internal static string IDS_FeatureNullableReferenceTypes => ResourceManager.GetString("IDS_FeatureNullableReferenceTypes");
+
+        internal static string IDS_FeaturePragmaWarningEnable => ResourceManager.GetString("IDS_FeaturePragmaWarningEnable");
+
+        internal static string WRN_ConvertingNullableToNonNullable => ResourceManager.GetString("WRN_ConvertingNullableToNonNullable");
+
+        internal static string WRN_ConvertingNullableToNonNullable_Title => ResourceManager.GetString("WRN_ConvertingNullableToNonNullable_Title");
+
+        internal static string WRN_NullReferenceAssignment => ResourceManager.GetString("WRN_NullReferenceAssignment");
+
+        internal static string WRN_NullReferenceAssignment_Title => ResourceManager.GetString("WRN_NullReferenceAssignment_Title");
+
+        internal static string WRN_NullReferenceReceiver => ResourceManager.GetString("WRN_NullReferenceReceiver");
+
+        internal static string WRN_NullReferenceReceiver_Title => ResourceManager.GetString("WRN_NullReferenceReceiver_Title");
+
+        internal static string WRN_NullReferenceReturn => ResourceManager.GetString("WRN_NullReferenceReturn");
+
+        internal static string WRN_NullReferenceReturn_Title => ResourceManager.GetString("WRN_NullReferenceReturn_Title");
+
+        internal static string WRN_NullReferenceArgument => ResourceManager.GetString("WRN_NullReferenceArgument");
+
+        internal static string WRN_NullReferenceArgument_Title => ResourceManager.GetString("WRN_NullReferenceArgument_Title");
+
+        internal static string WRN_ThrowPossibleNull => ResourceManager.GetString("WRN_ThrowPossibleNull");
+
+        internal static string WRN_ThrowPossibleNull_Title => ResourceManager.GetString("WRN_ThrowPossibleNull_Title");
+
+        internal static string WRN_UnboxPossibleNull => ResourceManager.GetString("WRN_UnboxPossibleNull");
+
+        internal static string WRN_UnboxPossibleNull_Title => ResourceManager.GetString("WRN_UnboxPossibleNull_Title");
+
+        internal static string WRN_NullabilityMismatchInTypeOnOverride => ResourceManager.GetString("WRN_NullabilityMismatchInTypeOnOverride");
+
+        internal static string WRN_NullabilityMismatchInTypeOnOverride_Title => ResourceManager.GetString("WRN_NullabilityMismatchInTypeOnOverride_Title");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnOverride => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnOverride");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnOverride_Title => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnOverride_Title");
+
+        internal static string WRN_TopLevelNullabilityMismatchInReturnTypeOnOverride => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInReturnTypeOnOverride");
+
+        internal static string WRN_TopLevelNullabilityMismatchInReturnTypeOnOverride_Title => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInReturnTypeOnOverride_Title");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnOverride => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnOverride");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnOverride_Title => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnOverride_Title");
+
+        internal static string WRN_TopLevelNullabilityMismatchInParameterTypeOnOverride => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInParameterTypeOnOverride");
+
+        internal static string WRN_TopLevelNullabilityMismatchInParameterTypeOnOverride_Title => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInParameterTypeOnOverride_Title");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnPartial => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnPartial");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnPartial_Title => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnPartial_Title");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnPartial => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnPartial");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnPartial_Title => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnPartial_Title");
+
+        internal static string WRN_NullabilityMismatchInTypeOnImplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInTypeOnImplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInTypeOnImplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInTypeOnImplicitImplementation_Title");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnImplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnImplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnImplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnImplicitImplementation_Title");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnImplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnImplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnImplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnImplicitImplementation_Title");
+
+        internal static string WRN_TopLevelNullabilityMismatchInReturnTypeOnImplicitImplementation => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInReturnTypeOnImplicitImplementation");
+
+        internal static string WRN_TopLevelNullabilityMismatchInReturnTypeOnImplicitImplementation_Title => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInReturnTypeOnImplicitImplementation_Title");
+
+        internal static string WRN_TopLevelNullabilityMismatchInParameterTypeOnImplicitImplementation => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInParameterTypeOnImplicitImplementation");
+
+        internal static string WRN_TopLevelNullabilityMismatchInParameterTypeOnImplicitImplementation_Title => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInParameterTypeOnImplicitImplementation_Title");
+
+        internal static string WRN_NullabilityMismatchInTypeOnExplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInTypeOnExplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInTypeOnExplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInTypeOnExplicitImplementation_Title");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnExplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnExplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOnExplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOnExplicitImplementation_Title");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnExplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnExplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOnExplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOnExplicitImplementation_Title");
+
+        internal static string WRN_TopLevelNullabilityMismatchInReturnTypeOnExplicitImplementation => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInReturnTypeOnExplicitImplementation");
+
+        internal static string WRN_TopLevelNullabilityMismatchInReturnTypeOnExplicitImplementation_Title => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInReturnTypeOnExplicitImplementation_Title");
+
+        internal static string WRN_TopLevelNullabilityMismatchInParameterTypeOnExplicitImplementation => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInParameterTypeOnExplicitImplementation");
+
+        internal static string WRN_TopLevelNullabilityMismatchInParameterTypeOnExplicitImplementation_Title => ResourceManager.GetString("WRN_TopLevelNullabilityMismatchInParameterTypeOnExplicitImplementation_Title");
+
+        internal static string WRN_UninitializedNonNullableField => ResourceManager.GetString("WRN_UninitializedNonNullableField");
+
+        internal static string WRN_UninitializedNonNullableField_Title => ResourceManager.GetString("WRN_UninitializedNonNullableField_Title");
+
+        internal static string WRN_NullabilityMismatchInAssignment => ResourceManager.GetString("WRN_NullabilityMismatchInAssignment");
+
+        internal static string WRN_NullabilityMismatchInAssignment_Title => ResourceManager.GetString("WRN_NullabilityMismatchInAssignment_Title");
+
+        internal static string WRN_ImplicitCopyInReadOnlyMember => ResourceManager.GetString("WRN_ImplicitCopyInReadOnlyMember");
+
+        internal static string WRN_ImplicitCopyInReadOnlyMember_Title => ResourceManager.GetString("WRN_ImplicitCopyInReadOnlyMember_Title");
+
+        internal static string ERR_StaticMemberCantBeReadOnly => ResourceManager.GetString("ERR_StaticMemberCantBeReadOnly");
+
+        internal static string ERR_AutoSetterCantBeReadOnly => ResourceManager.GetString("ERR_AutoSetterCantBeReadOnly");
+
+        internal static string ERR_AutoPropertyWithSetterCantBeReadOnly => ResourceManager.GetString("ERR_AutoPropertyWithSetterCantBeReadOnly");
+
+        internal static string ERR_InvalidPropertyReadOnlyMods => ResourceManager.GetString("ERR_InvalidPropertyReadOnlyMods");
+
+        internal static string ERR_DuplicatePropertyReadOnlyMods => ResourceManager.GetString("ERR_DuplicatePropertyReadOnlyMods");
+
+        internal static string ERR_FieldLikeEventCantBeReadOnly => ResourceManager.GetString("ERR_FieldLikeEventCantBeReadOnly");
+
+        internal static string ERR_PartialMethodReadOnlyDifference => ResourceManager.GetString("ERR_PartialMethodReadOnlyDifference");
+
+        internal static string ERR_ReadOnlyModMissingAccessor => ResourceManager.GetString("ERR_ReadOnlyModMissingAccessor");
+
+        internal static string WRN_NullabilityMismatchInArgument => ResourceManager.GetString("WRN_NullabilityMismatchInArgument");
+
+        internal static string WRN_NullabilityMismatchInArgument_Title => ResourceManager.GetString("WRN_NullabilityMismatchInArgument_Title");
+
+        internal static string WRN_NullabilityMismatchInArgumentForOutput => ResourceManager.GetString("WRN_NullabilityMismatchInArgumentForOutput");
+
+        internal static string WRN_NullabilityMismatchInArgumentForOutput_Title => ResourceManager.GetString("WRN_NullabilityMismatchInArgumentForOutput_Title");
+
+        internal static string WRN_DisallowNullAttributeForbidsMaybeNullAssignment => ResourceManager.GetString("WRN_DisallowNullAttributeForbidsMaybeNullAssignment");
+
+        internal static string WRN_DisallowNullAttributeForbidsMaybeNullAssignment_Title => ResourceManager.GetString("WRN_DisallowNullAttributeForbidsMaybeNullAssignment_Title");
+
+        internal static string WRN_ParameterConditionallyDisallowsNull => ResourceManager.GetString("WRN_ParameterConditionallyDisallowsNull");
+
+        internal static string WRN_ParameterConditionallyDisallowsNull_Title => ResourceManager.GetString("WRN_ParameterConditionallyDisallowsNull_Title");
+
+        internal static string WRN_ParameterDisallowsNull => ResourceManager.GetString("WRN_ParameterDisallowsNull");
+
+        internal static string WRN_ParameterDisallowsNull_Title => ResourceManager.GetString("WRN_ParameterDisallowsNull_Title");
+
+        internal static string WRN_ParameterNotNullIfNotNull => ResourceManager.GetString("WRN_ParameterNotNullIfNotNull");
+
+        internal static string WRN_ParameterNotNullIfNotNull_Title => ResourceManager.GetString("WRN_ParameterNotNullIfNotNull_Title");
+
+        internal static string WRN_ReturnNotNullIfNotNull => ResourceManager.GetString("WRN_ReturnNotNullIfNotNull");
+
+        internal static string WRN_ReturnNotNullIfNotNull_Title => ResourceManager.GetString("WRN_ReturnNotNullIfNotNull_Title");
+
+        internal static string WRN_MemberNotNull => ResourceManager.GetString("WRN_MemberNotNull");
+
+        internal static string WRN_MemberNotNull_Title => ResourceManager.GetString("WRN_MemberNotNull_Title");
+
+        internal static string WRN_MemberNotNullBadMember => ResourceManager.GetString("WRN_MemberNotNullBadMember");
+
+        internal static string WRN_MemberNotNullBadMember_Title => ResourceManager.GetString("WRN_MemberNotNullBadMember_Title");
+
+        internal static string WRN_MemberNotNullWhen => ResourceManager.GetString("WRN_MemberNotNullWhen");
+
+        internal static string WRN_MemberNotNullWhen_Title => ResourceManager.GetString("WRN_MemberNotNullWhen_Title");
+
+        internal static string WRN_ShouldNotReturn => ResourceManager.GetString("WRN_ShouldNotReturn");
+
+        internal static string WRN_ShouldNotReturn_Title => ResourceManager.GetString("WRN_ShouldNotReturn_Title");
+
+        internal static string WRN_DoesNotReturnMismatch => ResourceManager.GetString("WRN_DoesNotReturnMismatch");
+
+        internal static string WRN_DoesNotReturnMismatch_Title => ResourceManager.GetString("WRN_DoesNotReturnMismatch_Title");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOfTargetDelegate => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOfTargetDelegate");
+
+        internal static string WRN_NullabilityMismatchInReturnTypeOfTargetDelegate_Title => ResourceManager.GetString("WRN_NullabilityMismatchInReturnTypeOfTargetDelegate_Title");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOfTargetDelegate => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOfTargetDelegate");
+
+        internal static string WRN_NullabilityMismatchInParameterTypeOfTargetDelegate_Title => ResourceManager.GetString("WRN_NullabilityMismatchInParameterTypeOfTargetDelegate_Title");
+
+        internal static string WRN_NullAsNonNullable => ResourceManager.GetString("WRN_NullAsNonNullable");
+
+        internal static string WRN_NullAsNonNullable_Title => ResourceManager.GetString("WRN_NullAsNonNullable_Title");
+
+        internal static string ERR_AnnotationDisallowedInObjectCreation => ResourceManager.GetString("ERR_AnnotationDisallowedInObjectCreation");
+
+        internal static string WRN_NullableValueTypeMayBeNull => ResourceManager.GetString("WRN_NullableValueTypeMayBeNull");
+
+        internal static string WRN_NullableValueTypeMayBeNull_Title => ResourceManager.GetString("WRN_NullableValueTypeMayBeNull_Title");
+
+        internal static string WRN_NullabilityMismatchInTypeParameterConstraint => ResourceManager.GetString("WRN_NullabilityMismatchInTypeParameterConstraint");
+
+        internal static string WRN_NullabilityMismatchInTypeParameterConstraint_Title => ResourceManager.GetString("WRN_NullabilityMismatchInTypeParameterConstraint_Title");
+
+        internal static string WRN_MissingNonNullTypesContextForAnnotation => ResourceManager.GetString("WRN_MissingNonNullTypesContextForAnnotation");
+
+        internal static string WRN_MissingNonNullTypesContextForAnnotation_Title => ResourceManager.GetString("WRN_MissingNonNullTypesContextForAnnotation_Title");
+
+        internal static string ERR_ExplicitNullableAttribute => ResourceManager.GetString("ERR_ExplicitNullableAttribute");
+
+        internal static string ERR_NullableUnconstrainedTypeParameter => ResourceManager.GetString("ERR_NullableUnconstrainedTypeParameter");
+
+        internal static string ERR_NullableOptionNotAvailable => ResourceManager.GetString("ERR_NullableOptionNotAvailable");
+
+        internal static string ERR_NonTaskMainCantBeAsync => ResourceManager.GetString("ERR_NonTaskMainCantBeAsync");
+
+        internal static string ERR_PatternWrongGenericTypeInVersion => ResourceManager.GetString("ERR_PatternWrongGenericTypeInVersion");
+
+        internal static string WRN_UnreferencedLocalFunction => ResourceManager.GetString("WRN_UnreferencedLocalFunction");
+
+        internal static string WRN_UnreferencedLocalFunction_Title => ResourceManager.GetString("WRN_UnreferencedLocalFunction_Title");
+
+        internal static string ERR_LocalFunctionMissingBody => ResourceManager.GetString("ERR_LocalFunctionMissingBody");
+
+        internal static string ERR_InvalidDebugInfo => ResourceManager.GetString("ERR_InvalidDebugInfo");
+
+        internal static string IConversionExpressionIsNotCSharpConversion => ResourceManager.GetString("IConversionExpressionIsNotCSharpConversion");
+
+        internal static string ERR_DynamicLocalFunctionTypeParameter => ResourceManager.GetString("ERR_DynamicLocalFunctionTypeParameter");
+
+        internal static string IDS_FeatureLeadingDigitSeparator => ResourceManager.GetString("IDS_FeatureLeadingDigitSeparator");
+
+        internal static string ERR_ExplicitReservedAttr => ResourceManager.GetString("ERR_ExplicitReservedAttr");
+
+        internal static string ERR_TypeReserved => ResourceManager.GetString("ERR_TypeReserved");
+
+        internal static string ERR_InExtensionMustBeValueType => ResourceManager.GetString("ERR_InExtensionMustBeValueType");
+
+        internal static string ERR_FieldsInRoStruct => ResourceManager.GetString("ERR_FieldsInRoStruct");
+
+        internal static string ERR_AutoPropsInRoStruct => ResourceManager.GetString("ERR_AutoPropsInRoStruct");
+
+        internal static string ERR_FieldlikeEventsInRoStruct => ResourceManager.GetString("ERR_FieldlikeEventsInRoStruct");
+
+        internal static string IDS_FeatureRefExtensionMethods => ResourceManager.GetString("IDS_FeatureRefExtensionMethods");
+
+        internal static string ERR_StackAllocConversionNotPossible => ResourceManager.GetString("ERR_StackAllocConversionNotPossible");
+
+        internal static string ERR_RefExtensionMustBeValueTypeOrConstrainedToOne => ResourceManager.GetString("ERR_RefExtensionMustBeValueTypeOrConstrainedToOne");
+
+        internal static string ERR_OutAttrOnInParam => ResourceManager.GetString("ERR_OutAttrOnInParam");
+
+        internal static string ICompoundAssignmentOperationIsNotCSharpCompoundAssignment => ResourceManager.GetString("ICompoundAssignmentOperationIsNotCSharpCompoundAssignment");
+
+        internal static string WRN_FilterIsConstantFalse => ResourceManager.GetString("WRN_FilterIsConstantFalse");
+
+        internal static string WRN_FilterIsConstantFalse_Title => ResourceManager.GetString("WRN_FilterIsConstantFalse_Title");
+
+        internal static string WRN_FilterIsConstantFalseRedundantTryCatch => ResourceManager.GetString("WRN_FilterIsConstantFalseRedundantTryCatch");
+
+        internal static string WRN_FilterIsConstantFalseRedundantTryCatch_Title => ResourceManager.GetString("WRN_FilterIsConstantFalseRedundantTryCatch_Title");
+
+        internal static string ERR_ConditionalInInterpolation => ResourceManager.GetString("ERR_ConditionalInInterpolation");
+
+        internal static string ERR_InDynamicMethodArg => ResourceManager.GetString("ERR_InDynamicMethodArg");
+
+        internal static string ERR_TupleSizesMismatchForBinOps => ResourceManager.GetString("ERR_TupleSizesMismatchForBinOps");
+
+        internal static string ERR_RefLocalOrParamExpected => ResourceManager.GetString("ERR_RefLocalOrParamExpected");
+
+        internal static string ERR_RefAssignNarrower => ResourceManager.GetString("ERR_RefAssignNarrower");
+
+        internal static string IDS_FeatureEnumGenericTypeConstraint => ResourceManager.GetString("IDS_FeatureEnumGenericTypeConstraint");
+
+        internal static string IDS_FeatureDelegateGenericTypeConstraint => ResourceManager.GetString("IDS_FeatureDelegateGenericTypeConstraint");
+
+        internal static string IDS_FeatureUnmanagedGenericTypeConstraint => ResourceManager.GetString("IDS_FeatureUnmanagedGenericTypeConstraint");
+
+        internal static string ERR_NewBoundWithUnmanaged => ResourceManager.GetString("ERR_NewBoundWithUnmanaged");
+
+        internal static string ERR_UnmanagedConstraintNotSatisfied => ResourceManager.GetString("ERR_UnmanagedConstraintNotSatisfied");
+
+        internal static string ERR_ConWithUnmanagedCon => ResourceManager.GetString("ERR_ConWithUnmanagedCon");
+
+        internal static string IDS_FeatureStackAllocInitializer => ResourceManager.GetString("IDS_FeatureStackAllocInitializer");
+
+        internal static string ERR_InvalidStackAllocArray => ResourceManager.GetString("ERR_InvalidStackAllocArray");
+
+        internal static string IDS_FeatureExpressionVariablesInQueriesAndInitializers => ResourceManager.GetString("IDS_FeatureExpressionVariablesInQueriesAndInitializers");
+
+        internal static string ERR_MissingPattern => ResourceManager.GetString("ERR_MissingPattern");
+
+        internal static string IDS_FeatureRecursivePatterns => ResourceManager.GetString("IDS_FeatureRecursivePatterns");
+
+        internal static string IDS_FeatureNullPointerConstantPattern => ResourceManager.GetString("IDS_FeatureNullPointerConstantPattern");
+
+        internal static string IDS_FeatureDefaultTypeParameterConstraint => ResourceManager.GetString("IDS_FeatureDefaultTypeParameterConstraint");
+
+        internal static string ERR_WrongNumberOfSubpatterns => ResourceManager.GetString("ERR_WrongNumberOfSubpatterns");
+
+        internal static string ERR_PropertyPatternNameMissing => ResourceManager.GetString("ERR_PropertyPatternNameMissing");
+
+        internal static string ERR_DefaultPattern => ResourceManager.GetString("ERR_DefaultPattern");
+
+        internal static string ERR_SwitchExpressionNoBestType => ResourceManager.GetString("ERR_SwitchExpressionNoBestType");
+
+        internal static string ERR_DefaultLiteralNoTargetType => ResourceManager.GetString("ERR_DefaultLiteralNoTargetType");
+
+        internal static string ERR_CannotInferDelegateType => ResourceManager.GetString("ERR_CannotInferDelegateType");
+
+        internal static string ERR_SingleElementPositionalPatternRequiresDisambiguation => ResourceManager.GetString("ERR_SingleElementPositionalPatternRequiresDisambiguation");
+
+        internal static string ERR_VarMayNotBindToType => ResourceManager.GetString("ERR_VarMayNotBindToType");
+
+        internal static string WRN_SwitchExpressionNotExhaustive => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustive");
+
+        internal static string WRN_SwitchExpressionNotExhaustive_Title => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustive_Title");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveWithWhen => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveWithWhen");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveWithWhen_Title => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveWithWhen_Title");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveWithUnnamedEnumValue => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveWithUnnamedEnumValue");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveWithUnnamedEnumValue_Title => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveWithUnnamedEnumValue_Title");
+
+        internal static string WRN_CaseConstantNamedUnderscore => ResourceManager.GetString("WRN_CaseConstantNamedUnderscore");
+
+        internal static string WRN_CaseConstantNamedUnderscore_Title => ResourceManager.GetString("WRN_CaseConstantNamedUnderscore_Title");
+
+        internal static string WRN_IsTypeNamedUnderscore => ResourceManager.GetString("WRN_IsTypeNamedUnderscore");
+
+        internal static string WRN_IsTypeNamedUnderscore_Title => ResourceManager.GetString("WRN_IsTypeNamedUnderscore_Title");
+
+        internal static string ERR_ExpressionTreeContainsSwitchExpression => ResourceManager.GetString("ERR_ExpressionTreeContainsSwitchExpression");
+
+        internal static string ERR_InvalidObjectCreation => ResourceManager.GetString("ERR_InvalidObjectCreation");
+
+        internal static string IDS_FeatureIndexingMovableFixedBuffers => ResourceManager.GetString("IDS_FeatureIndexingMovableFixedBuffers");
+
+        internal static string ERR_CantUseInOrOutInArglist => ResourceManager.GetString("ERR_CantUseInOrOutInArglist");
+
+        internal static string SyntaxTreeNotFound => ResourceManager.GetString("SyntaxTreeNotFound");
+
+        internal static string ERR_OutVariableCannotBeByRef => ResourceManager.GetString("ERR_OutVariableCannotBeByRef");
+
+        internal static string ERR_MultipleAnalyzerConfigsInSameDir => ResourceManager.GetString("ERR_MultipleAnalyzerConfigsInSameDir");
+
+        internal static string IDS_FeatureCoalesceAssignmentExpression => ResourceManager.GetString("IDS_FeatureCoalesceAssignmentExpression");
+
+        internal static string CannotCreateConstructedFromConstructed => ResourceManager.GetString("CannotCreateConstructedFromConstructed");
+
+        internal static string CannotCreateConstructedFromNongeneric => ResourceManager.GetString("CannotCreateConstructedFromNongeneric");
+
+        internal static string IDS_FeatureUnconstrainedTypeParameterInNullCoalescingOperator => ResourceManager.GetString("IDS_FeatureUnconstrainedTypeParameterInNullCoalescingOperator");
+
+        internal static string WRN_NullabilityMismatchInConstraintsOnImplicitImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInConstraintsOnImplicitImplementation");
+
+        internal static string WRN_NullabilityMismatchInConstraintsOnImplicitImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInConstraintsOnImplicitImplementation_Title");
+
+        internal static string WRN_NullabilityMismatchInTypeParameterReferenceTypeConstraint => ResourceManager.GetString("WRN_NullabilityMismatchInTypeParameterReferenceTypeConstraint");
+
+        internal static string WRN_NullabilityMismatchInTypeParameterReferenceTypeConstraint_Title => ResourceManager.GetString("WRN_NullabilityMismatchInTypeParameterReferenceTypeConstraint_Title");
+
+        internal static string ERR_TripleDotNotAllowed => ResourceManager.GetString("ERR_TripleDotNotAllowed");
+
+        internal static string IDS_FeatureIndexOperator => ResourceManager.GetString("IDS_FeatureIndexOperator");
+
+        internal static string IDS_FeatureRangeOperator => ResourceManager.GetString("IDS_FeatureRangeOperator");
+
+        internal static string IDS_FeatureStaticLocalFunctions => ResourceManager.GetString("IDS_FeatureStaticLocalFunctions");
+
+        internal static string IDS_FeatureNameShadowingInNestedFunctions => ResourceManager.GetString("IDS_FeatureNameShadowingInNestedFunctions");
+
+        internal static string IDS_FeatureLambdaDiscardParameters => ResourceManager.GetString("IDS_FeatureLambdaDiscardParameters");
+
+        internal static string IDS_FeatureMemberNotNull => ResourceManager.GetString("IDS_FeatureMemberNotNull");
+
+        internal static string IDS_FeatureNativeInt => ResourceManager.GetString("IDS_FeatureNativeInt");
+
+        internal static string ERR_BadDynamicAwaitForEach => ResourceManager.GetString("ERR_BadDynamicAwaitForEach");
+
+        internal static string ERR_NullableDirectiveQualifierExpected => ResourceManager.GetString("ERR_NullableDirectiveQualifierExpected");
+
+        internal static string ERR_NullableDirectiveTargetExpected => ResourceManager.GetString("ERR_NullableDirectiveTargetExpected");
+
+        internal static string WRN_MissingNonNullTypesContextForAnnotationInGeneratedCode => ResourceManager.GetString("WRN_MissingNonNullTypesContextForAnnotationInGeneratedCode");
+
+        internal static string WRN_MissingNonNullTypesContextForAnnotationInGeneratedCode_Title => ResourceManager.GetString("WRN_MissingNonNullTypesContextForAnnotationInGeneratedCode_Title");
+
+        internal static string WRN_NullReferenceInitializer => ResourceManager.GetString("WRN_NullReferenceInitializer");
+
+        internal static string WRN_NullReferenceInitializer_Title => ResourceManager.GetString("WRN_NullReferenceInitializer_Title");
+
+        internal static string ERR_ExpressionTreeCantContainRefStruct => ResourceManager.GetString("ERR_ExpressionTreeCantContainRefStruct");
+
+        internal static string ERR_ElseCannotStartStatement => ResourceManager.GetString("ERR_ElseCannotStartStatement");
+
+        internal static string ERR_ExpressionTreeCantContainNullCoalescingAssignment => ResourceManager.GetString("ERR_ExpressionTreeCantContainNullCoalescingAssignment");
+
+        internal static string ERR_BadNullableContextOption => ResourceManager.GetString("ERR_BadNullableContextOption");
+
+        internal static string ERR_SwitchGoverningExpressionRequiresParens => ResourceManager.GetString("ERR_SwitchGoverningExpressionRequiresParens");
+
+        internal static string ERR_TupleElementNameMismatch => ResourceManager.GetString("ERR_TupleElementNameMismatch");
+
+        internal static string ERR_DeconstructParameterNameMismatch => ResourceManager.GetString("ERR_DeconstructParameterNameMismatch");
+
+        internal static string ERR_IsPatternImpossible => ResourceManager.GetString("ERR_IsPatternImpossible");
+
+        internal static string WRN_IsPatternAlways => ResourceManager.GetString("WRN_IsPatternAlways");
+
+        internal static string WRN_IsPatternAlways_Title => ResourceManager.GetString("WRN_IsPatternAlways_Title");
+
+        internal static string WRN_GivenExpressionNeverMatchesPattern => ResourceManager.GetString("WRN_GivenExpressionNeverMatchesPattern");
+
+        internal static string WRN_GivenExpressionNeverMatchesPattern_Title => ResourceManager.GetString("WRN_GivenExpressionNeverMatchesPattern_Title");
+
+        internal static string WRN_GivenExpressionAlwaysMatchesConstant => ResourceManager.GetString("WRN_GivenExpressionAlwaysMatchesConstant");
+
+        internal static string WRN_GivenExpressionAlwaysMatchesConstant_Title => ResourceManager.GetString("WRN_GivenExpressionAlwaysMatchesConstant_Title");
+
+        internal static string WRN_GivenExpressionAlwaysMatchesPattern => ResourceManager.GetString("WRN_GivenExpressionAlwaysMatchesPattern");
+
+        internal static string WRN_GivenExpressionAlwaysMatchesPattern_Title => ResourceManager.GetString("WRN_GivenExpressionAlwaysMatchesPattern_Title");
+
+        internal static string ERR_FeatureNotAvailableInVersion8_0 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion8_0");
+
+        internal static string ERR_PointerTypeInPatternMatching => ResourceManager.GetString("ERR_PointerTypeInPatternMatching");
+
+        internal static string ERR_ArgumentNameInITuplePattern => ResourceManager.GetString("ERR_ArgumentNameInITuplePattern");
+
+        internal static string ERR_DiscardPatternInSwitchStatement => ResourceManager.GetString("ERR_DiscardPatternInSwitchStatement");
+
+        internal static string WRN_NullabilityMismatchInExplicitlyImplementedInterface => ResourceManager.GetString("WRN_NullabilityMismatchInExplicitlyImplementedInterface");
+
+        internal static string WRN_NullabilityMismatchInExplicitlyImplementedInterface_Title => ResourceManager.GetString("WRN_NullabilityMismatchInExplicitlyImplementedInterface_Title");
+
+        internal static string WRN_NullabilityMismatchInInterfaceImplementedByBase => ResourceManager.GetString("WRN_NullabilityMismatchInInterfaceImplementedByBase");
+
+        internal static string WRN_NullabilityMismatchInInterfaceImplementedByBase_Title => ResourceManager.GetString("WRN_NullabilityMismatchInInterfaceImplementedByBase_Title");
+
+        internal static string WRN_DuplicateInterfaceWithNullabilityMismatchInBaseList => ResourceManager.GetString("WRN_DuplicateInterfaceWithNullabilityMismatchInBaseList");
+
+        internal static string WRN_DuplicateInterfaceWithNullabilityMismatchInBaseList_Title => ResourceManager.GetString("WRN_DuplicateInterfaceWithNullabilityMismatchInBaseList_Title");
+
+        internal static string ERR_DuplicateExplicitImpl => ResourceManager.GetString("ERR_DuplicateExplicitImpl");
+
+        internal static string ERR_UsingVarInSwitchCase => ResourceManager.GetString("ERR_UsingVarInSwitchCase");
+
+        internal static string ERR_GoToForwardJumpOverUsingVar => ResourceManager.GetString("ERR_GoToForwardJumpOverUsingVar");
+
+        internal static string ERR_GoToBackwardJumpOverUsingVar => ResourceManager.GetString("ERR_GoToBackwardJumpOverUsingVar");
+
+        internal static string IDS_FeatureUsingDeclarations => ResourceManager.GetString("IDS_FeatureUsingDeclarations");
+
+        internal static string ERR_FeatureInPreview => ResourceManager.GetString("ERR_FeatureInPreview");
+
+        internal static string IDS_DefaultInterfaceImplementation => ResourceManager.GetString("IDS_DefaultInterfaceImplementation");
+
+        internal static string ERR_RuntimeDoesNotSupportDefaultInterfaceImplementation => ResourceManager.GetString("ERR_RuntimeDoesNotSupportDefaultInterfaceImplementation");
+
+        internal static string ERR_RuntimeDoesNotSupportDefaultInterfaceImplementationForMember => ResourceManager.GetString("ERR_RuntimeDoesNotSupportDefaultInterfaceImplementationForMember");
+
+        internal static string ERR_InvalidModifierForLanguageVersion => ResourceManager.GetString("ERR_InvalidModifierForLanguageVersion");
+
+        internal static string ERR_ImplicitImplementationOfNonPublicInterfaceMember => ResourceManager.GetString("ERR_ImplicitImplementationOfNonPublicInterfaceMember");
+
+        internal static string ERR_MostSpecificImplementationIsNotFound => ResourceManager.GetString("ERR_MostSpecificImplementationIsNotFound");
+
+        internal static string ERR_LanguageVersionDoesNotSupportDefaultInterfaceImplementationForMember => ResourceManager.GetString("ERR_LanguageVersionDoesNotSupportDefaultInterfaceImplementationForMember");
+
+        internal static string ERR_RuntimeDoesNotSupportProtectedAccessForInterfaceMember => ResourceManager.GetString("ERR_RuntimeDoesNotSupportProtectedAccessForInterfaceMember");
+
+        internal static string ERR_DefaultInterfaceImplementationInNoPIAType => ResourceManager.GetString("ERR_DefaultInterfaceImplementationInNoPIAType");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveForNull => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveForNull");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveForNull_Title => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveForNull_Title");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveForNullWithWhen => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveForNullWithWhen");
+
+        internal static string WRN_SwitchExpressionNotExhaustiveForNullWithWhen_Title => ResourceManager.GetString("WRN_SwitchExpressionNotExhaustiveForNullWithWhen_Title");
+
+        internal static string ERR_AttributeNotOnEventAccessor => ResourceManager.GetString("ERR_AttributeNotOnEventAccessor");
+
+        internal static string IDS_FeatureObsoleteOnPropertyAccessor => ResourceManager.GetString("IDS_FeatureObsoleteOnPropertyAccessor");
+
+        internal static string WRN_UnconsumedEnumeratorCancellationAttributeUsage => ResourceManager.GetString("WRN_UnconsumedEnumeratorCancellationAttributeUsage");
+
+        internal static string WRN_UnconsumedEnumeratorCancellationAttributeUsage_Title => ResourceManager.GetString("WRN_UnconsumedEnumeratorCancellationAttributeUsage_Title");
+
+        internal static string WRN_UndecoratedCancellationTokenParameter => ResourceManager.GetString("WRN_UndecoratedCancellationTokenParameter");
+
+        internal static string WRN_UndecoratedCancellationTokenParameter_Title => ResourceManager.GetString("WRN_UndecoratedCancellationTokenParameter_Title");
+
+        internal static string ERR_MultipleEnumeratorCancellationAttributes => ResourceManager.GetString("ERR_MultipleEnumeratorCancellationAttributes");
+
+        internal static string ERR_OverrideRefConstraintNotSatisfied => ResourceManager.GetString("ERR_OverrideRefConstraintNotSatisfied");
+
+        internal static string ERR_OverrideValConstraintNotSatisfied => ResourceManager.GetString("ERR_OverrideValConstraintNotSatisfied");
+
+        internal static string ERR_OverrideDefaultConstraintNotSatisfied => ResourceManager.GetString("ERR_OverrideDefaultConstraintNotSatisfied");
+
+        internal static string ERR_DefaultConstraintOverrideOnly => ResourceManager.GetString("ERR_DefaultConstraintOverrideOnly");
+
+        internal static string IDS_OverrideWithConstraints => ResourceManager.GetString("IDS_OverrideWithConstraints");
+
+        internal static string WRN_NullabilityMismatchInConstraintsOnPartialImplementation => ResourceManager.GetString("WRN_NullabilityMismatchInConstraintsOnPartialImplementation");
+
+        internal static string WRN_NullabilityMismatchInConstraintsOnPartialImplementation_Title => ResourceManager.GetString("WRN_NullabilityMismatchInConstraintsOnPartialImplementation_Title");
+
+        internal static string IDS_FeatureNestedStackalloc => ResourceManager.GetString("IDS_FeatureNestedStackalloc");
+
+        internal static string WRN_NullabilityMismatchInTypeParameterNotNullConstraint => ResourceManager.GetString("WRN_NullabilityMismatchInTypeParameterNotNullConstraint");
+
+        internal static string WRN_NullabilityMismatchInTypeParameterNotNullConstraint_Title => ResourceManager.GetString("WRN_NullabilityMismatchInTypeParameterNotNullConstraint_Title");
+
+        internal static string IDS_FeatureNotNullGenericTypeConstraint => ResourceManager.GetString("IDS_FeatureNotNullGenericTypeConstraint");
+
+        internal static string ERR_DuplicateNullSuppression => ResourceManager.GetString("ERR_DuplicateNullSuppression");
+
+        internal static string ERR_ReAbstractionInNoPIAType => ResourceManager.GetString("ERR_ReAbstractionInNoPIAType");
+
+        internal static string ERR_BadSwitchValue => ResourceManager.GetString("ERR_BadSwitchValue");
+
+        internal static string IDS_FeatureFunctionPointers => ResourceManager.GetString("IDS_FeatureFunctionPointers");
+
+        internal static string IDS_AddressOfMethodGroup => ResourceManager.GetString("IDS_AddressOfMethodGroup");
+
+        internal static string ERR_InvalidFunctionPointerCallingConvention => ResourceManager.GetString("ERR_InvalidFunctionPointerCallingConvention");
+
+        internal static string ERR_TypeNotFound => ResourceManager.GetString("ERR_TypeNotFound");
+
+        internal static string ERR_TypeMustBePublic => ResourceManager.GetString("ERR_TypeMustBePublic");
+
+        internal static string WRN_SyncAndAsyncEntryPoints => ResourceManager.GetString("WRN_SyncAndAsyncEntryPoints");
+
+        internal static string ERR_InternalError => ResourceManager.GetString("ERR_InternalError");
+
+        internal static string IDS_FeatureStaticAnonymousFunction => ResourceManager.GetString("IDS_FeatureStaticAnonymousFunction");
+
+        internal static string ERR_StaticAnonymousFunctionCannotCaptureThis => ResourceManager.GetString("ERR_StaticAnonymousFunctionCannotCaptureThis");
+
+        internal static string ERR_StaticAnonymousFunctionCannotCaptureVariable => ResourceManager.GetString("ERR_StaticAnonymousFunctionCannotCaptureVariable");
+
+        internal static string IDS_FeatureAsyncUsing => ResourceManager.GetString("IDS_FeatureAsyncUsing");
+
+        internal static string IDS_FeatureParenthesizedPattern => ResourceManager.GetString("IDS_FeatureParenthesizedPattern");
+
+        internal static string IDS_FeatureOrPattern => ResourceManager.GetString("IDS_FeatureOrPattern");
+
+        internal static string IDS_FeatureAndPattern => ResourceManager.GetString("IDS_FeatureAndPattern");
+
+        internal static string IDS_FeatureNotPattern => ResourceManager.GetString("IDS_FeatureNotPattern");
+
+        internal static string IDS_FeatureTypePattern => ResourceManager.GetString("IDS_FeatureTypePattern");
+
+        internal static string IDS_FeatureRelationalPattern => ResourceManager.GetString("IDS_FeatureRelationalPattern");
+
+        internal static string ERR_VarianceInterfaceNesting => ResourceManager.GetString("ERR_VarianceInterfaceNesting");
+
+        internal static string ERR_ExternEventInitializer => ResourceManager.GetString("ERR_ExternEventInitializer");
+
+        internal static string ERR_ImplicitIndexIndexerWithName => ResourceManager.GetString("ERR_ImplicitIndexIndexerWithName");
+
+        internal static string ERR_ImplicitRangeIndexerWithName => ResourceManager.GetString("ERR_ImplicitRangeIndexerWithName");
+
+        internal static string ERR_ImplicitObjectCreationIllegalTargetType => ResourceManager.GetString("ERR_ImplicitObjectCreationIllegalTargetType");
+
+        internal static string ERR_ImplicitObjectCreationNotValid => ResourceManager.GetString("ERR_ImplicitObjectCreationNotValid");
+
+        internal static string ERR_ImplicitObjectCreationNoTargetType => ResourceManager.GetString("ERR_ImplicitObjectCreationNoTargetType");
+
+        internal static string IDS_FeatureImplicitObjectCreation => ResourceManager.GetString("IDS_FeatureImplicitObjectCreation");
+
+        internal static string ERR_ExpressionTreeContainsPatternIndexOrRangeIndexer => ResourceManager.GetString("ERR_ExpressionTreeContainsPatternIndexOrRangeIndexer");
+
+        internal static string ERR_ExpressionTreeContainsFromEndIndexExpression => ResourceManager.GetString("ERR_ExpressionTreeContainsFromEndIndexExpression");
+
+        internal static string ERR_ExpressionTreeContainsRangeExpression => ResourceManager.GetString("ERR_ExpressionTreeContainsRangeExpression");
+
+        internal static string WRN_GeneratorFailedDuringGeneration => ResourceManager.GetString("WRN_GeneratorFailedDuringGeneration");
+
+        internal static string WRN_GeneratorFailedDuringInitialization => ResourceManager.GetString("WRN_GeneratorFailedDuringInitialization");
+
+        internal static string WRN_GeneratorFailedDuringGeneration_Title => ResourceManager.GetString("WRN_GeneratorFailedDuringGeneration_Title");
+
+        internal static string WRN_GeneratorFailedDuringInitialization_Title => ResourceManager.GetString("WRN_GeneratorFailedDuringInitialization_Title");
+
+        internal static string WRN_GeneratorFailedDuringGeneration_Description => ResourceManager.GetString("WRN_GeneratorFailedDuringGeneration_Description");
+
+        internal static string WRN_GeneratorFailedDuringInitialization_Description => ResourceManager.GetString("WRN_GeneratorFailedDuringInitialization_Description");
+
+        internal static string IDS_FeatureRecords => ResourceManager.GetString("IDS_FeatureRecords");
+
+        internal static string IDS_FeatureInitOnlySetters => ResourceManager.GetString("IDS_FeatureInitOnlySetters");
+
+        internal static string ERR_InvalidWithReceiverType => ResourceManager.GetString("ERR_InvalidWithReceiverType");
+
+        internal static string ERR_CannotClone => ResourceManager.GetString("ERR_CannotClone");
+
+        internal static string ERR_AssignmentInitOnly => ResourceManager.GetString("ERR_AssignmentInitOnly");
+
+        internal static string ERR_DesignatorBeneathPatternCombinator => ResourceManager.GetString("ERR_DesignatorBeneathPatternCombinator");
+
+        internal static string ERR_UnsupportedTypeForRelationalPattern => ResourceManager.GetString("ERR_UnsupportedTypeForRelationalPattern");
+
+        internal static string ERR_RelationalPatternWithNaN => ResourceManager.GetString("ERR_RelationalPatternWithNaN");
+
+        internal static string IDS_FeatureExtendedPartialMethods => ResourceManager.GetString("IDS_FeatureExtendedPartialMethods");
+
+        internal static string IDS_FeatureConstantInterpolatedStrings => ResourceManager.GetString("IDS_FeatureConstantInterpolatedStrings");
+
+        internal static string ERR_PartialMethodWithNonVoidReturnMustHaveAccessMods => ResourceManager.GetString("ERR_PartialMethodWithNonVoidReturnMustHaveAccessMods");
+
+        internal static string ERR_PartialMethodWithOutParamMustHaveAccessMods => ResourceManager.GetString("ERR_PartialMethodWithOutParamMustHaveAccessMods");
+
+        internal static string ERR_PartialMethodWithAccessibilityModsMustHaveImplementation => ResourceManager.GetString("ERR_PartialMethodWithAccessibilityModsMustHaveImplementation");
+
+        internal static string ERR_PartialMethodWithExtendedModMustHaveAccessMods => ResourceManager.GetString("ERR_PartialMethodWithExtendedModMustHaveAccessMods");
+
+        internal static string ERR_PartialMethodAccessibilityDifference => ResourceManager.GetString("ERR_PartialMethodAccessibilityDifference");
+
+        internal static string ERR_PartialMethodExtendedModDifference => ResourceManager.GetString("ERR_PartialMethodExtendedModDifference");
+
+        internal static string ERR_PartialMethodReturnTypeDifference => ResourceManager.GetString("ERR_PartialMethodReturnTypeDifference");
+
+        internal static string ERR_PartialMethodRefReturnDifference => ResourceManager.GetString("ERR_PartialMethodRefReturnDifference");
+
+        internal static string IDS_TopLevelStatements => ResourceManager.GetString("IDS_TopLevelStatements");
+
+        internal static string ERR_SimpleProgramLocalIsReferencedOutsideOfTopLevelStatement => ResourceManager.GetString("ERR_SimpleProgramLocalIsReferencedOutsideOfTopLevelStatement");
+
+        internal static string ERR_SimpleProgramMultipleUnitsWithTopLevelStatements => ResourceManager.GetString("ERR_SimpleProgramMultipleUnitsWithTopLevelStatements");
+
+        internal static string ERR_TopLevelStatementAfterNamespaceOrType => ResourceManager.GetString("ERR_TopLevelStatementAfterNamespaceOrType");
+
+        internal static string ERR_SimpleProgramDisallowsMainType => ResourceManager.GetString("ERR_SimpleProgramDisallowsMainType");
+
+        internal static string ERR_SimpleProgramNotAnExecutable => ResourceManager.GetString("ERR_SimpleProgramNotAnExecutable");
+
+        internal static string ERR_InvalidFuncPointerReturnTypeModifier => ResourceManager.GetString("ERR_InvalidFuncPointerReturnTypeModifier");
+
+        internal static string ERR_DupReturnTypeMod => ResourceManager.GetString("ERR_DupReturnTypeMod");
+
+        internal static string ERR_BadFuncPointerParamModifier => ResourceManager.GetString("ERR_BadFuncPointerParamModifier");
+
+        internal static string ERR_BadFuncPointerArgCount => ResourceManager.GetString("ERR_BadFuncPointerArgCount");
+
+        internal static string ERR_MethFuncPtrMismatch => ResourceManager.GetString("ERR_MethFuncPtrMismatch");
+
+        internal static string ERR_FuncPtrRefMismatch => ResourceManager.GetString("ERR_FuncPtrRefMismatch");
+
+        internal static string ERR_FuncPtrMethMustBeStatic => ResourceManager.GetString("ERR_FuncPtrMethMustBeStatic");
+
+        internal static string ERR_AddressOfMethodGroupInExpressionTree => ResourceManager.GetString("ERR_AddressOfMethodGroupInExpressionTree");
+
+        internal static string ERR_WrongFuncPtrCallingConvention => ResourceManager.GetString("ERR_WrongFuncPtrCallingConvention");
+
+        internal static string ERR_MissingAddressOf => ResourceManager.GetString("ERR_MissingAddressOf");
+
+        internal static string ERR_CannotUseReducedExtensionMethodInAddressOf => ResourceManager.GetString("ERR_CannotUseReducedExtensionMethodInAddressOf");
+
+        internal static string ERR_CannotUseFunctionPointerAsFixedLocal => ResourceManager.GetString("ERR_CannotUseFunctionPointerAsFixedLocal");
+
+        internal static string ERR_UnsupportedCallingConvention => ResourceManager.GetString("ERR_UnsupportedCallingConvention");
+
+        internal static string ERR_RuntimeDoesNotSupportUnmanagedDefaultCallConv => ResourceManager.GetString("ERR_RuntimeDoesNotSupportUnmanagedDefaultCallConv");
+
+        internal static string NotSameNumberParameterTypesAndRefKinds => ResourceManager.GetString("NotSameNumberParameterTypesAndRefKinds");
+
+        internal static string OutIsNotValidForReturn => ResourceManager.GetString("OutIsNotValidForReturn");
+
+        internal static string CallingConventionTypesRequireUnmanaged => ResourceManager.GetString("CallingConventionTypesRequireUnmanaged");
+
+        internal static string CallingConventionTypeIsInvalid => ResourceManager.GetString("CallingConventionTypeIsInvalid");
+
+        internal static string ERR_CannotConvertAddressOfToDelegate => ResourceManager.GetString("ERR_CannotConvertAddressOfToDelegate");
+
+        internal static string ERR_AddressOfToNonFunctionPointer => ResourceManager.GetString("ERR_AddressOfToNonFunctionPointer");
+
+        internal static string ERR_CannotSpecifyManagedWithUnmanagedSpecifiers => ResourceManager.GetString("ERR_CannotSpecifyManagedWithUnmanagedSpecifiers");
+
+        internal static string ERR_FeatureNotAvailableInVersion9 => ResourceManager.GetString("ERR_FeatureNotAvailableInVersion9");
+
+        internal static string ERR_UnexpectedArgumentList => ResourceManager.GetString("ERR_UnexpectedArgumentList");
+
+        internal static string ERR_UnexpectedOrMissingConstructorInitializerInRecord => ResourceManager.GetString("ERR_UnexpectedOrMissingConstructorInitializerInRecord");
+
+        internal static string ERR_MultipleRecordParameterLists => ResourceManager.GetString("ERR_MultipleRecordParameterLists");
+
+        internal static string ERR_BadRecordBase => ResourceManager.GetString("ERR_BadRecordBase");
+
+        internal static string ERR_BadInheritanceFromRecord => ResourceManager.GetString("ERR_BadInheritanceFromRecord");
+
+        internal static string ERR_BadRecordMemberForPositionalParameter => ResourceManager.GetString("ERR_BadRecordMemberForPositionalParameter");
+
+        internal static string ERR_NoCopyConstructorInBaseType => ResourceManager.GetString("ERR_NoCopyConstructorInBaseType");
+
+        internal static string ERR_CopyConstructorMustInvokeBaseCopyConstructor => ResourceManager.GetString("ERR_CopyConstructorMustInvokeBaseCopyConstructor");
+
+        internal static string IDS_FeatureTargetTypedConditional => ResourceManager.GetString("IDS_FeatureTargetTypedConditional");
+
+        internal static string ERR_DoesNotOverrideMethodFromObject => ResourceManager.GetString("ERR_DoesNotOverrideMethodFromObject");
+
+        internal static string IDS_FeatureCovariantReturnsForOverrides => ResourceManager.GetString("IDS_FeatureCovariantReturnsForOverrides");
+
+        internal static string ERR_RuntimeDoesNotSupportCovariantReturnsOfClasses => ResourceManager.GetString("ERR_RuntimeDoesNotSupportCovariantReturnsOfClasses");
+
+        internal static string ERR_RuntimeDoesNotSupportCovariantPropertiesOfClasses => ResourceManager.GetString("ERR_RuntimeDoesNotSupportCovariantPropertiesOfClasses");
+
+        internal static string ERR_SealedAPIInRecord => ResourceManager.GetString("ERR_SealedAPIInRecord");
+
+        internal static string ERR_DoesNotOverrideBaseMethod => ResourceManager.GetString("ERR_DoesNotOverrideBaseMethod");
+
+        internal static string WRN_ConstOutOfRangeChecked => ResourceManager.GetString("WRN_ConstOutOfRangeChecked");
+
+        internal static string WRN_ConstOutOfRangeChecked_Title => ResourceManager.GetString("WRN_ConstOutOfRangeChecked_Title");
+
+        internal static string ERR_CloneDisallowedInRecord => ResourceManager.GetString("ERR_CloneDisallowedInRecord");
+
+        internal static string WRN_RecordNamedDisallowed => ResourceManager.GetString("WRN_RecordNamedDisallowed");
+
+        internal static string WRN_RecordNamedDisallowed_Title => ResourceManager.GetString("WRN_RecordNamedDisallowed_Title");
+
+        internal static string ERR_NotOverridableAPIInRecord => ResourceManager.GetString("ERR_NotOverridableAPIInRecord");
+
+        internal static string ERR_NonPublicAPIInRecord => ResourceManager.GetString("ERR_NonPublicAPIInRecord");
+
+        internal static string ERR_SignatureMismatchInRecord => ResourceManager.GetString("ERR_SignatureMismatchInRecord");
+
+        internal static string ERR_NonProtectedAPIInRecord => ResourceManager.GetString("ERR_NonProtectedAPIInRecord");
+
+        internal static string ERR_DoesNotOverrideBaseEqualityContract => ResourceManager.GetString("ERR_DoesNotOverrideBaseEqualityContract");
+
+        internal static string ERR_StaticAPIInRecord => ResourceManager.GetString("ERR_StaticAPIInRecord");
+
+        internal static string ERR_CopyConstructorWrongAccessibility => ResourceManager.GetString("ERR_CopyConstructorWrongAccessibility");
+
+        internal static string ERR_NonPrivateAPIInRecord => ResourceManager.GetString("ERR_NonPrivateAPIInRecord");
+
+        internal static string WRN_PrecedenceInversion => ResourceManager.GetString("WRN_PrecedenceInversion");
+
+        internal static string WRN_PrecedenceInversion_Title => ResourceManager.GetString("WRN_PrecedenceInversion_Title");
+
+        internal static string IDS_FeatureModuleInitializers => ResourceManager.GetString("IDS_FeatureModuleInitializers");
+
+        internal static string ERR_ModuleInitializerMethodMustBeAccessibleOutsideTopLevelType => ResourceManager.GetString("ERR_ModuleInitializerMethodMustBeAccessibleOutsideTopLevelType");
+
+        internal static string ERR_ModuleInitializerMethodMustBeStaticParameterlessVoid => ResourceManager.GetString("ERR_ModuleInitializerMethodMustBeStaticParameterlessVoid");
+
+        internal static string ERR_ModuleInitializerMethodAndContainingTypesMustNotBeGeneric => ResourceManager.GetString("ERR_ModuleInitializerMethodAndContainingTypesMustNotBeGeneric");
+
+        internal static string ERR_ModuleInitializerMethodMustBeOrdinary => ResourceManager.GetString("ERR_ModuleInitializerMethodMustBeOrdinary");
+
+        internal static string IDS_FeatureExtensionGetAsyncEnumerator => ResourceManager.GetString("IDS_FeatureExtensionGetAsyncEnumerator");
+
+        internal static string IDS_FeatureExtensionGetEnumerator => ResourceManager.GetString("IDS_FeatureExtensionGetEnumerator");
+
+        internal static string ERR_UnmanagedCallersOnlyRequiresStatic => ResourceManager.GetString("ERR_UnmanagedCallersOnlyRequiresStatic");
+
+        internal static string ERR_InvalidUnmanagedCallersOnlyCallConv => ResourceManager.GetString("ERR_InvalidUnmanagedCallersOnlyCallConv");
+
+        internal static string ERR_CannotUseManagedTypeInUnmanagedCallersOnly => ResourceManager.GetString("ERR_CannotUseManagedTypeInUnmanagedCallersOnly");
+
+        internal static string ERR_UnmanagedCallersOnlyMethodOrTypeCannotBeGeneric => ResourceManager.GetString("ERR_UnmanagedCallersOnlyMethodOrTypeCannotBeGeneric");
+
+        internal static string ERR_UnmanagedCallersOnlyMethodsCannotBeCalledDirectly => ResourceManager.GetString("ERR_UnmanagedCallersOnlyMethodsCannotBeCalledDirectly");
+
+        internal static string ERR_UnmanagedCallersOnlyMethodsCannotBeConvertedToDelegate => ResourceManager.GetString("ERR_UnmanagedCallersOnlyMethodsCannotBeConvertedToDelegate");
+
+        internal static string ERR_EntryPointCannotBeUnmanagedCallersOnly => ResourceManager.GetString("ERR_EntryPointCannotBeUnmanagedCallersOnly");
+
+        internal static string ERR_ModuleInitializerCannotBeUnmanagedCallersOnly => ResourceManager.GetString("ERR_ModuleInitializerCannotBeUnmanagedCallersOnly");
+
+        internal static string WRN_RecordEqualsWithoutGetHashCode => ResourceManager.GetString("WRN_RecordEqualsWithoutGetHashCode");
+
+        internal static string WRN_RecordEqualsWithoutGetHashCode_Title => ResourceManager.GetString("WRN_RecordEqualsWithoutGetHashCode_Title");
+
+        internal static string ERR_InitCannotBeReadonly => ResourceManager.GetString("ERR_InitCannotBeReadonly");
+
+        internal static string IDS_FeatureDiscards => ResourceManager.GetString("IDS_FeatureDiscards");
+
+        internal static string IDS_FeatureMixedDeclarationsAndExpressionsInDeconstruction => ResourceManager.GetString("IDS_FeatureMixedDeclarationsAndExpressionsInDeconstruction");
+
+        internal static string IDS_FeatureRecordStructs => ResourceManager.GetString("IDS_FeatureRecordStructs");
+
+        internal static string IDS_FeatureWithOnStructs => ResourceManager.GetString("IDS_FeatureWithOnStructs");
+
+        internal static string IDS_FeaturePositionalFieldsInRecords => ResourceManager.GetString("IDS_FeaturePositionalFieldsInRecords");
+
+        internal static string IDS_FeatureVarianceSafetyForStaticInterfaceMembers => ResourceManager.GetString("IDS_FeatureVarianceSafetyForStaticInterfaceMembers");
+
+        internal static string ERR_EqualityContractRequiresGetter => ResourceManager.GetString("ERR_EqualityContractRequiresGetter");
+
+        internal static string WRN_AnalyzerReferencesFramework => ResourceManager.GetString("WRN_AnalyzerReferencesFramework");
+
+        internal static string WRN_AnalyzerReferencesFramework_Title => ResourceManager.GetString("WRN_AnalyzerReferencesFramework_Title");
+
+        internal static string ERR_BadFieldTypeInRecord => ResourceManager.GetString("ERR_BadFieldTypeInRecord");
+
+        internal static string ERR_FunctionPointersCannotBeCalledWithNamedArguments => ResourceManager.GetString("ERR_FunctionPointersCannotBeCalledWithNamedArguments");
+
+        internal static string WRN_UnreadRecordParameter => ResourceManager.GetString("WRN_UnreadRecordParameter");
+
+        internal static string WRN_UnreadRecordParameter_Title => ResourceManager.GetString("WRN_UnreadRecordParameter_Title");
+
+        internal static string ERR_RecordAmbigCtor => ResourceManager.GetString("ERR_RecordAmbigCtor");
+
+        internal static string IDS_FeatureLambdaAttributes => ResourceManager.GetString("IDS_FeatureLambdaAttributes");
+
+        internal static string IDS_FeatureInferredDelegateType => ResourceManager.GetString("IDS_FeatureInferredDelegateType");
+
+        internal static string WRN_DoNotCompareFunctionPointers => ResourceManager.GetString("WRN_DoNotCompareFunctionPointers");
+
+        internal static string WRN_DoNotCompareFunctionPointers_Title => ResourceManager.GetString("WRN_DoNotCompareFunctionPointers_Title");
+
+        internal static string ERR_FunctionPointerTypesInAttributeNotSupported => ResourceManager.GetString("ERR_FunctionPointerTypesInAttributeNotSupported");
+
+        internal static string IDS_FeatureSealedToStringInRecord => ResourceManager.GetString("IDS_FeatureSealedToStringInRecord");
+
+        internal static string ERR_InheritingFromRecordWithSealedToString => ResourceManager.GetString("ERR_InheritingFromRecordWithSealedToString");
+
+        internal static string ERR_HiddenPositionalMember => ResourceManager.GetString("ERR_HiddenPositionalMember");
+
+        internal static string IDS_FeatureGlobalUsing => ResourceManager.GetString("IDS_FeatureGlobalUsing");
+
+        internal static string ERR_GlobalUsingInNamespace => ResourceManager.GetString("ERR_GlobalUsingInNamespace");
+
+        internal static string ERR_GlobalUsingOutOfOrder => ResourceManager.GetString("ERR_GlobalUsingOutOfOrder");
     }
 }

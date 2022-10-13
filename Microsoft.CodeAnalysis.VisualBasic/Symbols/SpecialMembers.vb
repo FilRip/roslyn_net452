@@ -2,13 +2,9 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Generic
-Imports System.Collections.ObjectModel
 Imports System.Threading
-Imports Microsoft.CodeAnalysis.RuntimeMembers
-Imports Microsoft.CodeAnalysis.Text
+
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -71,7 +67,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     result = VisualBasicCompilation.GetRuntimeMember(type, descriptor, VisualBasicCompilation.SpecialMembersSignatureComparer.Instance, accessWithinOpt:=Nothing)
                 End If
 
-                Interlocked.CompareExchange(_lazySpecialTypeMembers(member), result, DirectCast(ErrorTypeSymbol.UnknownResultType, Symbol))
+                Interlocked.CompareExchange(Of Symbol)(_lazySpecialTypeMembers(member), result, ErrorTypeSymbol.UnknownResultType)
             End If
 
             Return _lazySpecialTypeMembers(member)

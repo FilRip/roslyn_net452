@@ -44,7 +44,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         End Property
 
         Public Overrides Sub Dispatch(visitor As Cci.MetadataVisitor)
-            visitor.Visit(DirectCast(Me, Cci.IGenericMethodInstanceReference))
+            visitor.Visit(Me)
         End Sub
 
     End Class

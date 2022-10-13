@@ -3,12 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Imports System.Collections.Immutable
-Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
     Partial Friend Class StackScheduler
@@ -137,7 +134,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
 
             Public Overrides Function VisitReferenceAssignment(node As BoundReferenceAssignment) As BoundNode
                 Dim locInfo As LocalDefUseInfo = Nothing
-                Dim left = DirectCast(node.ByRefLocal, BoundLocal)
+                Dim left = node.ByRefLocal
 
                 ' store to something that is not special. (operands still could be rewritten) 
                 If Not _info.TryGetValue(left.LocalSymbol, locInfo) Then

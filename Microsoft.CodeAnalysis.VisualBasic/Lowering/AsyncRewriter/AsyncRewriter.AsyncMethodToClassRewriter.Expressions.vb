@@ -2,18 +2,12 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Collections.Generic
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
-Imports System.Threading
-Imports Microsoft.Cci
+
 Imports Microsoft.CodeAnalysis
-Imports Microsoft.CodeAnalysis.Collections
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
-Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
-Imports TypeKind = Microsoft.CodeAnalysis.TypeKind
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
@@ -720,7 +714,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Debug.Assert(rewrittenInitializer Is Nothing OrElse rewrittenInitializer.Kind = BoundKind.ArrayInitialization)
                     Return node.Update(node.IsParamArrayArgument,
                                        bounds,
-                                       DirectCast(rewrittenInitializer, BoundArrayInitialization),
+                                       rewrittenInitializer,
                                        Nothing,
                                        Nothing,
                                        rewrittenType)
@@ -738,7 +732,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Return builder.BuildSequenceAndFree(Me.F,
                                                     node.Update(node.IsParamArrayArgument,
                                                                 bounds,
-                                                                DirectCast(rewrittenInitializer, BoundArrayInitialization),
+                                                                rewrittenInitializer,
                                                                 Nothing,
                                                                 Nothing,
                                                                 rewrittenType))
@@ -771,7 +765,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return Nothing
                 End If
 
-                Return VisitArrayInitializationParts(DirectCast(node, BoundArrayInitialization))
+                Return VisitArrayInitializationParts(node)
             End Function
 
             Public Overrides Function VisitArrayAccess(node As BoundArrayAccess) As BoundNode

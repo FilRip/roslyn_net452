@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
@@ -330,7 +331,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             boundInitializers As ArrayBuilder(Of BoundInitializer),
             diagnostics As BindingDiagnosticBag
         )
-            Dim propertySymbol = DirectCast(propertySymbols.First, PropertySymbol)
+            Dim propertySymbol = propertySymbols.First
             Dim syntaxNode As SyntaxNode = initValueOrAsNewNode
 
             Dim boundReceiver = If(propertySymbol.IsShared, Nothing, CreateMeReference(syntaxNode, isSynthetic:=True))

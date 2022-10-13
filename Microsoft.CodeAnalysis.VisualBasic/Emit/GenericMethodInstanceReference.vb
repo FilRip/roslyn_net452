@@ -20,7 +20,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         End Sub
 
         Public Overrides Sub Dispatch(visitor As Cci.MetadataVisitor)
-            visitor.Visit(DirectCast(Me, Cci.IGenericMethodInstanceReference))
+            visitor.Visit(Me)
         End Sub
 
         Private Function IGenericMethodInstanceReferenceGetGenericArguments(context As EmitContext) As IEnumerable(Of Cci.ITypeReference) Implements Cci.IGenericMethodInstanceReference.GetGenericArguments

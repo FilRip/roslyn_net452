@@ -5,8 +5,8 @@
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
-Imports Microsoft.CodeAnalysis.Operations
 Imports Microsoft.CodeAnalysis.Text
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
@@ -1958,7 +1958,7 @@ _Default:
             Dim result = LookupResult.GetInstance()
             Dim realArity = arity
 
-            options = CType(options Or LookupOptions.EagerlyLookupExtensionMethods, LookupOptions)
+            options = options Or LookupOptions.EagerlyLookupExtensionMethods
 
             If options.IsAttributeTypeLookup Then
                 binder.LookupAttributeType(result, container, name, options, useSiteInfo:=CompoundUseSiteInfo(Of AssemblySymbol).Discarded)

@@ -4,6 +4,7 @@
 
 Imports System.Collections.Immutable
 Imports System.Reflection.Metadata
+
 Imports Microsoft.CodeAnalysis.CodeGen
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
@@ -415,7 +416,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
         End Sub
 
         Private Sub EmitDelegateCreationExpression(expression As BoundDelegateCreationExpression, used As Boolean)
-            Dim invoke = DirectCast(expression.Method, MethodSymbol)
+            Dim invoke = expression.Method
             EmitDelegateCreation(expression.ReceiverOpt, invoke, expression.Type, used, expression.Syntax)
         End Sub
 

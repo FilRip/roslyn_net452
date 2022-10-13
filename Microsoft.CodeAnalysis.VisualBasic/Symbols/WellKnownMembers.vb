@@ -5,6 +5,7 @@
 Imports System.Collections.Immutable
 Imports System.Runtime.InteropServices
 Imports System.Threading
+
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.RuntimeMembers
 Imports Microsoft.CodeAnalysis.Symbols
@@ -118,8 +119,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' Storing m_LazyExtensionAttributeConstructorErrorInfo first.
                 _lazyExtensionAttributeConstructorErrorInfo = ctorError
                 Interlocked.CompareExchange(_lazyExtensionAttributeConstructor,
-                                            DirectCast(attributeCtor, Symbol),
-                                            DirectCast(ErrorTypeSymbol.UnknownResultType, Symbol))
+                                            attributeCtor,
+                                            ErrorTypeSymbol.UnknownResultType)
             End If
 
             attributeCtor = DirectCast(_lazyExtensionAttributeConstructor, MethodSymbol)
@@ -333,7 +334,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     result = VisualBasicCompilation.GetRuntimeMember(type, descriptor, _wellKnownMemberSignatureComparer, accessWithinOpt:=Me.Assembly)
                 End If
 
-                Interlocked.CompareExchange(_lazyWellKnownTypeMembers(member), result, DirectCast(ErrorTypeSymbol.UnknownResultType, Symbol))
+                Interlocked.CompareExchange(Of Symbol)(_lazyWellKnownTypeMembers(member), result, ErrorTypeSymbol.UnknownResultType)
             End If
 
             Return _lazyWellKnownTypeMembers(member)

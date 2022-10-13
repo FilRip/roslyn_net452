@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.PooledObjects
         }
 
         [Conditional("DEBUG")]
-        internal void ForgetTrackedObject(T old, T? replacement = null)
+        public void ForgetTrackedObject(T old, T? replacement = null)
         {
         }
 
