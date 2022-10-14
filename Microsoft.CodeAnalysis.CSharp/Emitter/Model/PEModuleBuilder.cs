@@ -25,9 +25,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
     internal abstract class PEModuleBuilder : PEModuleBuilder<CSharpCompilation, SourceModuleSymbol, AssemblySymbol, TypeSymbol, NamedTypeSymbol, MethodSymbol, SyntaxNode, NoPia.EmbeddedTypesManager, ModuleCompilationState>
     {
         // TODO: Need to estimate amount of elements for this map and pass that value to the constructor. 
-        protected readonly ConcurrentDictionary<Symbol, Cci.IModuleReference> AssemblyOrModuleSymbolToModuleRefMap = new ConcurrentDictionary<Symbol, Cci.IModuleReference>();
-        private readonly ConcurrentDictionary<Symbol, object> _genericInstanceMap = new ConcurrentDictionary<Symbol, object>(Symbols.SymbolEqualityComparer.ConsiderEverything);
-        private readonly ConcurrentSet<TypeSymbol> _reportedErrorTypesMap = new ConcurrentSet<TypeSymbol>();
+        protected readonly ConcurrentDictionary<Symbol, Cci.IModuleReference> AssemblyOrModuleSymbolToModuleRefMap = new();
+        private readonly ConcurrentDictionary<Symbol, object> _genericInstanceMap = new(Symbols.SymbolEqualityComparer.ConsiderEverything);
+        private readonly ConcurrentSet<TypeSymbol> _reportedErrorTypesMap = new();
 
         private readonly NoPia.EmbeddedTypesManager _embeddedTypesManagerOpt;
         public override NoPia.EmbeddedTypesManager EmbeddedTypesManagerOpt
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             get { return _metadataName; }
         }
 
-        public sealed override Cci.ICustomAttribute SynthesizeAttribute(WellKnownMember attributeConstructor)
+        protected sealed override Cci.ICustomAttribute SynthesizeAttribute(WellKnownMember attributeConstructor)
         {
             return Compilation.TrySynthesizeAttribute(attributeConstructor);
         }

@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// </summary>
     internal class SourceComplexParameterSymbol : SourceParameterSymbol, IAttributeTargetSymbol
     {
-        [Flags]
+        [Flags()]
         private enum ParameterSyntaxKind : byte
         {
             Regular = 0,

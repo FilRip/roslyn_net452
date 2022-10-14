@@ -59,5 +59,2034 @@ namespace Microsoft.CodeAnalysis.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A language name cannot be specified for this option..
+        /// </summary>
+        internal static string A_language_name_cannot_be_specified_for_this_option {
+            get {
+                return ResourceManager.GetString("A_language_name_cannot_be_specified_for_this_option", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A language name must be specified for this option..
+        /// </summary>
+        internal static string A_language_name_must_be_specified_for_this_option {
+            get {
+                return ResourceManager.GetString("A_language_name_must_be_specified_for_this_option", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Absolute path expected..
+        /// </summary>
+        internal static string AbsolutePathExpected {
+            get {
+                return ResourceManager.GetString("AbsolutePathExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer Driver Failure.
+        /// </summary>
+        internal static string AnalyzerDriverFailure {
+            get {
+                return ResourceManager.GetString("AnalyzerDriverFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer driver threw an exception of type &apos;{0}&apos; with message &apos;{1}&apos;..
+        /// </summary>
+        internal static string AnalyzerDriverThrows {
+            get {
+                return ResourceManager.GetString("AnalyzerDriverThrows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer driver threw the following exception:
+        ///&apos;{0}&apos;..
+        /// </summary>
+        internal static string AnalyzerDriverThrowsDescription {
+            get {
+                return ResourceManager.GetString("AnalyzerDriverThrowsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Time (s).
+        /// </summary>
+        internal static string AnalyzerExecutionTimeColumnHeader {
+            get {
+                return ResourceManager.GetString("AnalyzerExecutionTimeColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer.
+        /// </summary>
+        internal static string AnalyzerNameColumnHeader {
+            get {
+                return ResourceManager.GetString("AnalyzerNameColumnHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Total analyzer execution time: {0} seconds..
+        /// </summary>
+        internal static string AnalyzerTotalExecutionTime {
+            get {
+                return ResourceManager.GetString("AnalyzerTotalExecutionTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {0} must either be &apos;default&apos; or have the same length as {1}..
+        /// </summary>
+        internal static string AnonymousTypeArgumentCountMismatch2 {
+            get {
+                return ResourceManager.GetString("AnonymousTypeArgumentCountMismatch2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {0} and {1} must have the same length..
+        /// </summary>
+        internal static string AnonymousTypeMemberAndNamesCountMismatch2 {
+            get {
+                return ResourceManager.GetString("AnonymousTypeMemberAndNamesCountMismatch2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Destination array is not long enough to copy all the items in the collection. Check array index and length..
+        /// </summary>
+        internal static string Arg_ArrayPlusOffTooSmall {
+            get {
+                return ResourceManager.GetString("Arg_ArrayPlusOffTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unable to sort because the IComparer.Compare() method returns inconsistent results. Either a value does not compare equal to itself, or one value repeatedly compared to another value yields different results. IComparer: &apos;{0}&apos;..
+        /// </summary>
+        internal static string Arg_BogusIComparer {
+            get {
+                return ResourceManager.GetString("Arg_BogusIComparer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Hashtable&apos;s capacity overflowed and went negative. Check load factor, capacity and the current size of the table..
+        /// </summary>
+        internal static string Arg_HTCapacityOverflow {
+            get {
+                return ResourceManager.GetString("Arg_HTCapacityOverflow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The given key &apos;{0}&apos; was not present in the dictionary..
+        /// </summary>
+        internal static string Arg_KeyNotFoundWithKey {
+            get {
+                return ResourceManager.GetString("Arg_KeyNotFoundWithKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Destination array was not long enough. Check the destination index, length, and the array&apos;s lower bounds..
+        /// </summary>
+        internal static string Arg_LongerThanDestArray {
+            get {
+                return ResourceManager.GetString("Arg_LongerThanDestArray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Source array was not long enough. Check the source index, length, and the array&apos;s lower bounds..
+        /// </summary>
+        internal static string Arg_LongerThanSrcArray {
+            get {
+                return ResourceManager.GetString("Arg_LongerThanSrcArray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The lower bound of target array must be zero..
+        /// </summary>
+        internal static string Arg_NonZeroLowerBound {
+            get {
+                return ResourceManager.GetString("Arg_NonZeroLowerBound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Only single dimensional arrays are supported for the requested action..
+        /// </summary>
+        internal static string Arg_RankMultiDimNotSupported {
+            get {
+                return ResourceManager.GetString("Arg_RankMultiDimNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The value &quot;{0}&quot; is not of type &quot;{1}&quot; and cannot be used in this generic collection..
+        /// </summary>
+        internal static string Arg_WrongType {
+            get {
+                return ResourceManager.GetString("Arg_WrongType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à An item with the same key has already been added. Key: {0}.
+        /// </summary>
+        internal static string Argument_AddingDuplicateWithKey {
+            get {
+                return ResourceManager.GetString("Argument_AddingDuplicateWithKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Target array type is not compatible with the type of items in the collection..
+        /// </summary>
+        internal static string Argument_InvalidArrayType {
+            get {
+                return ResourceManager.GetString("Argument_InvalidArrayType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection..
+        /// </summary>
+        internal static string Argument_InvalidOffLen {
+            get {
+                return ResourceManager.GetString("Argument_InvalidOffLen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Argument cannot be empty..
+        /// </summary>
+        internal static string ArgumentCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ArgumentCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Argument cannot have a null element..
+        /// </summary>
+        internal static string ArgumentElementCannotBeNull {
+            get {
+                return ResourceManager.GetString("ArgumentElementCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Object is not a array with the same number of elements as the array to compare it to..
+        /// </summary>
+        internal static string ArgumentException_OtherNotArrayOfCorrectLength {
+            get {
+                return ResourceManager.GetString("ArgumentException_OtherNotArrayOfCorrectLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Number was less than the array&apos;s lower bound in the first dimension..
+        /// </summary>
+        internal static string ArgumentOutOfRange_ArrayLB {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_ArrayLB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Larger than collection size..
+        /// </summary>
+        internal static string ArgumentOutOfRange_BiggerThanCollection {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_BiggerThanCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Count must be positive and count must refer to a location within the string/array/collection..
+        /// </summary>
+        internal static string ArgumentOutOfRange_Count {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Index was out of range. Must be non-negative and less than the size of the collection..
+        /// </summary>
+        internal static string ArgumentOutOfRange_Index {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Index must be within the bounds of the List..
+        /// </summary>
+        internal static string ArgumentOutOfRange_ListInsert {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_ListInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Non-negative number required..
+        /// </summary>
+        internal static string ArgumentOutOfRange_NeedNonNegNum {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_NeedNonNegNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à capacity was less than the current size..
+        /// </summary>
+        internal static string ArgumentOutOfRange_SmallCapacity {
+            get {
+                return ResourceManager.GetString("ArgumentOutOfRange_SmallCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Arrays with more than one dimension cannot be serialized..
+        /// </summary>
+        internal static string Arrays_with_more_than_one_dimension_cannot_be_serialized {
+            get {
+                return ResourceManager.GetString("Arrays_with_more_than_one_dimension_cannot_be_serialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à assembly.
+        /// </summary>
+        internal static string Assembly {
+            get {
+                return ResourceManager.GetString("Assembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Assembly file not found.
+        /// </summary>
+        internal static string AssemblyFileNotFound {
+            get {
+                return ResourceManager.GetString("AssemblyFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Assembly must have at least one module..
+        /// </summary>
+        internal static string AssemblyMustHaveAtLeastOneModule {
+            get {
+                return ResourceManager.GetString("AssemblyMustHaveAtLeastOneModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The assembly containing type &apos;{0}&apos; references .NET Framework, which is not supported..
+        /// </summary>
+        internal static string AssemblyReferencesNetFramework {
+            get {
+                return ResourceManager.GetString("AssemblyReferencesNetFramework", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Assembly signing not supported..
+        /// </summary>
+        internal static string AssemblySigningNotSupported {
+            get {
+                return ResourceManager.GetString("AssemblySigningNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cannot deserialize type &apos;{0}&apos;..
+        /// </summary>
+        internal static string Cannot_deserialize_type_0 {
+            get {
+                return ResourceManager.GetString("Cannot_deserialize_type_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cannot serialize type &apos;{0}&apos;..
+        /// </summary>
+        internal static string Cannot_serialize_type_0 {
+            get {
+                return ResourceManager.GetString("Cannot_serialize_type_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t alias a module..
+        /// </summary>
+        internal static string CannotAliasModule {
+            get {
+                return ResourceManager.GetString("CannotAliasModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t create a reference to a module..
+        /// </summary>
+        internal static string CannotCreateReferenceToModule {
+            get {
+                return ResourceManager.GetString("CannotCreateReferenceToModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t create a reference to a submission..
+        /// </summary>
+        internal static string CannotCreateReferenceToSubmission {
+            get {
+                return ResourceManager.GetString("CannotCreateReferenceToSubmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t embed interop types from module..
+        /// </summary>
+        internal static string CannotEmbedInteropTypesFromModule {
+            get {
+                return ResourceManager.GetString("CannotEmbedInteropTypesFromModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cannot target net module when emitting ref assembly..
+        /// </summary>
+        internal static string CannotTargetNetModuleWhenEmittingRefAssembly {
+            get {
+                return ResourceManager.GetString("CannotTargetNetModuleWhenEmittingRefAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t create a module reference to an assembly..
+        /// </summary>
+        internal static string CantCreateModuleReferenceToAssembly {
+            get {
+                return ResourceManager.GetString("CantCreateModuleReferenceToAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t create a metadata reference to an assembly without location..
+        /// </summary>
+        internal static string CantCreateReferenceToAssemblyWithoutLocation {
+            get {
+                return ResourceManager.GetString("CantCreateReferenceToAssemblyWithoutLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Can&apos;t create a metadata reference to a dynamic assembly..
+        /// </summary>
+        internal static string CantCreateReferenceToDynamicAssembly {
+            get {
+                return ResourceManager.GetString("CantCreateReferenceToDynamicAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Changes must be within bounds of SourceText.
+        /// </summary>
+        internal static string ChangesMustBeWithinBoundsOfSourceText {
+            get {
+                return ResourceManager.GetString("ChangesMustBeWithinBoundsOfSourceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The changes must not overlap..
+        /// </summary>
+        internal static string ChangesMustNotOverlap {
+            get {
+                return ResourceManager.GetString("ChangesMustNotOverlap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Changing the version of an assembly reference is not allowed during debugging: &apos;{0}&apos; changed version to &apos;{1}&apos;..
+        /// </summary>
+        internal static string ChangingVersionOfAssemblyReferenceIsNotAllowedDuringDebugging {
+            get {
+                return ResourceManager.GetString("ChangingVersionOfAssemblyReferenceIsNotAllowedDuringDebugging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à class.
+        /// </summary>
+        internal static string Class1 {
+            get {
+                return ResourceManager.GetString("Class1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Win32 resources, assumed to be in COFF object format, have one or more invalid relocation header values..
+        /// </summary>
+        internal static string CoffResourceInvalidRelocation {
+            get {
+                return ResourceManager.GetString("CoffResourceInvalidRelocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Win32 resources, assumed to be in COFF object format, have an invalid section size..
+        /// </summary>
+        internal static string CoffResourceInvalidSectionSize {
+            get {
+                return ResourceManager.GetString("CoffResourceInvalidSectionSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Win32 resources, assumed to be in COFF object format, have one or more invalid symbol values..
+        /// </summary>
+        internal static string CoffResourceInvalidSymbol {
+            get {
+                return ResourceManager.GetString("CoffResourceInvalidSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Win32 resources, assumed to be in COFF object format, are missing one or both of sections &apos;.rsrc$01&apos; and &apos;.rsrc$02&apos;.
+        /// </summary>
+        internal static string CoffResourceMissingSection {
+            get {
+                return ResourceManager.GetString("CoffResourceMissingSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Compilation options must not have errors..
+        /// </summary>
+        internal static string CompilationOptionsMustNotHaveErrors {
+            get {
+                return ResourceManager.GetString("CompilationOptionsMustNotHaveErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The compilation references multiple assemblies whose versions only differ in auto-generated build and/or revision numbers..
+        /// </summary>
+        internal static string CompilationReferencesAssembliesWithDifferentAutoGeneratedVersion {
+            get {
+                return ResourceManager.GetString("CompilationReferencesAssembliesWithDifferentAutoGeneratedVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer Failure.
+        /// </summary>
+        internal static string CompilerAnalyzerFailure {
+            get {
+                return ResourceManager.GetString("CompilerAnalyzerFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer &apos;{0}&apos; threw an exception of type &apos;{1}&apos; with message &apos;{2}&apos;.
+        ///{3}.
+        /// </summary>
+        internal static string CompilerAnalyzerThrows {
+            get {
+                return ResourceManager.GetString("CompilerAnalyzerThrows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer &apos;{0}&apos; threw the following exception:
+        ///&apos;{1}&apos;..
+        /// </summary>
+        internal static string CompilerAnalyzerThrowsDescription {
+            get {
+                return ResourceManager.GetString("CompilerAnalyzerThrowsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à constructor.
+        /// </summary>
+        internal static string Constructor {
+            get {
+                return ResourceManager.GetString("Constructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à delegate.
+        /// </summary>
+        internal static string Delegate1 {
+            get {
+                return ResourceManager.GetString("Delegate1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Deserialization reader for &apos;{0}&apos; read incorrect number of values..
+        /// </summary>
+        internal static string Deserialization_reader_for_0_read_incorrect_number_of_values {
+            get {
+                return ResourceManager.GetString("Deserialization_reader_for_0_read_incorrect_number_of_values", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A DiagnosticDescriptor must have an Id that is neither null nor an empty string nor a string that only contains white space..
+        /// </summary>
+        internal static string DiagnosticIdCantBeNullOrWhitespace {
+            get {
+                return ResourceManager.GetString("DiagnosticIdCantBeNullOrWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Suppress the following diagnostics to disable this analyzer: {0}.
+        /// </summary>
+        internal static string DisableAnalyzerDiagnosticsMessage {
+            get {
+                return ResourceManager.GetString("DisableAnalyzerDiagnosticsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Argument contains duplicate analyzer instances..
+        /// </summary>
+        internal static string DuplicateAnalyzerInstances {
+            get {
+                return ResourceManager.GetString("DuplicateAnalyzerInstances", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à element is expected.
+        /// </summary>
+        internal static string ElementIsExpected {
+            get {
+                return ResourceManager.GetString("ElementIsExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Embedded texts are only supported when emitting a PDB..
+        /// </summary>
+        internal static string EmbeddedTextsRequirePdb {
+            get {
+                return ResourceManager.GetString("EmbeddedTextsRequirePdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Embedding PDB is not allowed when emitting metadata..
+        /// </summary>
+        internal static string EmbeddingPdbUnexpectedWhenEmittingMetadata {
+            get {
+                return ResourceManager.GetString("EmbeddingPdbUnexpectedWhenEmittingMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A key in the pathMap is empty..
+        /// </summary>
+        internal static string EmptyKeyInPathMap {
+            get {
+                return ResourceManager.GetString("EmptyKeyInPathMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Empty or invalid file name.
+        /// </summary>
+        internal static string EmptyOrInvalidFileName {
+            get {
+                return ResourceManager.GetString("EmptyOrInvalidFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Empty or invalid resource name.
+        /// </summary>
+        internal static string EmptyOrInvalidResourceName {
+            get {
+                return ResourceManager.GetString("EmptyOrInvalidResourceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &apos;end&apos; must not be less than &apos;start&apos;.
+        /// </summary>
+        internal static string EndMustNotBeLessThanStart {
+            get {
+                return ResourceManager.GetString("EndMustNotBeLessThanStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à enum.
+        /// </summary>
+        internal static string Enum1 {
+            get {
+                return ResourceManager.GetString("Enum1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à event.
+        /// </summary>
+        internal static string Event1 {
+            get {
+                return ResourceManager.GetString("Event1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Exception occurred with following context:
+        ///{0}.
+        /// </summary>
+        internal static string ExceptionContext {
+            get {
+                return ResourceManager.GetString("ExceptionContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Warning: Could not enable multicore JIT due to exception: {0}..
+        /// </summary>
+        internal static string ExceptionEnablingMulticoreJit {
+            get {
+                return ResourceManager.GetString("ExceptionEnablingMulticoreJit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Expected non-empty public key.
+        /// </summary>
+        internal static string ExpectedNonEmptyPublicKey {
+            get {
+                return ResourceManager.GetString("ExpectedNonEmptyPublicKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Could not locate the rule set file &apos;{0}&apos;..
+        /// </summary>
+        internal static string FailedToResolveRuleSetName {
+            get {
+                return ResourceManager.GetString("FailedToResolveRuleSetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à field.
+        /// </summary>
+        internal static string Field {
+            get {
+                return ResourceManager.GetString("Field", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à File not found..
+        /// </summary>
+        internal static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à File size exceeds maximum allowed size of a valid metadata file..
+        /// </summary>
+        internal static string FileSizeExceedsMaximumAllowed {
+            get {
+                return ResourceManager.GetString("FileSizeExceedsMaximumAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {0}.GetMetadata() must return an instance of {1}..
+        /// </summary>
+        internal static string GetMetadataMustReturnInstance {
+            get {
+                return ResourceManager.GetString("GetMetadataMustReturnInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The hintName contains an invalid character &apos;{0}&apos; at position {1}..
+        /// </summary>
+        internal static string HintNameInvalidChar {
+            get {
+                return ResourceManager.GetString("HintNameInvalidChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The hintName of the added source file must be unique within a generator..
+        /// </summary>
+        internal static string HintNameUniquePerGenerator {
+            get {
+                return ResourceManager.GetString("HintNameUniquePerGenerator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Icon stream is not in the expected format..
+        /// </summary>
+        internal static string IconStreamUnexpectedFormat {
+            get {
+                return ResourceManager.GetString("IconStreamUnexpectedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Including private members should not be used when emitting to the secondary assembly output..
+        /// </summary>
+        internal static string IncludingPrivateMembersUnexpectedWhenEmittingToMetadataPeStream {
+            get {
+                return ResourceManager.GetString("IncludingPrivateMembersUnexpectedWhenEmittingToMetadataPeStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Inconsistent language versions.
+        /// </summary>
+        internal static string InconsistentLanguageVersions {
+            get {
+                return ResourceManager.GetString("InconsistentLanguageVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Inconsistent syntax tree features.
+        /// </summary>
+        internal static string InconsistentSyntaxTreeFeature {
+            get {
+                return ResourceManager.GetString("InconsistentSyntaxTreeFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;in-memory assembly&gt;.
+        /// </summary>
+        internal static string InMemoryAssembly {
+            get {
+                return ResourceManager.GetString("InMemoryAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;in-memory module&gt;.
+        /// </summary>
+        internal static string InMemoryModule {
+            get {
+                return ResourceManager.GetString("InMemoryModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à interface.
+        /// </summary>
+        internal static string Interface1 {
+            get {
+                return ResourceManager.GetString("Interface1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Additional file doesn&apos;t belong to the underlying &apos;CompilationWithAnalyzers&apos;..
+        /// </summary>
+        internal static string InvalidAdditionalFile {
+            get {
+                return ResourceManager.GetString("InvalidAdditionalFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid alias..
+        /// </summary>
+        internal static string InvalidAlias {
+            get {
+                return ResourceManager.GetString("InvalidAlias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid assembly name: &apos;{0}&apos;.
+        /// </summary>
+        internal static string InvalidAssemblyName {
+            get {
+                return ResourceManager.GetString("InvalidAssemblyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid characters in assembly culture name.
+        /// </summary>
+        internal static string InvalidCharactersInAssemblyCultureName {
+            get {
+                return ResourceManager.GetString("InvalidCharactersInAssemblyCultureName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid characters in assembly name.
+        /// </summary>
+        internal static string InvalidCharactersInAssemblyName {
+            get {
+                return ResourceManager.GetString("InvalidCharactersInAssemblyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid compilation options -- submission can&apos;t be signed..
+        /// </summary>
+        internal static string InvalidCompilationOptions {
+            get {
+                return ResourceManager.GetString("InvalidCompilationOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid content type.
+        /// </summary>
+        internal static string InvalidContentType {
+            get {
+                return ResourceManager.GetString("InvalidContentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid culture name: &apos;{0}&apos;.
+        /// </summary>
+        internal static string InvalidCultureName {
+            get {
+                return ResourceManager.GetString("InvalidCultureName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid data at offset {0}: {1}{2}*{3}{4}.
+        /// </summary>
+        internal static string InvalidDataAtOffset {
+            get {
+                return ResourceManager.GetString("InvalidDataAtOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reported diagnostic has an ID &apos;{0}&apos;, which is not a valid identifier..
+        /// </summary>
+        internal static string InvalidDiagnosticIdReported {
+            get {
+                return ResourceManager.GetString("InvalidDiagnosticIdReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reported diagnostic &apos;{0}&apos; has a source location in file &apos;{1}&apos;, which is not part of the compilation being analyzed..
+        /// </summary>
+        internal static string InvalidDiagnosticLocationReported {
+            get {
+                return ResourceManager.GetString("InvalidDiagnosticLocationReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reported diagnostic &apos;{0}&apos; has a source location &apos;{1}&apos; in file &apos;{2}&apos;, which is outside of the given file..
+        /// </summary>
+        internal static string InvalidDiagnosticSpanReported {
+            get {
+                return ResourceManager.GetString("InvalidDiagnosticSpanReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Suppressed diagnostic ID &apos;{0}&apos; does not match suppressable ID &apos;{1}&apos; for the given suppression descriptor..
+        /// </summary>
+        internal static string InvalidDiagnosticSuppressionReported {
+            get {
+                return ResourceManager.GetString("InvalidDiagnosticSuppressionReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid hash..
+        /// </summary>
+        internal static string InvalidHash {
+            get {
+                return ResourceManager.GetString("InvalidHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid module name specified in metadata module &apos;{0}&apos;: &apos;{1}&apos;.
+        /// </summary>
+        internal static string InvalidModuleName {
+            get {
+                return ResourceManager.GetString("InvalidModuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Node to track is not a descendant of the root..
+        /// </summary>
+        internal static string InvalidNodeToTrack {
+            get {
+                return ResourceManager.GetString("InvalidNodeToTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Operations that change non-concurrent collections must have exclusive access. A concurrent update was performed on this collection and corrupted its state. The collection&apos;s state is no longer correct..
+        /// </summary>
+        internal static string InvalidOperation_ConcurrentOperationsNotSupported {
+            get {
+                return ResourceManager.GetString("InvalidOperation_ConcurrentOperationsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Collection was modified; enumeration operation may not execute..
+        /// </summary>
+        internal static string InvalidOperation_EnumFailedVersion {
+            get {
+                return ResourceManager.GetString("InvalidOperation_EnumFailedVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enumeration has either not started or has already finished..
+        /// </summary>
+        internal static string InvalidOperation_EnumOpCantHappen {
+            get {
+                return ResourceManager.GetString("InvalidOperation_EnumOpCantHappen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Failed to compare two elements in the array..
+        /// </summary>
+        internal static string InvalidOperation_IComparerFailed {
+            get {
+                return ResourceManager.GetString("InvalidOperation_IComparerFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Given operation block does not belong to the current analysis context..
+        /// </summary>
+        internal static string InvalidOperationBlockForAnalysisContext {
+            get {
+                return ResourceManager.GetString("InvalidOperationBlockForAnalysisContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid output kind for submission. DynamicallyLinkedLibrary expected..
+        /// </summary>
+        internal static string InvalidOutputKindForSubmission {
+            get {
+                return ResourceManager.GetString("InvalidOutputKindForSubmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid public key..
+        /// </summary>
+        internal static string InvalidPublicKey {
+            get {
+                return ResourceManager.GetString("InvalidPublicKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid public key token..
+        /// </summary>
+        internal static string InvalidPublicKeyToken {
+            get {
+                return ResourceManager.GetString("InvalidPublicKeyToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à An error occurred while loading the included rule set file {0} - {1}.
+        /// </summary>
+        internal static string InvalidRuleSetInclude {
+            get {
+                return ResourceManager.GetString("InvalidRuleSetInclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid size of public key token..
+        /// </summary>
+        internal static string InvalidSizeOfPublicKeyToken {
+            get {
+                return ResourceManager.GetString("InvalidSizeOfPublicKeyToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Syntax tree doesn&apos;t belong to the underlying &apos;Compilation&apos;..
+        /// </summary>
+        internal static string InvalidTree {
+            get {
+                return ResourceManager.GetString("InvalidTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Parameter &apos;{0}&apos; must be an &apos;INamedTypeSymbol&apos; or an &apos;IAssemblySymbol&apos;..
+        /// </summary>
+        internal static string IsSymbolAccessibleBadWithin {
+            get {
+                return ResourceManager.GetString("IsSymbolAccessibleBadWithin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Parameter &apos;{0}&apos; must be a symbol from this compilation or some referenced assembly..
+        /// </summary>
+        internal static string IsSymbolAccessibleWrongAssembly {
+            get {
+                return ResourceManager.GetString("IsSymbolAccessibleWrongAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Argument to &apos;/keepalive&apos; option is not a 32-bit integer..
+        /// </summary>
+        internal static string KeepAliveIsNotAnInteger {
+            get {
+                return ResourceManager.GetString("KeepAliveIsNotAnInteger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Arguments to &apos;/keepalive&apos; option below -1 are invalid..
+        /// </summary>
+        internal static string KeepAliveIsTooSmall {
+            get {
+                return ResourceManager.GetString("KeepAliveIsTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &apos;/keepalive&apos; option is only valid with &apos;/shared&apos; option..
+        /// </summary>
+        internal static string KeepAliveWithoutShared {
+            get {
+                return ResourceManager.GetString("KeepAliveWithoutShared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Metadata PE stream should not be given when emitting metadata only..
+        /// </summary>
+        internal static string MetadataPeStreamUnexpectedWhenEmittingMetadataOnly {
+            get {
+                return ResourceManager.GetString("MetadataPeStreamUnexpectedWhenEmittingMetadataOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à MetadataReference &apos;{0}&apos; not found to remove..
+        /// </summary>
+        internal static string MetadataRefNotFoundToRemove1 {
+            get {
+                return ResourceManager.GetString("MetadataRefNotFoundToRemove1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à method.
+        /// </summary>
+        internal static string Method {
+            get {
+                return ResourceManager.GetString("Method", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Roslyn compiler server reports different protocol version than build task..
+        /// </summary>
+        internal static string MismatchedVersion {
+            get {
+                return ResourceManager.GetString("MismatchedVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Missing argument for &apos;/keepalive&apos; option..
+        /// </summary>
+        internal static string MissingKeepAlive {
+            get {
+                return ResourceManager.GetString("MissingKeepAlive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The item specified is not the element of a list..
+        /// </summary>
+        internal static string MissingListItem {
+            get {
+                return ResourceManager.GetString("MissingListItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à module.
+        /// </summary>
+        internal static string Module {
+            get {
+                return ResourceManager.GetString("Module", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Module copy can&apos;t be used to create an assembly metadata..
+        /// </summary>
+        internal static string ModuleCopyCannotBeUsedToCreateAssemblyMetadata {
+            get {
+                return ResourceManager.GetString("ModuleCopyCannotBeUsedToCreateAssemblyMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Module has invalid attributes..
+        /// </summary>
+        internal static string ModuleHasInvalidAttributes {
+            get {
+                return ResourceManager.GetString("ModuleHasInvalidAttributes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à NOTE: Elapsed time may be less than analyzer execution time because analyzers can run concurrently..
+        /// </summary>
+        internal static string MultithreadedAnalyzerExecutionNote {
+            get {
+                return ResourceManager.GetString("MultithreadedAnalyzerExecutionNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Must include private members unless emitting a ref assembly..
+        /// </summary>
+        internal static string MustIncludePrivateMembersUnlessRefAssembly {
+            get {
+                return ResourceManager.GetString("MustIncludePrivateMembersUnlessRefAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Name cannot be empty..
+        /// </summary>
+        internal static string NameCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("NameCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Name cannot be null..
+        /// </summary>
+        internal static string NameCannotBeNull {
+            get {
+                return ResourceManager.GetString("NameCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Name cannot start with whitespace..
+        /// </summary>
+        internal static string NameCannotStartWithWhitespace {
+            get {
+                return ResourceManager.GetString("NameCannotStartWithWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Name contains invalid characters..
+        /// </summary>
+        internal static string NameContainsInvalidCharacter {
+            get {
+                return ResourceManager.GetString("NameContainsInvalidCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à No analyzers found.
+        /// </summary>
+        internal static string NoAnalyzersFound {
+            get {
+                return ResourceManager.GetString("NoAnalyzersFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A node or token is out of sequence..
+        /// </summary>
+        internal static string NodeOrTokenOutOfSequence {
+            get {
+                return ResourceManager.GetString("NodeOrTokenOutOfSequence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Non-reported diagnostic with ID &apos;{0}&apos; cannot be suppressed..
+        /// </summary>
+        internal static string NonReportedDiagnosticCannotBeSuppressed {
+            get {
+                return ResourceManager.GetString("NonReportedDiagnosticCannotBeSuppressed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Given operation has a non-null parent..
+        /// </summary>
+        internal static string NotARootOperation {
+            get {
+                return ResourceManager.GetString("NotARootOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Collection was of a fixed size..
+        /// </summary>
+        internal static string NotSupported_FixedSizeCollection {
+            get {
+                return ResourceManager.GetString("NotSupported_FixedSizeCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Mutating a key collection derived from a dictionary is not allowed..
+        /// </summary>
+        internal static string NotSupported_KeyCollectionSet {
+            get {
+                return ResourceManager.GetString("NotSupported_KeyCollectionSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Mutating a value collection derived from a dictionary is not allowed..
+        /// </summary>
+        internal static string NotSupported_ValueCollectionSet {
+            get {
+                return ResourceManager.GetString("NotSupported_ValueCollectionSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A value in the pathMap is null..
+        /// </summary>
+        internal static string NullValueInPathMap {
+            get {
+                return ResourceManager.GetString("NullValueInPathMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Given operation has a null semantic model..
+        /// </summary>
+        internal static string OperationHasNullSemanticModel {
+            get {
+                return ResourceManager.GetString("OperationHasNullSemanticModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The provided operation must not be part of a Control Flow Graph..
+        /// </summary>
+        internal static string OperationMustNotBeControlFlowGraphPart {
+            get {
+                return ResourceManager.GetString("OperationMustNotBeControlFlowGraphPart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Output kind not supported..
+        /// </summary>
+        internal static string OutputKindNotSupported {
+            get {
+                return ResourceManager.GetString("OutputKindNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à parameter.
+        /// </summary>
+        internal static string Parameter {
+            get {
+                return ResourceManager.GetString("Parameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Path returned by {0}.ResolveMetadataFile must be absolute: &apos;{1}&apos;.
+        /// </summary>
+        internal static string PathReturnedByResolveMetadataFileMustBeAbsolute {
+            get {
+                return ResourceManager.GetString("PathReturnedByResolveMetadataFileMustBeAbsolute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Path returned by {0}.ResolveStrongNameKeyFile must be absolute: &apos;{1}&apos;.
+        /// </summary>
+        internal static string PathReturnedByResolveStrongNameKeyFileMustBeAbsolute {
+            get {
+                return ResourceManager.GetString("PathReturnedByResolveStrongNameKeyFileMustBeAbsolute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à PDB stream should not be given when embedding PDB into the PE stream..
+        /// </summary>
+        internal static string PdbStreamUnexpectedWhenEmbedding {
+            get {
+                return ResourceManager.GetString("PdbStreamUnexpectedWhenEmbedding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à PDB stream should not be given when emitting metadata only..
+        /// </summary>
+        internal static string PdbStreamUnexpectedWhenEmittingMetadataOnly {
+            get {
+                return ResourceManager.GetString("PdbStreamUnexpectedWhenEmittingMetadataOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à PE image doesn&apos;t contain managed metadata..
+        /// </summary>
+        internal static string PEImageDoesntContainManagedMetadata {
+            get {
+                return ResourceManager.GetString("PEImageDoesntContainManagedMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à PE image not available..
+        /// </summary>
+        internal static string PEImageNotAvailable {
+            get {
+                return ResourceManager.GetString("PEImageNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Previous submission has errors..
+        /// </summary>
+        internal static string PreviousSubmissionHasErrors {
+            get {
+                return ResourceManager.GetString("PreviousSubmissionHasErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à property, indexer.
+        /// </summary>
+        internal static string Property {
+            get {
+                return ResourceManager.GetString("Property", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified arrays must have the same number of dimensions..
+        /// </summary>
+        internal static string Rank_MustMatch {
+            get {
+                return ResourceManager.GetString("Rank_MustMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reference of type &apos;{0}&apos; is not valid for this compilation..
+        /// </summary>
+        internal static string ReferenceOfTypeIsInvalid1 {
+            get {
+                return ResourceManager.GetString("ReferenceOfTypeIsInvalid1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reference resolver should return readable non-null stream..
+        /// </summary>
+        internal static string ReferenceResolverShouldReturnReadableNonNullStream {
+            get {
+                return ResourceManager.GetString("ReferenceResolverShouldReturnReadableNonNullStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Resource data provider should return non-null stream.
+        /// </summary>
+        internal static string ResourceDataProviderShouldReturnNonNullStream {
+            get {
+                return ResourceManager.GetString("ResourceDataProviderShouldReturnNonNullStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Resource stream ended at {0} bytes, expected {1} bytes..
+        /// </summary>
+        internal static string ResourceStreamEndedUnexpectedly {
+            get {
+                return ResourceManager.GetString("ResourceStreamEndedUnexpectedly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Resource stream provider should return non-null stream..
+        /// </summary>
+        internal static string ResourceStreamProviderShouldReturnNonNullStream {
+            get {
+                return ResourceManager.GetString("ResourceStreamProviderShouldReturnNonNullStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à return.
+        /// </summary>
+        internal static string Return1 {
+            get {
+                return ResourceManager.GetString("Return1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Return type can&apos;t be a value type, pointer, by-ref or open generic type.
+        /// </summary>
+        internal static string ReturnTypeCannotBeValuePointerbyRefOrOpen {
+            get {
+                return ResourceManager.GetString("ReturnTypeCannotBeValuePointerbyRefOrOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Return type can&apos;t be void, by-ref or open generic type.
+        /// </summary>
+        internal static string ReturnTypeCannotBeVoidByRefOrOpen {
+            get {
+                return ResourceManager.GetString("ReturnTypeCannotBeVoidByRefOrOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The attribute {0} has an invalid value of {1}..
+        /// </summary>
+        internal static string RuleSetBadAttributeValue {
+            get {
+                return ResourceManager.GetString("RuleSetBadAttributeValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The rule set file has duplicate rules for &apos;{0}&apos; with differing actions &apos;{1}&apos; and &apos;{2}&apos;..
+        /// </summary>
+        internal static string RuleSetHasDuplicateRules {
+            get {
+                return ResourceManager.GetString("RuleSetHasDuplicateRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The element {0} is missing an attribute named {1}..
+        /// </summary>
+        internal static string RuleSetMissingAttribute {
+            get {
+                return ResourceManager.GetString("RuleSetMissingAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à separator is expected.
+        /// </summary>
+        internal static string SeparatorIsExpected {
+            get {
+                return ResourceManager.GetString("SeparatorIsExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Value for argument &apos;/shared:&apos; must not be empty.
+        /// </summary>
+        internal static string SharedArgumentMissing {
+            get {
+                return ResourceManager.GetString("SharedArgumentMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Only a single {0} can be registered per generator..
+        /// </summary>
+        internal static string Single_type_per_generator_0 {
+            get {
+                return ResourceManager.GetString("Single_type_per_generator_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Size has to be positive..
+        /// </summary>
+        internal static string SizeHasToBePositive {
+            get {
+                return ResourceManager.GetString("SizeHasToBePositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à SourceText cannot be embedded. Provide encoding or canBeEmbedded=true at construction..
+        /// </summary>
+        internal static string SourceTextCannotBeEmbedded {
+            get {
+                return ResourceManager.GetString("SourceTextCannotBeEmbedded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The provided SourceText must have an explicit encoding set..
+        /// </summary>
+        internal static string SourceTextRequiresEncoding {
+            get {
+                return ResourceManager.GetString("SourceTextRequiresEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The span does not include the end of a line..
+        /// </summary>
+        internal static string SpanDoesNotIncludeEndOfLine {
+            get {
+                return ResourceManager.GetString("SpanDoesNotIncludeEndOfLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The span does not include the start of a line..
+        /// </summary>
+        internal static string SpanDoesNotIncludeStartOfLine {
+            get {
+                return ResourceManager.GetString("SpanDoesNotIncludeStartOfLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &apos;start&apos; must not be negative.
+        /// </summary>
+        internal static string StartMustNotBeNegative {
+            get {
+                return ResourceManager.GetString("StartMustNotBeNegative", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stream contains invalid data.
+        /// </summary>
+        internal static string Stream_contains_invalid_data {
+            get {
+                return ResourceManager.GetString("Stream_contains_invalid_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stream is too long..
+        /// </summary>
+        internal static string StreamIsTooLong {
+            get {
+                return ResourceManager.GetString("StreamIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stream must be readable..
+        /// </summary>
+        internal static string StreamMustSupportRead {
+            get {
+                return ResourceManager.GetString("StreamMustSupportRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stream must support read and seek operations..
+        /// </summary>
+        internal static string StreamMustSupportReadAndSeek {
+            get {
+                return ResourceManager.GetString("StreamMustSupportReadAndSeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Stream must be writable..
+        /// </summary>
+        internal static string StreamMustSupportWrite {
+            get {
+                return ResourceManager.GetString("StreamMustSupportWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à struct.
+        /// </summary>
+        internal static string Struct1 {
+            get {
+                return ResourceManager.GetString("Struct1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer &apos;{0}&apos; contains a null descriptor in its &apos;SupportedDiagnostics&apos;..
+        /// </summary>
+        internal static string SupportedDiagnosticsHasNullDescriptor {
+            get {
+                return ResourceManager.GetString("SupportedDiagnosticsHasNullDescriptor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Analyzer &apos;{0}&apos; contains a null descriptor in its &apos;SupportedSuppressions&apos;..
+        /// </summary>
+        internal static string SupportedSuppressionsHasNullDescriptor {
+            get {
+                return ResourceManager.GetString("SupportedSuppressionsHasNullDescriptor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Diagnostic &apos;{0}: {1}&apos; was programmatically suppressed by a DiagnosticSuppressor with suppression ID &apos;{2}&apos; and justification &apos;{3}&apos;.
+        /// </summary>
+        internal static string SuppressionDiagnosticDescriptorMessage {
+            get {
+                return ResourceManager.GetString("SuppressionDiagnosticDescriptorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Programmatic suppression of an analyzer diagnostic.
+        /// </summary>
+        internal static string SuppressionDiagnosticDescriptorTitle {
+            get {
+                return ResourceManager.GetString("SuppressionDiagnosticDescriptorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A SuppressionDescriptor must have an Id that is neither null nor an empty string nor a string that only contains white space..
+        /// </summary>
+        internal static string SuppressionIdCantBeNullOrWhitespace {
+            get {
+                return ResourceManager.GetString("SuppressionIdCantBeNullOrWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Windows PDB writer doesn&apos;t support SourceLink feature: &apos;{0}&apos;.
+        /// </summary>
+        internal static string SymWriterDoesNotSupportSourceLink {
+            get {
+                return ResourceManager.GetString("SymWriterDoesNotSupportSourceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Windows PDB writer doesn&apos;t support deterministic compilation: &apos;{0}&apos;.
+        /// </summary>
+        internal static string SymWriterNotDeterministic {
+            get {
+                return ResourceManager.GetString("SymWriterNotDeterministic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The version of Windows PDB writer is older than required: &apos;{0}&apos;.
+        /// </summary>
+        internal static string SymWriterOlderVersionThanRequired {
+            get {
+                return ResourceManager.GetString("SymWriterOlderVersionThanRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The type &apos;{0}&apos; is not understood by the serialization binder..
+        /// </summary>
+        internal static string The_type_0_is_not_understood_by_the_serialization_binder {
+            get {
+                return ResourceManager.GetString("The_type_0_is_not_understood_by_the_serialization_binder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The stream cannot be read from..
+        /// </summary>
+        internal static string TheStreamCannotBeReadFrom {
+            get {
+                return ResourceManager.GetString("TheStreamCannotBeReadFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The stream cannot be written to..
+        /// </summary>
+        internal static string TheStreamCannotBeWrittenTo {
+            get {
+                return ResourceManager.GetString("TheStreamCannotBeWrittenTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à If tuple element locations are specified, the number of locations must match the cardinality of the tuple..
+        /// </summary>
+        internal static string TupleElementLocationCountMismatch {
+            get {
+                return ResourceManager.GetString("TupleElementLocationCountMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à If tuple element names are specified, the number of element names must match the cardinality of the tuple..
+        /// </summary>
+        internal static string TupleElementNameCountMismatch {
+            get {
+                return ResourceManager.GetString("TupleElementNameCountMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Tuple element name cannot be an empty string..
+        /// </summary>
+        internal static string TupleElementNameEmpty {
+            get {
+                return ResourceManager.GetString("TupleElementNameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à If tuple element nullable annotations are specified, the number of annotations must match the cardinality of the tuple..
+        /// </summary>
+        internal static string TupleElementNullableAnnotationCountMismatch {
+            get {
+                return ResourceManager.GetString("TupleElementNullableAnnotationCountMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Tuples must have at least two elements..
+        /// </summary>
+        internal static string TuplesNeedAtLeastTwoElements {
+            get {
+                return ResourceManager.GetString("TuplesNeedAtLeastTwoElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The underlying type for a tuple must be tuple-compatible..
+        /// </summary>
+        internal static string TupleUnderlyingTypeMustBeTupleCompatible {
+            get {
+                return ResourceManager.GetString("TupleUnderlyingTypeMustBeTupleCompatible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à type must be a subclass of SyntaxAnnotation..
+        /// </summary>
+        internal static string TypeMustBeASubclassOfSyntaxAnnotation {
+            get {
+                return ResourceManager.GetString("TypeMustBeASubclassOfSyntaxAnnotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Type must be same as host object type of previous submission..
+        /// </summary>
+        internal static string TypeMustBeSameAsHostObjectTypeOfPreviousSubmission {
+            get {
+                return ResourceManager.GetString("TypeMustBeSameAsHostObjectTypeOfPreviousSubmission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à type parameter.
+        /// </summary>
+        internal static string TypeParameter {
+            get {
+                return ResourceManager.GetString("TypeParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unable to determine specific cause of the failure..
+        /// </summary>
+        internal static string UnableToDetermineSpecificCauseOfFailure {
+            get {
+                return ResourceManager.GetString("UnableToDetermineSpecificCauseOfFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à A node in the list is not of the expected type..
+        /// </summary>
+        internal static string UnexpectedTypeOfNodeInList {
+            get {
+                return ResourceManager.GetString("UnexpectedTypeOfNodeInList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unrecognized resource file format..
+        /// </summary>
+        internal static string UnrecognizedResourceFileFormat {
+            get {
+                return ResourceManager.GetString("UnrecognizedResourceFileFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unresolved: .
+        /// </summary>
+        internal static string Unresolved {
+            get {
+                return ResourceManager.GetString("Unresolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Argument contains an analyzer instance that does not belong to the &apos;Analyzers&apos; for this CompilationWithAnalyzers instance..
+        /// </summary>
+        internal static string UnsupportedAnalyzerInstance {
+            get {
+                return ResourceManager.GetString("UnsupportedAnalyzerInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reported diagnostic with ID &apos;{0}&apos; is not supported by the analyzer..
+        /// </summary>
+        internal static string UnsupportedDiagnosticReported {
+            get {
+                return ResourceManager.GetString("UnsupportedDiagnosticReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unsupported hash algorithm..
+        /// </summary>
+        internal static string UnsupportedHashAlgorithm {
+            get {
+                return ResourceManager.GetString("UnsupportedHashAlgorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Reported suppression with ID &apos;{0}&apos; is not supported by the suppressor..
+        /// </summary>
+        internal static string UnsupportedSuppressionReported {
+            get {
+                return ResourceManager.GetString("UnsupportedSuppressionReported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Value too large to be represented as a 30 bit unsigned integer..
+        /// </summary>
+        internal static string Value_too_large_to_be_represented_as_a_30_bit_unsigned_integer {
+            get {
+                return ResourceManager.GetString("Value_too_large_to_be_represented_as_a_30_bit_unsigned_integer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à WindowsRuntime identity can&apos;t be retargetable.
+        /// </summary>
+        internal static string WinRTIdentityCantBeRetargetable {
+            get {
+                return ResourceManager.GetString("WinRTIdentityCantBeRetargetable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Global analyzer config section name &apos;{0}&apos; is invalid as it is not an absolute path. Section will be ignored. Section was declared in file: &apos;{1}&apos;.
+        /// </summary>
+        internal static string WRN_InvalidGlobalSectionName {
+            get {
+                return ResourceManager.GetString("WRN_InvalidGlobalSectionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Global analyzer config section name is invalid as it is not an absolute path. Section will be ignored..
+        /// </summary>
+        internal static string WRN_InvalidGlobalSectionName_Title {
+            get {
+                return ResourceManager.GetString("WRN_InvalidGlobalSectionName_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The diagnostic &apos;{0}&apos; was given an invalid severity &apos;{1}&apos; in the analyzer config file at &apos;{2}&apos;..
+        /// </summary>
+        internal static string WRN_InvalidSeverityInAnalyzerConfig {
+            get {
+                return ResourceManager.GetString("WRN_InvalidSeverityInAnalyzerConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Invalid severity in analyzer config file..
+        /// </summary>
+        internal static string WRN_InvalidSeverityInAnalyzerConfig_Title {
+            get {
+                return ResourceManager.GetString("WRN_InvalidSeverityInAnalyzerConfig_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Multiple global analyzer config files set the same key &apos;{0}&apos; in section &apos;{1}&apos;. It has been unset. Key was set by the following files: &apos;{2}&apos;.
+        /// </summary>
+        internal static string WRN_MultipleGlobalAnalyzerKeys {
+            get {
+                return ResourceManager.GetString("WRN_MultipleGlobalAnalyzerKeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Multiple global analyzer config files set the same key. It has been unset..
+        /// </summary>
+        internal static string WRN_MultipleGlobalAnalyzerKeys_Title {
+            get {
+                return ResourceManager.GetString("WRN_MultipleGlobalAnalyzerKeys_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à References to XML documents are not supported..
+        /// </summary>
+        internal static string XmlReferencesNotSupported {
+            get {
+                return ResourceManager.GetString("XmlReferencesNotSupported", resourceCulture);
+            }
+        }
     }
 }

@@ -2240,7 +2240,7 @@ lVbRuntimePlus:
             AddDiagnostic(diagnostics, ERRID.WRN_UnimplementedCommandLineSwitch, "/" + switchName)
         End Sub
 
-        Public Overrides Sub GenerateErrorForNoFilesFoundInRecurse(path As String, errors As IList(Of Diagnostic))
+        Protected Overrides Sub GenerateErrorForNoFilesFoundInRecurse(path As String, errors As IList(Of Diagnostic))
             AddDiagnostic(errors, ERRID.ERR_InvalidSwitchValue, "recurse", path)
         End Sub
 

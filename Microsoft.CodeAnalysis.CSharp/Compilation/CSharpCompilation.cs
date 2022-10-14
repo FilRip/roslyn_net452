@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        public override CommonAnonymousTypeManager CommonAnonymousTypeManager
+        protected override CommonAnonymousTypeManager CommonAnonymousTypeManager
         {
             get
             {
@@ -501,7 +501,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (EventQueue != null) EventQueue.TryEnqueue(new CompilationStartedEvent(this));
         }
 
-        public override void ValidateDebugEntryPoint(IMethodSymbol debugEntryPoint, DiagnosticBag diagnostics)
+        protected override void ValidateDebugEntryPoint(IMethodSymbol debugEntryPoint, DiagnosticBag diagnostics)
         {
 
             // Debug entry point has to be a method definition from this compilation.
@@ -743,11 +743,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         #region Submission
 
         public new CSharpScriptCompilationInfo? ScriptCompilationInfo { get; }
-        public override ScriptCompilationInfo? CommonScriptCompilationInfo => ScriptCompilationInfo;
+        protected override ScriptCompilationInfo? CommonScriptCompilationInfo => ScriptCompilationInfo;
 
         internal CSharpCompilation? PreviousSubmission => ScriptCompilationInfo?.PreviousScriptCompilation;
 
-        public override bool HasSubmissionResult()
+        protected override bool HasSubmissionResult()
         {
 
             // A submission may be empty or comprised of a single script file.
@@ -1022,7 +1022,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         #region References
 
-        public override CommonReferenceManager CommonGetBoundReferenceManager()
+        protected override CommonReferenceManager CommonGetBoundReferenceManager()
         {
             return GetBoundReferenceManager();
         }
@@ -1053,7 +1053,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        public override IDictionary<(string path, string content), MetadataReference> ReferenceDirectiveMap
+        protected override IDictionary<(string path, string content), MetadataReference> ReferenceDirectiveMap
             => GetBoundReferenceManager().ReferenceDirectiveMap;
 
         // for testing purposes
@@ -1101,7 +1101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// All reference directives used in this compilation.
         /// </summary>
-        public override IEnumerable<ReferenceDirective> ReferenceDirectives
+        protected override IEnumerable<ReferenceDirective> ReferenceDirectives
         {
             get { return this.Declarations.ReferenceDirectives; }
         }
@@ -2034,7 +2034,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return (array.IsSZArray && array.ElementType.SpecialType == SpecialType.System_String, returnsTaskOrTaskOfInt);
         }
 
-        public override bool IsUnreferencedAssemblyIdentityDiagnosticCode(int code)
+        protected override bool IsUnreferencedAssemblyIdentityDiagnosticCode(int code)
             => code == (int)ErrorCode.ERR_NoTypeDef;
 
         internal class EntryPoint
@@ -2105,7 +2105,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ClassifyConversion(source, destination).ToCommonConversion();
         }
 
-        public override IConvertibleConversion ClassifyConvertibleConversion(IOperation source, ITypeSymbol? destination, out ConstantValue? constantValue)
+        protected override IConvertibleConversion ClassifyConvertibleConversion(IOperation source, ITypeSymbol? destination, out ConstantValue? constantValue)
         {
             constantValue = null;
 
@@ -2273,7 +2273,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return AddNewFactory(syntaxTree, ignoreAccessibility, ref binderFactories[treeNum]);
         }
 
-        private BinderFactory AddNewFactory(SyntaxTree syntaxTree, bool ignoreAccessibility, [NotNull] ref WeakReference<BinderFactory>? slot)
+        private BinderFactory AddNewFactory(SyntaxTree syntaxTree, bool ignoreAccessibility, [NotNull()] ref WeakReference<BinderFactory>? slot)
         {
             var newFactory = new BinderFactory(this, syntaxTree, ignoreAccessibility);
             var newWeakReference = new WeakReference<BinderFactory>(newFactory);
@@ -2417,7 +2417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CompleteTrees(filterTree);
         }
 
-        public override void CompleteTrees(SyntaxTree? filterTree)
+        protected override void CompleteTrees(SyntaxTree? filterTree)
         {
             // By definition, a tree is complete when all of its compiler diagnostics have been reported.
             // Since unused imports are the last thing we compute and report, a tree is complete when
@@ -3290,7 +3290,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        public override EmitDifferenceResult EmitDifference(
+        protected override EmitDifferenceResult EmitDifference(
             EmitBaseline baseline,
             IEnumerable<SemanticEdit> edits,
             Func<ISymbol, bool> isAddedSymbol,
@@ -3344,7 +3344,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return emitOptions.RuntimeMetadataVersion;
         }
 
-        public override void AddDebugSourceDocumentsForChecksumDirectives(
+        protected override void AddDebugSourceDocumentsForChecksumDirectives(
             DebugDocumentsBuilder documentsBuilder,
             SyntaxTree tree,
             DiagnosticBag diagnostics)
@@ -3441,9 +3441,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             return builder.ToImmutableAndFree();
         }
 
-        public override Guid DebugSourceDocumentLanguageId => Cci.DebugSourceDocument.CorSymLanguageTypeCSharp;
+        protected override Guid DebugSourceDocumentLanguageId => Cci.DebugSourceDocument.CorSymLanguageTypeCSharp;
 
-        public override bool HasCodeToEmit()
+        protected override bool HasCodeToEmit()
         {
             foreach (var syntaxTree in this.SyntaxTrees)
             {

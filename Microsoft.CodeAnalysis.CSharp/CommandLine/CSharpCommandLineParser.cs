@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected override string RegularFileExtension { get { return ".cs"; } }
         protected override string ScriptFileExtension { get { return ".csx"; } }
 
-        public sealed override CommandLineArguments CommonParse(IEnumerable<string> args, string baseDirectory, string? sdkDirectory, string? additionalReferenceDirectories)
+        protected sealed override CommandLineArguments CommonParse(IEnumerable<string> args, string baseDirectory, string? sdkDirectory, string? additionalReferenceDirectories)
         {
             return Parse(args, baseDirectory, sdkDirectory, additionalReferenceDirectories);
         }
@@ -2027,7 +2027,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             AddDiagnostic(diagnostics, ErrorCode.WRN_UnimplementedCommandLineSwitch, "/" + switchName);
         }
 
-        public override void GenerateErrorForNoFilesFoundInRecurse(string path, IList<Diagnostic> diagnostics)
+        protected override void GenerateErrorForNoFilesFoundInRecurse(string path, IList<Diagnostic> diagnostics)
         {
             //  no error in csc.exe
         }

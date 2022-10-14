@@ -2546,7 +2546,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Next
         End Function
 
-        Public Overrides Function EmitDifference(
+        Protected Overrides Function EmitDifference(
             baseline As EmitBaseline,
             edits As IEnumerable(Of SemanticEdit),
             isAddedSymbol As Func(Of ISymbol, Boolean),
@@ -2575,7 +2575,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return If(corLibrary Is Nothing, String.Empty, corLibrary.Assembly.ManifestModule.MetadataVersion)
         End Function
 
-        Public Overrides Sub AddDebugSourceDocumentsForChecksumDirectives(
+        Protected Overrides Sub AddDebugSourceDocumentsForChecksumDirectives(
             documentsBuilder As DebugDocumentsBuilder,
             tree As SyntaxTree,
             diagnosticBag As DiagnosticBag)
@@ -2658,13 +2658,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return builder.ToImmutableAndFree()
         End Function
 
-        Public Overrides ReadOnly Property DebugSourceDocumentLanguageId As Guid
+        Protected Overrides ReadOnly Property DebugSourceDocumentLanguageId As Guid
             Get
                 Return DebugSourceDocument.CorSymLanguageTypeBasic
             End Get
         End Property
 
-        Public Overrides Function HasCodeToEmit() As Boolean
+        Protected Overrides Function HasCodeToEmit() As Boolean
             For Each syntaxTree In SyntaxTrees
                 Dim unit = syntaxTree.GetCompilationUnitRoot()
                 If unit.Members.Count > 0 Then
@@ -2975,7 +2975,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 #Enable Warning RS0026 ' Do not add multiple public overloads with optional parameters
 
-        Public Overrides Function IsUnreferencedAssemblyIdentityDiagnosticCode(code As Integer) As Boolean
+        Protected Overrides Function IsUnreferencedAssemblyIdentityDiagnosticCode(code As Integer) As Boolean
             Select Case code
                 Case ERRID.ERR_UnreferencedAssemblyEvent3,
                      ERRID.ERR_UnreferencedAssembly3
