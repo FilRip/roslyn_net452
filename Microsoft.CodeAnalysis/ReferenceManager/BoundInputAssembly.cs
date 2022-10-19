@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis
             /// Suitable AssemblySymbol instance for the corresponding assembly, 
             /// null reference if none is available/found.
             /// </summary>
-            internal TAssemblySymbol? AssemblySymbol;
+            public TAssemblySymbol? AssemblySymbol;
 
             /// <summary>
             /// For each AssemblyRef of this AssemblyDef specifies which AssemblyDef matches the reference.
@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis
             /// Each element describes the assembly the corresponding reference of the input assembly 
             /// is bound to.
             /// </remarks>
-            internal AssemblyReferenceBinding[]? ReferenceBinding;
+            public AssemblyReferenceBinding[]? ReferenceBinding;
 
             private string? GetDebuggerDisplay()
             {

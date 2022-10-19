@@ -208,7 +208,7 @@ namespace Roslyn.Utilities
 
         private static readonly char[] s_invalidPathChars = Path.GetInvalidPathChars();
 
-        internal static string? NormalizeRelativePath(string path, string? basePath, string? baseDirectory)
+        public static string? NormalizeRelativePath(string path, string? basePath, string? baseDirectory)
         {
             // Does this look like a URI at all or does it have any invalid path characters? If so, just use it as is.
             if (path.IndexOf("://", StringComparison.Ordinal) >= 0 || path.IndexOfAny(s_invalidPathChars) >= 0)
@@ -265,7 +265,7 @@ namespace Roslyn.Utilities
             return NormalizeAbsolutePath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
 
-        internal static string? TryNormalizeAbsolutePath(string path)
+        public static string? TryNormalizeAbsolutePath(string path)
         {
             Debug.Assert(PathUtilities.IsAbsolute(path));
 

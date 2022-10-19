@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
     // The null-suppression uses in this type are covered under the following issue to
     // better design this type around a null _builder
     // https://github.com/dotnet/roslyn/issues/40858
-    internal struct SeparatedSyntaxListBuilder<TNode> where TNode : GreenNode
+    public struct SeparatedSyntaxListBuilder<TNode> where TNode : GreenNode
     {
         private readonly SyntaxListBuilder? _builder;
 
@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             return new SeparatedSyntaxListBuilder<TNode>(8);
         }
 
-        internal SeparatedSyntaxListBuilder(SyntaxListBuilder builder)
+        public SeparatedSyntaxListBuilder(SyntaxListBuilder builder)
         {
             _builder = builder;
         }
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
         /// In order to avoid creating a separate pool of SeparatedSyntaxListBuilders, we expose
         /// our underlying SyntaxListBuilder to SyntaxListPool.
         /// </remarks>
-        internal SyntaxListBuilder? UnderlyingBuilder
+        public SyntaxListBuilder? UnderlyingBuilder
         {
             get { return _builder; }
         }

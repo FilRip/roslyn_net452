@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public DocumentationMode DocumentationMode { get; protected set; }
 
-        internal ParseOptions(SourceCodeKind kind, DocumentationMode documentationMode)
+        public ParseOptions(SourceCodeKind kind, DocumentationMode documentationMode)
         {
             this.SpecifiedKind = kind;
             this.Kind = kind.MapSpecifiedToEffectiveKind();
@@ -74,9 +74,9 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Performs validation of options compatibilities and generates diagnostics if needed
         /// </summary>
-        internal abstract void ValidateOptions(ArrayBuilder<Diagnostic> builder);
+        public abstract void ValidateOptions(ArrayBuilder<Diagnostic> builder);
 
-        internal void ValidateOptions(ArrayBuilder<Diagnostic> builder, CommonMessageProvider messageProvider)
+        public void ValidateOptions(ArrayBuilder<Diagnostic> builder, CommonMessageProvider messageProvider)
         {
             // Validate SpecifiedKind not Kind, to catch deprecated specified kinds:
             if (!SpecifiedKind.IsValid())

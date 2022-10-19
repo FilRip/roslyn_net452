@@ -715,7 +715,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // returns WellKnownType.Unknown if given arity isn't available:
-        internal static WellKnownType GetWellKnownFunctionDelegate(int invokeArgumentCount)
+        public static WellKnownType GetWellKnownFunctionDelegate(int invokeArgumentCount)
         {
             Debug.Assert(invokeArgumentCount >= 0);
             return (invokeArgumentCount <= WellKnownType.System_Func_TMax - WellKnownType.System_Func_T) ?
@@ -724,7 +724,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // returns WellKnownType.Unknown if given arity isn't available:
-        internal static WellKnownType GetWellKnownActionDelegate(int invokeArgumentCount)
+        public static WellKnownType GetWellKnownActionDelegate(int invokeArgumentCount)
         {
             Debug.Assert(invokeArgumentCount >= 0);
 

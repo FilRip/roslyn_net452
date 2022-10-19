@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public NullableFlowState FlowState { get; }
 
-        internal NullabilityInfo(NullableAnnotation annotation, NullableFlowState flowState)
+        public NullabilityInfo(NullableAnnotation annotation, NullableFlowState flowState)
         {
             Annotation = annotation;
             FlowState = flowState;

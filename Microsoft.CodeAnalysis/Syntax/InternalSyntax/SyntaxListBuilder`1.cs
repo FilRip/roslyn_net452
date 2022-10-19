@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal struct SyntaxListBuilder<TNode> where TNode : GreenNode
+    public struct SyntaxListBuilder<TNode> where TNode : GreenNode
     {
         private readonly SyntaxListBuilder _builder;
 
@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             return new SyntaxListBuilder<TNode>(8);
         }
 
-        internal SyntaxListBuilder(SyntaxListBuilder builder)
+        public SyntaxListBuilder(SyntaxListBuilder builder)
         {
             _builder = builder;
         }

@@ -342,7 +342,7 @@ namespace Microsoft.CodeAnalysis
         public const string SliceMethodName = "Slice";
 
         // internal until we settle on this long-term
-        internal const string CloneMethodName = "<Clone>$";
+        public const string CloneMethodName = "<Clone>$";
 
         /// <summary>
         /// The required name for the <c>PrintMembers</c> method that is synthesized in a record.

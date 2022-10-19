@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal enum PlaceholderKind
+    public enum PlaceholderKind
     {
         Unspecified = 0,
         SwitchOperationExpression = 1,

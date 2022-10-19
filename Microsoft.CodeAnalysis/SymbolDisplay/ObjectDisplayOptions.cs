@@ -11,8 +11,8 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Specifies the options for how generics are displayed in the description of a symbol.
     /// </summary>
-    [Flags]
-    internal enum ObjectDisplayOptions
+    [Flags()]
+    public enum ObjectDisplayOptions
     {
         /// <summary>
         /// Format object using default options.

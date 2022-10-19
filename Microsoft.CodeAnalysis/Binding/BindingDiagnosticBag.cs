@@ -38,13 +38,13 @@ namespace Microsoft.CodeAnalysis
             DiagnosticBag?.AddRange(diagnostics);
         }
 
-        internal bool HasAnyResolvedErrors()
+        public bool HasAnyResolvedErrors()
         {
             Debug.Assert(DiagnosticBag is object);
             return DiagnosticBag?.HasAnyResolvedErrors() == true;
         }
 
-        internal bool HasAnyErrors()
+        public bool HasAnyErrors()
         {
             Debug.Assert(DiagnosticBag is object);
             return DiagnosticBag?.HasAnyErrors() == true;
@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis
             ((PooledHashSet<TAssemblySymbol>?)DependenciesBag)?.Free();
         }
 
-        internal ImmutableBindingDiagnostic<TAssemblySymbol> ToReadOnly()
+        public ImmutableBindingDiagnostic<TAssemblySymbol> ToReadOnly()
         {
             return new ImmutableBindingDiagnostic<TAssemblySymbol>(DiagnosticBag?.ToReadOnly() ?? default, DependenciesBag?.ToImmutableArray() ?? default);
         }
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis
             return result;
         }
 
-        internal void AddRangeAndFree(BindingDiagnosticBag<TAssemblySymbol> other)
+        public void AddRangeAndFree(BindingDiagnosticBag<TAssemblySymbol> other)
         {
             AddRange(other);
             other.Free();
@@ -129,7 +129,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal void AddDependency(TAssemblySymbol? dependency)
+        public void AddDependency(TAssemblySymbol? dependency)
         {
             if (dependency is object && DependenciesBag is object)
             {
@@ -210,12 +210,12 @@ namespace Microsoft.CodeAnalysis
             return Add(node.Location, useSiteInfo);
         }
 
-        internal bool AddDiagnostics(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
+        public bool AddDiagnostics(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
         {
             return AddDiagnostics(node.Location, useSiteInfo);
         }
 
-        internal bool AddDiagnostics(Location location, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
+        public bool AddDiagnostics(Location location, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
         {
             if (DiagnosticBag is DiagnosticBag diagnosticBag)
             {

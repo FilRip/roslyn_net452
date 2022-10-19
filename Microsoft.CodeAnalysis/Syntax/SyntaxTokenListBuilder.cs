@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.Syntax
 {
-    internal class SyntaxTokenListBuilder
+    public class SyntaxTokenListBuilder
     {
         private GreenNode?[] _nodes;
         private int _count;

@@ -150,7 +150,7 @@ namespace Roslyn.Utilities
             return null;
         }
 
-        internal static bool IsSameDirectoryOrChildOf(string child, string parent)
+        public static bool IsSameDirectoryOrChildOf(string child, string parent)
         {
             parent = RemoveTrailingDirectorySeparator(parent);
             string? currentChild = child;

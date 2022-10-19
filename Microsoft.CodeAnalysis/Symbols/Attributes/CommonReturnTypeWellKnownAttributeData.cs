@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on a method return value.
     /// </summary>
-    internal class CommonReturnTypeWellKnownAttributeData : WellKnownAttributeData, IMarshalAsAttributeTarget
+    public class CommonReturnTypeWellKnownAttributeData : WellKnownAttributeData, IMarshalAsAttributeTarget
     {
         #region MarshalAsAttribute
         // data from MarshalAsAttribute applied on the return value

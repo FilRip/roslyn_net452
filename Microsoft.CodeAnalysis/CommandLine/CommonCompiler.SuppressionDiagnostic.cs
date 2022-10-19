@@ -98,12 +98,12 @@ namespace Microsoft.CodeAnalysis
                 throw new NotSupportedException();
             }
 
-            internal override Diagnostic WithSeverity(DiagnosticSeverity severity)
+            public override Diagnostic WithSeverity(DiagnosticSeverity severity)
             {
                 throw new NotSupportedException();
             }
 
-            internal override Diagnostic WithIsSuppressed(bool isSuppressed)
+            public override Diagnostic WithIsSuppressed(bool isSuppressed)
             {
                 throw new NotSupportedException();
             }

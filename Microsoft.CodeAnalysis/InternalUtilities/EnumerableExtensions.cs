@@ -481,7 +481,7 @@ namespace Roslyn.Utilities
         }
 
 #nullable disable // Transpose doesn't handle empty arrays. Needs to be updated as appropriate.
-        internal static IList<IList<T>> Transpose<T>(this IEnumerable<IEnumerable<T>> data)
+        public static IList<IList<T>> Transpose<T>(this IEnumerable<IEnumerable<T>> data)
         {
 #if DEBUG
             var count = data.First().Count();
@@ -535,7 +535,7 @@ namespace Roslyn.Utilities
         }
 #nullable enable
 
-        internal static Dictionary<K, ImmutableArray<T>> ToDictionary<K, T>(this IEnumerable<T> data, Func<T, K> keySelector, IEqualityComparer<K>? comparer = null)
+        public static Dictionary<K, ImmutableArray<T>> ToDictionary<K, T>(this IEnumerable<T> data, Func<T, K> keySelector, IEqualityComparer<K>? comparer = null)
             where K : notnull
         {
             var dictionary = new Dictionary<K, ImmutableArray<T>>(comparer);

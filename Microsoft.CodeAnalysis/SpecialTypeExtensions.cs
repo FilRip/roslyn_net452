@@ -7,7 +7,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class SpecialTypeExtensions
+    public static class SpecialTypeExtensions
     {
         /// <summary>
         /// Checks if a type is considered a "built-in integral" by CLR.
@@ -266,7 +266,7 @@ namespace Microsoft.CodeAnalysis
                 case SpecialType.System_Int64:
                     return 63;
                 default:
-                    throw Roslyn.Utilities.ExceptionUtilities.UnexpectedValue(specialType);
+                    throw ExceptionUtilities.UnexpectedValue(specialType);
             }
         }
 

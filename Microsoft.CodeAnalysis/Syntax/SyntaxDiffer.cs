@@ -12,7 +12,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal class SyntaxDiffer
+    public class SyntaxDiffer
     {
         private const int InitialStackSize = 8;
         private const int MaxSearchLength = 8;
@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // return a set of text changes that when applied to the old document produces the new document
-        internal static IList<TextChange> GetTextChanges(SyntaxTree before, SyntaxTree after)
+        public static IList<TextChange> GetTextChanges(SyntaxTree before, SyntaxTree after)
         {
             if (before == after)
             {
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // return a set of text changes that when applied to the old document produces the new document
-        internal static IList<TextChange> GetTextChanges(SyntaxNode oldNode, SyntaxNode newNode)
+        public static IList<TextChange> GetTextChanges(SyntaxNode oldNode, SyntaxNode newNode)
         {
             return new SyntaxDiffer(oldNode, newNode, computeNewText: true).ComputeTextChangesFromOld();
         }
@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis
             return reducedChanges.Select(c => new TextChange(c.Range.Span, c.NewText!)).ToList();
         }
 
-        internal static IList<TextSpan> GetPossiblyDifferentTextSpans(SyntaxTree? before, SyntaxTree? after)
+        public static IList<TextSpan> GetPossiblyDifferentTextSpans(SyntaxTree? before, SyntaxTree? after)
         {
             if (object.ReferenceEquals(before, after))
             {
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // return which spans of text in the new document are possibly different than text in the old document
-        internal static IList<TextSpan> GetPossiblyDifferentTextSpans(SyntaxNode oldNode, SyntaxNode newNode)
+        public static IList<TextSpan> GetPossiblyDifferentTextSpans(SyntaxNode oldNode, SyntaxNode newNode)
         {
             return new SyntaxDiffer(oldNode, newNode, computeNewText: false).ComputeSpansInNew();
         }

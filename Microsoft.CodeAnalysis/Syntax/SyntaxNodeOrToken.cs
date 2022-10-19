@@ -125,9 +125,9 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public SyntaxNode? Parent => _token != null ? _nodeOrParent : _nodeOrParent?.Parent;
 
-        internal GreenNode? UnderlyingNode => _token ?? _nodeOrParent?.Green;
+        public GreenNode? UnderlyingNode => _token ?? _nodeOrParent?.Green;
 
-        internal int Position => _position;
+        public int Position => _position;
 
         internal GreenNode RequiredUnderlyingNode
         {
@@ -907,7 +907,7 @@ namespace Microsoft.CodeAnalysis
 
         internal int Width => _token?.Width ?? _nodeOrParent?.Width ?? 0;
 
-        internal int FullWidth => _token?.FullWidth ?? _nodeOrParent?.FullWidth ?? 0;
+        public int FullWidth => _token?.FullWidth ?? _nodeOrParent?.FullWidth ?? 0;
 
         internal int EndPosition => _position + this.FullWidth;
 
@@ -921,7 +921,7 @@ namespace Microsoft.CodeAnalysis
             return GetFirstChildIndexSpanningPosition(node.ChildNodesAndTokens(), position);
         }
 
-        internal static int GetFirstChildIndexSpanningPosition(ChildSyntaxList list, int position)
+        public static int GetFirstChildIndexSpanningPosition(ChildSyntaxList list, int position)
         {
             int lo = 0;
             int hi = list.Count - 1;

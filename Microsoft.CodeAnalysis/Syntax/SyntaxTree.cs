@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis
         /// Unlike Dev12 we do account for #line and #ExternalSource directives when determining value for 
         /// <see cref="System.Runtime.CompilerServices.CallerFilePathAttribute"/>.
         /// </remarks>
-        internal string GetDisplayPath(TextSpan span, SourceReferenceResolver? resolver)
+        public string GetDisplayPath(TextSpan span, SourceReferenceResolver? resolver)
         {
             var mappedSpan = GetMappedLineSpan(span);
             if (resolver == null || mappedSpan.Path.IsEmpty())
@@ -283,7 +283,7 @@ namespace Microsoft.CodeAnalysis
         /// Unlike Dev12 we do account for #line and #ExternalSource directives when determining value for 
         /// <see cref="System.Runtime.CompilerServices.CallerLineNumberAttribute"/>.
         /// </remarks>
-        internal int GetDisplayLineNumber(TextSpan span)
+        public int GetDisplayLineNumber(TextSpan span)
         {
             // display line numbers are 1-based
             return GetMappedLineSpan(span).StartLinePosition.Line + 1;
@@ -383,7 +383,7 @@ namespace Microsoft.CodeAnalysis
             return this.GetText(CancellationToken.None).ToString();
         }
 
-        internal virtual bool SupportsLocations
+        public virtual bool SupportsLocations
         {
             get { return this.HasCompilationUnitRoot; }
         }

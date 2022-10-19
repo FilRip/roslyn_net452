@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis
             return (this.State & part) == part;
         }
 
-        internal bool IsSealed
+        public bool IsSealed
         {
             get { return IsPartComplete(CustomAttributeBagCompletionPart.All); }
         }
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis
         /// Return whether early decoded attribute data has been computed and stored on the bag and it is safe to access <see cref="EarlyDecodedWellKnownAttributeData"/> from this bag.
         /// Return value of true doesn't guarantee that bound attributes or remaining decoded attribute data has also been initialized.
         /// </summary>
-        internal bool IsEarlyDecodedWellKnownAttributeDataComputed
+        public bool IsEarlyDecodedWellKnownAttributeDataComputed
         {
             get { return IsPartComplete(CustomAttributeBagCompletionPart.EarlyDecodedWellKnownAttributeData); }
         }
@@ -183,7 +183,7 @@ namespace Microsoft.CodeAnalysis
         /// Return whether all decoded attribute data has been computed and stored on the bag and it is safe to access <see cref="DecodedWellKnownAttributeData"/> from this bag.
         /// Return value of true doesn't guarantee that bound attributes have also been initialized.
         /// </summary>
-        internal bool IsDecodedWellKnownAttributeDataComputed
+        public bool IsDecodedWellKnownAttributeDataComputed
         {
             get { return IsPartComplete(CustomAttributeBagCompletionPart.DecodedWellKnownAttributeData); }
         }

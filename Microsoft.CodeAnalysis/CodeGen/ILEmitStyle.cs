@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    internal enum ILEmitStyle : byte
+    public enum ILEmitStyle : byte
     {
         // no optimizations
         // add additional debug specific emit 

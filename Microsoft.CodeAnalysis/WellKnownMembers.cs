@@ -3958,7 +3958,7 @@ namespace Microsoft.CodeAnalysis
         /// This function defines whether an attribute is optional or not.
         /// </summary>
         /// <param name="attributeMember">The attribute member.</param>
-        internal static bool IsSynthesizedAttributeOptional(WellKnownMember attributeMember)
+        public static bool IsSynthesizedAttributeOptional(WellKnownMember attributeMember)
         {
             switch (attributeMember)
             {

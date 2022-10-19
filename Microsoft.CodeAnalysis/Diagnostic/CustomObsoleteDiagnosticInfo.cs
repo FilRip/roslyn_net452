@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal override DiagnosticInfo GetInstanceWithSeverity(DiagnosticSeverity severity)
+        public override DiagnosticInfo GetInstanceWithSeverity(DiagnosticSeverity severity)
         {
             return new CustomObsoleteDiagnosticInfo(this, severity);
         }

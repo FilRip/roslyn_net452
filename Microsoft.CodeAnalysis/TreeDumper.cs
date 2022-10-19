@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// This is ONLY used id BoundNode.cs Debug method - Dump()
     /// </summary>
-    internal class TreeDumper
+    public class TreeDumper
     {
         private readonly StringBuilder _sb;
 

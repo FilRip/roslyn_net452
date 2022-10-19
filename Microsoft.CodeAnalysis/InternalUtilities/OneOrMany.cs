@@ -154,7 +154,7 @@ namespace Roslyn.Utilities
         }
     }
 
-    internal static class OneOrMany
+    public static class OneOrMany
     {
         public static OneOrMany<T> Create<T>(T one)
             where T : notnull

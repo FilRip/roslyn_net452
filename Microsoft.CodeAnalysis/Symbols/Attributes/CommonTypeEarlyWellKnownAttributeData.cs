@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from early well-known custom attributes applied on a type.
     /// </summary>
-    internal class CommonTypeEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
+    public class CommonTypeEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
     {
         #region AttributeUsageAttribute
         private AttributeUsageInfo _attributeUsageInfo = AttributeUsageInfo.Null;

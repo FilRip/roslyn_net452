@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.RuntimeMembers;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class SpecialMembers
+    public static class SpecialMembers
     {
         private static readonly ImmutableArray<MemberDescriptor> s_descriptors;
 

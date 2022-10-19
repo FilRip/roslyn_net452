@@ -4,9 +4,9 @@
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static partial class SourceCodeKindExtensions
+    public static partial class SourceCodeKindExtensions
     {
-        internal static SourceCodeKind MapSpecifiedToEffectiveKind(this SourceCodeKind kind)
+        public static SourceCodeKind MapSpecifiedToEffectiveKind(this SourceCodeKind kind)
         {
             switch (kind)
             {
@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static bool IsValid(this SourceCodeKind value)
+        public static bool IsValid(this SourceCodeKind value)
         {
             return value >= SourceCodeKind.Regular && value <= SourceCodeKind.Script;
         }

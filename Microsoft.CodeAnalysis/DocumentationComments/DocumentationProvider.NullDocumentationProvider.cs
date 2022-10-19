@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private class NullDocumentationProvider : DocumentationProvider
         {
-            protected internal override string GetDocumentationForSymbol(string documentationMemberID, CultureInfo preferredCulture, CancellationToken cancellationToken = default(CancellationToken))
+            public override string GetDocumentationForSymbol(string documentationMemberID, CultureInfo preferredCulture, CancellationToken cancellationToken = default(CancellationToken))
             {
                 return "";
             }

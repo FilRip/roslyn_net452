@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis
         /// results from another culture if the preferred culture was unavailable.</param>
         /// <param name="cancellationToken">A cancellation token for the search.</param>
         /// <returns>A DocumentationComment.</returns>
-        protected internal abstract string? GetDocumentationForSymbol(
+        public abstract string? GetDocumentationForSymbol(
             string documentationMemberID,
             CultureInfo preferredCulture,
             CancellationToken cancellationToken = default);

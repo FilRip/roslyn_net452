@@ -4,9 +4,9 @@
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal partial struct ChildSyntaxList
+    public partial struct ChildSyntaxList
     {
-        internal struct Enumerator
+        public struct Enumerator
         {
             private readonly GreenNode? _node;
             private int _childIndex;

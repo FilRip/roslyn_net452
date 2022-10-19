@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis
 
     public static partial class EnumBounds
     {
-        internal static bool IsValid(this SymbolDisplayPartKind value)
+        public static bool IsValid(this SymbolDisplayPartKind value)
         {
             return (value >= SymbolDisplayPartKind.AliasName && value <= SymbolDisplayPartKind.RecordStructName) ||
                 (value >= InternalSymbolDisplayPartKind.Arity && value <= InternalSymbolDisplayPartKind.Other);

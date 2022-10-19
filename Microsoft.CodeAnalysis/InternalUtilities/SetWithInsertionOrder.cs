@@ -14,7 +14,7 @@ namespace Roslyn.Utilities
     /// A set that returns the inserted values in insertion order.
     /// The mutation operations are not thread-safe.
     /// </summary>
-    internal sealed class SetWithInsertionOrder<T> : IEnumerable<T>, IReadOnlySet<T>
+    public sealed class SetWithInsertionOrder<T> : IEnumerable<T>, IReadOnlySet<T>
     {
         private HashSet<T>? _set = null;
         private ArrayBuilder<T>? _elements = null;

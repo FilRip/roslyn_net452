@@ -105,7 +105,7 @@ namespace Microsoft.Cci
         public static bool IsValid(this SignatureCallingConvention convention)
             => convention <= SignatureCallingConvention.VarArgs || convention == SignatureCallingConvention.Unmanaged;
 
-        internal static SignatureCallingConvention ToSignatureConvention(this CallingConvention convention)
+        public static SignatureCallingConvention ToSignatureConvention(this CallingConvention convention)
             => (SignatureCallingConvention)convention & SignatureCallingConventionMask;
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Microsoft.Cci
             return ((original & (CallingConvention)SignatureCallingConventionMask)) == compare;
         }
 
-        internal static bool HasUnknownCallingConventionAttributeBits(this CallingConvention convention)
+        public static bool HasUnknownCallingConventionAttributeBits(this CallingConvention convention)
             => (convention & ~((CallingConvention)SignatureCallingConventionMask
                                | (CallingConvention)SignatureAttributesMask))
                != 0;
@@ -965,9 +965,9 @@ namespace Microsoft.Cci
         new string Name { get; }
     }
 
-    internal static class Extensions
+    public static class Extensions
     {
-        internal static bool HasBody(this IMethodDefinition methodDef)
+        public static bool HasBody(this IMethodDefinition methodDef)
         {
             // Method definition has body if it is a non-abstract, non-extern method.
             // Additionally, methods within COM types have no body.

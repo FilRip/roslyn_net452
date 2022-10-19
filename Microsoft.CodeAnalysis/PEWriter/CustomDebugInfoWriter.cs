@@ -18,7 +18,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.Cci
 {
-    internal sealed class CustomDebugInfoWriter
+    public sealed class CustomDebugInfoWriter
     {
         private MethodDefinitionHandle _methodWithModuleInfo;
         private IMethodBody _methodBodyWithModuleInfo;

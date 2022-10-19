@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis
                 noThrow: true);
         }
 
-        internal static bool DeclaresTheObjectClass(this MetadataReader reader)
+        public static bool DeclaresTheObjectClass(this MetadataReader reader)
         {
             return reader.DeclaresType(IsTheObjectClass);
         }

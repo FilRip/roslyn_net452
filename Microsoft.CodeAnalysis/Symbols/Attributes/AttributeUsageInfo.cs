@@ -50,11 +50,11 @@ namespace Microsoft.CodeAnalysis
         /// (b) AllowMultiple: false
         /// (c) Inherited: true
         /// </summary>
-        internal static readonly AttributeUsageInfo Default = new AttributeUsageInfo(validTargets: AttributeTargets.All, allowMultiple: false, inherited: true);
+        public static readonly AttributeUsageInfo Default = new(validTargets: AttributeTargets.All, allowMultiple: false, inherited: true);
 
-        internal static readonly AttributeUsageInfo Null = default(AttributeUsageInfo);
+        public static readonly AttributeUsageInfo Null = default;
 
-        internal AttributeUsageInfo(AttributeTargets validTargets, bool allowMultiple, bool inherited)
+        public AttributeUsageInfo(AttributeTargets validTargets, bool allowMultiple, bool inherited)
         {
             // NOTE: VB allows AttributeUsageAttribute with no valid target, i.e. <AttributeUsageAttribute(0)>, and doesn't generate any diagnostics.
             // We use PackedAttributeUsage.Initialized field to differentiate between uninitialized AttributeUsageInfo and initialized AttributeUsageInfo with no valid targets.
@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool Inherited
+        public bool Inherited
         {
             get
             {
@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis
             return _flags.GetHashCode();
         }
 
-        internal bool HasValidAttributeTargets
+        public bool HasValidAttributeTargets
         {
             get
             {

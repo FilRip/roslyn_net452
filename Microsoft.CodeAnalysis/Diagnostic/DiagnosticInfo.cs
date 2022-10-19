@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // Create a copy of this instance with a explicit overridden severity
-        internal virtual DiagnosticInfo GetInstanceWithSeverity(DiagnosticSeverity severity)
+        public virtual DiagnosticInfo GetInstanceWithSeverity(DiagnosticSeverity severity)
         {
             return new DiagnosticInfo(this, severity);
         }
@@ -377,12 +377,12 @@ namespace Microsoft.CodeAnalysis
             return newArguments;
         }
 
-        internal object[] Arguments
+        public object[] Arguments
         {
             get { return _arguments; }
         }
 
-        internal CommonMessageProvider MessageProvider
+        public CommonMessageProvider MessageProvider
         {
             get { return _messageProvider; }
         }
@@ -464,7 +464,7 @@ namespace Microsoft.CodeAnalysis
         /// For a DiagnosticInfo that is lazily evaluated, this method evaluates it
         /// and returns a non-lazy DiagnosticInfo.
         /// </summary>
-        internal virtual DiagnosticInfo GetResolvedInfo()
+        public virtual DiagnosticInfo GetResolvedInfo()
         {
             // We should never call GetResolvedInfo on a non-lazy DiagnosticInfo
             throw ExceptionUtilities.Unreachable;

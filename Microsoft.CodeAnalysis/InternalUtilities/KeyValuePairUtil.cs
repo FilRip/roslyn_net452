@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Roslyn.Utilities
 {
-    internal static class KeyValuePairUtil
+    public static class KeyValuePairUtil
     {
         public static KeyValuePair<K, V> Create<K, V>(K key, V value)
         {

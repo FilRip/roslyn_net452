@@ -33,9 +33,9 @@ namespace Microsoft.CodeAnalysis
         }
     }
 
-    internal static class ModifierInfoExtensions
+    public static class ModifierInfoExtensions
     {
-        internal static bool AnyRequired<TypeSymbol>(this ImmutableArray<ModifierInfo<TypeSymbol>> modifiers) where TypeSymbol : class
+        public static bool AnyRequired<TypeSymbol>(this ImmutableArray<ModifierInfo<TypeSymbol>> modifiers) where TypeSymbol : class
         {
             return !modifiers.IsDefaultOrEmpty && modifiers.Any(m => !m.IsOptional);
         }
@@ -53,15 +53,15 @@ namespace Microsoft.CodeAnalysis
     }
 
     [StructLayout(LayoutKind.Auto)]
-    internal struct LocalInfo<TypeSymbol>
+    public struct LocalInfo<TypeSymbol>
         where TypeSymbol : class
     {
-        internal readonly byte[] SignatureOpt;
-        internal readonly TypeSymbol Type;
-        internal readonly ImmutableArray<ModifierInfo<TypeSymbol>> CustomModifiers;
-        internal readonly LocalSlotConstraints Constraints;
+        public readonly byte[] SignatureOpt;
+        public readonly TypeSymbol Type;
+        public readonly ImmutableArray<ModifierInfo<TypeSymbol>> CustomModifiers;
+        public readonly LocalSlotConstraints Constraints;
 
-        internal LocalInfo(TypeSymbol type, ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers, LocalSlotConstraints constraints, byte[] signatureOpt)
+        public LocalInfo(TypeSymbol type, ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers, LocalSlotConstraints constraints, byte[] signatureOpt)
         {
             Debug.Assert(type != null);
 
@@ -110,13 +110,13 @@ namespace Microsoft.CodeAnalysis
             _containingAssemblyIdentity = containingAssemblyIdentity;
         }
 
-        internal TypeSymbol GetTypeOfToken(EntityHandle token)
+        public TypeSymbol GetTypeOfToken(EntityHandle token)
         {
             bool isNoPiaLocalType;
             return GetTypeOfToken(token, out isNoPiaLocalType);
         }
 
-        internal TypeSymbol GetTypeOfToken(EntityHandle token, out bool isNoPiaLocalType)
+        public TypeSymbol GetTypeOfToken(EntityHandle token, out bool isNoPiaLocalType)
         {
             Debug.Assert(!token.IsNil);
 
@@ -881,7 +881,7 @@ tryAgain:
             }
         }
 
-        internal TypeSymbol DecodeGenericParameterConstraint(EntityHandle token, out ImmutableArray<ModifierInfo<TypeSymbol>> modifiers)
+        public TypeSymbol DecodeGenericParameterConstraint(EntityHandle token, out ImmutableArray<ModifierInfo<TypeSymbol>> modifiers)
         {
             modifiers = ImmutableArray<ModifierInfo<TypeSymbol>>.Empty;
 
@@ -1115,7 +1115,7 @@ tryAgain:
             }
         }
 
-        internal ImmutableArray<LocalInfo<TypeSymbol>> GetLocalsOrThrow(StandaloneSignatureHandle handle)
+        public ImmutableArray<LocalInfo<TypeSymbol>> GetLocalsOrThrow(StandaloneSignatureHandle handle)
         {
             var signatureHandle = Module.MetadataReader.GetStandaloneSignature(handle).Signature;
             var signatureReader = Module.MetadataReader.GetBlobReader(signatureHandle);
@@ -1181,7 +1181,7 @@ tryAgain:
         }
 
         // MetaImport::DecodeMethodSignature
-        internal ParamInfo<TypeSymbol>[] GetSignatureForMethod(MethodDefinitionHandle methodDef, out SignatureHeader signatureHeader, out BadImageFormatException metadataException, bool setParamHandles = true)
+        public ParamInfo<TypeSymbol>[] GetSignatureForMethod(MethodDefinitionHandle methodDef, out SignatureHeader signatureHeader, out BadImageFormatException metadataException, bool setParamHandles = true)
         {
             ParamInfo<TypeSymbol>[] paramInfo = null;
             signatureHeader = default(SignatureHeader);
@@ -1230,7 +1230,7 @@ tryAgain:
         }
 
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
-        internal static void GetSignatureCountsOrThrow(PEModule module, MethodDefinitionHandle methodDef, out int parameterCount, out int typeParameterCount)
+        public static void GetSignatureCountsOrThrow(PEModule module, MethodDefinitionHandle methodDef, out int parameterCount, out int typeParameterCount)
         {
             BlobHandle signature = module.GetMethodSignatureOrThrow(methodDef);
             SignatureHeader signatureHeader;
@@ -1239,7 +1239,7 @@ tryAgain:
             GetSignatureCountsOrThrow(ref signatureReader, signatureHeader, out parameterCount, out typeParameterCount);
         }
 
-        internal ParamInfo<TypeSymbol>[] GetSignatureForProperty(PropertyDefinitionHandle handle, out SignatureHeader signatureHeader, out BadImageFormatException BadImageFormatException)
+        public ParamInfo<TypeSymbol>[] GetSignatureForProperty(PropertyDefinitionHandle handle, out SignatureHeader signatureHeader, out BadImageFormatException BadImageFormatException)
         {
             ParamInfo<TypeSymbol>[] paramInfo = null;
             signatureHeader = default(SignatureHeader);
@@ -1269,7 +1269,7 @@ tryAgain:
             return paramInfo;
         }
 
-        internal SignatureHeader GetSignatureHeaderForProperty(PropertyDefinitionHandle handle)
+        public SignatureHeader GetSignatureHeaderForProperty(PropertyDefinitionHandle handle)
         {
             try
             {
@@ -1656,7 +1656,7 @@ tryAgain:
             }
         }
 
-        internal bool GetCustomAttribute(
+        public bool GetCustomAttribute(
             CustomAttributeHandle handle,
             out TypedConstant[] positionalArgs,
             out KeyValuePair<string, TypedConstant>[] namedArgs)
@@ -1736,7 +1736,7 @@ tryAgain:
         }
 
 #nullable enable
-        internal bool GetCustomAttribute(CustomAttributeHandle handle, [NotNullWhen(true)] out TypeSymbol? attributeClass, [NotNullWhen(true)] out MethodSymbol? attributeCtor)
+        public bool GetCustomAttribute(CustomAttributeHandle handle, [NotNullWhen(true)] out TypeSymbol? attributeClass, [NotNullWhen(true)] out MethodSymbol? attributeCtor)
         {
             EntityHandle attributeType;
             EntityHandle ctor;
@@ -1823,7 +1823,7 @@ tryAgain:
         }
 
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
-        internal BlobReader DecodeSignatureHeaderOrThrow(BlobHandle signature, out SignatureHeader signatureHeader)
+        public BlobReader DecodeSignatureHeaderOrThrow(BlobHandle signature, out SignatureHeader signatureHeader)
         {
             return DecodeSignatureHeaderOrThrow(Module, signature, out signatureHeader);
         }
@@ -1884,7 +1884,7 @@ tryAgain:
             parameterCount = signatureReader.ReadCompressedInteger();
         }
 
-        internal TypeSymbol DecodeFieldSignature(FieldDefinitionHandle fieldHandle, out ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers)
+        public TypeSymbol DecodeFieldSignature(FieldDefinitionHandle fieldHandle, out ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers)
         {
             try
             {
@@ -1943,7 +1943,7 @@ tryAgain:
         /// <param name="implementingMethodDef">MethodDef handle of the implementing method.</param>
         /// <param name="implementingTypeSymbol">The type symbol for the implementing type.</param>
         /// <returns>Array of implemented methods.</returns>
-        internal ImmutableArray<MethodSymbol> GetExplicitlyOverriddenMethods(TypeDefinitionHandle implementingTypeDef, MethodDefinitionHandle implementingMethodDef, TypeSymbol implementingTypeSymbol)
+        public ImmutableArray<MethodSymbol> GetExplicitlyOverriddenMethods(TypeDefinitionHandle implementingTypeDef, MethodDefinitionHandle implementingMethodDef, TypeSymbol implementingTypeSymbol)
         {
             ArrayBuilder<MethodSymbol> resultBuilder = ArrayBuilder<MethodSymbol>.GetInstance();
 
@@ -2156,7 +2156,7 @@ tryAgain:
         /// <param name="implementingTypeSymbol">Scope the search to supertypes of the implementing type.</param>
         /// <param name="methodsOnly">True to only return method symbols, null if the token resolves to a field.</param>
         /// <returns>The corresponding MethodSymbol or null.</returns>
-        internal abstract Symbol GetSymbolForMemberRef(MemberReferenceHandle memberRef, TypeSymbol implementingTypeSymbol = null, bool methodsOnly = false);
+        public abstract Symbol GetSymbolForMemberRef(MemberReferenceHandle memberRef, TypeSymbol implementingTypeSymbol = null, bool methodsOnly = false);
 
         internal MethodSymbol GetMethodSymbolForMemberRef(MemberReferenceHandle methodRef, TypeSymbol implementingTypeSymbol)
         {
@@ -2300,7 +2300,7 @@ tryAgain:
         /// <summary>
         /// Given a MemberRef token, return the TypeSymbol for its Class field.
         /// </summary>
-        internal TypeSymbol GetMemberRefTypeSymbol(MemberReferenceHandle memberRef)
+        public TypeSymbol GetMemberRefTypeSymbol(MemberReferenceHandle memberRef)
         {
             try
             {
@@ -2373,7 +2373,7 @@ tryAgain:
         /// True if differences in return type (or value parameter for setter) should be treated as significant.
         /// </param>
         /// <returns>True if the accessor signature is appropriate for the containing property.</returns>
-        internal bool DoPropertySignaturesMatch(ParamInfo<TypeSymbol>[] signature1, ParamInfo<TypeSymbol>[] signature2, bool comparingToSetter, bool compareParamByRef, bool compareReturnType)
+        public bool DoPropertySignaturesMatch(ParamInfo<TypeSymbol>[] signature1, ParamInfo<TypeSymbol>[] signature2, bool comparingToSetter, bool compareParamByRef, bool compareReturnType)
         {
             int additionalParamCount = (comparingToSetter ? 1 : 0);
 
@@ -2418,7 +2418,7 @@ tryAgain:
         /// <param name="eventType">Type of the event containing the accessor.</param>
         /// <param name="methodParams">Signature of the accessor (return type and then parameters).</param>
         /// <returns>True if the accessor signature is appropriate for the containing event.</returns>
-        internal bool DoesSignatureMatchEvent(TypeSymbol eventType, ParamInfo<TypeSymbol>[] methodParams)
+        public bool DoesSignatureMatchEvent(TypeSymbol eventType, ParamInfo<TypeSymbol>[] methodParams)
         {
             // Check the number of parameters.
             if (methodParams.Length != 2)

@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     // having identical hash value.
     using HashBucket = List<KeyValuePair<ConstantValue, object>>;
 
-    internal struct SwitchStringJumpTableEmitter
+    public struct SwitchStringJumpTableEmitter
     {
         private readonly ILBuilder _builder;
 
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             return stringHashMap;
         }
 
-        internal static bool ShouldGenerateHashTableSwitch(CommonPEModuleBuilder module, int labelsCount)
+        public static bool ShouldGenerateHashTableSwitch(CommonPEModuleBuilder module, int labelsCount)
         {
             return module.SupportsPrivateImplClass && ShouldGenerateHashTableSwitch(labelsCount);
         }

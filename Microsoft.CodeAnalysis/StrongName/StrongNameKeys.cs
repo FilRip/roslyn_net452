@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Determines source assembly identity.
         /// </summary>
-        internal readonly ImmutableArray<byte> PublicKey;
+        public readonly ImmutableArray<byte> PublicKey;
 
         /// <summary> 
         /// The Private key information that will exist if it was a private key file that was parsed.
@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// A diagnostic created in the process of determining the key.
         /// </summary>
-        internal readonly Diagnostic? DiagnosticOpt;
+        public readonly Diagnostic? DiagnosticOpt;
 
         /// <summary>
         /// The CSP key container containing the public key used to produce the key,
@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis
         /// The original value as specified by <see cref="System.Reflection.AssemblyKeyFileAttribute"/> or 
         /// <see cref="CompilationOptions.CryptoKeyFile"/>
         /// </remarks>
-        internal readonly string? KeyFilePath;
+        public readonly string? KeyFilePath;
 
         /// <summary>
         /// True when the assembly contains a <see cref="System.Reflection.AssemblySignatureKeyAttribute"/> value 
@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         internal readonly bool HasCounterSignature;
 
-        internal static readonly StrongNameKeys None = new StrongNameKeys();
+        public static readonly StrongNameKeys None = new();
 
         private StrongNameKeys()
         {
@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis
             this.HasCounterSignature = hasCounterSignature;
         }
 
-        internal static StrongNameKeys Create(ImmutableArray<byte> publicKey, RSAParameters? privateKey, bool hasCounterSignature, CommonMessageProvider messageProvider)
+        public static StrongNameKeys Create(ImmutableArray<byte> publicKey, RSAParameters? privateKey, bool hasCounterSignature, CommonMessageProvider messageProvider)
         {
             Debug.Assert(!publicKey.IsDefaultOrEmpty);
 
@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static StrongNameKeys Create(string? keyFilePath, CommonMessageProvider messageProvider)
+        public static StrongNameKeys Create(string? keyFilePath, CommonMessageProvider messageProvider)
         {
             if (string.IsNullOrEmpty(keyFilePath))
             {
@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis
             return new StrongNameKeys(keyPair, publicKey, privateKey, null, keyFilePath, hasCounterSignature);
         }
 
-        internal static StrongNameKeys Create(StrongNameProvider? providerOpt, string? keyFilePath, string? keyContainerName, bool hasCounterSignature, CommonMessageProvider messageProvider)
+        public static StrongNameKeys Create(StrongNameProvider? providerOpt, string? keyFilePath, string? keyContainerName, bool hasCounterSignature, CommonMessageProvider messageProvider)
         {
             if (string.IsNullOrEmpty(keyFilePath) && string.IsNullOrEmpty(keyContainerName))
             {
@@ -182,7 +182,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// True if the compilation can be signed using these keys.
         /// </summary>
-        internal bool CanSign
+        public bool CanSign
         {
             get
             {
@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis
             return messageProvider.CreateDiagnostic(messageProvider.ERR_PublicKeyFileFailure, Location.None, path, message);
         }
 
-        internal static bool IsValidPublicKeyString(string? publicKey)
+        public static bool IsValidPublicKeyString(string? publicKey)
         {
             if (string.IsNullOrEmpty(publicKey) || publicKey.Length % 2 != 0)
             {

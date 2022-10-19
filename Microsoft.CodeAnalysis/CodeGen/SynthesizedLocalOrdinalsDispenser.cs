@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// <summary>
     /// Dispenser of unique ordinals for synthesized variable names that have the same kind and syntax offset.
     /// </summary>
-    internal sealed class SynthesizedLocalOrdinalsDispenser
+    public sealed class SynthesizedLocalOrdinalsDispenser
     {
         // The key is (local.SyntaxOffset << 8) | local.SynthesizedKind.
         private PooledDictionary<long, int>? _lazyMap;

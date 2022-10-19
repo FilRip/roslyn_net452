@@ -10,13 +10,13 @@ namespace Microsoft.CodeAnalysis
 {
     public sealed class UnmanagedCallersOnlyAttributeData
     {
-        internal static readonly UnmanagedCallersOnlyAttributeData Uninitialized = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
-        internal static readonly UnmanagedCallersOnlyAttributeData AttributePresentDataNotBound = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
+        public static readonly UnmanagedCallersOnlyAttributeData Uninitialized = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
+        public static readonly UnmanagedCallersOnlyAttributeData AttributePresentDataNotBound = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
         private static readonly UnmanagedCallersOnlyAttributeData PlatformDefault = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
 
         public const string CallConvsPropertyName = "CallConvs";
 
-        internal static UnmanagedCallersOnlyAttributeData Create(ImmutableHashSet<INamedTypeSymbolInternal>? callingConventionTypes)
+        public static UnmanagedCallersOnlyAttributeData Create(ImmutableHashSet<INamedTypeSymbolInternal>? callingConventionTypes)
             => callingConventionTypes switch
             {
                 null or { IsEmpty: true } => PlatformDefault,
@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis
             CallingConventionTypes = callingConventionTypes;
         }
 
-        internal static bool IsCallConvsTypedConstant(string key, bool isField, in TypedConstant value)
+        public static bool IsCallConvsTypedConstant(string key, bool isField, in TypedConstant value)
         {
             return isField
                    && key == CallConvsPropertyName

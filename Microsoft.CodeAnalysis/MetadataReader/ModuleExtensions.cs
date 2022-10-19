@@ -11,7 +11,7 @@ using System.Reflection.Metadata;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class ModuleExtensions
+    public static class ModuleExtensions
     {
         private const string VTableGapMethodNamePrefix = "_VtblGap";
 

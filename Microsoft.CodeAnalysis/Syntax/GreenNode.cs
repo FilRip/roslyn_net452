@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis
             return this.GetType().Name + " " + this.KindText + " " + this.ToString();
         }
 
-        internal const int ListKind = 1;
+        public const int ListKind = 1;
 
         private readonly ushort _kind;
         protected NodeFlags flags;
@@ -187,7 +187,7 @@ namespace Microsoft.CodeAnalysis
             return offset;
         }
 
-        internal Syntax.InternalSyntax.ChildSyntaxList ChildNodesAndTokens()
+        public Syntax.InternalSyntax.ChildSyntaxList ChildNodesAndTokens()
         {
             return new Syntax.InternalSyntax.ChildSyntaxList(this);
         }
@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Enumerates all nodes of the tree rooted by this node (including this node).
         /// </summary>
-        internal IEnumerable<GreenNode> EnumerateNodes()
+        public IEnumerable<GreenNode> EnumerateNodes()
         {
             yield return this;
 
@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis
             this.flags &= ~flags;
         }
 
-        internal bool IsMissing
+        public bool IsMissing
         {
             get
             {
@@ -302,7 +302,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool ParsedInAsync
+        public bool ParsedInAsync
         {
             get
             {
@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool ParsedInQuery
+        public bool ParsedInQuery
         {
             get
             {
@@ -424,7 +424,7 @@ namespace Microsoft.CodeAnalysis
         // use high-bit on Kind to identify serialization of extra info
         private const UInt16 ExtendedSerializationInfoMask = unchecked((UInt16)(1u << 15));
 
-        internal GreenNode(ObjectReader reader)
+        protected GreenNode(ObjectReader reader)
         {
             var kindBits = reader.ReadUInt16();
             _kind = (ushort)(kindBits & ~ExtendedSerializationInfoMask);
@@ -449,7 +449,7 @@ namespace Microsoft.CodeAnalysis
 
         bool IObjectWritable.ShouldReuseInSerialization => ShouldReuseInSerialization;
 
-        internal virtual bool ShouldReuseInSerialization => this.IsCacheable;
+        public virtual bool ShouldReuseInSerialization => this.IsCacheable;
 
         void IObjectWritable.WriteTo(ObjectWriter writer)
         {
@@ -651,7 +651,7 @@ namespace Microsoft.CodeAnalysis
             this.WriteTo(writer, leading: true, trailing: true);
         }
 
-        protected internal void WriteTo(TextWriter writer, bool leading, bool trailing)
+        public void WriteTo(TextWriter writer, bool leading, bool trailing)
         {
             // Use an actual stack so we can write out deeply recursive structures without overflowing.
             var stack = ArrayBuilder<(GreenNode node, bool leading, bool trailing)>.GetInstance();
@@ -765,7 +765,7 @@ namespace Microsoft.CodeAnalysis
             return this;
         }
 
-        internal GreenNode? GetFirstTerminal()
+        public GreenNode? GetFirstTerminal()
         {
             GreenNode? node = this;
 
@@ -787,7 +787,7 @@ namespace Microsoft.CodeAnalysis
             return node;
         }
 
-        internal GreenNode? GetLastTerminal()
+        public GreenNode? GetLastTerminal()
         {
             GreenNode? node = this;
 
@@ -809,7 +809,7 @@ namespace Microsoft.CodeAnalysis
             return node;
         }
 
-        internal GreenNode? GetLastNonmissingTerminal()
+        public GreenNode? GetLastNonmissingTerminal()
         {
             GreenNode? node = this;
 
@@ -1043,7 +1043,7 @@ namespace Microsoft.CodeAnalysis
         /// <returns>A new node, with no parent, that has this error added to it.</returns>
         /// <remarks>Since nodes are immutable, the only way to create nodes with errors attached is to create a node without an error,
         /// then add an error with this method to create another node.</remarks>
-        internal GreenNode AddError(DiagnosticInfo err)
+        public GreenNode AddError(DiagnosticInfo err)
         {
             DiagnosticInfo[] errorInfos;
 

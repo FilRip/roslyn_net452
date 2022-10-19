@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis
             return -1;
         }
 
-        internal int IndexOf(int rawKind)
+        public int IndexOf(int rawKind)
         {
             for (int i = 0, n = this.Count; i < n; i++)
             {

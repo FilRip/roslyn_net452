@@ -209,7 +209,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// this.QualifiedNameOnly = containingSymbol.QualifiedNameOnly + "." + this.Name
         /// </summary>
-        internal static readonly SymbolDisplayFormat QualifiedNameOnlyFormat =
+        public static readonly SymbolDisplayFormat QualifiedNameOnlyFormat =
             new SymbolDisplayFormat(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
@@ -217,7 +217,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// this.QualifiedNameArity = containingSymbol.QualifiedNameArity + "." + this.Name + "`" + this.Arity
         /// </summary>
-        internal static readonly SymbolDisplayFormat QualifiedNameArityFormat =
+        public static readonly SymbolDisplayFormat QualifiedNameArityFormat =
             new SymbolDisplayFormat(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
@@ -226,7 +226,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// A succinct format for displaying symbols.
         /// </summary>
-        internal static readonly SymbolDisplayFormat ShortFormat =
+        public static readonly SymbolDisplayFormat ShortFormat =
             new SymbolDisplayFormat(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameOnly,

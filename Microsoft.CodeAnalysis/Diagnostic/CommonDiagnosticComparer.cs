@@ -7,9 +7,9 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal sealed class CommonDiagnosticComparer : IEqualityComparer<Diagnostic>
+    public sealed class CommonDiagnosticComparer : IEqualityComparer<Diagnostic>
     {
-        internal static readonly CommonDiagnosticComparer Instance = new CommonDiagnosticComparer();
+        public static readonly CommonDiagnosticComparer Instance = new();
 
         private CommonDiagnosticComparer()
         {

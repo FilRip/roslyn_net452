@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis
 
     public static partial class EnumBounds
     {
-        internal static bool IsValid(this MetadataImportOptions value)
+        public static bool IsValid(this MetadataImportOptions value)
         {
             return value >= MetadataImportOptions.Public && value <= MetadataImportOptions.All;
         }

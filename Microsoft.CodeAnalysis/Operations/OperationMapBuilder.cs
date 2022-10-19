@@ -9,13 +9,13 @@ using Microsoft.CodeAnalysis.Operations;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class OperationMapBuilder
+    public static class OperationMapBuilder
     {
         /// <summary>
         /// Populates a empty dictionary of SyntaxNode->IOperation, where every key corresponds to an explicit IOperation node.
         /// If there is a SyntaxNode with more than one explicit IOperation, this will throw.
         /// </summary>
-        internal static void AddToMap(IOperation root, Dictionary<SyntaxNode, IOperation> dictionary)
+        public static void AddToMap(IOperation root, Dictionary<SyntaxNode, IOperation> dictionary)
         {
             Debug.Assert(dictionary.Count == 0);
             Walker.Instance.Visit(root, dictionary);

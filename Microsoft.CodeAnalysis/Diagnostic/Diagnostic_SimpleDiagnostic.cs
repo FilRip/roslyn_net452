@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override IReadOnlyList<object?> Arguments
+            public override IReadOnlyList<object?> Arguments
             {
                 get { return _messageArgs; }
             }
@@ -196,7 +196,7 @@ namespace Microsoft.CodeAnalysis
                 return this;
             }
 
-            internal override Diagnostic WithSeverity(DiagnosticSeverity severity)
+            public override Diagnostic WithSeverity(DiagnosticSeverity severity)
             {
                 if (this.Severity != severity)
                 {
@@ -207,7 +207,7 @@ namespace Microsoft.CodeAnalysis
                 return this;
             }
 
-            internal override Diagnostic WithIsSuppressed(bool isSuppressed)
+            public override Diagnostic WithIsSuppressed(bool isSuppressed)
             {
                 if (this.IsSuppressed != isSuppressed)
                 {

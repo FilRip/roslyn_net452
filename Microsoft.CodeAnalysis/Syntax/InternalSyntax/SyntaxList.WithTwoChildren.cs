@@ -8,9 +8,9 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal partial class SyntaxList
+    public partial class SyntaxList
     {
-        internal class WithTwoChildren : SyntaxList
+        public class WithTwoChildren : SyntaxList
         {
             static WithTwoChildren()
             {
@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             private readonly GreenNode _child0;
             private readonly GreenNode _child1;
 
-            internal WithTwoChildren(GreenNode child0, GreenNode child1)
+            public WithTwoChildren(GreenNode child0, GreenNode child1)
             {
                 this.SlotCount = 2;
                 this.AdjustFlagsAndWidth(child0);
@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                 _child1 = child1;
             }
 
-            internal WithTwoChildren(DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations, GreenNode child0, GreenNode child1)
+            public WithTwoChildren(DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations, GreenNode child0, GreenNode child1)
                 : base(diagnostics, annotations)
             {
                 this.SlotCount = 2;
@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                 _child1 = child1;
             }
 
-            internal WithTwoChildren(ObjectReader reader)
+            public WithTwoChildren(ObjectReader reader)
                 : base(reader)
             {
                 this.SlotCount = 2;

@@ -467,7 +467,7 @@
     <Compile Include="InternalUtilities\Hash.cs" />
     <Compile Include="InternalUtilities\ImmutableArrayExtensions.cs" />
     <Compile Include="InternalUtilities\ImmutableListExtensions.cs" />
-    <Compile Include="InternalUtilities\ImmutableSetWithInsertionOrder`1.cs" />
+    <Compile Include="InternalUtilities\ImmutableSetWithInsertionOrder_T1.cs" />
     <Compile Include="InternalUtilities\Index.cs" />
     <Compile Include="InternalUtilities\InterlockedOperations.cs" />
     <Compile Include="InternalUtilities\IReadOnlyListExtensions.cs" />

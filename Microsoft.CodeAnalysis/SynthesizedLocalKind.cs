@@ -234,7 +234,7 @@ namespace Microsoft.CodeAnalysis
         DelegateRelaxationReceiver = 0x101,
     }
 
-    internal static class SynthesizedLocalKindExtensions
+    public static class SynthesizedLocalKindExtensions
     {
         public static bool IsLongLived(this SynthesizedLocalKind kind)
         {

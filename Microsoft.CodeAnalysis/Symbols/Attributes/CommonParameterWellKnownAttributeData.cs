@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on a parameter.
     /// </summary>
-    internal class CommonParameterWellKnownAttributeData : WellKnownAttributeData, IMarshalAsAttributeTarget
+    public class CommonParameterWellKnownAttributeData : WellKnownAttributeData, IMarshalAsAttributeTarget
     {
         #region OutAttribute
         private bool _hasOutAttribute;

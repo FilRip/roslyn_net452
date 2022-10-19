@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class Boxes
+    public static class Boxes
     {
         public static readonly object BoxedTrue = true;
         public static readonly object BoxedFalse = false;

@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal class SyntaxListBuilder
+    public class SyntaxListBuilder
     {
         private ArrayElement<GreenNode?>[] _nodes;
         public int Count { get; private set; }
@@ -169,7 +169,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             return array;
         }
 
-        internal GreenNode? ToListNode()
+        public GreenNode? ToListNode()
         {
             switch (this.Count)
             {

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class TypeAttributesExtensions
+    public static class TypeAttributesExtensions
     {
         public static bool IsInterface(this TypeAttributes flags)
         {
@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis
         /// Extracts <see cref="CharSet"/> information from TypeDef flags.
         /// Returns 0 if the value is invalid.
         /// </summary>
-        internal static CharSet ToCharSet(this TypeAttributes flags)
+        public static CharSet ToCharSet(this TypeAttributes flags)
         {
             switch (flags & TypeAttributes.StringFormatMask)
             {

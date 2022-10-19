@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.Symbols
     /// This interface is reserved for implementation by its associated APIs. We reserve the right to
     /// change it in the future.
     /// </remarks>
-    internal interface ISynthesizedMethodBodyImplementationSymbol : ISymbolInternal
+    public interface ISynthesizedMethodBodyImplementationSymbol : ISymbolInternal
     {
         /// <summary>
         /// The symbol whose body lowering produced this synthesized symbol, 

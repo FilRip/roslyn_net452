@@ -33,19 +33,19 @@ namespace Microsoft.Cci
             TargetXmlNamespaceOpt = targetXmlNamespace;
         }
 
-        internal static UsedNamespaceOrType CreateType(ITypeReference type, string? aliasOpt = null)
+        public static UsedNamespaceOrType CreateType(ITypeReference type, string? aliasOpt = null)
         {
             RoslynDebug.Assert(type != null);
             return new UsedNamespaceOrType(alias: aliasOpt, targetType: type);
         }
 
-        internal static UsedNamespaceOrType CreateNamespace(INamespace @namespace, IAssemblyReference? assemblyOpt = null, string? aliasOpt = null)
+        public static UsedNamespaceOrType CreateNamespace(INamespace @namespace, IAssemblyReference? assemblyOpt = null, string? aliasOpt = null)
         {
             RoslynDebug.Assert(@namespace != null);
             return new UsedNamespaceOrType(alias: aliasOpt, targetAssembly: assemblyOpt, targetNamespace: @namespace);
         }
 
-        internal static UsedNamespaceOrType CreateExternAlias(string alias)
+        public static UsedNamespaceOrType CreateExternAlias(string alias)
         {
             RoslynDebug.Assert(alias != null);
             return new UsedNamespaceOrType(alias: alias);

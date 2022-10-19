@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.Emit
         /// <summary>
         /// Name of the anonymous type field.
         /// </summary>
-        internal readonly string Name;
+        public readonly string Name;
 
         /// <summary>
         /// True if the anonymous type field was marked as 'Key' in VB.
@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis.Emit
     public struct AnonymousTypeKey : IEquatable<AnonymousTypeKey>
     {
         internal readonly bool IsDelegate;
-        internal readonly ImmutableArray<AnonymousTypeKeyField> Fields;
+        public readonly ImmutableArray<AnonymousTypeKeyField> Fields;
 
         public AnonymousTypeKey(ImmutableArray<AnonymousTypeKeyField> fields, bool isDelegate = false)
         {

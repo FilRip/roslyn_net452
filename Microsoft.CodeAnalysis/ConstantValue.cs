@@ -37,10 +37,10 @@ namespace Microsoft.CodeAnalysis
     public abstract partial class ConstantValue : IEquatable<ConstantValue?>
     {
         public abstract ConstantValueTypeDiscriminator Discriminator { get; }
-        internal abstract SpecialType SpecialType { get; }
+        public abstract SpecialType SpecialType { get; }
 
         public virtual string? StringValue { get { throw new InvalidOperationException(); } }
-        internal virtual Rope? RopeValue { get { throw new InvalidOperationException(); } }
+        public virtual Rope? RopeValue { get { throw new InvalidOperationException(); } }
 
         public virtual bool BooleanValue { get { throw new InvalidOperationException(); } }
 
@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis
             return new ConstantValueString(value);
         }
 
-        internal static ConstantValue CreateFromRope(Rope value)
+        public static ConstantValue CreateFromRope(Rope value)
         {
             RoslynDebug.Assert(value != null);
             return new ConstantValueString(value);
@@ -427,7 +427,7 @@ namespace Microsoft.CodeAnalysis
             throw ExceptionUtilities.UnexpectedValue(discriminator);
         }
 
-        internal static ConstantValueTypeDiscriminator GetDiscriminator(SpecialType st)
+        public static ConstantValueTypeDiscriminator GetDiscriminator(SpecialType st)
         {
             switch (st)
             {
@@ -780,7 +780,7 @@ namespace Microsoft.CodeAnalysis
             return String.Format("{0}({1}: {2})", this.GetType().Name, valueToDisplay, this.Discriminator);
         }
 
-        internal virtual string? GetValueToDisplay()
+        public virtual string? GetValueToDisplay()
         {
             return this.Value?.ToString();
         }

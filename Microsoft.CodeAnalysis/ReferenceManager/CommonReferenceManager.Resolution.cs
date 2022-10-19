@@ -888,7 +888,7 @@ namespace Microsoft.CodeAnalysis
             return references[0];
         }
 
-        internal static AssemblyReferenceBinding[] ResolveReferencedAssemblies(
+        public static AssemblyReferenceBinding[] ResolveReferencedAssemblies(
             ImmutableArray<AssemblyIdentity> references,
             ImmutableArray<AssemblyData> definitions,
             int definitionStartIndex,

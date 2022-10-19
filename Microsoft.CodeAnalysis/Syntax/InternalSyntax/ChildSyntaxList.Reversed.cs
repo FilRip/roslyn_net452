@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal partial struct ChildSyntaxList
+    public partial struct ChildSyntaxList
     {
-        internal partial struct Reversed
+        public partial struct Reversed
         {
             private readonly GreenNode? _node;
 

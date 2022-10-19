@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from early well-known custom attributes applied on a method.
     /// </summary>
-    internal class CommonMethodEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
+    public class CommonMethodEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
     {
         #region ConditionalAttribute
         private ImmutableArray<string> _lazyConditionalSymbols = ImmutableArray<string>.Empty;

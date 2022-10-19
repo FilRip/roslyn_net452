@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else
             {
-                FunctionPointerParameterSyntax? returnTypeParameter = syntax.ParameterList.Parameters[^1];
+                FunctionPointerParameterSyntax? returnTypeParameter = syntax.ParameterList.Parameters[syntax.ParameterList.Parameters.Count - 1];
                 SyntaxTokenList modifiers = returnTypeParameter.Modifiers;
                 for (int i = 0; i < modifiers.Count; i++)
                 {

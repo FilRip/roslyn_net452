@@ -8,7 +8,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
-    internal abstract partial class CompilerDiagnosticAnalyzer : DiagnosticAnalyzer
+    public abstract partial class CompilerDiagnosticAnalyzer : DiagnosticAnalyzer
     {
         private const string Origin = nameof(Origin);
         private const string Syntactic = nameof(Syntactic);
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 #pragma warning restore RS0013 
 
                 public override int Code => _original.Code;
-                internal override IReadOnlyList<object?> Arguments => _original.Arguments;
+                public override IReadOnlyList<object?> Arguments => _original.Arguments;
 
                 public override string Id => _original.Id;
                 public override DiagnosticSeverity Severity => _original.Severity;
@@ -124,12 +124,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     return new CompilerDiagnostic(_original.WithLocation(location), _properties);
                 }
 
-                internal override Diagnostic WithSeverity(DiagnosticSeverity severity)
+                public override Diagnostic WithSeverity(DiagnosticSeverity severity)
                 {
                     return new CompilerDiagnostic(_original.WithSeverity(severity), _properties);
                 }
 
-                internal override Diagnostic WithIsSuppressed(bool isSuppressed)
+                public override Diagnostic WithIsSuppressed(bool isSuppressed)
                 {
                     return new CompilerDiagnostic(_original.WithIsSuppressed(isSuppressed), _properties);
                 }

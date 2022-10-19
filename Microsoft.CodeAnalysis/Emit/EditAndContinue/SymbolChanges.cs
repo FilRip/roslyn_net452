@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Symbols;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
-    internal abstract class SymbolChanges
+    public abstract class SymbolChanges
     {
         /// <summary>
         /// Maps definitions being emitted to the corresponding definitions defined in the previous generation (metadata or source).

@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// A representation of a string of characters that requires O(1) extra space to concatenate two ropes.
     /// </summary>
-    internal abstract class Rope
+    public abstract class Rope
     {
         public static readonly Rope Empty = ForString("");
         public abstract override string ToString();

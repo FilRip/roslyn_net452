@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from early well-known custom attributes applied on an event.
     /// </summary>
-    internal class CommonEventEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
+    public class CommonEventEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
     {
         #region ObsoleteAttribute
         private ObsoleteAttributeData _obsoleteAttributeData = ObsoleteAttributeData.Uninitialized;

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal interface ISecurityAttributeTarget
+    public interface ISecurityAttributeTarget
     {
         SecurityWellKnownAttributeData GetOrCreateData();
     }

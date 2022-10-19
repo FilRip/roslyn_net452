@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis
 {
-    interface IMemberNotNullAttributeTarget
+    public interface IMemberNotNullAttributeTarget
     {
         void AddNotNullMember(string memberName);
 

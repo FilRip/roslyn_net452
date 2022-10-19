@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.Syntax
     /// This is a SyntaxReference implementation that lazily translates the result (SyntaxNode) of the
     /// original syntax reference to another one.
     /// </summary>
-    internal abstract class TranslationSyntaxReference : SyntaxReference
+    public abstract class TranslationSyntaxReference : SyntaxReference
     {
         private readonly SyntaxReference _reference;
 

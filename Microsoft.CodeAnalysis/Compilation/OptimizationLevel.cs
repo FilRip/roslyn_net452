@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis
 
     public static partial class EnumBounds
     {
-        internal static bool IsValid(this OptimizationLevel value)
+        public static bool IsValid(this OptimizationLevel value)
         {
             return value >= OptimizationLevel.Debug && value <= OptimizationLevel.Release;
         }

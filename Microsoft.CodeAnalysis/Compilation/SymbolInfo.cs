@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
 {
     public struct SymbolInfo : IEquatable<SymbolInfo>
     {
-        internal static readonly SymbolInfo None = new SymbolInfo(null, ImmutableArray<ISymbol>.Empty, CandidateReason.None);
+        public static readonly SymbolInfo None = new(null, ImmutableArray<ISymbol>.Empty, CandidateReason.None);
 
         private ImmutableArray<ISymbol> _candidateSymbols;
 
@@ -58,22 +58,22 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public CandidateReason CandidateReason { get; }
 
-        internal SymbolInfo(ISymbol symbol)
+        public SymbolInfo(ISymbol symbol)
             : this(symbol, ImmutableArray<ISymbol>.Empty, CandidateReason.None)
         {
         }
 
-        internal SymbolInfo(ISymbol symbol, CandidateReason reason)
+        public SymbolInfo(ISymbol symbol, CandidateReason reason)
             : this(symbol, ImmutableArray<ISymbol>.Empty, reason)
         {
         }
 
-        internal SymbolInfo(ImmutableArray<ISymbol> candidateSymbols, CandidateReason candidateReason)
+        public SymbolInfo(ImmutableArray<ISymbol> candidateSymbols, CandidateReason candidateReason)
             : this(null, candidateSymbols, candidateReason)
         {
         }
 
-        internal SymbolInfo(ISymbol? symbol, ImmutableArray<ISymbol> candidateSymbols, CandidateReason candidateReason)
+        public SymbolInfo(ISymbol? symbol, ImmutableArray<ISymbol> candidateSymbols, CandidateReason candidateReason)
             : this()
         {
             this.Symbol = symbol;

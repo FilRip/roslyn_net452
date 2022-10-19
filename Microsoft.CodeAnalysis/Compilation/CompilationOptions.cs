@@ -161,12 +161,12 @@ namespace Microsoft.CodeAnalysis
         /// Used for time-based version generation when <see cref="System.Reflection.AssemblyVersionAttribute"/> contains a wildcard.
         /// If equal to default(<see cref="DateTime"/>) the actual current local time will be used.
         /// </summary>
-        internal DateTime CurrentLocalTime { get; private protected set; }
+        public DateTime CurrentLocalTime { get; protected set; }
 
         /// <summary>
         /// Emit mode that favors debuggability. 
         /// </summary>
-        internal bool DebugPlusMode { get; set; }
+        public bool DebugPlusMode { get; set; }
 
         /// <summary>
         /// Specifies whether to import members with accessibility other than public or protected by default. 
@@ -180,14 +180,14 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Apply additional disambiguation rules during resolution of referenced assemblies.
         /// </summary>
-        internal bool ReferencesSupersedeLowerVersions { get; private protected set; }
+        public bool ReferencesSupersedeLowerVersions { get; protected set; }
 
         /// <summary>
         /// Modifies the incoming diagnostic, for example escalating its severity, or discarding it (returning null) based on the compilation options.
         /// </summary>
         /// <param name="diagnostic"></param>
         /// <returns>The modified diagnostic, or null</returns>
-        internal abstract Diagnostic? FilterDiagnostic(Diagnostic diagnostic, CancellationToken cancellationToken);
+        public abstract Diagnostic? FilterDiagnostic(Diagnostic diagnostic, CancellationToken cancellationToken);
 
         /// <summary>
         /// Warning report option for each warning.
@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis
         private readonly Lazy<ImmutableArray<Diagnostic>> _lazyErrors;
 
         // Expects correct arguments.
-        internal CompilationOptions(
+        public CompilationOptions(
             OutputKind outputKind,
             bool reportSuppressedDiagnostics,
             string? moduleName,
@@ -348,7 +348,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public abstract string Language { get; }
 
-        internal bool EnableEditAndContinue
+        public bool EnableEditAndContinue
         {
             get
             {
@@ -372,7 +372,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal abstract ImmutableArray<string> GetImports();
+        public abstract ImmutableArray<string> GetImports();
 
         /// <summary>
         /// Creates a new options instance with the specified general diagnostic option.
@@ -555,9 +555,9 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Performs validation of options compatibilities and generates diagnostics if needed
         /// </summary>
-        internal abstract void ValidateOptions(ArrayBuilder<Diagnostic> builder);
+        public abstract void ValidateOptions(ArrayBuilder<Diagnostic> builder);
 
-        internal void ValidateOptions(ArrayBuilder<Diagnostic> builder, CommonMessageProvider messageProvider)
+        public void ValidateOptions(ArrayBuilder<Diagnostic> builder, CommonMessageProvider messageProvider)
         {
             if (!CryptoPublicKey.IsEmpty)
             {

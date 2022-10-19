@@ -9,8 +9,8 @@ namespace Microsoft.CodeAnalysis
     public abstract class CommonSyntaxAndDeclarationManager
     {
         public readonly ImmutableArray<SyntaxTree> ExternalSyntaxTrees;
-        internal readonly string ScriptClassName;
-        internal readonly SourceReferenceResolver Resolver;
+        public readonly string ScriptClassName;
+        public readonly SourceReferenceResolver Resolver;
         public readonly CommonMessageProvider MessageProvider;
         public readonly bool IsSubmission;
 

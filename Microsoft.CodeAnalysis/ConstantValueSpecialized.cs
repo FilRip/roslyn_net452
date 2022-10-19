@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override SpecialType SpecialType
+            public override SpecialType SpecialType
             {
                 get { return SpecialType.None; }
             }
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis
                 return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(this);
             }
 
-            internal override string GetValueToDisplay()
+            public override string GetValueToDisplay()
             {
                 return "bad";
             }
@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override SpecialType SpecialType
+            public override SpecialType SpecialType
             {
                 get { return SpecialType.None; }
             }
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override Rope? RopeValue
+            public override Rope? RopeValue
             {
                 get
                 {
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override string GetValueToDisplay()
+            public override string GetValueToDisplay()
             {
                 return ((object)this == (object)Uninitialized) ? "unset" : "null";
             }
@@ -154,7 +154,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override SpecialType SpecialType
+            public override SpecialType SpecialType
             {
                 get { return SpecialType.System_String; }
             }
@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override Rope RopeValue
+            public override Rope RopeValue
             {
                 get
                 {
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis
                 return base.Equals(other) && _value.Equals(other.RopeValue);
             }
 
-            internal override string GetValueToDisplay()
+            public override string GetValueToDisplay()
             {
                 return (_value == null) ? "null" : string.Format("\"{0}\"", _value);
             }
@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override SpecialType SpecialType
+            public override SpecialType SpecialType
             {
                 get { return SpecialType.System_Decimal; }
             }
@@ -261,7 +261,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override SpecialType SpecialType
+            public override SpecialType SpecialType
             {
                 get { return SpecialType.System_DateTime; }
             }
@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal override SpecialType SpecialType
+            public override SpecialType SpecialType
             {
                 get { return GetSpecialType(_discriminator); }
             }

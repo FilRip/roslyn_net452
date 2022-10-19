@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis
     /// Used to determine if two <see cref="AttributeData"/> instances are identical,
     /// i.e. they have the same attribute type, attribute constructor and have identical arguments.
     /// </summary>
-    internal sealed class CommonAttributeDataComparer : IEqualityComparer<AttributeData>
+    public sealed class CommonAttributeDataComparer : IEqualityComparer<AttributeData>
     {
         public static CommonAttributeDataComparer Instance = new CommonAttributeDataComparer();
         private CommonAttributeDataComparer() { }

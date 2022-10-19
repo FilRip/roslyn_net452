@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Original reference that was unified to the identity of the <see cref="TargetAssembly"/>.
         /// </summary>
-        internal readonly AssemblyIdentity OriginalReference;
+        public readonly AssemblyIdentity OriginalReference;
 
         internal readonly TAssemblySymbol TargetAssembly;
 

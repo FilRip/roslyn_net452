@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static MethodImportAttributes MakeFlags(bool exactSpelling, CharSet charSet, bool setLastError, CallingConvention callingConvention, bool? useBestFit, bool? throwOnUnmappable)
+        public static MethodImportAttributes MakeFlags(bool exactSpelling, CharSet charSet, bool setLastError, CallingConvention callingConvention, bool? useBestFit, bool? throwOnUnmappable)
         {
             MethodImportAttributes result = 0;
             if (exactSpelling)

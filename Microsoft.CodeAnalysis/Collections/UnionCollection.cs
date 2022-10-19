@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
     /// If you have a few collections with many elements in them, then this is an appropriate
     /// collection for you.
     /// </summary>
-    internal class UnionCollection<T> : ICollection<T>
+    public class UnionCollection<T> : ICollection<T>
     {
         private readonly ImmutableArray<ICollection<T>> _collections;
         private int _count = -1;

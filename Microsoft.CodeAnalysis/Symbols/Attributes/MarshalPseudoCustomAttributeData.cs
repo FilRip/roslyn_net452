@@ -190,7 +190,7 @@ namespace Microsoft.CodeAnalysis
         /// Returns an instance of <see cref="MarshalPseudoCustomAttributeData"/> with all types replaced by types returned by specified translator.
         /// Returns this instance if it doesn't hold on any types.
         /// </summary>
-        internal MarshalPseudoCustomAttributeData WithTranslatedTypes<TTypeSymbol, TArg>(
+        public MarshalPseudoCustomAttributeData WithTranslatedTypes<TTypeSymbol, TArg>(
             Func<TTypeSymbol, TArg, TTypeSymbol> translator, TArg arg)
             where TTypeSymbol : ITypeSymbolInternal
         {

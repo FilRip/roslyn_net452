@@ -26,13 +26,7 @@ namespace Roslyn.Utilities
                 return maxCharCount;
             }
 
-#if CODE_STYLE
-            throw new IOException(CodeStyleResources.Stream_is_too_long);
-#elif WORKSPACE
-            throw new IOException(WorkspacesResources.Stream_is_too_long);
-#else
-            throw new IOException(Properties.Resources.StreamIsTooLong);
-#endif
+            throw new IOException(Microsoft.CodeAnalysis.Properties.Resources.StreamIsTooLong);
         }
 
         internal static bool TryGetMaxCharCount(this Encoding encoding, long length, out int maxCharCount)

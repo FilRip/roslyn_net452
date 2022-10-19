@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="node">The underlying syntax node.</param>
         /// <param name="index">The index.</param>
-        internal SyntaxNodeOrTokenList(SyntaxNode? node, int index)
+        public SyntaxNodeOrTokenList(SyntaxNode? node, int index)
             : this()
         {
             Debug.Assert(node != null || index == 0);

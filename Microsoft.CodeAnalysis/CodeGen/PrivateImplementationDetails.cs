@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     {
         // Note: Dev11 uses the source method token as the prefix, rather than a fixed token
         // value, and data field offsets are unique within the method, not across all methods.
-        internal const string SynthesizedStringHashFunctionName = "ComputeStringHash";
+        public const string SynthesizedStringHashFunctionName = "ComputeStringHash";
 
         private readonly CommonPEModuleBuilder _moduleBuilder;       //the module builder
         private readonly Cci.ITypeReference _systemObject;           //base type
@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             return name;
         }
 
-        internal void Freeze()
+        public void Freeze()
         {
             var wasFrozen = Interlocked.Exchange(ref _frozen, 1);
             if (wasFrozen != 0)
@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         }
 
         // Get the instrumentation payload roots ordered by analysis kind.
-        internal IOrderedEnumerable<KeyValuePair<int, InstrumentationPayloadRootField>> GetInstrumentationPayloadRoots()
+        public IOrderedEnumerable<KeyValuePair<int, InstrumentationPayloadRootField>> GetInstrumentationPayloadRoots()
         {
             Debug.Assert(IsFrozen);
             return _instrumentationPayloadRootFields.OrderBy(analysis => analysis.Key);
@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         }
 
         // Get method by name, if one exists. Otherwise return null.
-        internal Cci.IMethodDefinition? GetMethod(string name)
+        public Cci.IMethodDefinition? GetMethod(string name)
         {
             Cci.IMethodDefinition? method;
             _synthesizedMethods.TryGetValue(name, out method);
@@ -351,13 +351,13 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public override Cci.INestedTypeReference AsNestedTypeReference => this;
     }
 
-    internal abstract class SynthesizedStaticField : Cci.IFieldDefinition
+    public abstract class SynthesizedStaticField : Cci.IFieldDefinition
     {
         private readonly Cci.INamedTypeDefinition _containingType;
         private readonly Cci.ITypeReference _type;
         private readonly string _name;
 
-        internal SynthesizedStaticField(string name, Cci.INamedTypeDefinition containingType, Cci.ITypeReference type)
+        public SynthesizedStaticField(string name, Cci.INamedTypeDefinition containingType, Cci.ITypeReference type)
         {
             RoslynDebug.Assert(name != null);
             RoslynDebug.Assert(containingType != null);
@@ -424,7 +424,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public Cci.ITypeReference GetType(EmitContext context) => _type;
 
-        internal Cci.ITypeReference Type => _type;
+        public Cci.ITypeReference Type => _type;
 
         public Cci.IFieldDefinition GetResolvedField(EmitContext context) => this;
 
@@ -458,9 +458,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public override ImmutableArray<byte> MappedData => default(ImmutableArray<byte>);
     }
 
-    internal sealed class InstrumentationPayloadRootField : SynthesizedStaticField
+    public sealed class InstrumentationPayloadRootField : SynthesizedStaticField
     {
-        internal InstrumentationPayloadRootField(Cci.INamedTypeDefinition containingType, int analysisIndex, Cci.ITypeReference payloadType)
+        public InstrumentationPayloadRootField(Cci.INamedTypeDefinition containingType, int analysisIndex, Cci.ITypeReference payloadType)
             : base("PayloadRoot" + analysisIndex.ToString(), containingType, payloadType)
         {
         }

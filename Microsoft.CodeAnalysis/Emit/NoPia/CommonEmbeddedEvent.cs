@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                 _caller = caller;
             }
 
-            internal override TEmbeddedTypesManager TypeManager
+            public override TEmbeddedTypesManager TypeManager
             {
                 get
                 {
@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
             protected abstract void EmbedCorrespondingComEventInterfaceMethodInternal(TSyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics, bool isUsedForComAwareEventBinding);
 
-            internal void EmbedCorrespondingComEventInterfaceMethod(TSyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics, bool isUsedForComAwareEventBinding)
+            public void EmbedCorrespondingComEventInterfaceMethod(TSyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics, bool isUsedForComAwareEventBinding)
             {
                 if (_isUsedForComAwareEventBinding == 0 &&
                     (!isUsedForComAwareEventBinding ||

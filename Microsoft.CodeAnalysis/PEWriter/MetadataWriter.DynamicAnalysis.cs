@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis.Collections;
 
 namespace Microsoft.Cci
 {
-    internal class DynamicAnalysisDataWriter
+    public class DynamicAnalysisDataWriter
     {
         private struct DocumentRow
         {

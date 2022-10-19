@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         #region Serialization
 
-        protected override void WriteTo(ObjectWriter writer)
+        public override void WriteTo(ObjectWriter writer)
         {
             base.WriteTo(writer);
             writer.WriteUInt32((uint)_xmlErrorCode);

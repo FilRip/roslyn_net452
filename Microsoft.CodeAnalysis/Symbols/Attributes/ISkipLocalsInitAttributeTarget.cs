@@ -6,7 +6,7 @@
 
 namespace Microsoft.CodeAnalysis
 {
-    interface ISkipLocalsInitAttributeTarget
+    public interface ISkipLocalsInitAttributeTarget
     {
         bool HasSkipLocalsInitAttribute { get; set; }
     }

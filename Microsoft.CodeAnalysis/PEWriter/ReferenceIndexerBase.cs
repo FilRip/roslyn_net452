@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Emit;
 
 namespace Microsoft.Cci
 {
-    internal abstract class ReferenceIndexerBase : MetadataVisitor
+    public abstract class ReferenceIndexerBase : MetadataVisitor
     {
         private readonly HashSet<IReferenceOrISignature> _alreadySeen = new();
         private readonly HashSet<IReferenceOrISignature> _alreadyHasToken = new();

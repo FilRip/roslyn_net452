@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]
-    internal struct LocalOrParameter
+    public struct LocalOrParameter
     {
         public readonly LocalDefinition? Local;
         public readonly int ParameterIndex;

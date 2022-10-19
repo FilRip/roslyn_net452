@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             }
         }
 
-        internal LocalDefinition DeclareLocal(
+        public LocalDefinition DeclareLocal(
             Cci.ITypeReference type,
             ILocalSymbolInternal symbol,
             string name,
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// <summary>
         /// Retrieve a local slot by its symbol.
         /// </summary>
-        internal LocalDefinition GetLocal(ILocalSymbolInternal symbol)
+        public LocalDefinition GetLocal(ILocalSymbolInternal symbol)
         {
             return LocalMap[symbol];
         }
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// Release a local slot by its symbol.
         /// Slot is not associated with symbol after this.
         /// </summary>
-        internal void FreeLocal(ILocalSymbolInternal symbol)
+        public void FreeLocal(ILocalSymbolInternal symbol)
         {
             var slot = GetLocal(symbol);
             LocalMap.Remove(symbol);
@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// <summary>
         /// Gets a local slot.
         /// </summary>
-        internal LocalDefinition AllocateSlot(
+        public LocalDefinition AllocateSlot(
             Cci.ITypeReference type,
             LocalSlotConstraints constraints,
             ImmutableArray<bool> dynamicTransformFlags = default,
@@ -242,7 +242,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// <summary>
         /// Frees a local slot.
         /// </summary>
-        internal void FreeSlot(LocalDefinition slot)
+        public void FreeSlot(LocalDefinition slot)
         {
             Debug.Assert(slot.Name == null);
             FreeSlots.Push(new LocalSignature(slot.Type, slot.Constraints), slot);

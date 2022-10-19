@@ -22,7 +22,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.Cci
 {
-    internal sealed class PdbWriter : IDisposable
+    public sealed class PdbWriter : IDisposable
     {
         internal const uint Age = 1;
 

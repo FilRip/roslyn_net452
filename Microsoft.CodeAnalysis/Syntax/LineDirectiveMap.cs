@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis
     /// directives, then the array has just one element in it. To map line numbers, a binary search
     /// of the mapping entries is done and nearest line mapping is applied.
     /// </summary>
-    internal abstract partial class LineDirectiveMap<TDirective>
+    public abstract partial class LineDirectiveMap<TDirective>
         where TDirective : SyntaxNode
     {
         protected readonly LineMappingEntry[] Entries;
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Combines TranslateSpan and IsHiddenPosition to not search the entries twice when emitting sequence points
         /// </summary>
-        internal abstract FileLinePositionSpan TranslateSpanAndVisibility(SourceText sourceText, string treeFilePath, TextSpan span, out bool isHiddenPosition);
+        public abstract FileLinePositionSpan TranslateSpanAndVisibility(SourceText sourceText, string treeFilePath, TextSpan span, out bool isHiddenPosition);
 
         /// <summary>
         /// Are there any hidden regions in the map?

@@ -8,7 +8,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Syntax
 {
-    internal class SyntaxNodeOrTokenListBuilder
+    public class SyntaxNodeOrTokenListBuilder
     {
         private GreenNode?[] _nodes;
         private int _count;
@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.Syntax
             }
         }
 
-        internal void RemoveLast()
+        public void RemoveLast()
         {
             _count--;
             _nodes[_count] = null;

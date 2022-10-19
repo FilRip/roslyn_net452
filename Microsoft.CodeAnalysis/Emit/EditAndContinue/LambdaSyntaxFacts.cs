@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.Emit
 {
-    internal abstract class LambdaSyntaxFacts
+    public abstract class LambdaSyntaxFacts
     {
         public abstract SyntaxNode GetLambda(SyntaxNode lambdaOrLambdaBodySyntax);
 

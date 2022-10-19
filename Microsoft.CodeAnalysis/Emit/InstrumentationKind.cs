@@ -20,9 +20,9 @@ namespace Microsoft.CodeAnalysis.Emit
         TestCoverage = 1,
     }
 
-    internal static class InstrumentationKindExtensions
+    public static class InstrumentationKindExtensions
     {
-        internal static bool IsValid(this InstrumentationKind value)
+        public static bool IsValid(this InstrumentationKind value)
         {
             return value >= InstrumentationKind.None && value <= InstrumentationKind.TestCoverage;
         }

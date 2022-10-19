@@ -15,7 +15,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal abstract class CryptographicHashProvider
+    public abstract class CryptographicHashProvider
     {
         private ImmutableArray<byte> _lazySHA1Hash;
         private ImmutableArray<byte> _lazySHA256Hash;
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static bool IsSupportedAlgorithm(AssemblyHashAlgorithm algorithmId)
+        public static bool IsSupportedAlgorithm(AssemblyHashAlgorithm algorithmId)
         {
             switch (algorithmId)
             {

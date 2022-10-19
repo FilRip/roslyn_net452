@@ -30,7 +30,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.Cci
 {
-    internal abstract partial class MetadataWriter
+    public abstract partial class MetadataWriter
     {
         internal static readonly Encoding s_utf8Encoding = Encoding.UTF8;
 
@@ -459,9 +459,9 @@ namespace Microsoft.Cci
 
         // Well known dummy cor library types whose refs are used for attaching assembly attributes off within net modules
         // There is no guarantee the types actually exist in a cor library
-        internal const string dummyAssemblyAttributeParentNamespace = "System.Runtime.CompilerServices";
-        internal const string dummyAssemblyAttributeParentName = "AssemblyAttributesGoHere";
-        internal static readonly string[,] dummyAssemblyAttributeParentQualifier = { { "", "M" }, { "S", "SM" } };
+        public const string dummyAssemblyAttributeParentNamespace = "System.Runtime.CompilerServices";
+        public const string dummyAssemblyAttributeParentName = "AssemblyAttributesGoHere";
+        public static readonly string[,] dummyAssemblyAttributeParentQualifier = { { "", "M" }, { "S", "SM" } };
         private readonly TypeReferenceHandle[,] _dummyAssemblyAttributeParent = { { default(TypeReferenceHandle), default(TypeReferenceHandle) }, { default(TypeReferenceHandle), default(TypeReferenceHandle) } };
 
         internal CommonPEModuleBuilder Module => module;

@@ -16,15 +16,15 @@ namespace Microsoft.CodeAnalysis
     public abstract class CompilationReference : MetadataReference, IEquatable<CompilationReference>
     {
         public Compilation Compilation { get { return CompilationCore; } }
-        internal abstract Compilation CompilationCore { get; }
+        public abstract Compilation CompilationCore { get; }
 
-        internal CompilationReference(MetadataReferenceProperties properties)
+        public CompilationReference(MetadataReferenceProperties properties)
             : base(properties)
         {
             Debug.Assert(properties.Kind != MetadataImageKind.Module);
         }
 
-        internal static MetadataReferenceProperties GetProperties(Compilation compilation, ImmutableArray<string> aliases, bool embedInteropTypes)
+        public static MetadataReferenceProperties GetProperties(Compilation compilation, ImmutableArray<string> aliases, bool embedInteropTypes)
         {
             if (compilation == null)
             {
@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis
             return WithPropertiesImpl(properties);
         }
 
-        internal abstract CompilationReference WithPropertiesImpl(MetadataReferenceProperties properties);
+        public abstract CompilationReference WithPropertiesImpl(MetadataReferenceProperties properties);
 
         public override string? Display
         {

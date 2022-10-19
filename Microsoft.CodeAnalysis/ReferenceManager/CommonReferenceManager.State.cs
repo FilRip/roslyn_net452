@@ -13,10 +13,10 @@ using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 using Roslyn.Utilities;
 
+using MetadataOrDiagnostic = System.Object;
+
 namespace Microsoft.CodeAnalysis
 {
-    using MetadataOrDiagnostic = System.Object;
-
     public abstract class CommonReferenceManager
     {
         /// <summary>
@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis
         /// Once lazyAssemblySymbol is set the Compilation.referenceManager field and ReferenceManager
         /// state should not change.
         /// </summary>
-        internal static object SymbolCacheAndReferenceManagerStateGuard = new object();
+        public static object SymbolCacheAndReferenceManagerStateGuard = new();
 
         /// <summary>
         /// Enumerates all referenced assemblies.
@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis
 
         public abstract MetadataReference? GetMetadataReference(IAssemblySymbolInternal? assemblySymbol);
         internal abstract ImmutableArray<MetadataReference> ExplicitReferences { get; }
-        internal abstract ImmutableDictionary<AssemblyIdentity, PortableExecutableReference?> ImplicitReferenceResolutions { get; }
+        public abstract ImmutableDictionary<AssemblyIdentity, PortableExecutableReference?> ImplicitReferenceResolutions { get; }
     }
 
     public partial class CommonReferenceManager<TCompilation, TAssemblySymbol> : CommonReferenceManager
@@ -56,13 +56,13 @@ namespace Microsoft.CodeAnalysis
         /// containing assembly or <see cref="Compilation.UnspecifiedModuleAssemblyName"/>
         /// if not specified (/moduleassemblyname command line option).
         /// </summary>
-        internal readonly string SimpleAssemblyName;
+        public readonly string SimpleAssemblyName;
 
         /// <summary>
         /// Used to compares assembly identities. 
         /// May implement unification and portability policies specific to the target platform.
         /// </summary>
-        internal readonly AssemblyIdentityComparer IdentityComparer;
+        public readonly AssemblyIdentityComparer IdentityComparer;
 
         /// <summary>
         /// Metadata observed by the compiler.
@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool HasCircularReference
+        public bool HasCircularReference
         {
             get
             {
@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal Dictionary<MetadataReference, int> ReferencedModuleIndexMap
+        public Dictionary<MetadataReference, int> ReferencedModuleIndexMap
         {
             get
             {
@@ -256,7 +256,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal override ImmutableDictionary<AssemblyIdentity, PortableExecutableReference?> ImplicitReferenceResolutions
+        public override ImmutableDictionary<AssemblyIdentity, PortableExecutableReference?> ImplicitReferenceResolutions
         {
             get
             {
@@ -276,7 +276,7 @@ namespace Microsoft.CodeAnalysis
 
         #region Symbols necessary to set up source assembly and module
 
-        internal TAssemblySymbol? CorLibraryOpt
+        public TAssemblySymbol? CorLibraryOpt
         {
             get
             {
@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal ImmutableArray<PEModule> ReferencedModules
+        public ImmutableArray<PEModule> ReferencedModules
         {
             get
             {
@@ -294,7 +294,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal ImmutableArray<ModuleReferences<TAssemblySymbol>> ReferencedModulesReferences
+        public ImmutableArray<ModuleReferences<TAssemblySymbol>> ReferencedModulesReferences
         {
             get
             {
@@ -321,7 +321,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal ImmutableDictionary<MetadataReference, ImmutableArray<MetadataReference>> MergedAssemblyReferencesMap
+        public ImmutableDictionary<MetadataReference, ImmutableArray<MetadataReference>> MergedAssemblyReferencesMap
         {
             get
             {
@@ -331,7 +331,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal ImmutableArray<UnifiedAssembly<TAssemblySymbol>> UnifiedAssemblies
+        public ImmutableArray<UnifiedAssembly<TAssemblySymbol>> UnifiedAssemblies
         {
             get
             {
@@ -367,7 +367,7 @@ namespace Microsoft.CodeAnalysis
 
         [Conditional("DEBUG")]
         [MemberNotNull(nameof(_lazyReferencedAssembliesMap), nameof(_lazyReferencedModuleIndexMap), nameof(_lazyReferenceDirectiveMap), nameof(_lazyImplicitReferenceResolutions))]
-        internal void AssertBound()
+        public void AssertBound()
         {
             Debug.Assert(_isBound != 0);
             Debug.Assert(_lazyHasCircularReference != ThreeState.Unknown);
@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(compilation.MakeSourceAssemblySimpleName() == this.SimpleAssemblyName);
         }
 
-        internal bool IsBound
+        public bool IsBound
         {
             get
             {
@@ -405,7 +405,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Call only while holding <see cref="CommonReferenceManager.SymbolCacheAndReferenceManagerStateGuard"/>.
         /// </summary>
-        internal void InitializeNoLock(
+        public void InitializeNoLock(
             Dictionary<MetadataReference, int> referencedAssembliesMap,
             Dictionary<MetadataReference, int> referencedModulesMap,
             IDictionary<(string, string), MetadataReference> boundReferenceDirectiveMap,
@@ -539,7 +539,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="symbols">Assembly symbols for references of the current compilation.</param>
         /// <param name="originalIdentities">Identities in the baseline. <paramref name="originalIdentities"/>[i] corresponds to <paramref name="symbols"/>[i].</param>
-        internal static ImmutableDictionary<AssemblyIdentity, AssemblyIdentity> GetAssemblyReferenceIdentityBaselineMap(ImmutableArray<TAssemblySymbol> symbols, ImmutableArray<AssemblyIdentity> originalIdentities)
+        public static ImmutableDictionary<AssemblyIdentity, AssemblyIdentity> GetAssemblyReferenceIdentityBaselineMap(ImmutableArray<TAssemblySymbol> symbols, ImmutableArray<AssemblyIdentity> originalIdentities)
         {
             Debug.Assert(originalIdentities.Length == symbols.Length);
 
@@ -576,7 +576,7 @@ namespace Microsoft.CodeAnalysis
             return lazyBuilder?.ToImmutable() ?? ImmutableDictionary<AssemblyIdentity, AssemblyIdentity>.Empty;
         }
 
-        internal static bool CompareVersionPartsSpecifiedInSource(Version version, Version candidateVersion, TAssemblySymbol candidateSymbol)
+        public static bool CompareVersionPartsSpecifiedInSource(Version version, Version candidateVersion, TAssemblySymbol candidateSymbol)
         {
             // major and minor parts must match exactly
 

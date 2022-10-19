@@ -4,12 +4,12 @@
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal partial struct ChildSyntaxList
+    public partial struct ChildSyntaxList
     {
         private readonly GreenNode? _node;
         private int _count;
 
-        internal ChildSyntaxList(GreenNode node)
+        public ChildSyntaxList(GreenNode node)
         {
             _node = node;
             _count = -1;

@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.Emit
     public readonly struct EditAndContinueMethodDebugInformation
     {
         internal readonly int MethodOrdinal;
-        internal readonly ImmutableArray<LocalSlotDebugInfo> LocalSlots;
+        public readonly ImmutableArray<LocalSlotDebugInfo> LocalSlots;
         internal readonly ImmutableArray<LambdaDebugInfo> Lambdas;
         internal readonly ImmutableArray<ClosureDebugInfo> Closures;
 

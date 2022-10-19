@@ -11,7 +11,7 @@ using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
 {
-    internal sealed class ModifiedTypeReference : IModifiedTypeReference
+    public sealed class ModifiedTypeReference : IModifiedTypeReference
     {
         private readonly ITypeReference _modifiedType;
         private readonly ImmutableArray<ICustomModifier> _customModifiers;

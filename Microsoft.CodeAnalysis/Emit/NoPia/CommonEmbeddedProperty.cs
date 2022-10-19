@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                 _parameters = GetParameters();
             }
 
-            internal override TEmbeddedTypesManager TypeManager
+            public override TEmbeddedTypesManager TypeManager
             {
                 get
                 {

@@ -10,9 +10,9 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Struct containing information about a source declaration.
     /// </summary>
-    internal readonly struct DeclarationInfo
+    public readonly struct DeclarationInfo
     {
-        internal DeclarationInfo(SyntaxNode declaredNode, ImmutableArray<SyntaxNode> executableCodeBlocks, ISymbol? declaredSymbol)
+        public DeclarationInfo(SyntaxNode declaredNode, ImmutableArray<SyntaxNode> executableCodeBlocks, ISymbol? declaredSymbol)
         {
             Debug.Assert(declaredNode != null);
             Debug.Assert(!executableCodeBlocks.IsDefault);

@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from early well-known custom attributes applied on a property.
     /// </summary>
-    internal class CommonPropertyEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
+    public class CommonPropertyEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
     {
         #region ObsoleteAttribute
         private ObsoleteAttributeData _obsoleteAttributeData = ObsoleteAttributeData.Uninitialized;

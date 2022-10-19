@@ -1478,7 +1478,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Compiler-generated MoveNext methods have hoisted local scopes.
                 // These are built by call to CodeGen.Generate.
                 var stateMachineHoistedLocalScopes = ((object)kickoffMethod != null) ?
-                    builder.GetHoistedLocalScopes() : default(ImmutableArray<StateMachineHoistedLocalScope>);
+                    builder.GetHoistedLocalScopes() : default;
 
                 // Translate the imports even if we are not writing PDBs. The translation has an impact on generated metadata
                 // and we don't want to emit different metadata depending on whether or we emit with PDB stream.

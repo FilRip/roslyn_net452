@@ -423,7 +423,7 @@ namespace Microsoft.CodeAnalysis.PooledObjects
             return _builder.GetEnumerator();
         }
 
-        internal Dictionary<K, ImmutableArray<T>> ToDictionary<K>(Func<T, K> keySelector, IEqualityComparer<K>? comparer = null)
+        public Dictionary<K, ImmutableArray<T>> ToDictionary<K>(Func<T, K> keySelector, IEqualityComparer<K>? comparer = null)
             where K : notnull
         {
             if (this.Count == 1)

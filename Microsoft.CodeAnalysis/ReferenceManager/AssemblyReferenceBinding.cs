@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis
             /// <summary>
             /// True if the definition index is available (reference was successfully matched with the definition).
             /// </summary>
-            internal bool IsBound
+            public bool IsBound
             {
                 get
                 {
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis
             ///   
             /// Undefined unless <see cref="IsBound"/> is true.
             /// </summary>
-            internal int VersionDifference
+            public int VersionDifference
             {
                 get
                 {
@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis
             /// Index into assembly definition list.
             /// Undefined unless <see cref="IsBound"/> is true.
             /// </summary>
-            internal int DefinitionIndex
+            public int DefinitionIndex
             {
                 get
                 {
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            internal AssemblyIdentity? ReferenceIdentity
+            public AssemblyIdentity? ReferenceIdentity
             {
                 get
                 {

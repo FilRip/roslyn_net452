@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on an assembly.
     /// </summary>
-    internal class CommonAssemblyWellKnownAttributeData<TNamedTypeSymbol> : WellKnownAttributeData, ISecurityAttributeTarget
+    public class CommonAssemblyWellKnownAttributeData<TNamedTypeSymbol> : WellKnownAttributeData, ISecurityAttributeTarget
     {
         #region AssemblySignatureKeyAttributeSetting
         private string _assemblySignatureKeyAttributeSetting;
@@ -350,7 +350,7 @@ namespace Microsoft.CodeAnalysis
         private bool? _runtimeCompatibilityWrapNonExceptionThrows;
 
         // By default WrapNonExceptionThrows is considered to be true.
-        internal const bool WrapNonExceptionThrowsDefault = true;
+        public const bool WrapNonExceptionThrowsDefault = true;
 
         public bool HasRuntimeCompatibilityAttribute
         {

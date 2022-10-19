@@ -472,13 +472,13 @@ ExitDecodeTypeName:
 
         private static readonly string[] s_aritySuffixesOneToNine = { "`1", "`2", "`3", "`4", "`5", "`6", "`7", "`8", "`9" };
 
-        internal static string GetAritySuffix(int arity)
+        public static string GetAritySuffix(int arity)
         {
             Debug.Assert(arity > 0);
             return (arity <= 9) ? s_aritySuffixesOneToNine[arity - 1] : string.Concat(GenericTypeNameManglingString, arity.ToString(CultureInfo.InvariantCulture));
         }
 
-        internal static string ComposeAritySuffixedMetadataName(string name, int arity)
+        public static string ComposeAritySuffixedMetadataName(string name, int arity)
         {
             return arity == 0 ? name : name + GetAritySuffix(arity);
         }
@@ -529,7 +529,7 @@ ExitDecodeTypeName:
             return (short)arity;
         }
 
-        internal static string InferTypeArityAndUnmangleMetadataName(string emittedTypeName, out short arity)
+        public static string InferTypeArityAndUnmangleMetadataName(string emittedTypeName, out short arity)
         {
             int suffixStartsAt;
             arity = InferTypeArityFromMetadataName(emittedTypeName, out suffixStartsAt);
@@ -544,7 +544,7 @@ ExitDecodeTypeName:
             return emittedTypeName.Substring(0, suffixStartsAt);
         }
 
-        internal static string UnmangleMetadataNameForArity(string emittedTypeName, int arity)
+        public static string UnmangleMetadataNameForArity(string emittedTypeName, int arity)
         {
             Debug.Assert(arity > 0);
 
@@ -669,7 +669,7 @@ ExitDecodeTypeName:
             return pstrName.Substring(delimiter + 1);
         }
 
-        internal static string BuildQualifiedName(
+        public static string BuildQualifiedName(
             string qualifier,
             string name)
         {
@@ -903,7 +903,7 @@ DoneWithSequence:
         /// <summary>
         /// Determines whether given string can be used as a non-empty metadata identifier (a NUL-terminated UTF8 string).
         /// </summary>
-        internal static bool IsValidMetadataIdentifier(string str)
+        public static bool IsValidMetadataIdentifier(string str)
         {
             return !string.IsNullOrEmpty(str) && str.IsValidUnicodeString() && str.IndexOf('\0') == -1;
         }
@@ -921,7 +921,7 @@ DoneWithSequence:
             return GetAssemblyOrModuleNameErrorArgumentResourceName(name) == null;
         }
 
-        internal static void CheckAssemblyOrModuleName(string name, CommonMessageProvider messageProvider, int code, DiagnosticBag diagnostics)
+        public static void CheckAssemblyOrModuleName(string name, CommonMessageProvider messageProvider, int code, DiagnosticBag diagnostics)
         {
             string errorArgumentResourceId = GetAssemblyOrModuleNameErrorArgumentResourceName(name);
             if (errorArgumentResourceId != null)
@@ -932,7 +932,7 @@ DoneWithSequence:
             }
         }
 
-        internal static void CheckAssemblyOrModuleName(string name, CommonMessageProvider messageProvider, int code, ArrayBuilder<Diagnostic> builder)
+        public static void CheckAssemblyOrModuleName(string name, CommonMessageProvider messageProvider, int code, ArrayBuilder<Diagnostic> builder)
         {
             string errorArgumentResourceId = GetAssemblyOrModuleNameErrorArgumentResourceName(name);
             if (errorArgumentResourceId != null)
@@ -1008,7 +1008,7 @@ DoneWithSequence:
         /// <summary>
         /// Given an input string changes it to be acceptable as a part of a type name.
         /// </summary>
-        internal static string MangleForTypeNameIfNeeded(string moduleName)
+        public static string MangleForTypeNameIfNeeded(string moduleName)
         {
             var pooledStrBuilder = PooledStringBuilder.GetInstance();
             var s = pooledStrBuilder.Builder;

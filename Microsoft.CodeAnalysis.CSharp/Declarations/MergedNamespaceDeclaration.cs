@@ -143,7 +143,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (allNamespacesHaveSameName)
                 {
-                    children.Add(MergedNamespaceDeclaration.Create(namespaces.ToImmutableAndFree()));
+                    children.Add(Create(namespaces.ToImmutableAndFree()));
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     foreach (var namespaceGroup in namespaceGroups.Values)
                     {
-                        children.Add(MergedNamespaceDeclaration.Create(namespaceGroup));
+                        children.Add(Create(namespaceGroup));
                     }
                 }
             }

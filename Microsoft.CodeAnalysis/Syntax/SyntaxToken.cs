@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis
         public static readonly Func<SyntaxToken, bool> NonZeroWidth = t => t.Width > 0;
         internal static readonly Func<SyntaxToken, bool> Any = t => true;
 
-        internal SyntaxToken(SyntaxNode? parent, GreenNode? token, int position, int index)
+        public SyntaxToken(SyntaxNode? parent, GreenNode? token, int position, int index)
         {
             Debug.Assert(parent == null || !parent.Green.IsList, "list cannot be a parent");
             Debug.Assert(token == null || token.IsToken, "token must be a token");
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis
             Index = index;
         }
 
-        internal SyntaxToken(GreenNode? token)
+        public SyntaxToken(GreenNode? token)
             : this()
         {
             Debug.Assert(token == null || token.IsToken, "token must be a token");
@@ -70,14 +70,14 @@ namespace Microsoft.CodeAnalysis
         /// from Kind when a token is used in context where the token should be interpreted as a
         /// keyword.
         /// </remarks>
-        internal int RawContextualKind => Node?.RawContextualKind ?? 0;
+        public int RawContextualKind => Node?.RawContextualKind ?? 0;
 
         /// <summary>
         /// The node that contains this token in its Children collection.
         /// </summary>
         public SyntaxNode? Parent { get; }
 
-        internal GreenNode? Node { get; }
+        public GreenNode? Node { get; }
 
         internal GreenNode RequiredNode
         {
@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis
 
         internal int Index { get; }
 
-        internal int Position { get; }
+        public int Position { get; }
 
         /// <summary>
         /// The width of the token in characters, not including its leading and trailing trivia.

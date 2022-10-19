@@ -6,7 +6,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
-    internal enum SymbolChange
+    public enum SymbolChange
     {
         /// <summary>
         /// No change to symbol or members.

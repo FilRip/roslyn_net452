@@ -28,12 +28,12 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// 3) Convert each byte in the file content into two bytes containing hexadecimal characters (see method <see cref="ConvertToHex"/>).
     /// 4) Replacing the 'File = fileName' named argument with 'Hex = hexFileContent' argument, where hexFileContent is the converted output from step 3) above.
     /// </remarks>
-    internal class PermissionSetAttributeWithFileReference : Cci.ICustomAttribute
+    public class PermissionSetAttributeWithFileReference : Cci.ICustomAttribute
     {
         private readonly Cci.ICustomAttribute _sourceAttribute;
         private readonly string _resolvedPermissionSetFilePath;
-        internal const string FilePropertyName = "File";
-        internal const string HexPropertyName = "Hex";
+        public const string FilePropertyName = "File";
+        public const string HexPropertyName = "Hex";
 
         public PermissionSetAttributeWithFileReference(Cci.ICustomAttribute sourceAttribute, string resolvedPermissionSetFilePath)
         {

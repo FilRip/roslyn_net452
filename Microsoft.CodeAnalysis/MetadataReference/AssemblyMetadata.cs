@@ -302,7 +302,7 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="BadImageFormatException">The PE image format is invalid.</exception>
         /// <exception cref="IOException">IO error while reading the metadata. See <see cref="Exception.InnerException"/> for details.</exception>
         /// <exception cref="ObjectDisposedException">The object has been disposed.</exception>
-        internal PEAssembly? GetAssembly()
+        public PEAssembly? GetAssembly()
         {
             return GetOrCreateData().Assembly;
         }

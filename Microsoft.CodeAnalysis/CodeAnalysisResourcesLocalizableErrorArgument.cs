@@ -9,11 +9,11 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal struct CodeAnalysisResourcesLocalizableErrorArgument : IFormattable
+    public struct CodeAnalysisResourcesLocalizableErrorArgument : IFormattable
     {
         private readonly string _targetResourceId;
 
-        internal CodeAnalysisResourcesLocalizableErrorArgument(string targetResourceId)
+        public CodeAnalysisResourcesLocalizableErrorArgument(string targetResourceId)
         {
             RoslynDebug.Assert(targetResourceId != null);
             _targetResourceId = targetResourceId;

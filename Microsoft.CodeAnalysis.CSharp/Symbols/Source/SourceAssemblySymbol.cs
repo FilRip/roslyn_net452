@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             for (int i = 1; i < _modules.Length; i++)
             {
-                var peModuleSymbol = (Metadata.PE.PEModuleSymbol)_modules[i];
+                var peModuleSymbol = (PEModuleSymbol)_modules[i];
                 if (peModuleSymbol.Module.ContainsNoPiaLocalTypes())
                 {
                     return true;
@@ -806,7 +806,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (_compilation.Options.PublicSign &&
                 !_compilation.Options.OutputKind.IsNetModule() &&
-                (object)this.AssemblyKeyContainerAttributeSetting != (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
+                (object)this.AssemblyKeyContainerAttributeSetting != WellKnownAttributeData.StringMissingValue)
             {
                 diagnostics.Add(ErrorCode.WRN_AttributeIgnoredWhenPublicSigning, NoLocation.Singleton, AttributeDescription.AssemblyKeyNameAttribute.FullName);
             }

@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis
             get { return this.Info.MessageIdentifier; }
         }
 
-        internal override string Category
+        public override string Category
         {
             get { return this.Info.Category; }
         }
@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis
             get { return this.Info.DefaultSeverity; }
         }
 
-        internal sealed override bool IsEnabledByDefault
+        public sealed override bool IsEnabledByDefault
         {
             // All compiler errors and warnings are enabled by default.
             get { return true; }
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis
             return this.Info.GetMessage(formatProvider);
         }
 
-        internal override IReadOnlyList<object?> Arguments
+        public override IReadOnlyList<object?> Arguments
         {
             get { return this.Info.Arguments; }
         }
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis
         /// True if the DiagnosticInfo for this diagnostic requires (or required - this property
         /// is immutable) resolution.
         /// </summary>
-        internal bool HasLazyInfo
+        public bool HasLazyInfo
         {
             get
             {
@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis
             return this;
         }
 
-        internal override Diagnostic WithSeverity(DiagnosticSeverity severity)
+        public override Diagnostic WithSeverity(DiagnosticSeverity severity)
         {
             if (this.Severity != severity)
             {
@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis
             return this;
         }
 
-        internal override Diagnostic WithIsSuppressed(bool isSuppressed)
+        public override Diagnostic WithIsSuppressed(bool isSuppressed)
         {
             if (this.IsSuppressed != isSuppressed)
             {
@@ -221,7 +221,7 @@ namespace Microsoft.CodeAnalysis
             return this;
         }
 
-        internal sealed override bool IsNotConfigurable()
+        public sealed override bool IsNotConfigurable()
         {
             return this.Info.IsNotConfigurable();
         }

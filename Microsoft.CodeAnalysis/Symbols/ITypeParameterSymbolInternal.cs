@@ -6,7 +6,7 @@
 
 namespace Microsoft.CodeAnalysis.Symbols
 {
-    internal interface ITypeParameterSymbolInternal : ITypeSymbolInternal
+    public interface ITypeParameterSymbolInternal : ITypeSymbolInternal
     {
     }
 }

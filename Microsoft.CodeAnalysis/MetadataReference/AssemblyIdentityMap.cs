@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
     /// that either exactly matches the original identity key, or corresponds to a key with the lowest version among identities
     /// with higher version than the requested identity key.
     /// </summary>
-    internal sealed class AssemblyIdentityMap<TValue>
+    public sealed class AssemblyIdentityMap<TValue>
     {
         private readonly Dictionary<string, OneOrMany<KeyValuePair<AssemblyIdentity, TValue>>> _map;
 

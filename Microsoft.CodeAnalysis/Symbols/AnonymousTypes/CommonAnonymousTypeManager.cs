@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.Symbols
         /// <summary>
         /// Collection of anonymous type templates is sealed 
         /// </summary>
-        internal bool AreTemplatesSealed
+        public bool AreTemplatesSealed
         {
             get { return _templatesSealed == ThreeState.True; }
         }

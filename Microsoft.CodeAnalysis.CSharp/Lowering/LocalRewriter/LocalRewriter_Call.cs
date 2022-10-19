@@ -780,7 +780,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Finally, append the missing empty params array if necessary.
-            var lastParam = !parameters.IsEmpty ? parameters[^1] : null;
+            var lastParam = !parameters.IsEmpty ? parameters[parameters.Length - 1] : null;
             if (expanded && lastParam is object && !visitedLastParam)
             {
 

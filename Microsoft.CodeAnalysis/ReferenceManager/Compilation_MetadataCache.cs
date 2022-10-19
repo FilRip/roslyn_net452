@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis
         /// Adds given retargeting assembly for this compilation into the cache.
         /// <see cref="CommonReferenceManager.SymbolCacheAndReferenceManagerStateGuard"/> must be locked while calling this method.
         /// </summary>
-        internal void CacheRetargetingAssemblySymbolNoLock(IAssemblySymbolInternal assembly)
+        public void CacheRetargetingAssemblySymbolNoLock(IAssemblySymbolInternal assembly)
         {
             _retargetingAssemblySymbols.Add(assembly);
         }
@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis
         /// Adds cached retargeting symbols into the given list.
         /// <see cref="CommonReferenceManager.SymbolCacheAndReferenceManagerStateGuard"/> must be locked while calling this method.
         /// </summary>
-        internal void AddRetargetingAssemblySymbolsNoLock<T>(List<T> result) where T : IAssemblySymbolInternal
+        public void AddRetargetingAssemblySymbolsNoLock<T>(List<T> result) where T : IAssemblySymbolInternal
         {
             foreach (var symbol in _retargetingAssemblySymbols)
             {

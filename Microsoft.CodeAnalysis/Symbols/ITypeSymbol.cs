@@ -194,9 +194,9 @@ namespace Microsoft.CodeAnalysis
 
     // Intentionally not extension methods. We don't want them ever be called for symbol classes
     // Once Default Interface Implementations are supported, we can move these methods into the interface. 
-    internal static class ITypeSymbolHelpers
+    public static class ITypeSymbolHelpers
     {
-        internal static bool IsNullableType([NotNullWhen(returnValue: true)] ITypeSymbol? typeOpt)
+        public static bool IsNullableType([NotNullWhen(returnValue: true)] ITypeSymbol? typeOpt)
         {
             return typeOpt?.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T;
         }

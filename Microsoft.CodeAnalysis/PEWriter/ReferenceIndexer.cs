@@ -12,12 +12,12 @@ using Microsoft.CodeAnalysis.Emit;
 
 namespace Microsoft.Cci
 {
-    internal abstract class ReferenceIndexer : ReferenceIndexerBase
+    public abstract class ReferenceIndexer : ReferenceIndexerBase
     {
         protected readonly MetadataWriter metadataWriter;
         private readonly HashSet<IImportScope> _alreadySeenScopes = new HashSet<IImportScope>();
 
-        internal ReferenceIndexer(MetadataWriter metadataWriter)
+        public ReferenceIndexer(MetadataWriter metadataWriter)
             : base(metadataWriter.Context)
         {
             this.metadataWriter = metadataWriter;

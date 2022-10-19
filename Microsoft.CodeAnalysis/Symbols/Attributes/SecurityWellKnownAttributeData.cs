@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from security attributes, i.e. attributes derived from well-known SecurityAttribute, applied on a method/type/assembly.
     /// </summary>
-    internal sealed class SecurityWellKnownAttributeData
+    public sealed class SecurityWellKnownAttributeData
     {
         // data from Security attributes:
         // Array of decoded security actions corresponding to source security attributes, null if there are no security attributes in source.

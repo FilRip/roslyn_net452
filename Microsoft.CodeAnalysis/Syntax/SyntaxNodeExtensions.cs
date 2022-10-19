@@ -283,8 +283,8 @@ namespace Microsoft.CodeAnalysis
             return (TRoot?)root.RemoveNodesCore(nodes, options);
         }
 
-        internal const string DefaultIndentation = "    ";
-        internal const string DefaultEOL = "\r\n";
+        public const string DefaultIndentation = "    ";
+        public const string DefaultEOL = "\r\n";
 
         /// <summary>
         /// Creates a new syntax node with all whitespace and end of line trivia replaced with

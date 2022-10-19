@@ -306,7 +306,7 @@ namespace Microsoft.CodeAnalysis
         public StrongNameProvider GetStrongNameProvider(StrongNameFileSystem fileSystem)
             => new DesktopStrongNameProvider(KeyFileSearchPaths, fileSystem);
 
-        internal CommandLineArguments()
+        public CommandLineArguments()
         {
         }
 
@@ -392,7 +392,7 @@ namespace Microsoft.CodeAnalysis
             return resolved;
         }
 
-        internal virtual bool ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt, List<MetadataReference> resolved)
+        public virtual bool ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt, List<MetadataReference> resolved)
         {
             bool result = true;
 

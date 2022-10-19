@@ -436,7 +436,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// A helper used to efficiently cache <see cref="UseSiteInfo{TAssemblySymbol}"/> in the symbol.
     /// </summary>
-    internal struct CachedUseSiteInfo<TAssemblySymbol> where TAssemblySymbol : class, IAssemblySymbolInternal
+    public struct CachedUseSiteInfo<TAssemblySymbol> where TAssemblySymbol : class, IAssemblySymbolInternal
     {
         /// <summary>
         /// Either 

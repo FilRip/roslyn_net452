@@ -18,7 +18,7 @@ namespace Roslyn.Utilities
     /// This is basically a lossy cache of strings that is searchable by
     /// strings, string sub ranges, character array ranges or string-builder.
     /// </summary>
-    internal class StringTable
+    public class StringTable
     {
         // entry in the caches
         private struct Entry
@@ -73,7 +73,7 @@ namespace Roslyn.Utilities
         // same as above but for users that go directly with unbuffered shared cache.
         private static int s_sharedRandom = Environment.TickCount;
 
-        internal StringTable() :
+        public StringTable() :
             this(null)
         {
         }
@@ -111,7 +111,7 @@ namespace Roslyn.Utilities
 
         #endregion // Poolable
 
-        internal string Add(char[] chars, int start, int len)
+        public string Add(char[] chars, int start, int len)
         {
             var span = chars.AsSpan(start, len);
             var hashCode = Hash.GetFNVHashCode(chars, start, len);
@@ -146,7 +146,7 @@ namespace Roslyn.Utilities
             return AddItem(chars, start, len, hashCode);
         }
 
-        internal string Add(string chars, int start, int len)
+        public string Add(string chars, int start, int len)
         {
             var hashCode = Hash.GetFNVHashCode(chars, start, len);
 
@@ -180,7 +180,7 @@ namespace Roslyn.Utilities
             return AddItem(chars, start, len, hashCode);
         }
 
-        internal string Add(char chars)
+        public string Add(char chars)
         {
             var hashCode = Hash.GetFNVHashCode(chars);
 
@@ -214,7 +214,7 @@ namespace Roslyn.Utilities
             return AddItem(chars, hashCode);
         }
 
-        internal string Add(StringBuilder chars)
+        public string Add(StringBuilder chars)
         {
             var hashCode = Hash.GetFNVHashCode(chars);
 
@@ -248,7 +248,7 @@ namespace Roslyn.Utilities
             return AddItem(chars, hashCode);
         }
 
-        internal string Add(string chars)
+        public string Add(string chars)
         {
             var hashCode = Hash.GetFNVHashCode(chars);
 

@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Values for severity that are used internally by the compiler but are not exposed.
     /// </summary>
-    internal static class InternalDiagnosticSeverity
+    public static class InternalDiagnosticSeverity
     {
         /// <summary>
         /// An unknown severity diagnostic is something whose severity has not yet been determined.
@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Values for ErrorCode/ERRID that are used internally by the compiler but are not exposed.
     /// </summary>
-    internal static class InternalErrorCode
+    public static class InternalErrorCode
     {
         /// <summary>
         /// The code has yet to be determined.

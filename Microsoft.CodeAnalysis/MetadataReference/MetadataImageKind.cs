@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
 
     public static partial class EnumBounds
     {
-        internal static bool IsValid(this MetadataImageKind kind)
+        public static bool IsValid(this MetadataImageKind kind)
         {
             return kind >= MetadataImageKind.Assembly && kind <= MetadataImageKind.Module;
         }

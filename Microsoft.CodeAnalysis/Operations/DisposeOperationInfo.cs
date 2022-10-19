@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.Operations
 {
-    internal struct DisposeOperationInfo
+    public struct DisposeOperationInfo
     {
         public readonly IMethodSymbol? DisposeMethod;
 

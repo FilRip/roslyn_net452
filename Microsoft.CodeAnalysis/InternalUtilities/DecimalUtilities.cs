@@ -4,7 +4,7 @@
 
 namespace Roslyn.Utilities
 {
-    internal static class DecimalUtilities
+    public static class DecimalUtilities
     {
         public static int GetScale(this decimal value)
         {

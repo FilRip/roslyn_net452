@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         protected abstract int GetIndexOfReferencedAssembly(AssemblyIdentity identity);
 
-        internal TypeSymbol GetTypeSymbolForSerializedType(string s)
+        public TypeSymbol GetTypeSymbolForSerializedType(string s)
         {
             if (string.IsNullOrEmpty(s))
             {

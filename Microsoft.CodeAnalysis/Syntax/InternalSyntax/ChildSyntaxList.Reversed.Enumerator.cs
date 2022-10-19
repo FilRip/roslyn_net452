@@ -4,11 +4,11 @@
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
-    internal partial struct ChildSyntaxList
+    public partial struct ChildSyntaxList
     {
-        internal partial struct Reversed
+        public partial struct Reversed
         {
-            internal struct Enumerator
+            public struct Enumerator
             {
                 private readonly GreenNode? _node;
                 private int _childIndex;

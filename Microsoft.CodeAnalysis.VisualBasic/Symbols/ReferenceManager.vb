@@ -218,7 +218,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     referencedAssembliesByIdentity.Add(symbol.Identity, symbol)
                 Next
 
-                Dim assembly = metadata.GetAssembly
+                Dim assembly = metadata.GetAssembly()
                 Dim peReferences = assembly.AssemblyReferences.SelectAsArray(AddressOf MapAssemblyIdentityToResolvedSymbol, referencedAssembliesByIdentity)
 
                 assemblyReferenceIdentityMap = GetAssemblyReferenceIdentityBaselineMap(peReferences, assembly.AssemblyReferences)

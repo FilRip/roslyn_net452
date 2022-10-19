@@ -7,15 +7,15 @@ using System.Threading;
 
 namespace Roslyn.Utilities
 {
-    internal static class ReaderWriterLockSlimExtensions
+    public static class ReaderWriterLockSlimExtensions
     {
-        internal static ReadLockExiter DisposableRead(this ReaderWriterLockSlim @lock)
+        public static ReadLockExiter DisposableRead(this ReaderWriterLockSlim @lock)
         {
             return new ReadLockExiter(@lock);
         }
 
         [NonCopyable]
-        internal readonly struct ReadLockExiter : IDisposable
+        public readonly struct ReadLockExiter : IDisposable
         {
             private readonly ReaderWriterLockSlim _lock;
 
@@ -31,13 +31,13 @@ namespace Roslyn.Utilities
             }
         }
 
-        internal static UpgradeableReadLockExiter DisposableUpgradeableRead(this ReaderWriterLockSlim @lock)
+        public static UpgradeableReadLockExiter DisposableUpgradeableRead(this ReaderWriterLockSlim @lock)
         {
             return new UpgradeableReadLockExiter(@lock);
         }
 
         [NonCopyable]
-        internal readonly struct UpgradeableReadLockExiter : IDisposable
+        public readonly struct UpgradeableReadLockExiter : IDisposable
         {
             private readonly ReaderWriterLockSlim _lock;
 
@@ -63,13 +63,13 @@ namespace Roslyn.Utilities
             }
         }
 
-        internal static WriteLockExiter DisposableWrite(this ReaderWriterLockSlim @lock)
+        public static WriteLockExiter DisposableWrite(this ReaderWriterLockSlim @lock)
         {
             return new WriteLockExiter(@lock);
         }
 
         [NonCopyable]
-        internal readonly struct WriteLockExiter : IDisposable
+        public readonly struct WriteLockExiter : IDisposable
         {
             private readonly ReaderWriterLockSlim _lock;
 
@@ -85,7 +85,7 @@ namespace Roslyn.Utilities
             }
         }
 
-        internal static void AssertCanRead(this ReaderWriterLockSlim @lock)
+        public static void AssertCanRead(this ReaderWriterLockSlim @lock)
         {
             if (!@lock.IsReadLockHeld && !@lock.IsUpgradeableReadLockHeld && !@lock.IsWriteLockHeld)
             {

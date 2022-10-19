@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// 
     /// Use a ArrayBuilder{RawSequencePoint} to create.
     /// </summary>
-    internal class SequencePointList
+    public class SequencePointList
     {
         private readonly SyntaxTree _tree;
         private readonly OffsetAndSpan[] _points;

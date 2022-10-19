@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis
             return AssemblyName ?? UnspecifiedModuleAssemblyName;
         }
 
-        internal string MakeSourceModuleName()
+        public string MakeSourceModuleName()
         {
             return Options.ModuleName ??
                    (AssemblyName != null ? AssemblyName + Options.OutputKind.GetDefaultExtension() : UnspecifiedModuleAssemblyName);
@@ -384,7 +384,7 @@ namespace Microsoft.CodeAnalysis
         /// Gets or allocates a runtime submission slot index for this compilation.
         /// </summary>
         /// <returns>Non-negative integer if this is a submission and it or a previous submission contains code, negative integer otherwise.</returns>
-        internal int GetSubmissionSlotIndex()
+        public int GetSubmissionSlotIndex()
         {
             if (_lazySubmissionSlotIndex == SubmissionSlotIndexToBeAllocated)
             {
@@ -417,7 +417,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// The type of the globals object or null if not specified for this compilation.
         /// </summary>
-        protected Type? HostObjectType => ScriptCompilationInfo?.GlobalsType;
+        public Type? HostObjectType => ScriptCompilationInfo?.GlobalsType;
 
         internal static bool IsValidHostObjectType(Type type)
         {
@@ -617,7 +617,7 @@ namespace Microsoft.CodeAnalysis
         /// Embed the COM types from the reference so that the compiled
         /// application no longer requires a primary interop assembly (PIA).
         /// </param>
-        public abstract CompilationReference ToMetadataReference(ImmutableArray<string> aliases = default(ImmutableArray<string>), bool embedInteropTypes = false);
+        public abstract CompilationReference ToMetadataReference(ImmutableArray<string> aliases = default, bool embedInteropTypes = false);
 
         /// <summary>
         /// Creates a new compilation with the specified references.
@@ -849,24 +849,24 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Returns true if the type is System.Type.
         /// </summary>
-        internal abstract bool IsSystemTypeReference(ITypeSymbolInternal type);
+        public abstract bool IsSystemTypeReference(ITypeSymbolInternal type);
 
         protected abstract INamedTypeSymbolInternal CommonGetSpecialType(SpecialType specialType);
 
         /// <summary>
         /// Lookup member declaration in well known type used by this Compilation.
         /// </summary>
-        internal abstract ISymbolInternal? CommonGetWellKnownTypeMember(WellKnownMember member);
+        public abstract ISymbolInternal? CommonGetWellKnownTypeMember(WellKnownMember member);
 
         /// <summary>
         /// Lookup well-known type used by this Compilation.
         /// </summary>
-        internal abstract ITypeSymbolInternal CommonGetWellKnownType(WellKnownType wellknownType);
+        public abstract ITypeSymbolInternal CommonGetWellKnownType(WellKnownType wellknownType);
 
         /// <summary>
         /// Returns true if the specified type is equal to or derives from System.Attribute well-known type.
         /// </summary>
-        internal abstract bool IsAttributeType(ITypeSymbol type);
+        public abstract bool IsAttributeType(ITypeSymbol type);
 
         /// <summary>
         /// The INamedTypeSymbol for the .NET System.Object type, which could have a TypeKind of
@@ -1476,24 +1476,24 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Gets the diagnostics produced during the parsing stage.
         /// </summary>
-        public abstract ImmutableArray<Diagnostic> GetParseDiagnostics(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetParseDiagnostics(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the diagnostics produced during symbol declaration.
         /// </summary>
-        public abstract ImmutableArray<Diagnostic> GetDeclarationDiagnostics(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetDeclarationDiagnostics(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the diagnostics produced during the analysis of method bodies and field initializers.
         /// </summary>
-        public abstract ImmutableArray<Diagnostic> GetMethodBodyDiagnostics(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetMethodBodyDiagnostics(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the diagnostics for the compilation, including syntax, declaration, and
         /// binding. Does not include any diagnostics that might be produced during emit, see
         /// <see cref="EmitResult"/>.
         /// </summary>
-        public abstract ImmutableArray<Diagnostic> GetDiagnostics(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetDiagnostics(CancellationToken cancellationToken = default);
 
         public abstract void GetDiagnostics(CompilationStage stage, bool includeEarlierStages, DiagnosticBag diagnostics, CancellationToken cancellationToken = default);
 
@@ -1504,7 +1504,7 @@ namespace Microsoft.CodeAnalysis
         /// The returned set is a subset of references returned by <see cref="References"/> API.
         /// The result is undefined if the compilation contains errors.
         /// </summary>
-        public abstract ImmutableArray<MetadataReference> GetUsedAssemblyReferences(CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<MetadataReference> GetUsedAssemblyReferences(CancellationToken cancellationToken = default);
 
         public void EnsureCompilationEventQueueCompleted()
         {
@@ -1871,7 +1871,7 @@ namespace Microsoft.CodeAnalysis
         public Cci.ModulePropertiesForSerialization ConstructModuleSerializationProperties(
             EmitOptions emitOptions,
             string? targetRuntimeVersion,
-            Guid moduleVersionId = default(Guid))
+            Guid moduleVersionId = default)
         {
             CompilationOptions compilationOptions = this.Options;
             Platform platform = compilationOptions.Platform;
@@ -2273,7 +2273,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="filterTree">What tree to complete. null means complete all trees. </param>
         public abstract void CompleteTrees(SyntaxTree? filterTree);
 
-        internal bool Compile(
+        public bool Compile(
             CommonPEModuleBuilder moduleBuilder,
             bool emittingPdb,
             DiagnosticBag diagnostics,
@@ -2297,7 +2297,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal void EnsureAnonymousTypeTemplates(CancellationToken cancellationToken)
+        public void EnsureAnonymousTypeTemplates(CancellationToken cancellationToken)
         {
             Debug.Assert(IsSubmission);
 
@@ -2842,7 +2842,7 @@ namespace Microsoft.CodeAnalysis
 
         protected abstract void ValidateDebugEntryPoint(IMethodSymbol debugEntryPoint, DiagnosticBag diagnostics);
 
-        internal bool IsEmitDeterministic => this.Options.Deterministic;
+        public bool IsEmitDeterministic => this.Options.Deterministic;
 
         internal bool SerializeToPeStream(
             CommonPEModuleBuilder moduleBeingBuilt,
@@ -3059,7 +3059,7 @@ namespace Microsoft.CodeAnalysis
             return true;
         }
 
-        internal EmitBaseline? SerializeToDeltaStreams(
+        public EmitBaseline? SerializeToDeltaStreams(
             CommonPEModuleBuilder moduleBeingBuilt,
             EmitBaseline baseline,
             DefinitionMap definitionMap,
@@ -3312,7 +3312,7 @@ namespace Microsoft.CodeAnalysis
             return IsMemberMissing((int)member);
         }
 
-        internal bool IsMemberMissing(SpecialMember member)
+        public bool IsMemberMissing(SpecialMember member)
         {
             return IsMemberMissing(-(int)member - 1);
         }

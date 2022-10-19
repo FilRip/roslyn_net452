@@ -493,7 +493,7 @@ namespace Microsoft.CodeAnalysis
             return -1;
         }
 
-        internal int IndexOf(int rawKind)
+        public int IndexOf(int rawKind)
         {
             var index = 0;
             foreach (var child in this)

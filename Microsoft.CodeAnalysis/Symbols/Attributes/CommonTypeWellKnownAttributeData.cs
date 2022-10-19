@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on a type.
     /// </summary>
-    internal class CommonTypeWellKnownAttributeData : WellKnownAttributeData, ISecurityAttributeTarget
+    public class CommonTypeWellKnownAttributeData : WellKnownAttributeData, ISecurityAttributeTarget
     {
         #region SpecialNameAttribute
         private bool _hasSpecialNameAttribute;
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis
             return _lazySecurityAttributeData;
         }
 
-        internal bool HasDeclarativeSecurity
+        public bool HasDeclarativeSecurity
         {
             get
             {

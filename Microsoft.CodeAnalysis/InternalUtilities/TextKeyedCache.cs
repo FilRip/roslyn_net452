@@ -16,7 +16,7 @@ using System.Threading;
 
 namespace Roslyn.Utilities
 {
-    internal class TextKeyedCache<T> where T : class
+    public class TextKeyedCache<T> where T : class
     {
         // immutable tuple - text and corresponding item
         // reference type because we want atomic assignments
@@ -72,7 +72,7 @@ namespace Roslyn.Utilities
         // TODO: consider whether a counter is random enough
         private Random? _random;
 
-        internal TextKeyedCache() :
+        public TextKeyedCache() :
             this(null)
         {
         }
@@ -113,7 +113,7 @@ namespace Roslyn.Utilities
 
         #endregion // Poolable
 
-        internal T? FindItem(char[] chars, int start, int len, int hashCode)
+        public T? FindItem(char[] chars, int start, int len, int hashCode)
         {
             // get direct element reference to avoid extra range checks
             ref var localSlot = ref _localTable[LocalIdxFromHash(hashCode)];
@@ -179,7 +179,7 @@ namespace Roslyn.Utilities
             return e;
         }
 
-        internal void AddItem(char[] chars, int start, int len, int hashCode, T item)
+        public void AddItem(char[] chars, int start, int len, int hashCode, T item)
         {
             var text = _strings.Add(chars, start, len);
 

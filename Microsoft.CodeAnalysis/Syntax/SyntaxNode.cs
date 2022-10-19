@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis
 
         public GreenNode Green { get; }
 
-        internal int Position { get; }
+        public int Position { get; }
 
         internal int EndPosition => Position + Green.FullWidth;
 
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public TextSpan FullSpan => new TextSpan(this.Position, this.Green.FullWidth);
 
-        internal int SlotCount => this.Green.SlotCount;
+        public int SlotCount => this.Green.SlotCount;
 
         /// <summary>
         /// The absolute span of this node in characters, not including its leading and trailing trivia.
@@ -123,14 +123,14 @@ namespace Microsoft.CodeAnalysis
         /// <remarks>
         /// The Width property returns the same value as Span.Length, but is somewhat more efficient.
         /// </remarks>
-        internal int Width => this.Green.Width;
+        public int Width => this.Green.Width;
 
         /// <summary>
         /// The complete width of the node in characters, including leading and trailing trivia.
         /// </summary>
         /// <remarks>The FullWidth property returns the same value as FullSpan.Length, but is
         /// somewhat more efficient.</remarks>
-        internal int FullWidth => this.Green.FullWidth;
+        public int FullWidth => this.Green.FullWidth;
 
         // this is used in cases where we know that a child is a node of particular type.
         internal SyntaxNode? GetRed(ref SyntaxNode? field, int slot)
@@ -511,7 +511,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public abstract SyntaxNode? GetCachedSlot(int index);
 
-        internal int GetChildIndex(int slot)
+        public int GetChildIndex(int slot)
         {
             int index = 0;
             for (int i = 0; i < slot; i++)
@@ -541,7 +541,7 @@ namespace Microsoft.CodeAnalysis
         /// the number of children could be large (lists) this function is overridden with more
         /// efficient implementations.
         /// </summary>
-        internal virtual int GetChildPosition(int index)
+        public virtual int GetChildPosition(int index)
         {
             int offset = 0;
             var green = this.Green;
@@ -1537,7 +1537,7 @@ recurse:
         /// Creates a clone of a red node that can be used as a root of given syntaxTree.
         /// New node has no parents, position == 0, and syntaxTree as specified.
         /// </summary>
-        internal static T CloneNodeAsRoot<T>(T node, SyntaxTree syntaxTree) where T : SyntaxNode
+        public static T CloneNodeAsRoot<T>(T node, SyntaxTree syntaxTree) where T : SyntaxNode
         {
             var clone = (T)node.Green.CreateRed(null, 0);
             clone._syntaxTree = syntaxTree;

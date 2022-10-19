@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.Collections
     /// <remarks>
     /// Always uses the default comparer.
     /// </remarks>
-    internal sealed class OrderPreservingMultiDictionary<K, V> :
+    public sealed class OrderPreservingMultiDictionary<K, V> :
         IEnumerable<KeyValuePair<K, OrderPreservingMultiDictionary<K, V>.ValueSet>>
         where K : notnull
         where V : notnull

@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool IsEmbedded
+        public bool IsEmbedded
         {
             get { return FileName == null; }
         }

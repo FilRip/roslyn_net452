@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    internal enum ScopeType
+    public enum ScopeType
     {
         Variable,
         TryCatchFinally,

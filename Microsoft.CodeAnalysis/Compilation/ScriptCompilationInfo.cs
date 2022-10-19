@@ -19,9 +19,9 @@ namespace Microsoft.CodeAnalysis
         }
 
         public Compilation? PreviousScriptCompilation => CommonPreviousScriptCompilation;
-        internal abstract Compilation? CommonPreviousScriptCompilation { get; }
+        public abstract Compilation? CommonPreviousScriptCompilation { get; }
 
         public ScriptCompilationInfo WithPreviousScriptCompilation(Compilation? compilation) => CommonWithPreviousScriptCompilation(compilation);
-        internal abstract ScriptCompilationInfo CommonWithPreviousScriptCompilation(Compilation? compilation);
+        public abstract ScriptCompilationInfo CommonWithPreviousScriptCompilation(Compilation? compilation);
     }
 }

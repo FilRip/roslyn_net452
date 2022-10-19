@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.Emit
     /// Represents additional info needed by async method implementation methods 
     /// (MoveNext methods) to properly emit necessary PDB data for async debugging.
     /// </summary>
-    internal sealed class AsyncMoveNextBodyDebugInfo : StateMachineMoveNextBodyDebugInfo
+    public sealed class AsyncMoveNextBodyDebugInfo : StateMachineMoveNextBodyDebugInfo
     {
         /// <summary> 
         /// IL offset of catch handler or -1 

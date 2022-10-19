@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis
             return GetProductVersion(Type);
         }
 
-        internal static string GetProductVersion(Type type)
+        public static string GetProductVersion(Type type)
         {
             string? assemblyVersion = GetInformationalVersionWithoutHash(type);
             string? hash = GetShortCommitHash(type);
@@ -501,7 +501,7 @@ namespace Microsoft.CodeAnalysis
             return SpecializedCollections.StronglyTypedReadOnlySet(set);
         }
 
-        internal static DiagnosticInfo ToFileReadDiagnostics(CommonMessageProvider messageProvider, Exception e, string filePath)
+        public static DiagnosticInfo ToFileReadDiagnostics(CommonMessageProvider messageProvider, Exception e, string filePath)
         {
             DiagnosticInfo diagnosticInfo;
 

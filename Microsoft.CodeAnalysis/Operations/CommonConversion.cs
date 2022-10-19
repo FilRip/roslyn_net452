@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
         private readonly ConversionKind _conversionKind;
 
-        internal CommonConversion(bool exists, bool isIdentity, bool isNumeric, bool isReference, bool isImplicit, bool isNullable, IMethodSymbol? methodSymbol)
+        public CommonConversion(bool exists, bool isIdentity, bool isNumeric, bool isReference, bool isImplicit, bool isNullable, IMethodSymbol? methodSymbol)
         {
             _conversionKind = (exists ? ConversionKind.Exists : ConversionKind.None) |
                               (isIdentity ? ConversionKind.IsIdentity : ConversionKind.None) |

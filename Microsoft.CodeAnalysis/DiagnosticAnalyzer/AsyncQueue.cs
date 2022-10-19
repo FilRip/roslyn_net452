@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     {
         // Continuations run asynchronously to ensure user code does not execute within protected regions and lead to
         // delays, deadlocks, and/or state corruption.
-        private readonly TaskCompletionSource<bool> _whenCompleted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        private readonly TaskCompletionSource<bool> _whenCompleted = new TaskCompletionSource<bool>(); // FilRip Remove parameter TaskCreationOptions.RunContinuationsAsynchronously
 
         // Note: All of the below fields are accessed in parallel and may only be accessed
         // when protected by lock (SyncObject)
@@ -99,7 +99,6 @@ retry:
                 waiter = _waiters.Dequeue();
             }
 
-            Debug.Assert(waiter.Task.CreationOptions.HasFlag(TaskCreationOptions.RunContinuationsAsynchronously));
             if (!waiter.TrySetResult(value))
             {
                 // A waiter was available in the queue, but was cancelled before we were able to assign this value
@@ -194,15 +193,12 @@ retry:
                 //       the fact that we _had_ waiters at the time we completed the queue
                 //       guarantees that there is no items in the queue now or in the future, 
                 //       so it is safe to cancel waiters with no loss of diagnostics
-                Debug.Assert(this.Count == 0, "we should not be cancelling the waiters when we have items in the queue");
                 foreach (var tcs in existingWaiters)
                 {
-                    Debug.Assert(tcs.Task.CreationOptions.HasFlag(TaskCreationOptions.RunContinuationsAsynchronously));
                     tcs.TrySetResult(default);
                 }
             }
 
-            Debug.Assert(_whenCompleted.Task.CreationOptions.HasFlag(TaskCreationOptions.RunContinuationsAsynchronously));
             _whenCompleted.SetResult(true);
 
             return true;
@@ -237,7 +233,9 @@ retry:
                 var result = optionalResult.Result;
                 return result.HasValue
                     ? Task.FromResult(result.Value)
-                    : Task.FromCanceled<TElement>(new CancellationToken(canceled: true));
+                    : //Task.FromCanceled<TElement>(new CancellationToken(canceled: true));
+                    // FilRip create canceled task
+                    new Task<TElement>(new Func<TElement>(() => { return default; }), new CancellationToken(true));
             }
 
             return dequeueSlowAsync(optionalResult);
@@ -278,7 +276,7 @@ retry:
                 _waiters ??= new Queue<TaskCompletionSource<Optional<TElement>>>();
 
                 // Continuations run asynchronously to ensure user code does not execute within protected regions.
-                var waiter = new TaskCompletionSource<Optional<TElement>>(TaskCreationOptions.RunContinuationsAsynchronously);
+                var waiter = new TaskCompletionSource<Optional<TElement>>(); // FilRip Remove parameter TaskCreationOptions.RunContinuationsAsynchronously
                 AttachCancellation(waiter, cancellationToken);
                 _waiters.Enqueue(waiter);
                 return new ValueTask<Optional<TElement>>(waiter.Task);
@@ -313,7 +311,6 @@ retry:
                 cancelableTaskCompletionSource,
                 useSynchronizationContext: false);
 
-            Debug.Assert(taskCompletionSource.Task.CreationOptions.HasFlag(TaskCreationOptions.RunContinuationsAsynchronously));
             taskCompletionSource.Task.ContinueWith(
                 static (_, s) =>
                 {

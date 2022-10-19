@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on a method.
     /// </summary>
-    internal class CommonMethodWellKnownAttributeData : WellKnownAttributeData, ISecurityAttributeTarget
+    public class CommonMethodWellKnownAttributeData : WellKnownAttributeData, ISecurityAttributeTarget
     {
         public CommonMethodWellKnownAttributeData(bool preserveSigFirstWriteWins)
         {
@@ -196,7 +196,7 @@ namespace Microsoft.CodeAnalysis
             return _lazySecurityAttributeData;
         }
 
-        internal bool HasDeclarativeSecurity
+        public bool HasDeclarativeSecurity
         {
             get
             {

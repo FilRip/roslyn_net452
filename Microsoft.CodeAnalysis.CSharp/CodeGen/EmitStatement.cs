@@ -1317,7 +1317,7 @@ oneMoreTime:
             if (local.IsConst)
             {
                 MetadataConstant compileTimeValue = _module.CreateConstant(local.Type, local.ConstantValue, syntaxNode, _diagnostics);
-                LocalConstantDefinition localConstantDef = new LocalConstantDefinition(
+                LocalConstantDefinition localConstantDef = new(
                     local.Name,
                     local.Locations.FirstOrDefault() ?? Location.None,
                     compileTimeValue,

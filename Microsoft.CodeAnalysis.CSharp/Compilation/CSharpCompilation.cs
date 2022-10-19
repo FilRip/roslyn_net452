@@ -1101,7 +1101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// All reference directives used in this compilation.
         /// </summary>
-        protected override IEnumerable<ReferenceDirective> ReferenceDirectives
+        public override IEnumerable<ReferenceDirective> ReferenceDirectives
         {
             get { return this.Declarations.ReferenceDirectives; }
         }
@@ -2105,7 +2105,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ClassifyConversion(source, destination).ToCommonConversion();
         }
 
-        protected override IConvertibleConversion ClassifyConvertibleConversion(IOperation source, ITypeSymbol? destination, out ConstantValue? constantValue)
+        public override IConvertibleConversion ClassifyConvertibleConversion(IOperation source, ITypeSymbol? destination, out ConstantValue? constantValue)
         {
             constantValue = null;
 
@@ -2417,7 +2417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CompleteTrees(filterTree);
         }
 
-        protected override void CompleteTrees(SyntaxTree? filterTree)
+        public override void CompleteTrees(SyntaxTree? filterTree)
         {
             // By definition, a tree is complete when all of its compiler diagnostics have been reported.
             // Since unused imports are the last thing we compute and report, a tree is complete when

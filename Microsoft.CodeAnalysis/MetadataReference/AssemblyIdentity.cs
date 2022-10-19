@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // asserting constructor used by SourceAssemblySymbol:
-        internal AssemblyIdentity(
+        public AssemblyIdentity(
             string name,
             Version version,
             string? cultureName,
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // constructor used by metadata reader:
-        internal AssemblyIdentity(
+        public AssemblyIdentity(
             bool noThrow,
             string name,
             Version? version = null,
@@ -227,7 +227,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static bool IsValidCultureName(string? name)
+        public static bool IsValidCultureName(string? name)
         {
             // The native compiler doesn't enforce that the culture be anything in particular. 
             // AssemblyIdentity should preserve user input even if it is of dubious utility.

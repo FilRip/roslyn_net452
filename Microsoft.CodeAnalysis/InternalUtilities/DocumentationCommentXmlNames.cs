@@ -9,7 +9,7 @@ namespace Roslyn.Utilities
     /// <summary>
     /// Names of well-known XML attributes and elements.
     /// </summary>
-    internal static class DocumentationCommentXmlNames
+    public static class DocumentationCommentXmlNames
     {
         public const string CElementName = "c";
         public const string CodeElementName = "code";

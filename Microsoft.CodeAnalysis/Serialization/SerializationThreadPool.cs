@@ -55,7 +55,7 @@ namespace Roslyn.Utilities
             {
                 // Create the TaskCompletionSource used to represent this work. 'RunContinuationsAsynchronously' ensures
                 // continuations do not also run on the threads created by 'createThread'.
-                var tcs = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
+                var tcs = new TaskCompletionSource<object?>(); // FilRip remove TaskCreationOptions.RunContinuationsAsynchronously parameter
 
                 // Queue the work for a thread to pick up. If no thread is immediately available, it will create one.
                 enqueue((threadStart, state, tcs));
@@ -83,9 +83,9 @@ namespace Roslyn.Utilities
                                     item.tcs.SetResult(((Func<object?>)item.function)());
                                 }
                             }
-                            catch (OperationCanceledException ex)
+                            catch (OperationCanceledException/* ex*/)
                             {
-                                item.tcs.TrySetCanceled(ex.CancellationToken);
+                                item.tcs.TrySetCanceled(); // FilRip remove ex.CancellationToken parameter
                             }
                             catch (Exception ex)
                             {

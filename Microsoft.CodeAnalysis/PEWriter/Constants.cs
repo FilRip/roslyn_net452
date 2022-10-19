@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Cci
 {
-    internal static class Constants
+    public static class Constants
     {
         // Non-portable CharSet values:
         public const CharSet CharSet_None = (CharSet)1;

@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.Emit
         /// Then the resulting collection shall have the following entries:
         /// {S' -> {A', B', C, D}, U -> {G, H}, T -> {E, F}}
         /// </remarks>
-        internal ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> MapSynthesizedMembers(
+        public ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> MapSynthesizedMembers(
             ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> previousMembers,
             ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> newMembers)
         {

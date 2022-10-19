@@ -836,7 +836,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     diagnostics.Add(new CSDiagnostic(diagInfo ?? new CSDiagnosticInfo(ErrorCode.ERR_BogusType, string.Empty), syntaxNodeOpt == null ? NoLocation.Singleton : syntaxNodeOpt.Location));
                 }
 
-                return CodeAnalysis.Emit.ErrorType.Singleton;
+                return ErrorType.Singleton;
             }
 
             if (!namedTypeSymbol.IsDefinition)

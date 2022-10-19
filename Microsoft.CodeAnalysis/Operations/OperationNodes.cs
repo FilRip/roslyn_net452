@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal partial class ConversionOperation
+    public partial class ConversionOperation
     {
         public IMethodSymbol? OperatorMethod => Conversion.MethodSymbol;
     }
@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.Operations
         public abstract ISymbol Member { get; }
     }
 
-    internal sealed partial class MethodReferenceOperation
+    public sealed partial class MethodReferenceOperation
     {
         public override ISymbol Member => Method;
     }
@@ -184,7 +184,7 @@ namespace Microsoft.CodeAnalysis.Operations
         public override CaseKind CaseKind => CaseKind.Range;
     }
 
-    internal sealed partial class SingleValueCaseClauseOperation
+    public sealed partial class SingleValueCaseClauseOperation
     {
         public override CaseKind CaseKind => CaseKind.SingleValue;
     }
@@ -194,17 +194,17 @@ namespace Microsoft.CodeAnalysis.Operations
         public override CaseKind CaseKind => CaseKind.Relational;
     }
 
-    internal sealed partial class DefaultCaseClauseOperation
+    public sealed partial class DefaultCaseClauseOperation
     {
         public override CaseKind CaseKind => CaseKind.Default;
     }
 
-    internal sealed partial class PatternCaseClauseOperation
+    public sealed partial class PatternCaseClauseOperation
     {
         public override CaseKind CaseKind => CaseKind.Pattern;
     }
 
-    internal abstract partial class HasDynamicArgumentsExpression : Operation
+    public abstract partial class HasDynamicArgumentsExpression : Operation
     {
         protected HasDynamicArgumentsExpression(ImmutableArray<IOperation> arguments, ImmutableArray<string> argumentNames, ImmutableArray<RefKind> argumentRefKinds, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit) :
             base(semanticModel, syntax, isImplicit)
@@ -221,7 +221,7 @@ namespace Microsoft.CodeAnalysis.Operations
         public override ITypeSymbol? Type { get; }
     }
 
-    internal sealed partial class DynamicObjectCreationOperation : HasDynamicArgumentsExpression, IDynamicObjectCreationOperation
+    public sealed partial class DynamicObjectCreationOperation : HasDynamicArgumentsExpression, IDynamicObjectCreationOperation
     {
         public DynamicObjectCreationOperation(IObjectOrCollectionInitializerOperation? initializer, ImmutableArray<IOperation> arguments, ImmutableArray<string> argumentNames, ImmutableArray<RefKind> argumentRefKinds, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit) :
             base(arguments, argumentNames, argumentRefKinds, semanticModel, syntax, type, isImplicit)
@@ -277,7 +277,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class DynamicInvocationOperation : HasDynamicArgumentsExpression, IDynamicInvocationOperation
+    public sealed partial class DynamicInvocationOperation : HasDynamicArgumentsExpression, IDynamicInvocationOperation
     {
         public DynamicInvocationOperation(IOperation operation, ImmutableArray<IOperation> arguments, ImmutableArray<string> argumentNames, ImmutableArray<RefKind> argumentRefKinds, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit) :
             base(arguments, argumentNames, argumentRefKinds, semanticModel, syntax, type, isImplicit)
@@ -333,7 +333,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class DynamicIndexerAccessOperation : HasDynamicArgumentsExpression, IDynamicIndexerAccessOperation
+    public sealed partial class DynamicIndexerAccessOperation : HasDynamicArgumentsExpression, IDynamicIndexerAccessOperation
     {
         public DynamicIndexerAccessOperation(IOperation operation, ImmutableArray<IOperation> arguments, ImmutableArray<string> argumentNames, ImmutableArray<RefKind> argumentRefKinds, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit) :
             base(arguments, argumentNames, argumentRefKinds, semanticModel, syntax, type, isImplicit)
@@ -389,22 +389,22 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class ForEachLoopOperation
+    public sealed partial class ForEachLoopOperation
     {
         public override LoopKind LoopKind => LoopKind.ForEach;
     }
 
-    internal sealed partial class ForLoopOperation
+    public sealed partial class ForLoopOperation
     {
         public override LoopKind LoopKind => LoopKind.For;
     }
 
-    internal sealed partial class ForToLoopOperation
+    public sealed partial class ForToLoopOperation
     {
         public override LoopKind LoopKind => LoopKind.ForTo;
     }
 
-    internal sealed partial class WhileLoopOperation
+    public sealed partial class WhileLoopOperation
     {
         protected override IOperation GetCurrent(int slot, int index)
         {
@@ -485,7 +485,7 @@ namespace Microsoft.CodeAnalysis.Operations
         public override LoopKind LoopKind => LoopKind.While;
     }
 
-    internal sealed partial class FlowCaptureReferenceOperation
+    public sealed partial class FlowCaptureReferenceOperation
     {
         public FlowCaptureReferenceOperation(int id, SyntaxNode syntax, ITypeSymbol? type, ConstantValue? constantValue) :
             this(new CaptureId(id), semanticModel: null, syntax: syntax, type: type, constantValue: constantValue, isImplicit: true)
@@ -493,7 +493,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class FlowCaptureOperation
+    public sealed partial class FlowCaptureOperation
     {
         public FlowCaptureOperation(int id, SyntaxNode syntax, IOperation value) :
             this(new CaptureId(id), value, semanticModel: null, syntax: syntax, isImplicit: true)
@@ -502,7 +502,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class IsNullOperation
+    public sealed partial class IsNullOperation
     {
         public IsNullOperation(SyntaxNode syntax, IOperation operand, ITypeSymbol type, ConstantValue? constantValue) :
             this(operand, semanticModel: null, syntax: syntax, type: type, constantValue: constantValue, isImplicit: true)
@@ -511,7 +511,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class CaughtExceptionOperation
+    public sealed partial class CaughtExceptionOperation
     {
         public CaughtExceptionOperation(SyntaxNode syntax, ITypeSymbol type) :
             this(semanticModel: null, syntax: syntax, type: type, isImplicit: true)
@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.Operations
         }
     }
 
-    internal sealed partial class BlockOperation
+    public sealed partial class BlockOperation
     {
         /// <summary>
         /// This creates a block that can be used for temporary, internal applications that require a block composed of

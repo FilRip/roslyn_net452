@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.Syntax
 {
-    internal static class CommonSyntaxNodeRemover
+    public static class CommonSyntaxNodeRemover
     {
         public static void GetSeparatorInfo(
             SyntaxNodeOrTokenList nodesAndSeparators, int nodeIndex, int endOfLineKind,

@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.Emit
         internal IReadOnlyDictionary<string, Cci.DebugSourceDocument> DebugDocuments
             => _debugDocuments.ToImmutableDictionaryOrEmpty(); // FilRip : Added ToImmutableDictionaryOrEmpty()
 
-        internal Cci.DebugSourceDocument? TryGetDebugDocument(string path, string basePath)
+        public Cci.DebugSourceDocument? TryGetDebugDocument(string path, string basePath)
         {
             return TryGetDebugDocumentForNormalizedPath(NormalizeDebugDocumentPath(path, basePath));
         }
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.Emit
             return document;
         }
 
-        internal Cci.DebugSourceDocument GetOrAddDebugDocument(string path, string basePath, Func<string, Cci.DebugSourceDocument> factory)
+        public Cci.DebugSourceDocument GetOrAddDebugDocument(string path, string basePath, Func<string, Cci.DebugSourceDocument> factory)
         {
             return _debugDocuments.GetOrAdd(NormalizeDebugDocumentPath(path, basePath), factory);
         }

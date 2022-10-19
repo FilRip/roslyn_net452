@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace Roslyn.Utilities
 {
-    internal static class InterlockedOperations
+    public static class InterlockedOperations
     {
         /// <summary>
         /// Initialize the value referenced by <paramref name="target"/> in a thread-safe manner.

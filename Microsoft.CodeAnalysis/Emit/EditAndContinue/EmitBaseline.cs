@@ -227,7 +227,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 methodImpls: CalculateMethodImpls(reader));
         }
 
-        internal EmitBaseline InitialBaseline { get; }
+        public EmitBaseline InitialBaseline { get; }
 
         /// <summary>
         /// The original metadata of the module.
@@ -237,16 +237,16 @@ namespace Microsoft.CodeAnalysis.Emit
         // Symbols hydrated from the original metadata. Lazy since we don't know the language at the time the baseline is constructed.
         public MetadataSymbols? LazyMetadataSymbols;
 
-        internal readonly Compilation? Compilation;
-        internal readonly CommonPEModuleBuilder? PEModuleBuilder;
-        internal readonly Guid ModuleVersionId;
-        internal readonly bool HasPortablePdb;
+        public readonly Compilation? Compilation;
+        public readonly CommonPEModuleBuilder? PEModuleBuilder;
+        public readonly Guid ModuleVersionId;
+        public readonly bool HasPortablePdb;
 
         /// <summary>
         /// Metadata generation ordinal. Zero for
         /// full metadata and non-zero for delta.
         /// </summary>
-        internal readonly int Ordinal;
+        public readonly int Ordinal;
 
         /// <summary>
         /// Unique Guid for this delta, or default(Guid)
@@ -298,7 +298,7 @@ namespace Microsoft.CodeAnalysis.Emit
         internal readonly IReadOnlyDictionary<int, int> TypeToPropertyMap;
         internal readonly IReadOnlyDictionary<MethodImplKey, int> MethodImpls;
         private readonly IReadOnlyDictionary<AnonymousTypeKey, AnonymousTypeValue>? _anonymousTypeMap;
-        internal readonly ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> SynthesizedMembers;
+        public readonly ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> SynthesizedMembers;
 
         private EmitBaseline(
             EmitBaseline? initialBaseline,
@@ -453,7 +453,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 methodImpls: MethodImpls);
         }
 
-        internal IReadOnlyDictionary<AnonymousTypeKey, AnonymousTypeValue> AnonymousTypeMap
+        public IReadOnlyDictionary<AnonymousTypeKey, AnonymousTypeValue> AnonymousTypeMap
         {
             get
             {
@@ -563,7 +563,7 @@ namespace Microsoft.CodeAnalysis.Emit
             return result;
         }
 
-        internal int GetNextAnonymousTypeIndex(bool fromDelegates = false)
+        public int GetNextAnonymousTypeIndex(bool fromDelegates = false)
         {
             int nextIndex = 0;
             foreach (var pair in this.AnonymousTypeMap)

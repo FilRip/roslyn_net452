@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on a property.
     /// </summary>
-    internal class CommonPropertyWellKnownAttributeData : WellKnownAttributeData
+    public class CommonPropertyWellKnownAttributeData : WellKnownAttributeData
     {
         #region SpecialNameAttribute
         private bool _hasSpecialNameAttribute;

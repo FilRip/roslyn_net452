@@ -12,11 +12,11 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// A program location in metadata.
     /// </summary>
-    internal sealed class MetadataLocation : Location, IEquatable<MetadataLocation?>
+    public sealed class MetadataLocation : Location, IEquatable<MetadataLocation?>
     {
         private readonly IModuleSymbolInternal _module;
 
-        internal MetadataLocation(IModuleSymbolInternal module)
+        public MetadataLocation(IModuleSymbolInternal module)
         {
             RoslynDebug.Assert(module != null);
             _module = module;

@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis
             get { return _type?.GetITypeSymbol(); }
         }
 
-        internal ITypeSymbolInternal? TypeInternal
+        public ITypeSymbolInternal? TypeInternal
         {
             get { return _type; }
         }
@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Unlike <see cref="Value"/> returns <see cref="ISymbolInternal"/> when the value is a symbol.
         /// </summary>
-        internal object? ValueInternal
+        public object? ValueInternal
         {
             get
             {
@@ -124,13 +124,13 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal T? DecodeValue<T>(SpecialType specialType)
+        public T? DecodeValue<T>(SpecialType specialType)
         {
             TryDecodeValue(specialType, out T? value);
             return value;
         }
 
-        internal bool TryDecodeValue<T>(SpecialType specialType, [MaybeNullWhen(false)] out T value)
+        public bool TryDecodeValue<T>(SpecialType specialType, [MaybeNullWhen(false)] out T value)
         {
             if (_kind == TypedConstantKind.Error)
             {
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis
         /// TypedConstant isn't computing its own kind from the type symbol because it doesn't
         /// have a way to recognize the well-known type System.Type.
         /// </remarks>
-        internal static TypedConstantKind GetTypedConstantKind(ITypeSymbolInternal type, Compilation compilation)
+        public static TypedConstantKind GetTypedConstantKind(ITypeSymbolInternal type, Compilation compilation)
         {
             RoslynDebug.Assert(type != null);
 

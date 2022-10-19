@@ -15,10 +15,10 @@ namespace Microsoft.CodeAnalysis.CodeGen
     {
         internal readonly SyntaxTree SyntaxTree;
         internal readonly int ILMarker;
-        internal readonly TextSpan Span;
+        public readonly TextSpan Span;
 
         // Special text span indicating a hidden sequence point.
-        internal static readonly TextSpan HiddenSequencePointSpan = new TextSpan(0x7FFFFFFF, 0);
+        public static readonly TextSpan HiddenSequencePointSpan = new TextSpan(0x7FFFFFFF, 0);
 
         public RawSequencePoint(SyntaxTree syntaxTree, int ilMarker, TextSpan span)
         {

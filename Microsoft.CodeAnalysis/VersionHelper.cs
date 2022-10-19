@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class VersionHelper
+    public static class VersionHelper
     {
         /// <summary>
         /// Parses a version string of the form "major [ '.' minor [ '.' build [ '.' revision ] ] ]".
@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="s">The version string to parse.</param>
         /// <param name="version">If parsing succeeds, the parsed version. Otherwise a version that represents as much of the input as could be parsed successfully.</param>
         /// <returns>True when parsing succeeds completely (i.e. every character in the string was consumed), false otherwise.</returns>
-        internal static bool TryParse(string s, out Version version)
+        public static bool TryParse(string s, out Version version)
         {
             return TryParse(s, allowWildcard: false, maxValue: ushort.MaxValue, allowPartialParse: true, version: out version);
         }
@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis
         /// If <paramref name="s"/> contains * the version build and/or revision numbers are set to <see cref="ushort.MaxValue"/>.
         /// </param>
         /// <returns>True when parsing succeeds completely (i.e. every character in the string was consumed), false otherwise.</returns>
-        internal static bool TryParseAssemblyVersion(string s, bool allowWildcard, out Version version)
+        public static bool TryParseAssemblyVersion(string s, bool allowWildcard, out Version version)
         {
             return TryParse(s, allowWildcard: allowWildcard, maxValue: ushort.MaxValue - 1, allowPartialParse: false, version: out version);
         }

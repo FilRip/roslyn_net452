@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis
         /// check the public keys to ensure the internals-visible-to check should succeed. This is used by both the
         /// C# and VB implementations as a helper to implement `bool IAssemblySymbol.GivesAccessTo(IAssemblySymbol toAssembly)`.
         /// </summary>
-        internal static IVTConclusion PerformIVTCheck(
+        public static IVTConclusion PerformIVTCheck(
             this AssemblyIdentity assemblyGrantingAccessIdentity,
             ImmutableArray<byte> assemblyWantingAccessKey,
             ImmutableArray<byte> grantedToPublicKey)

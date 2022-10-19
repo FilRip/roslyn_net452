@@ -14,9 +14,9 @@ namespace Microsoft.Cci
     /// in metadata. Allows us to build the set of types that must be embedded
     /// as local types (for NoPia).
     /// </summary>
-    internal sealed class TypeReferenceIndexer : ReferenceIndexerBase
+    public sealed class TypeReferenceIndexer : ReferenceIndexerBase
     {
-        internal TypeReferenceIndexer(EmitContext context)
+        public TypeReferenceIndexer(EmitContext context)
             : base(context)
         {
         }

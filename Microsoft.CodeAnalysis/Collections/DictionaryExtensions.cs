@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// The collection of extension methods for the <see cref="Dictionary{TKey, TValue}"/> type
     /// </summary>
-    internal static class DictionaryExtensions
+    public static class DictionaryExtensions
     {
         /// <summary>
         /// If the given key is not found in the dictionary, add it with the given value and return the value.

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal interface IMarshalAsAttributeTarget
+    public interface IMarshalAsAttributeTarget
     {
         MarshalPseudoCustomAttributeData GetOrCreateData();
     }

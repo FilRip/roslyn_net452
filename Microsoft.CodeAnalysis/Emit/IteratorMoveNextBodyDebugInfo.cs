@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.Emit
     /// Represents additional info needed by iterator method implementation methods 
     /// (MoveNext methods) to properly emit necessary PDB data for iterator debugging.
     /// </summary>
-    internal sealed class IteratorMoveNextBodyDebugInfo : StateMachineMoveNextBodyDebugInfo
+    public sealed class IteratorMoveNextBodyDebugInfo : StateMachineMoveNextBodyDebugInfo
     {
         public IteratorMoveNextBodyDebugInfo(Cci.IMethodDefinition kickoffMethod)
             : base(kickoffMethod)

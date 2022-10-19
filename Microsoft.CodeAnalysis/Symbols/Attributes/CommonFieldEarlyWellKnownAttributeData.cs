@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from early well-known custom attributes applied on a field.
     /// </summary>
-    internal class CommonFieldEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
+    public class CommonFieldEarlyWellKnownAttributeData : EarlyWellKnownAttributeData
     {
         #region ObsoleteAttribute
         private ObsoleteAttributeData _obsoleteAttributeData = ObsoleteAttributeData.Uninitialized;

@@ -11,14 +11,14 @@ namespace Microsoft.CodeAnalysis.Emit
         Embedded = 3,
     }
 
-    internal static partial class DebugInformationFormatExtensions
+    public static partial class DebugInformationFormatExtensions
     {
-        internal static bool IsValid(this DebugInformationFormat value)
+        public static bool IsValid(this DebugInformationFormat value)
         {
             return value >= DebugInformationFormat.Pdb && value <= DebugInformationFormat.Embedded;
         }
 
-        internal static bool IsPortable(this DebugInformationFormat value)
+        public static bool IsPortable(this DebugInformationFormat value)
         {
             return value == DebugInformationFormat.PortablePdb || value == DebugInformationFormat.Embedded;
         }

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.Syntax
 {
-    internal class SyntaxTriviaListBuilder
+    public class SyntaxTriviaListBuilder
     {
         private SyntaxTrivia[] _nodes;
         private int _count;

@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// We need a CCI representation for local constants because they are emitted as locals in
     /// PDB scopes to improve the debugging experience (see LocalScopeProvider.GetConstantsInScope).
     /// </summary>
-    internal sealed class LocalConstantDefinition : Cci.ILocalDefinition
+    public sealed class LocalConstantDefinition : Cci.ILocalDefinition
     {
         public LocalConstantDefinition(
             string name,

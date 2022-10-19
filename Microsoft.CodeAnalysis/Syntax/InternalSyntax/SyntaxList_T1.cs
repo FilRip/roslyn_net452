@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             return node;
         }
 
-        internal GreenNode? ItemUntyped(int index)
+        public GreenNode? ItemUntyped(int index)
         {
             RoslynDebug.Assert(_node is object);
             var node = this._node;

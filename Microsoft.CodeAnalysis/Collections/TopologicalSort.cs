@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// A helper class that contains a topological sort algorithm.
     /// </summary>
-    internal static class TopologicalSort
+    public static class TopologicalSort
     {
         /// <summary>
         /// Produce a topological sort of a given directed acyclic graph, given a set of nodes which include all nodes

@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Information decoded from well-known custom attributes applied on a field.
     /// </summary>
-    internal class CommonFieldWellKnownAttributeData : WellKnownAttributeData, IMarshalAsAttributeTarget
+    public class CommonFieldWellKnownAttributeData : WellKnownAttributeData, IMarshalAsAttributeTarget
     {
         public CommonFieldWellKnownAttributeData()
         {

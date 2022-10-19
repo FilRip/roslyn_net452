@@ -66,13 +66,13 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal virtual string FormatSourcePath(string path, string? basePath, IFormatProvider? formatter)
+        public virtual string FormatSourcePath(string path, string? basePath, IFormatProvider? formatter)
         {
             // ignore base path
             return path;
         }
 
-        internal virtual string FormatSourceSpan(LinePositionSpan span, IFormatProvider? formatter)
+        public virtual string FormatSourceSpan(LinePositionSpan span, IFormatProvider? formatter)
         {
             return string.Format("({0},{1})", span.Start.Line + 1, span.Start.Character + 1);
         }

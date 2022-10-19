@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// <summary>
     /// An expression that represents a (name, value) pair and that is typically used in method calls, custom attributes and object initializers.
     /// </summary>
-    internal sealed class MetadataNamedArgument : Cci.IMetadataNamedArgument
+    public sealed class MetadataNamedArgument : Cci.IMetadataNamedArgument
     {
         private readonly ISymbolInternal _entity;
         private readonly Cci.ITypeReference _type;

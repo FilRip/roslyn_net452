@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// <summary>
     /// Holds on to the method body data.
     /// </summary>
-    internal sealed class MethodBody : Cci.IMethodBody
+    public sealed class MethodBody : Cci.IMethodBody
     {
         private readonly Cci.IMethodDefinition _parent;
 
