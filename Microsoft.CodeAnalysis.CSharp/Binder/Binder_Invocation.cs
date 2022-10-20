@@ -80,8 +80,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             string methodName,
             ImmutableArray<BoundExpression> args,
             BindingDiagnosticBag diagnostics,
-            SeparatedSyntaxList<TypeSyntax> typeArgsSyntax = default(SeparatedSyntaxList<TypeSyntax>),
-            ImmutableArray<TypeWithAnnotations> typeArgs = default(ImmutableArray<TypeWithAnnotations>),
+            SeparatedSyntaxList<TypeSyntax> typeArgsSyntax = default,
+            ImmutableArray<TypeWithAnnotations> typeArgs = default,
             CSharpSyntaxNode? queryClause = null,
             bool allowFieldsAndProperties = false,
             bool allowUnexpandedForm = true)
@@ -1790,7 +1790,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             ArgumentSyntax argument = node.ArgumentList.Arguments[0];
-            if (argument.NameColon != null || argument.RefOrOutKeyword != default(SyntaxToken) || InvocableNameofInScope())
+            if (argument.NameColon != null || argument.RefOrOutKeyword != default || InvocableNameofInScope())
             {
                 return false;
             }

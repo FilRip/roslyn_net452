@@ -269,7 +269,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 if ((object)transformedTypeArg == null)
                 {
                     transformedTypeArgsBuilder.Free();
-                    return default(ImmutableArray<TypeWithAnnotations>);
+                    return default;
                 }
 
                 // Note, modifiers are not involved, this is behavior of the native compiler.

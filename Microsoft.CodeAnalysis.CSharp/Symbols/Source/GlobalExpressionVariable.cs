@@ -53,9 +53,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 : new GlobalExpressionVariable(containingType, modifiers, typeSyntax, name, syntaxReference, location);
         }
 
-        protected override SyntaxList<AttributeListSyntax> AttributeDeclarationSyntaxList => default(SyntaxList<AttributeListSyntax>);
+        protected override SyntaxList<AttributeListSyntax> AttributeDeclarationSyntaxList => default;
         protected override TypeSyntax TypeSyntax => (TypeSyntax)_typeSyntaxOpt?.GetSyntax();
-        protected override SyntaxTokenList ModifiersTokenList => default(SyntaxTokenList);
+        protected override SyntaxTokenList ModifiersTokenList => default;
         public override bool HasInitializer => false;
         protected override ConstantValue MakeConstantValue(
             HashSet<SourceFieldSymbolWithSyntaxReference> dependencies,

@@ -228,7 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     completedOnThisThread = state.NotePartComplete(CompletionPart.EndDefaultSyntaxValueDiagnostics);
                 }
 
-                state.SpinWaitComplete(CompletionPart.EndDefaultSyntaxValue, default(CancellationToken));
+                state.SpinWaitComplete(CompletionPart.EndDefaultSyntaxValue, default);
                 return _lazyDefaultSyntaxValue;
             }
         }
@@ -456,14 +456,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else
             {
-                otherAttributes = default(SyntaxList<AttributeListSyntax>);
+                otherAttributes = default;
             }
 
-            if (attributes.Equals(default(SyntaxList<AttributeListSyntax>)))
+            if (attributes.Equals(default))
             {
                 return OneOrMany.Create(otherAttributes);
             }
-            else if (otherAttributes.Equals(default(SyntaxList<AttributeListSyntax>)))
+            else if (otherAttributes.Equals(default))
             {
                 return OneOrMany.Create(attributes);
             }

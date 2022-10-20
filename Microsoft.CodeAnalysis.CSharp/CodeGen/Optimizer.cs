@@ -2113,7 +2113,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         internal override SyntaxToken IdentifierToken
         {
-            get { return default(SyntaxToken); }
+            get { return default; }
         }
 
         internal override bool IsPinned

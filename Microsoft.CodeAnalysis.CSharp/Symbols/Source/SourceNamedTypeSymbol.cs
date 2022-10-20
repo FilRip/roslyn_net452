@@ -126,11 +126,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case SyntaxKind.RecordStructDeclaration:
                     return ((BaseTypeDeclarationSyntax)node).Identifier;
                 default:
-                    return default(SyntaxToken);
+                    return default;
             }
         }
 
-        public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default(CancellationToken))
+        public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default)
         {
             ref var lazyDocComment = ref expandIncludes ? ref _lazyExpandedDocComment : ref _lazyDocComment;
             return SourceDocumentationCommentUtils.GetAndCacheDocumentationComment(this, expandIncludes, ref lazyDocComment);
@@ -1296,7 +1296,7 @@ next:;
                     return new TypeLayout(LayoutKind.Sequential, this.HasInstanceFields() ? 0 : 1, alignment: 0);
                 }
 
-                return default(TypeLayout);
+                return default;
             }
         }
 

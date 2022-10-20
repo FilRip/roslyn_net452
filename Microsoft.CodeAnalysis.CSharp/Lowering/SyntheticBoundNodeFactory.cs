@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             string methodName,
             ImmutableArray<BoundExpression> args,
             BindingDiagnosticBag diagnostics,
-            ImmutableArray<TypeSymbol> typeArgs = default(ImmutableArray<TypeSymbol>),
+            ImmutableArray<TypeSymbol> typeArgs = default,
             bool allowUnexpandedForm = true)
         {
             if (_binder is null || _binder.Flags != flags)
@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 methodName,
                 args,
                 diagnostics,
-                typeArgs: typeArgs.IsDefault ? default(ImmutableArray<TypeWithAnnotations>) : typeArgs.SelectAsArray(t => TypeWithAnnotations.Create(t)),
+                typeArgs: typeArgs.IsDefault ? default : typeArgs.SelectAsArray(t => TypeWithAnnotations.Create(t)),
                 allowFieldsAndProperties: false,
                 allowUnexpandedForm: allowUnexpandedForm);
         }
@@ -652,7 +652,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (method is null)
             {
-                return new BoundBadExpression(Syntax, default(LookupResultKind), ImmutableArray<Symbol?>.Empty, args.AsImmutable(), receiver);
+                return new BoundBadExpression(Syntax, default, ImmutableArray<Symbol?>.Empty, args.AsImmutable(), receiver);
             }
 
             return Call(null, method, args);
@@ -703,8 +703,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return new BoundCall(
                 Syntax, receiver, method, args,
-                argumentNamesOpt: default(ImmutableArray<String>), argumentRefKindsOpt: method.ParameterRefKinds, isDelegateCall: false, expanded: false,
-                invokedAsExtensionMethod: false, argsToParamsOpt: default(ImmutableArray<int>), defaultArguments: default(BitVector), resultKind: LookupResultKind.Viable,
+                argumentNamesOpt: default, argumentRefKindsOpt: method.ParameterRefKinds, isDelegateCall: false, expanded: false,
+                invokedAsExtensionMethod: false, argsToParamsOpt: default, defaultArguments: default, resultKind: LookupResultKind.Viable,
                 type: method.ReturnType, hasErrors: method.OriginalDefinition is ErrorMethodSymbol)
             { WasCompilerGenerated = true };
         }
@@ -713,8 +713,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return new BoundCall(
                 Syntax, receiver, method, args,
-                argumentNamesOpt: default(ImmutableArray<String>), argumentRefKindsOpt: refKinds, isDelegateCall: false, expanded: false, invokedAsExtensionMethod: false,
-                argsToParamsOpt: ImmutableArray<int>.Empty, defaultArguments: default(BitVector), resultKind: LookupResultKind.Viable, type: method.ReturnType)
+                argumentNamesOpt: default, argumentRefKindsOpt: refKinds, isDelegateCall: false, expanded: false, invokedAsExtensionMethod: false,
+                argsToParamsOpt: ImmutableArray<int>.Empty, defaultArguments: default, resultKind: LookupResultKind.Viable, type: method.ReturnType)
             { WasCompilerGenerated = true };
         }
 

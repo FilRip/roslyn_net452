@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 if (_parameters.IsDefault)
                 {
-                    ImmutableInterlocked.InterlockedCompareExchange(ref _parameters, MakeParameters(), default(ImmutableArray<ParameterSymbol>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref _parameters, MakeParameters(), default);
                 }
                 return _parameters;
             }
@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         protected virtual ImmutableArray<TypeSymbol> ExtraSynthesizedRefParameters
         {
-            get { return default(ImmutableArray<TypeSymbol>); }
+            get { return default; }
         }
 
         protected virtual ImmutableArray<ParameterSymbol> BaseMethodParameters

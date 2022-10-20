@@ -212,7 +212,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<TypedConstant> constructorArguments;
             if (hasErrors || attributeConstructor.ParameterCount == 0)
             {
-                constructorArgumentsSourceIndices = default(ImmutableArray<int>);
+                constructorArgumentsSourceIndices = default;
                 constructorArguments = constructorArgsArray;
             }
             else
@@ -654,7 +654,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 reorderedArguments[i] = reorderedArgument;
             }
 
-            constructorArgumentsSourceIndices = sourceIndices != null ? sourceIndices.AsImmutableOrNull() : default(ImmutableArray<int>);
+            constructorArgumentsSourceIndices = sourceIndices != null ? sourceIndices.AsImmutableOrNull() : default;
             return reorderedArguments.AsImmutableOrNull();
         }
 
@@ -818,7 +818,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (kind == TypedConstantKind.Array)
             {
-                return new TypedConstant(parameterType, default(ImmutableArray<TypedConstant>));
+                return new TypedConstant(parameterType, default);
             }
             else
             {
@@ -1136,7 +1136,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             private static TypedConstant CreateTypedConstant(BoundExpression node, TypedConstantKind typedConstantKind, BindingDiagnosticBag diagnostics, ref bool attrHasErrors, bool curArgumentHasErrors,
-                object? simpleValue = null, ImmutableArray<TypedConstant> arrayValue = default(ImmutableArray<TypedConstant>))
+                object? simpleValue = null, ImmutableArray<TypedConstant> arrayValue = default)
             {
                 var type = node.Type;
 

@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => ParenthesizedLambdaExpression(TokenList(asyncKeyword), parameterList, arrowToken, block, expressionBody);
 
         public static ParenthesizedLambdaExpressionSyntax ParenthesizedLambdaExpression(ParameterListSyntax parameterList, BlockSyntax? block, ExpressionSyntax? expressionBody)
-            => ParenthesizedLambdaExpression(default(SyntaxTokenList), parameterList, block, expressionBody);
+            => ParenthesizedLambdaExpression(default, parameterList, block, expressionBody);
 
         public static ParenthesizedLambdaExpressionSyntax ParenthesizedLambdaExpression(SyntaxTokenList modifiers, ParameterListSyntax parameterList, SyntaxToken arrowToken, BlockSyntax? block, ExpressionSyntax? expressionBody)
             => SyntaxFactory.ParenthesizedLambdaExpression(attributeLists: default, modifiers, parameterList, arrowToken, block, expressionBody);

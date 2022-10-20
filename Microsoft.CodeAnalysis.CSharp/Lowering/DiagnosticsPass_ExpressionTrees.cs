@@ -453,7 +453,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Error(ErrorCode.ERR_ExtensionCollectionElementInitializerInExpressionTree, node);
             }
 
-            VisitCall(node.AddMethod, null, node.Arguments, default(ImmutableArray<RefKind>), default(ImmutableArray<string>), node.DefaultArguments, node);
+            VisitCall(node.AddMethod, null, node.Arguments, default, default, node.DefaultArguments, node);
             return base.VisitCollectionElementInitializer(node);
         }
 

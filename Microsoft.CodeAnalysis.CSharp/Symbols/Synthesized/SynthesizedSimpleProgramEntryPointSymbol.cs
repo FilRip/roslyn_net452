@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override System.Reflection.MethodImplAttributes ImplementationAttributes
         {
-            get { return default(System.Reflection.MethodImplAttributes); }
+            get { return default; }
         }
 
         public override bool IsVararg

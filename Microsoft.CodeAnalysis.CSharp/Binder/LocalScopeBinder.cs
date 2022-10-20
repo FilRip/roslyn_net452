@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (_locals.IsDefault)
                 {
-                    ImmutableInterlocked.InterlockedCompareExchange(ref _locals, BuildLocals(), default(ImmutableArray<LocalSymbol>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref _locals, BuildLocals(), default);
                 }
 
                 return _locals;
@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (_localFunctions.IsDefault)
                 {
-                    ImmutableInterlocked.InterlockedCompareExchange(ref _localFunctions, BuildLocalFunctions(), default(ImmutableArray<LocalFunctionSymbol>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref _localFunctions, BuildLocalFunctions(), default);
                 }
 
                 return _localFunctions;
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (_labels.IsDefault)
                 {
-                    ImmutableInterlocked.InterlockedCompareExchange(ref _labels, BuildLabels(), default(ImmutableArray<LabelSymbol>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref _labels, BuildLabels(), default);
                 }
 
                 return _labels;
@@ -231,7 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             kind = LocalDeclarationKind.Constant;
                         }
-                        else if (decl.UsingKeyword != default(SyntaxToken))
+                        else if (decl.UsingKeyword != default)
                         {
                             kind = LocalDeclarationKind.UsingVariable;
                         }

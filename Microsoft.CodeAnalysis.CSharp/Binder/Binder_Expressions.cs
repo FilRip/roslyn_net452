@@ -974,7 +974,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 tupleTypeOpt = NamedTypeSymbol.CreateTuple(node.Location, elements, locations, elementNames,
                     this.Compilation, syntax: node, diagnostics: diagnostics, shouldCheckConstraints: true,
-                    includeNullability: false, errorPositions: disallowInferredNames ? inferredPositions : default(ImmutableArray<bool>));
+                    includeNullability: false, errorPositions: disallowInferredNames ? inferredPositions : default);
             }
             else
             {
@@ -1415,7 +1415,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var typeArgumentsWithAnnotations = hasTypeArguments ?
                 BindTypeArguments(typeArgumentList, diagnostics) :
-                default(ImmutableArray<TypeWithAnnotations>);
+                default;
 
             var lookupResult = LookupResult.GetInstance();
             LookupOptions options = LookupOptions.AllMethodsOnArityZero;
@@ -3379,7 +3379,7 @@ namespace Microsoft.CodeAnalysis.CSharp
            ArrayTypeSymbol type,
            int?[] knownSizes,
            int dimension,
-           ImmutableArray<BoundExpression> boundInitExprOpt = default(ImmutableArray<BoundExpression>))
+           ImmutableArray<BoundExpression> boundInitExprOpt = default)
         {
             // Bind the array initializer expressions, if not already bound.
             // NOTE: Initializer expressions might already be bound for implicitly type array creation
@@ -3446,7 +3446,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             InitializerExpressionSyntax initSyntax,
             ArrayTypeSymbol type,
             ImmutableArray<BoundExpression> sizes,
-            ImmutableArray<BoundExpression> boundInitExprOpt = default(ImmutableArray<BoundExpression>),
+            ImmutableArray<BoundExpression> boundInitExprOpt = default,
             bool hasErrors = false)
         {
             // NOTE: In error scenarios, it may be the case sizes.Count > type.Rank.
@@ -4537,8 +4537,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     boundLeft: implicitReceiver,
                     rightName: memberName.Identifier.ValueText,
                     rightArity: 0,
-                    typeArgumentsSyntax: default(SeparatedSyntaxList<TypeSyntax>),
-                    typeArgumentsWithAnnotations: default(ImmutableArray<TypeWithAnnotations>),
+                    typeArgumentsSyntax: default,
+                    typeArgumentsWithAnnotations: default,
                     invoked: false,
                     indexed: false,
                     diagnostics: diagnostics);
@@ -4588,10 +4588,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             BindValueKind valueKind = isRhsNestedInitializer ? BindValueKind.RValue : BindValueKind.Assignable;
 
             ImmutableArray<BoundExpression> arguments = ImmutableArray<BoundExpression>.Empty;
-            ImmutableArray<string> argumentNamesOpt = default(ImmutableArray<string>);
-            ImmutableArray<int> argsToParamsOpt = default(ImmutableArray<int>);
-            ImmutableArray<RefKind> argumentRefKindsOpt = default(ImmutableArray<RefKind>);
-            BitVector defaultArguments = default(BitVector);
+            ImmutableArray<string> argumentNamesOpt = default;
+            ImmutableArray<int> argsToParamsOpt = default;
+            ImmutableArray<RefKind> argumentRefKindsOpt = default;
+            BitVector defaultArguments = default;
             bool expanded = false;
 
             switch (boundMemberKind)
@@ -5539,7 +5539,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Fill in the out parameter with the result, if there was one; it might be inaccessible.
             memberResolutionResult = succeededIgnoringAccessibility ?
                 result.ValidResult :
-                default(MemberResolutionResult<MethodSymbol>); // Invalid results are not interesting - we have enough info in candidateConstructors.
+                default; // Invalid results are not interesting - we have enough info in candidateConstructors.
 
             // If something failed and we are reporting errors, then report the right errors.
             // * If the failure was due to inaccessibility, just report that.
@@ -5838,7 +5838,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool rightHasTypeArguments = typeArgumentsSyntax.Count > 0;
             ImmutableArray<TypeWithAnnotations> typeArgumentsWithAnnotations = rightHasTypeArguments ?
                 BindTypeArguments(typeArgumentsSyntax, diagnostics) :
-                default(ImmutableArray<TypeWithAnnotations>);
+                default;
 
             bool hasErrors = false;
 
@@ -5942,7 +5942,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var typeArgumentsSyntax = right.Kind() == SyntaxKind.GenericName ? ((GenericNameSyntax)right).TypeArgumentList.Arguments : default(SeparatedSyntaxList<TypeSyntax>);
                 bool rightHasTypeArguments = typeArgumentsSyntax.Count > 0;
-                var typeArguments = rightHasTypeArguments ? BindTypeArguments(typeArgumentsSyntax, diagnostics) : default(ImmutableArray<TypeWithAnnotations>);
+                var typeArguments = rightHasTypeArguments ? BindTypeArguments(typeArgumentsSyntax, diagnostics) : default;
 
                 // A member-access consists of a primary-expression, a predefined-type, or a 
                 // qualified-alias-member, followed by a "." token, followed by an identifier, 
@@ -6339,7 +6339,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // we've reported other errors.
                 return new BoundMethodGroup(
                     node,
-                    default(ImmutableArray<TypeWithAnnotations>),
+                    default,
                     nameString,
                     methods,
                     methods.Length == 1 ? methods[0] : null,
@@ -7469,8 +7469,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     receiverOpt,
                     CreateErrorPropertySymbol(properties),
                     ImmutableArray<BoundExpression>.Empty,
-                    default(ImmutableArray<string>),
-                    default(ImmutableArray<RefKind>),
+                    default,
+                    default,
                     properties);
             }
 
@@ -7555,7 +7555,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // and an ambiguity error may be reported. Also additional checks are performed in runtime final validation 
                 // that are not performed at compile-time.
                 // Only if the set of final applicable candidates is empty we know for sure the call will fail at runtime.
-                var finalApplicableCandidates = GetCandidatesPassingFinalValidation(syntax, overloadResolutionResult, receiverOpt, default(ImmutableArray<TypeWithAnnotations>), diagnostics);
+                var finalApplicableCandidates = GetCandidatesPassingFinalValidation(syntax, overloadResolutionResult, receiverOpt, default, diagnostics);
                 overloadResolutionResult.Free();
                 return BindDynamicIndexer(syntax, receiverOpt, analyzedArguments, finalApplicableCandidates, diagnostics);
             }

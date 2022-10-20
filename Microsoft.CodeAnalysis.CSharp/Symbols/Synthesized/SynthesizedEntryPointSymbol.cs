@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override System.Reflection.MethodImplAttributes ImplementationAttributes
         {
-            get { return default(System.Reflection.MethodImplAttributes); }
+            get { return default; }
         }
 
         internal override bool RequiresSecurityObject
@@ -294,13 +294,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 receiver,
                 method,
                 ImmutableArray<BoundExpression>.Empty,
-                default(ImmutableArray<string>),
-                default(ImmutableArray<RefKind>),
+                default,
+                default,
                 isDelegateCall: false,
                 expanded: false,
                 invokedAsExtensionMethod: false,
-                argsToParamsOpt: default(ImmutableArray<int>),
-                defaultArguments: default(BitVector),
+                argsToParamsOpt: default,
+                defaultArguments: default,
                 resultKind: LookupResultKind.Viable,
                 type: method.ReturnType)
             { WasCompilerGenerated = true };
@@ -338,13 +338,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         receiverOpt: null,
                         method: userMain,
                         arguments: arguments,
-                        argumentNamesOpt: default(ImmutableArray<string>),
-                        argumentRefKindsOpt: default(ImmutableArray<RefKind>),
+                        argumentNamesOpt: default,
+                        argumentRefKindsOpt: default,
                         isDelegateCall: false,
                         expanded: false,
                         invokedAsExtensionMethod: false,
-                        argsToParamsOpt: default(ImmutableArray<int>),
-                        defaultArguments: default(BitVector),
+                        argsToParamsOpt: default,
+                        defaultArguments: default,
                         resultKind: LookupResultKind.Viable,
                         type: userMain.ReturnType)
                 { WasCompilerGenerated = true };
@@ -551,11 +551,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             syntax,
                             ctor,
                             ImmutableArray.Create<BoundExpression>(submissionArrayParameter),
-                            argumentNamesOpt: default(ImmutableArray<string>),
-                            argumentRefKindsOpt: default(ImmutableArray<RefKind>),
+                            argumentNamesOpt: default,
+                            argumentRefKindsOpt: default,
                             expanded: false,
-                            argsToParamsOpt: default(ImmutableArray<int>),
-                            defaultArguments: default(BitVector),
+                            argsToParamsOpt: default,
+                            defaultArguments: default,
                             constantValueOpt: null,
                             initializerExpressionOpt: null,
                             type: _containingType)

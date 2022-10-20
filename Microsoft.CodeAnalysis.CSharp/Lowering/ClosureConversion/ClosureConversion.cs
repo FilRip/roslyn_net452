@@ -497,7 +497,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         methodId = _analysis.GetTopLevelMethodId();
                     }
 
-                    DebugId closureId = default(DebugId);
+                    DebugId closureId = default;
                     // using _topLevelMethod as containing member because the static frame does not have generic parameters, except for the top level method's
                     var containingMethod = isNonGeneric ? null : (_substitutedSourceMethod ?? _topLevelMethod);
                     _lazyStaticLambdaFrame = new SynthesizedClosureEnvironment(
@@ -1541,7 +1541,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             MethodSymbol referencedMethod = synthesizedMethod;
             BoundExpression receiver;
             NamedTypeSymbol constructedFrame;
-            RemapLambdaOrLocalFunction(node.Syntax, node.Symbol, default(ImmutableArray<TypeWithAnnotations>), closureKind, ref referencedMethod, out receiver, out constructedFrame);
+            RemapLambdaOrLocalFunction(node.Syntax, node.Symbol, default, closureKind, ref referencedMethod, out receiver, out constructedFrame);
 
             // Rewrite the lambda expression (and the enclosing anonymous method conversion) as a delegate creation expression
 

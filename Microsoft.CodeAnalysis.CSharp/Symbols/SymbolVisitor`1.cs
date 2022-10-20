@@ -13,13 +13,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         public virtual TResult Visit(Symbol symbol)
         {
             return (object)symbol == null
-                ? default(TResult)
+                ? default
                 : symbol.Accept(this);
         }
 
         public virtual TResult DefaultVisit(Symbol symbol)
         {
-            return default(TResult);
+            return default;
         }
 
         public virtual TResult VisitAlias(AliasSymbol symbol)

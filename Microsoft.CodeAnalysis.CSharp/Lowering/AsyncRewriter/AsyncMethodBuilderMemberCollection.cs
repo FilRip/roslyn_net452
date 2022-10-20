@@ -157,7 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     out createBuilderMethod);
                 if ((object)createBuilderMethod == null)
                 {
-                    collection = default(AsyncMethodBuilderMemberCollection);
+                    collection = default;
                     return false;
                 }
                 return TryCreate(
@@ -214,7 +214,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     (object)createBuilderMethod == null ||
                     (object)taskProperty == null)
                 {
-                    collection = default(AsyncMethodBuilderMemberCollection);
+                    collection = default;
                     return false;
                 }
                 return TryCreate(
@@ -283,7 +283,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     (object)taskProperty == null ||
                     (object)createBuilderMethod == null)
                 {
-                    collection = default(AsyncMethodBuilderMemberCollection);
+                    collection = default;
                     return false;
                 }
                 return TryCreate(
@@ -372,7 +372,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
-            collection = default(AsyncMethodBuilderMemberCollection);
+            collection = default;
             return false;
         }
 

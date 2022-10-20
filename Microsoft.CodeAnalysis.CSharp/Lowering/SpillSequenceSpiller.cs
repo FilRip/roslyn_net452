@@ -392,7 +392,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private ImmutableArray<BoundExpression> VisitExpressionList(
             ref BoundSpillSequenceBuilder builder,
             ImmutableArray<BoundExpression> args,
-            ImmutableArray<RefKind> refKinds = default(ImmutableArray<RefKind>),
+            ImmutableArray<RefKind> refKinds = default,
             bool forceSpill = false,
             bool sideEffectsOnly = false)
         {

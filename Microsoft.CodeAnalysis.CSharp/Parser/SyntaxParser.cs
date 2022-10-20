@@ -47,13 +47,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             IEnumerable<TextChangeRange> changes,
             bool allowModeReset,
             bool preLexIfNotIncremental = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             this.lexer = lexer;
             _mode = mode;
             _allowModeReset = allowModeReset;
             this.cancellationToken = cancellationToken;
-            _currentNode = default(BlendedNode);
+            _currentNode = default;
             _isIncremental = oldTree != null;
 
             if (this.IsIncremental || allowModeReset)
@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
             else
             {
-                _firstBlender = default(Blender);
+                _firstBlender = default;
                 _lexedTokens = new ArrayElement<SyntaxToken>[32];
             }
 
@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             _mode = point.Mode;
             _tokenOffset = offset;
             _currentToken = null;
-            _currentNode = default(BlendedNode);
+            _currentNode = default;
             _prevTokenTrailingTrivia = point.PrevTokenTrailingTrivia;
             if (_blendedTokens != null)
             {
@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                     _mode = value;
                     _currentToken = null;
-                    _currentNode = default(BlendedNode);
+                    _currentNode = default;
                     _tokenCount = _tokenOffset;
                 }
             }
@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             _tokenCount = _tokenOffset; // forget anything after this slot
 
             // erase current state
-            _currentNode = default(BlendedNode);
+            _currentNode = default;
             _currentToken = null;
 
             return result;
@@ -458,7 +458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
             if (_blendedTokens != null)
             {
-                _currentNode = default(BlendedNode);
+                _currentNode = default;
             }
 
             _tokenOffset++;

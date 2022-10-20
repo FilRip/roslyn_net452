@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return System.Reflection.MethodImplAttributes.Runtime;
                 }
 
-                return default(System.Reflection.MethodImplAttributes);
+                return default;
             }
         }
 

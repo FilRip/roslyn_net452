@@ -1833,7 +1833,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             BoundExpression call = _inExpressionLambda
-                ? new BoundBinaryOperator(syntax, operatorKind, null, method, default(LookupResultKind), loweredLeft, loweredRight, method.ReturnType)
+                ? new BoundBinaryOperator(syntax, operatorKind, null, method, default, loweredLeft, loweredRight, method.ReturnType)
                 : (BoundExpression)BoundCall.Synthesized(syntax, receiverOpt: null, method, loweredLeft, loweredRight);
             BoundExpression result = method.ReturnType.SpecialType == SpecialType.System_Delegate ?
                 MakeConversionNode(syntax, call, Conversion.ExplicitReference, type, @checked: false) :

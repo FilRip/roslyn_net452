@@ -765,7 +765,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             get { return this.DeclaringCompilation != null; }
         }
 
-        internal virtual bool IsDefinedInSourceTree(SyntaxTree tree, TextSpan? definedWithinSpan, CancellationToken cancellationToken = default(CancellationToken))
+        internal virtual bool IsDefinedInSourceTree(SyntaxTree tree, TextSpan? definedWithinSpan, CancellationToken cancellationToken = default)
         {
             var declaringReferences = this.DeclaringSyntaxReferences;
             if (this.IsImplicitlyDeclared && declaringReferences.Length == 0)
@@ -829,7 +829,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public virtual string GetDocumentationCommentXml(
             CultureInfo preferredCulture = null,
             bool expandIncludes = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return "";
         }

@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool invokedAsExtensionMethod,
             LookupResultKind resultKind,
             TypeSymbol type,
-            ImmutableArray<LocalSymbol> temps = default(ImmutableArray<LocalSymbol>))
+            ImmutableArray<LocalSymbol> temps = default)
         {
             BoundExpression rewrittenBoundCall;
 
@@ -223,13 +223,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     rewrittenReceiver,
                     method,
                     rewrittenArguments,
-                    default(ImmutableArray<string>),
+                    default,
                     argumentRefKinds,
                     isDelegateCall: false,
                     expanded: false,
                     invokedAsExtensionMethod: invokedAsExtensionMethod,
-                    argsToParamsOpt: default(ImmutableArray<int>),
-                    defaultArguments: default(BitVector),
+                    argsToParamsOpt: default,
+                    defaultArguments: default,
                     resultKind: resultKind,
                     type: type);
             }
@@ -239,13 +239,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     rewrittenReceiver,
                     method,
                     rewrittenArguments,
-                    default(ImmutableArray<string>),
+                    default,
                     argumentRefKinds,
                     node.IsDelegateCall,
                     false,
                     node.InvokedAsExtensionMethod,
-                    default(ImmutableArray<int>),
-                    default(BitVector),
+                    default,
+                    default,
                     node.ResultKind,
                     node.Type);
             }
@@ -271,7 +271,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 rewrittenReceiver: rewrittenReceiver,
                 method: method,
                 rewrittenArguments: rewrittenArguments,
-                argumentRefKinds: default(ImmutableArray<RefKind>),
+                argumentRefKinds: default,
                 invokedAsExtensionMethod: false,
                 resultKind: LookupResultKind.Viable,
                 type: type);
@@ -640,7 +640,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return refKinds.ToImmutable();
                 }
             }
-            return default(ImmutableArray<RefKind>);
+            return default;
         }
 
         // This fills in the arguments, refKinds and storesToTemps arrays.
@@ -882,13 +882,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                         null,
                         arrayEmpty,
                         ImmutableArray<BoundExpression>.Empty,
-                        default(ImmutableArray<string>),
-                        default(ImmutableArray<RefKind>),
+                        default,
+                        default,
                         isDelegateCall: false,
                         expanded: false,
                         invokedAsExtensionMethod: false,
-                        argsToParamsOpt: default(ImmutableArray<int>),
-                        defaultArguments: default(BitVector),
+                        argsToParamsOpt: default,
+                        defaultArguments: default,
                         resultKind: LookupResultKind.Viable,
                         type: arrayEmpty.ReturnType);
                 }

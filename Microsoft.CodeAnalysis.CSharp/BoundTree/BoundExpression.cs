@@ -430,11 +430,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             return Update(
                 constructor: Constructor,
                 arguments: newArguments,
-                argumentNamesOpt: default(ImmutableArray<string>),
+                argumentNamesOpt: default,
                 argumentRefKindsOpt: newRefKinds,
                 expanded: false,
-                argsToParamsOpt: default(ImmutableArray<int>),
-                defaultArguments: default(BitVector),
+                argsToParamsOpt: default,
+                defaultArguments: default,
                 constantValueOpt: ConstantValueOpt,
                 initializerExpressionOpt: newInitializerExpression,
                 type: changeTypeOpt ?? Type);

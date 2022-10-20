@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     else
                     {
                         ImmutableInterlocked.InterlockedCompareExchange(ref _lazyTypeParameters,
-                            this.RetargetingTranslator.Retarget(_underlyingMethod.TypeParameters), default(ImmutableArray<TypeParameterSymbol>));
+                            this.RetargetingTranslator.Retarget(_underlyingMethod.TypeParameters), default);
                     }
                 }
 
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             {
                 if (_lazyParameters.IsDefault)
                 {
-                    ImmutableInterlocked.InterlockedCompareExchange(ref _lazyParameters, this.RetargetParameters(), default(ImmutableArray<ParameterSymbol>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref _lazyParameters, this.RetargetParameters(), default);
                 }
 
                 return _lazyParameters;
@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     ImmutableInterlocked.InterlockedCompareExchange(
                         ref _lazyExplicitInterfaceImplementations,
                         this.RetargetExplicitInterfaceImplementations(),
-                        default(ImmutableArray<MethodSymbol>));
+                        default);
                 }
                 return _lazyExplicitInterfaceImplementations;
             }

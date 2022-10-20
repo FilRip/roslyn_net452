@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             _containingType = containingType;
 
             EventAttributes mdFlags = 0;
-            EntityHandle eventType = default(EntityHandle);
+            EntityHandle eventType = default;
 
             try
             {
@@ -439,7 +439,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             return metadataDecoder.DoesSignatureMatchEvent(eventType, methodParams);
         }
 
-        public override string GetDocumentationCommentXml(CultureInfo? preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default(CancellationToken))
+        public override string GetDocumentationCommentXml(CultureInfo? preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default)
         {
             return PEDocumentationCommentUtils.GetDocumentationComment(this, _containingType.ContainingPEModule, preferredCulture, cancellationToken, ref _lazyDocComment);
         }

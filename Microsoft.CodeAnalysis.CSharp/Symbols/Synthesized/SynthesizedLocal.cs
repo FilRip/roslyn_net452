@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override SyntaxToken IdentifierToken
         {
-            get { return default(SyntaxToken); }
+            get { return default; }
         }
 
         public override Symbol ContainingSymbol

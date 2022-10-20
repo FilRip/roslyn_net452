@@ -228,7 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             // CONSIDER: the check for default(SyntaxToken) could go in IsBetweenTokens,
             // but this is where it has special meaning.
             SyntaxToken firstIncludedToken = GetFirstIncludedToken(statement);
-            return firstIncludedToken != default(SyntaxToken) &&
+            return firstIncludedToken != default &&
                    IsBetweenTokens(position, firstIncludedToken, GetFirstExcludedToken(statement));
         }
 
@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 case SyntaxKind.DoStatement:
                     return ((DoStatementSyntax)statement).DoKeyword;
                 case SyntaxKind.EmptyStatement:
-                    return default(SyntaxToken); //The caller will have to check for this.
+                    return default; //The caller will have to check for this.
                 case SyntaxKind.FixedStatement:
                     return ((FixedStatementSyntax)statement).FixedKeyword;
                 case SyntaxKind.ForEachStatement:
@@ -396,7 +396,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     LocalFunctionStatementSyntax localFunctionStmt = (LocalFunctionStatementSyntax)statement;
                     if (localFunctionStmt.Body != null)
                         return GetFirstExcludedToken(localFunctionStmt.Body);
-                    if (localFunctionStmt.SemicolonToken != default(SyntaxToken))
+                    if (localFunctionStmt.SemicolonToken != default)
                         return localFunctionStmt.SemicolonToken;
                     return localFunctionStmt.ParameterList.GetLastToken();
                 default:

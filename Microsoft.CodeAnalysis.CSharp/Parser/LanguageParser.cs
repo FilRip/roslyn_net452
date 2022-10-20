@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             CSharp.CSharpSyntaxNode oldTree,
             IEnumerable<TextChangeRange> changes,
             LexerMode lexerMode = LexerMode.Syntax,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
             : base(lexer, lexerMode, oldTree, changes, allowModeReset: false,
                 preLexIfNotIncremental: true, cancellationToken: cancellationToken)
         {
@@ -4624,7 +4624,7 @@ tryAgain:
                 }
             }
 
-            return default(SyntaxTokenList);
+            return default;
         }
 
         private static bool WasFirstVariable(CSharp.Syntax.VariableDeclaratorSyntax variable)
@@ -4642,7 +4642,7 @@ tryAgain:
         {
             var parent = GetOldParent(old);
             var mods = GetOriginalModifiers(parent);
-            VariableFlags flags = default(VariableFlags);
+            VariableFlags flags = default;
             if (mods.Any(SyntaxKind.FixedKeyword))
             {
                 flags |= VariableFlags.Fixed;
@@ -5905,7 +5905,7 @@ tryAgain:
             NameSyntax explicitInterfaceName = null;
             SyntaxToken separator = null;
 
-            ResetPoint beforeIdentifierPoint = default(ResetPoint);
+            ResetPoint beforeIdentifierPoint = default;
             bool beforeIdentifierPointSet = false;
 
             try
@@ -10698,7 +10698,7 @@ tryAgain:
             var saveTerm = _termState;
             _termState |= TerminatorState.IsEndOfArgumentList;
 
-            SeparatedSyntaxListBuilder<ArgumentSyntax> list = default(SeparatedSyntaxListBuilder<ArgumentSyntax>);
+            SeparatedSyntaxListBuilder<ArgumentSyntax> list = default;
             try
             {
                 if (this.CurrentToken.Kind != closeKind && this.CurrentToken.Kind != SyntaxKind.SemicolonToken)

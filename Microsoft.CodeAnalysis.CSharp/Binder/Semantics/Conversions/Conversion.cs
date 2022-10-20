@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return _uncommonData?._nestedConversionsOpt ?? default(ImmutableArray<Conversion>);
+                return _uncommonData?._nestedConversionsOpt ?? default;
             }
         }
 
@@ -817,7 +817,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                var conversionResult = _uncommonData?._conversionResult ?? default(UserDefinedConversionResult);
+                var conversionResult = _uncommonData?._conversionResult ?? default;
 
                 switch (conversionResult.Kind)
                 {

@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var currentNodeOrToken = _oldTreeCursor.CurrentNodeOrToken;
                 if (!CanReuse(currentNodeOrToken))
                 {
-                    blendedNode = default(BlendedNode);
+                    blendedNode = default;
                     return false;
                 }
 

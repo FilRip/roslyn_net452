@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return this.SyntaxNode.AttributeLists;
                 }
 
-                return default(SyntaxList<AttributeListSyntax>);
+                return default;
             }
         }
 

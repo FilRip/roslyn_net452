@@ -631,7 +631,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 diagnostics.Add(ErrorCode.WRN_GlobalAliasDefn, location);
                             }
 
-                            if (usingDirective.StaticKeyword != default(SyntaxToken))
+                            if (usingDirective.StaticKeyword != default)
                             {
                                 diagnostics.Add(ErrorCode.ERR_NoAliasHere, location);
                             }
@@ -704,7 +704,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             if (imported.Kind == SymbolKind.Namespace)
                             {
 
-                                if (usingDirective.StaticKeyword != default(SyntaxToken))
+                                if (usingDirective.StaticKeyword != default)
                                 {
                                     diagnostics.Add(ErrorCode.ERR_BadUsingType, usingDirective.Name.Location, imported);
                                 }
@@ -719,7 +719,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             }
                             else if (imported.Kind == SymbolKind.NamedType)
                             {
-                                if (usingDirective.StaticKeyword == default(SyntaxToken))
+                                if (usingDirective.StaticKeyword == default)
                                 {
                                     diagnostics.Add(ErrorCode.ERR_BadUsingNamespace, usingDirective.Name.Location, imported);
                                 }

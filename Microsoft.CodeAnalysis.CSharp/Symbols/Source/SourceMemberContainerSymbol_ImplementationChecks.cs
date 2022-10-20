@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     if (ImmutableInterlocked.InterlockedCompareExchange(
                             ref _lazySynthesizedExplicitImplementations,
                             ComputeInterfaceImplementations(diagnostics, cancellationToken),
-                            default(ImmutableArray<SynthesizedExplicitImplementationForwardingMethod>)).IsDefault)
+                            default).IsDefault)
                     {
                         // Do not cancel from this point on.  We've assigned the member, so we must add
                         // the diagnostics.

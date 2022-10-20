@@ -186,9 +186,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                             rewrittenReceiver,
                             property,
                             ImmutableArray<BoundExpression>.Empty,
-                            default(ImmutableArray<RefKind>),
+                            default,
                             false,
-                            default(ImmutableArray<int>),
+                            default,
                             rewrittenRight,
                             type,
                             used);

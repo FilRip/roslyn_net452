@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     ImmutableInterlocked.InterlockedCompareExchange(
                         ref _lazyExplicitInterfaceImplementations,
                         ExplicitInterfaceHelpers.SubstituteExplicitInterfaceImplementations(OriginalDefinition.ExplicitInterfaceImplementations, _containingType.TypeSubstitution),
-                        default(ImmutableArray<EventSymbol>));
+                        default);
                 }
                 return _lazyExplicitInterfaceImplementations;
             }

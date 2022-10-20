@@ -334,7 +334,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var method = UnsafeGetSpecialTypeMethod(syntax, member);
 
-            return new BoundBinaryOperator(syntax, operatorKind, constantValueOpt: null, method, default(LookupResultKind), loweredLeft, loweredRight, type);
+            return new BoundBinaryOperator(syntax, operatorKind, constantValueOpt: null, method, default, loweredLeft, loweredRight, type);
         }
 
         /// <summary>

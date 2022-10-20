@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal sealed override TypeLayout Layout
         {
-            get { return default(TypeLayout); }
+            get { return default; }
         }
 
         internal bool HasStructLayoutAttribute

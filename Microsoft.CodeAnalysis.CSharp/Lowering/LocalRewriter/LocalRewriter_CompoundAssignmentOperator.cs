@@ -353,11 +353,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 transformedReceiver,
                 indexer,
                 rewrittenArguments,
-                argumentNamesOpt: default(ImmutableArray<string>),
+                argumentNamesOpt: default,
                 argumentRefKinds,
                 expanded: false,
-                argsToParamsOpt: default(ImmutableArray<int>),
-                defaultArguments: default(BitVector),
+                argsToParamsOpt: default,
+                defaultArguments: default,
                 indexerAccess.Type);
         }
 

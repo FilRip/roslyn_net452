@@ -501,7 +501,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             Binder.ProcessedFieldInitializers processedInitializers =
                                 (method.MethodKind == MethodKind.Constructor || method.IsScriptInitializer) ? processedInstanceInitializers :
                                 method.MethodKind == MethodKind.StaticConstructor ? processedStaticInitializers :
-                                default(Binder.ProcessedFieldInitializers);
+                                default;
 
                             CompileMethod(method, memberOrdinal, ref processedInitializers, synthesizedSubmissionFields, compilationState);
 

@@ -699,12 +699,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected BoundCall MakeQueryInvocation(CSharpSyntaxNode node, BoundExpression receiver, string methodName, BoundExpression arg, BindingDiagnosticBag diagnostics)
         {
-            return MakeQueryInvocation(node, receiver, methodName, default(SeparatedSyntaxList<TypeSyntax>), default(ImmutableArray<TypeWithAnnotations>), ImmutableArray.Create(arg), diagnostics);
+            return MakeQueryInvocation(node, receiver, methodName, default, default, ImmutableArray.Create(arg), diagnostics);
         }
 
         protected BoundCall MakeQueryInvocation(CSharpSyntaxNode node, BoundExpression receiver, string methodName, ImmutableArray<BoundExpression> args, BindingDiagnosticBag diagnostics)
         {
-            return MakeQueryInvocation(node, receiver, methodName, default(SeparatedSyntaxList<TypeSyntax>), default(ImmutableArray<TypeWithAnnotations>), args, diagnostics);
+            return MakeQueryInvocation(node, receiver, methodName, default, default, args, diagnostics);
         }
 
         protected BoundCall MakeQueryInvocation(CSharpSyntaxNode node, BoundExpression receiver, string methodName, TypeSyntax typeArgSyntax, TypeWithAnnotations typeArg, BindingDiagnosticBag diagnostics)

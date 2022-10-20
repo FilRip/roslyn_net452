@@ -918,7 +918,7 @@ outerDefault:
                     inferWithDynamic: inferWithDynamic,
                     completeResults: completeResults,
                     useSiteInfo: ref useSiteInfo)
-                : default(MemberResolutionResult<TMember>);
+                : default;
 
             var result = normalResult;
             if (!normalResult.Result.IsValid)
@@ -2577,7 +2577,7 @@ outerDefault:
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             bool okToDowngradeToNeither;
-            return BetterConversionTargetCore(null, type1, default(Conversion), type2, default(Conversion), ref useSiteInfo, out okToDowngradeToNeither, BetterConversionTargetRecursionLimit);
+            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out okToDowngradeToNeither, BetterConversionTargetRecursionLimit);
         }
 
         private BetterResult BetterConversionTargetCore(
@@ -2592,7 +2592,7 @@ outerDefault:
             }
 
             bool okToDowngradeToNeither;
-            return BetterConversionTargetCore(null, type1, default(Conversion), type2, default(Conversion), ref useSiteInfo, out okToDowngradeToNeither, betterConversionTargetRecursionLimit - 1);
+            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out okToDowngradeToNeither, betterConversionTargetRecursionLimit - 1);
         }
 
         private BetterResult BetterConversionTarget(
@@ -3035,7 +3035,7 @@ outerDefault:
                 }
             }
 
-            var refKinds = refs != null ? refs.ToImmutableAndFree() : default(ImmutableArray<RefKind>);
+            var refKinds = refs != null ? refs.ToImmutableAndFree() : default;
             return new EffectiveParameters(types.ToImmutableAndFree(), refKinds);
         }
 
@@ -3116,7 +3116,7 @@ outerDefault:
                 }
             }
 
-            var refKinds = anyRef ? refs.ToImmutable() : default(ImmutableArray<RefKind>);
+            var refKinds = anyRef ? refs.ToImmutable() : default;
             refs.Free();
             return new EffectiveParameters(types.ToImmutableAndFree(), refKinds);
         }
@@ -3430,7 +3430,7 @@ outerDefault:
 
             if (inferenceResult.Success)
             {
-                error = default(MemberAnalysisResult);
+                error = default;
                 return inferenceResult.InferredTypeArguments;
             }
 
@@ -3444,12 +3444,12 @@ outerDefault:
                 if (inferredFromFirstArgument.IsDefault)
                 {
                     error = MemberAnalysisResult.TypeInferenceExtensionInstanceArgumentFailed();
-                    return default(ImmutableArray<TypeWithAnnotations>);
+                    return default;
                 }
             }
 
             error = MemberAnalysisResult.TypeInferenceFailed();
-            return default(ImmutableArray<TypeWithAnnotations>);
+            return default;
         }
 
         private MemberAnalysisResult IsApplicable(
@@ -3572,7 +3572,7 @@ outerDefault:
             }
 
             MemberAnalysisResult result;
-            var conversionsArray = conversions != null ? conversions.ToImmutableAndFree() : default(ImmutableArray<Conversion>);
+            var conversionsArray = conversions != null ? conversions.ToImmutableAndFree() : default;
             if (badArguments != null)
             {
                 result = MemberAnalysisResult.BadArgumentConversions(argsToParameters, badArguments.ToImmutableAndFree(), conversionsArray);

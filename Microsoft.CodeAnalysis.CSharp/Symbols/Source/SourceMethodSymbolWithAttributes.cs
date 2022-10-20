@@ -1195,7 +1195,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var data = GetDecodedWellKnownAttributeData();
-                var result = (data != null) ? data.MethodImplAttributes : default(System.Reflection.MethodImplAttributes);
+                var result = (data != null) ? data.MethodImplAttributes : default;
 
                 if (this.ContainingType.IsComImport && this.MethodKind == MethodKind.Constructor)
                 {

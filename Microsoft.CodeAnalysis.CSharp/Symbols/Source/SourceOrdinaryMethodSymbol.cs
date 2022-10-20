@@ -460,7 +460,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
-        public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default(CancellationToken))
+        public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default)
         {
             ref var lazyDocComment = ref expandIncludes ? ref this.lazyExpandedDocComment : ref this.lazyDocComment;
             return SourceDocumentationCommentUtils.GetAndCacheDocumentationComment(SourcePartialImplementation ?? this, expandIncludes, ref lazyDocComment);
@@ -496,7 +496,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return this.GetSyntax().AttributeLists;
                 }
 
-                return default(SyntaxList<AttributeListSyntax>);
+                return default;
             }
         }
 
@@ -595,7 +595,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override bool IsDefinedInSourceTree(
             SyntaxTree tree,
             TextSpan? definedWithinSpan,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             // Since only the declaring (and not the implementing) part of a partial method appears in the member
             // list, we need to ensure we complete the implementation part when needed.

@@ -785,7 +785,7 @@ hasRelatedInterfaces:
             ArrayBuilder<TypeParameterDiagnosticInfo> diagnosticsBuilder,
             ArrayBuilder<TypeParameterDiagnosticInfo> nullabilityDiagnosticsBuilderOpt,
             ref ArrayBuilder<TypeParameterDiagnosticInfo> useSiteDiagnosticsBuilder,
-            BitVector skipParameters = default(BitVector))
+            BitVector skipParameters = default)
         {
             return CheckConstraints(
                 method,
@@ -823,7 +823,7 @@ hasRelatedInterfaces:
             ArrayBuilder<TypeParameterDiagnosticInfo> diagnosticsBuilder,
             ArrayBuilder<TypeParameterDiagnosticInfo> nullabilityDiagnosticsBuilderOpt,
             ref ArrayBuilder<TypeParameterDiagnosticInfo> useSiteDiagnosticsBuilder,
-            BitVector skipParameters = default(BitVector),
+            BitVector skipParameters = default,
             HashSet<TypeParameterSymbol> ignoreTypeConstraintsDependentOnTypeParametersOpt = null)
         {
 

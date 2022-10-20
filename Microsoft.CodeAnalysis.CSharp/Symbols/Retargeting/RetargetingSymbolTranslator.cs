@@ -1076,7 +1076,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 {
                     bool modifiersHaveChanged;
                     ImmutableArray<CustomModifier> newModifiers = this.RetargetModifiers(oldModifiers, out modifiersHaveChanged);
-                    ImmutableInterlocked.InterlockedCompareExchange(ref lazyCustomModifiers, newModifiers, default(ImmutableArray<CustomModifier>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref lazyCustomModifiers, newModifiers, default);
                 }
 
                 return lazyCustomModifiers;
@@ -1260,7 +1260,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     // Retarget the attributes
                     ImmutableArray<CSharpAttributeData> retargetedAttributes = this.RetargetAttributes(underlyingAttributes);
 
-                    ImmutableInterlocked.InterlockedCompareExchange(ref lazyCustomAttributes, retargetedAttributes, default(ImmutableArray<CSharpAttributeData>));
+                    ImmutableInterlocked.InterlockedCompareExchange(ref lazyCustomAttributes, retargetedAttributes, default);
                 }
 
                 return lazyCustomAttributes;

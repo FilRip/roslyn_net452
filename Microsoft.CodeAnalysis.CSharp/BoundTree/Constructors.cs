@@ -141,8 +141,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 isDelegateCall: isDelegateCall,
                 expanded: false,
                 invokedAsExtensionMethod: invokedAsExtensionMethod,
-                argsToParamsOpt: default(ImmutableArray<int>),
-                defaultArguments: default(BitVector),
+                argsToParamsOpt: default,
+                defaultArguments: default,
                 resultKind: resultKind,
                 originalMethodsOpt: originalMethods,
                 type: method.ReturnType,
@@ -185,8 +185,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     isDelegateCall: false,
                     expanded: false,
                     invokedAsExtensionMethod: false,
-                    argsToParamsOpt: default(ImmutableArray<int>),
-                    defaultArguments: default(BitVector),
+                    argsToParamsOpt: default,
+                    defaultArguments: default,
                     resultKind: LookupResultKind.Viable,
                     originalMethodsOpt: default,
                     type: method.ReturnType,
@@ -199,11 +199,11 @@ namespace Microsoft.CodeAnalysis.CSharp
     internal sealed partial class BoundObjectCreationExpression
     {
         public BoundObjectCreationExpression(SyntaxNode syntax, MethodSymbol constructor, params BoundExpression[] arguments)
-            : this(syntax, constructor, ImmutableArray.Create<BoundExpression>(arguments), default(ImmutableArray<string>), default(ImmutableArray<RefKind>), false, default(ImmutableArray<int>), default(BitVector), null, null, constructor.ContainingType)
+            : this(syntax, constructor, ImmutableArray.Create<BoundExpression>(arguments), default, default, false, default, default, null, null, constructor.ContainingType)
         {
         }
         public BoundObjectCreationExpression(SyntaxNode syntax, MethodSymbol constructor, ImmutableArray<BoundExpression> arguments)
-            : this(syntax, constructor, arguments, default(ImmutableArray<string>), default(ImmutableArray<RefKind>), false, default(ImmutableArray<int>), default(BitVector), null, null, constructor.ContainingType)
+            : this(syntax, constructor, arguments, default, default, false, default, default, null, null, constructor.ContainingType)
         {
         }
     }
@@ -227,8 +227,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 namedArguments,
                 refKinds,
                 expanded: false,
-                argsToParamsOpt: default(ImmutableArray<int>),
-                defaultArguments: default(BitVector),
+                argsToParamsOpt: default,
+                defaultArguments: default,
                 originalIndexers,
                 type: indexer.Type,
                 hasErrors: true);

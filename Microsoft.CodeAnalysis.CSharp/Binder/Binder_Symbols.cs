@@ -707,12 +707,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                                           typesArray,
                                           locationsArray,
                                           elementNames == null ?
-                                            default(ImmutableArray<string>) :
+                                            default :
                                             elementNames.ToImmutableAndFree(),
                                           this.Compilation,
                                           this.ShouldCheckConstraints,
                                           includeNullability: this.ShouldCheckConstraints && includeNullability,
-                                          errorPositions: default(ImmutableArray<bool>),
+                                          errorPositions: default,
                                           syntax: syntax,
                                           diagnostics: diagnostics);
         }
@@ -1673,7 +1673,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool suppressUseSiteDiagnostics,
             out bool wasError,
             NamespaceOrTypeSymbol qualifierOpt,
-            LookupOptions options = default(LookupOptions))
+            LookupOptions options = default)
         {
             Symbol symbol = resultSymbol(result, simpleName, arity, where, diagnostics, suppressUseSiteDiagnostics, out wasError, qualifierOpt, options);
 
@@ -2195,8 +2195,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private BestSymbolInfo GetBestSymbolInfo(ArrayBuilder<Symbol> symbols, out BestSymbolInfo secondBest)
         {
-            BestSymbolInfo first = default(BestSymbolInfo);
-            BestSymbolInfo second = default(BestSymbolInfo);
+            BestSymbolInfo first = default;
+            BestSymbolInfo second = default;
             var compilation = this.Compilation;
 
             for (int i = 0; i < symbols.Count; i++)

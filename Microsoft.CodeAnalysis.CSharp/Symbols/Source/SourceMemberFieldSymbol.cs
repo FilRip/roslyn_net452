@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else if (IsConst && !type.CanBeConst())
             {
-                SyntaxToken constToken = default(SyntaxToken);
+                SyntaxToken constToken = default;
                 foreach (var modifier in ModifiersTokenList)
                 {
                     if (modifier.Kind() == SyntaxKind.ConstKeyword)
@@ -359,7 +359,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return GetFieldDeclaration(this.SyntaxNode).AttributeLists;
                 }
 
-                return default(SyntaxList<AttributeListSyntax>);
+                return default;
             }
         }
 
@@ -564,7 +564,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return ConstantValueUtils.EvaluateFieldConstant(this, (EqualsValueClauseSyntax)VariableDeclaratorNode.Initializer, dependencies, earlyDecodingWellKnownAttributes, diagnostics);
         }
 
-        internal override bool IsDefinedInSourceTree(SyntaxTree tree, TextSpan? definedWithinSpan, CancellationToken cancellationToken = default(CancellationToken))
+        internal override bool IsDefinedInSourceTree(SyntaxTree tree, TextSpan? definedWithinSpan, CancellationToken cancellationToken = default)
         {
             if (this.SyntaxTree == tree)
             {

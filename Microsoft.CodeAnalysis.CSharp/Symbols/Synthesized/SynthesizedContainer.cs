@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             Name = name;
             TypeMap = TypeMap.Empty;
             _typeParameters = CreateTypeParameters(parameterCount, returnsVoid);
-            _constructedFromTypeParameters = default(ImmutableArray<TypeParameterSymbol>);
+            _constructedFromTypeParameters = default;
         }
 
         protected SynthesizedContainer(string name, MethodSymbol containingMethod)
@@ -206,9 +206,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             throw ExceptionUtilities.Unreachable;
         }
 
-        internal override AttributeUsageInfo GetAttributeUsageInfo() => default(AttributeUsageInfo);
+        internal override AttributeUsageInfo GetAttributeUsageInfo() => default;
 
-        internal override TypeLayout Layout => default(TypeLayout);
+        internal override TypeLayout Layout => default;
 
         internal override bool HasSpecialName => false;
 

@@ -69,9 +69,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         private NullableContextKind _lazyNullableContextValue;
 
         private NamedTypeSymbol _lazyBaseType = ErrorTypeSymbol.UnknownResultType;
-        private ImmutableArray<NamedTypeSymbol> _lazyInterfaces = default(ImmutableArray<NamedTypeSymbol>);
+        private ImmutableArray<NamedTypeSymbol> _lazyInterfaces = default;
         private NamedTypeSymbol _lazyDeclaredBaseType = ErrorTypeSymbol.UnknownResultType;
-        private ImmutableArray<NamedTypeSymbol> _lazyDeclaredInterfaces = default(ImmutableArray<NamedTypeSymbol>);
+        private ImmutableArray<NamedTypeSymbol> _lazyDeclaredInterfaces = default;
 
         private Tuple<CultureInfo, string> _lazyDocComment;
 
@@ -210,7 +210,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             catch (BadImageFormatException e)
             {
                 arity = 0;
-                genericParameterHandles = default(GenericParameterHandleCollection);
+                genericParameterHandles = default;
                 mrEx = e;
             }
         }
@@ -416,7 +416,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             if (_lazyInterfaces.IsDefault)
             {
-                ImmutableInterlocked.InterlockedCompareExchange(ref _lazyInterfaces, MakeAcyclicInterfaces(), default(ImmutableArray<NamedTypeSymbol>));
+                ImmutableInterlocked.InterlockedCompareExchange(ref _lazyInterfaces, MakeAcyclicInterfaces(), default);
             }
 
             return _lazyInterfaces;
@@ -463,7 +463,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             if (_lazyDeclaredInterfaces.IsDefault)
             {
-                ImmutableInterlocked.InterlockedCompareExchange(ref _lazyDeclaredInterfaces, MakeDeclaredInterfaces(), default(ImmutableArray<NamedTypeSymbol>));
+                ImmutableInterlocked.InterlockedCompareExchange(ref _lazyDeclaredInterfaces, MakeDeclaredInterfaces(), default);
             }
 
             return _lazyDeclaredInterfaces;
@@ -1734,7 +1734,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 .SelectAsArray(t => BaseTypeAnalysis.TypeDependsOn(t, this) ? CyclicInheritanceError(this, t) : t);
         }
 
-        public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default(CancellationToken))
+        public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default)
         {
             return PEDocumentationCommentUtils.GetDocumentationComment(this, ContainingPEModule, preferredCulture, cancellationToken, ref _lazyDocComment);
         }
@@ -2177,7 +2177,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             if (uncommon.lazyConditionalAttributeSymbols.IsDefault)
             {
                 ImmutableArray<string> conditionalSymbols = this.ContainingPEModule.Module.GetConditionalAttributeValues(_handle);
-                ImmutableInterlocked.InterlockedCompareExchange(ref uncommon.lazyConditionalAttributeSymbols, conditionalSymbols, default(ImmutableArray<string>));
+                ImmutableInterlocked.InterlockedCompareExchange(ref uncommon.lazyConditionalAttributeSymbols, conditionalSymbols, default);
             }
 
             return uncommon.lazyConditionalAttributeSymbols;

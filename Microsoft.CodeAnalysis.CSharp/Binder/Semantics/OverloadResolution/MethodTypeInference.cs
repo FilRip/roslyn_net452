@@ -259,7 +259,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Early out: if the method has no formal parameters then we know that inference will fail.
             if (formalParameterTypes.Length == 0)
             {
-                return new MethodTypeInferenceResult(false, default(ImmutableArray<TypeWithAnnotations>));
+                return new MethodTypeInferenceResult(false, default);
 
                 // UNDONE: OPTIMIZATION: We could check to see whether there is a type
                 // UNDONE: parameter which is never used in any formal parameter; if
@@ -2733,7 +2733,7 @@ OuterBreak:
             // We need at least one formal parameter type and at least one argument.
             if ((method.ParameterCount < 1) || (arguments.Length < 1))
             {
-                return default(ImmutableArray<TypeWithAnnotations>);
+                return default;
             }
 
 
@@ -2750,7 +2750,7 @@ OuterBreak:
 
             if (!inferrer.InferTypeArgumentsFromFirstArgument(ref useSiteInfo))
             {
-                return default(ImmutableArray<TypeWithAnnotations>);
+                return default;
             }
 
             return inferrer.GetInferredTypeArguments();

@@ -320,7 +320,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             _leadingTriviaCache.Clear();
             this.LexSyntaxTrivia(afterFirstToken: TextWindow.Position > 0, isTrailing: false, triviaList: ref _leadingTriviaCache);
-            return new SyntaxTriviaList(default(Microsoft.CodeAnalysis.SyntaxToken),
+            return new SyntaxTriviaList(default,
                 _leadingTriviaCache.ToListNode(), position: 0, index: 0);
         }
 
@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             _trailingTriviaCache.Clear();
             this.LexSyntaxTrivia(afterFirstToken: true, isTrailing: true, triviaList: ref _trailingTriviaCache);
-            return new SyntaxTriviaList(default(Microsoft.CodeAnalysis.SyntaxToken),
+            return new SyntaxTriviaList(default,
                 _trailingTriviaCache.ToListNode(), position: 0, index: 0);
         }
 
@@ -2777,7 +2777,7 @@ top:
         private SyntaxToken LexDirectiveToken()
         {
             this.Start();
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
             this.ScanDirectiveToken(ref info);
             var errors = this.GetErrors(leadingTriviaWidth: 0);
             var trailing = this.LexDirectiveTrailingTrivia(info.Kind == SyntaxKind.EndOfDirectiveToken);
@@ -3066,7 +3066,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlToken()
         {
-            TokenInfo xmlTokenInfo = default(TokenInfo);
+            TokenInfo xmlTokenInfo = default;
 
             SyntaxListBuilder leading = null;
             this.LexXmlDocCommentLeadingTrivia(ref leading);
@@ -3417,7 +3417,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlElementTagToken()
         {
-            TokenInfo tagInfo = default(TokenInfo);
+            TokenInfo tagInfo = default;
 
             SyntaxListBuilder leading = null;
             this.LexXmlDocCommentLeadingTriviaWithWhitespace(ref leading);
@@ -3597,7 +3597,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlAttributeTextToken()
         {
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
 
             SyntaxListBuilder leading = null;
             this.LexXmlDocCommentLeadingTrivia(ref leading);
@@ -3747,7 +3747,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlCharacter()
         {
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
 
             //TODO: Dev11 allows C# comments and newlines in cref trivia (DevDiv #530523).
             SyntaxListBuilder leading = null;
@@ -3801,7 +3801,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlCrefOrNameToken()
         {
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
 
             //TODO: Dev11 allows C# comments and newlines in cref trivia (DevDiv #530523).
             SyntaxListBuilder leading = null;
@@ -4208,7 +4208,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlCDataSectionTextToken()
         {
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
 
             SyntaxListBuilder leading = null;
             this.LexXmlDocCommentLeadingTrivia(ref leading);
@@ -4328,7 +4328,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlCommentTextToken()
         {
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
 
             SyntaxListBuilder leading = null;
             this.LexXmlDocCommentLeadingTrivia(ref leading);
@@ -4456,7 +4456,7 @@ top:
         /// </summary>
         private SyntaxToken LexXmlProcessingInstructionTextToken()
         {
-            TokenInfo info = default(TokenInfo);
+            TokenInfo info = default;
 
             SyntaxListBuilder leading = null;
             this.LexXmlDocCommentLeadingTrivia(ref leading);

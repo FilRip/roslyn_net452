@@ -455,7 +455,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var invokeMethod = type.DelegateInvokeMethod();
             if ((object)invokeMethod == null)
             {
-                return default(ImmutableArray<ParameterSymbol>);
+                return default;
             }
             return invokeMethod.Parameters;
         }
@@ -481,7 +481,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             // source not a tuple
-            elementTypes = default(ImmutableArray<TypeWithAnnotations>);
+            elementTypes = default;
             return false;
         }
 

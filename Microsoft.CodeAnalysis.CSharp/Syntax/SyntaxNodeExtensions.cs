@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         continue;
 
                     default:
-                        return default(SyntaxToken);
+                        return default;
                 }
             }
         }

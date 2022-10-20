@@ -135,14 +135,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="options">Options to control behavior.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        internal abstract SymbolInfo GetSymbolInfoWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract SymbolInfo GetSymbolInfoWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets symbol information about the 'Add' method corresponding to an expression syntax <paramref name="node"/> within collection initializer.
         /// This is the worker function that is overridden in various derived kinds of Semantic Models. It can assume that 
         /// CheckSyntaxNode has already been called and the <paramref name="node"/> is in the right place in the syntax tree.
         /// </summary>
-        internal abstract SymbolInfo GetCollectionInitializerSymbolInfoWorker(InitializerExpressionSyntax collectionInitializer, ExpressionSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract SymbolInfo GetCollectionInitializerSymbolInfoWorker(InitializerExpressionSyntax collectionInitializer, ExpressionSyntax node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets type information about a syntax node. This is overridden by various specializations of SemanticModel.
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        internal abstract CSharpTypeInfo GetTypeInfoWorker(CSharpSyntaxNode node, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract CSharpTypeInfo GetTypeInfoWorker(CSharpSyntaxNode node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Binds the provided expression in the given context.
@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="options"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        internal abstract ImmutableArray<Symbol> GetMemberGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract ImmutableArray<Symbol> GetMemberGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets a list of indexer symbols for a syntax node. This is overridden by various specializations of SemanticModel.
@@ -183,7 +183,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="options"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        internal abstract ImmutableArray<IPropertySymbol> GetIndexerGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract ImmutableArray<IPropertySymbol> GetIndexerGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the constant value for a syntax node. This is overridden by various specializations of SemanticModel.
@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        internal abstract Optional<object> GetConstantValueWorker(CSharpSyntaxNode node, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract Optional<object> GetConstantValueWorker(CSharpSyntaxNode node, CancellationToken cancellationToken = default);
 
         #endregion Abstract worker methods
 
@@ -276,7 +276,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 throw new ArgumentNullException(nameof(expression));
             }
 
-            crefSymbols = default(ImmutableArray<Symbol>);
+            crefSymbols = default;
 
             expression = SyntaxFactory.GetStandaloneExpression(expression);
 
@@ -481,17 +481,17 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Gets the semantic information for an ordering clause in an orderby query clause.
         /// </summary>
-        public abstract SymbolInfo GetSymbolInfo(OrderingSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract SymbolInfo GetSymbolInfo(OrderingSyntax node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the semantic information associated with a select or group clause.
         /// </summary>
-        public abstract SymbolInfo GetSymbolInfo(SelectOrGroupClauseSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract SymbolInfo GetSymbolInfo(SelectOrGroupClauseSyntax node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the SymbolInfo for the Deconstruct method used for a deconstruction pattern clause, if any.
         /// </summary>
-        public SymbolInfo GetSymbolInfo(PositionalPatternClauseSyntax node, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetSymbolInfo(PositionalPatternClauseSyntax node, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(node);
             return this.GetSymbolInfoWorker(node, SymbolInfoOptions.DefaultOptions, cancellationToken);
@@ -508,7 +508,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// unambiguously binds to a single type that has a constructor. If C ambiguously binds to multiple
         /// types, or C binds to a static class, then type(s) are returned.
         /// </summary>
-        public SymbolInfo GetSymbolInfo(ExpressionSyntax expression, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetSymbolInfo(ExpressionSyntax expression, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(expression);
 
@@ -590,7 +590,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Returns what 'Add' method symbol(s), if any, corresponds to the given expression syntax 
         /// within <see cref="BaseObjectCreationExpressionSyntax.Initializer"/>.
         /// </summary>
-        public SymbolInfo GetCollectionInitializerSymbolInfo(ExpressionSyntax expression, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetCollectionInitializerSymbolInfo(ExpressionSyntax expression, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(expression);
 
@@ -627,7 +627,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="constructorInitializer">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public SymbolInfo GetSymbolInfo(ConstructorInitializerSyntax constructorInitializer, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetSymbolInfo(ConstructorInitializerSyntax constructorInitializer, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(constructorInitializer);
 
@@ -641,7 +641,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="constructorInitializer">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public SymbolInfo GetSymbolInfo(PrimaryConstructorBaseTypeSyntax constructorInitializer, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetSymbolInfo(PrimaryConstructorBaseTypeSyntax constructorInitializer, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(constructorInitializer);
 
@@ -655,7 +655,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="attributeSyntax">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public SymbolInfo GetSymbolInfo(AttributeSyntax attributeSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetSymbolInfo(AttributeSyntax attributeSyntax, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(attributeSyntax);
 
@@ -667,7 +667,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Gets the semantic information associated with a documentation comment cref.
         /// </summary>
-        public SymbolInfo GetSymbolInfo(CrefSyntax crefSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        public SymbolInfo GetSymbolInfo(CrefSyntax crefSyntax, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(crefSyntax);
 
@@ -903,7 +903,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="constructorInitializer">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public TypeInfo GetTypeInfo(ConstructorInitializerSyntax constructorInitializer, CancellationToken cancellationToken = default(CancellationToken))
+        public TypeInfo GetTypeInfo(ConstructorInitializerSyntax constructorInitializer, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(constructorInitializer);
 
@@ -912,9 +912,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 : CSharpTypeInfo.None;
         }
 
-        public abstract TypeInfo GetTypeInfo(SelectOrGroupClauseSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract TypeInfo GetTypeInfo(SelectOrGroupClauseSyntax node, CancellationToken cancellationToken = default);
 
-        public TypeInfo GetTypeInfo(PatternSyntax pattern, CancellationToken cancellationToken = default(CancellationToken))
+        public TypeInfo GetTypeInfo(PatternSyntax pattern, CancellationToken cancellationToken = default)
         {
             while (pattern is ParenthesizedPatternSyntax pp)
                 pattern = pp.Pattern;
@@ -928,7 +928,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="expression">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public TypeInfo GetTypeInfo(ExpressionSyntax expression, CancellationToken cancellationToken = default(CancellationToken))
+        public TypeInfo GetTypeInfo(ExpressionSyntax expression, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(expression);
 
@@ -967,7 +967,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="attributeSyntax">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public TypeInfo GetTypeInfo(AttributeSyntax attributeSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        public TypeInfo GetTypeInfo(AttributeSyntax attributeSyntax, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(attributeSyntax);
 
@@ -979,7 +979,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Gets the conversion that occurred between the expression's type and type implied by the expression's context.
         /// </summary>
-        public Conversion GetConversion(SyntaxNode expression, CancellationToken cancellationToken = default(CancellationToken))
+        public Conversion GetConversion(SyntaxNode expression, CancellationToken cancellationToken = default)
         {
             var csnode = (CSharpSyntaxNode)expression;
 
@@ -1054,7 +1054,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="expression">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public ImmutableArray<ISymbol> GetMemberGroup(ExpressionSyntax expression, CancellationToken cancellationToken = default(CancellationToken))
+        public ImmutableArray<ISymbol> GetMemberGroup(ExpressionSyntax expression, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(expression);
 
@@ -1068,7 +1068,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="attribute">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public ImmutableArray<ISymbol> GetMemberGroup(AttributeSyntax attribute, CancellationToken cancellationToken = default(CancellationToken))
+        public ImmutableArray<ISymbol> GetMemberGroup(AttributeSyntax attribute, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(attribute);
 
@@ -1082,7 +1082,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="initializer">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public ImmutableArray<ISymbol> GetMemberGroup(ConstructorInitializerSyntax initializer, CancellationToken cancellationToken = default(CancellationToken))
+        public ImmutableArray<ISymbol> GetMemberGroup(ConstructorInitializerSyntax initializer, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(initializer);
 
@@ -1105,7 +1105,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// If the receiver is an indexer expression, the list will contain the indexers that could be applied to the result
         /// of accessing the indexer, not the set of candidates that were considered during construction of the indexer expression.
         /// </remarks>
-        public ImmutableArray<IPropertySymbol> GetIndexerGroup(ExpressionSyntax expression, CancellationToken cancellationToken = default(CancellationToken))
+        public ImmutableArray<IPropertySymbol> GetIndexerGroup(ExpressionSyntax expression, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(expression);
 
@@ -1118,13 +1118,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         #region GetConstantValue
 
-        public Optional<object> GetConstantValue(ExpressionSyntax expression, CancellationToken cancellationToken = default(CancellationToken))
+        public Optional<object> GetConstantValue(ExpressionSyntax expression, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(expression);
 
             return CanGetSemanticInfo(expression)
                 ? this.GetConstantValueWorker(expression, cancellationToken)
-                : default(Optional<object>);
+                : default;
         }
 
         #endregion GetConstantValue
@@ -1132,13 +1132,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Gets the semantic information associated with a query clause.
         /// </summary>
-        public abstract QueryClauseInfo GetQueryClauseInfo(QueryClauseSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract QueryClauseInfo GetQueryClauseInfo(QueryClauseSyntax node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// If <paramref name="nameSyntax"/> resolves to an alias name, return the AliasSymbol corresponding
         /// to A. Otherwise return null.
         /// </summary>
-        public IAliasSymbol GetAliasInfo(IdentifierNameSyntax nameSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        public IAliasSymbol GetAliasInfo(IdentifierNameSyntax nameSyntax, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(nameSyntax);
 
@@ -1266,7 +1266,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else if (fullStart == fullEnd && position == fullEnd)
             {
                 // The root is an empty span and isn't the full compilation unit. No other choice here.
-                token = default(SyntaxToken);
+                token = default;
                 return fullStart;
             }
 
@@ -2833,7 +2833,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// NOTE:   (3) BaseFieldDeclarationSyntax or its subtypes as these declarations can contain multiple variable declarators.
         /// NOTE:       GetDeclaredSymbol should be called on the variable declarators directly.
         /// </remarks>
-        public abstract ISymbol GetDeclaredSymbol(MemberDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ISymbol GetDeclaredSymbol(MemberDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a local function declaration syntax, get the corresponding symbol.
@@ -2841,7 +2841,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a member.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract ISymbol GetDeclaredSymbol(LocalFunctionStatementSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ISymbol GetDeclaredSymbol(LocalFunctionStatementSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a compilation unit syntax, get the corresponding Simple Program entry point symbol.
@@ -2849,7 +2849,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The compilation unit that declares the entry point member.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IMethodSymbol GetDeclaredSymbol(CompilationUnitSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IMethodSymbol GetDeclaredSymbol(CompilationUnitSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a namespace declaration syntax node, get the corresponding namespace symbol for
@@ -2858,7 +2858,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a namespace.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The namespace symbol that was declared by the namespace declaration.</returns>
-        public abstract INamespaceSymbol GetDeclaredSymbol(NamespaceDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract INamespaceSymbol GetDeclaredSymbol(NamespaceDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a type declaration, get the corresponding type symbol.
@@ -2869,7 +2869,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <remarks>
         /// NOTE:   We have no GetDeclaredSymbol overloads for subtypes of BaseTypeDeclarationSyntax as all of them return a NamedTypeSymbol.
         /// </remarks>
-        public abstract INamedTypeSymbol GetDeclaredSymbol(BaseTypeDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract INamedTypeSymbol GetDeclaredSymbol(BaseTypeDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a delegate declaration, get the corresponding type symbol.
@@ -2877,7 +2877,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a delegate.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The type symbol that was declared.</returns>
-        public abstract INamedTypeSymbol GetDeclaredSymbol(DelegateDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract INamedTypeSymbol GetDeclaredSymbol(DelegateDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a enum member declaration, get the corresponding field symbol.
@@ -2885,7 +2885,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares an enum member.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IFieldSymbol GetDeclaredSymbol(EnumMemberDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IFieldSymbol GetDeclaredSymbol(EnumMemberDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a base method declaration syntax, get the corresponding method symbol.
@@ -2896,7 +2896,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <remarks>
         /// NOTE:   We have no GetDeclaredSymbol overloads for subtypes of BaseMethodDeclarationSyntax as all of them return a MethodSymbol.
         /// </remarks>
-        public abstract IMethodSymbol GetDeclaredSymbol(BaseMethodDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IMethodSymbol GetDeclaredSymbol(BaseMethodDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         #region GetDeclaredSymbol overloads for BasePropertyDeclarationSyntax and its subtypes
 
@@ -2906,7 +2906,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a property, indexer or an event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract ISymbol GetDeclaredSymbol(BasePropertyDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ISymbol GetDeclaredSymbol(BasePropertyDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node that declares a property, get the corresponding declared symbol.
@@ -2914,7 +2914,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a property.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IPropertySymbol GetDeclaredSymbol(PropertyDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IPropertySymbol GetDeclaredSymbol(PropertyDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node that declares an indexer, get the corresponding declared symbol.
@@ -2922,7 +2922,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares an indexer.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IPropertySymbol GetDeclaredSymbol(IndexerDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IPropertySymbol GetDeclaredSymbol(IndexerDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node that declares a (custom) event, get the corresponding event symbol.
@@ -2930,7 +2930,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a event.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IEventSymbol GetDeclaredSymbol(EventDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IEventSymbol GetDeclaredSymbol(EventDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         #endregion
 
@@ -2995,7 +2995,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declaratorSyntax">The syntax node that declares a property.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IPropertySymbol GetDeclaredSymbol(AnonymousObjectMemberDeclaratorSyntax declaratorSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IPropertySymbol GetDeclaredSymbol(AnonymousObjectMemberDeclaratorSyntax declaratorSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node of anonymous object creation expression, get the anonymous object type symbol.
@@ -3003,7 +3003,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declaratorSyntax">The syntax node that declares an anonymous object.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract INamedTypeSymbol GetDeclaredSymbol(AnonymousObjectCreationExpressionSyntax declaratorSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract INamedTypeSymbol GetDeclaredSymbol(AnonymousObjectCreationExpressionSyntax declaratorSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node of a tuple expression, get the tuple type symbol.
@@ -3011,7 +3011,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declaratorSyntax">The tuple expression node.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract INamedTypeSymbol GetDeclaredSymbol(TupleExpressionSyntax declaratorSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract INamedTypeSymbol GetDeclaredSymbol(TupleExpressionSyntax declaratorSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node of an argument expression, get the declared symbol.
@@ -3024,7 +3024,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Example:  var x = (Alice: 1, Bob: 2);
         ///           ArgumentSyntax "Alice: 1" declares a tuple element field "(int Alice, int Bob).Alice"
         /// </remarks>
-        public abstract ISymbol GetDeclaredSymbol(ArgumentSyntax declaratorSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ISymbol GetDeclaredSymbol(ArgumentSyntax declaratorSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node that declares a property or member accessor, get the corresponding
@@ -3033,7 +3033,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares an accessor.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IMethodSymbol GetDeclaredSymbol(AccessorDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IMethodSymbol GetDeclaredSymbol(AccessorDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a syntax node that declares an expression body, get the corresponding symbol.
@@ -3041,7 +3041,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares an expression body.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract IMethodSymbol GetDeclaredSymbol(ArrowExpressionClauseSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IMethodSymbol GetDeclaredSymbol(ArrowExpressionClauseSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a variable declarator syntax, get the corresponding symbol.
@@ -3049,7 +3049,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a variable.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract ISymbol GetDeclaredSymbol(VariableDeclaratorSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ISymbol GetDeclaredSymbol(VariableDeclaratorSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a variable designation syntax, get the corresponding symbol.
@@ -3057,7 +3057,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a variable.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public abstract ISymbol GetDeclaredSymbol(SingleVariableDesignationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ISymbol GetDeclaredSymbol(SingleVariableDesignationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a labeled statement syntax, get the corresponding label symbol.
@@ -3065,7 +3065,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node of the labeled statement.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The label symbol for that label.</returns>
-        public abstract ILabelSymbol GetDeclaredSymbol(LabeledStatementSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ILabelSymbol GetDeclaredSymbol(LabeledStatementSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a switch label syntax, get the corresponding label symbol.
@@ -3073,7 +3073,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node of the switch label.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The label symbol for that label.</returns>
-        public abstract ILabelSymbol GetDeclaredSymbol(SwitchLabelSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ILabelSymbol GetDeclaredSymbol(SwitchLabelSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a using declaration get the corresponding symbol for the using alias that was
@@ -3087,7 +3087,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// previously declared in the same scope, the result is a newly-constructed AliasSymbol (i.e. not one from the
         /// symbol table).
         /// </remarks>
-        public abstract IAliasSymbol GetDeclaredSymbol(UsingDirectiveSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IAliasSymbol GetDeclaredSymbol(UsingDirectiveSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given an extern alias declaration get the corresponding symbol for the alias that was introduced.
@@ -3095,7 +3095,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The alias symbol that was declared, or null if a duplicate alias symbol was declared.</returns>
-        public abstract IAliasSymbol GetDeclaredSymbol(ExternAliasDirectiveSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IAliasSymbol GetDeclaredSymbol(ExternAliasDirectiveSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a parameter declaration syntax node, get the corresponding symbol.
@@ -3103,7 +3103,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a parameter.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The parameter that was declared.</returns>
-        public abstract IParameterSymbol GetDeclaredSymbol(ParameterSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IParameterSymbol GetDeclaredSymbol(ParameterSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a base field declaration syntax, get the corresponding symbols.
@@ -3111,12 +3111,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares one or more fields or events.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbols that were declared.</returns>
-        internal abstract ImmutableArray<ISymbol> GetDeclaredSymbols(BaseFieldDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        internal abstract ImmutableArray<ISymbol> GetDeclaredSymbols(BaseFieldDeclarationSyntax declarationSyntax, CancellationToken cancellationToken = default);
 
         protected ParameterSymbol GetParameterSymbol(
             ImmutableArray<ParameterSymbol> parameters,
             ParameterSyntax parameter,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             foreach (var symbol in parameters)
             {
@@ -3141,7 +3141,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="typeParameter"></param>
-        public abstract ITypeParameterSymbol GetDeclaredSymbol(TypeParameterSyntax typeParameter, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ITypeParameterSymbol GetDeclaredSymbol(TypeParameterSyntax typeParameter, CancellationToken cancellationToken = default);
 
         internal BinderFlags GetSemanticModelBinderFlags()
         {
@@ -3155,7 +3155,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="forEachStatement"></param>
-        public ILocalSymbol GetDeclaredSymbol(ForEachStatementSyntax forEachStatement, CancellationToken cancellationToken = default(CancellationToken))
+        public ILocalSymbol GetDeclaredSymbol(ForEachStatementSyntax forEachStatement, CancellationToken cancellationToken = default)
         {
             Binder enclosingBinder = this.GetEnclosingBinder(GetAdjustedNodePosition(forEachStatement));
 
@@ -3192,7 +3192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="catchDeclaration"></param>
-        public ILocalSymbol GetDeclaredSymbol(CatchDeclarationSyntax catchDeclaration, CancellationToken cancellationToken = default(CancellationToken))
+        public ILocalSymbol GetDeclaredSymbol(CatchDeclarationSyntax catchDeclaration, CancellationToken cancellationToken = default)
         {
             CSharpSyntaxNode catchClause = catchDeclaration.Parent; //Syntax->Binder map is keyed on clause, not decl
             Binder enclosingBinder = this.GetEnclosingBinder(GetAdjustedNodePosition(catchClause));
@@ -3217,17 +3217,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                 : null;
         }
 
-        public abstract IRangeVariableSymbol GetDeclaredSymbol(QueryClauseSyntax queryClause, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IRangeVariableSymbol GetDeclaredSymbol(QueryClauseSyntax queryClause, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get the query range variable declared in a join into clause.
         /// </summary>
-        public abstract IRangeVariableSymbol GetDeclaredSymbol(JoinIntoClauseSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IRangeVariableSymbol GetDeclaredSymbol(JoinIntoClauseSyntax node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get the query range variable declared in a query continuation clause.
         /// </summary>
-        public abstract IRangeVariableSymbol GetDeclaredSymbol(QueryContinuationSyntax node, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IRangeVariableSymbol GetDeclaredSymbol(QueryContinuationSyntax node, CancellationToken cancellationToken = default);
 
         // Get the symbols and possible method or property group associated with a bound node, as
         // they should be exposed through GetSemanticInfo.
@@ -4615,7 +4615,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var filteredMethodBuilder = ArrayBuilder<MethodSymbol>.GetInstance();
             foreach (var method in FilterOverriddenOrHiddenMethods(methods))
             {
-                AddReducedAndFilteredMethodGroupSymbol(methodBuilder, filteredMethodBuilder, method, default(ImmutableArray<TypeWithAnnotations>), extensionThisType, compilation);
+                AddReducedAndFilteredMethodGroupSymbol(methodBuilder, filteredMethodBuilder, method, default, extensionThisType, compilation);
             }
             methodBuilder.Free();
             return filteredMethodBuilder.ToImmutableAndFree();
@@ -4744,7 +4744,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public new ISymbol GetEnclosingSymbol(
             int position,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             position = CheckAndAdjustPosition(position);
             var binder = GetEnclosingBinder(position);
@@ -4987,7 +4987,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="declarationSyntax">The syntax node that declares a tuple element.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol that was declared.</returns>
-        public ISymbol GetDeclaredSymbol(TupleElementSyntax declarationSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        public ISymbol GetDeclaredSymbol(TupleElementSyntax declarationSyntax, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(declarationSyntax);
 
@@ -4999,7 +4999,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return null;
         }
 
-        protected sealed override ImmutableArray<ISymbol> GetDeclaredSymbolsCore(SyntaxNode declaration, CancellationToken cancellationToken = default(CancellationToken))
+        protected sealed override ImmutableArray<ISymbol> GetDeclaredSymbolsCore(SyntaxNode declaration, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -5161,7 +5161,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return node is ExpressionSyntax expression
                 ? GetConstantValue(expression, cancellationToken)
-                : default(Optional<object>);
+                : default;
         }
 
         protected sealed override ISymbol GetEnclosingSymbolCore(int position, CancellationToken cancellationToken)

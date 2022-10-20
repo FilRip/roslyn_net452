@@ -746,7 +746,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if ((_flags & ParameterAttributes.HasFieldMarshal) == 0)
                 {
-                    return default(ImmutableArray<byte>);
+                    return default;
                 }
 
                 return _moduleSymbol.Module.GetMarshallingDescriptor(_handle);
@@ -808,7 +808,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 bool filterOutParamArrayAttribute = (!_lazyIsParams.HasValue() || _lazyIsParams.Value());
 
                 ConstantValue defaultValue = this.ExplicitDefaultConstantValue;
-                AttributeDescription filterOutConstantAttributeDescription = default(AttributeDescription);
+                AttributeDescription filterOutConstantAttributeDescription = default;
 
                 if ((object)defaultValue != null)
                 {

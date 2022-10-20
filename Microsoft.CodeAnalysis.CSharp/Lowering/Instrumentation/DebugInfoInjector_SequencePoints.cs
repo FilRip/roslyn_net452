@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 startPos = startOpt.First().SpanStart;
             }
-            else if (startFallbackOpt != default(SyntaxNodeOrToken))
+            else if (startFallbackOpt != default)
             {
                 startPos = startFallbackOpt.SpanStart;
             }
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             int endPos;
-            if (endOpt != default(SyntaxNodeOrToken))
+            if (endOpt != default)
             {
                 endPos = GetEndPosition(endOpt);
             }

@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             where TParameterSymbol : ParameterSymbol
             where TOwningSymbol : Symbol
         {
-            arglistToken = default(SyntaxToken);
+            arglistToken = default;
 
             int parameterIndex = 0;
             int firstDefault = -1;
@@ -204,7 +204,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var methodOwner = owner as MethodSymbol;
                 var typeParameters = (object)methodOwner != null ?
                     methodOwner.TypeParameters :
-                    default(ImmutableArray<TypeParameterSymbol>);
+                    default;
 
                 bool allowShadowingNames = binder.Compilation.IsFeatureEnabled(MessageID.IDS_FeatureNameShadowingInNestedFunctions) &&
                     methodOwner?.MethodKind == MethodKind.LocalFunction;
@@ -676,9 +676,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var refKind = RefKind.None;
 
-            refnessKeyword = default(SyntaxToken);
-            paramsKeyword = default(SyntaxToken);
-            thisKeyword = default(SyntaxToken);
+            refnessKeyword = default;
+            paramsKeyword = default;
+            thisKeyword = default;
 
             foreach (var modifier in modifiers)
             {

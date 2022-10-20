@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         {
             get
             {
-                return default(TypeDefinitionHandle);
+                return default;
             }
         }
 

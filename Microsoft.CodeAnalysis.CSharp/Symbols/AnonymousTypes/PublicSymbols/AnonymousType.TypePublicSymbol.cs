@@ -275,7 +275,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             internal override TypeLayout Layout
             {
-                get { return default(TypeLayout); }
+                get { return default; }
             }
 
             internal override CharSet MarshallingCharSet

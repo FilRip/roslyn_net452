@@ -1007,7 +1007,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (typeArguments.IsDefault)
             {
-                modifiedArguments = default(ImmutableArray<TypeWithAnnotations>);
+                modifiedArguments = default;
             }
             else
             {

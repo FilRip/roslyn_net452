@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static LoweredDynamicOperation Bad(TypeSymbol resultType, ImmutableArray<BoundExpression> children)
         {
             var bad = new BoundBadExpression(children[0].Syntax, LookupResultKind.Empty, ImmutableArray<Symbol?>.Empty, children, resultType);
-            return new LoweredDynamicOperation(null, null, bad, resultType, default(ImmutableArray<LocalSymbol>));
+            return new LoweredDynamicOperation(null, null, bad, resultType, default);
         }
 
         public BoundExpression ToExpression()
