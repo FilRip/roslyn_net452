@@ -225,7 +225,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Get
         End Property
 
-        Public Overrides ReadOnly Property CommonAnonymousTypeManager As CommonAnonymousTypeManager
+        Protected Overrides ReadOnly Property CommonAnonymousTypeManager As CommonAnonymousTypeManager
             Get
                 Return Me._anonymousTypeManager
             End Get
@@ -466,7 +466,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
         End Sub
 
-        Public Overrides Sub ValidateDebugEntryPoint(debugEntryPoint As IMethodSymbol, diagnostics As DiagnosticBag)
+        Protected Overrides Sub ValidateDebugEntryPoint(debugEntryPoint As IMethodSymbol, diagnostics As DiagnosticBag)
             Debug.Assert(debugEntryPoint IsNot Nothing)
 
             ' Debug entry point has to be a method definition from this compilation.
@@ -792,7 +792,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Friend Shadows ReadOnly Property ScriptCompilationInfo As VisualBasicScriptCompilationInfo
 
-        Public Overrides ReadOnly Property CommonScriptCompilationInfo As ScriptCompilationInfo
+        Protected Overrides ReadOnly Property CommonScriptCompilationInfo As ScriptCompilationInfo
             Get
                 Return ScriptCompilationInfo
             End Get
@@ -804,7 +804,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Get
         End Property
 
-        Public Overrides Function HasSubmissionResult() As Boolean
+        Protected Overrides Function HasSubmissionResult() As Boolean
             Debug.Assert(IsSubmission)
 
             ' submission can be empty or comprise of a script file
@@ -1258,7 +1258,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 #End Region
 
 #Region "References"
-        Public Overrides Function CommonGetBoundReferenceManager() As CommonReferenceManager
+        Protected Overrides Function CommonGetBoundReferenceManager() As CommonReferenceManager
             Return GetBoundReferenceManager()
         End Function
 
@@ -1284,7 +1284,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Get
         End Property
 
-        Public Overrides ReadOnly Property ReferenceDirectiveMap As IDictionary(Of (path As String, content As String), MetadataReference)
+        Protected Overrides ReadOnly Property ReferenceDirectiveMap As IDictionary(Of (path As String, content As String), MetadataReference)
             Get
                 Return GetBoundReferenceManager().ReferenceDirectiveMap
             End Get

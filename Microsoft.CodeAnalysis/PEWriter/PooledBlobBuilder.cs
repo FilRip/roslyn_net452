@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Microsoft.Cci
 {
-    internal sealed class PooledBlobBuilder : BlobBuilder, IDisposable
+    public sealed class PooledBlobBuilder : BlobBuilder, IDisposable
     {
         private const int PoolSize = 128;
         private const int ChunkSize = 1024;

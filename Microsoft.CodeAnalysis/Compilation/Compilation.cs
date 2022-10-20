@@ -3150,7 +3150,7 @@ namespace Microsoft.CodeAnalysis
             MarkImportDirectiveAsUsed(node.SyntaxTree, node.Span.Start);
         }
 
-        internal void MarkImportDirectiveAsUsed(SyntaxTree? syntaxTree, int position)
+        public void MarkImportDirectiveAsUsed(SyntaxTree? syntaxTree, int position)
         {
             // Optimization: Don't initialize TreeToUsedImportDirectivesMap in submissions.
             if (!IsSubmission && syntaxTree != null)
@@ -3209,7 +3209,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Return the lexically first of two locations.
         /// </summary>
-        internal TLocation FirstSourceLocation<TLocation>(TLocation first, TLocation second)
+        public TLocation FirstSourceLocation<TLocation>(TLocation first, TLocation second)
             where TLocation : Location
         {
             if (CompareSourceLocations(first, second) <= 0)
@@ -3225,7 +3225,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Return the lexically first of multiple locations.
         /// </summary>
-        internal TLocation? FirstSourceLocation<TLocation>(ImmutableArray<TLocation> locations)
+        public TLocation? FirstSourceLocation<TLocation>(ImmutableArray<TLocation> locations)
             where TLocation : Location
         {
             if (locations.IsEmpty)

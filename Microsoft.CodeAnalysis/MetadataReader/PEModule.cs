@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool IsLinkedModule
+        public bool IsLinkedModule
         {
             get
             {
@@ -992,7 +992,7 @@ namespace Microsoft.CodeAnalysis
             return FindTargetAttribute(token, ignoreCase ? AttributeDescription.CaseInsensitiveExtensionAttribute : AttributeDescription.CaseSensitiveExtensionAttribute).HasValue;
         }
 
-        internal bool HasVisualBasicEmbeddedAttribute(EntityHandle token)
+        public bool HasVisualBasicEmbeddedAttribute(EntityHandle token)
         {
             return FindTargetAttribute(token, AttributeDescription.VisualBasicEmbeddedAttribute).HasValue;
         }
@@ -1017,7 +1017,7 @@ namespace Microsoft.CodeAnalysis
             return HasStringAndIntValuedAttribute(token, AttributeDescription.FixedBufferAttribute, out elementTypeName, out bufferSize);
         }
 
-        internal bool HasAccessedThroughPropertyAttribute(EntityHandle token, out string propertyName)
+        public bool HasAccessedThroughPropertyAttribute(EntityHandle token, out string propertyName)
         {
             return HasStringValuedAttribute(token, AttributeDescription.AccessedThroughPropertyAttribute, out propertyName);
         }
@@ -1032,7 +1032,7 @@ namespace Microsoft.CodeAnalysis
             return FindTargetAttribute(token, description).HasValue;
         }
 
-        internal CustomAttributeHandle GetAttributeHandle(EntityHandle token, AttributeDescription description)
+        public CustomAttributeHandle GetAttributeHandle(EntityHandle token, AttributeDescription description)
         {
             return FindTargetAttribute(token, description).Handle;
         }
@@ -1227,7 +1227,7 @@ namespace Microsoft.CodeAnalysis
             return info.Handle;
         }
 
-        internal bool HasInterfaceTypeAttribute(EntityHandle token, out ComInterfaceType interfaceType)
+        public bool HasInterfaceTypeAttribute(EntityHandle token, out ComInterfaceType interfaceType)
         {
             AttributeInfo info = FindTargetAttribute(token, AttributeDescription.InterfaceTypeAttribute);
             if (info.HasValue && TryExtractInterfaceTypeFromAttribute(info, out interfaceType))
@@ -2085,12 +2085,12 @@ namespace Microsoft.CodeAnalysis
             return result;
         }
 
-        internal AttributeInfo FindTargetAttribute(EntityHandle hasAttribute, AttributeDescription description)
+        public AttributeInfo FindTargetAttribute(EntityHandle hasAttribute, AttributeDescription description)
         {
             return FindTargetAttribute(MetadataReader, hasAttribute, description);
         }
 
-        internal static AttributeInfo FindTargetAttribute(MetadataReader metadataReader, EntityHandle hasAttribute, AttributeDescription description)
+        public static AttributeInfo FindTargetAttribute(MetadataReader metadataReader, EntityHandle hasAttribute, AttributeDescription description)
         {
             try
             {
@@ -3434,7 +3434,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
-        internal int GetAssemblyReferenceIndexOrThrow(AssemblyReferenceHandle assemblyRef)
+        public int GetAssemblyReferenceIndexOrThrow(AssemblyReferenceHandle assemblyRef)
         {
             return MetadataReader.GetRowNumber(assemblyRef) - 1;
         }

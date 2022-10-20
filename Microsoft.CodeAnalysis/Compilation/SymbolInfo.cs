@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal ImmutableArray<ISymbol> GetAllSymbols()
+        public ImmutableArray<ISymbol> GetAllSymbols()
         {
             if (this.Symbol != null)
             {
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
             return Hash.Combine(this.Symbol, Hash.Combine(Hash.CombineValues(_candidateSymbols, 4), (int)this.CandidateReason));
         }
 
-        internal bool IsEmpty
+        public bool IsEmpty
         {
             get
             {

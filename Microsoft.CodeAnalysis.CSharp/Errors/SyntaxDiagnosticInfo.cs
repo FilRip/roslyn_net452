@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         #region Serialization
 
-        public override void WriteTo(ObjectWriter writer)
+        protected override void WriteTo(ObjectWriter writer)
         {
             base.WriteTo(writer);
             writer.WriteInt32(this.Offset);

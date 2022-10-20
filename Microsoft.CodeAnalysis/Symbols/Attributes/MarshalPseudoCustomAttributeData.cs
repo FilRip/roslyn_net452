@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis
             _marshalArrayElementCount = elementCount;
         }
 
-        internal void SetMarshalAsSimpleType(UnmanagedType type)
+        public void SetMarshalAsSimpleType(UnmanagedType type)
         {
             Debug.Assert(type >= 0 && (int)type <= MaxMarshalInteger);
             _marshalType = type;

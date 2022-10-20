@@ -253,7 +253,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal IEnumerable<Diagnostic> AsEnumerableWithoutResolution()
+        public IEnumerable<Diagnostic> AsEnumerableWithoutResolution()
         {
             // PERF: don't make a defensive copy - callers are internal and won't modify the bag.
             return _lazyBag ?? SpecializedCollections.EmptyEnumerable<Diagnostic>();

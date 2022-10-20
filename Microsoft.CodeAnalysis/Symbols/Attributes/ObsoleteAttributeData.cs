@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public readonly string? UrlFormat;
 
-        internal bool IsUninitialized
+        public bool IsUninitialized
         {
             get { return ReferenceEquals(this, Uninitialized); }
         }

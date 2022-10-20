@@ -675,7 +675,7 @@ foundIdx:
             return Interlocked.Increment(ref StringTable.s_sharedRandom);
         }
 
-        internal static bool TextEquals(string array, string text, int start, int length)
+        public static bool TextEquals(string array, string text, int start, int length)
         {
             if (array.Length != length)
             {
@@ -694,7 +694,7 @@ foundIdx:
             return true;
         }
 
-        internal static bool TextEquals(string array, StringBuilder text)
+        public static bool TextEquals(string array, StringBuilder text)
         {
             if (array.Length != text.Length)
             {
@@ -739,7 +739,7 @@ foundIdx:
             return true;
         }
 
-        internal static bool TextEquals(string array, ReadOnlySpan<char> text)
+        public static bool TextEquals(string array, ReadOnlySpan<char> text)
             => text.Equals(array.AsSpan(), StringComparison.Ordinal);
     }
 }

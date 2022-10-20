@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis
         private readonly string? _entryPointName;            // null if unspecified, the name of the target method should be used
         private readonly MethodImportAttributes _flags;
 
-        internal DllImportData(string? moduleName, string? entryPointName, MethodImportAttributes flags)
+        public DllImportData(string? moduleName, string? entryPointName, MethodImportAttributes flags)
         {
             _moduleName = moduleName;
             _entryPointName = entryPointName;

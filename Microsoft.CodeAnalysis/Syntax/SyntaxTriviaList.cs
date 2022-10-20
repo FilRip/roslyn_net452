@@ -469,7 +469,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Copy <paramref name="count"/> number of items starting at <paramref name="offset"/> from this list into <paramref name="array"/> starting at <paramref name="arrayOffset"/>.
         /// </summary>
-        internal void CopyTo(int offset, SyntaxTrivia[] array, int arrayOffset, int count)
+        public void CopyTo(int offset, SyntaxTrivia[] array, int arrayOffset, int count)
         {
             if (offset < 0 || count < 0 || this.Count < offset + count)
             {

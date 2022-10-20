@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis.Operations
         public override ISymbol Member => Field;
     }
 
-    internal sealed partial class RangeCaseClauseOperation
+    public sealed partial class RangeCaseClauseOperation
     {
         public override CaseKind CaseKind => CaseKind.Range;
     }
@@ -189,7 +189,7 @@ namespace Microsoft.CodeAnalysis.Operations
         public override CaseKind CaseKind => CaseKind.SingleValue;
     }
 
-    internal sealed partial class RelationalCaseClauseOperation
+    public sealed partial class RelationalCaseClauseOperation
     {
         public override CaseKind CaseKind => CaseKind.Relational;
     }

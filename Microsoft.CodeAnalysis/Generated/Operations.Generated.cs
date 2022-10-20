@@ -3148,7 +3148,7 @@ namespace Microsoft.CodeAnalysis.Operations
     /// <para>This interface is reserved for implementation by its associated APIs. We reserve the right to
     /// change it in the future.</para>
     /// </remarks>
-    internal interface IWithStatementOperation : IOperation
+    public interface IWithStatementOperation : IOperation
     {
         /// <summary>
         /// Body of the with.
@@ -4000,9 +4000,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitLocalFunction(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitLocalFunction(this, argument);
     }
-    internal sealed partial class StopOperation : Operation, IStopOperation
+    public sealed partial class StopOperation : Operation, IStopOperation
     {
-        internal StopOperation(SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public StopOperation(SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit) { }
         protected override IOperation GetCurrent(int slot, int index) => throw ExceptionUtilities.UnexpectedValue((slot, index));
         protected override (bool hasNext, int nextSlot, int nextIndex) MoveNext(int previousSlot, int previousIndex) => (false, int.MinValue, int.MinValue);
@@ -4024,9 +4024,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitEnd(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitEnd(this, argument);
     }
-    internal sealed partial class RaiseEventOperation : Operation, IRaiseEventOperation
+    public sealed partial class RaiseEventOperation : Operation, IRaiseEventOperation
     {
-        internal RaiseEventOperation(IEventReferenceOperation eventReference, ImmutableArray<IArgumentOperation> arguments, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public RaiseEventOperation(IEventReferenceOperation eventReference, ImmutableArray<IArgumentOperation> arguments, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             EventReference = SetParentOperation(eventReference, this);
@@ -6079,9 +6079,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public ArgumentKind ArgumentKind { get; }
         public IParameterSymbol? Parameter { get; }
         public IOperation Value { get; }
-        internal IConvertibleConversion InConversionConvertible { get; }
+        public IConvertibleConversion InConversionConvertible { get; }
         public CommonConversion InConversion => InConversionConvertible.ToCommonConversion();
-        internal IConvertibleConversion OutConversionConvertible { get; }
+        public IConvertibleConversion OutConversionConvertible { get; }
         public CommonConversion OutConversion => OutConversionConvertible.ToCommonConversion();
         protected override IOperation GetCurrent(int slot, int index)
             => slot switch
@@ -6278,9 +6278,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitPatternCaseClause(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitPatternCaseClause(this, argument);
     }
-    internal sealed partial class RangeCaseClauseOperation : BaseCaseClauseOperation, IRangeCaseClauseOperation
+    public sealed partial class RangeCaseClauseOperation : BaseCaseClauseOperation, IRangeCaseClauseOperation
     {
-        internal RangeCaseClauseOperation(IOperation minimumValue, IOperation maximumValue, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public RangeCaseClauseOperation(IOperation minimumValue, IOperation maximumValue, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(label, semanticModel, syntax, isImplicit)
         {
             MinimumValue = SetParentOperation(minimumValue, this);
@@ -6320,9 +6320,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitRangeCaseClause(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitRangeCaseClause(this, argument);
     }
-    internal sealed partial class RelationalCaseClauseOperation : BaseCaseClauseOperation, IRelationalCaseClauseOperation
+    public sealed partial class RelationalCaseClauseOperation : BaseCaseClauseOperation, IRelationalCaseClauseOperation
     {
-        internal RelationalCaseClauseOperation(IOperation value, BinaryOperatorKind relation, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public RelationalCaseClauseOperation(IOperation value, BinaryOperatorKind relation, ILabelSymbol? label, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(label, semanticModel, syntax, isImplicit)
         {
             Value = SetParentOperation(value, this);
@@ -6913,9 +6913,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitRangeOperation(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitRangeOperation(this, argument);
     }
-    internal sealed partial class ReDimOperation : Operation, IReDimOperation
+    public sealed partial class ReDimOperation : Operation, IReDimOperation
     {
-        internal ReDimOperation(ImmutableArray<IReDimClauseOperation> clauses, bool preserve, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public ReDimOperation(ImmutableArray<IReDimClauseOperation> clauses, bool preserve, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Clauses = SetParentOperation(clauses, this);
@@ -6952,9 +6952,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitReDim(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitReDim(this, argument);
     }
-    internal sealed partial class ReDimClauseOperation : Operation, IReDimClauseOperation
+    public sealed partial class ReDimClauseOperation : Operation, IReDimClauseOperation
     {
-        internal ReDimClauseOperation(IOperation operand, ImmutableArray<IOperation> dimensionSizes, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public ReDimClauseOperation(IOperation operand, ImmutableArray<IOperation> dimensionSizes, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Operand = SetParentOperation(operand, this);
@@ -7198,9 +7198,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitPropertySubpattern(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitPropertySubpattern(this, argument);
     }
-    internal sealed partial class AggregateQueryOperation : Operation, IAggregateQueryOperation
+    public sealed partial class AggregateQueryOperation : Operation, IAggregateQueryOperation
     {
-        internal AggregateQueryOperation(IOperation group, IOperation aggregation, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit)
+        public AggregateQueryOperation(IOperation group, IOperation aggregation, SemanticModel? semanticModel, SyntaxNode syntax, ITypeSymbol? type, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Group = SetParentOperation(group, this);
@@ -7338,9 +7338,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitPlaceholder(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitPlaceholder(this, argument);
     }
-    internal sealed partial class WithStatementOperation : Operation, IWithStatementOperation
+    public sealed partial class WithStatementOperation : Operation, IWithStatementOperation
     {
-        internal WithStatementOperation(IOperation body, IOperation value, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public WithStatementOperation(IOperation body, IOperation value, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(semanticModel, syntax, isImplicit)
         {
             Body = SetParentOperation(body, this);

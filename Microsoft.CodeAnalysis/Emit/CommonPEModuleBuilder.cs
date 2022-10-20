@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         internal EmitOptions EmitOptions { get; }
 
-        internal DebugInformationFormat DebugInformationFormat => EmitOptions.DebugInformationFormat;
+        public DebugInformationFormat DebugInformationFormat => EmitOptions.DebugInformationFormat;
         internal SourceHashAlgorithm PdbChecksumAlgorithm => EmitOptions.PdbChecksumAlgorithm;
 
         public CommonPEModuleBuilder(
@@ -88,9 +88,9 @@ namespace Microsoft.CodeAnalysis.Emit
         /// </summary>
         public abstract string ModuleName { get; }
 
-        internal abstract Cci.IAssemblyReference Translate(IAssemblySymbolInternal symbol, DiagnosticBag diagnostics);
-        internal abstract Cci.ITypeReference Translate(ITypeSymbolInternal symbol, SyntaxNode syntaxOpt, DiagnosticBag diagnostics);
-        internal abstract Cci.IMethodReference Translate(IMethodSymbolInternal symbol, DiagnosticBag diagnostics, bool needDeclaration);
+        public abstract Cci.IAssemblyReference Translate(IAssemblySymbolInternal symbol, DiagnosticBag diagnostics);
+        public abstract Cci.ITypeReference Translate(ITypeSymbolInternal symbol, SyntaxNode syntaxOpt, DiagnosticBag diagnostics);
+        public abstract Cci.IMethodReference Translate(IMethodSymbolInternal symbol, DiagnosticBag diagnostics, bool needDeclaration);
         public abstract bool SupportsPrivateImplClass { get; }
         public abstract Compilation CommonCompilation { get; }
         internal abstract IModuleSymbolInternal CommonSourceModule { get; }
@@ -619,17 +619,17 @@ namespace Microsoft.CodeAnalysis.Emit
         public abstract Cci.ITypeReference Translate(TTypeSymbol symbol, TSyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics);
         public abstract Cci.IMethodReference Translate(TMethodSymbol symbol, DiagnosticBag diagnostics, bool needDeclaration);
 
-        internal sealed override Cci.IAssemblyReference Translate(IAssemblySymbolInternal symbol, DiagnosticBag diagnostics)
+        public sealed override Cci.IAssemblyReference Translate(IAssemblySymbolInternal symbol, DiagnosticBag diagnostics)
         {
             return Translate((TAssemblySymbol)symbol, diagnostics);
         }
 
-        internal sealed override Cci.ITypeReference Translate(ITypeSymbolInternal symbol, SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
+        public sealed override Cci.ITypeReference Translate(ITypeSymbolInternal symbol, SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
         {
             return Translate((TTypeSymbol)symbol, (TSyntaxNode)syntaxNodeOpt, diagnostics);
         }
 
-        internal sealed override Cci.IMethodReference Translate(IMethodSymbolInternal symbol, DiagnosticBag diagnostics, bool needDeclaration)
+        public sealed override Cci.IMethodReference Translate(IMethodSymbolInternal symbol, DiagnosticBag diagnostics, bool needDeclaration)
         {
             return Translate((TMethodSymbol)symbol, diagnostics, needDeclaration);
         }

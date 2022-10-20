@@ -278,17 +278,17 @@ namespace Microsoft.CodeAnalysis
             InheritMask = ContainsDiagnostics | ContainsStructuredTrivia | ContainsDirectives | ContainsSkippedText | ContainsAnnotations | IsNotMissing,
         }
 
-        internal NodeFlags Flags
+        public NodeFlags Flags
         {
             get { return this.flags; }
         }
 
-        internal void SetFlags(NodeFlags flags)
+        public void SetFlags(NodeFlags flags)
         {
             this.flags |= flags;
         }
 
-        internal void ClearFlags(NodeFlags flags)
+        public void ClearFlags(NodeFlags flags)
         {
             this.flags &= ~flags;
         }
@@ -318,7 +318,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool ParsedInIterator
+        public bool ParsedInIterator
         {
             get
             {

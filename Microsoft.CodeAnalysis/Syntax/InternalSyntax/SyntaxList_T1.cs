@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             return false;
         }
 
-        internal TNode[] Nodes
+        public TNode[] Nodes
         {
             get
             {

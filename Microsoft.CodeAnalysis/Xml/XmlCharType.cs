@@ -1177,7 +1177,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// start &gt;= value &lt;= end
         /// </summary>
-        internal static bool InRange(char value, char start, char end)
+        public static bool InRange(char value, char start, char end)
         {
             Debug.Assert(start <= end);
             return unchecked((uint)(value - start) <= (uint)(end - start));

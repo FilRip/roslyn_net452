@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.Emit
         /// <summary>
         /// True if the anonymous type field was marked as 'Key' in VB.
         /// </summary>
-        internal readonly bool IsKey;
+        public readonly bool IsKey;
 
         /// <summary>
         /// <see cref="Name"/> is case insensitive.
@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.Emit
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public struct AnonymousTypeKey : IEquatable<AnonymousTypeKey>
     {
-        internal readonly bool IsDelegate;
+        public readonly bool IsDelegate;
         public readonly ImmutableArray<AnonymousTypeKeyField> Fields;
 
         public AnonymousTypeKey(ImmutableArray<AnonymousTypeKeyField> fields, bool isDelegate = false)

@@ -157,7 +157,7 @@ namespace Microsoft.CodeAnalysis
         /// For user defined attributes VB allows duplicate named arguments and uses the last value.
         /// Dev11 reports an error for pseudo-custom attributes when emitting metadata. We don't.
         /// </remarks>
-        internal T? DecodeNamedArgument<T>(string name, SpecialType specialType, T? defaultValue = default)
+        public T? DecodeNamedArgument<T>(string name, SpecialType specialType, T? defaultValue = default)
         {
             return DecodeNamedArgument<T>(CommonNamedArguments, name, specialType, defaultValue);
         }

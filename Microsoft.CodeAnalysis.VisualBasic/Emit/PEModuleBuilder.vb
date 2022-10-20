@@ -176,7 +176,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
             End If
         End Sub
 
-        Public NotOverridable Overrides Function SynthesizeAttribute(attributeConstructor As WellKnownMember) As Cci.ICustomAttribute
+        Protected NotOverridable Overrides Function SynthesizeAttribute(attributeConstructor As WellKnownMember) As Cci.ICustomAttribute
             Return Me.Compilation.TrySynthesizeAttribute(attributeConstructor)
         End Function
 

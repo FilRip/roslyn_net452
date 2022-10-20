@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         }
 
         // Method to emit the virtual switch instruction
-        internal void EmitSwitch(object[] labels)
+        public void EmitSwitch(object[] labels)
         {
             _emitState.AdjustStack(-1);
             int curStack = _emitState.CurStack;

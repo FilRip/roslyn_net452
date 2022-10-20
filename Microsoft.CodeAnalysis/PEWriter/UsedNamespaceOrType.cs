@@ -51,7 +51,7 @@ namespace Microsoft.Cci
             return new UsedNamespaceOrType(alias: alias);
         }
 
-        internal static UsedNamespaceOrType CreateXmlNamespace(string prefix, string xmlNamespace)
+        public static UsedNamespaceOrType CreateXmlNamespace(string prefix, string xmlNamespace)
         {
             RoslynDebug.Assert(xmlNamespace != null);
             RoslynDebug.Assert(prefix != null);

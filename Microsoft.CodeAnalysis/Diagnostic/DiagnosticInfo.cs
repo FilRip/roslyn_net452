@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         [Conditional("DEBUG")]
-        internal static void AssertMessageSerializable(object[] args)
+        public static void AssertMessageSerializable(object[] args)
         {
             foreach (var arg in args)
             {
@@ -149,7 +149,7 @@ namespace Microsoft.CodeAnalysis
             this.WriteTo(writer);
         }
 
-        public virtual void WriteTo(ObjectWriter writer)
+        protected virtual void WriteTo(ObjectWriter writer)
         {
             writer.WriteValue(_messageProvider);
             writer.WriteUInt32((uint)_errorCode);

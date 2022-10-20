@@ -405,7 +405,7 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="BadImageFormatException">The PE image format is invalid.</exception>
         /// <exception cref="IOException">IO error reading the metadata. See <see cref="Exception.InnerException"/> for details.</exception>
         /// <exception cref="ObjectDisposedException">The object has been disposed.</exception>
-        internal bool IsValidAssembly()
+        public bool IsValidAssembly()
         {
             var modules = GetModules();
 

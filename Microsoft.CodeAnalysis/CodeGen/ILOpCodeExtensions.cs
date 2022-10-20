@@ -9,7 +9,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
-    internal static partial class ILOpCodeExtensions
+    public static partial class ILOpCodeExtensions
     {
         public static int Size(this ILOpCode opcode)
         {

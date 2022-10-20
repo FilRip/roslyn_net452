@@ -239,7 +239,7 @@ namespace Microsoft.CodeAnalysis
             get { return _isDisposed || _module.IsDisposed; }
         }
 
-        internal PEModule Module
+        public PEModule Module
         {
             get
             {

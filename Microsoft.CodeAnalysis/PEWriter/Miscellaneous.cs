@@ -195,7 +195,7 @@ namespace Microsoft.Cci
     /// The name of the entity depends on other metadata (tokens, signatures) originated from
     /// PeWriter.
     /// </summary>
-    internal interface IContextualNamedEntity : INamedEntity
+    public interface IContextualNamedEntity : INamedEntity
     {
         /// <summary>
         /// Method must be called before calling INamedEntity.Name.

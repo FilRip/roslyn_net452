@@ -382,7 +382,7 @@ namespace Microsoft.CodeAnalysis
         /// <remarks>
         /// called by CommonCompiler with diagnostics and message provider
         /// </remarks>
-        internal IEnumerable<MetadataReference> ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
+        public IEnumerable<MetadataReference> ResolveMetadataReferences(MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
         {
             RoslynDebug.Assert(metadataResolver != null);
 
@@ -417,7 +417,7 @@ namespace Microsoft.CodeAnalysis
             return result;
         }
 
-        internal static ImmutableArray<PortableExecutableReference> ResolveMetadataReference(CommandLineReference cmdReference, MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
+        public static ImmutableArray<PortableExecutableReference> ResolveMetadataReference(CommandLineReference cmdReference, MetadataReferenceResolver metadataResolver, List<DiagnosticInfo>? diagnosticsOpt, CommonMessageProvider? messageProviderOpt)
         {
             RoslynDebug.Assert(metadataResolver != null);
             Debug.Assert((diagnosticsOpt == null) == (messageProviderOpt == null));
