@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private Dictionary<TMethodSymbol, TNamedTypeSymbol>? _lazyStateMachineTypes;
 
-        internal void SetStateMachineType(TMethodSymbol method, TNamedTypeSymbol stateMachineClass)
+        public void SetStateMachineType(TMethodSymbol method, TNamedTypeSymbol stateMachineClass)
         {
             Debug.Assert(!Frozen);
 
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool TryGetStateMachineType(TMethodSymbol method, [NotNullWhen(true)] out TNamedTypeSymbol? stateMachineType)
+        public bool TryGetStateMachineType(TMethodSymbol method, [NotNullWhen(true)] out TNamedTypeSymbol? stateMachineType)
         {
             Debug.Assert(Frozen);
 

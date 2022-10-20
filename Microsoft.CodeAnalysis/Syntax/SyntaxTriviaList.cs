@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis
     {
         public static SyntaxTriviaList Empty => default(SyntaxTriviaList);
 
-        internal SyntaxTriviaList(in SyntaxToken token, GreenNode? node, int position, int index = 0)
+        public SyntaxTriviaList(in SyntaxToken token, GreenNode? node, int position, int index = 0)
         {
             Token = token;
             Node = node;
@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis
             Index = index;
         }
 
-        internal SyntaxTriviaList(in SyntaxToken token, GreenNode? node)
+        public SyntaxTriviaList(in SyntaxToken token, GreenNode? node)
         {
             Token = token;
             Node = node;
@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis
 
         public SyntaxToken Token { get; }
 
-        internal GreenNode? Node { get; }
+        public GreenNode? Node { get; }
 
         internal int Position { get; }
 

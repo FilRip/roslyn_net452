@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis
 
         public int Position { get; }
 
-        internal int EndPosition => Position + Green.FullWidth;
+        public int EndPosition => Position + Green.FullWidth;
 
         /// <summary>
         /// Returns SyntaxTree that owns the node or null if node does not belong to a

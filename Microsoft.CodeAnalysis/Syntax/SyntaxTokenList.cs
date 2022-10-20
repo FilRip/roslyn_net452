@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis
         private readonly SyntaxNode? _parent;
         private readonly int _index;
 
-        internal SyntaxTokenList(SyntaxNode? parent, GreenNode? tokenOrList, int position, int index)
+        public SyntaxTokenList(SyntaxNode? parent, GreenNode? tokenOrList, int position, int index)
         {
             Debug.Assert(tokenOrList != null || (position == 0 && index == 0 && parent == null));
             Debug.Assert(position >= 0);
@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis
             return builder.ToList().Node;
         }
 
-        internal GreenNode? Node { get; }
+        public GreenNode? Node { get; }
 
         internal int Position { get; }
 

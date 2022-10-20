@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis
         MaybeNull
     }
 
-    internal static class NullableFlowStateExtensions
+    public static class NullableFlowStateExtensions
     {
         /// <summary>
         /// This method directly converts a <see cref="NullableFlowState"/> to a <see cref="NullableAnnotation"/>,

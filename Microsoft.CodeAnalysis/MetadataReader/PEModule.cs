@@ -646,7 +646,7 @@ namespace Microsoft.CodeAnalysis
         /// </param>
         /// <returns>A sorted list of TypeDef row ids, grouped by fully-qualified namespace name.</returns>
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
-        internal IEnumerable<IGrouping<string, TypeDefinitionHandle>> GroupTypesByNamespaceOrThrow(StringComparer nameComparer)
+        public IEnumerable<IGrouping<string, TypeDefinitionHandle>> GroupTypesByNamespaceOrThrow(StringComparer nameComparer)
         {
             // TODO: Consider if we should cache the result (not the IEnumerable, but the actual values).
 
@@ -961,7 +961,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal bool IsNoPiaLocalType(TypeDefinitionHandle typeDef)
+        public bool IsNoPiaLocalType(TypeDefinitionHandle typeDef)
         {
             AttributeInfo attributeInfo;
             return IsNoPiaLocalType(typeDef, out attributeInfo);
@@ -1039,7 +1039,7 @@ namespace Microsoft.CodeAnalysis
 
         private static readonly ImmutableArray<bool> s_simpleTransformFlags = ImmutableArray.Create(true);
 
-        internal bool HasDynamicAttribute(EntityHandle token, out ImmutableArray<bool> transformFlags)
+        public bool HasDynamicAttribute(EntityHandle token, out ImmutableArray<bool> transformFlags)
         {
             AttributeInfo info = FindTargetAttribute(token, AttributeDescription.DynamicAttribute);
             Debug.Assert(!info.HasValue || info.SignatureIndex == 0 || info.SignatureIndex == 1);
@@ -1059,7 +1059,7 @@ namespace Microsoft.CodeAnalysis
             return TryExtractBoolArrayValueFromAttribute(info.Handle, out transformFlags);
         }
 
-        internal bool HasNativeIntegerAttribute(EntityHandle token, out ImmutableArray<bool> transformFlags)
+        public bool HasNativeIntegerAttribute(EntityHandle token, out ImmutableArray<bool> transformFlags)
         {
             AttributeInfo info = FindTargetAttribute(token, AttributeDescription.NativeIntegerAttribute);
             Debug.Assert(!info.HasValue || info.SignatureIndex == 0 || info.SignatureIndex == 1);
@@ -1079,7 +1079,7 @@ namespace Microsoft.CodeAnalysis
             return TryExtractBoolArrayValueFromAttribute(info.Handle, out transformFlags);
         }
 
-        internal bool HasTupleElementNamesAttribute(EntityHandle token, out ImmutableArray<string> tupleElementNames)
+        public bool HasTupleElementNamesAttribute(EntityHandle token, out ImmutableArray<string> tupleElementNames)
         {
             var info = FindTargetAttribute(token, AttributeDescription.TupleElementNamesAttribute);
             Debug.Assert(!info.HasValue || info.SignatureIndex == 0 || info.SignatureIndex == 1);
@@ -1239,7 +1239,7 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal bool HasTypeLibTypeAttribute(EntityHandle token, out Cci.TypeLibTypeFlags flags)
+        public bool HasTypeLibTypeAttribute(EntityHandle token, out Cci.TypeLibTypeFlags flags)
         {
             AttributeInfo info = FindTargetAttribute(token, AttributeDescription.TypeLibTypeAttribute);
             if (info.HasValue && TryExtractTypeLibTypeFromAttribute(info, out flags))
@@ -1711,7 +1711,7 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal bool IsNoPiaLocalType(
+        public bool IsNoPiaLocalType(
             TypeDefinitionHandle typeDef,
             out string interfaceGuid,
             out string scope,

@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public readonly AssemblyIdentity OriginalReference;
 
-        internal readonly TAssemblySymbol TargetAssembly;
+        public readonly TAssemblySymbol TargetAssembly;
 
         public UnifiedAssembly(TAssemblySymbol targetAssembly, AssemblyIdentity originalReference)
         {

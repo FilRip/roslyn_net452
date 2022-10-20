@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.Emit
         internal abstract Cci.ITypeReference Translate(ITypeSymbolInternal symbol, SyntaxNode syntaxOpt, DiagnosticBag diagnostics);
         internal abstract Cci.IMethodReference Translate(IMethodSymbolInternal symbol, DiagnosticBag diagnostics, bool needDeclaration);
         public abstract bool SupportsPrivateImplClass { get; }
-        internal abstract Compilation CommonCompilation { get; }
+        public abstract Compilation CommonCompilation { get; }
         internal abstract IModuleSymbolInternal CommonSourceModule { get; }
         internal abstract IAssemblySymbolInternal CommonCorLibrary { get; }
         internal abstract CommonModuleCompilationState CommonModuleCompilationState { get; }
@@ -635,7 +635,7 @@ namespace Microsoft.CodeAnalysis.Emit
         }
 
         internal sealed override IModuleSymbolInternal CommonSourceModule => SourceModule;
-        internal sealed override Compilation CommonCompilation => Compilation;
+        public sealed override Compilation CommonCompilation => Compilation;
         internal sealed override CommonModuleCompilationState CommonModuleCompilationState => CompilationState;
         internal sealed override CommonEmbeddedTypesManager CommonEmbeddedTypesManagerOpt => EmbeddedTypesManagerOpt;
 

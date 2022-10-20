@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public NullabilityInfo ConvertedNullability { get; }
 
-        internal TypeInfo(ITypeSymbol? type, ITypeSymbol? convertedType, NullabilityInfo nullability, NullabilityInfo convertedNullability)
+        public TypeInfo(ITypeSymbol? type, ITypeSymbol? convertedType, NullabilityInfo nullability, NullabilityInfo convertedNullability)
             : this()
         {
             Debug.Assert(type is null || type.NullableAnnotation == nullability.FlowState.ToAnnotation());

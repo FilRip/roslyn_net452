@@ -6,7 +6,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal static class SymbolKindExtensions
+    public static class SymbolKindExtensions
     {
         public static int ToSortOrder(this SymbolKind kind)
         {

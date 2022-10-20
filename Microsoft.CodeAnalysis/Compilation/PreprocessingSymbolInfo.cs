@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
 {
     public struct PreprocessingSymbolInfo : IEquatable<PreprocessingSymbolInfo>
     {
-        internal static readonly PreprocessingSymbolInfo None = new PreprocessingSymbolInfo(null, false);
+        public static readonly PreprocessingSymbolInfo None = new PreprocessingSymbolInfo(null, false);
 
         /// <summary>
         /// The symbol that was referred to by the identifier, if any. 
@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public bool IsDefined { get; }
 
-        internal PreprocessingSymbolInfo(IPreprocessingSymbol? symbol, bool isDefined)
+        public PreprocessingSymbolInfo(IPreprocessingSymbol? symbol, bool isDefined)
             : this()
         {
             this.Symbol = symbol;

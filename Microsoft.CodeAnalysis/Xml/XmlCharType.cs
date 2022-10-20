@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis
     /// The XmlCharType class is used for quick character type recognition
     /// which is optimized for the first 127 ascii characters.
     /// 
-    internal static class XmlCharType
+    public static class XmlCharType
     {
         // Surrogate constants
         internal const int SurHighStart = 0xd800;    // 1101 10xx

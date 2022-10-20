@@ -1621,7 +1621,7 @@ tryAgain:
             return (new KeyValuePair<string, TypedConstant>(name, value), kind == CustomAttributeNamedArgumentKind.Property, typeCode, elementTypeCode);
         }
 
-        internal bool IsTargetAttribute(
+        public bool IsTargetAttribute(
             CustomAttributeHandle customAttribute,
             string namespaceName,
             string typeName,
@@ -1644,7 +1644,7 @@ tryAgain:
             }
         }
 
-        internal int GetTargetAttributeSignatureIndex(CustomAttributeHandle customAttribute, AttributeDescription description)
+        public int GetTargetAttributeSignatureIndex(CustomAttributeHandle customAttribute, AttributeDescription description)
         {
             try
             {

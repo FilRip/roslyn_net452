@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis
     [StructLayout(LayoutKind.Auto)]
     public readonly struct SyntaxTrivia : IEquatable<SyntaxTrivia>
     {
-        internal static readonly Func<SyntaxTrivia, bool> Any = t => true;
+        public static readonly Func<SyntaxTrivia, bool> Any = t => true;
 
         public SyntaxTrivia(in SyntaxToken token, GreenNode? triviaNode, int position, int index)
         {

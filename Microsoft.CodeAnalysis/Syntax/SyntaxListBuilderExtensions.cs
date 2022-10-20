@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.Syntax
 {
-    internal static class SyntaxListBuilderExtensions
+    public static class SyntaxListBuilderExtensions
     {
         public static SyntaxTokenList ToTokenList(this SyntaxListBuilder? builder)
         {

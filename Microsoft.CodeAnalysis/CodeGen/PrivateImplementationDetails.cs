@@ -199,7 +199,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         }
 
         // Add a new synthesized method indexed by its name if the method isn't already present.
-        internal bool TryAddSynthesizedMethod(Cci.IMethodDefinition method)
+        public bool TryAddSynthesizedMethod(Cci.IMethodDefinition method)
         {
             Debug.Assert(!IsFrozen);
 #nullable disable // Can 'method.Name' be null? https://github.com/dotnet/roslyn/issues/39166

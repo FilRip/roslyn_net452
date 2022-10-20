@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// The format used for displaying symbols when visualizing IL.
         /// </summary>
-        internal static readonly SymbolDisplayFormat ILVisualizationFormat =
+        public static readonly SymbolDisplayFormat ILVisualizationFormat =
             new SymbolDisplayFormat(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
@@ -255,7 +255,7 @@ namespace Microsoft.CodeAnalysis
         /// Used to normalize explicit interface implementation member names.
         /// Only expected to be applied to interface types (and their type arguments).
         /// </summary>
-        internal static readonly SymbolDisplayFormat ExplicitInterfaceImplementationFormat =
+        public static readonly SymbolDisplayFormat ExplicitInterfaceImplementationFormat =
             new SymbolDisplayFormat(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,

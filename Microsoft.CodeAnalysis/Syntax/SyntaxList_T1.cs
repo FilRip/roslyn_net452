@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis
     {
         private readonly SyntaxNode? _node;
 
-        internal SyntaxList(SyntaxNode? node)
+        public SyntaxList(SyntaxNode? node)
         {
             _node = node;
         }
@@ -374,7 +374,7 @@ namespace Microsoft.CodeAnalysis
             return _node != null;
         }
 
-        internal bool All(Func<TNode, bool> predicate)
+        public bool All(Func<TNode, bool> predicate)
         {
             foreach (var item in this)
             {

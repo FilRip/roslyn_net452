@@ -553,7 +553,7 @@ namespace Roslyn.Utilities
         /// Returns the only element of specified sequence if it has exactly one, and default(TSource) otherwise.
         /// Unlike <see cref="Enumerable.SingleOrDefault{TSource}(IEnumerable{TSource})"/> doesn't throw if there is more than one element in the sequence.
         /// </summary>
-        internal static TSource? AsSingleton<TSource>(this IEnumerable<TSource>? source)
+        public static TSource? AsSingleton<TSource>(this IEnumerable<TSource>? source)
         {
             if (source == null)
             {
@@ -608,7 +608,7 @@ namespace System.Linq
     /// The boxing would occur if the methods were defined in Roslyn.Utilities and the file calling these methods has <c>using Roslyn.Utilities</c>
     /// but not <c>using System.Linq</c>.
     /// </summary>
-    internal static class EnumerableExtensions
+    public static class EnumerableExtensions
     {
         public static bool SequenceEqual<T>(this IEnumerable<T>? first, IEnumerable<T>? second, Func<T, T, bool> comparer)
         {

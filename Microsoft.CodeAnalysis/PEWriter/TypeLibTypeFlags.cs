@@ -7,7 +7,7 @@ using System;
 namespace Microsoft.Cci
 {
     [Flags]
-    internal enum TypeLibTypeFlags
+    public enum TypeLibTypeFlags
     {
         FAppObject = 0x0001,
         FCanCreate = 0x0002,

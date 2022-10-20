@@ -5828,9 +5828,9 @@ namespace Microsoft.CodeAnalysis.Operations
         public override void Accept(OperationVisitor visitor) => visitor.VisitFieldInitializer(this);
         public override TResult? Accept<TArgument, TResult>(OperationVisitor<TArgument, TResult> visitor, TArgument argument) where TResult : default => visitor.VisitFieldInitializer(this, argument);
     }
-    internal sealed partial class VariableInitializerOperation : BaseSymbolInitializerOperation, IVariableInitializerOperation
+    public sealed partial class VariableInitializerOperation : BaseSymbolInitializerOperation, IVariableInitializerOperation
     {
-        internal VariableInitializerOperation(ImmutableArray<ILocalSymbol> locals, IOperation value, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
+        public VariableInitializerOperation(ImmutableArray<ILocalSymbol> locals, IOperation value, SemanticModel? semanticModel, SyntaxNode syntax, bool isImplicit)
             : base(locals, value, semanticModel, syntax, isImplicit) { }
         protected override IOperation GetCurrent(int slot, int index)
             => slot switch

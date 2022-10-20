@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Contains helper methods for switch statement label constants
     /// </summary>
-    internal static class SwitchConstantValueHelper
+    public static class SwitchConstantValueHelper
     {
         public static bool IsValidSwitchCaseLabelConstant(ConstantValue constant)
         {

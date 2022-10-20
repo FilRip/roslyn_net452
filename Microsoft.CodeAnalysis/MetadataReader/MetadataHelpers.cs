@@ -563,7 +563,7 @@ ExitDecodeTypeName:
         /// </summary>
         private static readonly ImmutableArray<string> s_splitQualifiedNameSystem = ImmutableArray.Create(SystemString);
 
-        internal static ImmutableArray<string> SplitQualifiedName(
+        public static ImmutableArray<string> SplitQualifiedName(
               string name)
         {
             Debug.Assert(name != null);
@@ -617,7 +617,7 @@ ExitDecodeTypeName:
             return result.ToImmutableAndFree();
         }
 
-        internal static string SplitQualifiedName(
+        public static string SplitQualifiedName(
             string pstrName,
             out string qualifier)
         {

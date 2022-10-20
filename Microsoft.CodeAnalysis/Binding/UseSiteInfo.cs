@@ -202,7 +202,7 @@ namespace Microsoft.CodeAnalysis
             {
                 Debug.Assert(AccumulatesDiagnostics);
                 AssertInternalConsistency();
-                return _diagnostics.ToReadOnlyCollection();
+                return _diagnostics?.ToReadOnlyCollection(); // FilRip added ?.ToReadOnlyCollection()
             }
         }
 
@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis
             {
                 Debug.Assert(AccumulatesDependencies);
                 AssertInternalConsistency();
-                return _dependencies.ToReadOnlyCollection();
+                return _dependencies?.ToReadOnlyCollection(); // FilRip added ?.ToReadOnlyCollection()
             }
         }
 

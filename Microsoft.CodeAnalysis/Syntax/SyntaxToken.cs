@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
         private static readonly Func<DiagnosticInfo, Diagnostic> s_createDiagnosticWithoutLocation = Diagnostic.Create;
 
         public static readonly Func<SyntaxToken, bool> NonZeroWidth = t => t.Width > 0;
-        internal static readonly Func<SyntaxToken, bool> Any = t => true;
+        public static readonly Func<SyntaxToken, bool> Any = t => true;
 
         public SyntaxToken(SyntaxNode? parent, GreenNode? token, int position, int index)
         {
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal int EndPosition
+        public int EndPosition
         {
             get { return Node != null ? Position + Node.FullWidth : 0; }
         }
@@ -186,7 +186,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Writes the text of this token to the specified TextWriter, optionally including trivia.
         /// </summary>
-        internal void WriteTo(System.IO.TextWriter writer, bool leading, bool trailing)
+        public void WriteTo(System.IO.TextWriter writer, bool leading, bool trailing)
         {
             Node?.WriteTo(writer, leading, trailing);
         }

@@ -10,7 +10,7 @@ namespace Roslyn.Utilities
     /// <summary>
     /// Defines a set of helper methods to classify Unicode characters.
     /// </summary>
-    internal static partial class UnicodeCharacterUtilities
+    public static partial class UnicodeCharacterUtilities
     {
         public static bool IsIdentifierStartCharacter(char ch)
         {
@@ -170,7 +170,7 @@ namespace Roslyn.Utilities
         /// Returns true if the Unicode character is a formatting character (Unicode class Cf).
         /// </summary>
         /// <param name="ch">The Unicode character.</param>
-        internal static bool IsFormattingChar(char ch)
+        public static bool IsFormattingChar(char ch)
         {
             // There are no FormattingChars in ASCII range
 

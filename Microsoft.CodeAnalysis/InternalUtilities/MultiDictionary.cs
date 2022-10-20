@@ -283,7 +283,7 @@ namespace Roslyn.Utilities
             return _dictionary.ContainsKey(k);
         }
 
-        internal void Clear()
+        public void Clear()
         {
             _dictionary.Clear();
         }

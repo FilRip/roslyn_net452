@@ -14,7 +14,7 @@ namespace Roslyn.Utilities
     {
         private static ImmutableArray<string> s_lazyNumerals;
 
-        internal static string GetNumeral(int number)
+        public static string GetNumeral(int number)
         {
             var numerals = s_lazyNumerals;
             if (numerals.IsDefault)
