@@ -44,6 +44,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>FilRip.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Microsoft.CodeAnalysis.CSharp.CommandLine.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,39 +56,39 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\AnalyzerInconsistencyBuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildClient.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildPathsAlt.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildProtocolConstants.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildRequest.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\BuildServerConnection.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompileFunc.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompilerServerLogger.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompilerServerLoggerExtensions.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CompletedBuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ConsoleUtil.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\CreateServerFunc.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\EmptyCompilerServerLogger.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ExitingTraceListener.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\FileMutex.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ICompilerServerLogger.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\IncorrectHashBuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\IServerMutex.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\MismatchedVersionBuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\NativeMethods.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\PROCESS_INFORMATION.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\RejectedBuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\RequestLanguage.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\RunCompilationResult.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ServerFileMutexPair.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ServerNamedMutex.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\ShutdownBuildResponse.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CommandLine\STARTUPINFO.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CSharp.CommandLine\Csc.cs" />
-    <Compile Include="Microsoft.CodeAnalysis.CSharp.CommandLine\Program.cs" />
-    <Compile Include="Microsoft.CodeAnalysis\NamedPipeUtil.cs" />
-    <Compile Include="Microsoft.CodeAnalysis\RuntimeHostInfo.cs" />
+    <Compile Include="CommandLine\AnalyzerInconsistencyBuildResponse.cs" />
+    <Compile Include="CommandLine\BuildClient.cs" />
+    <Compile Include="CommandLine\BuildPathsAlt.cs" />
+    <Compile Include="CommandLine\BuildProtocolConstants.cs" />
+    <Compile Include="CommandLine\BuildRequest.cs" />
+    <Compile Include="CommandLine\BuildResponse.cs" />
+    <Compile Include="CommandLine\BuildServerConnection.cs" />
+    <Compile Include="CommandLine\CompileFunc.cs" />
+    <Compile Include="CommandLine\CompilerServerLogger.cs" />
+    <Compile Include="CommandLine\CompilerServerLoggerExtensions.cs" />
+    <Compile Include="CommandLine\CompletedBuildResponse.cs" />
+    <Compile Include="CommandLine\ConsoleUtil.cs" />
+    <Compile Include="CommandLine\CreateServerFunc.cs" />
+    <Compile Include="CommandLine\EmptyCompilerServerLogger.cs" />
+    <Compile Include="CommandLine\ExitingTraceListener.cs" />
+    <Compile Include="CommandLine\FileMutex.cs" />
+    <Compile Include="CommandLine\ICompilerServerLogger.cs" />
+    <Compile Include="CommandLine\IncorrectHashBuildResponse.cs" />
+    <Compile Include="CommandLine\IServerMutex.cs" />
+    <Compile Include="CommandLine\MismatchedVersionBuildResponse.cs" />
+    <Compile Include="CommandLine\NativeMethods.cs" />
+    <Compile Include="CommandLine\PROCESS_INFORMATION.cs" />
+    <Compile Include="CommandLine\RejectedBuildResponse.cs" />
+    <Compile Include="CommandLine\RequestLanguage.cs" />
+    <Compile Include="CommandLine\RunCompilationResult.cs" />
+    <Compile Include="CommandLine\ServerFileMutexPair.cs" />
+    <Compile Include="CommandLine\ServerNamedMutex.cs" />
+    <Compile Include="CommandLine\ShutdownBuildResponse.cs" />
+    <Compile Include="CommandLine\STARTUPINFO.cs" />
+    <Compile Include="CSharp.CommandLine\Csc.cs" />
+    <Compile Include="CSharp.CommandLine\Program.cs" />
+    <Compile Include="NamedPipeUtil.cs" />
+    <Compile Include="RuntimeHostInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

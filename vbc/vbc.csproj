@@ -88,8 +88,8 @@
     <Compile Include="NamedPipeUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeHostInfo.cs" />
-    <Compile Include="VisualBasic\CommandLine\Program.cs" />
-    <Compile Include="VisualBasic\CommandLine\Vbc.cs" />
+    <Compile Include="VisualBasic.CommandLine\Program.cs" />
+    <Compile Include="VisualBasic.CommandLine\Vbc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
