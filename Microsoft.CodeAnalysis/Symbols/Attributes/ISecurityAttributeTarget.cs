@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {

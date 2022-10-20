@@ -12,8 +12,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
-using Microsoft.CodeAnalysis.Collections;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -266,7 +267,7 @@ namespace Microsoft.CodeAnalysis
                     }
                 }
 
-ExitDecodeTypeName:
+            ExitDecodeTypeName:
                 HandleDecodedTypeName(typeNameBuilder.ToString(), decodingTopLevelType, ref topLevelType, ref nestedTypesBuilder);
                 pooledStrBuilder.Free();
 
@@ -485,8 +486,7 @@ ExitDecodeTypeName:
 
         internal static int InferTypeArityFromMetadataName(string emittedTypeName)
         {
-            int suffixStartsAt;
-            return InferTypeArityFromMetadataName(emittedTypeName, out suffixStartsAt);
+            return InferTypeArityFromMetadataName(emittedTypeName, out int suffixStartsAt);
         }
 
         private static short InferTypeArityFromMetadataName(string emittedTypeName, out int suffixStartsAt)
@@ -515,8 +515,7 @@ ExitDecodeTypeName:
             // extract the arity.
             string stringRepresentingArity = emittedTypeName.Substring(indexOfManglingChar);
 
-            int arity;
-            bool nonNumericCharFound = !int.TryParse(stringRepresentingArity, NumberStyles.None, CultureInfo.InvariantCulture, out arity);
+            bool nonNumericCharFound = !int.TryParse(stringRepresentingArity, NumberStyles.None, CultureInfo.InvariantCulture, out int arity);
 
             if (nonNumericCharFound || arity < 0 || arity > short.MaxValue ||
                 stringRepresentingArity != arity.ToString())
@@ -531,8 +530,7 @@ ExitDecodeTypeName:
 
         public static string InferTypeArityAndUnmangleMetadataName(string emittedTypeName, out short arity)
         {
-            int suffixStartsAt;
-            arity = InferTypeArityFromMetadataName(emittedTypeName, out suffixStartsAt);
+            arity = InferTypeArityFromMetadataName(emittedTypeName, out int suffixStartsAt);
 
             if (arity == 0)
             {
@@ -548,8 +546,7 @@ ExitDecodeTypeName:
         {
             Debug.Assert(arity > 0);
 
-            int suffixStartsAt;
-            if (arity == InferTypeArityFromMetadataName(emittedTypeName, out suffixStartsAt))
+            if (arity == InferTypeArityFromMetadataName(emittedTypeName, out int suffixStartsAt))
             {
                 Debug.Assert(suffixStartsAt > 0 && suffixStartsAt < emittedTypeName.Length - 1);
                 return emittedTypeName.Substring(0, suffixStartsAt);
@@ -827,8 +824,8 @@ ExitDecodeTypeName:
                                 lastChildNamespaceName, typesInLastChildNamespace));
                     }
 
-DoneWithSequence:
-/*empty statement*/
+                DoneWithSequence:
+                    /*empty statement*/
                     ;
                 }
             } // using
@@ -856,7 +853,7 @@ DoneWithSequence:
                             Debug.Assert(keyIndex < i);
                             var primaryPair = nestedNamespaces[keyIndex];
                             nestedNamespaces[keyIndex] = KeyValuePairUtil.Create(primaryPair.Key, primaryPair.Value.Concat(pair.Value));
-                            nestedNamespaces[i] = default(KeyValuePair<string, IEnumerable<IGrouping<string, TypeDefinitionHandle>>>);
+                            nestedNamespaces[i] = default;
                         }
                     }
 

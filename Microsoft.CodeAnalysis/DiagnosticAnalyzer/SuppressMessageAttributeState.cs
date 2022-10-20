@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
@@ -49,8 +50,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             public void AddGlobalSymbolSuppression(ISymbol symbol, SuppressMessageInfo info)
             {
-                Dictionary<string, SuppressMessageInfo>? suppressions;
-                if (_globalSymbolSuppressions.TryGetValue(symbol, out suppressions))
+                if (_globalSymbolSuppressions.TryGetValue(symbol, out Dictionary<string, SuppressMessageInfo> suppressions))
                 {
                     AddOrUpdate(info, suppressions);
                 }
@@ -69,8 +69,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             public bool HasGlobalSymbolSuppression(ISymbol symbol, string id, bool isImmediatelyContainingSymbol, out SuppressMessageInfo info)
             {
                 Debug.Assert(symbol != null);
-                Dictionary<string, SuppressMessageInfo>? suppressions;
-                if (_globalSymbolSuppressions.TryGetValue(symbol, out suppressions) &&
+                if (_globalSymbolSuppressions.TryGetValue(symbol, out Dictionary<string, SuppressMessageInfo> suppressions) &&
                     suppressions.TryGetValue(id, out info))
                 {
                     if (symbol.Kind != SymbolKind.Namespace)
@@ -93,7 +92,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     }
                 }
 
-                info = default(SuppressMessageInfo);
+                info = default;
                 return false;
             }
         }
@@ -112,8 +111,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return diagnostic;
             }
 
-            SuppressMessageInfo info;
-            if (IsDiagnosticSuppressed(diagnostic, out info))
+            if (IsDiagnosticSuppressed(diagnostic, out SuppressMessageInfo info))
             {
                 // Attach the suppression info to the diagnostic.
                 diagnostic = diagnostic.WithIsSuppressed(true);
@@ -124,8 +122,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public bool IsDiagnosticSuppressed(Diagnostic diagnostic, [NotNullWhen(true)] out AttributeData? suppressingAttribute)
         {
-            SuppressMessageInfo info;
-            if (IsDiagnosticSuppressed(diagnostic, out info))
+            if (IsDiagnosticSuppressed(diagnostic, out SuppressMessageInfo info))
             {
                 suppressingAttribute = info.Attribute;
                 return true;
@@ -281,8 +278,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             var builder = ImmutableDictionary.CreateBuilder<string, SuppressMessageInfo>();
             foreach (var attribute in attributes)
             {
-                SuppressMessageInfo info;
-                if (!TryDecodeSuppressMessageAttributeData(attribute, out info))
+                if (!TryDecodeSuppressMessageAttributeData(attribute, out SuppressMessageInfo info))
                 {
                     continue;
                 }
@@ -297,8 +293,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         {
             // TODO: How should we deal with multiple SuppressMessage attributes, with different suppression info/states?
             // For now, we just pick the last attribute, if not suppressed.
-            SuppressMessageInfo currentInfo;
-            if (!builder.TryGetValue(info.Id, out currentInfo))
+            if (!builder.TryGetValue(info.Id, out SuppressMessageInfo currentInfo))
             {
                 builder[info.Id] = info;
             }
@@ -316,8 +311,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         {
             foreach (var instance in attributes)
             {
-                SuppressMessageInfo info;
-                if (!TryDecodeSuppressMessageAttributeData(instance, out info))
+                if (!TryDecodeSuppressMessageAttributeData(instance, out SuppressMessageInfo info))
                 {
                     continue;
                 }
@@ -369,7 +363,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private static bool TryDecodeSuppressMessageAttributeData(AttributeData attribute, out SuppressMessageInfo info)
         {
-            info = default(SuppressMessageInfo);
+            info = default;
 
             // We need at least the Category and Id to decode the diagnostic to suppress.
             // The only SuppressMessageAttribute constructor requires those two parameters.

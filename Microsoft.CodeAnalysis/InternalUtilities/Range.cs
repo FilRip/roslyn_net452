@@ -4,6 +4,7 @@
 
 #if !NETCOREAPP
 using System.Runtime.CompilerServices;
+
 using Roslyn.Utilities;
 namespace System
 {

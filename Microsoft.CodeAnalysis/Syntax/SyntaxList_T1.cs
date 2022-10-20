@@ -7,8 +7,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.Syntax;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -128,7 +130,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (this.Count == 0)
                 {
-                    return default(TextSpan);
+                    return default;
                 }
                 else
                 {
@@ -146,7 +148,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (this.Count == 0)
                 {
-                    return default(TextSpan);
+                    return default;
                 }
                 else
                 {
@@ -312,7 +314,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (items.Count == 0)
             {
-                return default(SyntaxList<TNode>);
+                return default;
             }
 
             var newGreen = GreenNode.CreateList(items, static n => n.Green);

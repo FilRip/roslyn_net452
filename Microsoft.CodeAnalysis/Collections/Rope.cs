@@ -4,7 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -73,7 +75,7 @@ namespace Microsoft.CodeAnalysis
         {
             int result = Length;
             foreach (char c in GetChars())
-                result = Hash.Combine((int)c, result);
+                result = Hash.Combine(c, result);
 
             return result;
         }

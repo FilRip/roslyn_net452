@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis
                         overflowKind = CheckOverflow(long.MaxValue, previous, offset);
                         if (overflowKind == EnumOverflowKind.NoOverflow)
                         {
-                            offsetValue = ConstantValue.Create((long)(previous + offset));
+                            offsetValue = ConstantValue.Create(previous + offset);
                         }
                     }
                     break;
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis
                         overflowKind = CheckOverflow(ulong.MaxValue, previous, offset);
                         if (overflowKind == EnumOverflowKind.NoOverflow)
                         {
-                            offsetValue = ConstantValue.Create((ulong)(previous + offset));
+                            offsetValue = ConstantValue.Create(previous + offset);
                         }
                     }
                     break;

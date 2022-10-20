@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.Symbols;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {

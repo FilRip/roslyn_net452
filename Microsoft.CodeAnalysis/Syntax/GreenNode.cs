@@ -9,9 +9,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Microsoft.CodeAnalysis.Collections;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Syntax.InternalSyntax;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -458,7 +459,7 @@ namespace Microsoft.CodeAnalysis
 
         public virtual void WriteTo(ObjectWriter writer)
         {
-            var kindBits = (UInt16)_kind;
+            var kindBits = _kind;
             var hasDiagnostics = this.GetDiagnostics().Length > 0;
             var hasAnnotations = this.GetAnnotations().Length > 0;
 
@@ -595,8 +596,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (this.ContainsAnnotations)
             {
-                SyntaxAnnotation[]? annotations;
-                if (s_annotationsTable.TryGetValue(this, out annotations))
+                if (s_annotationsTable.TryGetValue(this, out SyntaxAnnotation[] annotations))
                 {
                     System.Diagnostics.Debug.Assert(annotations.Length != 0, "we should return nonempty annotations or NoAnnotations");
                     return annotations;
@@ -615,8 +615,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (this.ContainsDiagnostics)
             {
-                DiagnosticInfo[]? diags;
-                if (s_diagnosticsTable.TryGetValue(this, out diags))
+                if (s_diagnosticsTable.TryGetValue(this, out DiagnosticInfo[] diags))
                 {
                     return diags;
                 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Reflection.Metadata;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit
@@ -88,7 +89,7 @@ namespace Microsoft.CodeAnalysis.Emit
         {
             get
             {
-                return default(TypeDefinitionHandle);
+                return default;
             }
         }
 
@@ -162,7 +163,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.INamespaceTypeReference)this);
+            visitor.Visit(this);
         }
 
         Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)
@@ -226,7 +227,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
             void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
             {
-                visitor.Visit((Cci.IAssemblyReference)this);
+                visitor.Visit(this);
             }
 
             Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)

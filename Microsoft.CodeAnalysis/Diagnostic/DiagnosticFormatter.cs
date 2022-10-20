@@ -4,7 +4,9 @@
 
 using System;
 using System.Globalization;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis

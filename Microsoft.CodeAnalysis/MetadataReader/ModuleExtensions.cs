@@ -176,9 +176,8 @@ namespace Microsoft.CodeAnalysis
                     return 1;
                 }
 
-                int countOfSlots;
 
-                if (int.TryParse(emittedMethodName.Substring(index + 1), NumberStyles.None, CultureInfo.InvariantCulture, out countOfSlots)
+                if (int.TryParse(emittedMethodName.Substring(index + 1), NumberStyles.None, CultureInfo.InvariantCulture, out int countOfSlots)
                     && countOfSlots > 0)
                 {
                     return countOfSlots;

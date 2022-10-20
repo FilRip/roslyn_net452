@@ -10,7 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -624,7 +626,7 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                return default(SyntaxTrivia);
+                return default;
             }
         }
 
@@ -997,12 +999,12 @@ namespace Microsoft.CodeAnalysis
                 return FindTriviaByOffset(this, position - this.Position, stepInto);
             }
 
-            return default(SyntaxTrivia);
+            return default;
         }
 
         internal static SyntaxTrivia FindTriviaByOffset(SyntaxNode node, int textOffset, Func<SyntaxTrivia, bool>? stepInto = null)
         {
-recurse:
+        recurse:
             if (textOffset >= 0)
             {
                 foreach (var element in node.ChildNodesAndTokens())
@@ -1057,7 +1059,7 @@ recurse:
                                 }
                             }
 
-                            return default(SyntaxTrivia);
+                            return default;
                         }
                     }
 
@@ -1065,7 +1067,7 @@ recurse:
                 }
             }
 
-            return default(SyntaxTrivia);
+            return default;
         }
 
         /// <summary>
@@ -1333,8 +1335,7 @@ recurse:
                 return this.FindToken(position, SyntaxTrivia.Any);
             }
 
-            SyntaxToken EoF;
-            if (this.TryGetEofAt(position, out EoF))
+            if (this.TryGetEofAt(position, out SyntaxToken EoF))
             {
                 return EoF;
             }
@@ -1360,7 +1361,7 @@ recurse:
                 }
             }
 
-            Eof = default(SyntaxToken);
+            Eof = default;
             return false;
         }
 
@@ -1449,7 +1450,7 @@ recurse:
                 }
             }
 
-            return default(SyntaxTrivia);
+            return default;
         }
 
         /// <summary>

@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -162,7 +164,7 @@ namespace Microsoft.CodeAnalysis
                 return new SyntaxToken(_nodeOrParent, _token, this.Position, _tokenIndex);
             }
 
-            return default(SyntaxToken);
+            return default;
         }
 
         internal bool AsToken(out SyntaxToken token)
@@ -237,7 +239,7 @@ namespace Microsoft.CodeAnalysis
                     return _nodeOrParent.Span;
                 }
 
-                return default(TextSpan);
+                return default;
             }
         }
 
@@ -283,7 +285,7 @@ namespace Microsoft.CodeAnalysis
                     return _nodeOrParent.FullSpan;
                 }
 
-                return default(TextSpan);
+                return default;
             }
         }
 
@@ -367,7 +369,7 @@ namespace Microsoft.CodeAnalysis
                 return _nodeOrParent.GetLeadingTrivia();
             }
 
-            return default(SyntaxTriviaList);
+            return default;
         }
 
         /// <summary>
@@ -391,7 +393,7 @@ namespace Microsoft.CodeAnalysis
                 return _nodeOrParent.GetTrailingTrivia();
             }
 
-            return default(SyntaxTriviaList);
+            return default;
         }
 
         public SyntaxNodeOrToken WithLeadingTrivia(IEnumerable<SyntaxTrivia> trivia)
@@ -966,7 +968,7 @@ namespace Microsoft.CodeAnalysis
             var parent = this.Parent;
             if (parent == null)
             {
-                return default(SyntaxNodeOrToken);
+                return default;
             }
 
             var siblings = parent.ChildNodesAndTokens();
@@ -997,7 +999,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            return default(SyntaxNodeOrToken);
+            return default;
         }
 
         private SyntaxNodeOrToken GetNextSiblingFromStart(ChildSyntaxList siblings)
@@ -1016,7 +1018,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            return default(SyntaxNodeOrToken);
+            return default;
         }
 
         private SyntaxNodeOrToken GetNextSiblingWithSearch(ChildSyntaxList siblings)
@@ -1039,7 +1041,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            return default(SyntaxNodeOrToken);
+            return default;
         }
     }
 }

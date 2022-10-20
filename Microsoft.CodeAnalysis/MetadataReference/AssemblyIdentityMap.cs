@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -26,14 +27,12 @@ namespace Microsoft.CodeAnalysis
 
         public bool Contains(AssemblyIdentity identity, bool allowHigherVersion = true)
         {
-            TValue value;
-            return TryGetValue(identity, out value, allowHigherVersion);
+            return TryGetValue(identity, out TValue value, allowHigherVersion);
         }
 
         public bool TryGetValue(AssemblyIdentity identity, out TValue value, bool allowHigherVersion = true)
         {
-            OneOrMany<KeyValuePair<AssemblyIdentity, TValue>> sameName;
-            if (_map.TryGetValue(identity.Name, out sameName))
+            if (_map.TryGetValue(identity.Name, out OneOrMany<KeyValuePair<AssemblyIdentity, TValue>> sameName))
             {
                 int minHigherVersionCandidate = -1;
 
@@ -69,14 +68,13 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            value = default(TValue);
+            value = default;
             return false;
         }
 
         public bool TryGetValue(AssemblyIdentity identity, out TValue value, Func<Version, Version, TValue, bool> comparer)
         {
-            OneOrMany<KeyValuePair<AssemblyIdentity, TValue>> sameName;
-            if (_map.TryGetValue(identity.Name, out sameName))
+            if (_map.TryGetValue(identity.Name, out OneOrMany<KeyValuePair<AssemblyIdentity, TValue>> sameName))
             {
                 for (int i = 0; i < sameName.Count; i++)
                 {
@@ -91,7 +89,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            value = default(TValue);
+            value = default;
             return false;
         }
 
@@ -99,8 +97,7 @@ namespace Microsoft.CodeAnalysis
         {
             var pair = KeyValuePairUtil.Create(identity, value);
 
-            OneOrMany<KeyValuePair<AssemblyIdentity, TValue>> sameName;
-            _map[identity.Name] = _map.TryGetValue(identity.Name, out sameName) ? sameName.Add(pair) : OneOrMany.Create(pair);
+            _map[identity.Name] = _map.TryGetValue(identity.Name, out OneOrMany<KeyValuePair<AssemblyIdentity, TValue>> sameName) ? sameName.Add(pair) : OneOrMany.Create(pair);
         }
     }
 }

@@ -4,6 +4,7 @@
 
 using System.Collections.Immutable;
 using System.Threading;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -64,7 +65,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     builder.Add(
                         trees[i]!,
-                        new Options(results.IsDefault ? null : (AnalyzerConfigOptionsResult?)results[i]));
+                        new Options(results.IsDefault ? null : results[i]));
                 }
             }
             _options = builder.ToImmutableDictionary();

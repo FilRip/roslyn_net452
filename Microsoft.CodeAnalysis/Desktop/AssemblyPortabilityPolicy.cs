@@ -69,7 +69,7 @@ namespace Microsoft.CodeAnalysis
                     !ReadToChild(xml, 2, "assemblyBinding", ns) ||
                     !ReadToChild(xml, 3, "supportPortability", ns))
                 {
-                    return default(AssemblyPortabilityPolicy);
+                    return default;
                 }
 
                 // 31bf3856ad364e35
@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis
                     bool? enable =
                         string.Equals(enableAttribute, "false", StringComparison.OrdinalIgnoreCase) ? false :
                         string.Equals(enableAttribute, "true", StringComparison.OrdinalIgnoreCase) ? true :
-                        (bool?)null;
+                        null;
 
                     if (enable != null)
                     {

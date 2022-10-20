@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Roslyn.Utilities;
-using static System.Linq.ImmutableArrayExtensions;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
@@ -147,8 +147,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             //evaluation stack at X, clearly, cannot be derived from existing information. In this case, the CLI demands that
             //the evaluation stack at X be empty.          
 
-            LabelInfo labelInfo;
-            if (_labelInfos.TryGetValue(label, out labelInfo))
+            if (_labelInfos.TryGetValue(label, out LabelInfo labelInfo))
             {
                 Debug.Assert(labelInfo.bb == null, "duplicate use of a label");
                 int labelStack = labelInfo.stack;
@@ -200,8 +199,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             bool isConditional = code.IsConditionalBranch();
 
-            LabelInfo labelInfo;
-            if (!_labelInfos.TryGetValue(label, out labelInfo))
+            if (!_labelInfos.TryGetValue(label, out LabelInfo labelInfo))
             {
                 _labelInfos.Add(label, new LabelInfo(_emitState.CurStack, isConditional));
             }
@@ -300,8 +298,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             foreach (object label in labels)
             {
-                LabelInfo ld;
-                if (!_labelInfos.TryGetValue(label, out ld))
+                if (!_labelInfos.TryGetValue(label, out LabelInfo ld))
                 {
                     _labelInfos.Add(label, new LabelInfo(curStack, true));
                 }
@@ -385,7 +382,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             var ctor = module.ArrayMethods.GetArrayConstructor(arrayType);
 
             // idx1, idx2 --> array
-            this.EmitOpCode(ILOpCode.Newobj, 1 - (int)arrayType.Rank);
+            this.EmitOpCode(ILOpCode.Newobj, 1 - arrayType.Rank);
             this.EmitToken(ctor, syntaxNode, diagnostics);
         }
 
@@ -399,7 +396,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             var load = module.ArrayMethods.GetArrayGet(arrayType);
 
             // this, idx1, idx2 --> value
-            this.EmitOpCode(ILOpCode.Call, -(int)arrayType.Rank);
+            this.EmitOpCode(ILOpCode.Call, -arrayType.Rank);
             this.EmitToken(load, syntaxNode, diagnostics);
         }
 
@@ -413,7 +410,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             var address = module.ArrayMethods.GetArrayAddress(arrayType);
 
             // this, idx1, idx2 --> &value
-            this.EmitOpCode(ILOpCode.Call, -(int)arrayType.Rank);
+            this.EmitOpCode(ILOpCode.Call, -arrayType.Rank);
             this.EmitToken(address, syntaxNode, diagnostics);
         }
 
@@ -427,7 +424,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             var store = module.ArrayMethods.GetArraySet(arrayType);
 
             // this, idx1, idx2, value --> void
-            this.EmitOpCode(ILOpCode.Call, -(2 + (int)arrayType.Rank));
+            this.EmitOpCode(ILOpCode.Call, -(2 + arrayType.Rank));
             this.EmitToken(store, syntaxNode, diagnostics);
         }
 
@@ -668,22 +665,22 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         internal void EmitByteConstant(byte value)
         {
-            EmitIntConstant((int)value);
+            EmitIntConstant(value);
         }
 
         internal void EmitSByteConstant(sbyte value)
         {
-            EmitIntConstant((int)value);
+            EmitIntConstant(value);
         }
 
         internal void EmitShortConstant(short value)
         {
-            EmitIntConstant((int)value);
+            EmitIntConstant(value);
         }
 
         internal void EmitUShortConstant(ushort value)
         {
-            EmitIntConstant((int)value);
+            EmitIntConstant(value);
         }
 
         internal void EmitLongConstant(long value)

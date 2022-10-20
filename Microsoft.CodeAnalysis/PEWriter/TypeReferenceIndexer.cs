@@ -5,6 +5,7 @@
 #nullable disable
 
 using Microsoft.CodeAnalysis.Emit;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci

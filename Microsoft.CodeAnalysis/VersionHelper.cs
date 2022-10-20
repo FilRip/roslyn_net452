@@ -153,8 +153,7 @@ namespace Microsoft.CodeAnalysis
 
         private static bool TryGetValue(string s, out ushort value)
         {
-            System.Numerics.BigInteger number;
-            if (System.Numerics.BigInteger.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out number))
+            if (System.Numerics.BigInteger.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out System.Numerics.BigInteger number))
             {
                 //The old compiler would take the 16 least significant bits and use their value as the output
                 //so we'll do that too.
@@ -181,7 +180,7 @@ namespace Microsoft.CodeAnalysis
             // MSDN doc on the attribute: 
             // "The default build number increments daily. The default revision number is the number of seconds since midnight local time 
             // (without taking into account time zone adjustments for daylight saving time), divided by 2."
-            if (time == default(DateTime))
+            if (time == default)
             {
                 time = DateTime.Now;
             }

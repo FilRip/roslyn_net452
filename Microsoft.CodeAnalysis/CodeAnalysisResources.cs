@@ -405,7 +405,7 @@ namespace Microsoft.CodeAnalysis
         {
             get { return Properties.Resources.ResourceManager; }
         }
-            
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetResourceString(string resourceKey, string defaultValue = null)
         {

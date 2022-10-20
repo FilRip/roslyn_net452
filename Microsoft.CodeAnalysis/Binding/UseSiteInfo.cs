@@ -9,7 +9,9 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -72,7 +74,7 @@ namespace Microsoft.CodeAnalysis
 
         public UseSiteInfo<TAssemblySymbol> AdjustDiagnosticInfo(DiagnosticInfo? diagnosticInfo)
         {
-            if ((object?)DiagnosticInfo != diagnosticInfo)
+            if (DiagnosticInfo != diagnosticInfo)
             {
                 if (diagnosticInfo?.Severity == DiagnosticSeverity.Error)
                 {
@@ -456,7 +458,7 @@ namespace Microsoft.CodeAnalysis
             _info = info;
         }
 
-        public bool IsInitialized => (object?)_info != Sentinel;
+        public bool IsInitialized => _info != Sentinel;
 
         public void Initialize(DiagnosticInfo? diagnosticInfo)
         {
@@ -521,7 +523,7 @@ namespace Microsoft.CodeAnalysis
 
         public void InterlockedCompareExchange(TAssemblySymbol? primaryDependency, UseSiteInfo<TAssemblySymbol> value)
         {
-            if ((object?)_info == Sentinel)
+            if (_info == Sentinel)
             {
                 object? info = Compact(value.DiagnosticInfo, GetDependenciesToCache(primaryDependency, value));
                 Interlocked.CompareExchange(ref _info, info, Sentinel);

@@ -109,7 +109,7 @@ namespace Microsoft.CodeAnalysis.Syntax
             }
             else
             {
-                return default(SyntaxTokenList);
+                return default;
             }
         }
 

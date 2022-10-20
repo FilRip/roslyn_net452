@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Text
@@ -125,9 +126,7 @@ namespace Microsoft.CodeAnalysis.Text
                     return 0;
                 }
 
-                int startLineBreak;
-                int lineBreakLength;
-                TextUtilities.GetStartAndLengthOfLineBreakEndingAt(_text, _endIncludingBreaks - 1, out startLineBreak, out lineBreakLength);
+                TextUtilities.GetStartAndLengthOfLineBreakEndingAt(_text, _endIncludingBreaks - 1, out int startLineBreak, out int lineBreakLength);
                 return lineBreakLength;
             }
         }

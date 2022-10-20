@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
@@ -95,13 +95,13 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                 {
                     return separated
                         ? new Syntax.SyntaxList.SeparatedWithManyWeakChildren(this, parent, position)
-                        : (SyntaxNode)new Syntax.SyntaxList.WithManyWeakChildren(this, parent, position);
+                        : new Syntax.SyntaxList.WithManyWeakChildren(this, parent, position);
                 }
                 else
                 {
                     return separated
                         ? new Syntax.SyntaxList.SeparatedWithManyChildren(this, parent, position)
-                        : (SyntaxNode)new Syntax.SyntaxList.WithManyChildren(this, parent, position);
+                        : new Syntax.SyntaxList.WithManyChildren(this, parent, position);
                 }
             }
 

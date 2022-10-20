@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -149,9 +150,8 @@ namespace Microsoft.CodeAnalysis
 
         public static SpecialType GetTypeFromMetadataName(string metadataName)
         {
-            SpecialType id;
 
-            if (s_nameToTypeIdMap.TryGetValue(metadataName, out id))
+            if (s_nameToTypeIdMap.TryGetValue(metadataName, out SpecialType id))
             {
                 return id;
             }

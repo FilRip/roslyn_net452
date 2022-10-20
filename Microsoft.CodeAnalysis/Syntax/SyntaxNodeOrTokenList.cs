@@ -8,8 +8,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.Syntax;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -131,12 +133,12 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// The absolute span of the list elements in characters, including the leading and trailing trivia of the first and last elements.
         /// </summary>
-        public TextSpan FullSpan => _node?.FullSpan ?? default(TextSpan);
+        public TextSpan FullSpan => _node?.FullSpan ?? default;
 
         /// <summary>
         /// The absolute span of the list elements in characters, not including the leading and trailing trivia of the first and last elements.
         /// </summary>
-        public TextSpan Span => _node?.Span ?? default(TextSpan);
+        public TextSpan Span => _node?.Span ?? default;
 
         /// <summary>
         /// Returns the string representation of the nodes and tokens in this list, not including the first node or token's leading trivia 
@@ -183,7 +185,7 @@ namespace Microsoft.CodeAnalysis
         {
             return this.Any()
                 ? this[0]
-                : default(SyntaxNodeOrToken);
+                : default;
         }
 
         /// <summary>
@@ -201,7 +203,7 @@ namespace Microsoft.CodeAnalysis
         {
             return this.Any()
                 ? this[this.Count - 1]
-                : default(SyntaxNodeOrToken);
+                : default;
         }
 
         /// <summary>
@@ -274,7 +276,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="nodeOrToken">The node or token to insert.</param>
         public SyntaxNodeOrTokenList Insert(int index, SyntaxNodeOrToken nodeOrToken)
         {
-            if (nodeOrToken == default(SyntaxNodeOrToken))
+            if (nodeOrToken == default)
             {
                 throw new ArgumentOutOfRangeException(nameof(nodeOrToken));
             }
@@ -313,7 +315,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (items.Count == 0)
             {
-                return default(SyntaxNodeOrTokenList);
+                return default;
             }
 
             var newGreen = GreenNode.CreateList(items, static n => n.RequiredUnderlyingNode)!;
@@ -366,7 +368,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="newNodeOrToken">The new node or token.</param>
         public SyntaxNodeOrTokenList Replace(SyntaxNodeOrToken nodeOrTokenInList, SyntaxNodeOrToken newNodeOrToken)
         {
-            if (newNodeOrToken == default(SyntaxNodeOrToken))
+            if (newNodeOrToken == default)
             {
                 throw new ArgumentOutOfRangeException(nameof(newNodeOrToken));
             }

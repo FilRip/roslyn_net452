@@ -9,7 +9,6 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +18,7 @@ using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,6 +27,7 @@ using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.DiaSymReader;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -98,7 +99,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 else
                 {
-                    if ((object)set != treeFeatures && !set.SetEquals(treeFeatures))
+                    if (set != treeFeatures && !set.SetEquals(treeFeatures))
                     {
                         throw new ArgumentException(Properties.Resources.InconsistentSyntaxTreeFeature, nameof(trees));
                     }
@@ -1176,7 +1177,7 @@ namespace Microsoft.CodeAnalysis
             ImmutableArray<Location?> elementLocations = default,
             ImmutableArray<NullableAnnotation> elementNullableAnnotations = default)
         {
-            if ((object)underlyingType == null)
+            if (underlyingType == null)
             {
                 throw new ArgumentNullException(nameof(underlyingType));
             }
@@ -2460,7 +2461,7 @@ namespace Microsoft.CodeAnalysis
             Stream? sourceLinkStream = null,
             IEnumerable<EmbeddedText>? embeddedTexts = null,
             Stream? metadataPEStream = null,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return Emit(
                 peStream,
@@ -2713,7 +2714,7 @@ namespace Microsoft.CodeAnalysis
             Stream ilStream,
             Stream pdbStream,
             ICollection<MethodDefinitionHandle> updatedMethods,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             return EmitDifference(baseline, edits, s => false, metadataStream, ilStream, pdbStream, updatedMethods, cancellationToken);
         }
@@ -2733,7 +2734,7 @@ namespace Microsoft.CodeAnalysis
             Stream ilStream,
             Stream pdbStream,
             ICollection<MethodDefinitionHandle> updatedMethods,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             if (baseline == null)
             {
@@ -2910,7 +2911,7 @@ namespace Microsoft.CodeAnalysis
                 Func<Stream?>? getPortablePdbStream =
                     moduleBeingBuilt.DebugInformationFormat != DebugInformationFormat.PortablePdb || pdbStreamProvider == null
                     ? null
-                    : (Func<Stream?>)(() => ConditionalGetOrCreateStream(pdbStreamProvider, metadataDiagnostics));
+                    : (() => ConditionalGetOrCreateStream(pdbStreamProvider, metadataDiagnostics));
 
                 try
                 {
@@ -3128,8 +3129,7 @@ namespace Microsoft.CodeAnalysis
 
         public string? Feature(string p)
         {
-            string? v;
-            return _features.TryGetValue(p, out v) ? v : null;
+            return _features.TryGetValue(p, out string v) ? v : null;
         }
 
         #endregion
@@ -3168,9 +3168,8 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            SmallConcurrentSetOfInts? usedImports;
             return syntaxTree != null &&
-                TreeToUsedImportDirectivesMap.TryGetValue(syntaxTree, out usedImports) &&
+                TreeToUsedImportDirectivesMap.TryGetValue(syntaxTree, out SmallConcurrentSetOfInts usedImports) &&
                 usedImports.Contains(position);
         }
 
@@ -3270,12 +3269,12 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Return true if there is a source declaration symbol name that meets given predicate.
         /// </summary>
-        public abstract bool ContainsSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract bool ContainsSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Return source declaration symbols whose name meets given predicate.
         /// </summary>
-        public abstract IEnumerable<ISymbol> GetSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IEnumerable<ISymbol> GetSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 
 #pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         /// <summary>
@@ -3284,7 +3283,7 @@ namespace Microsoft.CodeAnalysis
         /// SymbolFilter, CancellationToken)"/> when predicate is just a simple string check.
         /// <paramref name="name"/> is case sensitive or not depending on the target language.
         /// </summary>
-        public abstract bool ContainsSymbolsWithName(string name, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract bool ContainsSymbolsWithName(string name, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Return source declaration symbols whose name matches the provided name.  This may be
@@ -3292,7 +3291,7 @@ namespace Microsoft.CodeAnalysis
         /// CancellationToken)"/> when predicate is just a simple string check.  <paramref
         /// name="name"/> is case sensitive or not depending on the target language.
         /// </summary>
-        public abstract IEnumerable<ISymbol> GetSymbolsWithName(string name, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract IEnumerable<ISymbol> GetSymbolsWithName(string name, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 #pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         #endregion
@@ -3349,7 +3348,7 @@ namespace Microsoft.CodeAnalysis
                 _lazyMakeWellKnownTypeMissingMap = new SmallDictionary<int, bool>();
             }
 
-            _lazyMakeWellKnownTypeMissingMap[(int)type] = true;
+            _lazyMakeWellKnownTypeMissingMap[type] = true;
         }
 
         protected bool IsTypeMissing(SpecialType type)
@@ -3364,7 +3363,7 @@ namespace Microsoft.CodeAnalysis
 
         protected bool IsTypeMissing(int type)
         {
-            return _lazyMakeWellKnownTypeMissingMap != null && _lazyMakeWellKnownTypeMissingMap.ContainsKey((int)type);
+            return _lazyMakeWellKnownTypeMissingMap != null && _lazyMakeWellKnownTypeMissingMap.ContainsKey(type);
         }
 
         /// <summary>

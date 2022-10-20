@@ -10,8 +10,10 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis.Interop;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -211,10 +213,8 @@ namespace Microsoft.CodeAnalysis
         {
             IClrStrongName strongName = GetStrongNameInterface();
 
-            IntPtr keyBlob;
-            int keyBlobByteCount;
 
-            strongName.StrongNameGetPublicKey(keyContainer, pbKeyBlob: default, 0, out keyBlob, out keyBlobByteCount);
+            strongName.StrongNameGetPublicKey(keyContainer, pbKeyBlob: default, 0, out IntPtr keyBlob, out int keyBlobByteCount);
 
             byte[] pubKey = new byte[keyBlobByteCount];
             Marshal.Copy(keyBlob, pubKey, 0, keyBlobByteCount);

@@ -33,8 +33,7 @@ namespace Microsoft.CodeAnalysis
         {
             var str = DecimalFloatingPointString.FromSource(s);
             var dbl = DoubleFloatingPointType.Instance;
-            ulong result;
-            var status = RealParser.ConvertDecimalToFloatingPointBits(str, dbl, out result);
+            var status = RealParser.ConvertDecimalToFloatingPointBits(str, dbl, out ulong result);
             d = BitConverter.Int64BitsToDouble((long)result);
             return status != Status.Overflow;
         }
@@ -51,8 +50,7 @@ namespace Microsoft.CodeAnalysis
         {
             var str = DecimalFloatingPointString.FromSource(s);
             var dbl = FloatFloatingPointType.Instance;
-            ulong result;
-            var status = RealParser.ConvertDecimalToFloatingPointBits(str, dbl, out result);
+            var status = RealParser.ConvertDecimalToFloatingPointBits(str, dbl, out ulong result);
             f = Int32BitsToFloat((uint)result);
             return status != Status.Overflow;
         }
@@ -345,9 +343,8 @@ namespace Microsoft.CodeAnalysis
                     int lastExponent = i;
                     while (i < source.Length && source[i] >= '0' && source[i] <= '9') lastExponent = ++i;
 
-                    int exponentMagnitude = 0;
 
-                    if (int.TryParse(source.Substring(firstExponent, lastExponent - firstExponent), out exponentMagnitude) &&
+                    if (int.TryParse(source.Substring(firstExponent, lastExponent - firstExponent), out int exponentMagnitude) &&
                         exponentMagnitude <= MAX_EXP)
                     {
                         if (exponentSign == '-')
@@ -429,8 +426,7 @@ namespace Microsoft.CodeAnalysis
             // of the mantissa.  If either [1] this number has more than the required
             // number of bits of precision or [2] the mantissa has no fractional part,
             // then we can assemble the result immediately:
-            byte[] integerValueAsBytes;
-            uint integerBitsOfPrecision = CountSignificantBits(integerValue, out integerValueAsBytes);
+            uint integerBitsOfPrecision = CountSignificantBits(integerValue, out byte[] integerValueAsBytes);
             if (integerBitsOfPrecision >= requiredBitsOfPrecision ||
                 fractionalDigitsPresent == 0)
             {
@@ -528,8 +524,7 @@ namespace Microsoft.CodeAnalysis
                 : fractionalShift;
 
             ShiftLeft(ref fractionalNumerator, remainingBitsOfPrecisionRequired);
-            BigInteger fractionalRemainder;
-            BigInteger bigFractionalMantissa = BigInteger.DivRem(fractionalNumerator, fractionalDenominator, out fractionalRemainder);
+            BigInteger bigFractionalMantissa = BigInteger.DivRem(fractionalNumerator, fractionalDenominator, out BigInteger fractionalRemainder);
             ulong fractionalMantissa = (ulong)bigFractionalMantissa;
 
             bool hasZeroTail = fractionalRemainder.IsZero;
@@ -598,7 +593,7 @@ namespace Microsoft.CodeAnalysis
             int bottomElementIndex = Math.Max(0, topElementIndex - (64 / 8) + 1);
             exponent = baseExponent + bottomElementIndex * 8;
             mantissa = 0;
-            for (int i = (int)topElementIndex; i >= bottomElementIndex; i--)
+            for (int i = topElementIndex; i >= bottomElementIndex; i--)
             {
                 mantissa <<= 8;
                 mantissa |= integerValueAsBytes[i];
@@ -681,8 +676,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private static uint CountSignificantBits(BigInteger data)
         {
-            byte[] dataBytes;
-            return CountSignificantBits(data, out dataBytes);
+            return CountSignificantBits(data, out byte[] dataBytes);
         }
 
         /// <summary>

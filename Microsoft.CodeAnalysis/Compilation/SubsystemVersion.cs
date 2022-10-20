@@ -3,11 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -105,10 +102,9 @@ namespace Microsoft.CodeAnalysis
                     minor = null;
                 }
 
-                int majorValue;
 
                 if (major != major.Trim() ||
-                    !int.TryParse(major, NumberStyles.None, CultureInfo.InvariantCulture, out majorValue) ||
+                    !int.TryParse(major, NumberStyles.None, CultureInfo.InvariantCulture, out int majorValue) ||
                     majorValue >= 65356 || majorValue < 0)
                 {
                     return false;

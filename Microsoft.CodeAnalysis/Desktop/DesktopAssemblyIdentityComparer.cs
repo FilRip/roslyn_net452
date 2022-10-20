@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
         //   Non-FX identities:
         //     if (isUnified1 && version1 > version2 || isUnified2 && version1 < version2) return EquivalentUnified.
 
-        public static new DesktopAssemblyIdentityComparer Default { get; } = new DesktopAssemblyIdentityComparer(default(AssemblyPortabilityPolicy));
+        public static new DesktopAssemblyIdentityComparer Default { get; } = new DesktopAssemblyIdentityComparer(default);
 
         internal readonly AssemblyPortabilityPolicy policy;
 
@@ -164,8 +164,7 @@ namespace Microsoft.CodeAnalysis
                 return false;
             }
 
-            FrameworkAssemblyDictionary.Value value;
-            if (!s_arFxPolicy.TryGetValue(identity.Name, out value) ||
+            if (!s_arFxPolicy.TryGetValue(identity.Name, out FrameworkAssemblyDictionary.Value value) ||
                 !value.PublicKeyToken.SequenceEqual(identity.PublicKeyToken))
             {
                 return false;
@@ -179,8 +178,7 @@ namespace Microsoft.CodeAnalysis
 
         private static bool IsRetargetableAssembly(AssemblyIdentity identity)
         {
-            bool retargetable, portable;
-            IsRetargetableAssembly(identity, out retargetable, out portable);
+            IsRetargetableAssembly(identity, out bool retargetable, out bool portable);
             return retargetable;
         }
 
@@ -191,8 +189,7 @@ namespace Microsoft.CodeAnalysis
                 return false;
             }
 
-            bool retargetable, portable;
-            IsRetargetableAssembly(identity, out retargetable, out portable);
+            IsRetargetableAssembly(identity, out bool retargetable, out bool portable);
             return retargetable && portable;
         }
 
@@ -214,8 +211,7 @@ namespace Microsoft.CodeAnalysis
                 return;
             }
 
-            FrameworkRetargetingDictionary.Value value;
-            retargetable = s_arRetargetPolicy.TryGetValue(identity, out value);
+            retargetable = s_arRetargetPolicy.TryGetValue(identity, out FrameworkRetargetingDictionary.Value value);
             portable = value.IsPortable;
         }
 
@@ -226,8 +222,7 @@ namespace Microsoft.CodeAnalysis
                 return identity;
             }
 
-            FrameworkRetargetingDictionary.Value value;
-            if (s_arRetargetPolicy.TryGetValue(identity, out value))
+            if (s_arRetargetPolicy.TryGetValue(identity, out FrameworkRetargetingDictionary.Value value))
             {
                 return new AssemblyIdentity(
                     value.NewName ?? identity.Name,

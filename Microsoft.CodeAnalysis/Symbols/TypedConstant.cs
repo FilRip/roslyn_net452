@@ -6,7 +6,9 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -32,7 +34,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         public TypedConstant(ITypeSymbolInternal type, ImmutableArray<TypedConstant> array)
-            : this(type, TypedConstantKind.Array, value: array.IsDefault ? null : (object)array)
+            : this(type, TypedConstantKind.Array, value: array.IsDefault ? null : array)
         {
         }
 

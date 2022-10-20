@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.Syntax
         {
             if (builder == null)
             {
-                return default(SyntaxList<SyntaxNode>);
+                return default;
             }
 
             return builder.ToList();

@@ -9,9 +9,11 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.Debugging;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
@@ -73,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             this.module = module;
             this.LocalSlotManager = localSlotManager;
-            _emitState = default(EmitState);
+            _emitState = default;
             _scopeManager = new LocalScopeManager();
 
             leaderBlock = _currentBlock = _scopeManager.CreateBlock(this);
@@ -177,7 +179,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 for (int marker = startMarker; marker <= endMarker; marker++)
                 {
                     current.AddILMarker(marker);
-                    _allocatedILMarkers[marker] = new ILMarker() { BlockOffset = (int)current.RegularInstructionsLength, AbsoluteOffset = -1 };
+                    _allocatedILMarkers[marker] = new ILMarker() { BlockOffset = current.RegularInstructionsLength, AbsoluteOffset = -1 };
                 }
             }
         }
@@ -281,7 +283,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// </summary>
         private static void MarkReachableFrom(ArrayBuilder<BasicBlock> reachableBlocks, BasicBlock block)
         {
-tryAgain:
+        tryAgain:
 
             if (block != null && block.Reachability == Reachability.NotReachable)
             {
@@ -1233,7 +1235,7 @@ tryAgain:
             _allocatedILMarkers.Add(
                 new ILMarker()
                 {
-                    BlockOffset = (int)curBlock.RegularInstructionsLength,
+                    BlockOffset = curBlock.RegularInstructionsLength,
                     AbsoluteOffset = -1
                 }
             );

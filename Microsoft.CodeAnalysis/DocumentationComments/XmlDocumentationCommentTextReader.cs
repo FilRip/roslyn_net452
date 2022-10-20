@@ -5,8 +5,8 @@
 #nullable disable
 
 using System.Xml;
+
 using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {

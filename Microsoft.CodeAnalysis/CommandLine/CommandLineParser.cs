@@ -11,8 +11,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -953,7 +955,7 @@ namespace Microsoft.CodeAnalysis
                 string? resolvedPath = FileUtilities.ResolveRelativePath(path, baseDirectory);
                 if (resolvedPath == null)
                 {
-                    errors.Add(Diagnostic.Create(MessageProvider, (int)MessageProvider.FTL_InvalidInputFileName, path));
+                    errors.Add(Diagnostic.Create(MessageProvider, MessageProvider.FTL_InvalidInputFileName, path));
                 }
                 else
                 {
@@ -1073,7 +1075,7 @@ namespace Microsoft.CodeAnalysis
 
                         if (resolvedPath == null)
                         {
-                            errors.Add(Diagnostic.Create(MessageProvider, (int)MessageProvider.FTL_InvalidInputFileName, path));
+                            errors.Add(Diagnostic.Create(MessageProvider, MessageProvider.FTL_InvalidInputFileName, path));
                             break;
                         }
 
@@ -1093,7 +1095,7 @@ namespace Microsoft.CodeAnalysis
                     else
                     {
                         // handling wildcard in file spec
-                        errors.Add(Diagnostic.Create(MessageProvider, (int)MessageProvider.ERR_FileNotFound, path));
+                        errors.Add(Diagnostic.Create(MessageProvider, MessageProvider.ERR_FileNotFound, path));
                     }
                 }
             }

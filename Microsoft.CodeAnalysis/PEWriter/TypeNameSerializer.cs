@@ -4,12 +4,12 @@
 
 #nullable disable
 
+using System.Diagnostics;
+using System.Text;
+
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
-using System.Text;
-using System.Diagnostics;
 
 namespace Microsoft.Cci
 {
@@ -43,7 +43,7 @@ namespace Microsoft.Cci
                         sb.Append('*');
                     }
 
-                    sb.Append(',', (int)arrType.Rank - 1);
+                    sb.Append(',', arrType.Rank - 1);
 
                     sb.Append(']');
                 }
@@ -117,8 +117,8 @@ namespace Microsoft.Cci
                 goto done;
             }
 
-// TODO: error
-done:
+        // TODO: error
+        done:
             if (isAssemblyQualified)
             {
                 AppendAssemblyQualifierIfNecessary(sb, UnwrapTypeReference(typeReference, context), out isAssemblyQualified, context);

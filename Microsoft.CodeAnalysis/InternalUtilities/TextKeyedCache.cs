@@ -3,16 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 using System.Threading;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Roslyn.Utilities
 {
@@ -219,7 +213,7 @@ namespace Roslyn.Utilities
             var i1 = NextRandom() & SharedBucketSizeMask;
             idx = (idx + ((i1 * i1 + i1) / 2)) & SharedSizeMask;
 
-foundIdx:
+        foundIdx:
             arr[idx].HashCode = hashCode;
             Volatile.Write(ref arr[idx].Entry, e);
         }

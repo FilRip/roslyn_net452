@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.Syntax
         {
             if (builder == null || builder.Count == 0)
             {
-                return default(SyntaxTokenList);
+                return default;
             }
 
             return new SyntaxTokenList(null, builder.ToListNode(), 0, 0);

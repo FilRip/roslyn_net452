@@ -9,13 +9,13 @@ namespace Microsoft.CodeAnalysis
         public virtual TResult? Visit(ISymbol? symbol)
         {
             return symbol == null
-                ? default(TResult?)
+                ? default
                 : symbol.Accept(this);
         }
 
         public virtual TResult? DefaultVisit(ISymbol symbol)
         {
-            return default(TResult?);
+            return default;
         }
 
         public virtual TResult? VisitAlias(IAliasSymbol symbol)

@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -86,7 +87,7 @@ namespace Microsoft.CodeAnalysis
             name._inferredArity = -1;
             name._useCLSCompliantNameArityEncoding = useCLSCompliantNameArityEncoding;
             name._forcedArity = (short)forcedArity;
-            name._namespaceSegments = default(ImmutableArray<string>);
+            name._namespaceSegments = default;
 
             return name;
         }
@@ -114,7 +115,7 @@ namespace Microsoft.CodeAnalysis
             name._inferredArity = -1;
             name._useCLSCompliantNameArityEncoding = useCLSCompliantNameArityEncoding;
             name._forcedArity = (short)forcedArity;
-            name._namespaceSegments = default(ImmutableArray<string>);
+            name._namespaceSegments = default;
 
             return name;
         }

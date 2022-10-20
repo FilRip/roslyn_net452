@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection.Metadata;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -336,7 +337,7 @@ namespace Microsoft.CodeAnalysis
 
         public static ConstantValue Create(DateTime value)
         {
-            if (value == default(DateTime))
+            if (value == default)
             {
                 return ConstantValueDefault.DateTime;
             }

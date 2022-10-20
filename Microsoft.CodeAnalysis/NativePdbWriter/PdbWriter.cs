@@ -12,12 +12,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.DiaSymReader;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.Cci
@@ -97,8 +98,7 @@ namespace Microsoft.Cci
 
             if (!isKickoffMethod && methodBody.ImportScope != null)
             {
-                IMethodDefinition forwardToMethod;
-                if (customDebugInfoWriter.ShouldForwardNamespaceScopes(Context, methodBody, methodHandle, out forwardToMethod))
+                if (customDebugInfoWriter.ShouldForwardNamespaceScopes(Context, methodBody, methodHandle, out IMethodDefinition forwardToMethod))
                 {
                     if (forwardToMethod != null)
                     {
@@ -134,8 +134,7 @@ namespace Microsoft.Cci
             // delta doesn't need this information - we use information recorded by previous generation emit
             bool emitEncInfo = compilationOptions.EnableEditAndContinue && _metadataWriter.IsFullMetadata;
 
-            bool emitExternNamespaces;
-            byte[] blob = customDebugInfoWriter.SerializeMethodDebugInfo(Context, methodBody, methodHandle, emitEncInfo, suppressNewCustomDebugInfo, out emitExternNamespaces);
+            byte[] blob = customDebugInfoWriter.SerializeMethodDebugInfo(Context, methodBody, methodHandle, emitEncInfo, suppressNewCustomDebugInfo, out bool emitExternNamespaces);
             if (blob != null)
             {
                 _symWriter.DefineCustomMetadata(blob);
@@ -327,8 +326,7 @@ namespace Microsoft.Cci
 
         internal string GetOrCreateSerializedNamespaceName(INamespace @namespace)
         {
-            string result;
-            if (!_qualifiedNameCache.TryGetValue(@namespace, out result))
+            if (!_qualifiedNameCache.TryGetValue(@namespace, out string result))
             {
                 result = TypeNameSerializer.BuildQualifiedNamespaceName(@namespace);
                 _qualifiedNameCache.Add(@namespace, result);
@@ -339,8 +337,7 @@ namespace Microsoft.Cci
 
         internal string GetOrCreateSerializedTypeName(ITypeReference typeReference)
         {
-            string result;
-            if (!_qualifiedNameCache.TryGetValue(typeReference, out result))
+            if (!_qualifiedNameCache.TryGetValue(typeReference, out string result))
             {
                 if (Module.GenerateVisualBasicStylePdb)
                 {

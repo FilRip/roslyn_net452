@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Immutable;
 using System.Text;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.Text
@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.Text
         public override SourceText ToSourceText()
         {
             this.Flush();
-            return new LargeText(_chunks.ToImmutableAndFree(), _encoding, default(ImmutableArray<byte>), _checksumAlgorithm, default(ImmutableArray<byte>));
+            return new LargeText(_chunks.ToImmutableAndFree(), _encoding, default, _checksumAlgorithm, default);
         }
 
         // https://github.com/dotnet/roslyn/issues/40830

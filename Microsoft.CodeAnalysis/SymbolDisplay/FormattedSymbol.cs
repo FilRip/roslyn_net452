@@ -4,10 +4,12 @@
 
 #nullable disable
 
-using Microsoft.CodeAnalysis.Symbols;
-using Roslyn.Utilities;
 using System;
 using System.Diagnostics;
+
+using Microsoft.CodeAnalysis.Symbols;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {

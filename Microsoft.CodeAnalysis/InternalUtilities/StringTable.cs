@@ -5,6 +5,7 @@
 using System;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis;
 
@@ -560,7 +561,7 @@ namespace Roslyn.Utilities
             var i1 = LocalNextRandom() & SharedBucketSizeMask;
             idx = (idx + ((i1 * i1 + i1) / 2)) & SharedSizeMask;
 
-foundIdx:
+        foundIdx:
             arr[idx].HashCode = hashCode;
             Volatile.Write(ref arr[idx].Text, text);
         }
@@ -649,7 +650,7 @@ foundIdx:
             var i1 = SharedNextRandom() & SharedBucketSizeMask;
             idx = (idx + ((i1 * i1 + i1) / 2)) & SharedSizeMask;
 
-foundIdx:
+        foundIdx:
             arr[idx].HashCode = hashCode;
             Volatile.Write(ref arr[idx].Text, text);
         }

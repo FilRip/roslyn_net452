@@ -11,8 +11,10 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -68,9 +70,9 @@ namespace Microsoft.CodeAnalysis
                 Debug.Assert(index >= 0);
                 _index = index + 1;
                 _kind = kind;
-                _aliasesOpt = default(ImmutableArray<string>);
-                _recursiveAliasesOpt = default(ImmutableArray<string>);
-                _mergedReferencesOpt = default(ImmutableArray<MetadataReference>);
+                _aliasesOpt = default;
+                _recursiveAliasesOpt = default;
+                _mergedReferencesOpt = default;
             }
 
             // initialized aliases
@@ -218,8 +220,7 @@ namespace Microsoft.CodeAnalysis
             DiagnosticBag diagnostics)
         {
             // Locations of all #r directives in the order they are listed in the references list.
-            ImmutableArray<Location> referenceDirectiveLocations;
-            GetCompilationReferences(compilation, diagnostics, out references, out boundReferenceDirectiveMap, out referenceDirectiveLocations);
+            GetCompilationReferences(compilation, diagnostics, out references, out boundReferenceDirectiveMap, out ImmutableArray<Location> referenceDirectiveLocations);
 
             // References originating from #r directives precede references supplied as arguments of the compilation.
             int referenceCount = references.Length;
@@ -252,11 +253,10 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 // add bound reference if it doesn't exist yet, merging aliases:
-                MetadataReference? existingReference;
-                if (boundReferences.TryGetValue(boundReference, out existingReference))
+                if (boundReferences.TryGetValue(boundReference, out MetadataReference existingReference))
                 {
                     // merge properties of compilation-based references if the underlying compilations are the same
-                    if ((object)boundReference != existingReference)
+                    if (boundReference != existingReference)
                     {
                         MergeReferenceProperties(existingReference, boundReference, diagnostics, ref lazyAliasMap);
                     }
@@ -443,8 +443,8 @@ namespace Microsoft.CodeAnalysis
 
             if (propertyMapOpt != null && propertyMapOpt.TryGetValue(reference, out MergedAliases? mergedProperties))
             {
-                aliasesOpt = mergedProperties.AliasesOpt?.ToImmutableAndFree() ?? default(ImmutableArray<string>);
-                recursiveAliasesOpt = mergedProperties.RecursiveAliasesOpt?.ToImmutableAndFree() ?? default(ImmutableArray<string>);
+                aliasesOpt = mergedProperties.AliasesOpt?.ToImmutableAndFree() ?? default;
+                recursiveAliasesOpt = mergedProperties.RecursiveAliasesOpt?.ToImmutableAndFree() ?? default;
 
                 if (mergedProperties.MergedReferencesOpt is object)
                 {
@@ -453,13 +453,13 @@ namespace Microsoft.CodeAnalysis
             }
             else if (reference.Properties.HasRecursiveAliases)
             {
-                aliasesOpt = default(ImmutableArray<string>);
+                aliasesOpt = default;
                 recursiveAliasesOpt = reference.Properties.Aliases;
             }
             else
             {
                 aliasesOpt = reference.Properties.Aliases;
-                recursiveAliasesOpt = default(ImmutableArray<string>);
+                recursiveAliasesOpt = default;
             }
 
             return new ResolvedReference(index, kind, aliasesOpt, recursiveAliasesOpt, mergedReferences);
@@ -584,7 +584,7 @@ namespace Microsoft.CodeAnalysis
                     var cy = y as CompilationReference;
                     if (cy != null)
                     {
-                        return (object)cx.Compilation == cy.Compilation;
+                        return cx.Compilation == cy.Compilation;
                     }
                 }
 
@@ -619,8 +619,7 @@ namespace Microsoft.CodeAnalysis
                 lazyAliasMap = new Dictionary<MetadataReference, MergedAliases>();
             }
 
-            MergedAliases? mergedAliases;
-            if (!lazyAliasMap.TryGetValue(primaryReference, out mergedAliases))
+            if (!lazyAliasMap.TryGetValue(primaryReference, out MergedAliases mergedAliases))
             {
                 mergedAliases = new MergedAliases();
                 lazyAliasMap.Add(primaryReference, mergedAliases);
@@ -671,8 +670,7 @@ namespace Microsoft.CodeAnalysis
         {
             var referencedAssembly = new ReferencedAssemblyIdentity(identity, reference, assemblyIndex);
 
-            List<ReferencedAssemblyIdentity>? sameSimpleNameIdentities;
-            if (!referencesBySimpleName.TryGetValue(identity.Name, out sameSimpleNameIdentities))
+            if (!referencesBySimpleName.TryGetValue(identity.Name, out List<ReferencedAssemblyIdentity> sameSimpleNameIdentities))
             {
                 referencesBySimpleName.Add(identity.Name, new List<ReferencedAssemblyIdentity> { referencedAssembly });
                 return null;
@@ -703,7 +701,7 @@ namespace Microsoft.CodeAnalysis
                 return null;
             }
 
-            ReferencedAssemblyIdentity equivalent = default(ReferencedAssemblyIdentity);
+            ReferencedAssemblyIdentity equivalent = default;
             if (identity.IsStrongName)
             {
                 foreach (var other in sameSimpleNameIdentities)

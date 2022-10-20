@@ -7,8 +7,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CodeGen;
-using Cci = Microsoft.Cci;
 
 namespace Microsoft.CodeAnalysis.Emit.NoPia
 {
@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
             void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
             {
-                visitor.Visit((Cci.IPropertyDefinition)this);
+                visitor.Visit(this);
             }
 
             Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)

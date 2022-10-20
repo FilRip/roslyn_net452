@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.FlowAnalysis;
 using Microsoft.CodeAnalysis.PooledObjects;
 
@@ -365,8 +366,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public GeneratedCodeAnalysisFlags GetGeneratedCodeAnalysisFlags(DiagnosticAnalyzer analyzer)
         {
-            GeneratedCodeAnalysisFlags mode;
-            return _generatedCodeConfigurationMap.TryGetValue(analyzer, out mode) ? mode : AnalyzerDriver.DefaultGeneratedCodeAnalysisFlags;
+            return _generatedCodeConfigurationMap.TryGetValue(analyzer, out GeneratedCodeAnalysisFlags mode) ? mode : AnalyzerDriver.DefaultGeneratedCodeAnalysisFlags;
         }
 
         public void RegisterCompilationStartAction(DiagnosticAnalyzer analyzer, Action<CompilationStartAnalysisContext> action)

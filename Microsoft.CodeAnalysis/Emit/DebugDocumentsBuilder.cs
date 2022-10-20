@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Roslyn.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
@@ -50,8 +51,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         public Cci.DebugSourceDocument? TryGetDebugDocumentForNormalizedPath(string normalizedPath)
         {
-            Cci.DebugSourceDocument? document;
-            _debugDocuments.TryGetValue(normalizedPath, out document);
+            _debugDocuments.TryGetValue(normalizedPath, out Cci.DebugSourceDocument document);
             return document;
         }
 
@@ -68,8 +68,7 @@ namespace Microsoft.CodeAnalysis.Emit
             }
 
             var key = (path, basePath);
-            string? normalizedPath;
-            if (!_normalizedPathsCache.TryGetValue(key, out normalizedPath))
+            if (!_normalizedPathsCache.TryGetValue(key, out string normalizedPath))
             {
                 normalizedPath = _resolver.NormalizePath(path, basePath) ?? path;
                 _normalizedPathsCache.TryAdd(key, normalizedPath);

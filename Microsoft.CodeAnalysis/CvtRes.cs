@@ -4,17 +4,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis.Text;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection.PortableExecutable;
+using System.Text;
+
+using Roslyn.Utilities;
+
 using BYTE = System.Byte;
 using DWORD = System.UInt32;
 using WCHAR = System.Char;
 using WORD = System.UInt16;
-using System.Reflection.PortableExecutable;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
 
                 stream.Position = (stream.Position + 3) & ~3;
 
-                if (pAdditional.pstringType.theString == null && (pAdditional.pstringType.Ordinal == (WORD)RT_DLGINCLUDE))
+                if (pAdditional.pstringType.theString == null && (pAdditional.pstringType.Ordinal == RT_DLGINCLUDE))
                 {
                     // Ignore DLGINCLUDE resources
                     continue;
@@ -394,10 +394,10 @@ namespace Microsoft.CodeAnalysis
                 */
 
                 resStream.Position = (resStream.Position + 3) & ~3; //headers begin on 4-byte boundaries.
-                resWriter.Write((DWORD)iconDirEntries[i].dwBytesInRes);
+                resWriter.Write(iconDirEntries[i].dwBytesInRes);
                 resWriter.Write((DWORD)0x00000020);
                 resWriter.Write((WORD)0xFFFF);
-                resWriter.Write((WORD)RT_ICON);
+                resWriter.Write(RT_ICON);
                 resWriter.Write((WORD)0xFFFF);
                 resWriter.Write((WORD)(i + 1));       //EDMAURER this is not general. Implies you can only append one icon to the resources.
                                                       //This icon ID would seem to be global among all of the icons not just this group.
@@ -443,7 +443,7 @@ namespace Microsoft.CodeAnalysis
             resWriter.Write((DWORD)(3 * sizeof(WORD) + count * /*sizeof(ICONRESDIR)*/ 14));
             resWriter.Write((DWORD)0x00000020);
             resWriter.Write((WORD)0xFFFF);
-            resWriter.Write((WORD)RT_GROUP_ICON);
+            resWriter.Write(RT_GROUP_ICON);
             resWriter.Write((WORD)0xFFFF);
             resWriter.Write((WORD)0x7F00);  //IDI_APPLICATION
             resWriter.Write((DWORD)0x00000000);
@@ -455,17 +455,17 @@ namespace Microsoft.CodeAnalysis
             //the ICONDIR
             resWriter.Write((WORD)0x0000);
             resWriter.Write((WORD)0x0001);
-            resWriter.Write((WORD)count);
+            resWriter.Write(count);
 
             for (ushort i = 0; i < count; i++)
             {
-                resWriter.Write((BYTE)iconDirEntries[i].bWidth);
-                resWriter.Write((BYTE)iconDirEntries[i].bHeight);
-                resWriter.Write((BYTE)iconDirEntries[i].bColorCount);
-                resWriter.Write((BYTE)iconDirEntries[i].bReserved);
-                resWriter.Write((WORD)iconDirEntries[i].wPlanes);
-                resWriter.Write((WORD)iconDirEntries[i].wBitCount);
-                resWriter.Write((DWORD)iconDirEntries[i].dwBytesInRes);
+                resWriter.Write(iconDirEntries[i].bWidth);
+                resWriter.Write(iconDirEntries[i].bHeight);
+                resWriter.Write(iconDirEntries[i].bColorCount);
+                resWriter.Write(iconDirEntries[i].bReserved);
+                resWriter.Write(iconDirEntries[i].wPlanes);
+                resWriter.Write(iconDirEntries[i].wBitCount);
+                resWriter.Write(iconDirEntries[i].dwBytesInRes);
                 resWriter.Write((WORD)(i + 1));   //ID
             }
         }
@@ -559,7 +559,7 @@ namespace Microsoft.CodeAnalysis
             resWriter.Write((DWORD)(manifestStream.Length));    //data size
             resWriter.Write((DWORD)0x00000020);                 //header size
             resWriter.Write((WORD)0xFFFF);                      //identifies type as ordinal.
-            resWriter.Write((WORD)RT_MANIFEST);                 //type
+            resWriter.Write(RT_MANIFEST);                 //type
             resWriter.Write((WORD)0xFFFF);                      //identifies name as ordinal.
             resWriter.Write((WORD)((isDll) ? 0x0002 : 0x0001));  //EDMAURER executables are named "1", DLLs "2"
             resWriter.Write((DWORD)0x00000000);                 //data version
@@ -642,23 +642,21 @@ namespace Microsoft.CodeAnalysis
             {
                 //There's nothing guaranteeing that these are n.n.n.n format.
                 //The documentation says that if they're not that format the behavior is undefined.
-                Version fileVersion;
-                VersionHelper.TryParse(_fileVersionContents, version: out fileVersion);
+                VersionHelper.TryParse(_fileVersionContents, version: out Version fileVersion);
 
 
-                Version productVersion;
-                VersionHelper.TryParse(_productVersionContents, version: out productVersion);
+                VersionHelper.TryParse(_productVersionContents, version: out Version productVersion);
 
-                writer.Write((DWORD)0xFEEF04BD);
+                writer.Write(0xFEEF04BD);
                 writer.Write((DWORD)0x00010000);
-                writer.Write((DWORD)((uint)fileVersion.Major << 16) | (uint)fileVersion.Minor);
-                writer.Write((DWORD)((uint)fileVersion.Build << 16) | (uint)fileVersion.Revision);
-                writer.Write((DWORD)((uint)productVersion.Major << 16) | (uint)productVersion.Minor);
-                writer.Write((DWORD)((uint)productVersion.Build << 16) | (uint)productVersion.Revision);
+                writer.Write((uint)fileVersion.Major << 16 | (uint)fileVersion.Minor);
+                writer.Write((uint)fileVersion.Build << 16 | (uint)fileVersion.Revision);
+                writer.Write((uint)productVersion.Major << 16 | (uint)productVersion.Minor);
+                writer.Write((uint)productVersion.Build << 16 | (uint)productVersion.Revision);
                 writer.Write((DWORD)0x0000003F);   //VS_FFI_FILEFLAGSMASK  (EDMAURER) really? all these bits are valid?
                 writer.Write((DWORD)0);    //file flags
                 writer.Write((DWORD)0x00000004);   //VOS__WINDOWS32
-                writer.Write((DWORD)this.FileType);
+                writer.Write(FileType);
                 writer.Write((DWORD)0);    //file subtype
                 writer.Write((DWORD)0);    //date most sig
                 writer.Write((DWORD)0);    //date least sig
@@ -711,7 +709,7 @@ namespace Microsoft.CodeAnalysis
                 var startPos = writer.BaseStream.Position;
                 Debug.Assert((startPos & 3) == 0);
 
-                writer.Write((WORD)cbBlock);
+                writer.Write(cbBlock);
                 writer.Write((WORD)(keyValuePair.Value.Length + 1)); //add 1 for nul
                 writer.Write((WORD)1);
                 writer.Write(keyValuePair.Key.ToCharArray());
@@ -807,7 +805,7 @@ namespace Microsoft.CodeAnalysis
                 var dataSize = GetDataSize();
 
                 writer.Write((WORD)dataSize);
-                writer.Write((WORD)sizeVS_FIXEDFILEINFO);
+                writer.Write(sizeVS_FIXEDFILEINFO);
                 writer.Write((WORD)0);
                 writer.Write(vsVersionInfoKey.ToCharArray());
                 writer.Write(new byte[KEYBYTES(vsVersionInfoKey) - vsVersionInfoKey.Length * 2]);

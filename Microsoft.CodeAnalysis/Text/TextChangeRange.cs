@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Text
@@ -120,7 +121,7 @@ namespace Microsoft.CodeAnalysis.Text
             if (start > end)
             {
                 // there were no changes.
-                return default(TextChangeRange);
+                return default;
             }
 
             var combined = TextSpan.FromBounds(start, end);

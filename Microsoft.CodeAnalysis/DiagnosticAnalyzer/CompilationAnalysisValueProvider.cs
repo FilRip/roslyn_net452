@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             // We do it outside the lock statement as this may call into user code which can be a long running operation.
             if (!_analysisValueProvider.TryGetValue(key, out value))
             {
-                value = default(TValue);
+                value = default;
                 return false;
             }
 
@@ -48,8 +48,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             lock (_valueMap)
             {
                 // Check if another thread already stored the computed value.
-                TValue storedValue;
-                if (_valueMap.TryGetValue(key, out storedValue))
+                if (_valueMap.TryGetValue(key, out TValue storedValue))
                 {
                     // If so, we return the stored value.
                     value = storedValue;

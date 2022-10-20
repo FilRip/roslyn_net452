@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
+
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -351,11 +353,10 @@ namespace Microsoft.CodeAnalysis
                 return null;
             }
 
-            AttributeData? attribute;
             var suppressMessageState = new SuppressMessageAttributeState(compilation);
             if (!suppressMessageState.IsDiagnosticSuppressed(
                     this,
-                    out attribute))
+                    out AttributeData attribute))
             {
                 attribute = null;
             }

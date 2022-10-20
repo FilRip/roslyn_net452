@@ -11,8 +11,8 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.Emit.NoPia;
 using Microsoft.CodeAnalysis.PooledObjects;
@@ -236,9 +236,8 @@ namespace Microsoft.CodeAnalysis.Emit
             Debug.Assert(methodSymbol.IsDefinition);
             Debug.Assert(((IMethodSymbol)methodSymbol.GetISymbol()).PartialDefinitionPart == null); // Must be definition.
 
-            Cci.IMethodBody body;
 
-            if (_methodBodyMap.TryGetValue(methodSymbol, out body))
+            if (_methodBodyMap.TryGetValue(methodSymbol, out Cci.IMethodBody body))
             {
                 return body;
             }
@@ -251,7 +250,7 @@ namespace Microsoft.CodeAnalysis.Emit
             Debug.Assert(methodSymbol.ContainingModule == CommonSourceModule);
             Debug.Assert(methodSymbol.IsDefinition);
             Debug.Assert(((IMethodSymbol)methodSymbol.GetISymbol()).PartialDefinitionPart == null); // Must be definition.
-            Debug.Assert(body == null || (object)methodSymbol == body.MethodDefinition.GetInternalSymbol());
+            Debug.Assert(body == null || methodSymbol == body.MethodDefinition.GetInternalSymbol());
 
             _methodBodyMap.Add(methodSymbol, body);
         }
@@ -354,7 +353,7 @@ namespace Microsoft.CodeAnalysis.Emit
         {
             if (_lazyAssemblyReferenceAliases.IsDefault)
             {
-                ImmutableInterlocked.InterlockedCompareExchange(ref _lazyAssemblyReferenceAliases, CalculateAssemblyReferenceAliases(context), default(ImmutableArray<Cci.AssemblyReferenceAlias>));
+                ImmutableInterlocked.InterlockedCompareExchange(ref _lazyAssemblyReferenceAliases, CalculateAssemblyReferenceAliases(context), default);
             }
 
             return _lazyAssemblyReferenceAliases;
@@ -959,7 +958,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         public sealed override Cci.ITypeReference GetPlatformType(Cci.PlatformType platformType, EmitContext context)
         {
-            Debug.Assert((object)this == context.Module);
+            Debug.Assert(this == context.Module);
 
             switch (platformType)
             {

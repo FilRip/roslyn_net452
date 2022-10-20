@@ -6,7 +6,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis.Text
 {
@@ -111,7 +110,7 @@ namespace Microsoft.CodeAnalysis.Text
                     }
                     else
                     {
-                        return default(TextLine);
+                        return default;
                     }
                 }
             }

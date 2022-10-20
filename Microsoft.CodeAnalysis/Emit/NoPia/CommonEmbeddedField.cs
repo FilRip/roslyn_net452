@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.CodeGen;
 
 namespace Microsoft.CodeAnalysis.Emit.NoPia
@@ -73,7 +74,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
             {
                 get
                 {
-                    return default(ImmutableArray<byte>);
+                    return default;
                 }
             }
 
@@ -180,7 +181,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
             void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
             {
-                visitor.Visit((Cci.IFieldDefinition)this);
+                visitor.Visit(this);
             }
 
             Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)

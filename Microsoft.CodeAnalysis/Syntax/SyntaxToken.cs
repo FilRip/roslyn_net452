@@ -8,7 +8,9 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -109,7 +111,7 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                return Node != null ? new TextSpan(Position + Node.GetLeadingTriviaWidth(), Node.Width) : default(TextSpan);
+                return Node != null ? new TextSpan(Position + Node.GetLeadingTriviaWidth(), Node.Width) : default;
             }
         }
 
@@ -318,7 +320,7 @@ namespace Microsoft.CodeAnalysis
                     index: 0);
             }
 
-            return default(SyntaxToken);
+            return default;
         }
 
         /// <summary>
@@ -348,7 +350,7 @@ namespace Microsoft.CodeAnalysis
                     index: 0);
             }
 
-            return default(SyntaxToken);
+            return default;
         }
 
         /// <summary>
@@ -379,7 +381,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (token.Node == null)
             {
-                return default(SyntaxToken);
+                return default;
             }
 
             if (Node == null)
@@ -411,7 +413,7 @@ namespace Microsoft.CodeAnalysis
             {
                 return Node != null
                     ? new SyntaxTriviaList(this, Node.GetLeadingTriviaCore(), this.Position)
-                    : default(SyntaxTriviaList);
+                    : default;
             }
         }
 
@@ -425,7 +427,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (Node == null)
                 {
-                    return default(SyntaxTriviaList);
+                    return default;
                 }
 
                 var leading = Node.GetLeadingTriviaCore();
@@ -480,7 +482,7 @@ namespace Microsoft.CodeAnalysis
         {
             return Node != null
                 ? new SyntaxToken(null, Node.WithLeadingTrivia(GreenNode.CreateList(trivia, static t => t.RequiredUnderlyingNode)), position: 0, index: 0)
-                : default(SyntaxToken);
+                : default;
         }
 
         /// <summary>
@@ -506,7 +508,7 @@ namespace Microsoft.CodeAnalysis
         {
             return Node != null
                 ? new SyntaxToken(null, Node.WithTrailingTrivia(GreenNode.CreateList(trivia, static t => t.RequiredUnderlyingNode)), position: 0, index: 0)
-                : default(SyntaxToken);
+                : default;
         }
 
         /// <summary>
@@ -585,7 +587,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (Node == null)
             {
-                return default(SyntaxToken);
+                return default;
             }
 
             return SyntaxNavigator.Instance.GetNextToken(this, includeZeroWidth, includeSkipped, includeDirectives, includeDocumentationComments);
@@ -602,7 +604,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (Node == null)
             {
-                return default(SyntaxToken);
+                return default;
             }
 
             return SyntaxNavigator.Instance.GetNextToken(this, predicate, stepInto);
@@ -616,7 +618,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (Node == null)
             {
-                return default(SyntaxToken);
+                return default;
             }
 
             return SyntaxNavigator.Instance.GetPreviousToken(this, includeZeroWidth, includeSkipped, includeDirectives, includeDocumentationComments);

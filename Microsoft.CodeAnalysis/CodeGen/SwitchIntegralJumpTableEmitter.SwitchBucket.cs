@@ -3,10 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
-using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
@@ -290,7 +289,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     return false;
                 }
 
-                uint labelsCount = (uint)(bucket1.LabelsCount + bucket2.LabelsCount);
+                uint labelsCount = bucket1.LabelsCount + bucket2.LabelsCount;
                 ulong bucketSize = GetBucketSize(startConstant, endConstant);
 
                 return !IsSparse(labelsCount, bucketSize);

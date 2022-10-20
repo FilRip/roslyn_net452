@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.Collections.Internal;
 
 namespace Microsoft.CodeAnalysis.Collections
@@ -439,13 +440,13 @@ namespace Microsoft.CodeAnalysis.Collections
 
             goto ReturnNotFound;
 
-ConcurrentOperation:
+        ConcurrentOperation:
             ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
-ReturnFound:
+        ReturnFound:
             ref TValue value = ref entry._value;
-Return:
+        Return:
             return ref value;
-ReturnNotFound:
+        ReturnNotFound:
             value = ref RoslynUnsafe.NullRef<TValue>();
             goto Return;
         }

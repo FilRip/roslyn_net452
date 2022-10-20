@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
+
 using Roslyn.Utilities;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -114,7 +115,7 @@ namespace Microsoft.Cci
         {
             get
             {
-                return this as IGenericTypeParameter;
+                return this;
             }
         }
 
@@ -122,7 +123,7 @@ namespace Microsoft.Cci
         {
             get
             {
-                return this as IGenericTypeParameterReference;
+                return this;
             }
         }
 
@@ -209,7 +210,7 @@ namespace Microsoft.Cci
         {
             get
             {
-                return default(TypeDefinitionHandle);
+                return default;
             }
         }
 

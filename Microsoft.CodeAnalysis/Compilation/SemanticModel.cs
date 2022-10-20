@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
 
@@ -72,7 +73,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The expression or statement syntax node.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns></returns>
-        public IOperation? GetOperation(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        public IOperation? GetOperation(SyntaxNode node, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -103,7 +104,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the semantic info.</param>
-        internal SymbolInfo GetSymbolInfo(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        internal SymbolInfo GetSymbolInfo(SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return GetSymbolInfoCore(node, cancellationToken);
         }
@@ -114,7 +115,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the semantic info.</param>
-        protected abstract SymbolInfo GetSymbolInfoCore(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract SymbolInfo GetSymbolInfoCore(SyntaxNode node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Binds the node in the context of the specified location and get semantic information
@@ -208,7 +209,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the semantic info.</param>
-        internal TypeInfo GetTypeInfo(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        internal TypeInfo GetTypeInfo(SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return GetTypeInfoCore(node, cancellationToken);
         }
@@ -219,7 +220,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the semantic info.</param>
-        protected abstract TypeInfo GetTypeInfoCore(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract TypeInfo GetTypeInfoCore(SyntaxNode node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// If "nameSyntax" resolves to an alias name, return the IAliasSymbol corresponding
@@ -228,7 +229,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="nameSyntax">Name to get alias info for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the alias information.</param>
-        internal IAliasSymbol? GetAliasInfo(SyntaxNode nameSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        internal IAliasSymbol? GetAliasInfo(SyntaxNode nameSyntax, CancellationToken cancellationToken = default)
         {
             return GetAliasInfoCore(nameSyntax, cancellationToken);
         }
@@ -240,7 +241,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="nameSyntax">Name to get alias info for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the alias information.</param>
-        protected abstract IAliasSymbol? GetAliasInfoCore(SyntaxNode nameSyntax, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract IAliasSymbol? GetAliasInfoCore(SyntaxNode nameSyntax, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns true if this is a speculative semantic model created with any of the TryGetSpeculativeSemanticModel methods.
@@ -334,7 +335,7 @@ namespace Microsoft.CodeAnalysis
         /// If no argument is specified, then diagnostics for the entire tree are returned.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the diagnostics.</param>
-        public abstract ImmutableArray<Diagnostic> GetSyntaxDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetSyntaxDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all of the declaration errors within the syntax tree associated with this
@@ -348,7 +349,7 @@ namespace Microsoft.CodeAnalysis
         /// is called, all declarations are analyzed for diagnostics. Calling this a second time
         /// will return the cached diagnostics.
         /// </remarks>
-        public abstract ImmutableArray<Diagnostic> GetDeclarationDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetDeclarationDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all of the method body and initializer errors within the syntax tree associated with this
@@ -362,7 +363,7 @@ namespace Microsoft.CodeAnalysis
         /// is called, all method bodies are analyzed for diagnostics. Calling this a second time
         /// will repeat this work.
         /// </remarks>
-        public abstract ImmutableArray<Diagnostic> GetMethodBodyDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetMethodBodyDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get all the errors within the syntax tree associated with this object. Includes errors
@@ -379,7 +380,7 @@ namespace Microsoft.CodeAnalysis
         /// GetDeclarationDiagnostics, diagnostics for method bodies and initializers are not
         /// cached, any semantic information used to obtain the diagnostics is discarded.
         /// </remarks>
-        public abstract ImmutableArray<Diagnostic> GetDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default(CancellationToken));
+        public abstract ImmutableArray<Diagnostic> GetDiagnostics(TextSpan? span = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the symbol associated with a declaration syntax node.
@@ -390,7 +391,7 @@ namespace Microsoft.CodeAnalysis
         /// UsingDirectiveSyntax</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol declared by the node or null if the node is not a declaration.</returns>
-        internal ISymbol? GetDeclaredSymbolForNode(SyntaxNode declaration, CancellationToken cancellationToken = default(CancellationToken))
+        internal ISymbol? GetDeclaredSymbolForNode(SyntaxNode declaration, CancellationToken cancellationToken = default)
         {
             return GetDeclaredSymbolCore(declaration, cancellationToken);
         }
@@ -404,7 +405,7 @@ namespace Microsoft.CodeAnalysis
         /// UsingDirectiveSyntax</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol declared by the node or null if the node is not a declaration.</returns>
-        protected abstract ISymbol? GetDeclaredSymbolCore(SyntaxNode declaration, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract ISymbol? GetDeclaredSymbolCore(SyntaxNode declaration, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the symbol associated with a declaration syntax node. Unlike <see cref="GetDeclaredSymbolForNode(SyntaxNode, CancellationToken)"/>,
@@ -417,7 +418,7 @@ namespace Microsoft.CodeAnalysis
         /// UsingDirectiveSyntax</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbols declared by the node.</returns>
-        internal ImmutableArray<ISymbol> GetDeclaredSymbolsForNode(SyntaxNode declaration, CancellationToken cancellationToken = default(CancellationToken))
+        internal ImmutableArray<ISymbol> GetDeclaredSymbolsForNode(SyntaxNode declaration, CancellationToken cancellationToken = default)
         {
             return GetDeclaredSymbolsCore(declaration, cancellationToken);
         }
@@ -433,7 +434,7 @@ namespace Microsoft.CodeAnalysis
         /// UsingDirectiveSyntax</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbols declared by the node.</returns>
-        protected abstract ImmutableArray<ISymbol> GetDeclaredSymbolsCore(SyntaxNode declaration, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract ImmutableArray<ISymbol> GetDeclaredSymbolsCore(SyntaxNode declaration, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the available named symbols in the context of the specified location and optional container. Only
@@ -738,7 +739,7 @@ namespace Microsoft.CodeAnalysis
         /// HasValue set to true and with Value set to the constant.  If the node does not have an
         /// constant value, an Optional will be returned with HasValue set to false.
         /// </summary>
-        public Optional<object?> GetConstantValue(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        public Optional<object?> GetConstantValue(SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return GetConstantValueCore(node, cancellationToken);
         }
@@ -748,14 +749,14 @@ namespace Microsoft.CodeAnalysis
         /// HasValue set to true and with Value set to the constant.  If the node does not have an
         /// constant value, an Optional will be returned with HasValue set to false.
         /// </summary>
-        protected abstract Optional<object?> GetConstantValueCore(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract Optional<object?> GetConstantValueCore(SyntaxNode node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// When getting information for a symbol that resolves to a method group or property group,
         /// from which a method is then chosen; the chosen method or property is present in Symbol;
         /// all methods in the group that was consulted are placed in this property.
         /// </summary>
-        internal ImmutableArray<ISymbol> GetMemberGroup(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        internal ImmutableArray<ISymbol> GetMemberGroup(SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return GetMemberGroupCore(node, cancellationToken);
         }
@@ -765,13 +766,13 @@ namespace Microsoft.CodeAnalysis
         /// from which a method is then chosen; the chosen method or property is present in Symbol;
         /// all methods in the group that was consulted are placed in this property.
         /// </summary>
-        protected abstract ImmutableArray<ISymbol> GetMemberGroupCore(SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract ImmutableArray<ISymbol> GetMemberGroupCore(SyntaxNode node, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Given a position in the SyntaxTree for this SemanticModel returns the innermost Symbol
         /// that the position is considered inside of.
         /// </summary>
-        public ISymbol? GetEnclosingSymbol(int position, CancellationToken cancellationToken = default(CancellationToken))
+        public ISymbol? GetEnclosingSymbol(int position, CancellationToken cancellationToken = default)
         {
             return GetEnclosingSymbolCore(position, cancellationToken);
         }
@@ -780,7 +781,7 @@ namespace Microsoft.CodeAnalysis
         /// Given a position in the SyntaxTree for this SemanticModel returns the innermost Symbol
         /// that the position is considered inside of.
         /// </summary>
-        protected abstract ISymbol? GetEnclosingSymbolCore(int position, CancellationToken cancellationToken = default(CancellationToken));
+        protected abstract ISymbol? GetEnclosingSymbolCore(int position, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Determines if the symbol is accessible from the specified location.

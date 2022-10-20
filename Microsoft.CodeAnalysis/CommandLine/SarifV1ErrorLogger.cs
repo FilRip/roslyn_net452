@@ -8,7 +8,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.Diagnostics;
+
 using Roslyn.Utilities;
 
 #pragma warning disable RS0013 // We need to invoke Diagnostic.Descriptor here to log all the metadata properties of the diagnostic.

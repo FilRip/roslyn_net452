@@ -4,12 +4,13 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
+
+using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
 {

@@ -4,12 +4,14 @@
 
 using System;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.Text
 {
@@ -47,7 +49,7 @@ namespace Microsoft.CodeAnalysis.Text
         }
 
         internal LargeText(ImmutableArray<char[]> chunks, Encoding? encodingOpt, SourceHashAlgorithm checksumAlgorithm)
-            : this(chunks, encodingOpt, default(ImmutableArray<byte>), checksumAlgorithm, default(ImmutableArray<byte>))
+            : this(chunks, encodingOpt, default, checksumAlgorithm, default)
         {
         }
 
@@ -72,7 +74,7 @@ namespace Microsoft.CodeAnalysis.Text
                 // We must compute the checksum and embedded text blob now while we still have the original bytes in hand.
                 // We cannot re-encode to obtain checksum and blob as the encoding is not guaranteed to round-trip.
                 var checksum = CalculateChecksum(stream, checksumAlgorithm);
-                var embeddedTextBlob = canBeEmbedded ? EmbeddedText.CreateBlob(stream) : default(ImmutableArray<byte>);
+                var embeddedTextBlob = canBeEmbedded ? EmbeddedText.CreateBlob(stream) : default;
                 return new LargeText(chunks, reader.CurrentEncoding, checksum, checksumAlgorithm, embeddedTextBlob);
             }
         }
@@ -206,7 +208,7 @@ namespace Microsoft.CodeAnalysis.Text
             }
         }
 
-        public override void Write(TextWriter writer, TextSpan span, CancellationToken cancellationToken = default(CancellationToken))
+        public override void Write(TextWriter writer, TextSpan span, CancellationToken cancellationToken = default)
         {
             if (span.Start < 0 || span.Start > _length || span.End > _length)
             {
@@ -302,7 +304,7 @@ namespace Microsoft.CodeAnalysis.Text
                         case '\u0085':
                         case '\u2028':
                         case '\u2029':
-line_break:
+                        line_break:
                             arrayBuilder.Add(position);
                             position = index;
                             break;

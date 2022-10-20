@@ -10,10 +10,11 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.Debugging;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
-using Cci = Microsoft.Cci;
 
 namespace Microsoft.CodeAnalysis.CodeGen
 {
@@ -507,7 +508,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     {
                         while (result.Count <= slotIndex)
                         {
-                            result.Add(default(StateMachineHoistedLocalScope));
+                            result.Add(default);
                         }
 
                         result[slotIndex] = newScope;

@@ -6,8 +6,8 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis
             int idx = hash & mask;
 
             var entries = this.entries;
-            if ((object)entries[idx].key == (object)key)
+            if (entries[idx].key == key)
             {
                 value = entries[idx].value;
                 return true;
@@ -180,7 +180,7 @@ namespace Microsoft.CodeAnalysis
             int idx = hash & mask;
 
             var entries = this.entries;
-            if ((object)entries[idx].key == (object)key)
+            if (entries[idx].key == key)
             {
                 return entries[idx].value;
             }

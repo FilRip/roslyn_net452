@@ -4,7 +4,9 @@
 
 using System;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CodeGen;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit

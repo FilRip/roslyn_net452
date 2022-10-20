@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.Collections
@@ -145,7 +146,6 @@ namespace Microsoft.CodeAnalysis.Collections
         /// </summary>
         private ImmutableArray<TElement> GetOrCreateValue(TKey key)
         {
-            ImmutableArray<TElement> elements;
             ConcurrentDictionary<TKey, ImmutableArray<TElement>>? concurrentMap;
 
             // Check if we're fully populated before trying to retrieve the elements.  If we are
@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis.Collections
             }
 
             // first check to see if they are already cached
-            if (localMap.TryGetValue(key, out elements))
+            if (localMap.TryGetValue(key, out ImmutableArray<TElement> elements))
             {
                 return elements;
             }
@@ -233,9 +233,8 @@ namespace Microsoft.CodeAnalysis.Collections
                 foreach (var key in allKeys)
                 {
                     // Copy non-empty values from the existing map
-                    ImmutableArray<TElement> elements;
 
-                    if (!existingMap.TryGetValue(key, out elements))
+                    if (!existingMap.TryGetValue(key, out ImmutableArray<TElement> elements))
                     {
                         elements = _getElementsOfKey(key);
                     }

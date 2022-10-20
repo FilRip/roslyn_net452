@@ -4,7 +4,7 @@
 
 using System;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis
 
             public override string GetValueToDisplay()
             {
-                return ((object)this == (object)Uninitialized) ? "unset" : "null";
+                return (this == (object)Uninitialized) ? "unset" : "null";
             }
         }
 
@@ -387,7 +387,7 @@ namespace Microsoft.CodeAnalysis
             {
                 get
                 {
-                    return default(char);
+                    return default;
                 }
             }
 
@@ -395,7 +395,7 @@ namespace Microsoft.CodeAnalysis
             {
                 get
                 {
-                    return default(DateTime);
+                    return default;
                 }
             }
 

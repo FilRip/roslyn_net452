@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis
@@ -53,8 +54,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             MetadataHelpers.AssemblyQualifiedTypeName fullName = MetadataHelpers.DecodeTypeName(s);
-            bool refersToNoPiaLocalType;
-            return GetTypeSymbol(fullName, out refersToNoPiaLocalType);
+            return GetTypeSymbol(fullName, out bool refersToNoPiaLocalType);
         }
 
         protected TypeSymbol GetUnsupportedMetadataTypeSymbol(BadImageFormatException exception = null)
@@ -127,8 +127,7 @@ namespace Microsoft.CodeAnalysis
             int referencedAssemblyIndex;
             if (fullName.AssemblyName != null)
             {
-                AssemblyIdentity identity;
-                if (!AssemblyIdentity.TryParseDisplayName(fullName.AssemblyName, out identity))
+                if (!AssemblyIdentity.TryParseDisplayName(fullName.AssemblyName, out AssemblyIdentity identity))
                 {
                     refersToNoPiaLocalType = false;
                     return GetUnsupportedMetadataTypeSymbol();
@@ -180,8 +179,7 @@ namespace Microsoft.CodeAnalysis
             //  Substitute type arguments if any
             if (fullName.TypeArguments != null)
             {
-                ImmutableArray<bool> argumentRefersToNoPiaLocalType;
-                var typeArguments = ResolveTypeArguments(fullName.TypeArguments, out argumentRefersToNoPiaLocalType);
+                var typeArguments = ResolveTypeArguments(fullName.TypeArguments, out ImmutableArray<bool> argumentRefersToNoPiaLocalType);
                 container = SubstituteTypeParameters(container, typeArguments, argumentRefersToNoPiaLocalType);
 
                 foreach (bool flag in argumentRefersToNoPiaLocalType)
@@ -210,8 +208,8 @@ namespace Microsoft.CodeAnalysis
                 {
                     Debug.Assert(rank >= 0);
                     container = rank == 0 ?
-                                GetSZArrayTypeSymbol(container, default(ImmutableArray<ModifierInfo<TypeSymbol>>)) :
-                                GetMDArrayTypeSymbol(rank, container, default(ImmutableArray<ModifierInfo<TypeSymbol>>), ImmutableArray<int>.Empty, default(ImmutableArray<int>));
+                                GetSZArrayTypeSymbol(container, default) :
+                                GetMDArrayTypeSymbol(rank, container, default, ImmutableArray<int>.Empty, default);
                 }
             }
 
@@ -226,8 +224,7 @@ namespace Microsoft.CodeAnalysis
 
             foreach (var argument in arguments)
             {
-                bool refersToNoPia;
-                typeArgumentsBuilder.Add(new KeyValuePair<TypeSymbol, ImmutableArray<ModifierInfo<TypeSymbol>>>(GetTypeSymbol(argument, out refersToNoPia), ImmutableArray<ModifierInfo<TypeSymbol>>.Empty));
+                typeArgumentsBuilder.Add(new KeyValuePair<TypeSymbol, ImmutableArray<ModifierInfo<TypeSymbol>>>(GetTypeSymbol(argument, out bool refersToNoPia), ImmutableArray<ModifierInfo<TypeSymbol>>.Empty));
                 refersToNoPiaBuilder.Add(refersToNoPia);
             }
 

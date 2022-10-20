@@ -4,7 +4,9 @@
 
 using System;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -83,7 +85,7 @@ namespace Microsoft.CodeAnalysis
             // then just return an invalid span.
             if (_syntaxTree == null)
             {
-                FileLinePositionSpan result = default(FileLinePositionSpan);
+                FileLinePositionSpan result = default;
                 Debug.Assert(!result.IsValid);
                 return result;
             }
@@ -97,7 +99,7 @@ namespace Microsoft.CodeAnalysis
             // then just return an invalid span.
             if (_syntaxTree == null)
             {
-                FileLinePositionSpan result = default(FileLinePositionSpan);
+                FileLinePositionSpan result = default;
                 Debug.Assert(!result.IsValid);
                 return result;
             }

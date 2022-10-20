@@ -5,7 +5,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
@@ -194,8 +196,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
                 uint hash = computeStringHashcodeDelegate((string?)stringConstant.Value);
 
-                HashBucket? bucket;
-                if (!stringHashMap.TryGetValue(hash, out bucket))
+                if (!stringHashMap.TryGetValue(hash, out HashBucket bucket))
                 {
                     bucket = new HashBucket();
                     stringHashMap.Add(hash, bucket);

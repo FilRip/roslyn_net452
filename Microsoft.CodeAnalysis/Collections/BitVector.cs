@@ -5,7 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using Roslyn.Utilities;
+
 using Word = System.UInt64;
 
 namespace Microsoft.CodeAnalysis

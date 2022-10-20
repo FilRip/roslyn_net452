@@ -7,12 +7,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
+using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -132,11 +133,9 @@ namespace Microsoft.CodeAnalysis
             var ivtMap = new Dictionary<string, List<ImmutableArray<byte>>>(StringComparer.OrdinalIgnoreCase);
             foreach (string attrVal in Modules[0].GetInternalsVisibleToAttributeValues(Handle))
             {
-                AssemblyIdentity identity;
-                if (AssemblyIdentity.TryParseDisplayName(attrVal, out identity))
+                if (AssemblyIdentity.TryParseDisplayName(attrVal, out AssemblyIdentity identity))
                 {
-                    List<ImmutableArray<byte>> keys;
-                    if (ivtMap.TryGetValue(identity.Name, out keys))
+                    if (ivtMap.TryGetValue(identity.Name, out List<ImmutableArray<byte>> keys))
                         keys.Add(identity.PublicKey);
                     else
                     {
@@ -162,9 +161,8 @@ namespace Microsoft.CodeAnalysis
             if (_lazyInternalsVisibleToMap == null)
                 Interlocked.CompareExchange(ref _lazyInternalsVisibleToMap, BuildInternalsVisibleToMap(), null);
 
-            List<ImmutableArray<byte>> result;
 
-            _lazyInternalsVisibleToMap.TryGetValue(simpleName, out result);
+            _lazyInternalsVisibleToMap.TryGetValue(simpleName, out List<ImmutableArray<byte>> result);
 
             return result ?? SpecializedCollections.EmptyEnumerable<ImmutableArray<byte>>();
         }

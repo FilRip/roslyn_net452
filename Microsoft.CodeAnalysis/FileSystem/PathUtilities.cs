@@ -678,7 +678,7 @@ namespace Roslyn.Utilities
                 {
                     if (!IsDirectorySeparator(ch))
                     {
-                        hc = Hash.Combine((int)char.ToUpperInvariant(ch), hc);
+                        hc = Hash.Combine(char.ToUpperInvariant(ch), hc);
                     }
                 }
             }

@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+
+using Microsoft.CodeAnalysis.PooledObjects;
+
+using Roslyn.Utilities;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 
@@ -106,10 +108,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
         private ArrayMethod GetArrayMethod(Cci.IArrayTypeReference arrayType, ArrayMethodKind id)
         {
             var key = ((byte)id, new IReferenceOrISignature(arrayType));
-            ArrayMethod? result;
 
             var dict = _dict;
-            if (!dict.TryGetValue(key, out result))
+            if (!dict.TryGetValue(key, out ArrayMethod result))
             {
                 result = MakeArrayMethod(arrayType, id);
                 result = dict.GetOrAdd(key, result);
@@ -198,7 +199,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             protected override ImmutableArray<ArrayMethodParameterInfo> MakeParameters()
             {
-                int rank = (int)arrayType.Rank;
+                int rank = arrayType.Rank;
                 var parameters = ArrayBuilder<ArrayMethodParameterInfo>.GetInstance(rank + 1);
 
                 for (int i = 0; i < rank; i++)
@@ -306,7 +307,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         // Set overrides this to include "value" parameter.
         protected virtual ImmutableArray<ArrayMethodParameterInfo> MakeParameters()
         {
-            int rank = (int)arrayType.Rank;
+            int rank = arrayType.Rank;
             var parameters = ArrayBuilder<ArrayMethodParameterInfo>.GetInstance(rank);
 
             for (int i = 0; i < rank; i++)

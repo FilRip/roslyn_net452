@@ -6,7 +6,9 @@
 
 using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.SymbolDisplay
@@ -241,7 +243,7 @@ namespace Microsoft.CodeAnalysis.SymbolDisplay
                 // If we had 0 as the value, and there's an enum value equal to 0, then use that.
                 var zeroField = constantValueULong == 0
                     ? EnumField.FindValue(allFieldsAndValues, 0)
-                    : default(EnumField);
+                    : default;
                 if (!zeroField.IsDefault)
                 {
                     ((IFieldSymbol)zeroField.IdentityOpt).Accept(this.NotFirstVisitor);

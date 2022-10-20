@@ -15,6 +15,7 @@ using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Threading;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
@@ -300,14 +301,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 // Arguments are present--check prologue.
                 if (argsReader.ReadByte() == 1 && argsReader.ReadByte() == 0)
                 {
-                    string firstLanguageName;
-                    if (!PEModule.CrackStringInAttributeValue(out firstLanguageName, ref argsReader))
+                    if (!PEModule.CrackStringInAttributeValue(out string firstLanguageName, ref argsReader))
                     {
                         return SpecializedCollections.EmptyEnumerable<string>();
                     }
 
-                    ImmutableArray<string> additionalLanguageNames;
-                    if (PEModule.CrackStringArrayInAttributeValue(out additionalLanguageNames, ref argsReader))
+                    if (PEModule.CrackStringArrayInAttributeValue(out ImmutableArray<string> additionalLanguageNames, ref argsReader))
                     {
                         if (additionalLanguageNames.Length == 0)
                         {
@@ -521,8 +520,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             private ImmutableArray<TExtension> GetLanguageSpecificAnalyzers(Assembly analyzerAssembly, ImmutableSortedDictionary<string, ImmutableSortedSet<string>> analyzerTypeNameMap, string language, ref bool reportedError)
             {
-                ImmutableSortedSet<string>? languageSpecificAnalyzerTypeNames;
-                if (!analyzerTypeNameMap.TryGetValue(language, out languageSpecificAnalyzerTypeNames))
+                if (!analyzerTypeNameMap.TryGetValue(language, out ImmutableSortedSet<string> languageSpecificAnalyzerTypeNames))
                 {
                     return ImmutableArray<TExtension>.Empty;
                 }

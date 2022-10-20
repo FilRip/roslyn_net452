@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Syntax
@@ -158,7 +159,7 @@ namespace Microsoft.CodeAnalysis.Syntax
             }
             else
             {
-                return default(SyntaxNodeOrTokenList);
+                return default;
             }
         }
     }

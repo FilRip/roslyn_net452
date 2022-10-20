@@ -4,12 +4,12 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Threading;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
-using System;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         public CustomAttributesBag()
-            : this(CustomAttributeBagCompletionPart.None, default(ImmutableArray<T>))
+            : this(CustomAttributeBagCompletionPart.None, default)
         {
         }
 
@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static CustomAttributesBag<T> WithEmptyData()
         {
-            return new CustomAttributesBag<T>(CustomAttributeBagCompletionPart.EarlyDecodedWellKnownAttributeData | CustomAttributeBagCompletionPart.DecodedWellKnownAttributeData, default(ImmutableArray<T>));
+            return new CustomAttributesBag<T>(CustomAttributeBagCompletionPart.EarlyDecodedWellKnownAttributeData | CustomAttributeBagCompletionPart.DecodedWellKnownAttributeData, default);
         }
 
         public bool IsEmpty
@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis
         public bool SetAttributes(ImmutableArray<T> newCustomAttributes)
         {
             Debug.Assert(!newCustomAttributes.IsDefault);
-            var setOnOurThread = ImmutableInterlocked.InterlockedCompareExchange(ref _customAttributes, newCustomAttributes, default(ImmutableArray<T>)) == default(ImmutableArray<T>);
+            var setOnOurThread = ImmutableInterlocked.InterlockedCompareExchange(ref _customAttributes, newCustomAttributes, default) == default;
             NotePartComplete(CustomAttributeBagCompletionPart.Attributes);
             return setOnOurThread;
         }

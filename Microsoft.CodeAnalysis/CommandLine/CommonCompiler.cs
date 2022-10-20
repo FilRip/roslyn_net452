@@ -14,10 +14,12 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -454,10 +456,9 @@ namespace Microsoft.CodeAnalysis
             var embeddedTextBuilder = ImmutableArray.CreateBuilder<EmbeddedText?>(embeddedFileOrderedSet.Count);
             foreach (var path in embeddedFileOrderedSet)
             {
-                SyntaxTree? tree;
                 EmbeddedText? text;
 
-                if (embeddedTreeMap.TryGetValue(path, out tree))
+                if (embeddedTreeMap.TryGetValue(path, out SyntaxTree tree))
                 {
                     text = EmbeddedText.FromSource(path, tree.GetText());
                     Debug.Assert(text != null);

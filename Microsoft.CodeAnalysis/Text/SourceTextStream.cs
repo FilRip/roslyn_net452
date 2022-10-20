@@ -101,9 +101,7 @@ namespace Microsoft.CodeAnalysis.Text
                     FillBuffer();
                 }
 
-                int charsUsed, bytesUsed;
-                bool ignored;
-                _encoder.Convert(_charBuffer, _bufferOffset, _bufferUnreadChars, buffer, offset, count, flush: false, charsUsed: out charsUsed, bytesUsed: out bytesUsed, completed: out ignored);
+                _encoder.Convert(_charBuffer, _bufferOffset, _bufferUnreadChars, buffer, offset, count, flush: false, charsUsed: out int charsUsed, bytesUsed: out int bytesUsed, completed: out bool ignored);
                 _position += charsUsed;
                 _bufferOffset += charsUsed;
                 _bufferUnreadChars -= charsUsed;

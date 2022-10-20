@@ -8,10 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -114,8 +115,7 @@ namespace Microsoft.CodeAnalysis
                         var ruleId = rule.Key;
                         var action = rule.Value;
 
-                        ReportDiagnostic existingAction;
-                        if (specificOptions.TryGetValue(ruleId, out existingAction))
+                        if (specificOptions.TryGetValue(ruleId, out ReportDiagnostic existingAction))
                         {
                             if (existingAction != action)
                             {

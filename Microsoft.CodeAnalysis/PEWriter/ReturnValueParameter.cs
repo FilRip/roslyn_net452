@@ -4,7 +4,9 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.CodeGen;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -109,7 +111,7 @@ namespace Microsoft.Cci
 
         public IDefinition AsDefinition(EmitContext context)
         {
-            return this as IDefinition;
+            return this;
         }
 
         CodeAnalysis.Symbols.ISymbolInternal? Cci.IReference.GetInternalSymbol() => null;

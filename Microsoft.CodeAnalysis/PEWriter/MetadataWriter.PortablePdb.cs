@@ -13,12 +13,13 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Debugging;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.DiaSymReader;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.Cci
@@ -36,7 +37,7 @@ namespace Microsoft.Cci
 
             public bool Equals(IImportScope x, IImportScope y)
             {
-                return (object)x == y ||
+                return x == y ||
                        x != null && y != null && Equals(x.Parent, y.Parent) && x.GetUsedNamespaces().SequenceEqual(y.GetUsedNamespaces());
             }
 
@@ -53,7 +54,7 @@ namespace Microsoft.Cci
         {
             if (bodyOpt == null)
             {
-                _debugMetadataOpt.AddMethodDebugInformation(default(DocumentHandle), default(BlobHandle));
+                _debugMetadataOpt.AddMethodDebugInformation(default, default);
                 return;
             }
 
@@ -62,18 +63,17 @@ namespace Microsoft.Cci
 
             if (!emitDebugInfo)
             {
-                _debugMetadataOpt.AddMethodDebugInformation(default(DocumentHandle), default(BlobHandle));
+                _debugMetadataOpt.AddMethodDebugInformation(default, default);
                 return;
             }
 
             var methodHandle = MetadataTokens.MethodDefinitionHandle(methodRid);
 
             var bodyImportScope = bodyOpt.ImportScope;
-            var importScopeHandle = (bodyImportScope != null) ? GetImportScopeIndex(bodyImportScope, _scopeIndex) : default(ImportScopeHandle);
+            var importScopeHandle = (bodyImportScope != null) ? GetImportScopeIndex(bodyImportScope, _scopeIndex) : default;
 
             // documents & sequence points:
-            DocumentHandle singleDocumentHandle;
-            BlobHandle sequencePointsBlob = SerializeSequencePoints(localSignatureHandleOpt, bodyOpt.SequencePoints, _documentIndex, out singleDocumentHandle);
+            BlobHandle sequencePointsBlob = SerializeSequencePoints(localSignatureHandleOpt, bodyOpt.SequencePoints, _documentIndex, out DocumentHandle singleDocumentHandle);
 
             _debugMetadataOpt.AddMethodDebugInformation(document: singleDocumentHandle, sequencePoints: sequencePointsBlob);
 
@@ -417,7 +417,7 @@ namespace Microsoft.Cci
             }
 
             var rid = _debugMetadataOpt.AddImportScope(
-                parentScope: default(ImportScopeHandle),
+                parentScope: default,
                 imports: _debugMetadataOpt.GetOrAddBlob(writer));
 
             Debug.Assert(rid == ModuleImportScopeHandle);
@@ -425,8 +425,7 @@ namespace Microsoft.Cci
 
         private ImportScopeHandle GetImportScopeIndex(IImportScope scope, Dictionary<IImportScope, ImportScopeHandle> scopeIndex)
         {
-            ImportScopeHandle scopeHandle;
-            if (scopeIndex.TryGetValue(scope, out scopeHandle))
+            if (scopeIndex.TryGetValue(scope, out ImportScopeHandle scopeHandle))
             {
                 // scope is already indexed:
                 return scopeHandle;
@@ -621,8 +620,8 @@ namespace Microsoft.Cci
         {
             if (sequencePoints.Length == 0)
             {
-                singleDocumentHandle = default(DocumentHandle);
-                return default(BlobHandle);
+                singleDocumentHandle = default;
+                return default;
             }
 
             var writer = new BlobBuilder();
@@ -634,7 +633,7 @@ namespace Microsoft.Cci
             writer.WriteCompressedInteger(MetadataTokens.GetRowNumber(localSignatureHandleOpt));
 
             var previousDocument = TryGetSingleDocument(sequencePoints);
-            singleDocumentHandle = (previousDocument != null) ? GetOrAddDocument(previousDocument, documentIndex) : default(DocumentHandle);
+            singleDocumentHandle = (previousDocument != null) ? GetOrAddDocument(previousDocument, documentIndex) : default;
 
             for (int i = 0; i < sequencePoints.Length; i++)
             {
@@ -755,8 +754,8 @@ namespace Microsoft.Cci
 
             documentHandle = _debugMetadataOpt.AddDocument(
                 name: _debugMetadataOpt.GetOrAddDocumentName(name),
-                hashAlgorithm: info.Checksum.IsDefault ? default(GuidHandle) : _debugMetadataOpt.GetOrAddGuid(info.ChecksumAlgorithmId),
-                hash: info.Checksum.IsDefault ? default(BlobHandle) : _debugMetadataOpt.GetOrAddBlob(info.Checksum),
+                hashAlgorithm: info.Checksum.IsDefault ? default : _debugMetadataOpt.GetOrAddGuid(info.ChecksumAlgorithmId),
+                hash: info.Checksum.IsDefault ? default : _debugMetadataOpt.GetOrAddBlob(info.Checksum),
                 language: _debugMetadataOpt.GetOrAddGuid(document.Language));
 
             index.Add(document, documentHandle);

@@ -112,8 +112,7 @@ namespace Microsoft.CodeAnalysis
 
             Debug.Assert(reference.ContentType == definition.ContentType);
 
-            bool isDefinitionFxAssembly;
-            if (!ApplyUnificationPolicies(ref reference, ref definition, parts, out isDefinitionFxAssembly))
+            if (!ApplyUnificationPolicies(ref reference, ref definition, parts, out bool isDefinitionFxAssembly))
             {
                 return ComparisonResult.NotEquivalent;
             }

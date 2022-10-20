@@ -4,11 +4,12 @@
 
 #nullable disable
 
-using Microsoft.CodeAnalysis.Emit;
-using Microsoft.CodeAnalysis.Symbols;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+
+using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis.Symbols;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -120,7 +121,7 @@ namespace Microsoft.CodeAnalysis
             var typeSymbol = _marshalTypeNameOrSymbol as ITypeSymbolInternal;
             if (typeSymbol != null)
             {
-                return ((CommonPEModuleBuilder)context.Module).Translate(typeSymbol, context.SyntaxNode, context.Diagnostics);
+                return context.Module.Translate(typeSymbol, context.SyntaxNode, context.Diagnostics);
             }
             else
             {
@@ -183,7 +184,7 @@ namespace Microsoft.CodeAnalysis
                 return null;
             }
 
-            return ((CommonPEModuleBuilder)context.Module).Translate((ITypeSymbolInternal)_marshalTypeNameOrSymbol, context.SyntaxNode, context.Diagnostics);
+            return context.Module.Translate((ITypeSymbolInternal)_marshalTypeNameOrSymbol, context.SyntaxNode, context.Diagnostics);
         }
 
         /// <summary>
@@ -200,7 +201,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             var translatedType = translator((TTypeSymbol)_marshalTypeNameOrSymbol, arg);
-            if ((object)translatedType == (object)_marshalTypeNameOrSymbol)
+            if ((object)translatedType == _marshalTypeNameOrSymbol)
             {
                 return this;
             }

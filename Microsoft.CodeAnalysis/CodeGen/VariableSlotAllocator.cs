@@ -4,6 +4,7 @@
 
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 

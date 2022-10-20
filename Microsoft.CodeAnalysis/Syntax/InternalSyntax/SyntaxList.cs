@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
@@ -34,8 +35,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             RoslynDebug.Assert(child0 != null);
             RoslynDebug.Assert(child1 != null);
 
-            int hash;
-            GreenNode? cached = SyntaxNodeCache.TryGetNode(GreenNode.ListKind, child0, child1, out hash);
+            GreenNode? cached = SyntaxNodeCache.TryGetNode(GreenNode.ListKind, child0, child1, out int hash);
             if (cached != null)
                 return (WithTwoChildren)cached;
 
@@ -54,8 +54,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             RoslynDebug.Assert(child1 != null);
             RoslynDebug.Assert(child2 != null);
 
-            int hash;
-            GreenNode? cached = SyntaxNodeCache.TryGetNode(GreenNode.ListKind, child0, child1, child2, out hash);
+            GreenNode? cached = SyntaxNodeCache.TryGetNode(GreenNode.ListKind, child0, child1, child2, out int hash);
             if (cached != null)
                 return (WithThreeChildren)cached;
 

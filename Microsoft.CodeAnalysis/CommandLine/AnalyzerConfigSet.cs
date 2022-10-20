@@ -7,14 +7,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
+
 using static Microsoft.CodeAnalysis.AnalyzerConfig;
+
 using AnalyzerOptions = System.Collections.Immutable.ImmutableDictionary<string, string>;
 using TreeOptions = System.Collections.Immutable.ImmutableDictionary<string, Microsoft.CodeAnalysis.ReportDiagnostic>;
 

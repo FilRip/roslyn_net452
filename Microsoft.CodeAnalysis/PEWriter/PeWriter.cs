@@ -17,11 +17,14 @@ using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.DiaSymReader;
+
 using static Microsoft.CodeAnalysis.SigningUtilities;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -61,24 +64,21 @@ namespace Microsoft.Cci
             // Since we are producing a full assembly, we should not have a module version ID
             // imposed ahead-of time. Instead we will compute a deterministic module version ID
             // based on the contents of the generated stream.
-            Debug.Assert(properties.PersistentIdentifier == default(Guid));
+            Debug.Assert(properties.PersistentIdentifier == default);
 
             var ilBuilder = new BlobBuilder(32 * 1024);
             var mappedFieldDataBuilder = new BlobBuilder();
             var managedResourceBuilder = new BlobBuilder(1024);
 
-            Blob mvidFixup, mvidStringFixup;
             mdWriter.BuildMetadataAndIL(
                 nativePdbWriterOpt,
                 ilBuilder,
                 mappedFieldDataBuilder,
                 managedResourceBuilder,
-                out mvidFixup,
-                out mvidStringFixup);
+                out Blob mvidFixup,
+                out Blob mvidStringFixup);
 
-            MethodDefinitionHandle entryPointHandle;
-            MethodDefinitionHandle debugEntryPointHandle;
-            mdWriter.GetEntryPoints(out entryPointHandle, out debugEntryPointHandle);
+            mdWriter.GetEntryPoints(out MethodDefinitionHandle entryPointHandle, out MethodDefinitionHandle debugEntryPointHandle);
 
             if (!debugEntryPointHandle.IsNil)
             {

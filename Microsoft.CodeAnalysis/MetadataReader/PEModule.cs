@@ -17,8 +17,10 @@ using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -730,9 +732,8 @@ namespace Microsoft.CodeAnalysis
                 NamespaceDefinitionHandle nsHandle = pair.NamespaceHandle;
                 TypeDefinitionHandle typeDef = pair.TypeDef;
 
-                ArrayBuilder<TypeDefinitionHandle> builder;
 
-                if (namespaceHandles.TryGetValue(nsHandle, out builder))
+                if (namespaceHandles.TryGetValue(nsHandle, out ArrayBuilder<TypeDefinitionHandle> builder))
                 {
                     builder.Add(typeDef);
                 }
@@ -746,9 +747,8 @@ namespace Microsoft.CodeAnalysis
             {
                 string @namespace = MetadataReader.GetString(kvp.Key);
 
-                ArrayBuilder<TypeDefinitionHandle> builder;
 
-                if (namespaces.TryGetValue(@namespace, out builder))
+                if (namespaces.TryGetValue(@namespace, out ArrayBuilder<TypeDefinitionHandle> builder))
                 {
                     builder.AddRange(kvp.Value);
                 }
@@ -930,11 +930,11 @@ namespace Microsoft.CodeAnalysis
                         break;
 
                     case TypeAttributes.AutoLayout:
-                        return default(TypeLayout);
+                        return default;
 
                     default:
                         // TODO (tomat) report error:
-                        return default(TypeLayout);
+                        return default;
                 }
 
                 var layout = def.GetLayout();
@@ -957,14 +957,13 @@ namespace Microsoft.CodeAnalysis
             }
             catch (BadImageFormatException)
             {
-                return default(TypeLayout);
+                return default;
             }
         }
 
         public bool IsNoPiaLocalType(TypeDefinitionHandle typeDef)
         {
-            AttributeInfo attributeInfo;
-            return IsNoPiaLocalType(typeDef, out attributeInfo);
+            return IsNoPiaLocalType(typeDef, out AttributeInfo attributeInfo);
         }
 
         public bool HasParamsAttribute(EntityHandle token)
@@ -1086,7 +1085,7 @@ namespace Microsoft.CodeAnalysis
 
             if (!info.HasValue)
             {
-                tupleElementNames = default(ImmutableArray<string>);
+                tupleElementNames = default;
                 return false;
             }
 
@@ -1235,7 +1234,7 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            interfaceType = default(ComInterfaceType);
+            interfaceType = default;
             return false;
         }
 
@@ -1247,15 +1246,14 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            flags = default(Cci.TypeLibTypeFlags);
+            flags = default;
             return false;
         }
 
         public bool HasDateTimeConstantAttribute(EntityHandle token, out ConstantValue defaultValue)
         {
-            long value;
             AttributeInfo info = FindLastTargetAttribute(token, AttributeDescription.DateTimeConstantAttribute);
-            if (info.HasValue && TryExtractLongValueFromAttribute(info.Handle, out value))
+            if (info.HasValue && TryExtractLongValueFromAttribute(info.Handle, out long value))
             {
                 // if value is outside this range, DateTime would throw when constructed
                 if (value < DateTime.MinValue.Ticks || value > DateTime.MaxValue.Ticks)
@@ -1276,9 +1274,8 @@ namespace Microsoft.CodeAnalysis
 
         public bool HasDecimalConstantAttribute(EntityHandle token, out ConstantValue defaultValue)
         {
-            decimal value;
             AttributeInfo info = FindLastTargetAttribute(token, AttributeDescription.DecimalConstantAttribute);
-            if (info.HasValue && TryExtractDecimalValueFromDecimalConstantAttribute(info.Handle, out value))
+            if (info.HasValue && TryExtractDecimalValueFromDecimalConstantAttribute(info.Handle, out decimal value))
             {
                 defaultValue = ConstantValue.Create(value);
                 return true;
@@ -1413,8 +1410,7 @@ namespace Microsoft.CodeAnalysis
 
             foreach (var ai in attrInfos)
             {
-                string extractedStr;
-                if (TryExtractStringValueFromAttribute(ai.Handle, out extractedStr) && extractedStr != null)
+                if (TryExtractStringValueFromAttribute(ai.Handle, out string extractedStr) && extractedStr != null)
                 {
                     result.Add(extractedStr);
                 }
@@ -1556,7 +1552,7 @@ namespace Microsoft.CodeAnalysis
                     throw ExceptionUtilities.UnexpectedValue(attributeInfo.SignatureIndex);
             }
 
-            interfaceType = default(ComInterfaceType);
+            interfaceType = default;
             return false;
         }
 
@@ -1605,7 +1601,7 @@ namespace Microsoft.CodeAnalysis
                     throw ExceptionUtilities.UnexpectedValue(info.SignatureIndex);
             }
 
-            flags = default(Cci.TypeLibTypeFlags);
+            flags = default;
             return false;
         }
 
@@ -1633,8 +1629,7 @@ namespace Microsoft.CodeAnalysis
 
         private bool TryExtractStringAndIntValueFromAttribute(CustomAttributeHandle handle, out string stringValue, out int intValue)
         {
-            StringAndInt data;
-            var result = TryExtractValueFromAttribute(handle, out data, s_attributeStringAndIntValueExtractor);
+            var result = TryExtractValueFromAttribute(handle, out StringAndInt data, s_attributeStringAndIntValueExtractor);
             stringValue = data.StringValue;
             intValue = data.IntValue;
             return result;
@@ -1682,7 +1677,7 @@ namespace Microsoft.CodeAnalysis
             catch (BadImageFormatException)
             { }
 
-            value = default(T);
+            value = default;
             return false;
         }
 
@@ -1717,9 +1712,8 @@ namespace Microsoft.CodeAnalysis
             out string scope,
             out string identifier)
         {
-            AttributeInfo typeIdentifierInfo;
 
-            if (!IsNoPiaLocalType(typeDef, out typeIdentifierInfo))
+            if (!IsNoPiaLocalType(typeDef, out AttributeInfo typeIdentifierInfo))
             {
                 interfaceGuid = null;
                 scope = null;
@@ -1817,8 +1811,7 @@ namespace Microsoft.CodeAnalysis
 
         private static bool CrackDeprecatedAttributeData(out ObsoleteAttributeData value, ref BlobReader sig)
         {
-            StringAndInt args;
-            if (CrackStringAndIntInAttributeValue(out args, ref sig))
+            if (CrackStringAndIntInAttributeValue(out StringAndInt args, ref sig))
             {
                 value = new ObsoleteAttributeData(ObsoleteAttributeKind.Deprecated, args.StringValue, args.IntValue == 1, diagnosticId: null, urlFormat: null);
                 return true;
@@ -1830,7 +1823,7 @@ namespace Microsoft.CodeAnalysis
 
         private static bool CrackStringAndIntInAttributeValue(out StringAndInt value, ref BlobReader sig)
         {
-            value = default(StringAndInt);
+            value = default;
             return
                 CrackStringInAttributeValue(out value.StringValue, ref sig) &&
                 CrackIntInAttributeValue(out value.IntValue, ref sig);
@@ -1840,8 +1833,7 @@ namespace Microsoft.CodeAnalysis
         {
             try
             {
-                int strLen;
-                if (sig.TryReadCompressedInteger(out strLen) && sig.RemainingBytes >= strLen)
+                if (sig.TryReadCompressedInteger(out int strLen) && sig.RemainingBytes >= strLen)
                 {
                     value = sig.ReadUTF8(strLen);
 
@@ -1883,7 +1875,7 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            value = default(ImmutableArray<string>);
+            value = default;
             return false;
         }
 
@@ -1976,17 +1968,12 @@ namespace Microsoft.CodeAnalysis
         // Note: not a general purpose helper
         private static bool CrackDecimalInDecimalConstantAttribute(out decimal value, ref BlobReader sig)
         {
-            byte scale;
-            byte sign;
-            int high;
-            int mid;
-            int low;
 
-            if (CrackByteInAttributeValue(out scale, ref sig) &&
-                CrackByteInAttributeValue(out sign, ref sig) &&
-                CrackIntInAttributeValue(out high, ref sig) &&
-                CrackIntInAttributeValue(out mid, ref sig) &&
-                CrackIntInAttributeValue(out low, ref sig))
+            if (CrackByteInAttributeValue(out byte scale, ref sig) &&
+                CrackByteInAttributeValue(out byte sign, ref sig) &&
+                CrackIntInAttributeValue(out int high, ref sig) &&
+                CrackIntInAttributeValue(out int mid, ref sig) &&
+                CrackIntInAttributeValue(out int low, ref sig))
             {
                 value = new decimal(low, mid, high, sign != 0, scale);
                 return true;
@@ -2014,7 +2001,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            value = default(ImmutableArray<bool>);
+            value = default;
             return false;
         }
 
@@ -2036,7 +2023,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            value = default(ImmutableArray<byte>);
+            value = default;
             return false;
         }
 
@@ -2107,14 +2094,14 @@ namespace Microsoft.CodeAnalysis
             catch (BadImageFormatException)
             { }
 
-            return default(AttributeInfo);
+            return default;
         }
 
         public AttributeInfo FindLastTargetAttribute(EntityHandle hasAttribute, AttributeDescription description)
         {
             try
             {
-                AttributeInfo attrInfo = default(AttributeInfo);
+                AttributeInfo attrInfo = default;
                 foreach (var attributeHandle in MetadataReader.GetCustomAttributes(hasAttribute))
                 {
                     int signatureIndex = GetTargetAttributeSignatureIndex(attributeHandle, description);
@@ -2129,7 +2116,7 @@ namespace Microsoft.CodeAnalysis
             catch (BadImageFormatException)
             { }
 
-            return default(AttributeInfo);
+            return default;
         }
 
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
@@ -2151,7 +2138,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (_lazyContainsNoPiaLocalTypes == ThreeState.False)
             {
-                attributeInfo = default(AttributeInfo);
+                attributeInfo = default;
                 return false;
             }
 
@@ -2190,7 +2177,7 @@ namespace Microsoft.CodeAnalysis
             { }
 
             RecordNoPiaLocalTypeCheck(typeDef);
-            attributeInfo = default(AttributeInfo);
+            attributeInfo = default;
             return false;
         }
 
@@ -2309,16 +2296,13 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(namespaceName != null);
             Debug.Assert(typeName != null);
 
-            EntityHandle ctorType;
-            StringHandle ctorTypeNamespace;
-            StringHandle ctorTypeName;
 
-            if (!GetTypeAndConstructor(metadataReader, customAttribute, out ctorType, out ctor))
+            if (!GetTypeAndConstructor(metadataReader, customAttribute, out EntityHandle ctorType, out ctor))
             {
                 return false;
             }
 
-            if (!GetAttributeNamespaceAndName(metadataReader, ctorType, out ctorTypeNamespace, out ctorTypeName))
+            if (!GetAttributeNamespaceAndName(metadataReader, ctorType, out StringHandle ctorTypeNamespace, out StringHandle ctorTypeName))
             {
                 return false;
             }
@@ -2360,7 +2344,7 @@ namespace Microsoft.CodeAnalysis
             { }
 
             // Not found
-            return default(AssemblyReferenceHandle);
+            return default;
         }
 
         /// <summary>
@@ -2461,10 +2445,9 @@ namespace Microsoft.CodeAnalysis
         private static int GetTargetAttributeSignatureIndex(MetadataReader metadataReader, CustomAttributeHandle customAttribute, AttributeDescription description)
         {
             const int No = -1;
-            EntityHandle ctor;
 
             // Check namespace and type name and get signature if a match is found
-            if (!IsTargetAttribute(metadataReader, customAttribute, description.Namespace, description.Name, out ctor, description.MatchIgnoringCase))
+            if (!IsTargetAttribute(metadataReader, customAttribute, description.Namespace, description.Name, out EntityHandle ctor, description.MatchIgnoringCase))
             {
                 return No;
             }
@@ -2601,7 +2584,7 @@ namespace Microsoft.CodeAnalysis
         {
             try
             {
-                ctorType = default(EntityHandle);
+                ctorType = default;
 
                 attributeCtor = metadataReader.GetCustomAttribute(customAttribute).Constructor;
 
@@ -2642,8 +2625,8 @@ namespace Microsoft.CodeAnalysis
             }
             catch (BadImageFormatException)
             {
-                ctorType = default(EntityHandle);
-                attributeCtor = default(EntityHandle);
+                ctorType = default;
+                attributeCtor = default;
                 return false;
             }
         }
@@ -2665,8 +2648,8 @@ namespace Microsoft.CodeAnalysis
         /// <returns>True if the function successfully returns the name and namespace.</returns>
         private static bool GetAttributeNamespaceAndName(MetadataReader metadataReader, EntityHandle typeDefOrRef, out StringHandle namespaceHandle, out StringHandle nameHandle)
         {
-            nameHandle = default(StringHandle);
-            namespaceHandle = default(StringHandle);
+            nameHandle = default;
+            namespaceHandle = default;
 
             try
             {
@@ -2771,7 +2754,7 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(!info.HasValue || info.SignatureIndex == 0 || info.SignatureIndex == 1);
 
             defaultTransform = 0;
-            nullableTransforms = default(ImmutableArray<byte>);
+            nullableTransforms = default;
 
             if (!info.HasValue)
             {
@@ -2947,7 +2930,7 @@ namespace Microsoft.CodeAnalysis
 
                 string moduleName = GetModuleRefNameOrThrow(methodImport.Module);
                 string entryPointName = MetadataReader.GetString(methodImport.Name);
-                MethodImportAttributes flags = (MethodImportAttributes)methodImport.Attributes;
+                MethodImportAttributes flags = methodImport.Attributes;
 
                 return new DllImportData(moduleName, entryPointName, flags);
             }
@@ -3312,8 +3295,7 @@ namespace Microsoft.CodeAnalysis
             }
             else
             {
-                (int FirstIndex, int SecondIndex) assemblyIndices;
-                if (_lazyForwardedTypesToAssemblyIndexMap.TryGetValue(fullName, out assemblyIndices))
+                if (_lazyForwardedTypesToAssemblyIndexMap.TryGetValue(fullName, out (int FirstIndex, int SecondIndex) assemblyIndices))
                 {
                     matchedName = fullName;
                     return assemblyIndices;
@@ -3379,9 +3361,8 @@ namespace Microsoft.CodeAnalysis
                             }
                         }
 
-                        (int FirstIndex, int SecondIndex) indices;
 
-                        if (typesToAssemblyIndexMap.TryGetValue(name, out indices))
+                        if (typesToAssemblyIndexMap.TryGetValue(name, out (int FirstIndex, int SecondIndex) indices))
                         {
                             Debug.Assert(indices.FirstIndex >= 0, "Not allowed to store a negative (non-existent) index in typesToAssemblyIndexMap");
 

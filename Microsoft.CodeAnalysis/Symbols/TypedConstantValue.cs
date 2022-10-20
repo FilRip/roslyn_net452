@@ -6,8 +6,6 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
-using Microsoft.CodeAnalysis.CodeGen;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -28,7 +26,7 @@ namespace Microsoft.CodeAnalysis
 
         internal TypedConstantValue(ImmutableArray<TypedConstant> array)
         {
-            _value = array.IsDefault ? null : (object)array;
+            _value = array.IsDefault ? null : array;
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                return _value == null ? default(ImmutableArray<TypedConstant>) : (ImmutableArray<TypedConstant>)_value;
+                return _value == null ? default : (ImmutableArray<TypedConstant>)_value;
             }
         }
 

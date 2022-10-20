@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.Serialization;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Text
@@ -121,7 +122,7 @@ namespace Microsoft.CodeAnalysis.Text
 
             return overlapStart < overlapEnd
                 ? TextSpan.FromBounds(overlapStart, overlapEnd)
-                : (TextSpan?)null;
+                : null;
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace Microsoft.CodeAnalysis.Text
 
             return intersectStart <= intersectEnd
                 ? TextSpan.FromBounds(intersectStart, intersectEnd)
-                : (TextSpan?)null;
+                : null;
         }
 
         /// <summary>

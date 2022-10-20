@@ -11,10 +11,12 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
@@ -180,8 +182,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         internal Cci.IFieldReference GetOrAddInstrumentationPayloadRoot(int analysisKind, Cci.ITypeReference payloadRootType)
         {
-            InstrumentationPayloadRootField? payloadRootField;
-            if (!_instrumentationPayloadRootFields.TryGetValue(analysisKind, out payloadRootField))
+            if (!_instrumentationPayloadRootFields.TryGetValue(analysisKind, out InstrumentationPayloadRootField payloadRootField))
             {
                 Debug.Assert(!IsFrozen);
                 payloadRootField = _instrumentationPayloadRootFields.GetOrAdd(analysisKind, kind => new InstrumentationPayloadRootField(this, kind, payloadRootType));
@@ -222,8 +223,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         // Get method by name, if one exists. Otherwise return null.
         public Cci.IMethodDefinition? GetMethod(string name)
         {
-            Cci.IMethodDefinition? method;
-            _synthesizedMethods.TryGetValue(name, out method);
+            _synthesizedMethods.TryGetValue(name, out Cci.IMethodDefinition? method);
             return method;
         }
 
@@ -390,7 +390,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public Cci.IMarshallingInformation? MarshallingInformation => null;
 
-        public ImmutableArray<byte> MarshallingDescriptor => default(ImmutableArray<byte>);
+        public ImmutableArray<byte> MarshallingDescriptor => default;
 
         public int Offset
         {
@@ -455,7 +455,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         {
         }
 
-        public override ImmutableArray<byte> MappedData => default(ImmutableArray<byte>);
+        public override ImmutableArray<byte> MappedData => default;
     }
 
     public sealed class InstrumentationPayloadRootField : SynthesizedStaticField
@@ -465,7 +465,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         {
         }
 
-        public override ImmutableArray<byte> MappedData => default(ImmutableArray<byte>);
+        public override ImmutableArray<byte> MappedData => default;
     }
 
     /// <summary>

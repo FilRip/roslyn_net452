@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
@@ -83,7 +84,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                     }
 
                     var slotIndex = _stack[_count - 1].SlotIndex;
-tryAgain:
+                tryAgain:
                     if (slotIndex < node.SlotCount - 1)
                     {
                         slotIndex++;

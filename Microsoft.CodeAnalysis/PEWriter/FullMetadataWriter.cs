@@ -8,9 +8,12 @@ using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -128,8 +131,7 @@ namespace Microsoft.Cci
 
         protected override bool TryGetTypeDefinitionHandle(ITypeDefinition def, out TypeDefinitionHandle handle)
         {
-            int index;
-            bool result = _typeDefs.TryGetValue(def, out index);
+            bool result = _typeDefs.TryGetValue(def, out int index);
             handle = MetadataTokens.TypeDefinitionHandle(index);
             return result;
         }
@@ -171,8 +173,7 @@ namespace Microsoft.Cci
 
         protected override bool TryGetMethodDefinitionHandle(IMethodDefinition def, out MethodDefinitionHandle handle)
         {
-            int index;
-            bool result = _methodDefs.TryGetValue(def, out index);
+            bool result = _methodDefs.TryGetValue(def, out int index);
             handle = MetadataTokens.MethodDefinitionHandle(index);
             return result;
         }
@@ -276,8 +277,7 @@ namespace Microsoft.Cci
 
         protected override bool TryGetTypeReferenceHandle(ITypeReference reference, out TypeReferenceHandle handle)
         {
-            int index;
-            bool result = _typeRefIndex.TryGetValue(reference, out index);
+            bool result = _typeRefIndex.TryGetValue(reference, out int index);
             handle = MetadataTokens.TypeReferenceHandle(index);
             return result;
         }

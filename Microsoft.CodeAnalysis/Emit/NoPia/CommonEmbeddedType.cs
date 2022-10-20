@@ -4,13 +4,14 @@
 
 #nullable disable
 
-using System.Collections.Immutable;
-using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
-using Microsoft.CodeAnalysis.Symbols;
+
+using Microsoft.CodeAnalysis.PooledObjects;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit.NoPia
 {
@@ -106,8 +107,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                 {
                     if (IsTargetAttribute(attrData, AttributeDescription.GuidAttribute))
                     {
-                        string guidString;
-                        if (attrData.TryGetGuidAttributeValue(out guidString))
+                        if (attrData.TryGetGuidAttributeValue(out string guidString))
                         {
                             // If this type has a GuidAttribute, we should emit it.
                             hasGuid = true;
@@ -249,9 +249,8 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
                     foreach (var e in GetEventsToEmit())
                     {
-                        TEmbeddedEvent embedded;
 
-                        if (TypeManager.EmbeddedEventsMap.TryGetValue(e, out embedded))
+                        if (TypeManager.EmbeddedEventsMap.TryGetValue(e, out TEmbeddedEvent embedded))
                         {
                             builder.Add(embedded);
                         }
@@ -278,9 +277,8 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
                     foreach (var f in GetFieldsToEmit())
                     {
-                        TEmbeddedField embedded;
 
-                        if (TypeManager.EmbeddedFieldsMap.TryGetValue(f, out embedded))
+                        if (TypeManager.EmbeddedFieldsMap.TryGetValue(f, out TEmbeddedField embedded))
                         {
                             builder.Add(embedded);
                         }
@@ -450,11 +448,10 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
                     foreach (var method in GetMethodsToEmit())
                     {
-                        if ((object)method != null)
+                        if (method != null)
                         {
-                            TEmbeddedMethod embedded;
 
-                            if (TypeManager.EmbeddedMethodsMap.TryGetValue(method, out embedded))
+                            if (TypeManager.EmbeddedMethodsMap.TryGetValue(method, out TEmbeddedMethod embedded))
                             {
                                 if (gapSize > 0)
                                 {
@@ -497,9 +494,8 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
                     foreach (var p in GetPropertiesToEmit())
                     {
-                        TEmbeddedProperty embedded;
 
-                        if (TypeManager.EmbeddedPropertiesMap.TryGetValue(p, out embedded))
+                        if (TypeManager.EmbeddedPropertiesMap.TryGetValue(p, out TEmbeddedProperty embedded))
                         {
                             builder.Add(embedded);
                         }
@@ -592,7 +588,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
             {
                 get
                 {
-                    return default(TypeDefinitionHandle);
+                    return default;
                 }
             }
 

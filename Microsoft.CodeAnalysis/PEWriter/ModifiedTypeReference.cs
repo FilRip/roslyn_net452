@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Roslyn.Utilities;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -74,7 +76,7 @@ namespace Microsoft.Cci
 
         void IReference.Dispatch(MetadataVisitor visitor)
         {
-            visitor.Visit((IModifiedTypeReference)this);
+            visitor.Visit(this);
         }
 
         IGenericMethodParameterReference? ITypeReference.AsGenericMethodParameterReference

@@ -5,9 +5,8 @@
 #nullable disable
 
 using System;
-using System.Reflection;
-using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Microsoft.CodeAnalysis
 {

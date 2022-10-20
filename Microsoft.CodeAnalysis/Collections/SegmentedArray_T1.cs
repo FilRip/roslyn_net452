@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.Collections.Internal;
 
 namespace Microsoft.CodeAnalysis.Collections
@@ -318,7 +319,7 @@ namespace Microsoft.CodeAnalysis.Collections
             if (!(other is SegmentedArray<T> o))
                 return false;
 
-            if ((object)_items == o._items)
+            if (_items == o._items)
                 return true;
 
             if (Length != o.Length)

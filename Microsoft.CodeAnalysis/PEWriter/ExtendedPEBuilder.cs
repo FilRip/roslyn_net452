@@ -9,8 +9,8 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Reflection.PortableExecutable;
+
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis;
 
 namespace Microsoft.Cci
 {
@@ -24,7 +24,7 @@ namespace Microsoft.Cci
         public const int SizeOfGuid = 16;
 
         // When the section is built with a placeholder, the placeholder blob is saved for later fixing up.
-        private Blob _mvidSectionFixup = default(Blob);
+        private Blob _mvidSectionFixup = default;
 
         // Only include the .mvid section in ref assemblies
         private readonly bool _withMvidSection;

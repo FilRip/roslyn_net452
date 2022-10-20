@@ -166,8 +166,7 @@ namespace Roslyn.Utilities
 
             for (int i = 0; i < count; i++)
             {
-                T? item;
-                if (_items[i].TryGetTarget(out item))
+                if (_items[i].TryGetTarget(out T item))
                 {
                     yield return item;
                 }

@@ -9,8 +9,10 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 using MetadataOrDiagnostic = System.Object;
@@ -684,14 +686,12 @@ namespace Microsoft.CodeAnalysis
 
         public TAssemblySymbol? GetReferencedAssemblySymbol(MetadataReference reference)
         {
-            int index;
-            return ReferencedAssembliesMap.TryGetValue(reference, out index) ? ReferencedAssemblies[index] : null;
+            return ReferencedAssembliesMap.TryGetValue(reference, out int index) ? ReferencedAssemblies[index] : null;
         }
 
         public int GetReferencedModuleIndex(MetadataReference reference)
         {
-            int index;
-            return ReferencedModuleIndexMap.TryGetValue(reference, out index) ? index : -1;
+            return ReferencedModuleIndexMap.TryGetValue(reference, out int index) ? index : -1;
         }
 
         /// <summary>
@@ -701,7 +701,7 @@ namespace Microsoft.CodeAnalysis
         {
             foreach (var entry in ReferencedAssembliesMap)
             {
-                if ((object)ReferencedAssemblies[entry.Value] == assemblySymbol)
+                if (ReferencedAssemblies[entry.Value] == assemblySymbol)
                 {
                     return entry.Key;
                 }

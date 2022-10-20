@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis
@@ -149,7 +150,7 @@ namespace Microsoft.CodeAnalysis
 
             if (publicKeyOrToken.IsEmpty)
             {
-                publicKeyOrToken = default(ImmutableArray<byte>);
+                publicKeyOrToken = default;
             }
 
             return new AssemblyIdentity(

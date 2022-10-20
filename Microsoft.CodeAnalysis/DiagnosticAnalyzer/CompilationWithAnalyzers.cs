@@ -9,10 +9,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.CodeAnalysis.Diagnostics.Telemetry;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
+
 using static Microsoft.CodeAnalysis.Diagnostics.AnalyzerDriver;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
@@ -1182,13 +1185,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 lock (_executingTasksLock)
                 {
-                    Tuple<Task, CancellationTokenSource>? executingTask;
                     if (fileOpt.HasValue && _analysisOptions.ConcurrentAnalysis)
                     {
                         Debug.Assert(_executingConcurrentTreeTasksOpt != null);
                         Debug.Assert(_concurrentTreeTaskTokensOpt != null);
 
-                        if (_executingConcurrentTreeTasksOpt.TryGetValue(fileOpt.Value, out executingTask) &&
+                        if (_executingConcurrentTreeTasksOpt.TryGetValue(fileOpt.Value, out Tuple<Task, CancellationTokenSource> executingTask) &&
                             executingTask.Item1 == computeTask)
                         {
                             _executingConcurrentTreeTasksOpt.Remove(fileOpt.Value);

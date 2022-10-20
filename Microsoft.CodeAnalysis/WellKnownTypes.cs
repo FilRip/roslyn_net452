@@ -622,7 +622,7 @@ namespace Microsoft.CodeAnalysis
             "System.Text.StringBuilder",
         };
 
-        private static readonly Dictionary<string, WellKnownType> s_nameToTypeIdMap = new Dictionary<string, WellKnownType>((int)Count);
+        private static readonly Dictionary<string, WellKnownType> s_nameToTypeIdMap = new Dictionary<string, WellKnownType>(Count);
 
         static WellKnownTypes()
         {
@@ -631,7 +631,7 @@ namespace Microsoft.CodeAnalysis
             for (int i = 0; i < s_metadataNames.Length; i++)
             {
                 var name = s_metadataNames[i];
-                var typeId = (WellKnownType)(i + WellKnownType.First);
+                var typeId = i + WellKnownType.First;
                 s_nameToTypeIdMap.Add(name, typeId);
             }
         }
@@ -642,7 +642,7 @@ namespace Microsoft.CodeAnalysis
             for (int i = 0; i < s_metadataNames.Length; i++)
             {
                 var name = s_metadataNames[i];
-                var typeId = (WellKnownType)(i + WellKnownType.First);
+                var typeId = i + WellKnownType.First;
 
                 string typeIdName;
                 switch (typeId)
@@ -698,14 +698,13 @@ namespace Microsoft.CodeAnalysis
 
         public static string GetMetadataName(this WellKnownType id)
         {
-            return s_metadataNames[(int)(id - WellKnownType.First)];
+            return s_metadataNames[id - WellKnownType.First];
         }
 
         public static WellKnownType GetTypeFromMetadataName(string metadataName)
         {
-            WellKnownType id;
 
-            if (s_nameToTypeIdMap.TryGetValue(metadataName, out id))
+            if (s_nameToTypeIdMap.TryGetValue(metadataName, out WellKnownType id))
             {
                 return id;
             }

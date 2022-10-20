@@ -4,9 +4,10 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Linq;
-using Roslyn.Utilities;
 using System.Diagnostics;
+using System.Linq;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -80,7 +81,7 @@ namespace Microsoft.CodeAnalysis
             _candidateSymbols = candidateSymbols.IsDefault ? ImmutableArray.Create<ISymbol>() : candidateSymbols;
 
 #if DEBUG
-            const NamespaceKind NamespaceKindNamespaceGroup = (NamespaceKind)0;
+            const NamespaceKind NamespaceKindNamespaceGroup = 0;
             Debug.Assert(symbol is null || symbol.Kind != SymbolKind.Namespace || ((INamespaceSymbol)symbol).NamespaceKind != NamespaceKindNamespaceGroup);
             foreach (var item in _candidateSymbols)
             {

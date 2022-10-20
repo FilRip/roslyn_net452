@@ -4,9 +4,10 @@
 
 #nullable disable
 
-using System.Collections.Immutable;
-using Roslyn.Utilities;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit.NoPia
 {
@@ -133,7 +134,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
         ImmutableArray<byte> Cci.IMethodDefinition.ReturnValueMarshallingDescriptor
         {
-            get { return default(ImmutableArray<byte>); }
+            get { return default; }
         }
 
         IEnumerable<Cci.SecurityAttribute> Cci.IMethodDefinition.SecurityAttributes
@@ -172,7 +173,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
         void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.IMethodDefinition)this);
+            visitor.Visit(this);
         }
 
         Symbols.ISymbolInternal Cci.IReference.GetInternalSymbol() => null;

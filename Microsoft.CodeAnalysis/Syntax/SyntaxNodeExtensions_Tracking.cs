@@ -8,7 +8,9 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.Collections;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -137,8 +139,7 @@ namespace Microsoft.CodeAnalysis
 
         private static SyntaxAnnotation? GetId(SyntaxNode original)
         {
-            SyntaxAnnotation? id;
-            s_nodeToIdMap.TryGetValue(original, out id);
+            s_nodeToIdMap.TryGetValue(original, out SyntaxAnnotation id);
             return id;
         }
 
@@ -206,8 +207,7 @@ namespace Microsoft.CodeAnalysis
                     Debug.Assert(node is object);
                     foreach (var id in node.GetAnnotations(IdAnnotationKind))
                     {
-                        List<SyntaxNode>? list;
-                        if (!map.TryGetValue(id, out list))
+                        if (!map.TryGetValue(id, out List<SyntaxNode> list))
                         {
                             list = new List<SyntaxNode>();
                             map.Add(id, list);
@@ -222,8 +222,7 @@ namespace Microsoft.CodeAnalysis
 
             public IReadOnlyList<SyntaxNode> GetNodes(SyntaxAnnotation id)
             {
-                IReadOnlyList<SyntaxNode>? nodes;
-                if (_idToNodeMap.TryGetValue(id, out nodes))
+                if (_idToNodeMap.TryGetValue(id, out IReadOnlyList<SyntaxNode> nodes))
                 {
                     return nodes;
                 }

@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool IsDefaultTupleElement(this IFieldSymbol field)
         {
-            return (object)field == field.CorrespondingTupleField;
+            return field == field.CorrespondingTupleField;
         }
 
         /// <summary>

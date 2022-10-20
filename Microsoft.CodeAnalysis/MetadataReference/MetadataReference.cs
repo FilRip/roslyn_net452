@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -275,7 +276,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static MetadataReference CreateFromAssemblyInternal(Assembly assembly)
         {
-            return CreateFromAssemblyInternal(assembly, default(MetadataReferenceProperties));
+            return CreateFromAssemblyInternal(assembly, default);
         }
 
         /// <summary>

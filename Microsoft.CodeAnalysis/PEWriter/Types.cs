@@ -7,8 +7,10 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Symbols;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -428,7 +430,7 @@ namespace Microsoft.Cci
 
         public TypeReferenceWithAttributes(
             ITypeReference typeRef,
-            ImmutableArray<ICustomAttribute> attributes = default(ImmutableArray<ICustomAttribute>))
+            ImmutableArray<ICustomAttribute> attributes = default)
         {
             TypeRef = typeRef;
             Attributes = attributes.NullToEmpty();

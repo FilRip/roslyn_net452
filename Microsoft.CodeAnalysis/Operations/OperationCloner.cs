@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.FlowAnalysis;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations

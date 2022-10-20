@@ -5,8 +5,7 @@
 #nullable disable
 
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.Text;
-using Cci = Microsoft.Cci;
+
 using DWORD = System.UInt32;
 
 namespace Microsoft.CodeAnalysis.CodeGen

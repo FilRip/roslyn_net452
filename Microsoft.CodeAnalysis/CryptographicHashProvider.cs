@@ -10,7 +10,9 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -151,7 +153,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (lazyHash.IsDefault)
             {
-                ImmutableInterlocked.InterlockedCompareExchange(ref lazyHash, ComputeHash(algorithm), default(ImmutableArray<byte>));
+                ImmutableInterlocked.InterlockedCompareExchange(ref lazyHash, ComputeHash(algorithm), default);
             }
 
             return lazyHash;

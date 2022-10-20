@@ -6,10 +6,11 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Roslyn.Utilities;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.Debugging;
-using Microsoft.CodeAnalysis.Symbols;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit.NoPia
 {
@@ -145,23 +146,23 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                 Cci.IImportScope Cci.IMethodBody.ImportScope => null;
 
                 ImmutableArray<StateMachineHoistedLocalScope> Cci.IMethodBody.StateMachineHoistedLocalScopes =>
-                    default(ImmutableArray<StateMachineHoistedLocalScope>);
+                    default;
 
                 string Cci.IMethodBody.StateMachineTypeName => null;
 
                 ImmutableArray<EncHoistedLocalInfo> Cci.IMethodBody.StateMachineHoistedLocalSlots =>
-                    default(ImmutableArray<EncHoistedLocalInfo>);
+                    default;
 
                 ImmutableArray<Cci.ITypeReference> Cci.IMethodBody.StateMachineAwaiterSlots =>
-                    default(ImmutableArray<Cci.ITypeReference>);
+                    default;
 
                 ImmutableArray<ClosureDebugInfo> Cci.IMethodBody.ClosureDebugInfo =>
-                    default(ImmutableArray<ClosureDebugInfo>);
+                    default;
 
                 ImmutableArray<LambdaDebugInfo> Cci.IMethodBody.LambdaDebugInfo =>
-                    default(ImmutableArray<LambdaDebugInfo>);
+                    default;
 
-                public DebugId MethodId => default(DebugId);
+                public DebugId MethodId => default;
             }
 
             IEnumerable<Cci.IGenericMethodParameter> Cci.IMethodDefinition.GenericParameters => _typeParameters;

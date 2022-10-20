@@ -10,11 +10,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.Diagnostics.Telemetry;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
@@ -1158,8 +1160,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                 lock (GeneratedCodeSymbolsForTreeMap)
                 {
-                    ImmutableHashSet<ISymbol>? existingGeneratedCodeSymbols;
-                    if (!GeneratedCodeSymbolsForTreeMap.TryGetValue(tree, out existingGeneratedCodeSymbols))
+                    if (!GeneratedCodeSymbolsForTreeMap.TryGetValue(tree, out ImmutableHashSet<ISymbol> existingGeneratedCodeSymbols))
                     {
                         GeneratedCodeSymbolsForTreeMap.Add(tree, generatedCodeSymbols);
                     }
@@ -2268,8 +2269,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return false;
             }
 
-            bool hasHiddenRegions;
-            if (!_lazyTreesWithHiddenRegionsMap.TryGetValue(tree, out hasHiddenRegions))
+            if (!_lazyTreesWithHiddenRegionsMap.TryGetValue(tree, out bool hasHiddenRegions))
             {
                 hasHiddenRegions = tree.HasHiddenRegions();
                 _lazyTreesWithHiddenRegionsMap.TryAdd(tree, hasHiddenRegions);

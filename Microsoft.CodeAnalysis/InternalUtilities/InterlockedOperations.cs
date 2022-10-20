@@ -23,7 +23,7 @@ namespace Roslyn.Utilities
         /// because it saves another read to <paramref name="target"/>.</returns>
         public static T Initialize<T>([NotNull] ref T? target, T value) where T : class
         {
-            RoslynDebug.Assert((object?)value != null);
+            RoslynDebug.Assert(value != null);
             return Interlocked.CompareExchange(ref target, value, null) ?? value;
         }
 
@@ -42,9 +42,9 @@ namespace Roslyn.Utilities
         [return: NotNullIfNotNull(parameterName: "initializedValue")]
         public static T Initialize<T>(ref T target, T initializedValue, T uninitializedValue) where T : class?
         {
-            Debug.Assert((object?)initializedValue != uninitializedValue);
+            Debug.Assert(initializedValue != uninitializedValue);
             T oldValue = Interlocked.CompareExchange(ref target, initializedValue, uninitializedValue);
-            return (object?)oldValue == uninitializedValue ? initializedValue : oldValue;
+            return oldValue == uninitializedValue ? initializedValue : oldValue;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Roslyn.Utilities
         public static ImmutableArray<T> Initialize<T>(ref ImmutableArray<T> target, ImmutableArray<T> initializedValue)
         {
             Debug.Assert(!initializedValue.IsDefault);
-            var oldValue = ImmutableInterlocked.InterlockedCompareExchange(ref target, initializedValue, default(ImmutableArray<T>));
+            var oldValue = ImmutableInterlocked.InterlockedCompareExchange(ref target, initializedValue, default);
             return oldValue.IsDefault ? initializedValue : oldValue;
         }
     }

@@ -9,7 +9,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -197,8 +199,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             int position = 0;
-            string? simpleName;
-            if (!TryParseNameToken(displayName, ref position, out simpleName))
+            if (!TryParseNameToken(displayName, ref position, out string simpleName))
             {
                 return false;
             }
@@ -223,8 +224,7 @@ namespace Microsoft.CodeAnalysis
 
                 position++;
 
-                string? propertyName;
-                if (!TryParseNameToken(displayName, ref position, out propertyName))
+                if (!TryParseNameToken(displayName, ref position, out string propertyName))
                 {
                     return false;
                 }
@@ -236,8 +236,7 @@ namespace Microsoft.CodeAnalysis
 
                 position++;
 
-                string? propertyValue;
-                if (!TryParseNameToken(displayName, ref position, out propertyValue))
+                if (!TryParseNameToken(displayName, ref position, out string propertyValue))
                 {
                     return false;
                 }
@@ -257,9 +256,7 @@ namespace Microsoft.CodeAnalysis
                         continue;
                     }
 
-                    ulong versionLong;
-                    AssemblyIdentityParts versionParts;
-                    if (!TryParseVersion(propertyValue, out versionLong, out versionParts))
+                    if (!TryParseVersion(propertyValue, out ulong versionLong, out AssemblyIdentityParts versionParts))
                     {
                         return false;
                     }
@@ -299,8 +296,7 @@ namespace Microsoft.CodeAnalysis
                         continue;
                     }
 
-                    ImmutableArray<byte> value;
-                    if (!TryParsePublicKey(propertyValue, out value))
+                    if (!TryParsePublicKey(propertyValue, out ImmutableArray<byte> value))
                     {
                         return false;
                     }
@@ -326,8 +322,7 @@ namespace Microsoft.CodeAnalysis
                         continue;
                     }
 
-                    ImmutableArray<byte> value;
-                    if (!TryParsePublicKeyToken(propertyValue, out value))
+                    if (!TryParsePublicKeyToken(propertyValue, out ImmutableArray<byte> value))
                     {
                         return false;
                     }
@@ -657,8 +652,7 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            ImmutableArray<byte> result;
-            if (value.Length != (PublicKeyTokenBytes * 2) || !TryParseHexBytes(value, out result))
+            if (value.Length != (PublicKeyTokenBytes * 2) || !TryParseHexBytes(value, out ImmutableArray<byte> result))
             {
                 token = default;
                 return false;

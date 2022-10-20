@@ -5,10 +5,11 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.PooledObjects;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -104,7 +105,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (OperationConstantValue == null || OperationConstantValue.IsBad)
                 {
-                    return default(Optional<object?>);
+                    return default;
                 }
 
                 return new Optional<object?>(OperationConstantValue.Value);
@@ -180,7 +181,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (child is object)
             {
-                Debug.Assert((object?)child.Parent == parent);
+                Debug.Assert(child.Parent == parent);
             }
         }
 

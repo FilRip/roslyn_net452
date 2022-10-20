@@ -4,14 +4,13 @@
 
 #nullable disable
 
-using Microsoft.CodeAnalysis.Collections;
-using Roslyn.Utilities;
 using System;
 using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
+
+using Microsoft.CodeAnalysis.Collections;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -195,7 +194,7 @@ namespace Microsoft.CodeAnalysis
         public static bool TryParseKey(ImmutableArray<byte> blob, out ImmutableArray<byte> snKey, out RSAParameters? privateKey)
         {
             privateKey = null;
-            snKey = default(ImmutableArray<byte>);
+            snKey = default;
 
             if (IsValidPublicKey(blob))
             {

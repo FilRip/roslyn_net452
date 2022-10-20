@@ -8,8 +8,10 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.FlowAnalysis
@@ -2645,7 +2647,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         /// </summary>
         private void VisitConditionalBranchCore(IOperation condition, [NotNull] ref BasicBlockBuilder? dest, bool jumpIfTrue)
         {
-oneMoreTime:
+        oneMoreTime:
             Debug.Assert(_startSpillingAt == _evalStack.Count);
 
             while (condition.Kind == OperationKind.Parenthesized)

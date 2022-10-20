@@ -4,17 +4,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis;
-using System.Collections.Immutable;
-using System.Threading.Tasks;
 
 namespace Roslyn.Utilities
 {

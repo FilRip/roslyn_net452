@@ -7,8 +7,8 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.Symbols;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis
     {
         public static void Decode(ref DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> arguments, AttributeTargets target, CommonMessageProvider messageProvider)
         {
-            Debug.Assert((object)arguments.AttributeSyntaxOpt != null);
+            Debug.Assert(arguments.AttributeSyntaxOpt != null);
 
             UnmanagedType unmanagedType = DecodeMarshalAsType(arguments.Attribute);
 
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
 
         private static void DecodeMarshalAsCustom(ref DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> arguments, CommonMessageProvider messageProvider)
         {
-            Debug.Assert((object)arguments.AttributeSyntaxOpt != null);
+            Debug.Assert(arguments.AttributeSyntaxOpt != null);
 
             ITypeSymbolInternal typeSymbol = null;
             string typeName = null;
@@ -167,13 +167,13 @@ namespace Microsoft.CodeAnalysis
 
             if (!hasErrors)
             {
-                arguments.GetOrCreateData<TWellKnownAttributeData>().GetOrCreateData().SetMarshalAsCustom(hasTypeName ? (object)typeName : typeSymbol, cookie);
+                arguments.GetOrCreateData<TWellKnownAttributeData>().GetOrCreateData().SetMarshalAsCustom(hasTypeName ? typeName : typeSymbol, cookie);
             }
         }
 
         private static void DecodeMarshalAsComInterface(ref DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> arguments, UnmanagedType unmanagedType, CommonMessageProvider messageProvider)
         {
-            Debug.Assert((object)arguments.AttributeSyntaxOpt != null);
+            Debug.Assert(arguments.AttributeSyntaxOpt != null);
 
             int? parameterIndex = null;
             int position = 1;
@@ -206,10 +206,10 @@ namespace Microsoft.CodeAnalysis
 
         private static void DecodeMarshalAsArray(ref DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> arguments, CommonMessageProvider messageProvider, bool isFixed)
         {
-            Debug.Assert((object)arguments.AttributeSyntaxOpt != null);
+            Debug.Assert(arguments.AttributeSyntaxOpt != null);
 
             UnmanagedType? elementType = null;
-            int? elementCount = isFixed ? 1 : (int?)null;
+            int? elementCount = isFixed ? 1 : null;
             short? parameterIndex = null;
             bool hasErrors = false;
 
@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis
 
         private static void DecodeMarshalAsSafeArray(ref DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> arguments, CommonMessageProvider messageProvider)
         {
-            Debug.Assert((object)arguments.AttributeSyntaxOpt != null);
+            Debug.Assert(arguments.AttributeSyntaxOpt != null);
 
             Cci.VarEnum? elementTypeVariant = null;
             ITypeSymbolInternal elementTypeSymbol = null;
@@ -354,7 +354,7 @@ namespace Microsoft.CodeAnalysis
 
         private static void DecodeMarshalAsFixedString(ref DecodeWellKnownAttributeArguments<TAttributeSyntax, TAttributeData, TAttributeLocation> arguments, CommonMessageProvider messageProvider)
         {
-            Debug.Assert((object)arguments.AttributeSyntaxOpt != null);
+            Debug.Assert(arguments.AttributeSyntaxOpt != null);
 
             int elementCount = -1;
             int position = 1;

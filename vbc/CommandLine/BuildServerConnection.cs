@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: Microsoft.CodeAnalysis.CommandLine.BuildServerConnection
 // Assembly: vbc, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
 // MVID: 59BA59CE-D1C9-469A-AF98-699E22DB28ED
@@ -178,7 +178,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
           PipeStream pipeStream,
           Guid requestId,
           ICompilerServerLogger logger,
-          CancellationToken cancellationToken = default(CancellationToken))
+          CancellationToken cancellationToken = default)
         {
             byte[] buffer = new byte[0];
             while (!cancellationToken.IsCancellationRequested)

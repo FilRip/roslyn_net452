@@ -4,9 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -48,8 +47,7 @@ namespace Microsoft.CodeAnalysis
         {
             RoslynDebug.Assert(identifier != null);
 
-            object? value;
-            if (!_map.TryGetValue(identifier, out value))
+            if (!_map.TryGetValue(identifier, out object value))
             {
                 AddInitialSpelling(identifier);
             }
@@ -114,8 +112,7 @@ namespace Microsoft.CodeAnalysis
 
         private bool CaseSensitiveContains(string identifier)
         {
-            object? spellings;
-            if (_map.TryGetValue(identifier, out spellings))
+            if (_map.TryGetValue(identifier, out object spellings))
             {
                 var spelling = spellings as string;
                 if (spelling != null)

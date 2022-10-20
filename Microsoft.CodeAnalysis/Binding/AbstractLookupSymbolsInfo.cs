@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -195,7 +197,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 else
                 {
-                    arities = (_uniqueSymbolOrArities == null && _arityBitVectorOrUniqueArity == 0) ? null : (IArityEnumerable)this;
+                    arities = (_uniqueSymbolOrArities == null && _arityBitVectorOrUniqueArity == 0) ? null : this;
                     uniqueSymbol = null;
                 }
             }
@@ -241,8 +243,7 @@ namespace Microsoft.CodeAnalysis
 
         public void AddSymbol(TSymbol symbol, string name, int arity)
         {
-            UniqueSymbolOrArities pair;
-            if (!_nameMap.TryGetValue(name, out pair))
+            if (!_nameMap.TryGetValue(name, out AbstractLookupSymbolsInfo<TSymbol>.UniqueSymbolOrArities pair))
             {
                 // First time seeing a symbol with this name.  Create a mapping for it from the name
                 // to the one arity we've seen, and also store around the symbol as it's currently
@@ -285,8 +286,7 @@ namespace Microsoft.CodeAnalysis
         {
             Debug.Assert(CanBeAdded(name));
 
-            UniqueSymbolOrArities pair;
-            if (!_nameMap.TryGetValue(name, out pair))
+            if (!_nameMap.TryGetValue(name, out AbstractLookupSymbolsInfo<TSymbol>.UniqueSymbolOrArities pair))
             {
                 arities = null;
                 uniqueSymbol = null;

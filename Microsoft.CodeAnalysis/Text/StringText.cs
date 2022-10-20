@@ -4,10 +4,10 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Text
@@ -23,9 +23,9 @@ namespace Microsoft.CodeAnalysis.Text
         internal StringText(
             string source,
             Encoding? encodingOpt,
-            ImmutableArray<byte> checksum = default(ImmutableArray<byte>),
+            ImmutableArray<byte> checksum = default,
             SourceHashAlgorithm checksumAlgorithm = SourceHashAlgorithm.Sha1,
-            ImmutableArray<byte> embeddedTextBlob = default(ImmutableArray<byte>))
+            ImmutableArray<byte> embeddedTextBlob = default)
             : base(checksum, checksumAlgorithm, embeddedTextBlob)
         {
             RoslynDebug.Assert(source != null);
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.Text
             this.Source.CopyTo(sourceIndex, destination, destinationIndex, count);
         }
 
-        public override void Write(TextWriter textWriter, TextSpan span, CancellationToken cancellationToken = default(CancellationToken))
+        public override void Write(TextWriter textWriter, TextSpan span, CancellationToken cancellationToken = default)
         {
             if (span.Start == 0 && span.End == this.Length)
             {

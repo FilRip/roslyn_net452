@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -423,8 +423,7 @@ namespace Microsoft.CodeAnalysis
             {
                 while (stack.IsNotEmpty)
                 {
-                    SyntaxNodeOrToken value;
-                    if (stack.TryGetNextInSpan(in span, out value))
+                    if (stack.TryGetNextInSpan(in span, out SyntaxNodeOrToken value))
                     {
                         // PERF: Push before yield return so that "value" is 'dead' after the yield
                         // and therefore doesn't need to be stored in the iterator state machine. This
@@ -535,8 +534,7 @@ namespace Microsoft.CodeAnalysis
             {
                 while (stack.IsNotEmpty)
                 {
-                    SyntaxNodeOrToken value;
-                    if (stack.TryGetNextInSpan(in span, out value))
+                    if (stack.TryGetNextInSpan(in span, out SyntaxNodeOrToken value))
                     {
                         if (value.AsNode(out var nodeValue))
                         {

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -36,7 +35,7 @@ namespace Microsoft.CodeAnalysis
             get
             {
                 VerifySealed(expected: true);
-                return _offset != Uninitialized ? _offset : (int?)null;
+                return _offset != Uninitialized ? _offset : null;
             }
         }
         #endregion

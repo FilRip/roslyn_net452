@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the semantic info.</param>
-        public static SymbolInfo GetSymbolInfo(this SemanticModel semanticModel, SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        public static SymbolInfo GetSymbolInfo(this SemanticModel semanticModel, SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return semanticModel.GetSymbolInfo(node, cancellationToken);
         }
@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the semantic info.</param>
-        public static TypeInfo GetTypeInfo(this SemanticModel semanticModel, SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        public static TypeInfo GetTypeInfo(this SemanticModel semanticModel, SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return semanticModel.GetTypeInfo(node, cancellationToken);
         }
@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="nameSyntax">Name to get alias info for.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the
         /// process of obtaining the alias information.</param>
-        public static IAliasSymbol? GetAliasInfo(this SemanticModel semanticModel, SyntaxNode nameSyntax, CancellationToken cancellationToken = default(CancellationToken))
+        public static IAliasSymbol? GetAliasInfo(this SemanticModel semanticModel, SyntaxNode nameSyntax, CancellationToken cancellationToken = default)
         {
             return semanticModel.GetAliasInfo(nameSyntax, cancellationToken);
         }
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis
         /// UsingDirectiveSyntax</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The symbol declared by the node or null if the node is not a declaration.</returns>
-        public static ISymbol? GetDeclaredSymbol(this SemanticModel semanticModel, SyntaxNode declaration, CancellationToken cancellationToken = default(CancellationToken))
+        public static ISymbol? GetDeclaredSymbol(this SemanticModel semanticModel, SyntaxNode declaration, CancellationToken cancellationToken = default)
         {
             return semanticModel.GetDeclaredSymbolForNode(declaration, cancellationToken);
         }
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="semanticModel"></param>
         /// <param name="node">The syntax node to get semantic information for.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public static ImmutableArray<ISymbol> GetMemberGroup(this SemanticModel semanticModel, SyntaxNode node, CancellationToken cancellationToken = default(CancellationToken))
+        public static ImmutableArray<ISymbol> GetMemberGroup(this SemanticModel semanticModel, SyntaxNode node, CancellationToken cancellationToken = default)
         {
             return semanticModel.GetMemberGroup(node, cancellationToken);
         }

@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.CodeAnalysis.Text;
 
@@ -58,7 +59,7 @@ namespace Microsoft.CodeAnalysis
         /// <remarks>
         /// If <see cref="IsInSource"/> returns False this method returns an empty <see cref="TextSpan"/> which starts at position 0.
         /// </remarks>
-        public virtual TextSpan SourceSpan { get { return default(TextSpan); } }
+        public virtual TextSpan SourceSpan { get { return default; } }
 
         /// <summary>
         /// Gets the location in terms of path, line and column.
@@ -72,7 +73,7 @@ namespace Microsoft.CodeAnalysis
         /// </returns>
         public virtual FileLinePositionSpan GetLineSpan()
         {
-            return default(FileLinePositionSpan);
+            return default;
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace Microsoft.CodeAnalysis
         /// </returns>
         public virtual FileLinePositionSpan GetMappedLineSpan()
         {
-            return default(FileLinePositionSpan);
+            return default;
         }
 
         // Derived classes should provide value equality semantics.

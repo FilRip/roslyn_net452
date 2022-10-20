@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -222,7 +223,7 @@ namespace Microsoft.CodeAnalysis
             value = default!;
             return false;
 
-hasBucket:
+        hasBucket:
             if (CompareKeys(b.Key, key))
             {
                 value = b.Value;

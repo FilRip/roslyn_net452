@@ -10,11 +10,13 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading;
+
 using Microsoft.Cci;
-using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis;
-using Roslyn.Utilities;
+using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Emit
 {
@@ -65,7 +67,7 @@ namespace Microsoft.CodeAnalysis.Emit
                    cancellationToken: cancellationToken)
         {
             Debug.Assert(previousGeneration != null);
-            Debug.Assert(encId != default(Guid));
+            Debug.Assert(encId != default);
             Debug.Assert(encId != previousGeneration.EncId);
             Debug.Assert(context.Module.DebugInformationFormat != DebugInformationFormat.Embedded);
 
@@ -265,8 +267,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         protected override bool TryGetTypeDefinitionHandle(ITypeDefinition def, out TypeDefinitionHandle handle)
         {
-            int index;
-            bool result = _typeDefs.TryGetValue(def, out index);
+            bool result = _typeDefs.TryGetValue(def, out int index);
             handle = MetadataTokens.TypeDefinitionHandle(index);
             return result;
         }
@@ -288,8 +289,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         protected override bool TryGetMethodDefinitionHandle(IMethodDefinition def, out MethodDefinitionHandle handle)
         {
-            int index;
-            bool result = _methodDefs.TryGetValue(def, out index);
+            bool result = _methodDefs.TryGetValue(def, out int index);
             handle = MetadataTokens.MethodDefinitionHandle(index);
             return result;
         }
@@ -383,8 +383,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         protected override bool TryGetTypeReferenceHandle(ITypeReference reference, out TypeReferenceHandle handle)
         {
-            int index;
-            bool result = _typeRefIndex.TryGetValue(reference, out index);
+            bool result = _typeRefIndex.TryGetValue(reference, out int index);
             handle = MetadataTokens.TypeReferenceHandle(index);
             return result;
         }
@@ -458,14 +457,12 @@ namespace Microsoft.CodeAnalysis.Emit
                     throw ExceptionUtilities.UnexpectedValue(change);
             }
 
-            int typeIndex;
-            var ok = _typeDefs.TryGetValue(typeDef, out typeIndex);
+            var ok = _typeDefs.TryGetValue(typeDef, out int typeIndex);
             Debug.Assert(ok);
 
             foreach (var eventDef in typeDef.GetEvents(this.Context))
             {
-                int eventMapIndex;
-                if (!_eventMap.TryGetValue(typeIndex, out eventMapIndex))
+                if (!_eventMap.TryGetValue(typeIndex, out int eventMapIndex))
                 {
                     _eventMap.Add(typeIndex);
                 }
@@ -500,8 +497,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
             foreach (var propertyDef in typeDef.GetProperties(this.Context))
             {
-                int propertyMapIndex;
-                if (!_propertyMap.TryGetValue(typeIndex, out propertyMapIndex))
+                if (!_propertyMap.TryGetValue(typeIndex, out int propertyMapIndex))
                 {
                     _propertyMap.Add(typeIndex);
                 }
@@ -517,15 +513,13 @@ namespace Microsoft.CodeAnalysis.Emit
                 var methodDef = (IMethodDefinition?)methodImpl.ImplementingMethod.AsDefinition(this.Context);
                 RoslynDebug.AssertNotNull(methodDef);
 
-                int methodDefIndex;
-                ok = _methodDefs.TryGetValue(methodDef, out methodDefIndex);
+                ok = _methodDefs.TryGetValue(methodDef, out int methodDefIndex);
                 Debug.Assert(ok);
 
                 // If there are N existing MethodImpl entries for this MethodDef,
                 // those will be index:1, ..., index:N, so it's sufficient to check for index:1.
-                int methodImplIndex;
                 var key = new MethodImplKey(methodDefIndex, index: 1);
-                if (!_methodImpls.TryGetValue(key, out methodImplIndex))
+                if (!_methodImpls.TryGetValue(key, out int methodImplIndex))
                 {
                     implementingMethods.Add(methodDefIndex);
                     this.methodImplList.Add(methodImpl);
@@ -538,9 +532,8 @@ namespace Microsoft.CodeAnalysis.Emit
                 int index = 1;
                 while (true)
                 {
-                    int methodImplIndex;
                     var key = new MethodImplKey(methodDefIndex, index);
-                    if (!_methodImpls.TryGetValue(key, out methodImplIndex))
+                    if (!_methodImpls.TryGetValue(key, out int methodImplIndex))
                     {
                         _methodImpls.Add(key);
                         break;
@@ -731,8 +724,7 @@ namespace Microsoft.CodeAnalysis.Emit
                     int typeIndex = _typeDefs[member.ContainingTypeDefinition];
                     Debug.Assert(typeIndex > 0);
 
-                    int mapRowId;
-                    var ok = map.TryGetValue(typeIndex, out mapRowId);
+                    var ok = map.TryGetValue(typeIndex, out int mapRowId);
                     Debug.Assert(ok);
 
                     metadata.AddEncLogEntry(
@@ -1004,8 +996,7 @@ namespace Microsoft.CodeAnalysis.Emit
             {
                 get
                 {
-                    int token;
-                    this.TryGetValue(item, out token);
+                    this.TryGetValue(item, out int token);
 
                     // Fails if we are attempting to make a change that should have been reported as rude,
                     // e.g. the corresponding definitions type don't match, etc.
@@ -1097,8 +1088,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 if (_tryGetExistingIndex(item, out index))
                 {
 #if DEBUG
-                    T? other;
-                    Debug.Assert(!_map.TryGetValue(index, out other) || ((object)other == (object)item));
+                    Debug.Assert(!_map.TryGetValue(index, out T other) || (other == item));
 #endif
                     _map[index] = item;
                     return true;
@@ -1157,8 +1147,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 return true;
             }
 
-            TypeDefinitionHandle handle;
-            if (_definitionMap.TryGetTypeHandle(item, out handle))
+            if (_definitionMap.TryGetTypeHandle(item, out TypeDefinitionHandle handle))
             {
                 index = MetadataTokens.GetRowNumber(handle);
                 Debug.Assert(index > 0);
@@ -1176,8 +1165,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 return true;
             }
 
-            EventDefinitionHandle handle;
-            if (_definitionMap.TryGetEventHandle(item, out handle))
+            if (_definitionMap.TryGetEventHandle(item, out EventDefinitionHandle handle))
             {
                 index = MetadataTokens.GetRowNumber(handle);
                 Debug.Assert(index > 0);
@@ -1195,8 +1183,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 return true;
             }
 
-            FieldDefinitionHandle handle;
-            if (_definitionMap.TryGetFieldHandle(item, out handle))
+            if (_definitionMap.TryGetFieldHandle(item, out FieldDefinitionHandle handle))
             {
                 index = MetadataTokens.GetRowNumber(handle);
                 Debug.Assert(index > 0);
@@ -1214,8 +1201,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 return true;
             }
 
-            MethodDefinitionHandle handle;
-            if (_definitionMap.TryGetMethodHandle(item, out handle))
+            if (_definitionMap.TryGetMethodHandle(item, out MethodDefinitionHandle handle))
             {
                 index = MetadataTokens.GetRowNumber(handle);
                 Debug.Assert(index > 0);
@@ -1233,8 +1219,7 @@ namespace Microsoft.CodeAnalysis.Emit
                 return true;
             }
 
-            PropertyDefinitionHandle handle;
-            if (_definitionMap.TryGetPropertyHandle(item, out handle))
+            if (_definitionMap.TryGetPropertyHandle(item, out PropertyDefinitionHandle handle))
             {
                 index = MetadataTokens.GetRowNumber(handle);
                 Debug.Assert(index > 0);

@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.CodeAnalysis.Syntax
 {
@@ -39,8 +38,7 @@ namespace Microsoft.CodeAnalysis.Syntax
         {
             var entry = GetEntryAtOrBeforePosition(position);
 
-            TWarningState state;
-            if (entry.SpecificWarningOption.TryGetValue(id, out state))
+            if (entry.SpecificWarningOption.TryGetValue(id, out TWarningState state))
             {
                 return state;
             }

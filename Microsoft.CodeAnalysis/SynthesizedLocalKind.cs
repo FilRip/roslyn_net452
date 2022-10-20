@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.Emit;
 
 namespace Microsoft.CodeAnalysis

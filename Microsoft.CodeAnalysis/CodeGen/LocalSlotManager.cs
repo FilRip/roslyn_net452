@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CodeGen
@@ -128,9 +130,8 @@ namespace Microsoft.CodeAnalysis.CodeGen
             ImmutableArray<string> tupleElementNames,
             bool isSlotReusable)
         {
-            LocalDefinition? local;
 
-            if (!isSlotReusable || !FreeSlots.TryPop(new LocalSignature(type, constraints), out local))
+            if (!isSlotReusable || !FreeSlots.TryPop(new LocalSignature(type, constraints), out LocalDefinition local))
             {
                 local = this.DeclareLocalImpl(type, symbol, name, kind, id, pdbAttributes, constraints, dynamicTransformFlags, tupleElementNames);
             }

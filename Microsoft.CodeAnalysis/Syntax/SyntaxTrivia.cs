@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -30,7 +32,7 @@ namespace Microsoft.CodeAnalysis
             Position = position;
             Index = index;
 
-            Debug.Assert(this.RawKind != 0 || this.Equals(default(SyntaxTrivia)));
+            Debug.Assert(this.RawKind != 0 || this.Equals(default));
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace Microsoft.CodeAnalysis
             {
                 return UnderlyingNode != null
                     ? new TextSpan(Position + UnderlyingNode.GetLeadingTriviaWidth(), UnderlyingNode.Width)
-                    : default(TextSpan);
+                    : default;
             }
         }
 
@@ -119,7 +121,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public TextSpan FullSpan
         {
-            get { return UnderlyingNode != null ? new TextSpan(Position, UnderlyingNode.FullWidth) : default(TextSpan); }
+            get { return UnderlyingNode != null ? new TextSpan(Position, UnderlyingNode.FullWidth) : default; }
         }
 
         /// <summary>
@@ -309,12 +311,12 @@ namespace Microsoft.CodeAnalysis
             if (this.UnderlyingNode != null)
             {
                 return new SyntaxTrivia(
-                    token: default(SyntaxToken),
+                    token: default,
                     triviaNode: this.UnderlyingNode.WithAdditionalAnnotationsGreen(annotations),
                     position: 0, index: 0);
             }
 
-            return default(SyntaxTrivia);
+            return default;
         }
 
         /// <summary>
@@ -338,12 +340,12 @@ namespace Microsoft.CodeAnalysis
             if (this.UnderlyingNode != null)
             {
                 return new SyntaxTrivia(
-                    token: default(SyntaxToken),
+                    token: default,
                     triviaNode: this.UnderlyingNode.WithoutAnnotationsGreen(annotations),
                     position: 0, index: 0);
             }
 
-            return default(SyntaxTrivia);
+            return default;
         }
 
         /// <summary>
@@ -371,7 +373,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (trivia.UnderlyingNode == null)
             {
-                return default(SyntaxTrivia);
+                return default;
             }
 
             if (this.UnderlyingNode == null)
@@ -386,7 +388,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             return new SyntaxTrivia(
-                token: default(SyntaxToken),
+                token: default,
                 triviaNode: trivia.UnderlyingNode.WithAdditionalAnnotationsGreen(annotations),
                 position: 0, index: 0);
         }

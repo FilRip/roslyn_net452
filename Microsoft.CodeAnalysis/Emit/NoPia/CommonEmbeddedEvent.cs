@@ -7,7 +7,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using Cci = Microsoft.Cci;
 
 namespace Microsoft.CodeAnalysis.Emit.NoPia
 {
@@ -173,7 +172,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
             void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
             {
-                visitor.Visit((Cci.IEventDefinition)this);
+                visitor.Visit(this);
             }
 
             Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)

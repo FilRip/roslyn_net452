@@ -7,7 +7,9 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+
 using Roslyn.Utilities;
+
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
 namespace Microsoft.Cci
@@ -34,7 +36,7 @@ namespace Microsoft.Cci
 
         public TypeDefinitionHandle TypeDef
         {
-            get { return default(TypeDefinitionHandle); }
+            get { return default; }
         }
 
         public ITypeDefinition ResolvedType

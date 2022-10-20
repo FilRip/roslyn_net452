@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
@@ -75,7 +76,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private bool EnqueueCore(TElement value)
         {
-retry:
+        retry:
             if (_disallowEnqueue)
             {
                 throw new InvalidOperationException($"Cannot enqueue data after PromiseNotToEnqueue.");
@@ -117,7 +118,7 @@ retry:
             {
                 if (_data.Count == 0)
                 {
-                    d = default(TElement);
+                    d = default;
                     return false;
                 }
 
@@ -225,7 +226,7 @@ retry:
         /// is called before an element becomes available, the returned task is cancelled.
         /// </summary>
         [PerformanceSensitive("https://github.com/dotnet/roslyn/issues/23582", OftenCompletesSynchronously = true)]
-        public Task<TElement> DequeueAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<TElement> DequeueAsync(CancellationToken cancellationToken = default)
         {
             var optionalResult = TryDequeueAsync(cancellationToken);
             if (optionalResult.IsCompletedSuccessfully)
@@ -234,7 +235,7 @@ retry:
                 return result.HasValue
                     ? Task.FromResult(result.Value)
                     : //Task.FromCanceled<TElement>(new CancellationToken(canceled: true));
-                    // FilRip create canceled task
+                      // FilRip create canceled task
                     new Task<TElement>(new Func<TElement>(() => { return default; }), new CancellationToken(true));
             }
 

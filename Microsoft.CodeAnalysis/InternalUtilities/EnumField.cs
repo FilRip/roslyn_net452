@@ -4,8 +4,8 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis;
 
 namespace Roslyn.Utilities
 {
@@ -65,7 +65,7 @@ namespace Roslyn.Utilities
                 }
             }
 
-            return default(EnumField);
+            return default;
         }
 
         private class EnumFieldComparer : IComparer<EnumField>

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Immutable;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Diagnostics
@@ -25,7 +26,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public sealed override bool Equals(object? obj)
         {
-            return (object?)this == obj;
+            return this == obj;
         }
 
         public sealed override int GetHashCode()
