@@ -499,8 +499,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns></returns>
         protected virtual TLocalState LabelState(LabelSymbol label)
         {
-            TLocalState result;
-            if (_labels.TryGetValue(label, out result))
+            if (_labels.TryGetValue(label, out TLocalState result))
             {
                 return result;
             }
@@ -675,8 +674,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private void LoopHead(BoundLoopStatement node)
         {
-            TLocalState previousState;
-            if (_loopHeadState.TryGetValue(node, out previousState))
+            if (_loopHeadState.TryGetValue(node, out TLocalState previousState))
             {
                 Join(ref this.State, ref previousState);
             }

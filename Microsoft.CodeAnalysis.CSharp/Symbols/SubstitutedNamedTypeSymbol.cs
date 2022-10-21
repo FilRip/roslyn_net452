@@ -94,10 +94,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            ImmutableArray<TypeParameterSymbol> typeParameters;
 
             // We're creating a new unconstructed Method from another; alpha-rename type parameters.
-            var newMap = _inputMap.WithAlphaRename(OriginalDefinition, this, out typeParameters);
+            var newMap = _inputMap.WithAlphaRename(OriginalDefinition, this, out ImmutableArray<TypeParameterSymbol> typeParameters);
 
             var prevMap = Interlocked.CompareExchange(ref _lazyMap, newMap, null);
             if (prevMap != null)
@@ -266,9 +265,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             if (_unbound) return StaticCast<Symbol>.From(GetTypeMembers(name));
 
-            ImmutableArray<Symbol> result;
             var cache = _lazyMembersByNameCache;
-            if (cache != null && cache.TryGetValue(name, out result))
+            if (cache != null && cache.TryGetValue(name, out ImmutableArray<Symbol> result))
             {
                 return result;
             }

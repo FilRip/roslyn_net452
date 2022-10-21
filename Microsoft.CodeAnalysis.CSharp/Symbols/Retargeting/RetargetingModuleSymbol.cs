@@ -207,9 +207,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
                 if (!ReferenceEquals(referencedAssemblySymbols[i], underlyingBoundReferences[j]))
                 {
-                    DestinationData destinationData;
 
-                    if (!_retargetingAssemblyMap.TryGetValue(underlyingBoundReferences[j], out destinationData))
+                    if (!_retargetingAssemblyMap.TryGetValue(underlyingBoundReferences[j], out DestinationData destinationData))
                     {
                         _retargetingAssemblyMap.Add(underlyingBoundReferences[j],
                             new DestinationData { To = referencedAssemblySymbols[i] });
@@ -231,9 +230,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
         internal bool RetargetingDefinitions(AssemblySymbol from, out AssemblySymbol to)
         {
-            DestinationData destination;
 
-            if (!_retargetingAssemblyMap.TryGetValue(from, out destination))
+            if (!_retargetingAssemblyMap.TryGetValue(from, out DestinationData destination))
             {
                 to = null;
                 return false;

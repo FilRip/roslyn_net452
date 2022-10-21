@@ -307,8 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var labelsMap = LabelsByValue;
             if (labelsMap != null)
             {
-                SourceLabelSymbol label;
-                if (labelsMap.TryGetValue(key, out label))
+                if (labelsMap.TryGetValue(key, out SourceLabelSymbol label))
                 {
                     return label;
                 }
@@ -397,9 +396,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    TypeSymbol resultantGoverningType;
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-                    Conversion conversion = binder.Conversions.ClassifyImplicitUserDefinedConversionForV6SwitchGoverningType(switchGoverningType, out resultantGoverningType, ref useSiteInfo);
+                    Conversion conversion = binder.Conversions.ClassifyImplicitUserDefinedConversionForV6SwitchGoverningType(switchGoverningType, out TypeSymbol resultantGoverningType, ref useSiteInfo);
                     diagnostics.Add(node, useSiteInfo);
                     if (conversion.IsValid)
                     {

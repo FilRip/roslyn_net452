@@ -2432,10 +2432,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     // At this point we can either have indexers, methods, or 
                     // properties (or something unknown).  Try to break apart
                     // the following name and determine what to do from there.
-                    ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt;
-                    SyntaxToken identifierOrThisOpt;
-                    TypeParameterListSyntax typeParameterListOpt;
-                    this.ParseMemberName(out explicitInterfaceOpt, out identifierOrThisOpt, out typeParameterListOpt, isEvent: false);
+                    this.ParseMemberName(out ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt, out SyntaxToken identifierOrThisOpt, out TypeParameterListSyntax typeParameterListOpt, isEvent: false);
 
                     // First, check if we got absolutely nothing.  If so, then 
                     // We need to consume a bad member and try again.
@@ -2764,8 +2761,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 {
                     // Check for misplaced modifiers.  if we see any, then consider this member
                     // terminated and restart parsing.
-                    MemberDeclarationSyntax result;
-                    if (IsMisplacedModifier(modifiers, attributes, type, out result))
+                    if (IsMisplacedModifier(modifiers, attributes, type, out MemberDeclarationSyntax result))
                     {
                         return result;
                     }
@@ -2790,10 +2786,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     // At this point we can either have indexers, methods, or 
                     // properties (or something unknown).  Try to break apart
                     // the following name and determine what to do from there.
-                    ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt;
-                    SyntaxToken identifierOrThisOpt;
-                    TypeParameterListSyntax typeParameterListOpt;
-                    this.ParseMemberName(out explicitInterfaceOpt, out identifierOrThisOpt, out typeParameterListOpt, isEvent: false);
+                    this.ParseMemberName(out ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt, out SyntaxToken identifierOrThisOpt, out TypeParameterListSyntax typeParameterListOpt, isEvent: false);
 
                     // First, check if we got absolutely nothing.  If so, then 
                     // We need to consume a bad member and try again.
@@ -3150,9 +3143,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 _termState = saveTerm;
 
-                BlockSyntax blockBody;
-                ArrowExpressionClauseSyntax expressionBody;
-                SyntaxToken semicolon;
 
                 // Method declarations cannot be nested or placed inside async lambdas, and so cannot occur in an
                 // asynchronous context. Therefore the IsInAsync state of the parent scope is not saved and
@@ -3160,7 +3150,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 IsInAsync = modifiers.Any((int)SyntaxKind.AsyncKeyword);
 
-                this.ParseBlockAndExpressionBodiesWithSemicolon(out blockBody, out expressionBody, out semicolon);
+                this.ParseBlockAndExpressionBodiesWithSemicolon(out BlockSyntax blockBody, out ArrowExpressionClauseSyntax expressionBody, out SyntaxToken semicolon);
 
                 IsInAsync = false;
 
@@ -3226,10 +3216,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
             var paramList = this.ParseParenthesizedParameterList();
 
-            BlockSyntax blockBody;
-            ArrowExpressionClauseSyntax expressionBody;
-            SyntaxToken semicolon;
-            this.ParseBlockAndExpressionBodiesWithSemicolon(out blockBody, out expressionBody, out semicolon);
+            this.ParseBlockAndExpressionBodiesWithSemicolon(out BlockSyntax blockBody, out ArrowExpressionClauseSyntax expressionBody, out SyntaxToken semicolon);
 
             return _syntaxFactory.ConversionOperatorDeclaration(
                 attributes,
@@ -3344,10 +3331,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     break;
             }
 
-            BlockSyntax blockBody;
-            ArrowExpressionClauseSyntax expressionBody;
-            SyntaxToken semicolon;
-            this.ParseBlockAndExpressionBodiesWithSemicolon(out blockBody, out expressionBody, out semicolon);
+            this.ParseBlockAndExpressionBodiesWithSemicolon(out BlockSyntax blockBody, out ArrowExpressionClauseSyntax expressionBody, out SyntaxToken semicolon);
 
             // if the operator is invalid, then switch it to plus (which will work either way) so that
             // we can finish building the tree
@@ -3645,8 +3629,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             // We're going to cheat here and pass the underlying SyntaxListBuilder of "list" to the helper method so that
             // it can append skipped trivia to the last element, regardless of whether that element is a node or a token.
-            GreenNode trailingTrivia;
-            var action = this.SkipBadListTokensWithExpectedKindHelper(list.UnderlyingBuilder, isNotExpectedFunction, abortFunction, expected, out trailingTrivia);
+            var action = this.SkipBadListTokensWithExpectedKindHelper(list.UnderlyingBuilder, isNotExpectedFunction, abortFunction, expected, out GreenNode trailingTrivia);
             if (trailingTrivia != null)
             {
                 startToken = AddTrailingSkippedSyntax(startToken, trailingTrivia);
@@ -3663,8 +3646,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             where T : CSharpSyntaxNode
             where TNode : CSharpSyntaxNode
         {
-            GreenNode trailingTrivia;
-            var action = this.SkipBadListTokensWithErrorCodeHelper(list, isNotExpectedFunction, abortFunction, error, out trailingTrivia);
+            var action = this.SkipBadListTokensWithErrorCodeHelper(list, isNotExpectedFunction, abortFunction, error, out GreenNode trailingTrivia);
             if (trailingTrivia != null)
             {
                 startToken = AddTrailingSkippedSyntax(startToken, trailingTrivia);
@@ -3689,8 +3671,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
             else
             {
-                GreenNode lastItemTrailingTrivia;
-                var action = SkipBadTokensWithExpectedKind(isNotExpectedFunction, abortFunction, expected, out lastItemTrailingTrivia);
+                var action = SkipBadTokensWithExpectedKind(isNotExpectedFunction, abortFunction, expected, out GreenNode lastItemTrailingTrivia);
                 if (lastItemTrailingTrivia != null)
                 {
                     AddTrailingSkippedSyntax(list, lastItemTrailingTrivia);
@@ -3713,8 +3694,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
             else
             {
-                GreenNode lastItemTrailingTrivia;
-                var action = SkipBadTokensWithErrorCode(isNotExpectedFunction, abortFunction, error, out lastItemTrailingTrivia);
+                var action = SkipBadTokensWithErrorCode(isNotExpectedFunction, abortFunction, error, out GreenNode lastItemTrailingTrivia);
                 if (lastItemTrailingTrivia != null)
                 {
                     AddTrailingSkippedSyntax(list, lastItemTrailingTrivia);
@@ -3932,9 +3912,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var openKind = SyntaxKind.OpenParenToken;
                 var closeKind = SyntaxKind.CloseParenToken;
 
-                SyntaxToken open;
-                SyntaxToken close;
-                this.ParseParameterList(out open, parameters, out close, openKind, closeKind);
+                this.ParseParameterList(out SyntaxToken open, parameters, out SyntaxToken close, openKind, closeKind);
                 return _syntaxFactory.ParameterList(open, parameters, close);
             }
             finally
@@ -3957,9 +3935,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var openKind = SyntaxKind.OpenBracketToken;
                 var closeKind = SyntaxKind.CloseBracketToken;
 
-                SyntaxToken open;
-                SyntaxToken close;
-                this.ParseParameterList(out open, parameters, out close, openKind, closeKind);
+                this.ParseParameterList(out SyntaxToken open, parameters, out SyntaxToken close, openKind, closeKind);
                 return _syntaxFactory.BracketedParameterList(open, parameters, close);
             }
             finally
@@ -4320,11 +4296,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             SyntaxToken eventToken,
             TypeSyntax type)
         {
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt;
-            SyntaxToken identifierOrThisOpt;
-            TypeParameterListSyntax typeParameterList;
 
-            this.ParseMemberName(out explicitInterfaceOpt, out identifierOrThisOpt, out typeParameterList, isEvent: true);
+            this.ParseMemberName(out ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt, out SyntaxToken identifierOrThisOpt, out TypeParameterListSyntax typeParameterList, isEvent: true);
 
             // check availability of readonly members feature for custom events
             CheckForVersionSpecificModifiers(modifiers, SyntaxKind.ReadOnlyKeyword, MessageID.IDS_FeatureReadOnlyMembers);
@@ -4508,7 +4481,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 parentKind != SyntaxKind.NamespaceDeclaration &&
                 (parentKind != SyntaxKind.CompilationUnit || IsScript);
 
-            LocalFunctionStatementSyntax localFunction;
             ParseVariableDeclarators(
                 type: type,
                 flags: flags,
@@ -4517,7 +4489,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 allowLocalFunctions: false,
                 attributes: default,
                 mods: default,
-                localFunction: out localFunction);
+                localFunction: out LocalFunctionStatementSyntax localFunction);
 
         }
 
@@ -4738,8 +4710,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         var isAfterNewLine = parentType.GetLastToken().TrailingTrivia.Any((int)SyntaxKind.EndOfLineTrivia);
                         if (isAfterNewLine)
                         {
-                            int offset, width;
-                            this.GetDiagnosticSpanForMissingToken(out offset, out width);
+                            this.GetDiagnosticSpanForMissingToken(out int offset, out int width);
 
                             this.EatToken();
                             currentTokenKind = this.CurrentToken.Kind;
@@ -5447,10 +5418,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 if (kind == ScanTypeArgumentListKind.DefiniteTypeArgumentList || (kind == ScanTypeArgumentListKind.PossibleTypeArgumentList && (options & NameOptions.InTypeList) != 0))
                 {
-                    SyntaxToken open;
                     var types = _pool.AllocateSeparated<TypeSyntax>();
-                    SyntaxToken close;
-                    this.ParseTypeArgumentList(out open, types, out close);
+                    this.ParseTypeArgumentList(out SyntaxToken open, types, out SyntaxToken close);
                     name = _syntaxFactory.GenericName(id.Identifier,
                         _syntaxFactory.TypeArgumentList(open, types, close));
                     _pool.Free(types);
@@ -6223,8 +6192,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         private void ScanNamedTypePart()
         {
-            SyntaxToken lastTokenOfType;
-            ScanNamedTypePart(out lastTokenOfType);
+            ScanNamedTypePart(out SyntaxToken lastTokenOfType);
         }
 
         private ScanTypeFlags ScanNamedTypePart(out SyntaxToken lastTokenOfType)
@@ -7574,10 +7542,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 return IsPossibleFieldDeclarationFollowingNullableType();
             }
 
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt;
-            SyntaxToken identifierOrThisOpt;
-            TypeParameterListSyntax typeParameterListOpt;
-            this.ParseMemberName(out explicitInterfaceOpt, out identifierOrThisOpt, out typeParameterListOpt, isEvent: false);
+            this.ParseMemberName(out ExplicitInterfaceSpecifierSyntax explicitInterfaceOpt, out SyntaxToken identifierOrThisOpt, out TypeParameterListSyntax typeParameterListOpt, isEvent: false);
 
             if (explicitInterfaceOpt == null && identifierOrThisOpt == null && typeParameterListOpt == null)
             {
@@ -7977,8 +7942,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     }
                 }
 
-                GreenNode trailingTrivia;
-                var action = this.SkipBadStatementListTokens(statements, SyntaxKind.CloseBraceToken, out trailingTrivia);
+                var action = this.SkipBadStatementListTokens(statements, SyntaxKind.CloseBraceToken, out GreenNode trailingTrivia);
                 if (trailingTrivia != null)
                 {
                     previousNode = AddTrailingSkippedSyntax(previousNode, trailingTrivia);
@@ -8629,8 +8593,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             try
             {
                 bool typeIsVar = IsVarType();
-                SyntaxToken lastTokenOfType;
-                if (ScanType(mode, out lastTokenOfType) == ScanTypeFlags.NotType)
+                if (ScanType(mode, out SyntaxToken lastTokenOfType) == ScanTypeFlags.NotType)
                 {
                     return false;
                 }
@@ -9282,9 +9245,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private VariableDeclarationSyntax ParseVariableDeclaration()
         {
             var variables = _pool.AllocateSeparated<VariableDeclaratorSyntax>();
-            TypeSyntax type;
-            LocalFunctionStatementSyntax localFunction;
-            ParseLocalDeclaration(variables, false, attributes: default, mods: default, out type, out localFunction);
+            ParseLocalDeclaration(variables, false, attributes: default, mods: default, out TypeSyntax type, out LocalFunctionStatementSyntax localFunction);
             var result = _syntaxFactory.VariableDeclaration(type, variables);
             _pool.Free(variables);
             return result;
@@ -9537,10 +9498,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 forceLocalFunc = true;
             }
 
-            BlockSyntax blockBody;
-            ArrowExpressionClauseSyntax expressionBody;
-            SyntaxToken semicolon;
-            this.ParseBlockAndExpressionBodiesWithSemicolon(out blockBody, out expressionBody, out semicolon, parseSemicolonAfterBlock: false);
+            this.ParseBlockAndExpressionBodiesWithSemicolon(out BlockSyntax blockBody, out ArrowExpressionClauseSyntax expressionBody, out SyntaxToken semicolon, parseSemicolonAfterBlock: false);
 
             IsInAsync = parentScopeIsInAsync;
 
@@ -11808,8 +11766,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             var initializers = _pool.AllocateSeparated<ExpressionSyntax>();
             try
             {
-                bool isObjectInitializer;
-                this.ParseObjectOrCollectionInitializerMembers(ref openBrace, initializers, out isObjectInitializer);
+                this.ParseObjectOrCollectionInitializerMembers(ref openBrace, initializers, out bool isObjectInitializer);
 
                 openBrace = CheckFeatureAvailability(openBrace, isObjectInitializer ? MessageID.IDS_FeatureObjectInitializer : MessageID.IDS_FeatureCollectionInitializer);
 
@@ -11951,8 +11908,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             var initializers = _pool.AllocateSeparated<ExpressionSyntax>();
             try
             {
-                DiagnosticInfo closeBraceError;
-                this.ParseExpressionsForComplexElementInitializer(ref openBrace, initializers, out closeBraceError);
+                this.ParseExpressionsForComplexElementInitializer(ref openBrace, initializers, out DiagnosticInfo closeBraceError);
                 var closeBrace = this.EatToken(SyntaxKind.CloseBraceToken);
                 if (closeBraceError != null)
                 {

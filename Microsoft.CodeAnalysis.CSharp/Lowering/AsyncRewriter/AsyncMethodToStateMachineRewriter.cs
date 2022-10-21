@@ -98,16 +98,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private FieldSymbol GetAwaiterField(TypeSymbol awaiterType)
         {
-            FieldSymbol result;
 
             // Awaiters of the same type always share the same slot, regardless of what await expressions they belong to.
             // Even in case of nested await expressions only one awaiter is active.
             // So we don't need to tie the awaiter variable to a particular await expression and only use its type
             // to find the previous awaiter field.
-            if (!_awaiterFields.TryGetValue(awaiterType, out result))
+            if (!_awaiterFields.TryGetValue(awaiterType, out FieldSymbol result))
             {
-                int slotIndex;
-                if (slotAllocatorOpt == null || !slotAllocatorOpt.TryGetPreviousAwaiterSlotIndex(F.ModuleBuilderOpt.Translate(awaiterType, F.Syntax, F.Diagnostics.DiagnosticBag), F.Diagnostics.DiagnosticBag, out slotIndex))
+                if (slotAllocatorOpt == null || !slotAllocatorOpt.TryGetPreviousAwaiterSlotIndex(F.ModuleBuilderOpt.Translate(awaiterType, F.Syntax, F.Diagnostics.DiagnosticBag), F.Diagnostics.DiagnosticBag, out int slotIndex))
                 {
                     slotIndex = _nextAwaiterId++;
                 }
@@ -128,8 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             F.CurrentFunction = moveNextMethod;
             BoundStatement rewrittenBody = VisitBody(body);
 
-            ImmutableArray<StateMachineFieldSymbol> rootScopeHoistedLocals;
-            TryUnwrapBoundStateMachineScope(ref rewrittenBody, out rootScopeHoistedLocals);
+            TryUnwrapBoundStateMachineScope(ref rewrittenBody, out ImmutableArray<StateMachineFieldSymbol> rootScopeHoistedLocals);
 
             var bodyBuilder = ArrayBuilder<BoundStatement>.GetInstance();
 

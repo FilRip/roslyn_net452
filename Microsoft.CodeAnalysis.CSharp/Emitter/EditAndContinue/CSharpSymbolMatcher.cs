@@ -19,6 +19,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
     internal sealed class CSharpSymbolMatcher : SymbolMatcher
@@ -437,17 +439,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             {
                 var otherContainer = Visit(@namespace.ContainingSymbol);
 
-                switch (otherContainer.Kind)
+                return otherContainer.Kind switch
                 {
-                    case SymbolKind.NetModule:
-                        return ((ModuleSymbol)otherContainer).GlobalNamespace;
-
-                    case SymbolKind.Namespace:
-                        return FindMatchingMember(otherContainer, @namespace, AreNamespacesEqual);
-
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(otherContainer.Kind);
-                }
+                    SymbolKind.NetModule => ((ModuleSymbol)otherContainer).GlobalNamespace,
+                    SymbolKind.Namespace => FindMatchingMember(otherContainer, @namespace, AreNamespacesEqual),
+                    _ => throw ExceptionUtilities.UnexpectedValue(otherContainer.Kind),
+                };
             }
 
             public override Symbol VisitDynamicType(DynamicTypeSymbol symbol)
@@ -785,7 +782,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     property.Parameters.SequenceEqual(other.Parameters, AreParametersEqual);
             }
 
-            private static bool AreTypeParametersEqual(TypeParameterSymbol type, TypeParameterSymbol other)
+            private static bool AreTypeParametersEqual(/*TypeParameterSymbol type, TypeParameterSymbol other*/)
             {
                 // Comparing constraints is unnecessary: two methods cannot differ by
                 // constraints alone and changing the signature of a method is a rude
@@ -805,27 +802,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     return false;
                 }
 
-                switch (type.Kind)
+                return type.Kind switch
                 {
-                    case SymbolKind.ArrayType:
-                        return AreArrayTypesEqual((ArrayTypeSymbol)type, (ArrayTypeSymbol)other);
-
-                    case SymbolKind.PointerType:
-                        return ArePointerTypesEqual((PointerTypeSymbol)type, (PointerTypeSymbol)other);
-
-                    case SymbolKind.FunctionPointerType:
-                        return AreFunctionPointerTypesEqual((FunctionPointerTypeSymbol)type, (FunctionPointerTypeSymbol)other);
-
-                    case SymbolKind.NamedType:
-                    case SymbolKind.ErrorType:
-                        return AreNamedTypesEqual((NamedTypeSymbol)type, (NamedTypeSymbol)other);
-
-                    case SymbolKind.TypeParameter:
-                        return AreTypeParametersEqual((TypeParameterSymbol)type, (TypeParameterSymbol)other);
-
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(type.Kind);
-                }
+                    SymbolKind.ArrayType => AreArrayTypesEqual((ArrayTypeSymbol)type, (ArrayTypeSymbol)other),
+                    SymbolKind.PointerType => ArePointerTypesEqual((PointerTypeSymbol)type, (PointerTypeSymbol)other),
+                    SymbolKind.FunctionPointerType => AreFunctionPointerTypesEqual((FunctionPointerTypeSymbol)type, (FunctionPointerTypeSymbol)other),
+                    SymbolKind.NamedType or SymbolKind.ErrorType => AreNamedTypesEqual((NamedTypeSymbol)type, (NamedTypeSymbol)other),
+                    SymbolKind.TypeParameter => AreTypeParametersEqual(/*(TypeParameterSymbol)type, (TypeParameterSymbol)other*/),
+                    _ => throw ExceptionUtilities.UnexpectedValue(type.Kind),
+                };
             }
 
             private IReadOnlyDictionary<string, ImmutableArray<ISymbolInternal>> GetAllEmittedMembers(ISymbolInternal symbol)

@@ -1361,8 +1361,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // Also, requesting the token has side-effect of registering types used, which is critical for embedded types (NoPia, VBCore, etc).
             _module.GetFakeSymbolTokenForIL(translatedType, syntaxNode, _diagnostics);
 
-            LocalDebugId localId;
-            var name = GetLocalDebugName(local, out localId);
+            var name = GetLocalDebugName(local, out LocalDebugId localId);
 
             var localDef = _builder.LocalSlotManager.DeclareLocal(
                 type: translatedType,
@@ -1549,8 +1548,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     _labelClones = labelClones = new Dictionary<LabelSymbol, GeneratedLabelSymbol>();
                 }
 
-                GeneratedLabelSymbol clone;
-                if (!labelClones.TryGetValue(label, out clone))
+                if (!labelClones.TryGetValue(label, out GeneratedLabelSymbol clone))
                 {
                     clone = new GeneratedLabelSymbol("cloned_" + label.Name);
                     labelClones.Add(label, clone);

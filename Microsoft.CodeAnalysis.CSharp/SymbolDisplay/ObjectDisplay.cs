@@ -333,8 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 builder.Append(quote);
             }
 
-            string replaceWith;
-            if (escapeNonPrintable && TryReplaceChar(c, out replaceWith))
+            if (escapeNonPrintable && TryReplaceChar(c, out string replaceWith))
             {
                 builder.Append(replaceWith);
             }

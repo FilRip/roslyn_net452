@@ -162,8 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static string GetCategory(ErrorCode code)
         {
-            string category;
-            if (s_categoriesMap.Value.TryGetValue(code, out category))
+            if (s_categoriesMap.Value.TryGetValue(code, out string category))
             {
                 return category;
             }

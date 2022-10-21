@@ -23,8 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     if (ch == '\\' && allowEscapes)
                     {
                         // normal string & char constants can have escapes
-                        char c2;
-                        ch = this.ScanEscapeSequence(out c2);
+                        ch = this.ScanEscapeSequence(out char c2);
                         _builder.Append(ch);
                         if (c2 != SlidingTextWindow.InvalidCharacter)
                         {
@@ -233,8 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // [] brackets, and "" strings, including interpolated holes in the latter.
 
             SyntaxDiagnosticInfo error = null;
-            bool closeQuoteMissing;
-            ScanInterpolatedStringLiteralTop(null, isVerbatim, ref info, ref error, out closeQuoteMissing);
+            ScanInterpolatedStringLiteralTop(null, isVerbatim, ref info, ref error, out bool closeQuoteMissing);
             this.AddError(error);
         }
 
@@ -449,8 +447,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     {
                         // normal string & char constants can have escapes
                         var pos = lexer.TextWindow.Position;
-                        char c2;
-                        ch = lexer.ScanEscapeSequence(out c2);
+                        ch = lexer.ScanEscapeSequence(out char c2);
                         if ((ch == '{' || ch == '}') && error == null)
                         {
                             error = lexer.MakeError(pos, 1, ErrorCode.ERR_EscapedCurly, ch);
@@ -542,8 +539,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 {
                                     this.isVerbatim = isVerbatimSubstring;
                                     this.allowNewlines &= isVerbatim;
-                                    bool closeQuoteMissing;
-                                    ScanInterpolatedStringLiteralTop(interpolations, ref info, out closeQuoteMissing);
+                                    ScanInterpolatedStringLiteralTop(interpolations, ref info, out bool closeQuoteMissing);
                                 }
                                 finally
                                 {
@@ -607,8 +603,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 {
                                     this.isVerbatim = true;
                                     this.allowNewlines = true;
-                                    bool closeQuoteMissing;
-                                    ScanInterpolatedStringLiteralTop(interpolations, ref info, out closeQuoteMissing);
+                                    ScanInterpolatedStringLiteralTop(interpolations, ref info, out bool closeQuoteMissing);
                                 }
                                 finally
                                 {

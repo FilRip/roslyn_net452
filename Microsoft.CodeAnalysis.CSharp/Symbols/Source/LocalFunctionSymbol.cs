@@ -177,14 +177,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            SyntaxToken arglistToken;
             var diagnostics = BindingDiagnosticBag.GetInstance(_declarationDiagnostics);
 
             var parameters = ParameterHelpers.MakeParameters(
                 _binder,
                 this,
                 this.Syntax.ParameterList,
-                arglistToken: out arglistToken,
+                arglistToken: out SyntaxToken arglistToken,
                 allowRefOrOut: true,
                 allowThis: true,
                 addRefReadOnlyModifier: false,

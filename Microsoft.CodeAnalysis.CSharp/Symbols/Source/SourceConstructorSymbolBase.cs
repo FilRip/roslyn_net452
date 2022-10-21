@@ -46,9 +46,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // instance). Constraints are checked in AfterAddingTypeMembersChecks.
             var signatureBinder = bodyBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
 
-            SyntaxToken arglistToken;
             _lazyParameters = ParameterHelpers.MakeParameters(
-                signatureBinder, this, parameterList, out arglistToken,
+                signatureBinder, this, parameterList, out SyntaxToken arglistToken,
                 allowRefOrOut: AllowRefOrOut,
                 allowThis: false,
                 addRefReadOnlyModifier: false,
@@ -226,9 +225,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             // lambdas in field/property initializers:
-            int syntaxOffset;
             var containingType = (SourceNamedTypeSymbol)this.ContainingType;
-            if (containingType.TryCalculateSyntaxOffsetOfPositionInInitializer(position, tree, this.IsStatic, ctorInitializerLength, out syntaxOffset))
+            if (containingType.TryCalculateSyntaxOffsetOfPositionInInitializer(position, tree, this.IsStatic, ctorInitializerLength, out int syntaxOffset))
             {
                 return syntaxOffset;
             }

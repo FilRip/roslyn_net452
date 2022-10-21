@@ -92,10 +92,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             EnsureAllMembersLoaded();
 
-            PENestedNamespaceSymbol ns = null;
             ImmutableArray<PENamedTypeSymbol> t;
 
-            if (lazyNamespaces.TryGetValue(name, out ns))
+            if (lazyNamespaces.TryGetValue(name, out PENestedNamespaceSymbol ns))
             {
                 if (lazyTypes.TryGetValue(name, out t))
                 {
@@ -126,9 +125,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             EnsureAllMembersLoaded();
 
-            ImmutableArray<PENamedTypeSymbol> t;
 
-            return lazyTypes.TryGetValue(name, out t)
+            return lazyTypes.TryGetValue(name, out ImmutableArray<PENamedTypeSymbol> t)
                 ? StaticCast<NamedTypeSymbol>.From(t)
                 : ImmutableArray<NamedTypeSymbol>.Empty;
         }
@@ -179,14 +177,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
 
             // A sequence of groups of TypeDef row ids for types immediately contained within this namespace.
-            IEnumerable<IGrouping<string, TypeDefinitionHandle>> nestedTypes = null;
 
             // A sequence with information about namespaces immediately contained within this namespace.
             // For each pair:
             //    Key - contains simple name of a child namespace.
             //    Value - contains a sequence similar to the one passed to this function, but
             //            calculated for the child namespace. 
-            IEnumerable<KeyValuePair<string, IEnumerable<IGrouping<string, TypeDefinitionHandle>>>> nestedNamespaces = null;
             bool isGlobalNamespace = this.IsGlobalNamespace;
 
             MetadataHelpers.GetInfoForImmediateNamespaceMembers(
@@ -194,7 +190,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 isGlobalNamespace ? 0 : GetQualifiedNameLength(),
                 typesByNS,
                 StringComparer.Ordinal,
-                out nestedTypes, out nestedNamespaces);
+                out IEnumerable<IGrouping<string, TypeDefinitionHandle>> nestedTypes, out IEnumerable<KeyValuePair<string, IEnumerable<IGrouping<string, TypeDefinitionHandle>>>> nestedNamespaces);
 
             LazyInitializeNamespaces(nestedNamespaces);
 
@@ -303,11 +299,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             if (result is MissingMetadataTypeSymbol)
             {
                 EnsureAllMembersLoaded();
-                TypeDefinitionHandle typeDef;
 
                 // See if this is a NoPia local type, which we should unify.
                 // Note, VB should use FullName.
-                if (_lazyNoPiaLocalTypes != null && _lazyNoPiaLocalTypes.TryGetValue(emittedTypeName.TypeName, out typeDef))
+                if (_lazyNoPiaLocalTypes != null && _lazyNoPiaLocalTypes.TryGetValue(emittedTypeName.TypeName, out TypeDefinitionHandle typeDef))
                 {
                     result = (NamedTypeSymbol)new MetadataDecoder(ContainingPEModule).GetTypeOfToken(typeDef, out isNoPiaLocalType);
                 }

@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class Binder
@@ -53,8 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             foreach (var clause in clauses)
             {
                 var name = clause.Name.Identifier.ValueText;
-                int ordinal;
-                if (names.TryGetValue(name, out ordinal))
+                if (names.TryGetValue(name, out int ordinal))
                 {
                     (TypeParameterConstraintClause constraintClause, ArrayBuilder<TypeConstraintSyntax>? typeConstraintNodes) = this.BindTypeParameterConstraints(typeParameterList.Parameters[ordinal], clause, isForOverride, diagnostics);
                     if (results[ordinal] == null)

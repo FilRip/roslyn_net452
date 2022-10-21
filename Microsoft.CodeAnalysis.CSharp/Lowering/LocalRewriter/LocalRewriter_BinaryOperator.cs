@@ -80,8 +80,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return node.Update(operatorKind, node.LogicalOperator, node.TrueOperator, node.FalseOperator, node.ResultKind, loweredLeft, loweredRight, type);
             }
 
-            BoundAssignmentOperator tempAssignment;
-            var boundTemp = _factory.StoreToTemp(loweredLeft, out tempAssignment);
+            var boundTemp = _factory.StoreToTemp(loweredLeft, out BoundAssignmentOperator tempAssignment);
 
             // T.false(temp)
             var falseOperatorCall = BoundCall.Synthesized(syntax, receiverOpt: null, operatorKind.Operator() == BinaryOperatorKind.And ? node.FalseOperator : node.TrueOperator, boundTemp);
@@ -583,8 +582,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundLocal? temp;
             if (constantLeft == null && loweredLeft.Kind != BoundKind.Local && loweredLeft.Kind != BoundKind.Parameter)
             {
-                BoundAssignmentOperator assignment;
-                var local = _factory.StoreToTemp(loweredLeft, out assignment);
+                var local = _factory.StoreToTemp(loweredLeft, out BoundAssignmentOperator assignment);
                 loweredLeft = local;
                 tempAssignment = assignment;
                 temp = local;
@@ -1039,10 +1037,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // TODO: Build a better temporary-storage management system that decides whether or not
             // TODO: to store a temporary.
 
-            BoundAssignmentOperator tempAssignmentX;
-            BoundLocal boundTempX = _factory.StoreToTemp(xNonNull ?? loweredLeft, out tempAssignmentX);
-            BoundAssignmentOperator tempAssignmentY;
-            BoundLocal boundTempY = _factory.StoreToTemp(yNonNull ?? loweredRight, out tempAssignmentY);
+            BoundLocal boundTempX = _factory.StoreToTemp(xNonNull ?? loweredLeft, out BoundAssignmentOperator tempAssignmentX);
+            BoundLocal boundTempY = _factory.StoreToTemp(yNonNull ?? loweredRight, out BoundAssignmentOperator tempAssignmentY);
 
             BoundExpression callX_GetValueOrDefault = MakeOptimizedGetValueOrDefault(syntax, boundTempX);
             BoundExpression callY_GetValueOrDefault = MakeOptimizedGetValueOrDefault(syntax, boundTempY);
@@ -1315,8 +1311,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (CanChangeValueBetweenReads(operand))
             {
-                BoundAssignmentOperator tempAssignment;
-                var tempAccess = _factory.StoreToTemp(operand, out tempAssignment, kind: kind);
+                var tempAccess = _factory.StoreToTemp(operand, out BoundAssignmentOperator tempAssignment, kind: kind);
                 sideeffects.Add(tempAssignment);
                 locals.Add(tempAccess.LocalSymbol);
                 operand = tempAccess;
@@ -1534,8 +1529,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // respectively.
 
-            BoundAssignmentOperator tempAssignment;
-            BoundLocal boundTemp = _factory.StoreToTemp(notAlwaysNull, out tempAssignment);
+            BoundLocal boundTemp = _factory.StoreToTemp(notAlwaysNull, out BoundAssignmentOperator tempAssignment);
             BoundExpression condition = MakeOptimizedGetValueOrDefault(syntax, boundTemp);
             BoundExpression consequence = kind == BinaryOperatorKind.LiftedBoolAnd ? nullBool : boundTemp;
             BoundExpression alternative = kind == BinaryOperatorKind.LiftedBoolAnd ? boundTemp : nullBool;
@@ -1588,10 +1582,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // One is definitely not null and the other might be null.
 
-            BoundAssignmentOperator tempAssignmentX;
-            BoundLocal boundTempX = _factory.StoreToTemp(leftNonNull ?? left, out tempAssignmentX);
-            BoundAssignmentOperator tempAssignmentY;
-            BoundLocal boundTempY = _factory.StoreToTemp(rightNonNull ?? right, out tempAssignmentY);
+            BoundLocal boundTempX = _factory.StoreToTemp(leftNonNull ?? left, out BoundAssignmentOperator tempAssignmentX);
+            BoundLocal boundTempY = _factory.StoreToTemp(rightNonNull ?? right, out BoundAssignmentOperator tempAssignmentY);
             BoundExpression nonNullTemp = leftNonNull == null ? boundTempY : boundTempX;
             BoundExpression maybeNullTemp = leftNonNull == null ? boundTempX : boundTempY;
             BoundExpression condition = nonNullTemp;
@@ -1642,10 +1634,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // CONSIDER: Consider realizing these using | instead of ||. 
             // CONSIDER: The operations are extremely low cost and the added bulk to the code might not be worthwhile.
 
-            BoundAssignmentOperator tempAssignmentX;
-            BoundLocal boundTempX = _factory.StoreToTemp(loweredLeft, out tempAssignmentX);
-            BoundAssignmentOperator tempAssignmentY;
-            BoundLocal boundTempY = _factory.StoreToTemp(loweredRight, out tempAssignmentY);
+            BoundLocal boundTempX = _factory.StoreToTemp(loweredLeft, out BoundAssignmentOperator tempAssignmentX);
+            BoundLocal boundTempY = _factory.StoreToTemp(loweredRight, out BoundAssignmentOperator tempAssignmentY);
 
             TypeSymbol boolType = _compilation.GetSpecialType(SpecialType.System_Boolean);
 

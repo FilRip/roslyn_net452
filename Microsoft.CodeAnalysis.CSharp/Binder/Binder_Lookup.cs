@@ -362,8 +362,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected bool IsUsingAlias(ImmutableDictionary<string, AliasAndUsingDirective> usingAliases, string name, bool callerIsSemanticModel)
         {
-            AliasAndUsingDirective node;
-            if (usingAliases.TryGetValue(name, out node))
+            if (usingAliases.TryGetValue(name, out AliasAndUsingDirective node))
             {
                 // This method is called by InContainerBinder.LookupSymbolsInSingleBinder to see if
                 // there's a conflict between an alias and a member.  As a conflict may cause a
@@ -398,8 +397,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             bool callerIsSemanticModel = originalBinder.IsSemanticModelBinder;
 
-            AliasAndUsingDirective alias;
-            if (usingAliases.TryGetValue(name, out alias))
+            if (usingAliases.TryGetValue(name, out AliasAndUsingDirective alias))
             {
                 // Found a match in our list of normal aliases.  Mark the alias as being seen so that
                 // it won't be reported to the user as something that can be removed.
@@ -505,9 +503,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             LookupSymbolsOrMembersInternal(result, qualifierOpt, name, arity, basesBeingResolved, options, diagnose, ref useSiteInfo);
 
             // Result without 'Attribute' suffix added.
-            Symbol symbolWithoutSuffix;
             var attributeTypeWithoutSuffixViabilityUseSiteInfo = new CompoundUseSiteInfo<AssemblySymbol>(useSiteInfo);
-            bool resultWithoutSuffixIsViable = IsSingleViableAttributeType(result, out symbolWithoutSuffix, ref attributeTypeWithoutSuffixViabilityUseSiteInfo);
+            bool resultWithoutSuffixIsViable = IsSingleViableAttributeType(result, out Symbol symbolWithoutSuffix, ref attributeTypeWithoutSuffixViabilityUseSiteInfo);
 
             // Generic types are not allowed.
 
@@ -610,8 +607,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 symbols[i] = UnwrapAliasNoDiagnostics(symbols[i]);
             }
 
-            BestSymbolInfo secondBest;
-            BestSymbolInfo best = GetBestSymbolInfo(symbols, out secondBest);
+            BestSymbolInfo best = GetBestSymbolInfo(symbols, out BestSymbolInfo secondBest);
 
 
             if (best.IsFromCompilation && !secondBest.IsFromCompilation)
@@ -897,8 +893,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var tmp = LookupResult.GetInstance();
 
-            NamedTypeSymbol idictSymbol, iroDictSymbol, iListSymbol, iCollectionSymbol, inccSymbol, inpcSymbol;
-            GetWellKnownWinRTMemberInterfaces(out idictSymbol, out iroDictSymbol, out iListSymbol, out iCollectionSymbol, out inccSymbol, out inpcSymbol);
+            GetWellKnownWinRTMemberInterfaces(out NamedTypeSymbol idictSymbol, out NamedTypeSymbol iroDictSymbol, out NamedTypeSymbol iListSymbol, out NamedTypeSymbol iCollectionSymbol, out NamedTypeSymbol inccSymbol, out NamedTypeSymbol inpcSymbol);
 
             // Dev11 searches all declared and undeclared base interfaces
             foreach (var iface in type.AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
@@ -1292,8 +1287,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         internal SingleLookupResult CheckViability(Symbol symbol, int arity, LookupOptions options, TypeSymbol accessThroughType, bool diagnose, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConsList<TypeSymbol> basesBeingResolved = null)
         {
-            bool inaccessibleViaQualifier;
-            DiagnosticInfo diagInfo;
 
             // General pattern: checks and diagnostics refer to unwrapped symbol,
             // but lookup results refer to symbol.
@@ -1307,7 +1300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return LookupResult.Empty();
             }
-            else if (WrongArity(symbol, arity, diagnose, options, out diagInfo))
+            else if (WrongArity(symbol, arity, diagnose, options, out DiagnosticInfo diagInfo))
             {
                 return LookupResult.WrongArity(symbol, diagInfo);
             }
@@ -1339,7 +1332,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else if (!InCref &&
                      !this.IsAccessible(unwrappedSymbol,
                                         RefineAccessThroughType(options, accessThroughType),
-                                        out inaccessibleViaQualifier,
+                                        out bool inaccessibleViaQualifier,
                                         ref useSiteInfo,
                                         basesBeingResolved))
             {
@@ -1554,8 +1547,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal bool IsAccessible(Symbol symbol, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, TypeSymbol accessThroughType = null, ConsList<TypeSymbol> basesBeingResolved = null)
         {
-            bool failedThroughTypeCheck;
-            return IsAccessible(symbol, accessThroughType, out failedThroughTypeCheck, ref useSiteInfo, basesBeingResolved);
+            return IsAccessible(symbol, accessThroughType, out bool failedThroughTypeCheck, ref useSiteInfo, basesBeingResolved);
         }
 
         /// <summary>
@@ -1850,8 +1842,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void AddWinRTMembersLookupSymbolsInfo(LookupSymbolsInfo result, NamedTypeSymbol type, LookupOptions options, Binder originalBinder, TypeSymbol accessThroughType)
         {
-            NamedTypeSymbol idictSymbol, iroDictSymbol, iListSymbol, iCollectionSymbol, inccSymbol, inpcSymbol;
-            GetWellKnownWinRTMemberInterfaces(out idictSymbol, out iroDictSymbol, out iListSymbol, out iCollectionSymbol, out inccSymbol, out inpcSymbol);
+            GetWellKnownWinRTMemberInterfaces(out NamedTypeSymbol idictSymbol, out NamedTypeSymbol iroDictSymbol, out NamedTypeSymbol iListSymbol, out NamedTypeSymbol iCollectionSymbol, out NamedTypeSymbol inccSymbol, out NamedTypeSymbol inpcSymbol);
 
             // Dev11 searches all declared and undeclared base interfaces
             foreach (var iface in type.AllInterfacesNoUseSiteDiagnostics)

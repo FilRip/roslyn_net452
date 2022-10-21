@@ -787,8 +787,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             for (int i = 0; i < allTypeArguments.Count; i++)
             {
                 TypeWithAnnotations oldTypeArgument = allTypeArguments[i];
-                TypeWithAnnotations newTypeArgument;
-                if (!oldTypeArgument.ApplyNullableTransforms(defaultTransformFlag, transforms, ref position, out newTypeArgument))
+                if (!oldTypeArgument.ApplyNullableTransforms(defaultTransformFlag, transforms, ref position, out TypeWithAnnotations newTypeArgument))
                 {
                     allTypeArguments.Free();
                     result = this;

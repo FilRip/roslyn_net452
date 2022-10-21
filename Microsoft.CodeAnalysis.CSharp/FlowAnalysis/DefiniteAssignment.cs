@@ -298,8 +298,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // check that each out parameter is definitely assigned at the end of the method.  If
             // there's more than one location, then the method is partial and we prefer to report an
             // out parameter in partial method error.
-            Location location;
-            if (ShouldAnalyzeOutParameters(out location))
+            if (ShouldAnalyzeOutParameters(out Location location))
             {
                 LeaveParameters(methodParameters, null, location);
                 if ((object)methodThisParameter != null) LeaveParameter(methodThisParameter, null, location);
@@ -552,8 +551,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 foreach (Symbol captured in _capturedVariables)
                 {
-                    Location location;
-                    if (_unsafeAddressTakenVariables.TryGetValue(captured, out location))
+                    if (_unsafeAddressTakenVariables.TryGetValue(captured, out Location location))
                     {
                         diagnostics.Add(ErrorCode.ERR_LocalCantBeFixedAndHoisted, location, captured.Name);
                     }
@@ -2203,8 +2201,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (MayRequireTracking(node.ReceiverOpt, backingField))
                     {
                         // special definite assignment behavior for fields of struct local variables.
-                        int unassignedSlot;
-                        if (this.State.Reachable && !IsAssigned(node, out unassignedSlot))
+                        if (this.State.Reachable && !IsAssigned(node, out int unassignedSlot))
                         {
                             ReportUnassignedIfNotCapturedInLocalFunction(backingField, node.Syntax, unassignedSlot);
                         }

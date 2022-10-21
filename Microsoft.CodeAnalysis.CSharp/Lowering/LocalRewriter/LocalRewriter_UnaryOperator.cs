@@ -179,8 +179,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //        new R?(OP(temp.GetValueOrDefault())) :
             //        default(R?);
 
-            BoundAssignmentOperator tempAssignment;
-            BoundLocal boundTemp = _factory.StoreToTemp(loweredOperand, out tempAssignment);
+            BoundLocal boundTemp = _factory.StoreToTemp(loweredOperand, out BoundAssignmentOperator tempAssignment);
             MethodSymbol getValueOrDefault = UnsafeGetNullableMethod(syntax, boundTemp.Type, SpecialMember.System_Nullable_T_GetValueOrDefault);
 
             // temp.HasValue
@@ -606,8 +605,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // increment or decrement. The operand is a variable (or property), and so we do not know if
             // it is always null/never null.
 
-            BoundAssignmentOperator tempAssignment;
-            BoundLocal boundTemp = _factory.StoreToTemp(rewrittenArgument, out tempAssignment);
+            BoundLocal boundTemp = _factory.StoreToTemp(rewrittenArgument, out BoundAssignmentOperator tempAssignment);
 
             MethodSymbol getValueOrDefault = UnsafeGetNullableMethod(syntax, type, SpecialMember.System_Nullable_T_GetValueOrDefault);
             MethodSymbol ctor = UnsafeGetNullableMethod(syntax, type, SpecialMember.System_Nullable_T__ctor);

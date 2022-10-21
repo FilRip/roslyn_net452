@@ -249,8 +249,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             if (_lazyType == null)
             {
                 var moduleSymbol = _containingType.ContainingPEModule;
-                ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers;
-                TypeSymbol typeSymbol = (new MetadataDecoder(moduleSymbol, _containingType)).DecodeFieldSignature(_handle, out customModifiers);
+                TypeSymbol typeSymbol = (new MetadataDecoder(moduleSymbol, _containingType)).DecodeFieldSignature(_handle, out ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers);
                 ImmutableArray<CustomModifier> customModifiersArray = CSharpCustomModifier.Convert(customModifiers);
 
                 typeSymbol = DynamicTypeDecoder.TransformType(typeSymbol, customModifiersArray.Length, _handle, moduleSymbol);
@@ -266,9 +265,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 _lazyIsVolatile = customModifiersArray.Any(m => !m.IsOptional && m.Modifier.SpecialType == SpecialType.System_Runtime_CompilerServices_IsVolatile);
 
-                TypeSymbol fixedElementType;
-                int fixedSize;
-                if (customModifiersArray.IsEmpty && IsFixedBuffer(out fixedSize, out fixedElementType))
+                if (customModifiersArray.IsEmpty && IsFixedBuffer(out int fixedSize, out TypeSymbol fixedElementType))
                 {
                     _lazyFixedSize = fixedSize;
                     _lazyFixedImplementationType = type.Type as NamedTypeSymbol;
@@ -284,10 +281,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             fixedSize = 0;
             fixedElementType = null;
 
-            string elementTypeName;
-            int bufferSize;
             PEModuleSymbol containingPEModule = this.ContainingPEModule;
-            if (containingPEModule.Module.HasFixedBufferAttribute(_handle, out elementTypeName, out bufferSize))
+            if (containingPEModule.Module.HasFixedBufferAttribute(_handle, out string elementTypeName, out int bufferSize))
             {
                 var decoder = new MetadataDecoder(containingPEModule);
                 var elementType = decoder.GetTypeSymbolForSerializedType(elementTypeName);
@@ -320,8 +315,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                FlowAnalysisAnnotations value;
-                if (!_packedFlags.TryGetFlowAnalysisAnnotations(out value))
+                if (!_packedFlags.TryGetFlowAnalysisAnnotations(out FlowAnalysisAnnotations value))
                 {
                     value = DecodeFlowAnalysisAttributes(_containingType.ContainingPEModule.Module, _handle);
                     _packedFlags.SetFlowAnalysisAnnotations(value);
@@ -412,9 +406,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 if (this.Type.SpecialType == SpecialType.System_Decimal)
                 {
-                    ConstantValue defaultValue;
 
-                    if (_containingType.ContainingPEModule.Module.HasDecimalConstantAttribute(Handle, out defaultValue))
+                    if (_containingType.ContainingPEModule.Module.HasDecimalConstantAttribute(Handle, out ConstantValue defaultValue))
                     {
                         value = defaultValue;
                     }

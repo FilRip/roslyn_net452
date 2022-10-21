@@ -86,9 +86,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int argumentPosition = 0; argumentPosition < argumentCount; ++argumentPosition)
             {
                 // We use -1 as a sentinel to mean that no parameter was found that corresponded to this argument.
-                bool isNamedArgument;
                 int parameterPosition = CorrespondsToAnyParameter(parameters, expanded, arguments, argumentPosition,
-                    isValidParams, isVararg, out isNamedArgument, ref seenNamedParams, ref seenOutOfPositionNamedArgument) ?? -1;
+                    isValidParams, isVararg, out bool isNamedArgument, ref seenNamedParams, ref seenOutOfPositionNamedArgument) ?? -1;
 
                 if (parameterPosition == -1 && unmatchedArgumentIndex == null)
                 {

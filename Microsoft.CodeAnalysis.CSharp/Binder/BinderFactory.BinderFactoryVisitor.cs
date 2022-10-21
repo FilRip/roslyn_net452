@@ -109,8 +109,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     var key = CreateBinderCacheKey(compilationUnit, NodeUsage.MethodBody);
 
-                    Binder result;
-                    if (!binderCache.TryGetValue(key, out result))
+                    if (!binderCache.TryGetValue(key, out Binder result))
                     {
                         SynthesizedSimpleProgramEntryPointSymbol simpleProgram = SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(compilation, (CompilationUnitSyntax)node.Parent, fallbackToMainEntryPoint: false);
                         ExecutableCodeBinder bodyBinder = simpleProgram.GetBodyBinder(_factory._ignoreAccessibility);
@@ -153,8 +152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(methodDecl, usage);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     var parentType = methodDecl.Parent as TypeDeclarationSyntax;
                     if (parentType != null)
@@ -199,8 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inBodyOrInitializer ? NodeUsage.ConstructorBodyOrInitializer : NodeUsage.Normal;  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent);
 
@@ -235,8 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     // Destructors have neither parameters nor type parameters, so there's nothing special to do here.
                     resultBinder = VisitCore(parent.Parent);
@@ -264,8 +260,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inBody ? NodeUsage.AccessorBody : NodeUsage.Normal;  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent);
 
@@ -327,8 +322,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inBody ? NodeUsage.OperatorBody : NodeUsage.Normal;  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent);
 
@@ -395,8 +389,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var key = CreateBinderCacheKey(parent, NodeUsage.AccessorBody);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
 
@@ -607,8 +600,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     Binder outer = VisitCore(parent.Parent); // a binder for the body of the enclosing type or namespace
                     var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent);
@@ -642,8 +634,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     Binder outer = VisitCore(parent.Parent); // a binder for the body of the type enclosing this type
                     var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent.Identifier.ValueText, 0, SyntaxKind.EnumDeclaration, parent);
@@ -695,8 +686,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                Binder resultBinder;
-                if (!binderCache.TryGetValue(key, out resultBinder))
+                if (!binderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     // if node is in the optional type parameter list, then members and type parameters are in scope 
                     //     (needed when binding attributes applied to type parameters).
@@ -775,8 +765,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inUsing ? NodeUsage.NamespaceUsings : (inBody ? NodeUsage.NamespaceBody : NodeUsage.Normal);  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                Binder result;
-                if (!binderCache.TryGetValue(key, out result))
+                if (!binderCache.TryGetValue(key, out Binder result))
                 {
                     Binder outer;
                     var container = parent.Parent;
@@ -863,8 +852,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     : (inScript ? NodeUsage.CompilationUnitScript : NodeUsage.Normal);  // extra info for the cache.
                 var key = CreateBinderCacheKey(compilationUnit, extraInfo);
 
-                Binder result;
-                if (!binderCache.TryGetValue(key, out result))
+                if (!binderCache.TryGetValue(key, out Binder result))
                 {
                     result = this.buckStopsHereBinder;
 
@@ -1053,8 +1041,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                Binder result;
-                if (!binderCache.TryGetValue(key, out result))
+                if (!binderCache.TryGetValue(key, out Binder result))
                 {
                     CrefSyntax crefSyntax = parent.Cref;
                     MemberDeclarationSyntax memberSyntax = GetAssociatedMemberForXmlSyntax(parent);
@@ -1103,8 +1090,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // kind, in the same doc comment can share the same binder.
                 var key = CreateBinderCacheKey(GetEnclosingDocumentationComment(parent), extraInfo);
 
-                Binder result;
-                if (!binderCache.TryGetValue(key, out result))
+                if (!binderCache.TryGetValue(key, out Binder result))
                 {
                     result = this.buckStopsHereBinder;
 

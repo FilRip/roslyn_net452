@@ -175,7 +175,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression rewrittenReceiver = VisitExpression(receiverOpt);
 
-            BoundAssignmentOperator assignmentToTemp;
 
             // SPEC VIOLATION: It is not very clear when receiver of constrained callvirt is dereferenced - when pushed (in lexical order),
             // SPEC VIOLATION: or when actual call is executed. The actual behavior seems to be implementation specific in different JITs.
@@ -186,7 +185,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC VIOLATION: as value types.
             var variableRepresentsLocation = rewrittenReceiver.Type.IsValueType || rewrittenReceiver.Type.Kind == SymbolKind.TypeParameter;
 
-            var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out assignmentToTemp, refKind: variableRepresentsLocation ? RefKind.Ref : RefKind.None);
+            var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out BoundAssignmentOperator assignmentToTemp, refKind: variableRepresentsLocation ? RefKind.Ref : RefKind.None);
             stores.Add(assignmentToTemp);
             temps.Add(receiverTemp.LocalSymbol);
 
@@ -202,8 +201,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // store receiver to temp:
             var rewrittenReceiver = VisitExpression(memberAccess.Receiver);
-            BoundAssignmentOperator assignmentToTemp;
-            var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out assignmentToTemp);
+            var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out BoundAssignmentOperator assignmentToTemp);
             stores.Add(assignmentToTemp);
             temps.Add(receiverTemp.LocalSymbol);
 
@@ -219,7 +217,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 BoundExpression rewrittenReceiver = VisitExpression(receiverOpt);
 
-                BoundAssignmentOperator assignmentToTemp;
 
                 // SPEC VIOLATION: It is not very clear when receiver of constrained callvirt is dereferenced - when pushed (in lexical order),
                 // SPEC VIOLATION: or when actual call is executed. The actual behavior seems to be implementation specific in different JITs.
@@ -230,7 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // SPEC VIOLATION: as value types.
                 var variableRepresentsLocation = rewrittenReceiver.Type.IsValueType || rewrittenReceiver.Type.Kind == SymbolKind.TypeParameter;
 
-                var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out assignmentToTemp, refKind: variableRepresentsLocation ? RefKind.Ref : RefKind.None);
+                var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out BoundAssignmentOperator assignmentToTemp, refKind: variableRepresentsLocation ? RefKind.Ref : RefKind.None);
                 transformedReceiver = receiverTemp;
                 stores.Add(assignmentToTemp);
                 temps.Add(receiverTemp.LocalSymbol);
@@ -316,8 +313,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (expanded)
             {
                 BoundExpression array = BuildParamsArray(syntax, indexer, argsToParamsOpt, rewrittenArguments, parameters, actualArguments[actualArguments.Length - 1]);
-                BoundAssignmentOperator storeToTemp;
-                var boundTemp = _factory.StoreToTemp(array, out storeToTemp);
+                var boundTemp = _factory.StoreToTemp(array, out BoundAssignmentOperator storeToTemp);
                 stores.Add(storeToTemp);
                 temps.Add(boundTemp.LocalSymbol);
                 actualArguments[actualArguments.Length - 1] = boundTemp;
@@ -413,8 +409,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 rewrittenReceiver = BoxReceiver(rewrittenReceiver, memberContainingType);
             }
 
-            BoundAssignmentOperator assignmentToTemp;
-            var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out assignmentToTemp);
+            var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out BoundAssignmentOperator assignmentToTemp);
             stores.Add(assignmentToTemp);
             temps.Add(receiverTemp.LocalSymbol);
             receiver = receiverTemp;
@@ -426,8 +421,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression loweredReceiver;
             if (CanChangeValueBetweenReads(indexerAccess.Receiver))
             {
-                BoundAssignmentOperator assignmentToTemp;
-                var temp = _factory.StoreToTemp(VisitExpression(indexerAccess.Receiver), out assignmentToTemp);
+                var temp = _factory.StoreToTemp(VisitExpression(indexerAccess.Receiver), out BoundAssignmentOperator assignmentToTemp);
                 stores.Add(assignmentToTemp);
                 temps.Add(temp.LocalSymbol);
                 loweredReceiver = temp;
@@ -444,8 +438,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (CanChangeValueBetweenReads(arguments[i]))
                 {
-                    BoundAssignmentOperator assignmentToTemp;
-                    var temp = _factory.StoreToTemp(VisitExpression(arguments[i]), out assignmentToTemp, indexerAccess.ArgumentRefKindsOpt.RefKinds(i) != RefKind.None ? RefKind.Ref : RefKind.None);
+                    var temp = _factory.StoreToTemp(VisitExpression(arguments[i]), out BoundAssignmentOperator assignmentToTemp, indexerAccess.ArgumentRefKindsOpt.RefKinds(i) != RefKind.None ? RefKind.Ref : RefKind.None);
                     stores.Add(assignmentToTemp);
                     temps.Add(temp.LocalSymbol);
                     loweredArguments[i] = temp;
@@ -660,8 +653,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // rewritten here are rewritten the same for lvalues and rvalues.
             BoundExpression rewrittenVariable = VisitExpression(originalLHS);
 
-            BoundAssignmentOperator assignmentToTemp2;
-            var variableTemp = _factory.StoreToTemp(rewrittenVariable, out assignmentToTemp2, refKind: RefKind.Ref);
+            var variableTemp = _factory.StoreToTemp(rewrittenVariable, out BoundAssignmentOperator assignmentToTemp2, refKind: RefKind.Ref);
             stores.Add(assignmentToTemp2);
             temps.Add(variableTemp.LocalSymbol);
             return variableTemp;
@@ -689,8 +681,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ArrayBuilder<BoundExpression> stores,
             ArrayBuilder<LocalSymbol> temps)
         {
-            BoundAssignmentOperator assignmentToArrayTemp;
-            var arrayTemp = _factory.StoreToTemp(loweredExpression, out assignmentToArrayTemp);
+            var arrayTemp = _factory.StoreToTemp(loweredExpression, out BoundAssignmentOperator assignmentToArrayTemp);
             stores.Add(assignmentToArrayTemp);
             temps.Add(arrayTemp.LocalSymbol);
             var boundTempArray = arrayTemp;
@@ -700,8 +691,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (CanChangeValueBetweenReads(loweredIndices[i]))
                 {
-                    BoundAssignmentOperator assignmentToTemp;
-                    var temp = _factory.StoreToTemp(loweredIndices[i], out assignmentToTemp);
+                    var temp = _factory.StoreToTemp(loweredIndices[i], out BoundAssignmentOperator assignmentToTemp);
                     stores.Add(assignmentToTemp);
                     temps.Add(temp.LocalSymbol);
                     boundTempIndices[i] = temp;

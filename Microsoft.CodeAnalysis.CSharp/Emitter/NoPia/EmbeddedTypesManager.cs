@@ -90,10 +90,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         {
             if (lazyMethod == (object)ErrorMethodSymbol.UnknownMethod)
             {
-                UseSiteInfo<AssemblySymbol> info;
                 var symbol = (MethodSymbol)Binder.GetWellKnownTypeMember(ModuleBeingBuilt.Compilation,
                                                                          member,
-                                                                         out info,
+                                                                         out UseSiteInfo<AssemblySymbol> info,
                                                                          isOptional: false);
 
                 if (info.DiagnosticInfo?.Severity == DiagnosticSeverity.Error)
@@ -155,9 +154,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         internal string GetAssemblyGuidString(AssemblySymbol assembly)
         {
 
-            string guidString;
 
-            if (_assemblyGuidMap.TryGetValue(assembly, out guidString))
+            if (_assemblyGuidMap.TryGetValue(assembly, out string guidString))
             {
                 return guidString;
             }

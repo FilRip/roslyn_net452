@@ -331,8 +331,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _lazyDefinitionMap = map;
             }
 
-            Symbol existingDeclaration;
-            if (map.TryGetValue(name, out existingDeclaration))
+            if (map.TryGetValue(name, out Symbol existingDeclaration))
             {
                 return ReportConflictWithParameter(existingDeclaration, symbol, name, location, diagnostics);
             }

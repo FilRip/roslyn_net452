@@ -29,8 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0; i < numFixedLocals; i++)
             {
                 BoundLocalDeclaration localDecl = localDecls[i];
-                LocalSymbol pinnedTemp;
-                statementBuilder.Add(InitializeFixedStatementLocal(localDecl, _factory, out pinnedTemp));
+                statementBuilder.Add(InitializeFixedStatementLocal(localDecl, _factory, out LocalSymbol pinnedTemp));
                 localBuilder.Add(pinnedTemp);
 
                 // NOTE: Dev10 nulls out the locals in declaration order (as opposed to "popping" them in reverse order).
@@ -436,8 +435,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression notNullCheck = MakeNullCheck(factory.Syntax, factory.Local(localSymbol), BinaryOperatorKind.NotEqual);
             BoundExpression helperCall;
 
-            MethodSymbol offsetMethod;
-            if (TryGetWellKnownTypeMember(fixedInitializer.Syntax, WellKnownMember.System_Runtime_CompilerServices_RuntimeHelpers__get_OffsetToStringData, out offsetMethod))
+            if (TryGetWellKnownTypeMember(fixedInitializer.Syntax, WellKnownMember.System_Runtime_CompilerServices_RuntimeHelpers__get_OffsetToStringData, out MethodSymbol offsetMethod))
             {
                 helperCall = factory.Call(receiver: null, method: offsetMethod);
             }
@@ -494,8 +492,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                MethodSymbol lengthMethod;
-                if (TryGetWellKnownTypeMember(fixedInitializer.Syntax, WellKnownMember.System_Array__get_Length, out lengthMethod))
+                if (TryGetWellKnownTypeMember(fixedInitializer.Syntax, WellKnownMember.System_Array__get_Length, out MethodSymbol lengthMethod))
                 {
                     lengthCall = factory.Call(factory.Local(pinnedTemp), lengthMethod);
                 }

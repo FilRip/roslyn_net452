@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class Binder
@@ -345,9 +347,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundAssignmentOperator BindNamedAttributeArgument(AttributeArgumentSyntax namedArgument, NamedTypeSymbol attributeType, BindingDiagnosticBag diagnostics)
         {
-            bool wasError;
-            LookupResultKind resultKind;
-            Symbol namedArgumentNameSymbol = BindNamedAttributeArgumentName(namedArgument, attributeType, diagnostics, out wasError, out resultKind);
+            Symbol namedArgumentNameSymbol = BindNamedAttributeArgumentName(namedArgument, attributeType, diagnostics, out bool wasError, out LookupResultKind resultKind);
 
             ReportDiagnosticsIfObsolete(diagnostics, namedArgumentNameSymbol, namedArgument, hasBaseReceiver: false);
 
@@ -510,8 +510,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
             out ImmutableArray<BoundExpression> constructorArguments)
         {
-            MemberResolutionResult<MethodSymbol> memberResolutionResult;
-            ImmutableArray<MethodSymbol> candidateConstructors;
             if (!TryPerformConstructorOverloadResolution(
                 attributeType,
                 boundConstructorArguments,
@@ -519,8 +517,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 node.Location,
                 suppressErrors, //don't cascade in these cases
                 diagnostics,
-                out memberResolutionResult,
-                out candidateConstructors,
+                out MemberResolutionResult<MethodSymbol> memberResolutionResult,
+                out ImmutableArray<MethodSymbol> candidateConstructors,
                 allowProtectedConstructorsOfBaseType: true))
             {
                 resultKind = resultKind.WorseResultKind(
@@ -621,8 +619,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // Current parameter must either have a matching named argument or a default value
                         // For the former case, argsConsumedCount must be incremented to note that we have
                         // consumed a named argument. For the latter case, argsConsumedCount stays same.
-                        int matchingArgumentIndex;
-                        reorderedArgument = GetMatchingNamedOrOptionalConstructorArgument(out matchingArgumentIndex, constructorArgsArray,
+                        reorderedArgument = GetMatchingNamedOrOptionalConstructorArgument(out int matchingArgumentIndex, constructorArgsArray,
                             constructorArgumentNamesOpt, parameter, firstNamedArgIndex, argumentsCount, ref argsConsumedCount, syntax, diagnostics);
 
                         sourceIndices = sourceIndices ?? CreateSourceIndicesArray(i, parameterCount);

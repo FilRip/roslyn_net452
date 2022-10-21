@@ -176,8 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private NamedTypeSymbol LookupTopLevelMetadataTypeInCache(ref MetadataTypeName emittedName)
         {
-            NamedTypeSymbol result = null;
-            if (_emittedNameToTypeMap.TryGetValue(emittedName.ToKey(), out result))
+            if (_emittedNameToTypeMap.TryGetValue(emittedName.ToKey(), out NamedTypeSymbol result))
             {
                 return result;
             }

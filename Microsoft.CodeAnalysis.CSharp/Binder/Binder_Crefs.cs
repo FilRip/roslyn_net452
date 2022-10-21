@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class Binder
@@ -639,8 +641,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     unwrappedSymbols.Add(UnwrapAliasNoDiagnostics(wrapped));
                 }
 
-                BestSymbolInfo secondBest;
-                BestSymbolInfo best = GetBestSymbolInfo(unwrappedSymbols, out secondBest);
+                BestSymbolInfo best = GetBestSymbolInfo(unwrappedSymbols, out BestSymbolInfo secondBest);
 
 
                 unwrappedSymbols.Free();

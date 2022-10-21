@@ -12,6 +12,7 @@ using Roslyn.Utilities;
 
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
+#nullable enable
 
 // Contains support for pseudo-methods on multidimensional arrays.
 //

@@ -135,8 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private Symbol EnsureSpecialMember(SpecialMember member, BindingDiagnosticBag bag)
         {
-            Symbol symbol;
-            Binder.TryGetSpecialTypeMember(F.Compilation, member, body.Syntax, bag, out symbol);
+            Binder.TryGetSpecialTypeMember(F.Compilation, member, body.Syntax, bag, out Symbol symbol);
             return symbol;
         }
 

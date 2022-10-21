@@ -569,9 +569,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 foreach (int index1 in originalConstraintTypesMap.Values)
                 {
                     TypeWithAnnotations constraintType1 = mergedConstraintTypes?[index1] ?? originalConstraintTypes[index1];
-                    int index2;
 
-                    if (!clauseConstraintTypesMap.TryGetValue(constraintType1, out index2))
+                    if (!clauseConstraintTypesMap.TryGetValue(constraintType1, out int index2))
                     {
                         // No matching type
                         result = false;
@@ -898,8 +897,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return null;
             }
 
-            ObsoleteAttributeData obsoleteData;
-            if (EarlyDecodeDeprecatedOrExperimentalOrObsoleteAttribute(ref arguments, out boundAttribute, out obsoleteData))
+            if (EarlyDecodeDeprecatedOrExperimentalOrObsoleteAttribute(ref arguments, out boundAttribute, out ObsoleteAttributeData obsoleteData))
             {
                 if (obsoleteData != null)
                 {

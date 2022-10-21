@@ -162,9 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 // TODO: some of the trivia in the interpolation maybe should be trailing trivia of the openBraceToken
                 using (var tempParser = new LanguageParser(tempLexer, null, null))
                 {
-                    SyntaxToken commaToken = null;
-                    ExpressionSyntax alignmentExpression = null;
-                    tempParser.ParseInterpolationStart(out openBraceToken, out expression, out commaToken, out alignmentExpression);
+                    tempParser.ParseInterpolationStart(out openBraceToken, out expression, out SyntaxToken commaToken, out ExpressionSyntax alignmentExpression);
                     if (alignmentExpression != null)
                     {
                         alignment = SyntaxFactory.InterpolationAlignmentClause(commaToken, alignmentExpression);

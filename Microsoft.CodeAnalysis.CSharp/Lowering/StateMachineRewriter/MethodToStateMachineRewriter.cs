@@ -144,10 +144,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // create cache local for reference type "this" in Release
             var thisParameter = originalMethod.ThisParameter;
-            CapturedSymbolReplacement thisProxy;
             if ((object)thisParameter != null &&
                 thisParameter.Type.IsReferenceType &&
-                proxies.TryGetValue(thisParameter, out thisProxy) &&
+                proxies.TryGetValue(thisParameter, out CapturedSymbolReplacement thisProxy) &&
                 F.Compilation.Options.OptimizationLevel == OptimizationLevel.Release)
             {
                 BoundExpression thisProxyReplacement = thisProxy.Replacement(F.Syntax, frameType => F.This());
@@ -266,9 +265,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
 
-                CapturedSymbolReplacement proxy;
                 bool reused = false;
-                if (!proxies.TryGetValue(local, out proxy))
+                if (!proxies.TryGetValue(local, out CapturedSymbolReplacement proxy))
                 {
                     proxy = new CapturedToStateMachineFieldReplacement(GetOrAllocateReusableHoistedField(TypeMap.SubstituteType(local.Type).Type, out reused, local), isReusable: true);
                     proxies.Add(local, proxy);
@@ -296,8 +294,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // as well as all proxies allocated by VisitAssignmentOperator within this block:
             foreach (var local in locals)
             {
-                CapturedSymbolReplacement proxy;
-                if (!proxies.TryGetValue(local, out proxy))
+                if (!proxies.TryGetValue(local, out CapturedSymbolReplacement proxy))
                 {
                     continue;
                 }
@@ -405,8 +402,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private StateMachineFieldSymbol GetOrAllocateReusableHoistedField(TypeSymbol type, out bool reused, LocalSymbol local = null)
         {
-            ArrayBuilder<StateMachineFieldSymbol> fields;
-            if (_lazyAvailableReusableHoistedFields != null && _lazyAvailableReusableHoistedFields.TryGetValue(type, out fields) && fields.Count > 0)
+            if (_lazyAvailableReusableHoistedFields != null && _lazyAvailableReusableHoistedFields.TryGetValue(type, out ArrayBuilder<StateMachineFieldSymbol> fields) && fields.Count > 0)
             {
                 var field = fields.Last();
                 fields.RemoveLast();
@@ -428,8 +424,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void FreeReusableHoistedField(StateMachineFieldSymbol field)
         {
-            ArrayBuilder<StateMachineFieldSymbol> fields;
-            if (_lazyAvailableReusableHoistedFields == null || !_lazyAvailableReusableHoistedFields.TryGetValue(field.Type, out fields))
+            if (_lazyAvailableReusableHoistedFields == null || !_lazyAvailableReusableHoistedFields.TryGetValue(field.Type, out ArrayBuilder<StateMachineFieldSymbol> fields))
             {
                 if (_lazyAvailableReusableHoistedFields == null)
                 {
@@ -600,7 +595,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         // Editing await expression is not allowed. Thus all spilled fields will be present in the previous state machine.
                         // However, it may happen that the type changes, in which case we need to allocate a new slot.
-                        int slotIndex;
                         if (slotAllocatorOpt == null ||
                             !slotAllocatorOpt.TryGetPreviousHoistedLocalSlotIndex(
                                 awaitSyntaxOpt,
@@ -608,7 +602,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 kind,
                                 id,
                                 Diagnostics.DiagnosticBag,
-                                out slotIndex))
+                                out int slotIndex))
                         {
                             slotIndex = _nextFreeHoistedLocalSlot++;
                         }
@@ -655,8 +649,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // BoundScope is only used for switch
 
-                LocalSymbol localToUse;
-                if (TryRewriteLocal(local, out localToUse))
+                if (TryRewriteLocal(local, out LocalSymbol localToUse))
                 {
                     newLocalsBuilder.Add(localToUse);
                     localsRewritten |= ((object)local != localToUse);
@@ -883,8 +876,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var thisParameter = this.OriginalMethod.ThisParameter;
-            CapturedSymbolReplacement proxy;
-            if ((object)thisParameter == null || !proxies.TryGetValue(thisParameter, out proxy))
+            if ((object)thisParameter == null || !proxies.TryGetValue(thisParameter, out CapturedSymbolReplacement proxy))
             {
                 // This can occur in a delegate creation expression because the method group
                 // in the argument can have a "this" receiver even when "this"

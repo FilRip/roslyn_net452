@@ -111,9 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // the conversion, and second, because that is more convenient for the "d += lambda" case.
             // We want to have the converted (bound) lambda in the bound tree, not the unconverted unbound lambda.
 
-            LookupResultKind resultKind;
-            ImmutableArray<MethodSymbol> originalUserDefinedOperators;
-            BinaryOperatorAnalysisResult best = this.BinaryOperatorOverloadResolution(kind, left, right, node, diagnostics, out resultKind, out originalUserDefinedOperators);
+            BinaryOperatorAnalysisResult best = this.BinaryOperatorOverloadResolution(kind, left, right, node, diagnostics, out LookupResultKind resultKind, out ImmutableArray<MethodSymbol> originalUserDefinedOperators);
             if (!best.HasValue)
             {
                 ReportAssignmentOperatorError(node, diagnostics, left, right, resultKind);
@@ -535,12 +533,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // that being bound as !x.HasValue.
             //
 
-            LookupResultKind resultKind;
-            ImmutableArray<MethodSymbol> originalUserDefinedOperators;
-            BinaryOperatorSignature signature;
-            BinaryOperatorAnalysisResult best;
             bool foundOperator = BindSimpleBinaryOperatorParts(node, diagnostics, left, right, kind,
-                out resultKind, out originalUserDefinedOperators, out signature, out best);
+                out LookupResultKind resultKind, out ImmutableArray<MethodSymbol> originalUserDefinedOperators, out BinaryOperatorSignature signature, out BinaryOperatorAnalysisResult best);
 
             BinaryOperatorKind resultOperatorKind = signature.Kind;
             bool hasErrors = false;
@@ -812,9 +806,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return BindDynamicBinaryOperator(node, kind, left, right, diagnostics);
             }
 
-            LookupResultKind lookupResult;
-            ImmutableArray<MethodSymbol> originalUserDefinedOperators;
-            var best = this.BinaryOperatorOverloadResolution(kind, left, right, node, diagnostics, out lookupResult, out originalUserDefinedOperators);
+            var best = this.BinaryOperatorOverloadResolution(kind, left, right, node, diagnostics, out LookupResultKind lookupResult, out ImmutableArray<MethodSymbol> originalUserDefinedOperators);
 
             // SPEC: If overload resolution fails to find a single best operator, or if overload
             // SPEC: resolution selects one of the predefined integer logical operators, a binding-
@@ -2080,9 +2072,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     hasErrors: false);
             }
 
-            LookupResultKind resultKind;
-            ImmutableArray<MethodSymbol> originalUserDefinedOperators;
-            var best = this.UnaryOperatorOverloadResolution(kind, operand, node, diagnostics, out resultKind, out originalUserDefinedOperators);
+            var best = this.UnaryOperatorOverloadResolution(kind, operand, node, diagnostics, out LookupResultKind resultKind, out ImmutableArray<MethodSymbol> originalUserDefinedOperators);
             if (!best.HasValue)
             {
                 ReportUnaryOperatorError(node, diagnostics, operatorToken.Text, operand, resultKind);
@@ -2166,9 +2156,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             BoundExpression operand = BindToNaturalType(BindValue(node.Operand, diagnostics, GetUnaryAssignmentKind(node.Kind())), diagnostics);
 
-            TypeSymbol pointedAtType;
-            bool hasErrors;
-            BindPointerIndirectionExpressionInternal(node, operand, diagnostics, out pointedAtType, out hasErrors);
+            BindPointerIndirectionExpressionInternal(node, operand, diagnostics, out TypeSymbol pointedAtType, out bool hasErrors);
 
             return new BoundPointerIndirectionOperator(node, operand, pointedAtType ?? CreateErrorType(), hasErrors);
         }
@@ -2245,8 +2233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!hasErrors)
                 {
-                    Symbol accessedLocalOrParameterOpt;
-                    if (IsMoveableVariable(operand, out accessedLocalOrParameterOpt) != isFixedStatementAddressOfExpression)
+                    if (IsMoveableVariable(operand, out Symbol accessedLocalOrParameterOpt) != isFixedStatementAddressOfExpression)
                     {
                         Error(diagnostics, isFixedStatementAddressOfExpression ? ErrorCode.ERR_FixedNotNeeded : ErrorCode.ERR_FixedNeeded, node);
                         hasErrors = true;
@@ -2443,9 +2430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     type: operand.Type!);
             }
 
-            LookupResultKind resultKind;
-            ImmutableArray<MethodSymbol> originalUserDefinedOperators;
-            var best = this.UnaryOperatorOverloadResolution(kind, operand, node, diagnostics, out resultKind, out originalUserDefinedOperators);
+            var best = this.UnaryOperatorOverloadResolution(kind, operand, node, diagnostics, out LookupResultKind resultKind, out ImmutableArray<MethodSymbol> originalUserDefinedOperators);
             if (!best.HasValue)
             {
                 ReportUnaryOperatorError(node, diagnostics, operatorText, operand, resultKind);
@@ -3313,8 +3298,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundExpression BindAsOperator(BinaryExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
             var operand = BindRValueWithoutTargetType(node.Left, diagnostics);
-            AliasSymbol alias;
-            TypeWithAnnotations targetTypeWithAnnotations = BindType(node.Right, diagnostics, out alias);
+            TypeWithAnnotations targetTypeWithAnnotations = BindType(node.Right, diagnostics, out AliasSymbol alias);
             TypeSymbol targetType = targetTypeWithAnnotations.Type;
             var typeExpression = new BoundTypeExpression(node.Right, alias, targetTypeWithAnnotations);
             var targetTypeKind = targetType.TypeKind;

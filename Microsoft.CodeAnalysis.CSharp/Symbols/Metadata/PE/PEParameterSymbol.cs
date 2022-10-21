@@ -477,11 +477,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private ConstantValue GetDefaultDecimalOrDateTimeValue()
         {
-            ConstantValue value = null;
 
             // It is possible in Visual Basic for a parameter of object type to have a default value of DateTime type.
             // If it's present, use it.  We'll let the call-site figure out whether it can actually be used.
-            if (_moduleSymbol.Module.HasDateTimeConstantAttribute(_handle, out value))
+            if (_moduleSymbol.Module.HasDateTimeConstantAttribute(_handle, out ConstantValue value))
             {
                 return value;
             }
@@ -510,8 +509,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.HasIDispatchConstantAttribute;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     value = _packedFlags.SetWellKnownAttribute(flag, _moduleSymbol.Module.HasAttribute(_handle,
                         AttributeDescription.IDispatchConstantAttribute));
@@ -526,8 +524,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.HasIUnknownConstantAttribute;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     value = _packedFlags.SetWellKnownAttribute(flag, _moduleSymbol.Module.HasAttribute(_handle,
                         AttributeDescription.IUnknownConstantAttribute));
@@ -542,8 +539,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.HasCallerLineNumberAttribute;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     value = _packedFlags.SetWellKnownAttribute(flag, _moduleSymbol.Module.HasAttribute(_handle,
                         AttributeDescription.CallerLineNumberAttribute));
@@ -558,8 +554,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.HasCallerFilePathAttribute;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     value = _packedFlags.SetWellKnownAttribute(flag, _moduleSymbol.Module.HasAttribute(_handle,
                         AttributeDescription.CallerFilePathAttribute));
@@ -574,8 +569,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.HasCallerMemberNameAttribute;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     value = _packedFlags.SetWellKnownAttribute(flag, _moduleSymbol.Module.HasAttribute(_handle,
                         AttributeDescription.CallerMemberNameAttribute));
@@ -590,8 +584,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.IsCallerLineNumber;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
                     bool isCallerLineNumber = HasCallerLineNumberAttribute
@@ -609,8 +602,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.IsCallerFilePath;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
                     bool isCallerFilePath = !HasCallerLineNumberAttribute
@@ -629,8 +621,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 const WellKnownAttributeFlags flag = WellKnownAttributeFlags.IsCallerMemberName;
 
-                bool value;
-                if (!_packedFlags.TryGetWellKnownAttribute(flag, out value))
+                if (!_packedFlags.TryGetWellKnownAttribute(flag, out bool value))
                 {
                     var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
                     bool isCallerMemberName = !HasCallerLineNumberAttribute
@@ -648,8 +639,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                FlowAnalysisAnnotations value;
-                if (!_packedFlags.TryGetFlowAnalysisAnnotations(out value))
+                if (!_packedFlags.TryGetFlowAnalysisAnnotations(out FlowAnalysisAnnotations value))
                 {
                     value = DecodeFlowAnalysisAttributes(_moduleSymbol.Module, _handle);
                     _packedFlags.SetFlowAnalysisAnnotations(value);
@@ -827,18 +817,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 if (filterOutParamArrayAttribute || filterOutConstantAttributeDescription.Signatures != null || filterIsReadOnlyAttribute)
                 {
-                    CustomAttributeHandle paramArrayAttribute;
-                    CustomAttributeHandle constantAttribute;
-                    CustomAttributeHandle isReadOnlyAttribute;
 
                     ImmutableArray<CSharpAttributeData> attributes =
                         containingPEModuleSymbol.GetCustomAttributesForToken(
                             _handle,
-                            out paramArrayAttribute,
+                            out CustomAttributeHandle paramArrayAttribute,
                             filterOutParamArrayAttribute ? AttributeDescription.ParamArrayAttribute : default,
-                            out constantAttribute,
+                            out CustomAttributeHandle constantAttribute,
                             filterOutConstantAttributeDescription,
-                            out isReadOnlyAttribute,
+                            out CustomAttributeHandle isReadOnlyAttribute,
                             filterIsReadOnlyAttribute ? AttributeDescription.IsReadOnlyAttribute : default,
                             out _,
                             default);

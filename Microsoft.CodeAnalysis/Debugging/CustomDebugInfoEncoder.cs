@@ -151,17 +151,17 @@ namespace Microsoft.CodeAnalysis.Debugging
                 {
                     builder.WriteInt32(infos.Count);
 
-                    foreach (var info in infos)
+                    foreach (var (LocalName, Flags, Count, SlotIndex) in infos)
                     {
-                        Debug.Assert(info.Flags.Length <= DynamicAttributeSize);
-                        Debug.Assert(info.LocalName.Length <= IdentifierSize);
+                        Debug.Assert(Flags.Length <= DynamicAttributeSize);
+                        Debug.Assert(LocalName.Length <= IdentifierSize);
 
-                        builder.WriteBytes(info.Flags);
-                        builder.WriteBytes(0, sizeof(byte) * (DynamicAttributeSize - info.Flags.Length));
-                        builder.WriteInt32(info.Count);
-                        builder.WriteInt32(info.SlotIndex);
-                        builder.WriteUTF16(info.LocalName);
-                        builder.WriteBytes(0, sizeof(char) * (IdentifierSize - info.LocalName.Length));
+                        builder.WriteBytes(Flags);
+                        builder.WriteBytes(0, sizeof(byte) * (DynamicAttributeSize - Flags.Length));
+                        builder.WriteInt32(Count);
+                        builder.WriteInt32(SlotIndex);
+                        builder.WriteUTF16(LocalName);
+                        builder.WriteBytes(0, sizeof(char) * (IdentifierSize - LocalName.Length));
                     }
                 });
         }
@@ -178,14 +178,14 @@ namespace Microsoft.CodeAnalysis.Debugging
                     Debug.Assert(infos.Count > 0);
 
                     builder.WriteInt32(infos.Count);
-                    foreach (var info in infos)
+                    foreach (var (LocalName, SlotIndex, ScopeStart, ScopeEnd, Names) in infos)
                     {
                         // Constants have slot index -1 and scope specified,
                         // variables have a slot index specified and no scope.
-                        Debug.Assert((info.SlotIndex == -1) ^ (info.ScopeStart == 0 && info.ScopeEnd == 0));
+                        Debug.Assert((SlotIndex == -1) ^ (ScopeStart == 0 && ScopeEnd == 0));
 
-                        builder.WriteInt32(info.Names.Length);
-                        foreach (var name in info.Names)
+                        builder.WriteInt32(Names.Length);
+                        foreach (var name in Names)
                         {
                             if (name != null)
                             {
@@ -195,12 +195,12 @@ namespace Microsoft.CodeAnalysis.Debugging
                             builder.WriteByte(0);
                         }
 
-                        builder.WriteInt32(info.SlotIndex);
-                        builder.WriteInt32(info.ScopeStart);
-                        builder.WriteInt32(info.ScopeEnd);
-                        if (info.LocalName != null)
+                        builder.WriteInt32(SlotIndex);
+                        builder.WriteInt32(ScopeStart);
+                        builder.WriteInt32(ScopeEnd);
+                        if (LocalName != null)
                         {
-                            builder.WriteUTF8(info.LocalName);
+                            builder.WriteUTF8(LocalName);
                         }
 
                         builder.WriteByte(0);

@@ -28,8 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return new RegionAnalysisContext(Compilation, null, node, node, node);
             }
 
-            Symbol member;
-            BoundNode boundNode = GetBoundRoot(memberModel, out member);
+            BoundNode boundNode = GetBoundRoot(memberModel, out Symbol member);
             var first = memberModel.GetUpperBoundNode(expression, promoteToBindable: true);
             var last = first;
             return new RegionAnalysisContext(this.Compilation, member, boundNode, first, last);
@@ -45,8 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return new RegionAnalysisContext(Compilation, null, node, node, node);
             }
 
-            Symbol member;
-            BoundNode boundNode = GetBoundRoot(memberModel, out member);
+            BoundNode boundNode = GetBoundRoot(memberModel, out Symbol member);
             var first = memberModel.GetUpperBoundNode(firstStatement, promoteToBindable: true);
             var last = memberModel.GetUpperBoundNode(lastStatement, promoteToBindable: true);
             return new RegionAnalysisContext(Compilation, member, boundNode, first, last);

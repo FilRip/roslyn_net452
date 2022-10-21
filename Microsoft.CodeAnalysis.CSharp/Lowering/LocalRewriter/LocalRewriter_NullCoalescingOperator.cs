@@ -131,8 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // (temp != null) ? MakeConversion(temp) : right
             //
 
-            BoundAssignmentOperator tempAssignment;
-            BoundLocal boundTemp = _factory.StoreToTemp(rewrittenLeft, out tempAssignment);
+            BoundLocal boundTemp = _factory.StoreToTemp(rewrittenLeft, out BoundAssignmentOperator tempAssignment);
 
             // temp != null
             BoundExpression nullCheck = MakeNullCheck(syntax, boundTemp, BinaryOperatorKind.NotEqual);

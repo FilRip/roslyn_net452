@@ -4,6 +4,8 @@
 
 using System;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static class Boxes

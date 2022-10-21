@@ -38,7 +38,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // We have already lowered each argument, but we may need some additional rewriting for the arguments,
             // such as generating a params array, re-ordering arguments based on argsToParamsOpt map, etc.
-            ImmutableArray<LocalSymbol> temps;
             ImmutableArray<RefKind> argumentRefKindsOpt = node.ArgumentRefKindsOpt;
             rewrittenArguments = MakeArguments(
                 node.Syntax,
@@ -47,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 node.Expanded,
                 node.ArgsToParamsOpt,
                 ref argumentRefKindsOpt,
-                out temps);
+                out ImmutableArray<LocalSymbol> temps);
 
             BoundExpression rewrittenObjectCreation;
 
@@ -166,8 +165,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             // Create a temp and assign it with the object creation expression.
-            BoundAssignmentOperator boundAssignmentToTemp;
-            BoundLocal value = _factory.StoreToTemp(rewrittenExpression, out boundAssignmentToTemp);
+            BoundLocal value = _factory.StoreToTemp(rewrittenExpression, out BoundAssignmentOperator boundAssignmentToTemp);
 
             // Rewrite object/collection initializer expressions
             ArrayBuilder<BoundExpression>? dynamicSiteInitializers = null;
@@ -234,9 +232,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // if struct defines one.
             // Since we cannot know if T has a parameterless constructor statically, 
             // we must call Activator.CreateInstance unconditionally.
-            MethodSymbol method;
 
-            if (!this.TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Activator__CreateInstance_T, out method))
+            if (!this.TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Activator__CreateInstance_T, out MethodSymbol method))
             {
                 return new BoundDefaultExpression(syntax, type: typeParameter, hasErrors: true);
             }

@@ -144,8 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var xmlFileResolver = new LoggingXmlFileResolver(Arguments.BaseDirectory, touchedFilesLogger);
             var sourceFileResolver = new LoggingSourceFileResolver(ImmutableArray<string>.Empty, Arguments.BaseDirectory, Arguments.PathMap, touchedFilesLogger);
 
-            MetadataReferenceResolver referenceDirectiveResolver;
-            var resolvedReferences = ResolveMetadataReferences(diagnostics, touchedFilesLogger, out referenceDirectiveResolver);
+            var resolvedReferences = ResolveMetadataReferences(diagnostics, touchedFilesLogger, out MetadataReferenceResolver referenceDirectiveResolver);
             if (ReportDiagnostics(diagnostics, consoleOutput, errorLogger, compilation: null))
             {
                 return null;
@@ -208,8 +207,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // prepopulate line tables.
             // we will need line tables anyways and it is better to not wait until we are in emit
             // where things run sequentially.
-            bool isHiddenDummy;
-            tree.GetMappedLineSpanAndVisibility(default, out isHiddenDummy);
+            tree.GetMappedLineSpanAndVisibility(default, out bool isHiddenDummy);
 
             return tree;
         }

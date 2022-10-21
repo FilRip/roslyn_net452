@@ -316,14 +316,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal sealed override CSharpAttributeData EarlyDecodeWellKnownAttribute(ref EarlyDecodeWellKnownAttributeArguments<EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation> arguments)
         {
-
-            bool hasAnyDiagnostics;
-
             if (arguments.SymbolPart == AttributeLocation.None)
             {
                 if (CSharpAttributeData.IsTargetEarlyAttribute(arguments.AttributeType, arguments.AttributeSyntax, AttributeDescription.ConditionalAttribute))
                 {
-                    var boundAttribute = arguments.Binder.GetAttribute(arguments.AttributeSyntax, arguments.AttributeType, out hasAnyDiagnostics);
+                    var boundAttribute = arguments.Binder.GetAttribute(arguments.AttributeSyntax, arguments.AttributeType, out bool hasAnyDiagnostics);
                     if (!boundAttribute.HasErrors)
                     {
                         string name = boundAttribute.GetConstructorArgument<string>(0, SpecialType.System_String);
@@ -940,11 +937,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             static (m, systemType) => m is FieldSymbol { Type: ArrayTypeSymbol { ElementType: NamedTypeSymbol elementType } } && elementType.Equals(systemType, TypeCompareKind.ConsiderEverything),
                             systemType);
 
-                        var namedArgumentDecoded = TryDecodeUnmanagedCallersOnlyCallConvsField(key, value, isField, location, diagnostics);
+                        var (IsCallConvs, CallConvs) = TryDecodeUnmanagedCallersOnlyCallConvsField(key, value, isField, location, diagnostics);
 
-                        if (namedArgumentDecoded.IsCallConvs)
+                        if (IsCallConvs)
                         {
-                            callingConventionTypes = namedArgumentDecoded.CallConvs;
+                            callingConventionTypes = CallConvs;
                         }
                     }
                 }

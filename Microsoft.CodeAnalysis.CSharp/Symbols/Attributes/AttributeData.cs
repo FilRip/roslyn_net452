@@ -233,8 +233,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             where T : WellKnownAttributeData, ISecurityAttributeTarget, new()
         {
 
-            bool hasErrors;
-            DeclarativeSecurityAction action = DecodeSecurityAttributeAction(targetSymbol, compilation, arguments.AttributeSyntaxOpt, out hasErrors, (BindingDiagnosticBag)arguments.Diagnostics);
+            DeclarativeSecurityAction action = DecodeSecurityAttributeAction(targetSymbol, compilation, arguments.AttributeSyntaxOpt, out bool hasErrors, (BindingDiagnosticBag)arguments.Diagnostics);
 
             if (!hasErrors)
             {
@@ -402,8 +401,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     if (this.IsTargetAttribute(targetSymbol, AttributeDescription.PrincipalPermissionAttribute))
                     {
                         // CS7052: SecurityAction value '{0}' is invalid for PrincipalPermission attribute
-                        object displayString;
-                        Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out displayString);
+                        Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out object displayString);
                         diagnostics.Add(ErrorCode.ERR_PrincipalPermissionInvalidAction, syntaxLocation, displayString);
                         hasErrors = true;
                         return DeclarativeSecurityAction.None;
@@ -432,8 +430,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 default:
                     {
                         // CS7049: Security attribute '{0}' has an invalid SecurityAction value '{1}'
-                        object displayString;
-                        Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out displayString);
+                        Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out object displayString);
                         diagnostics.Add(ErrorCode.ERR_SecurityAttributeInvalidAction, syntaxLocation, nodeOpt != null ? nodeOpt.GetErrorDisplayName() : "", displayString);
                         hasErrors = true;
                         return DeclarativeSecurityAction.None;
@@ -448,8 +445,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // Types and methods cannot take permission requests.
 
                     // CS7051: SecurityAction value '{0}' is invalid for security attributes applied to a type or a method
-                    object displayString;
-                    Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out displayString);
+                    Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out object displayString);
                     diagnostics.Add(ErrorCode.ERR_SecurityAttributeInvalidActionTypeOrMethod, syntaxLocation, displayString);
                     hasErrors = true;
                     return DeclarativeSecurityAction.None;
@@ -462,8 +458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // Assemblies cannot take declarative security.
 
                     // CS7050: SecurityAction value '{0}' is invalid for security attributes applied to an assembly
-                    object displayString;
-                    Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out displayString);
+                    Location syntaxLocation = GetSecurityAttributeActionSyntaxLocation(nodeOpt, typedValue, out object displayString);
                     diagnostics.Add(ErrorCode.ERR_SecurityAttributeInvalidActionAssembly, syntaxLocation, displayString);
                     hasErrors = true;
                     return DeclarativeSecurityAction.None;
@@ -629,8 +624,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var guidString = (string?)this.CommonConstructorArguments[0].ValueInternal;
 
             // Native compiler allows only a specific GUID format: "D" format (32 digits separated by hyphens)
-            Guid guid;
-            if (!Guid.TryParseExact(guidString, "D", out guid))
+            if (!Guid.TryParseExact(guidString, "D", out Guid guid))
             {
                 // CS0591: Invalid value for argument to '{0}' attribute
                 Location attributeArgumentSyntaxLocation = this.GetAttributeArgumentSyntaxLocation(0, nodeOpt);

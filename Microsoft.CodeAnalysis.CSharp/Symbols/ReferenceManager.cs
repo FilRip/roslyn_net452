@@ -272,8 +272,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private static AssemblySymbol MapAssemblyIdentityToResolvedSymbol(AssemblyIdentity identity, AssemblyIdentityMap<AssemblySymbol> map)
             {
-                AssemblySymbol symbol;
-                if (map.TryGetValue(identity, out symbol, CompareVersionPartsSpecifiedInSource))
+                if (map.TryGetValue(identity, out AssemblySymbol symbol, CompareVersionPartsSpecifiedInSource))
                 {
                     return symbol;
                 }
@@ -337,31 +336,22 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 try
                 {
-                    IDictionary<(string, string), MetadataReference>? boundReferenceDirectiveMap;
-                    ImmutableArray<MetadataReference> boundReferenceDirectives;
-                    ImmutableArray<AssemblyData> referencedAssemblies;
-                    ImmutableArray<PEModule> modules; // To make sure the modules are not collected ahead of time.
-                    ImmutableArray<MetadataReference> explicitReferences;
+                    // To make sure the modules are not collected ahead of time.
 
                     ImmutableArray<ResolvedReference> referenceMap = ResolveMetadataReferences(
                         compilation,
                         assemblyReferencesBySimpleName,
-                        out explicitReferences,
-                        out boundReferenceDirectiveMap,
-                        out boundReferenceDirectives,
-                        out referencedAssemblies,
-                        out modules,
+                        out ImmutableArray<MetadataReference> explicitReferences,
+                        out IDictionary<(string, string), MetadataReference> boundReferenceDirectiveMap,
+                        out ImmutableArray<MetadataReference> boundReferenceDirectives,
+                        out ImmutableArray<AssemblyData> referencedAssemblies,
+                        out ImmutableArray<PEModule> modules,
                         resolutionDiagnostics);
 
                     var assemblyBeingBuiltData = new AssemblyDataForAssemblyBeingBuilt(new AssemblyIdentity(name: SimpleAssemblyName, noThrow: true), referencedAssemblies, modules);
                     var explicitAssemblyData = referencedAssemblies.Insert(0, assemblyBeingBuiltData);
 
                     // Let's bind all the references and resolve missing one (if resolver is available)
-                    bool hasCircularReference;
-                    int corLibraryIndex;
-                    ImmutableArray<MetadataReference> implicitlyResolvedReferences;
-                    ImmutableArray<ResolvedReference> implicitlyResolvedReferenceMap;
-                    ImmutableArray<AssemblyData> allAssemblyData;
 
                     // Avoid resolving previously resolved missing references. If we call to the resolver again we would create new assembly symbols for them,
                     // which would not match the previously created ones. As a result we would get duplicate PE types and conversion errors.
@@ -378,21 +368,18 @@ namespace Microsoft.CodeAnalysis.CSharp
                         compilation.Options.MetadataImportOptions,
                         supersedeLowerVersions,
                         assemblyReferencesBySimpleName,
-                        out allAssemblyData,
-                        out implicitlyResolvedReferences,
-                        out implicitlyResolvedReferenceMap,
+                        out ImmutableArray<AssemblyData> allAssemblyData,
+                        out ImmutableArray<MetadataReference> implicitlyResolvedReferences,
+                        out ImmutableArray<ResolvedReference> implicitlyResolvedReferenceMap,
                         ref implicitReferenceResolutions,
                         resolutionDiagnostics,
-                        out hasCircularReference,
-                        out corLibraryIndex);
+                        out bool hasCircularReference,
+                        out int corLibraryIndex);
 
 
                     var references = explicitReferences.AddRange(implicitlyResolvedReferences);
                     referenceMap = referenceMap.AddRange(implicitlyResolvedReferenceMap);
 
-                    Dictionary<MetadataReference, int> referencedAssembliesMap, referencedModulesMap;
-                    ImmutableArray<ImmutableArray<string>> aliasesOfReferencedAssemblies;
-                    Dictionary<MetadataReference, ImmutableArray<MetadataReference>>? mergedAssemblyReferencesMapOpt;
 
                     BuildReferencedAssembliesAndModulesMaps(
                         bindingResult,
@@ -402,10 +389,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                         referencedAssemblies.Length,
                         assemblyReferencesBySimpleName,
                         supersedeLowerVersions,
-                        out referencedAssembliesMap,
-                        out referencedModulesMap,
-                        out aliasesOfReferencedAssemblies,
-                        out mergedAssemblyReferencesMapOpt);
+                        out Dictionary<MetadataReference, int> referencedAssembliesMap,
+                        out Dictionary<MetadataReference, int> referencedModulesMap,
+                        out ImmutableArray<ImmutableArray<string>> aliasesOfReferencedAssemblies,
+                        out Dictionary<MetadataReference, ImmutableArray<MetadataReference>> mergedAssemblyReferencesMapOpt);
 
                     // Create AssemblySymbols for assemblies that can't use any existing symbols.
                     var newSymbols = new List<int>();
@@ -449,14 +436,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     int totalReferencedAssemblyCount = allAssemblyData.Length - 1;
 
                     // Setup bound references for newly created SourceAssemblySymbol
-                    ImmutableArray<ModuleReferences<AssemblySymbol>> moduleReferences;
                     SetupReferencesForSourceAssembly(
                         assemblySymbol,
                         modules,
                         totalReferencedAssemblyCount,
                         bindingResult,
                         ref missingAssemblies,
-                        out moduleReferences);
+                        out ImmutableArray<ModuleReferences<AssemblySymbol>> moduleReferences);
 
                     if (newSymbols.Count > 0)
                     {

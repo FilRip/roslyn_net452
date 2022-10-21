@@ -65,9 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
 
             var metadataDecoder = new MetadataDecoder(moduleSymbol, containingType);
-            SignatureHeader callingConvention;
-            BadImageFormatException propEx;
-            var propertyParams = metadataDecoder.GetSignatureForProperty(handle, out callingConvention, out propEx);
+            var propertyParams = metadataDecoder.GetSignatureForProperty(handle, out SignatureHeader callingConvention, out BadImageFormatException propEx);
 
             var returnInfo = propertyParams[0];
 
@@ -118,19 +116,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             _setMethod = setMethod;
             _handle = handle;
 
-            SignatureHeader unusedCallingConvention;
             BadImageFormatException getEx = null;
-            var getMethodParams = (object)getMethod == null ? null : metadataDecoder.GetSignatureForMethod(getMethod.Handle, out unusedCallingConvention, out getEx);
+            var getMethodParams = (object)getMethod == null ? null : metadataDecoder.GetSignatureForMethod(getMethod.Handle, out SignatureHeader unusedCallingConvention, out getEx);
             BadImageFormatException setEx = null;
             var setMethodParams = (object)setMethod == null ? null : metadataDecoder.GetSignatureForMethod(setMethod.Handle, out unusedCallingConvention, out setEx);
 
             // NOTE: property parameter names are not recorded in metadata, so we have to
             // use the parameter names from one of the indexers
             // NB: prefer setter names to getter names if both are present.
-            bool isBad;
 
             _parameters = setMethodParams is null
-                ? GetParameters(moduleSymbol, this, getMethod, propertyParams, getMethodParams, out isBad)
+                ? GetParameters(moduleSymbol, this, getMethod, propertyParams, getMethodParams, out bool isBad)
                 : GetParameters(moduleSymbol, this, setMethod, propertyParams, setMethodParams, out isBad);
 
             if (getEx != null || setEx != null || mrEx != null || isBad)
@@ -700,9 +696,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     nullableContext = property;
                 }
                 var ordinal = i - 1;
-                bool isBad;
 
-                parameters[ordinal] = PEParameterSymbol.Create(moduleSymbol, property, accessor.IsMetadataVirtual(), ordinal, paramHandle, propertyParam, nullableContext, out isBad);
+                parameters[ordinal] = PEParameterSymbol.Create(moduleSymbol, property, accessor.IsMetadataVirtual(), ordinal, paramHandle, propertyParam, nullableContext, out bool isBad);
 
                 if (isBad)
                 {

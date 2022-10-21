@@ -220,8 +220,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 foreach (var label in section.SwitchLabels)
                 {
-                    var labelResult = labelStateMap.TryGetValue(label.Label, out var s1) ? s1 : (state: UnreachableState(), believedReachable: false);
-                    SetState(labelResult.state);
+                    var (state, _) = labelStateMap.TryGetValue(label.Label, out var s1) ? s1 : (state: UnreachableState(), believedReachable: false);
+                    SetState(state);
                     PendingBranches.Add(new PendingBranch(label, this.State, label.Label));
                 }
             }
@@ -600,7 +600,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            bool isDerivedType(TypeSymbol derivedType, TypeSymbol baseType)
+            /*bool isDerivedType(TypeSymbol derivedType, TypeSymbol baseType)
             {
                 if (derivedType.IsErrorType() || baseType.IsErrorType())
                     return true;
@@ -613,7 +613,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     ConversionKind.Boxing => true,
                     _ => false,
                 };
-            }
+            }*/
 
             void gotoNodeWithCurrentState(BoundDecisionDagNode node, bool believedReachable)
             {

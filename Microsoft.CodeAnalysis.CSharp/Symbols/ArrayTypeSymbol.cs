@@ -388,9 +388,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override bool ApplyNullableTransforms(byte defaultTransformFlag, ImmutableArray<byte> transforms, ref int position, out TypeSymbol result)
         {
             TypeWithAnnotations oldElementType = ElementTypeWithAnnotations;
-            TypeWithAnnotations newElementType;
 
-            if (!oldElementType.ApplyNullableTransforms(defaultTransformFlag, transforms, ref position, out newElementType))
+            if (!oldElementType.ApplyNullableTransforms(defaultTransformFlag, transforms, ref position, out TypeWithAnnotations newElementType))
             {
                 result = this;
                 return false;

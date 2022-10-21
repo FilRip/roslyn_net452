@@ -207,8 +207,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // needs to use the method's type parameters inside the rewritten method body. All other methods generated
             // during async rewriting are members of the synthesized state machine struct, and use the type parameters
             // structs type parameters.
-            AsyncMethodBuilderMemberCollection methodScopeAsyncMethodBuilderMemberCollection;
-            if (!AsyncMethodBuilderMemberCollection.TryCreate(F, method, null, out methodScopeAsyncMethodBuilderMemberCollection))
+            if (!AsyncMethodBuilderMemberCollection.TryCreate(F, method, null, out AsyncMethodBuilderMemberCollection methodScopeAsyncMethodBuilderMemberCollection))
             {
                 return new BoundBadStatement(F.Syntax, ImmutableArray<BoundNode>.Empty, hasErrors: true);
             }

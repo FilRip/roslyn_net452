@@ -937,12 +937,12 @@ namespace Microsoft.Cci
             // COFF header SizeOfImage field (4 byte int)
             // MVID (Guid, 24 bytes)
             var referenceManager = module.CommonCompilation.GetBoundReferenceManager();
-            foreach (var pair in referenceManager.GetReferencedAssemblyAliases())
+            foreach (var (AssemblySymbol, Aliases) in referenceManager.GetReferencedAssemblyAliases())
             {
-                if (referenceManager.GetMetadataReference(pair.AssemblySymbol) is PortableExecutableReference { FilePath: { } } portableReference)
+                if (referenceManager.GetMetadataReference(AssemblySymbol) is PortableExecutableReference { FilePath: { } } portableReference)
                 {
                     var fileName = PathUtilities.GetFileName(portableReference.FilePath);
-                    var peReader = pair.AssemblySymbol.GetISymbol() is IAssemblySymbol assemblySymbol
+                    var peReader = AssemblySymbol.GetISymbol() is IAssemblySymbol assemblySymbol
                         ? assemblySymbol.GetMetadata().GetAssembly().ManifestModule.PEReaderOpt
                         : null;
 
@@ -957,8 +957,8 @@ namespace Microsoft.Cci
                     builder.WriteByte(0);
 
                     // Extern alias
-                    if (pair.Aliases.Length > 0)
-                        builder.WriteUTF8(string.Join(",", pair.Aliases.OrderBy(StringComparer.Ordinal)));
+                    if (Aliases.Length > 0)
+                        builder.WriteUTF8(string.Join(",", Aliases.OrderBy(StringComparer.Ordinal)));
 
                     // Always null terminate the extern alias list
                     builder.WriteByte(0);

@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.Emit;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal partial class

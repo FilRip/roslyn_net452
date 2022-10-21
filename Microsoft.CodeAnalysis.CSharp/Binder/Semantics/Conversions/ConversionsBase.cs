@@ -2099,11 +2099,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             ClassifyConversionFromTypeDelegate classifyConversion,
             bool arg)
         {
-            ImmutableArray<TypeWithAnnotations> sourceTypes;
-            ImmutableArray<TypeWithAnnotations> destTypes;
 
-            if (!source.TryGetElementTypesWithAnnotationsIfTupleType(out sourceTypes) ||
-                !destination.TryGetElementTypesWithAnnotationsIfTupleType(out destTypes) ||
+            if (!source.TryGetElementTypesWithAnnotationsIfTupleType(out ImmutableArray<TypeWithAnnotations> sourceTypes) ||
+                !destination.TryGetElementTypesWithAnnotationsIfTupleType(out ImmutableArray<TypeWithAnnotations> destTypes) ||
                 sourceTypes.Length != destTypes.Length)
             {
                 return Conversion.NoConversion;

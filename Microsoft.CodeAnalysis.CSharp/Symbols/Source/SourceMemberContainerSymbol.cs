@@ -290,12 +290,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     break;
             }
 
-            bool modifierErrors;
             var mods = MakeAndCheckTypeModifiers(
                 defaultAccess,
                 allowedModifiers,
                 diagnostics,
-                out modifierErrors);
+                out bool modifierErrors);
 
             this.CheckUnsafeModifier(mods, diagnostics);
 
@@ -633,8 +632,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     foreach (var member in membersAndInitializers.NonTypeMembers)
                     {
-                        FieldSymbol field;
-                        if (!member.IsFieldOrFieldLikeEvent(out field) || field.IsConst || field.IsFixedSizeBuffer)
+                        if (!member.IsFieldOrFieldLikeEvent(out FieldSymbol field) || field.IsConst || field.IsFixedSizeBuffer)
                         {
                             continue;
                         }
@@ -993,8 +991,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 throw ExceptionUtilities.Unreachable;
             }
 
-            int syntaxOffset;
-            if (TryCalculateSyntaxOffsetOfPositionInInitializer(position, tree, isStatic, ctorInitializerLength: 0, syntaxOffset: out syntaxOffset))
+            if (TryCalculateSyntaxOffsetOfPositionInInitializer(position, tree, isStatic, ctorInitializerLength: 0, syntaxOffset: out int syntaxOffset))
             {
                 return syntaxOffset;
             }
@@ -1164,8 +1161,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override ImmutableArray<NamedTypeSymbol> GetTypeMembers(string name)
         {
-            ImmutableArray<NamedTypeSymbol> members;
-            if (GetTypeMembersDictionary().TryGetValue(name, out members))
+            if (GetTypeMembersDictionary().TryGetValue(name, out ImmutableArray<NamedTypeSymbol> members))
             {
                 return members;
             }
@@ -1208,8 +1204,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     this.CheckMemberNameDistinctFromType(t, diagnostics);
 
                     var key = (t.Name, t.Arity);
-                    SourceNamedTypeSymbol? other;
-                    if (conflictDict.TryGetValue(key, out other))
+                    if (conflictDict.TryGetValue(key, out SourceNamedTypeSymbol other))
                     {
                         if (Locations.Length == 1 || IsPartial)
                         {
@@ -1307,8 +1302,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public sealed override ImmutableArray<Symbol> GetMembers(string name)
         {
-            ImmutableArray<Symbol> members;
-            if (GetMembersByName().TryGetValue(name, out members))
+            if (GetMembersByName().TryGetValue(name, out ImmutableArray<Symbol> members))
             {
                 return members;
             }
@@ -1387,8 +1381,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal override ImmutableArray<Symbol> GetEarlyAttributeDecodingMembers(string name)
         {
-            ImmutableArray<Symbol> result;
-            return GetEarlyAttributeDecodingMembersDictionary().TryGetValue(name, out result) ? result : ImmutableArray<Symbol>.Empty;
+            return GetEarlyAttributeDecodingMembersDictionary().TryGetValue(name, out ImmutableArray<Symbol> result) ? result : ImmutableArray<Symbol>.Empty;
         }
 
         private Dictionary<string, ImmutableArray<Symbol>> GetEarlyAttributeDecodingMembersDictionary()
@@ -2439,8 +2432,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 ImmutableArray<NamedTypeSymbol> types = pair.Value;
                 ImmutableArray<Symbol> typesAsSymbols = StaticCast<Symbol>.From(types);
 
-                ImmutableArray<Symbol> membersForName;
-                if (membersByName.TryGetValue(name, out membersForName))
+                if (membersByName.TryGetValue(name, out ImmutableArray<Symbol> membersForName))
                 {
                     membersByName[name] = membersForName.Concat(typesAsSymbols);
                 }
@@ -4074,8 +4066,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                     new SourceLocation(fieldSyntax.Declaration.Variables.First().Identifier));
                             }
 
-                            bool modifierErrors;
-                            var modifiers = SourceMemberFieldSymbol.MakeModifiers(this, fieldSyntax.Declaration.Variables[0].Identifier, fieldSyntax.Modifiers, diagnostics, out modifierErrors);
+                            var modifiers = SourceMemberFieldSymbol.MakeModifiers(this, fieldSyntax.Declaration.Variables[0].Identifier, fieldSyntax.Modifiers, diagnostics, out bool modifierErrors);
                             foreach (var variable in fieldSyntax.Declaration.Variables)
                             {
                                 var fieldSymbol = (modifiers & DeclarationModifiers.Fixed) == 0
@@ -4404,8 +4395,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override byte? GetLocalNullableContextValue()
         {
-            byte? value;
-            if (!_flags.TryGetNullableContext(out value))
+            if (!_flags.TryGetNullableContext(out byte? value))
             {
                 value = ComputeNullableContextValue();
                 _flags.SetNullableContext(value);

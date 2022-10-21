@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             return RunCompilationResult.Failed;
         }
 
-        private static bool TryEnableMulticoreJitting(out string errorMessage)
+        /*private static bool TryEnableMulticoreJitting(out string errorMessage)
         {
             errorMessage = null;
             try
@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 return false;
             }
             return true;
-        }
+        }*/
 
         public Task<RunCompilationResult> RunCompilationAsync(IEnumerable<string> originalArguments, BuildPaths buildPaths, TextWriter textWriter = null)
         {

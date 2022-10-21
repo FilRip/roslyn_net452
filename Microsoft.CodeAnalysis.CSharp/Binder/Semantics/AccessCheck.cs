@@ -26,8 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             AssemblySymbol within,
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            bool failedThroughTypeCheck;
-            return IsSymbolAccessibleCore(symbol, within, null, out failedThroughTypeCheck, within.DeclaringCompilation, ref useSiteInfo);
+            return IsSymbolAccessibleCore(symbol, within, null, out bool failedThroughTypeCheck, within.DeclaringCompilation, ref useSiteInfo);
         }
 
         /// <summary>
@@ -40,8 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
             TypeSymbol throughTypeOpt = null)
         {
-            bool failedThroughTypeCheck;
-            return IsSymbolAccessibleCore(symbol, within, throughTypeOpt, out failedThroughTypeCheck, within.DeclaringCompilation, ref useSiteInfo);
+            return IsSymbolAccessibleCore(symbol, within, throughTypeOpt, out bool failedThroughTypeCheck, within.DeclaringCompilation, ref useSiteInfo);
         }
 
         /// <summary>

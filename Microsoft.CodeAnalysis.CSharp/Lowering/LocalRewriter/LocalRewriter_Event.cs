@@ -95,8 +95,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression? clearCall = null;
             if (kind == EventAssignmentKind.Assignment)
             {
-                MethodSymbol clearMethod;
-                if (TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Runtime_InteropServices_WindowsRuntime_WindowsRuntimeMarshal__RemoveAllEventHandlers, out clearMethod))
+                if (TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Runtime_InteropServices_WindowsRuntime_WindowsRuntimeMarshal__RemoveAllEventHandlers, out MethodSymbol clearMethod))
                 {
                     clearCall = MakeCall(
                         syntax: syntax,
@@ -135,8 +134,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression marshalCall;
 
-            MethodSymbol marshalMethod;
-            if (TryGetWellKnownTypeMember(syntax, helper, out marshalMethod))
+            if (TryGetWellKnownTypeMember(syntax, helper, out MethodSymbol marshalMethod))
             {
                 marshalMethod = marshalMethod.Construct(eventType);
 
@@ -223,8 +221,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression getOrCreateCall;
 
-            MethodSymbol getOrCreateMethod;
-            if (TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Runtime_InteropServices_WindowsRuntime_EventRegistrationTokenTable_T__GetOrCreateEventRegistrationTokenTable, out getOrCreateMethod))
+            if (TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Runtime_InteropServices_WindowsRuntime_EventRegistrationTokenTable_T__GetOrCreateEventRegistrationTokenTable, out MethodSymbol getOrCreateMethod))
             {
                 getOrCreateMethod = getOrCreateMethod.AsMember(fieldType);
 
@@ -240,8 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 getOrCreateCall = new BoundBadExpression(syntax, LookupResultKind.NotInvocable, ImmutableArray<Symbol?>.Empty, ImmutableArray.Create<BoundExpression>(fieldAccess), ErrorTypeSymbol.UnknownResultType);
             }
 
-            PropertySymbol invocationListProperty;
-            if (TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Runtime_InteropServices_WindowsRuntime_EventRegistrationTokenTable_T__InvocationList, out invocationListProperty))
+            if (TryGetWellKnownTypeMember(syntax, WellKnownMember.System_Runtime_InteropServices_WindowsRuntime_EventRegistrationTokenTable_T__InvocationList, out PropertySymbol invocationListProperty))
             {
                 MethodSymbol invocationListAccessor = invocationListProperty.GetMethod;
 

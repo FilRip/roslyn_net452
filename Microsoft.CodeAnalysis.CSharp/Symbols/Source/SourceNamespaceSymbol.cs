@@ -162,8 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override ImmutableArray<Symbol> GetMembers(string name)
         {
-            ImmutableArray<NamespaceOrTypeSymbol> members;
-            return this.GetNameToMembersMap().TryGetValue(name, out members)
+            return this.GetNameToMembersMap().TryGetValue(name, out ImmutableArray<NamespaceOrTypeSymbol> members)
                 ? members.Cast<NamespaceOrTypeSymbol, Symbol>()
                 : ImmutableArray<Symbol>.Empty;
         }
@@ -186,8 +185,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override ImmutableArray<NamedTypeSymbol> GetTypeMembers(string name)
         {
-            ImmutableArray<NamedTypeSymbol> members;
-            return this.GetNameToTypeMembersMap().TryGetValue(name, out members)
+            return this.GetNameToTypeMembersMap().TryGetValue(name, out ImmutableArray<NamedTypeSymbol> members)
                 ? members
                 : ImmutableArray<NamedTypeSymbol>.Empty;
         }
@@ -498,8 +496,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             public void Add(NamespaceOrTypeSymbol symbol)
             {
                 string name = symbol.Name;
-                object item;
-                if (_dictionary.TryGetValue(name, out item))
+                if (_dictionary.TryGetValue(name, out object item))
                 {
                     var builder = item as ArrayBuilder<NamespaceOrTypeSymbol>;
                     if (builder == null)

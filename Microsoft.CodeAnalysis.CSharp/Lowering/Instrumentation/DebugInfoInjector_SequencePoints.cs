@@ -22,9 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static BoundStatement AddSequencePoint(VariableDeclaratorSyntax declaratorSyntax, BoundStatement rewrittenStatement)
         {
-            SyntaxNode node;
-            TextSpan? part;
-            GetBreakpointSpan(declaratorSyntax, out node, out part);
+            GetBreakpointSpan(declaratorSyntax, out SyntaxNode node, out TextSpan? part);
             var result = BoundSequencePoint.Create(declaratorSyntax, part, rewrittenStatement);
             result.WasCompilerGenerated = rewrittenStatement.WasCompilerGenerated;
             return result;

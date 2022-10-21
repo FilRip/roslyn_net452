@@ -10,6 +10,8 @@ using System.Reflection.Metadata;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public partial class ILBuilder

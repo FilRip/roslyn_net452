@@ -1266,8 +1266,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private AttributeSemanticModel CreateModelForAttribute(Binder enclosingBinder, AttributeSyntax attribute, MemberSemanticModel containingModel)
         {
-            AliasSymbol aliasOpt;
-            var attributeType = (NamedTypeSymbol)enclosingBinder.BindType(attribute.Name, BindingDiagnosticBag.Discarded, out aliasOpt).Type;
+            var attributeType = (NamedTypeSymbol)enclosingBinder.BindType(attribute.Name, BindingDiagnosticBag.Discarded, out AliasSymbol aliasOpt).Type;
 
             return AttributeSemanticModel.Create(
                 this,

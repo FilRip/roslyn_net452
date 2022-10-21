@@ -178,14 +178,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                             id = new LocalDebugId(syntaxOffset, ordinal);
 
                             // map local id to the previous id, if available:
-                            int previousSlotIndex;
                             if (mapToPreviousFields && slotAllocatorOpt.TryGetPreviousHoistedLocalSlotIndex(
                                 declaratorSyntax,
                                 F.ModuleBuilderOpt.Translate(fieldType, declaratorSyntax, diagnostics.DiagnosticBag),
                                 synthesizedKind,
                                 id,
                                 diagnostics.DiagnosticBag,
-                                out previousSlotIndex))
+                                out int previousSlotIndex))
                             {
                                 slotIndex = previousSlotIndex;
                             }
@@ -288,8 +287,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!method.IsStatic)
             {
 
-                CapturedSymbolReplacement proxy;
-                if (proxies.TryGetValue(method.ThisParameter, out proxy))
+                if (proxies.TryGetValue(method.ThisParameter, out CapturedSymbolReplacement proxy))
                 {
                     bodyBuilder.Add(F.Assignment(proxy.Replacement(F.Syntax, frameType1 => F.Local(stateMachineVariable)), F.This()));
                 }
@@ -297,8 +295,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             foreach (var parameter in method.Parameters)
             {
-                CapturedSymbolReplacement proxy;
-                if (proxies.TryGetValue(parameter, out proxy))
+                if (proxies.TryGetValue(parameter, out CapturedSymbolReplacement proxy))
                 {
                     bodyBuilder.Add(F.Assignment(proxy.Replacement(F.Syntax, frameType1 => F.Local(stateMachineVariable)),
                                                  F.Parameter(parameter)));
@@ -431,8 +428,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!method.IsStatic)
             {
                 // starting with "this"
-                CapturedSymbolReplacement proxy;
-                if (copyDest.TryGetValue(method.ThisParameter, out proxy))
+                if (copyDest.TryGetValue(method.ThisParameter, out CapturedSymbolReplacement proxy))
                 {
                     bodyBuilder.Add(
                         F.Assignment(
@@ -445,8 +441,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             foreach (var parameter in method.Parameters)
             {
-                CapturedSymbolReplacement proxy;
-                if (copyDest.TryGetValue(parameter, out proxy))
+                if (copyDest.TryGetValue(parameter, out CapturedSymbolReplacement proxy))
                 {
                     // result.parameter
                     BoundExpression resultParameter = proxy.Replacement(F.Syntax, stateMachineType => F.Local(resultVariable));

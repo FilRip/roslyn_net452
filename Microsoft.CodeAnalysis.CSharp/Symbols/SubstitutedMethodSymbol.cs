@@ -100,10 +100,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            ImmutableArray<TypeParameterSymbol> typeParameters;
 
             // We're creating a new unconstructed Method from another; alpha-rename type parameters.
-            var newMap = _inputMap.WithAlphaRename(this.OriginalDefinition, this, out typeParameters);
+            var newMap = _inputMap.WithAlphaRename(this.OriginalDefinition, this, out ImmutableArray<TypeParameterSymbol> typeParameters);
 
             var prevMap = Interlocked.CompareExchange(ref _lazyMap, newMap, null);
             if (prevMap != null)
@@ -309,8 +308,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // context of an original definition.  
             // There should never be any reason to call this in normal compilation
             // scenarios, but the behavior should be sensible if it does occur.
-            ParameterSymbol originalThisParameter;
-            if (!OriginalDefinition.TryGetThisParameter(out originalThisParameter))
+            if (!OriginalDefinition.TryGetThisParameter(out ParameterSymbol originalThisParameter))
             {
                 thisParameter = null;
                 return false;

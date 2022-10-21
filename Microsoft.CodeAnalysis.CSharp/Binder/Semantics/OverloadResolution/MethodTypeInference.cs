@@ -1530,11 +1530,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             //       that is ok, because we are inferring type parameters used in the matching elements, 
             //       This is not the situation where entire tuple type used to infer a single type param
 
-            ImmutableArray<TypeWithAnnotations> sourceTypes;
-            ImmutableArray<TypeWithAnnotations> targetTypes;
 
-            if (!source.Type.TryGetElementTypesWithAnnotationsIfTupleType(out sourceTypes) ||
-                !target.Type.TryGetElementTypesWithAnnotationsIfTupleType(out targetTypes) ||
+            if (!source.Type.TryGetElementTypesWithAnnotationsIfTupleType(out ImmutableArray<TypeWithAnnotations> sourceTypes) ||
+                !target.Type.TryGetElementTypesWithAnnotationsIfTupleType(out ImmutableArray<TypeWithAnnotations> targetTypes) ||
                 sourceTypes.Length != targetTypes.Length)
             {
                 return false;

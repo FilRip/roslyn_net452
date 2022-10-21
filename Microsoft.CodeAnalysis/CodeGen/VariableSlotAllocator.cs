@@ -8,6 +8,8 @@ using System.Reflection.Metadata;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public abstract class VariableSlotAllocator

@@ -1,9 +1,3 @@
-// Decompiled with JetBrains decompiler
-// Type: Microsoft.CodeAnalysis.CommandLine.BuildRequest
-// Assembly: vbc, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-// MVID: 59BA59CE-D1C9-469A-AF98-699E22DB28ED
-// Assembly location: C:\Code\Libs\Compilateurs\Work\Compilateur.NET\vbc.exe
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,13 +7,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal class BuildRequest
     {
-        private const int MaximumRequestSize = 5242880;
+        //private const int MaximumRequestSize = 5242880;
         public readonly Guid RequestId;
         public readonly RequestLanguage Language;
         public readonly ReadOnlyCollection<BuildRequest.Argument> Arguments;
@@ -33,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
         {
             this.RequestId = requestId ?? Guid.Empty;
             this.Language = language;
-            this.Arguments = new ReadOnlyCollection<BuildRequest.Argument>((IList<BuildRequest.Argument>)arguments.ToList<BuildRequest.Argument>());
+            this.Arguments = new ReadOnlyCollection<BuildRequest.Argument>(arguments.ToList<BuildRequest.Argument>());
             this.CompilerHash = compilerHash;
             if (this.Arguments.Count > ushort.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(arguments), "Too many arguments: maximum of " + ushort.MaxValue.ToString() + " arguments allowed.");
@@ -49,17 +43,19 @@ namespace Microsoft.CodeAnalysis.CommandLine
           string? keepAlive = null,
           string? libDirectory = null)
         {
-            List<BuildRequest.Argument> arguments = new List<BuildRequest.Argument>(args.Count + 1 + (libDirectory == null ? 0 : 1));
-            arguments.Add(new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory));
-            arguments.Add(new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory));
+            List<Argument> arguments = new(args.Count + 1 + (libDirectory == null ? 0 : 1))
+            {
+                new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory),
+                new Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory)
+            };
             if (keepAlive != null)
-                arguments.Add(new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.KeepAlive, 0, keepAlive));
+                arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.KeepAlive, 0, keepAlive));
             if (libDirectory != null)
-                arguments.Add(new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.LibEnvVariable, 0, libDirectory));
+                arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.LibEnvVariable, 0, libDirectory));
             for (int index = 0; index < args.Count; ++index)
             {
                 string str = args[index];
-                arguments.Add(new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.CommandLineArgument, index, str));
+                arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.CommandLineArgument, index, str));
             }
             return new BuildRequest(language, compilerHash, arguments, requestId);
         }
@@ -87,17 +83,17 @@ namespace Microsoft.CodeAnalysis.CommandLine
             await BuildProtocolConstants.ReadAllAsync(inStream, requestBuffer, int32, cancellationToken).ConfigureAwait(false);
             cancellationToken.ThrowIfCancellationRequested();
             BuildRequest buildRequest;
-            using (BinaryReader reader = new BinaryReader(new MemoryStream(requestBuffer), Encoding.Unicode))
+            using (BinaryReader reader = new(new MemoryStream(requestBuffer), Encoding.Unicode))
             {
                 Guid guid = readGuid(reader);
                 RequestLanguage language = (RequestLanguage)reader.ReadUInt32();
                 string compilerHash = reader.ReadString();
                 uint capacity = reader.ReadUInt32();
-                List<BuildRequest.Argument> arguments = new List<BuildRequest.Argument>((int)capacity);
+                List<Argument> arguments = new((int)capacity);
                 for (int index = 0; index < capacity; ++index)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    arguments.Add(BuildRequest.Argument.ReadFromBinaryReader(reader));
+                    arguments.Add(Argument.ReadFromBinaryReader(reader));
                 }
                 buildRequest = new BuildRequest(language, compilerHash, arguments, new Guid?(guid));
             }
@@ -115,7 +111,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
         public async Task WriteAsync(Stream outStream, CancellationToken cancellationToken = default)
         {
             BinaryWriter writer;
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new())
             {
                 writer = new BinaryWriter(memoryStream, Encoding.Unicode);
                 try
@@ -162,14 +158,14 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 this.Value = value;
             }
 
-            public static BuildRequest.Argument ReadFromBinaryReader(BinaryReader reader)
+            public static Argument ReadFromBinaryReader(BinaryReader reader)
             {
                 int num1 = reader.ReadInt32();
                 int num2 = reader.ReadInt32();
-                string str1 = BuildProtocolConstants.ReadLengthPrefixedString(reader);
+                string? str1 = BuildProtocolConstants.ReadLengthPrefixedString(reader);
                 int argumentIndex = num2;
-                string str2 = str1;
-                return new BuildRequest.Argument((BuildProtocolConstants.ArgumentId)num1, argumentIndex, str2);
+                string? str2 = str1;
+                return new Argument((BuildProtocolConstants.ArgumentId)num1, argumentIndex, str2);
             }
 
             public void WriteToBinaryWriter(BinaryWriter writer)

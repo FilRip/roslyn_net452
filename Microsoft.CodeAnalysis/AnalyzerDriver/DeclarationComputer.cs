@@ -9,6 +9,9 @@ using System.Linq;
 using System.Threading;
 
 using Roslyn.Utilities;
+
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public class DeclarationComputer

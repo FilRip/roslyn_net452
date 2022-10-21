@@ -456,8 +456,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 { WasCompilerGenerated = true };
 
                 var initializeCall = CreateParameterlessCall(syntax, scriptLocal, initializer);
-                BoundExpression getAwaiterGetResultCall;
-                if (!binder.GetAwaitableExpressionInfo(initializeCall, out getAwaiterGetResultCall, syntax, diagnostics))
+                if (!binder.GetAwaitableExpressionInfo(initializeCall, out BoundExpression getAwaiterGetResultCall, syntax, diagnostics))
                 {
                     return new BoundBlock(
                         syntax: syntax,

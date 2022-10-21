@@ -406,8 +406,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         internal TypeSymbol TryDecodeAttributeWithTypeArgument(EntityHandle handle, AttributeDescription attributeDescription)
         {
-            string typeName;
-            if (_module.HasStringValuedAttribute(handle, attributeDescription, out typeName))
+            if (_module.HasStringValuedAttribute(handle, attributeDescription, out string typeName))
             {
                 return new MetadataDecoder(this).GetTypeSymbolForSerializedType(typeName);
             }
@@ -665,8 +664,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         /// </remarks>
         internal (AssemblySymbol FirstSymbol, AssemblySymbol SecondSymbol) GetAssembliesForForwardedType(ref MetadataTypeName fullName)
         {
-            string matchedName;
-            (int firstIndex, int secondIndex) = this.Module.GetAssemblyRefsForForwardedType(fullName.FullName, ignoreCase: false, matchedName: out matchedName);
+            (int firstIndex, int secondIndex) = this.Module.GetAssemblyRefsForForwardedType(fullName.FullName, ignoreCase: false, matchedName: out string matchedName);
 
             if (firstIndex < 0)
             {

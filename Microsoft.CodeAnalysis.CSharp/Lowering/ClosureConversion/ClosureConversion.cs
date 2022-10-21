@@ -589,8 +589,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Otherwise we need to return the value from a frame pointer local variable...
             Symbol framePointer = _framePointers[frameClass];
-            CapturedSymbolReplacement proxyField;
-            if (proxies.TryGetValue(framePointer, out proxyField))
+            if (proxies.TryGetValue(framePointer, out CapturedSymbolReplacement proxyField))
             {
                 // However, frame pointer local variables themselves can be "captured".  In that case
                 // the inner frames contain pointers to the enclosing frames.  That is, nested
@@ -710,8 +709,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void InitVariableProxy(SyntaxNode syntax, Symbol symbol, LocalSymbol framePointer, ArrayBuilder<BoundExpression> prologue)
         {
-            CapturedSymbolReplacement proxy;
-            if (proxies.TryGetValue(symbol, out proxy))
+            if (proxies.TryGetValue(symbol, out CapturedSymbolReplacement proxy))
             {
                 BoundExpression value;
                 switch (symbol.Kind)
@@ -769,8 +767,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override BoundNode VisitUnhoistedParameter(BoundParameter node)
         {
-            ParameterSymbol replacementParameter;
-            if (_parameterMap.TryGetValue(node.ParameterSymbol, out replacementParameter))
+            if (_parameterMap.TryGetValue(node.ParameterSymbol, out ParameterSymbol replacementParameter))
             {
                 return new BoundParameter(node.Syntax, replacementParameter, node.HasErrors);
             }
@@ -866,7 +863,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             method = loweredSymbol;
-            NamedTypeSymbol constructedFrame;
 
             RemapLambdaOrLocalFunction(syntax,
                                        localFunc,
@@ -874,7 +870,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                        loweredSymbol.ClosureKind,
                                        ref method,
                                        out receiver,
-                                       out constructedFrame);
+                                       out NamedTypeSymbol constructedFrame);
         }
 
         /// <summary>
@@ -1329,20 +1325,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitLocalFunctionStatement(BoundLocalFunctionStatement node)
         {
-            ClosureKind closureKind;
-            NamedTypeSymbol translatedLambdaContainer;
-            SynthesizedClosureEnvironment containerAsFrame;
-            BoundNode lambdaScope;
-            DebugId topLevelMethodId;
-            DebugId lambdaId;
             RewriteLambdaOrLocalFunction(
                 node,
-                out closureKind,
-                out translatedLambdaContainer,
-                out containerAsFrame,
-                out lambdaScope,
-                out topLevelMethodId,
-                out lambdaId);
+                out ClosureKind closureKind,
+                out NamedTypeSymbol translatedLambdaContainer,
+                out SynthesizedClosureEnvironment containerAsFrame,
+                out BoundNode lambdaScope,
+                out DebugId topLevelMethodId,
+                out DebugId lambdaId);
 
             return new BoundNoOpStatement(node.Syntax, NoOpStatementFlavor.Default);
         }
@@ -1389,8 +1379,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // determine lambda ordinal and calculate syntax offset
 
             DebugId lambdaId;
-            DebugId previousLambdaId;
-            if (slotAllocatorOpt != null && slotAllocatorOpt.TryGetPreviousLambda(lambdaOrLambdaBodySyntax, isLambdaBody, out previousLambdaId))
+            if (slotAllocatorOpt != null && slotAllocatorOpt.TryGetPreviousLambda(lambdaOrLambdaBodySyntax, isLambdaBody, out DebugId previousLambdaId))
             {
                 lambdaId = previousLambdaId;
             }
@@ -1524,25 +1513,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return result0;
             }
 
-            ClosureKind closureKind;
-            NamedTypeSymbol translatedLambdaContainer;
-            SynthesizedClosureEnvironment containerAsFrame;
-            BoundNode lambdaScope;
-            DebugId topLevelMethodId;
-            DebugId lambdaId;
             SynthesizedClosureMethod synthesizedMethod = RewriteLambdaOrLocalFunction(
                 node,
-                out closureKind,
-                out translatedLambdaContainer,
-                out containerAsFrame,
-                out lambdaScope,
-                out topLevelMethodId,
-                out lambdaId);
+                out ClosureKind closureKind,
+                out NamedTypeSymbol translatedLambdaContainer,
+                out SynthesizedClosureEnvironment containerAsFrame,
+                out BoundNode lambdaScope,
+                out DebugId topLevelMethodId,
+                out DebugId lambdaId);
 
             MethodSymbol referencedMethod = synthesizedMethod;
-            BoundExpression receiver;
-            NamedTypeSymbol constructedFrame;
-            RemapLambdaOrLocalFunction(node.Syntax, node.Symbol, default, closureKind, ref referencedMethod, out receiver, out constructedFrame);
+            RemapLambdaOrLocalFunction(node.Syntax, node.Symbol, default, closureKind, ref referencedMethod, out BoundExpression receiver, out NamedTypeSymbol constructedFrame);
 
             // Rewrite the lambda expression (and the enclosing anonymous method conversion) as a delegate creation expression
 

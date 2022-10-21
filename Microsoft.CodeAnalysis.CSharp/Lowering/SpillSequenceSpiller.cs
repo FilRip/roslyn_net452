@@ -196,8 +196,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (!node.LocalSymbol.SynthesizedKind.IsLongLived())
                 {
-                    LocalSymbol longLived;
-                    if (_tempSubstitution.TryGetValue(node.LocalSymbol, out longLived))
+                    if (_tempSubstitution.TryGetValue(node.LocalSymbol, out LocalSymbol longLived))
                     {
                         return node.Update(longLived, node.ConstantValueOpt, node.Type);
                     }
@@ -372,11 +371,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                         else
                         {
-                            BoundAssignmentOperator assignToTemp;
 
                             var replacement = _F.StoreToTemp(
                                 expression,
-                                out assignToTemp,
+                                out BoundAssignmentOperator assignToTemp,
                                 refKind: refKind,
                                 kind: SynthesizedLocalKind.Spill,
                                 syntaxOpt: _F.Syntax);

@@ -250,9 +250,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            DocumentationMode maxDocumentationMode;
-            ImmutableArray<DocumentationCommentTriviaSyntax> docCommentNodes;
-            if (!TryGetDocumentationCommentNodes(symbol, out maxDocumentationMode, out docCommentNodes))
+            if (!TryGetDocumentationCommentNodes(symbol, out DocumentationMode maxDocumentationMode, out ImmutableArray<DocumentationCommentTriviaSyntax> docCommentNodes))
             {
                 // If the XML in any of the doc comments is invalid, skip all further processing (for this symbol) and 
                 // just write a comment saying that info was lost for this symbol.
@@ -280,21 +278,16 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             bool reportParameterOrTypeParameterDiagnostics = GetLocationInTreeReportingDocumentationCommentDiagnostics(symbol) != null;
 
-            string withUnprocessedIncludes;
-            bool haveParseError;
-            HashSet<TypeParameterSymbol> documentedTypeParameters;
-            HashSet<ParameterSymbol> documentedParameters;
-            ImmutableArray<CSharpSyntaxNode> includeElementNodes;
             if (!TryProcessDocumentationCommentTriviaNodes(
                     symbol,
                     isPartialMethodDefinitionPart,
                     docCommentNodes,
                     reportParameterOrTypeParameterDiagnostics,
-                    out withUnprocessedIncludes,
-                    out haveParseError,
-                    out documentedTypeParameters,
-                    out documentedParameters,
-                    out includeElementNodes))
+                    out string withUnprocessedIncludes,
+                    out bool haveParseError,
+                    out HashSet<TypeParameterSymbol> documentedTypeParameters,
+                    out HashSet<ParameterSymbol> documentedParameters,
+                    out ImmutableArray<CSharpSyntaxNode> includeElementNodes))
             {
                 return;
             }
@@ -776,8 +769,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool skipSpace = true;
             for (int start = 0; start < text.Length;)
             {
-                int newLineLength;
-                int end = IndexOfNewLine(text, start, out newLineLength);
+                int end = IndexOfNewLine(text, start, out int newLineLength);
                 int trimStart = GetIndexOfFirstNonWhitespaceChar(text, start, end);
                 int trimmedLength = end - trimStart;
                 if (trimmedLength < 4 || !SyntaxFacts.IsWhitespace(text[trimStart + 3]))
@@ -793,8 +785,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             for (int start = 0; start < text.Length;)
             {
-                int newLineLength;
-                int end = IndexOfNewLine(text, start, out newLineLength);
+                int end = IndexOfNewLine(text, start, out int newLineLength);
                 int trimStart = GetIndexOfFirstNonWhitespaceChar(text, start, end) + substringStart;
                 WriteSubStringLine(text, trimStart, end - trimStart);
                 start = end + newLineLength;
@@ -935,8 +926,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return ToBadCrefString(crefSyntax);
             }
 
-            Symbol ambiguityWinner;
-            ImmutableArray<Symbol> symbols = binder.BindCref(crefSyntax, out ambiguityWinner, diagnostics);
+            ImmutableArray<Symbol> symbols = binder.BindCref(crefSyntax, out Symbol ambiguityWinner, diagnostics);
 
             Symbol symbol;
             switch (symbols.Length)

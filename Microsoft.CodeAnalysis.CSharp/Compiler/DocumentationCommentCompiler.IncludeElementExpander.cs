@@ -342,9 +342,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
 
 
-                        string errorMessage;
-                        bool invalidXPath;
-                        XElement[] loadedElements = XmlUtilities.TrySelectElements(doc, xpathValue, out errorMessage, out invalidXPath);
+                        XElement[] loadedElements = XmlUtilities.TrySelectElements(doc, xpathValue, out string errorMessage, out bool invalidXPath);
                         if (loadedElements == null)
                         {
                             includeDiagnostics.Add(ErrorCode.WRN_FailedInclude, location, filePathValue, xpathValue, errorMessage);

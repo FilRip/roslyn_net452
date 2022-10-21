@@ -1404,8 +1404,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal BoundLocal MakeTempForDiscard(BoundDiscardExpression node, ArrayBuilder<LocalSymbol> temps)
         {
-            LocalSymbol temp;
-            BoundLocal result = MakeTempForDiscard(node, out temp);
+            BoundLocal result = MakeTempForDiscard(node, out LocalSymbol temp);
             temps.Add(temp);
             return result;
         }

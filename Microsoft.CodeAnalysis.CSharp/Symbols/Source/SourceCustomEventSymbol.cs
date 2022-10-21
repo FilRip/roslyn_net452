@@ -33,8 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             SyntaxToken nameToken = syntax.Identifier;
             bool isExplicitInterfaceImplementation = interfaceSpecifier != null;
 
-            string? aliasQualifierOpt;
-            _name = ExplicitInterfaceHelpers.GetMemberNameAndInterfaceSymbol(binder, interfaceSpecifier, nameToken.ValueText, diagnostics, out _explicitInterfaceType, out aliasQualifierOpt);
+            _name = ExplicitInterfaceHelpers.GetMemberNameAndInterfaceSymbol(binder, interfaceSpecifier, nameToken.ValueText, diagnostics, out _explicitInterfaceType, out string aliasQualifierOpt);
 
             _type = BindEventType(binder, syntax.Type, diagnostics);
 

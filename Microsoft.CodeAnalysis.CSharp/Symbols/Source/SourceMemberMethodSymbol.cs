@@ -830,8 +830,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // on lambdas and local functions (see https://github.com/dotnet/roslyn/issues/36736).
         internal override byte? GetLocalNullableContextValue()
         {
-            byte? value;
-            if (!flags.TryGetNullableContext(out value))
+            if (!flags.TryGetNullableContext(out byte? value))
             {
                 value = ComputeNullableContextValue();
                 flags.SetNullableContext(value);

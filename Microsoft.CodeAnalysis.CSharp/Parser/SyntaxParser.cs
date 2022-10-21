@@ -614,8 +614,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         protected virtual SyntaxDiagnosticInfo GetExpectedTokenError(SyntaxKind expected, SyntaxKind actual)
         {
-            int offset, width;
-            this.GetDiagnosticSpanForMissingToken(out offset, out width);
+            this.GetDiagnosticSpanForMissingToken(out int offset, out int width);
 
             return this.GetExpectedTokenError(expected, actual, offset, width);
         }
@@ -758,8 +757,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         protected TNode AddError<TNode>(TNode node, CSharpSyntaxNode location, ErrorCode code, params object[] args) where TNode : CSharpSyntaxNode
         {
             // assumes non-terminals will at most appear once in sub-tree
-            int offset;
-            FindOffset(node, location, out offset);
+            FindOffset(node, location, out int offset);
             return WithAdditionalDiagnostics(node, MakeError(offset, location.Width, code, args));
         }
 
@@ -777,17 +775,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         protected TNode AddErrorToLastToken<TNode>(TNode node, ErrorCode code) where TNode : CSharpSyntaxNode
         {
-            int offset;
-            int width;
-            GetOffsetAndWidthForLastToken(node, out offset, out width);
+            GetOffsetAndWidthForLastToken(node, out int offset, out int width);
             return WithAdditionalDiagnostics(node, MakeError(offset, width, code));
         }
 
         protected TNode AddErrorToLastToken<TNode>(TNode node, ErrorCode code, params object[] args) where TNode : CSharpSyntaxNode
         {
-            int offset;
-            int width;
-            GetOffsetAndWidthForLastToken(node, out offset, out width);
+            GetOffsetAndWidthForLastToken(node, out int offset, out int width);
             return WithAdditionalDiagnostics(node, MakeError(offset, width, code, args));
         }
 

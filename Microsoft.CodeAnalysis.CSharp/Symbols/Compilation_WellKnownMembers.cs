@@ -375,8 +375,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<KeyValuePair<WellKnownMember, TypedConstant>> namedArguments = default,
             bool isOptionalUse = false)
         {
-            UseSiteInfo<AssemblySymbol> info;
-            var ctorSymbol = (MethodSymbol)Binder.GetWellKnownTypeMember(this, constructor, out info, isOptional: true);
+            var ctorSymbol = (MethodSymbol)Binder.GetWellKnownTypeMember(this, constructor, out UseSiteInfo<AssemblySymbol> info, isOptional: true);
 
             if ((object)ctorSymbol == null)
             {
@@ -436,10 +435,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal SynthesizedAttributeData? SynthesizeDecimalConstantAttribute(decimal value)
         {
-            bool isNegative;
-            byte scale;
-            uint low, mid, high;
-            value.GetBits(out isNegative, out scale, out low, out mid, out high);
+            value.GetBits(out bool isNegative, out byte scale, out uint low, out uint mid, out uint high);
             var systemByte = GetSpecialType(SpecialType.System_Byte);
 
             var systemUnit32 = GetSpecialType(SpecialType.System_UInt32);

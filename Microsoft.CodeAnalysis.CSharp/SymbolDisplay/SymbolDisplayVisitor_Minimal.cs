@@ -263,8 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 format.MiscellaneousOptions.IncludesOption(SymbolDisplayMiscellaneousOptions.RemoveAttributeSuffix) &&
                 semanticModelOpt.Compilation.IsAttributeType(symbol))
             {
-                string nameWithoutAttributeSuffix;
-                if (symbolName.TryGetWithoutAttributeSuffix(out nameWithoutAttributeSuffix))
+                if (symbolName.TryGetWithoutAttributeSuffix(out string nameWithoutAttributeSuffix))
                 {
                     var token = SyntaxFactory.ParseToken(nameWithoutAttributeSuffix);
                     if (token.IsKind(SyntaxKind.IdentifierToken))
@@ -306,8 +305,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private IAliasSymbol GetAliasSymbol(INamespaceOrTypeSymbol symbol)
         {
-            IAliasSymbol result;
-            return AliasMap.TryGetValue(symbol, out result) ? result : null;
+            return AliasMap.TryGetValue(symbol, out IAliasSymbol result) ? result : null;
         }
     }
 }

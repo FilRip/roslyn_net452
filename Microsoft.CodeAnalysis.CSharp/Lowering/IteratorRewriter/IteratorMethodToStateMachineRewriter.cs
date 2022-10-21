@@ -85,9 +85,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ///////////////////////////////////
 
             F.CurrentFunction = moveNextMethod;
-            int initialState;
-            GeneratedLabelSymbol initialLabel;
-            AddState(out initialState, out initialLabel);
+            AddState(out int initialState, out GeneratedLabelSymbol initialLabel);
             var newBody = (BoundStatement)Visit(body);
 
             // switch(cachedState) {
@@ -319,9 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //     <next_state_label>: ;
             //     <hidden sequence point>
             //     this.state = finalizeState;
-            int stateNumber;
-            GeneratedLabelSymbol resumeLabel;
-            AddState(out stateNumber, out resumeLabel);
+            AddState(out int stateNumber, out GeneratedLabelSymbol resumeLabel);
             _currentFinallyFrame.AddState(stateNumber);
 
             var rewrittenExpression = (BoundExpression)Visit(node.Expression);

@@ -444,8 +444,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
                 else
                 {
-                    bool isVar;
-                    type = binder.BindTypeOrVarKeyword(typeSyntax, diagnostics, out isVar);
+                    type = binder.BindTypeOrVarKeyword(typeSyntax, diagnostics, out bool isVar);
 
 
                     if (isVar)

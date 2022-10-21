@@ -12,7 +12,9 @@ namespace Microsoft.CodeAnalysis
     /// </summary>
     public readonly struct DeclarationInfo
     {
+#nullable enable
         public DeclarationInfo(SyntaxNode declaredNode, ImmutableArray<SyntaxNode> executableCodeBlocks, ISymbol? declaredSymbol)
+#nullable restore
         {
             Debug.Assert(declaredNode != null);
             Debug.Assert(!executableCodeBlocks.IsDefault);
@@ -39,6 +41,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Symbol declared by this declaration.
         /// </summary>
+#nullable enable
         public ISymbol? DeclaredSymbol { get; }
     }
 }

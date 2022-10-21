@@ -110,8 +110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 AnonymousTypeTemplateSymbol anonymousType = (AnonymousTypeTemplateSymbol)this.ContainingType;
 
                 //  local
-                BoundAssignmentOperator assignmentToTemp;
-                BoundLocal boundLocal = F.StoreToTemp(F.As(F.Parameter(_parameters[0]), anonymousType), out assignmentToTemp);
+                BoundLocal boundLocal = F.StoreToTemp(F.As(F.Parameter(_parameters[0]), anonymousType), out BoundAssignmentOperator assignmentToTemp);
 
                 //  Generate: statement <= 'local = value as $anonymous$'
                 BoundStatement assignment = F.ExpressionStatement(assignmentToTemp);

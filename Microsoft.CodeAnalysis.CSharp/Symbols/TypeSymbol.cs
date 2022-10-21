@@ -878,15 +878,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (seenTypeDeclaringInterface)
                 {
                     //pass 2: check for implicit impls (name must match)
-                    Symbol currTypeImplicitImpl;
-                    Symbol currTypeCloseMismatch;
 
                     FindPotentialImplicitImplementationMemberDeclaredInType(
                         interfaceMember,
                         implementingTypeIsFromSomeCompilation,
                         currType,
-                        out currTypeImplicitImpl,
-                        out currTypeCloseMismatch);
+                        out Symbol currTypeImplicitImpl,
+                        out Symbol currTypeCloseMismatch);
 
                     if ((object)currTypeImplicitImpl != null)
                     {
@@ -1391,11 +1389,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             (MethodSymbol interfaceAccessor1, MethodSymbol interfaceAccessor2) = GetImplementableAccessors(interfaceMember);
 
-            Symbol associated1;
-            Symbol associated2;
 
-            if (TryGetExplicitImplementationAssociatedPropertyOrEvent(interfaceAccessor1, currType, out associated1) |  // NB: not ||
-                TryGetExplicitImplementationAssociatedPropertyOrEvent(interfaceAccessor2, currType, out associated2))
+            if (TryGetExplicitImplementationAssociatedPropertyOrEvent(interfaceAccessor1, currType, out Symbol associated1) |  // NB: not ||
+                TryGetExplicitImplementationAssociatedPropertyOrEvent(interfaceAccessor2, currType, out Symbol associated2))
             {
                 // If there's more than one associated property/event, don't do anything special - just let the algorithm
                 // fail in the usual way.

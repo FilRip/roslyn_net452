@@ -1,9 +1,3 @@
-// Decompiled with JetBrains decompiler
-// Type: Microsoft.CodeAnalysis.CommandLine.BuildServerConnection
-// Assembly: vbc, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-// MVID: 59BA59CE-D1C9-469A-AF98-699E22DB28ED
-// Assembly location: C:\Code\Libs\Compilateurs\Work\Compilateur.NET\vbc.exe
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,8 +12,8 @@ using System.Threading.Tasks;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class BuildServerConnection
@@ -258,20 +252,20 @@ namespace Microsoft.CodeAnalysis.CommandLine
           string pipeName,
           ICompilerServerLogger logger)
         {
-            (string processFilePath, string commandLineArguments, string toolFilePath) serverProcessInfo = BuildServerConnection.GetServerProcessInfo(clientDir, pipeName);
-            if (!File.Exists(serverProcessInfo.toolFilePath))
+            (string processFilePath, string commandLineArguments, string toolFilePath) = GetServerProcessInfo(clientDir, pipeName);
+            if (!File.Exists(toolFilePath))
                 return false;
             if (PlatformInformation.IsWindows)
             {
-                STARTUPINFO lpStartupInfo = new STARTUPINFO();
+                STARTUPINFO lpStartupInfo = new();
                 lpStartupInfo.cb = Marshal.SizeOf<STARTUPINFO>(lpStartupInfo);
                 lpStartupInfo.hStdError = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.hStdInput = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.hStdOutput = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.dwFlags = 256;
                 uint dwCreationFlags = 134217760;
-                logger.Log("Attempting to create process '{0}'", (object)serverProcessInfo.processFilePath);
-                bool process = NativeMethods.CreateProcess(null, new StringBuilder("\"" + serverProcessInfo.processFilePath + "\" " + serverProcessInfo.commandLineArguments), NativeMethods.NullPtr, NativeMethods.NullPtr, false, dwCreationFlags, NativeMethods.NullPtr, clientDir, ref lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
+                logger.Log("Attempting to create process '{0}'", (object)processFilePath);
+                bool process = NativeMethods.CreateProcess(null, new StringBuilder("\"" + processFilePath + "\" " + commandLineArguments), NativeMethods.NullPtr, NativeMethods.NullPtr, false, dwCreationFlags, NativeMethods.NullPtr, clientDir, ref lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
                 if (process)
                 {
                     logger.Log("Successfully created process with process id {0}", (object)lpProcessInformation.dwProcessId);
@@ -286,8 +280,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
             {
                 Process.Start(new ProcessStartInfo()
                 {
-                    FileName = serverProcessInfo.processFilePath,
-                    Arguments = serverProcessInfo.commandLineArguments,
+                    FileName = processFilePath,
+                    Arguments = commandLineArguments,
                     UseShellExecute = false,
                     WorkingDirectory = clientDir,
                     RedirectStandardInput = true,
@@ -316,8 +310,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
         {
             compilerExeDirectory = compilerExeDirectory.TrimEnd(Path.DirectorySeparatorChar);
             string s = string.Format("{0}.{1}.{2}", userName, isAdmin, compilerExeDirectory);
-            using (SHA256 shA256 = SHA256.Create())
-                return Convert.ToBase64String(shA256.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("/", "_").Replace("=", string.Empty);
+            using SHA256 shA256 = SHA256.Create();
+            return Convert.ToBase64String(shA256.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("/", "_").Replace("=", string.Empty);
         }
 
         internal static bool WasServerMutexOpen(string mutexName)

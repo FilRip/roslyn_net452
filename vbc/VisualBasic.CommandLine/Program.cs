@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Microsoft.CodeAnalysis.VisualBasic.CommandLine.Program
-// Assembly: vbc, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-// MVID: 59BA59CE-D1C9-469A-AF98-699E22DB28ED
-// Assembly location: C:\Code\Libs\Compilateurs\Work\Compilateur.NET\vbc.exe
-
-using System;
+﻿using System;
 using System.IO;
 
 using Microsoft.CodeAnalysis.CommandLine;
@@ -29,8 +23,8 @@ namespace Microsoft.CodeAnalysis.VisualBasic.CommandLine
         private static int MainCore(string[] args)
         {
             Guid guid = Guid.NewGuid();
-            using (CompilerServerLogger logger = new CompilerServerLogger(string.Format("vbc {0}", guid)))
-                return BuildClient.Run(args, RequestLanguage.VisualBasicCompile, new CompileFunc(Vbc.Run), logger, new Guid?(guid));
+            using CompilerServerLogger logger = new(string.Format("vbc {0}", guid));
+            return BuildClient.Run(args, RequestLanguage.VisualBasicCompile, new CompileFunc(Vbc.Run), logger, new Guid?(guid));
         }
 
         public static int Run(

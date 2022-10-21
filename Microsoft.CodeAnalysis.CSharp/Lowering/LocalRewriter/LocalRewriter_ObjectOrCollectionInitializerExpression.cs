@@ -156,7 +156,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // We have already lowered each argument, but we may need some additional rewriting for the arguments,
             // such as generating a params array, re-ordering arguments based on argsToParamsOpt map, inserting arguments for optional parameters, etc.
-            ImmutableArray<LocalSymbol> temps;
             var argumentRefKindsOpt = default(ImmutableArray<RefKind>);
             if (addMethod.Parameters[0].RefKind == RefKind.Ref)
             {
@@ -168,7 +167,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 argumentRefKindsOpt = builder.ToImmutableAndFree();
             }
 
-            rewrittenArguments = MakeArguments(syntax, rewrittenArguments, addMethod, initializer.Expanded, initializer.ArgsToParamsOpt, ref argumentRefKindsOpt, out temps, enableCallerInfo: ThreeState.True);
+            rewrittenArguments = MakeArguments(syntax, rewrittenArguments, addMethod, initializer.Expanded, initializer.ArgsToParamsOpt, ref argumentRefKindsOpt, out ImmutableArray<LocalSymbol> temps, enableCallerInfo: ThreeState.True);
 
             if (initializer.InvokedAsExtensionMethod)
             {
@@ -350,8 +349,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         if (CanChangeValueBetweenReads(rewrittenIndex))
                         {
-                            BoundAssignmentOperator store;
-                            var temp = _factory.StoreToTemp(rewrittenIndex, out store);
+                            var temp = _factory.StoreToTemp(rewrittenIndex, out BoundAssignmentOperator store);
                             rewrittenIndex = temp;
 
                             if (temps == null)
@@ -404,8 +402,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     RefKind refKind = paramRefKindsOpt.RefKinds(i);
 
-                    BoundAssignmentOperator store;
-                    var temp = _factory.StoreToTemp(arg, out store, refKind);
+                    var temp = _factory.StoreToTemp(arg, out BoundAssignmentOperator store, refKind);
                     newArgs.Add(temp);
 
                     if (temps == null)

@@ -94,8 +94,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Consult the cache.
-            bool result;
-            if (Cache.TryGetValue(nts, out result))
+            if (Cache.TryGetValue(nts, out bool result))
             {
                 return result;
             }

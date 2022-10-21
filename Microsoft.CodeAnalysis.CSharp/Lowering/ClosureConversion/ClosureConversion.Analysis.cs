@@ -522,8 +522,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
 
                 DebugId closureId;
-                DebugId previousClosureId;
-                if (_slotAllocatorOpt != null && _slotAllocatorOpt.TryGetPreviousClosure(syntax, out previousClosureId))
+                if (_slotAllocatorOpt != null && _slotAllocatorOpt.TryGetPreviousClosure(syntax, out DebugId previousClosureId))
                 {
                     closureId = previousClosureId;
                 }

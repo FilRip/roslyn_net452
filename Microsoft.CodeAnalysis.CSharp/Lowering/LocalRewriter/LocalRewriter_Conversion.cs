@@ -654,8 +654,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var srcElementFields = tupleTypeSymbol.TupleElements;
             var fieldAccessorsBuilder = ArrayBuilder<BoundExpression>.GetInstance(numElements);
 
-            BoundAssignmentOperator assignmentToTemp;
-            var savedTuple = _factory.StoreToTemp(rewrittenOperand, out assignmentToTemp);
+            var savedTuple = _factory.StoreToTemp(rewrittenOperand, out BoundAssignmentOperator assignmentToTemp);
             var elementConversions = conversion.UnderlyingConversions;
 
             for (int i = 0; i < numElements; i++)
@@ -842,11 +841,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // S? temp = s;
             // temp.HasValue ? new T?((T)temp.GetValueOrDefault()) : default(T?)
 
-            BoundAssignmentOperator tempAssignment;
-            var boundTemp = _factory.StoreToTemp(operand, out tempAssignment);
-            MethodSymbol getValueOrDefault;
+            var boundTemp = _factory.StoreToTemp(operand, out BoundAssignmentOperator tempAssignment);
 
-            if (!TryGetNullableMethod(syntax, boundTemp.Type, SpecialMember.System_Nullable_T_GetValueOrDefault, out getValueOrDefault))
+            if (!TryGetNullableMethod(syntax, boundTemp.Type, SpecialMember.System_Nullable_T_GetValueOrDefault, out MethodSymbol getValueOrDefault))
             {
                 return BadExpression(syntax, type, operand);
             }
@@ -1081,8 +1078,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // temp = operand
             // temp.HasValue ? op_Whatever(temp.GetValueOrDefault()) : default(P)
 
-            BoundAssignmentOperator tempAssignment;
-            BoundLocal boundTemp = _factory.StoreToTemp(rewrittenOperand, out tempAssignment);
+            BoundLocal boundTemp = _factory.StoreToTemp(rewrittenOperand, out BoundAssignmentOperator tempAssignment);
             MethodSymbol getValueOrDefault = UnsafeGetNullableMethod(syntax, boundTemp.Type, SpecialMember.System_Nullable_T_GetValueOrDefault);
 
             // temp.HasValue
@@ -1135,9 +1131,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol target = rewrittenType;
 
             SpecialMember member = GetIntPtrConversionMethod(source: source, target: rewrittenType);
-            MethodSymbol method;
 
-            if (!TryGetSpecialTypeMethod(syntax, member, out method))
+            if (!TryGetSpecialTypeMethod(syntax, member, out MethodSymbol method))
             {
                 return BadExpression(syntax, rewrittenType, rewrittenOperand);
             }
@@ -1417,8 +1412,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case ConversionKind.IntPtr:
                     {
                         SpecialMember member = GetIntPtrConversionMethod(fromType, toType);
-                        MethodSymbol method;
-                        if (!TryGetSpecialTypeMethod(syntax, member, out method))
+                        if (!TryGetSpecialTypeMethod(syntax, member, out MethodSymbol method))
                         {
                             return Conversion.NoConversion;
                         }
@@ -1431,8 +1425,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (fromType.SpecialType == SpecialType.System_Decimal || toType.SpecialType == SpecialType.System_Decimal)
                     {
                         SpecialMember member = DecimalConversionMethod(fromType, toType);
-                        MethodSymbol method;
-                        if (!TryGetSpecialTypeMethod(syntax, member, out method))
+                        if (!TryGetSpecialTypeMethod(syntax, member, out MethodSymbol method))
                         {
                             return Conversion.NoConversion;
                         }
@@ -1447,8 +1440,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var underlying = toType.GetEnumUnderlyingType();
                         SpecialMember member = DecimalConversionMethod(fromType, underlying);
-                        MethodSymbol method;
-                        if (!TryGetSpecialTypeMethod(syntax, member, out method))
+                        if (!TryGetSpecialTypeMethod(syntax, member, out MethodSymbol method))
                         {
                             return Conversion.NoConversion;
                         }
@@ -1459,8 +1451,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var underlying = fromType.GetEnumUnderlyingType();
                         SpecialMember member = DecimalConversionMethod(underlying, toType);
-                        MethodSymbol method;
-                        if (!TryGetSpecialTypeMethod(syntax, member, out method))
+                        if (!TryGetSpecialTypeMethod(syntax, member, out MethodSymbol method))
                         {
                             return Conversion.NoConversion;
                         }

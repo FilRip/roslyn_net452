@@ -598,8 +598,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private CSharpAttributeData EarlyDecodeAttributeForDefaultParameterValue(AttributeDescription description, ref EarlyDecodeWellKnownAttributeArguments<EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation> arguments)
         {
-            bool hasAnyDiagnostics;
-            var attribute = arguments.Binder.GetAttribute(arguments.AttributeSyntax, arguments.AttributeType, out hasAnyDiagnostics);
+            var attribute = arguments.Binder.GetAttribute(arguments.AttributeSyntax, arguments.AttributeType, out bool hasAnyDiagnostics);
             ConstantValue value;
             if (attribute.HasErrors)
             {

@@ -27,8 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             const MethodKind methodKind = MethodKind.Destructor;
             Location location = this.Locations[0];
 
-            bool modifierErrors;
-            var declarationModifiers = MakeModifiers(syntax.Modifiers, location, diagnostics, out modifierErrors);
+            var declarationModifiers = MakeModifiers(syntax.Modifiers, location, diagnostics, out bool modifierErrors);
             this.MakeFlags(methodKind, declarationModifiers, returnsVoid: true, isExtensionMethod: false, isNullableAnalysisEnabled: isNullableAnalysisEnabled);
 
             if (syntax.Identifier.ValueText != containingType.Name)

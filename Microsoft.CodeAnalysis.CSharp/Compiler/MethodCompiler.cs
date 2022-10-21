@@ -254,7 +254,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 VariableSlotAllocator lazyVariableSlotAllocator = null;
                 var lambdaDebugInfoBuilder = ArrayBuilder<LambdaDebugInfo>.GetInstance();
                 var closureDebugInfoBuilder = ArrayBuilder<ClosureDebugInfo>.GetInstance();
-                StateMachineTypeSymbol stateMachineTypeOpt = null;
                 const int methodOrdinal = -1;
 
                 var loweredBody = LowerBodyOrInitializer(
@@ -270,7 +269,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     ref lazyVariableSlotAllocator,
                     lambdaDebugInfoBuilder,
                     closureDebugInfoBuilder,
-                    out stateMachineTypeOpt);
+                    out StateMachineTypeSymbol stateMachineTypeOpt);
 
 
                 lambdaDebugInfoBuilder.Free();
@@ -309,8 +308,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return;
             }
 
-            Task curTask;
-            while (tasks.TryPop(out curTask))
+            while (tasks.TryPop(out Task curTask))
             {
                 curTask.GetAwaiter().GetResult();
             }
@@ -700,14 +698,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                     try
                     {
                         // Local functions can be iterators as well as be async (lambdas can only be async), so we need to lower both iterators and async
-                        IteratorStateMachine iteratorStateMachine;
-                        BoundStatement loweredBody = IteratorRewriter.Rewrite(methodWithBody.Body, method, methodOrdinal, variableSlotAllocatorOpt, compilationState, diagnosticsThisMethod, out iteratorStateMachine);
+                        BoundStatement loweredBody = IteratorRewriter.Rewrite(methodWithBody.Body, method, methodOrdinal, variableSlotAllocatorOpt, compilationState, diagnosticsThisMethod, out IteratorStateMachine iteratorStateMachine);
                         StateMachineTypeSymbol stateMachine = iteratorStateMachine;
 
                         if (!loweredBody.HasErrors)
                         {
-                            AsyncStateMachine asyncStateMachine;
-                            loweredBody = AsyncRewriter.Rewrite(loweredBody, method, methodOrdinal, variableSlotAllocatorOpt, compilationState, diagnosticsThisMethod, out asyncStateMachine);
+                            loweredBody = AsyncRewriter.Rewrite(loweredBody, method, methodOrdinal, variableSlotAllocatorOpt, compilationState, diagnosticsThisMethod, out AsyncStateMachine asyncStateMachine);
 
                             stateMachine = stateMachine ?? asyncStateMachine;
                         }
@@ -888,8 +884,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if ((object)sourceMethod != null)
                 {
-                    bool diagsWritten;
-                    sourceMethod.SetDiagnostics(ImmutableArray<Diagnostic>.Empty, out diagsWritten);
+                    sourceMethod.SetDiagnostics(ImmutableArray<Diagnostic>.Empty, out bool diagsWritten);
                     if (diagsWritten && !methodSymbol.IsImplicitlyDeclared && _compilation.EventQueue != null)
                     {
                         _compilation.SymbolDeclaredEvent(methodSymbol);
@@ -1171,7 +1166,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                             {
                                 // For dynamic analysis, field initializers are instrumented as part of constructors,
                                 // and so are never instrumented here.
-                                StateMachineTypeSymbol initializerStateMachineTypeOpt;
 
                                 BoundStatement lowered = LowerBodyOrInitializer(
                                     methodSymbol,
@@ -1186,7 +1180,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     ref lazyVariableSlotAllocator,
                                     lambdaDebugInfoBuilder,
                                     closureDebugInfoBuilder,
-                                    out initializerStateMachineTypeOpt);
+                                    out StateMachineTypeSymbol initializerStateMachineTypeOpt);
 
                                 processedInitializers.LoweredInitializers = lowered;
 

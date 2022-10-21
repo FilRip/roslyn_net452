@@ -349,14 +349,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                bool wasError;
                 var plainName = node.Identifier.ValueText;
                 var result = LookupResult.GetInstance();
                 CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
                 this.LookupSymbolsWithFallback(result, plainName, 0, ref useSiteInfo, null, LookupOptions.NamespaceAliasesOnly);
                 diagnostics.Add(node, useSiteInfo);
 
-                Symbol bindingResult = ResultSymbol(result, plainName, 0, node, diagnostics, false, out wasError, qualifierOpt: null, options: LookupOptions.NamespaceAliasesOnly);
+                Symbol bindingResult = ResultSymbol(result, plainName, 0, node, diagnostics, false, out bool wasError, qualifierOpt: null, options: LookupOptions.NamespaceAliasesOnly);
                 result.Free();
 
                 return bindingResult;
@@ -898,9 +897,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (bindingResult is null)
             {
-                bool wasError;
 
-                bindingResult = ResultSymbol(result, identifierValueText, 0, node, diagnostics, suppressUseSiteDiagnostics, out wasError, qualifierOpt, options);
+                bindingResult = ResultSymbol(result, identifierValueText, 0, node, diagnostics, suppressUseSiteDiagnostics, out bool wasError, qualifierOpt, options);
                 if (bindingResult.Kind == SymbolKind.Alias)
                 {
                     var aliasTarget = ((AliasSymbol)bindingResult).GetAliasTarget(basesBeingResolved);
@@ -1024,8 +1022,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (symbol.IsAlias)
             {
-                AliasSymbol discarded;
-                return NamespaceOrTypeOrAliasSymbolWithAnnotations.CreateUnannotated(symbol.IsNullableEnabled, (NamespaceOrTypeSymbol)UnwrapAlias(symbol.Symbol, out discarded, diagnostics, syntax, basesBeingResolved));
+                return NamespaceOrTypeOrAliasSymbolWithAnnotations.CreateUnannotated(symbol.IsNullableEnabled, (NamespaceOrTypeSymbol)UnwrapAlias(symbol.Symbol, out AliasSymbol discarded, diagnostics, syntax, basesBeingResolved));
             }
 
             return symbol;
@@ -1044,8 +1041,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private Symbol UnwrapAlias(Symbol symbol, BindingDiagnosticBag diagnostics, SyntaxNode syntax, ConsList<TypeSymbol> basesBeingResolved = null)
         {
-            AliasSymbol discarded;
-            return UnwrapAlias(symbol, out discarded, diagnostics, syntax, basesBeingResolved);
+            return UnwrapAlias(symbol, out AliasSymbol discarded, diagnostics, syntax, basesBeingResolved);
         }
 
         private Symbol UnwrapAlias(Symbol symbol, out AliasSymbol alias, BindingDiagnosticBag diagnostics, SyntaxNode syntax, ConsList<TypeSymbol> basesBeingResolved = null)
@@ -1209,8 +1205,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             this.LookupSymbolsSimpleName(lookupResult, qualifierOpt, plainName, arity, basesBeingResolved, options, diagnose: true, useSiteInfo: ref useSiteInfo);
             diagnostics.Add(node, useSiteInfo);
 
-            bool wasError;
-            Symbol lookupResultSymbol = ResultSymbol(lookupResult, plainName, arity, node, diagnostics, (basesBeingResolved != null), out wasError, qualifierOpt, options);
+            Symbol lookupResultSymbol = ResultSymbol(lookupResult, plainName, arity, node, diagnostics, (basesBeingResolved != null), out bool wasError, qualifierOpt, options);
 
             // As we said in the method above, there are three cases here:
             //
@@ -1472,8 +1467,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal Symbol GetSpecialTypeMember(SpecialMember member, BindingDiagnosticBag diagnostics, SyntaxNode syntax)
         {
-            Symbol memberSymbol;
-            return TryGetSpecialTypeMember(this.Compilation, member, syntax, diagnostics, out memberSymbol)
+            return TryGetSpecialTypeMember(this.Compilation, member, syntax, diagnostics, out Symbol memberSymbol)
                 ? memberSymbol
                 : null;
         }
@@ -1592,8 +1586,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal static Symbol GetWellKnownTypeMember(CSharpCompilation compilation, WellKnownMember member, BindingDiagnosticBag diagnostics, Location location = null, SyntaxNode syntax = null, bool isOptional = false)
         {
 
-            UseSiteInfo<AssemblySymbol> useSiteInfo;
-            Symbol memberSymbol = GetWellKnownTypeMember(compilation, member, out useSiteInfo, isOptional);
+            Symbol memberSymbol = GetWellKnownTypeMember(compilation, member, out UseSiteInfo<AssemblySymbol> useSiteInfo, isOptional);
             diagnostics.Add(useSiteInfo, location ?? syntax.Location);
             return memberSymbol;
         }
@@ -1724,8 +1717,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             symbols[i] = UnwrapAlias(symbols[i], diagnostics, where);
                         }
 
-                        BestSymbolInfo secondBest;
-                        BestSymbolInfo best = GetBestSymbolInfo(symbols, out secondBest);
+                        BestSymbolInfo best = GetBestSymbolInfo(symbols, out BestSymbolInfo secondBest);
 
 
                         if (best.IsFromCompilation && !secondBest.IsFromCompilation)

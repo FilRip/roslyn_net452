@@ -191,8 +191,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override ITypeSymbolInternal? TryGetStateMachineType(EntityHandle methodHandle)
         {
-            string typeName;
-            if (_metadataDecoder.Module.HasStringValuedAttribute(methodHandle, AttributeDescription.AsyncStateMachineAttribute, out typeName) ||
+            if (_metadataDecoder.Module.HasStringValuedAttribute(methodHandle, AttributeDescription.AsyncStateMachineAttribute, out string typeName) ||
                 _metadataDecoder.Module.HasStringValuedAttribute(methodHandle, AttributeDescription.IteratorStateMachineAttribute, out typeName))
             {
                 return _metadataDecoder.GetTypeSymbolForSerializedType(typeName);

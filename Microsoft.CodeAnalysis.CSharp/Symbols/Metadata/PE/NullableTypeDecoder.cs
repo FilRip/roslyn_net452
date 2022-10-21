@@ -29,9 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             _ = AccessCheck.IsEffectivelyPublicOrInternal(accessSymbol, out _);
 #endif
 
-            byte defaultTransformFlag;
-            ImmutableArray<byte> nullableTransformFlags;
-            if (!containingModule.Module.HasNullableAttribute(targetSymbolToken, out defaultTransformFlag, out nullableTransformFlags))
+            if (!containingModule.Module.HasNullableAttribute(targetSymbolToken, out byte defaultTransformFlag, out ImmutableArray<byte> nullableTransformFlags))
             {
                 byte? value = nullableContext.GetNullableContextValue();
                 if (value == null)
@@ -57,8 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
 
             int position = 0;
-            TypeWithAnnotations result;
-            if (metadataType.ApplyNullableTransforms(defaultTransformFlag, nullableTransformFlags, ref position, out result) &&
+            if (metadataType.ApplyNullableTransforms(defaultTransformFlag, nullableTransformFlags, ref position, out TypeWithAnnotations result) &&
                 (nullableTransformFlags.IsDefault || position == nullableTransformFlags.Length))
             {
                 return result;

@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             }
         }
 
-        private const int MaximumRequestSize = 5242880;
+        //private const int MaximumRequestSize = 5242880;
 
         public readonly Guid RequestId;
 

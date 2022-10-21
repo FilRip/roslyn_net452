@@ -73,8 +73,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _previousSubmissionFieldMap = new Dictionary<ImplicitNamedTypeSymbol, FieldSymbol>();
             }
 
-            FieldSymbol previousSubmissionField;
-            if (!_previousSubmissionFieldMap.TryGetValue(previousSubmissionType, out previousSubmissionField))
+            if (!_previousSubmissionFieldMap.TryGetValue(previousSubmissionType, out FieldSymbol previousSubmissionField))
             {
                 // TODO: generate better name?
                 previousSubmissionField = new SynthesizedFieldSymbol(

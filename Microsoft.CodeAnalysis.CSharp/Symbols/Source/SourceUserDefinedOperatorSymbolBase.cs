@@ -116,7 +116,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var binder = this.DeclaringCompilation.
                 GetBinderFactory(declarationSyntax.SyntaxTree).GetBinder(returnTypeSyntax, declarationSyntax, this);
 
-            SyntaxToken arglistToken;
 
             var signatureBinder = binder.WithAdditionalFlags(BinderFlags.SuppressConstraintChecks);
 
@@ -124,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 signatureBinder,
                 this,
                 declarationSyntax.ParameterList,
-                out arglistToken,
+                out SyntaxToken arglistToken,
                 allowRefOrOut: true,
                 allowThis: false,
                 addRefReadOnlyModifier: false,

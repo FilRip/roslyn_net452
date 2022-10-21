@@ -1022,9 +1022,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Addendum: Assignment is also allowed for get-only autoprops in their constructor
 
-            BoundExpression receiver;
-            SyntaxNode propertySyntax;
-            var propertySymbol = GetPropertySymbol(expr, out receiver, out propertySyntax);
+            PropertySymbol propertySymbol = GetPropertySymbol(expr, out BoundExpression receiver, out SyntaxNode propertySyntax);
 
 
             if ((RequiresReferenceToLocation(valueKind) || checkingReceiver) &&
@@ -1085,9 +1083,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     var accessThroughType = this.GetAccessThroughType(receiver);
-                    bool failedThroughTypeCheck;
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-                    bool isAccessible = this.IsAccessible(setMethod, accessThroughType, out failedThroughTypeCheck, ref useSiteInfo);
+                    bool isAccessible = this.IsAccessible(setMethod, accessThroughType, out bool failedThroughTypeCheck, ref useSiteInfo);
                     diagnostics.Add(node, useSiteInfo);
 
                     if (!isAccessible)
@@ -1134,9 +1131,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 else
                 {
                     var accessThroughType = this.GetAccessThroughType(receiver);
-                    bool failedThroughTypeCheck;
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-                    bool isAccessible = this.IsAccessible(getMethod, accessThroughType, out failedThroughTypeCheck, ref useSiteInfo);
+                    bool isAccessible = this.IsAccessible(getMethod, accessThroughType, out bool failedThroughTypeCheck, ref useSiteInfo);
                     diagnostics.Add(node, useSiteInfo);
 
                     if (!isAccessible)

@@ -277,8 +277,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                ParameterSymbol thisParameter;
-                if (!TryGetThisParameter(out thisParameter))
+                if (!TryGetThisParameter(out ParameterSymbol thisParameter))
                 {
                     throw ExceptionUtilities.Unreachable;
                 }

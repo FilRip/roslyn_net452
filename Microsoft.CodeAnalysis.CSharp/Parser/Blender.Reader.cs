@@ -81,8 +81,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         // Attempt to take a node or token from the old tree.  If we can't, then
                         // either break down the current node we're looking at to its first child
                         // and try again, or move to the next token.
-                        BlendedNode blendedNode;
-                        if (this.TryTakeOldNodeOrToken(asToken, out blendedNode))
+                        if (this.TryTakeOldNodeOrToken(asToken, out BlendedNode blendedNode))
                         {
                             return blendedNode;
                         }

@@ -318,8 +318,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static ImmutableArray<Symbol> BindCref(CrefSyntax crefSyntax, Binder binder)
         {
-            Symbol unusedAmbiguityWinner;
-            var symbols = binder.BindCref(crefSyntax, out unusedAmbiguityWinner, BindingDiagnosticBag.Discarded);
+            var symbols = binder.BindCref(crefSyntax, out Symbol unusedAmbiguityWinner, BindingDiagnosticBag.Discarded);
             return symbols;
         }
 
@@ -404,8 +403,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return null;
             }
 
-            AliasSymbol aliasOpt; // not needed.
-            NamedTypeSymbol attributeType = (NamedTypeSymbol)binder.BindType(attribute.Name, BindingDiagnosticBag.Discarded, out aliasOpt).Type;
+            // not needed.
+            NamedTypeSymbol attributeType = (NamedTypeSymbol)binder.BindType(attribute.Name, BindingDiagnosticBag.Discarded, out AliasSymbol aliasOpt).Type;
             var boundNode = new ExecutableCodeBinder(attribute, binder.ContainingMemberOrLambda, binder).BindAttribute(attribute, attributeType, BindingDiagnosticBag.Discarded);
 
             return boundNode;
@@ -705,9 +704,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (!CanGetSemanticInfo(expression, isSpeculative: true)) return SymbolInfo.None;
 
-            Binder binder;
-            ImmutableArray<Symbol> crefSymbols;
-            BoundNode boundNode = GetSpeculativelyBoundExpression(position, expression, bindingOption, out binder, out crefSymbols); //calls CheckAndAdjustPosition
+            BoundNode boundNode = GetSpeculativelyBoundExpression(position, expression, bindingOption, out Binder binder, out ImmutableArray<Symbol> crefSymbols); //calls CheckAndAdjustPosition
             if (boundNode == null)
             {
                 return crefSymbols.IsDefault ? SymbolInfo.None : GetCrefSymbolInfo(crefSymbols, SymbolInfoOptions.DefaultOptions, hasParameterList: false);
@@ -734,8 +731,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public SymbolInfo GetSpeculativeSymbolInfo(int position, AttributeSyntax attribute)
         {
 
-            Binder binder;
-            BoundNode boundNode = GetSpeculativelyBoundAttribute(position, attribute, out binder); //calls CheckAndAdjustPosition
+            BoundNode boundNode = GetSpeculativelyBoundAttribute(position, attribute, out Binder binder); //calls CheckAndAdjustPosition
             if (boundNode == null)
                 return SymbolInfo.None;
 
@@ -1024,8 +1020,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return CSharpTypeInfo.None;
             }
 
-            ImmutableArray<Symbol> crefSymbols;
-            BoundNode boundNode = GetSpeculativelyBoundExpression(position, expression, bindingOption, out _, out crefSymbols); //calls CheckAndAdjustPosition
+            BoundNode boundNode = GetSpeculativelyBoundExpression(position, expression, bindingOption, out _, out ImmutableArray<Symbol> crefSymbols); //calls CheckAndAdjustPosition
             if (boundNode == null)
             {
                 return !crefSymbols.IsDefault && crefSymbols.Length == 1
@@ -1169,9 +1164,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// appeared by itself somewhere within the scope that encloses "position".</remarks>
         public IAliasSymbol GetSpeculativeAliasInfo(int position, IdentifierNameSyntax nameSyntax, SpeculativeBindingOption bindingOption)
         {
-            Binder binder;
-            ImmutableArray<Symbol> crefSymbols;
-            BoundNode boundNode = GetSpeculativelyBoundExpression(position, nameSyntax, bindingOption, out binder, out crefSymbols); //calls CheckAndAdjustPosition
+            BoundNode boundNode = GetSpeculativelyBoundExpression(position, nameSyntax, bindingOption, out Binder binder, out ImmutableArray<Symbol> crefSymbols); //calls CheckAndAdjustPosition
             if (boundNode == null)
             {
                 return !crefSymbols.IsDefault && crefSymbols.Length == 1
@@ -1238,8 +1231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected int CheckAndAdjustPosition(int position)
         {
-            SyntaxToken unused;
-            return CheckAndAdjustPosition(position, out unused);
+            return CheckAndAdjustPosition(position, out SyntaxToken unused);
         }
 
         protected int CheckAndAdjustPosition(int position, out SyntaxToken token)
@@ -1538,8 +1530,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             options.ThrowIfInvalid();
 
-            SyntaxToken token;
-            position = CheckAndAdjustPosition(position, out token);
+            position = CheckAndAdjustPosition(position, out SyntaxToken token);
 
             if ((object)container == null || container.Kind == SymbolKind.Namespace)
             {
@@ -1652,10 +1643,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void AppendSymbolsWithName(ArrayBuilder<ISymbol> results, string name, Binder binder, NamespaceOrTypeSymbol container, LookupOptions options, LookupSymbolsInfo info)
         {
-            LookupSymbolsInfo.IArityEnumerable arities;
-            Symbol uniqueSymbol;
 
-            if (info.TryGetAritiesAndUniqueSymbol(name, out arities, out uniqueSymbol))
+            if (info.TryGetAritiesAndUniqueSymbol(name, out AbstractLookupSymbolsInfo<Symbol>.IArityEnumerable arities, out Symbol uniqueSymbol))
             {
                 if ((object)uniqueSymbol != null)
                 {
@@ -1712,8 +1701,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (lookupResult.Symbols.Any(t => t.Kind == SymbolKind.NamedType || t.Kind == SymbolKind.Namespace || t.Kind == SymbolKind.ErrorType))
                 {
                     // binder.ResultSymbol is defined only for type/namespace lookups
-                    bool wasError;
-                    Symbol singleSymbol = binder.ResultSymbol(lookupResult, name, arity, this.Root, BindingDiagnosticBag.Discarded, true, out wasError, container, options);
+                    Symbol singleSymbol = binder.ResultSymbol(lookupResult, name, arity, this.Root, BindingDiagnosticBag.Discarded, true, out bool wasError, container, options);
 
                     if (!wasError)
                     {
@@ -1885,11 +1873,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (highestBoundNode is BoundExpression highestBoundExpr)
             {
-                LookupResultKind highestResultKind;
-                bool highestIsDynamic;
-                ImmutableArray<Symbol> unusedHighestMemberGroup;
                 ImmutableArray<Symbol> highestSymbols = GetSemanticSymbols(
-                    highestBoundExpr, boundNodeForSyntacticParent, binderOpt, options, out highestIsDynamic, out highestResultKind, out unusedHighestMemberGroup);
+                    highestBoundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool highestIsDynamic, out LookupResultKind highestResultKind, out ImmutableArray<Symbol> unusedHighestMemberGroup);
 
                 if ((symbols.Length != 1 || resultKind == LookupResultKind.OverloadResolutionFailure) && highestSymbols.Length > 0)
                 {
@@ -2230,10 +2215,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (lowestBoundNode is BoundExpression boundExpr)
             {
-                LookupResultKind resultKind;
-                ImmutableArray<Symbol> memberGroup;
-                bool isDynamic;
-                GetSemanticSymbols(boundExpr, boundNodeForSyntacticParent, binderOpt, options, out isDynamic, out resultKind, out memberGroup);
+                GetSemanticSymbols(boundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool isDynamic, out LookupResultKind resultKind, out ImmutableArray<Symbol> memberGroup);
 
                 return memberGroup;
             }
@@ -2674,8 +2656,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            AliasSymbol aliasOpt;
-            var attributeType = (NamedTypeSymbol)binder.BindType(attribute.Name, BindingDiagnosticBag.Discarded, out aliasOpt).Type;
+            var attributeType = (NamedTypeSymbol)binder.BindType(attribute.Name, BindingDiagnosticBag.Discarded, out AliasSymbol aliasOpt).Type;
             speculativeModel = ((SyntaxTreeSemanticModel)this).CreateSpeculativeAttributeSemanticModel(position, attribute, binder, aliasOpt, attributeType);
             return true;
         }

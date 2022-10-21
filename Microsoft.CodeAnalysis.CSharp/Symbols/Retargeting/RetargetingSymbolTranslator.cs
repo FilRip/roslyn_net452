@@ -176,8 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     newTypeSymbol = newTypeSymbol.AsDynamicIfNoPia(asDynamicIfNoPiaContainingType);
                 }
 
-                bool modifiersHaveChanged;
-                var newModifiers = RetargetModifiers(underlyingType.CustomModifiers, out modifiersHaveChanged);
+                var newModifiers = RetargetModifiers(underlyingType.CustomModifiers, out bool modifiersHaveChanged);
 
                 if (modifiersHaveChanged || !TypeSymbol.Equals(underlyingType.Type, newTypeSymbol, TypeCompareKind.ConsiderEverything2))
                 {
@@ -247,9 +246,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 }
 
                 // Does this type come from one of the retargeted assemblies?
-                DestinationData destination;
 
-                if (!this.RetargetingAssemblyMap.TryGetValue(retargetFrom, out destination))
+                if (!this.RetargetingAssemblyMap.TryGetValue(retargetFrom, out DestinationData destination))
                 {
                     // No need to retarget
                     return type;
@@ -293,10 +291,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
             private NamedTypeSymbol RetargetNoPiaLocalType(NamedTypeSymbol type)
             {
-                NamedTypeSymbol cached;
 
                 var map = this.RetargetingAssembly.NoPiaUnificationMap;
-                if (map.TryGetValue(type, out cached))
+                if (map.TryGetValue(type, out NamedTypeSymbol cached))
                 {
                     return cached;
                 }
@@ -379,9 +376,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
             private static NamedTypeSymbol RetargetNamedTypeDefinition(PENamedTypeSymbol type, PEModuleSymbol addedModule)
             {
-                TypeSymbol cached;
 
-                if (addedModule.TypeHandleToTypeMap.TryGetValue(type.Handle, out cached))
+                if (addedModule.TypeHandleToTypeMap.TryGetValue(type.Handle, out TypeSymbol cached))
                 {
                     return (NamedTypeSymbol)cached;
                 }
@@ -416,9 +412,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 ref DestinationData destination,
                 NamedTypeSymbol type)
             {
-                NamedTypeSymbol result;
 
-                if (!destination.SymbolMap.TryGetValue(type, out result))
+                if (!destination.SymbolMap.TryGetValue(type, out NamedTypeSymbol result))
                 {
                     // Lookup by name as a TypeRef.
                     NamedTypeSymbol containingType = type.ContainingType;
@@ -1074,8 +1069,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             {
                 if (lazyCustomModifiers.IsDefault)
                 {
-                    bool modifiersHaveChanged;
-                    ImmutableArray<CustomModifier> newModifiers = this.RetargetModifiers(oldModifiers, out modifiersHaveChanged);
+                    ImmutableArray<CustomModifier> newModifiers = this.RetargetModifiers(oldModifiers, out bool modifiersHaveChanged);
                     ImmutableInterlocked.InterlockedCompareExchange(ref lazyCustomModifiers, newModifiers, default);
                 }
 

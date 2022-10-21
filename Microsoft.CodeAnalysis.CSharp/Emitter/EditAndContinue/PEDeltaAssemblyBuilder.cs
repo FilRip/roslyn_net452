@@ -16,6 +16,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
     internal sealed class PEDeltaAssemblyBuilder : PEAssemblyBuilderBase, IPEDeltaAssemblyBuilder
@@ -105,8 +107,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             // We need to transfer the references from the current source compilation but don't need its syntax trees.
             var metadataCompilation = compilation.RemoveAllSyntaxTrees();
 
-            ImmutableDictionary<AssemblyIdentity, AssemblyIdentity> assemblyReferenceIdentityMap;
-            var metadataAssembly = metadataCompilation.GetBoundReferenceManager().CreatePEAssemblyForAssemblyMetadata(AssemblyMetadata.Create(originalMetadata), MetadataImportOptions.All, out assemblyReferenceIdentityMap);
+            var metadataAssembly = metadataCompilation.GetBoundReferenceManager().CreatePEAssemblyForAssemblyMetadata(AssemblyMetadata.Create(originalMetadata), MetadataImportOptions.All, out ImmutableDictionary<AssemblyIdentity, AssemblyIdentity> assemblyReferenceIdentityMap);
             var metadataDecoder = new MetadataDecoder(metadataAssembly.PrimaryModule);
             var metadataAnonymousTypes = GetAnonymousTypeMapFromMetadata(originalMetadata.MetadataReader, metadataDecoder);
             var metadataSymbols = new EmitBaseline.MetadataSymbols(metadataAnonymousTypes, metadataDecoder, assemblyReferenceIdentityMap);
@@ -130,10 +131,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     continue;
                 }
                 var metadataName = reader.GetString(def.Name);
-                short arity;
-                var name = MetadataHelpers.InferTypeArityAndUnmangleMetadataName(metadataName, out arity);
-                int index;
-                if (GeneratedNames.TryParseAnonymousTypeTemplateName(name, out index))
+                var name = MetadataHelpers.InferTypeArityAndUnmangleMetadataName(metadataName, out short arity);
+                if (GeneratedNames.TryParseAnonymousTypeTemplateName(name, out int index))
                 {
                     var builder = ArrayBuilder<AnonymousTypeKeyField>.GetInstance();
                     if (TryGetAnonymousTypeKey(reader, def, builder))
@@ -157,8 +156,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             foreach (var typeParameterHandle in def.GetGenericParameters())
             {
                 var typeParameter = reader.GetGenericParameter(typeParameterHandle);
-                string fieldName;
-                if (!GeneratedNames.TryParseAnonymousTypeParameterName(reader.GetString(typeParameter.Name), out fieldName))
+                if (!GeneratedNames.TryParseAnonymousTypeParameterName(reader.GetString(typeParameter.Name), out string fieldName))
                 {
                     return false;
                 }

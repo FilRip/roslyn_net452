@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             { }
         }
 
-        protected override LocalFunctionState CreateLocalFunctionState(LocalFunctionSymbol symbol) => new LocalFunctionState(UnreachableState());
+        protected override LocalFunctionState CreateLocalFunctionState(LocalFunctionSymbol symbol) => new(UnreachableState());
 
         protected override bool Meet(ref LocalState self, ref LocalState other)
         {
@@ -183,7 +183,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns></returns>
         protected bool Analyze(ref bool badRegion, DiagnosticBag diagnostics)
         {
-            ImmutableArray<PendingBranch> returns = Analyze(ref badRegion);
+            Analyze(ref badRegion);
 
             if (diagnostics != null)
             {
@@ -335,9 +335,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             var sourceStart = sourceLocation.SourceSpan.Start;
             var targetStart = node.Label.Locations[0].SourceSpan.Start;
 
-            foreach (var usingDecl in _usingDeclarations)
+            foreach (var (symbol, block) in _usingDeclarations)
             {
-                var usingStart = usingDecl.symbol.Locations[0].SourceSpan.Start;
+                var usingStart = symbol.Locations[0].SourceSpan.Start;
                 if (sourceStart < usingStart && targetStart > usingStart)
                 {
                     // No forward jumps
@@ -349,7 +349,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // Backwards jump, so we must have already seen the label
 
                     // Error if label and using are part of the same block
-                    if (_labelsDefined[node.Label] == usingDecl.block)
+                    if (_labelsDefined[node.Label] == block)
                     {
                         Diagnostics.Add(ErrorCode.ERR_GoToBackwardJumpOverUsingVar, sourceLocation);
                         break;

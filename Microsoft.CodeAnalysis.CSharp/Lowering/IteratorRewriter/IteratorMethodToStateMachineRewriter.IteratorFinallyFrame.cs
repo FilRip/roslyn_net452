@@ -107,8 +107,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     this.proxyLabels = proxyLabels = new Dictionary<LabelSymbol, LabelSymbol>();
                 }
 
-                LabelSymbol proxy;
-                if (!proxyLabels.TryGetValue(label, out proxy))
+                if (!proxyLabels.TryGetValue(label, out LabelSymbol proxy))
                 {
                     proxy = new GeneratedLabelSymbol("proxy" + label.Name);
                     proxyLabels.Add(label, proxy);

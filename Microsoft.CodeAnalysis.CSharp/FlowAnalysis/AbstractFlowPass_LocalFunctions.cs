@@ -6,6 +6,8 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class AbstractFlowPass<TLocalState, TLocalFunctionState>

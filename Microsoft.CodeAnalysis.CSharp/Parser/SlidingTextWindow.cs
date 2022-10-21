@@ -366,8 +366,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             int position = this.Position;
 
             // if we're peeking, then we don't want to change the position
-            SyntaxDiagnosticInfo info;
-            var ch = this.ScanUnicodeEscape(peek: true, surrogateCharacter: out surrogateCharacter, info: out info);
+            var ch = this.ScanUnicodeEscape(peek: true, surrogateCharacter: out surrogateCharacter, info: out SyntaxDiagnosticInfo info);
             this.Reset(position);
             return ch;
         }

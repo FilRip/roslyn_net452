@@ -74,8 +74,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             foreach (var local in locals)
             {
-                LocalSymbol newLocal;
-                if (TryRewriteLocal(local, out newLocal))
+                if (TryRewriteLocal(local, out LocalSymbol newLocal))
                 {
                     newLocals.Add(newLocal);
                 }
@@ -306,8 +305,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private bool TryReplaceWithProxy(Symbol parameterOrLocal, SyntaxNode syntax, out BoundNode replacement)
         {
-            CapturedSymbolReplacement proxy;
-            if (proxies.TryGetValue(parameterOrLocal, out proxy))
+            if (proxies.TryGetValue(parameterOrLocal, out CapturedSymbolReplacement proxy))
             {
                 replacement = proxy.Replacement(syntax, frameType => FramePointer(syntax, frameType));
                 return true;
@@ -319,8 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public sealed override BoundNode VisitParameter(BoundParameter node)
         {
-            BoundNode replacement;
-            if (TryReplaceWithProxy(node.ParameterSymbol, node.Syntax, out replacement))
+            if (TryReplaceWithProxy(node.ParameterSymbol, node.Syntax, out BoundNode replacement))
             {
                 return replacement;
             }
@@ -336,8 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public sealed override BoundNode VisitLocal(BoundLocal node)
         {
-            BoundNode replacement;
-            if (TryReplaceWithProxy(node.LocalSymbol, node.Syntax, out replacement))
+            if (TryReplaceWithProxy(node.LocalSymbol, node.Syntax, out BoundNode replacement))
             {
                 return replacement;
             }
@@ -349,8 +345,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private BoundNode VisitUnhoistedLocal(BoundLocal node)
         {
-            LocalSymbol replacementLocal;
-            if (this.localMap.TryGetValue(node.LocalSymbol, out replacementLocal))
+            if (this.localMap.TryGetValue(node.LocalSymbol, out LocalSymbol replacementLocal))
             {
                 return new BoundLocal(node.Syntax, replacementLocal, node.ConstantValueOpt, replacementLocal.Type, node.HasErrors);
             }
@@ -428,8 +423,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // If LHS isLocal, then genAddr is a noop so regular case works fine.
 
                 SyntheticBoundNodeFactory factory = new SyntheticBoundNodeFactory(this.CurrentMethod, rewrittenLeft.Syntax, this.CompilationState, this.Diagnostics);
-                BoundAssignmentOperator tempAssignment;
-                BoundLocal tempLocal = factory.StoreToTemp(rewrittenRight, out tempAssignment);
+                BoundLocal tempLocal = factory.StoreToTemp(rewrittenRight, out BoundAssignmentOperator tempAssignment);
 
                 BoundAssignmentOperator rewrittenAssignment = node.Update(rewrittenLeft, tempLocal, node.IsRef, rewrittenType);
 

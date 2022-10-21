@@ -1115,8 +1115,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns>Metadata reference the specified directive resolves to, or null if the <paramref name="directive"/> doesn't match any #r directive in the compilation.</returns>
         public MetadataReference? GetDirectiveReference(ReferenceDirectiveTriviaSyntax directive)
         {
-            MetadataReference? reference;
-            return ReferenceDirectiveMap.TryGetValue((directive.SyntaxTree.FilePath, directive.File.ValueText), out reference) ? reference : null;
+            return ReferenceDirectiveMap.TryGetValue((directive.SyntaxTree.FilePath, directive.File.ValueText), out MetadataReference reference) ? reference : null;
         }
 
         /// <summary>
@@ -1687,8 +1686,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (entryPoint is null)
                     {
-                        ImmutableBindingDiagnostic<AssemblySymbol> diagnostics;
-                        var entryPointMethod = FindEntryPoint(simpleProgramEntryPointSymbol, cancellationToken, out diagnostics);
+                        var entryPointMethod = FindEntryPoint(simpleProgramEntryPointSymbol, cancellationToken, out ImmutableBindingDiagnostic<AssemblySymbol> diagnostics);
                         entryPoint = new EntryPoint(entryPointMethod, diagnostics);
                     }
 
@@ -1973,8 +1971,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var syntax = method.ExtractReturnTypeSyntax();
             var dumbInstance = new BoundLiteral(syntax, ConstantValue.Null, namedType);
             var binder = GetBinder(syntax);
-            BoundExpression? result;
-            var success = binder.GetAwaitableExpressionInfo(dumbInstance, out result, syntax, diagnostics);
+            var success = binder.GetAwaitableExpressionInfo(dumbInstance, out BoundExpression result, syntax, diagnostics);
 
             return success &&
                 (result!.Type!.IsVoidType() || result.Type!.SpecialType == SpecialType.System_Int32);
@@ -2265,9 +2262,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 binderFactories = Interlocked.CompareExchange(ref cachedBinderFactories, binderFactories, null) ?? binderFactories;
             }
 
-            BinderFactory? previousFactory;
             var previousWeakReference = binderFactories[treeNum];
-            if (previousWeakReference != null && previousWeakReference.TryGetTarget(out previousFactory))
+            if (previousWeakReference != null && previousWeakReference.TryGetTarget(out BinderFactory previousFactory))
             {
                 return previousFactory;
             }
@@ -2282,9 +2278,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             while (true)
             {
-                BinderFactory? previousFactory;
                 WeakReference<BinderFactory>? previousWeakReference = slot;
-                if (previousWeakReference != null && previousWeakReference.TryGetTarget(out previousFactory))
+                if (previousWeakReference != null && previousWeakReference.TryGetTarget(out BinderFactory previousFactory))
                 {
                     return previousFactory;
                 }
@@ -2701,8 +2696,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static void AppendLoadDirectiveDiagnostics(DiagnosticBag builder, SyntaxAndDeclarationManager syntaxAndDeclarations, SyntaxTree syntaxTree, Func<IEnumerable<Diagnostic>, IEnumerable<Diagnostic>>? locationFilterOpt = null)
         {
-            ImmutableArray<LoadDirective> loadDirectives;
-            if (syntaxAndDeclarations.GetLazyState().LoadDirectiveMap.TryGetValue(syntaxTree, out loadDirectives))
+            if (syntaxAndDeclarations.GetLazyState().LoadDirectiveMap.TryGetValue(syntaxTree, out ImmutableArray<LoadDirective> loadDirectives))
             {
                 foreach (var directive in loadDirectives)
                 {

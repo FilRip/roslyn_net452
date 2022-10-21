@@ -167,11 +167,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             TypeDefinitionHandle handle,
             string emittedNamespaceName)
         {
-            GenericParameterHandleCollection genericParameterHandles;
-            ushort arity;
-            BadImageFormatException mrEx = null;
 
-            GetGenericInfo(moduleSymbol, handle, out genericParameterHandles, out arity, out mrEx);
+            GetGenericInfo(moduleSymbol, handle, out GenericParameterHandleCollection genericParameterHandles, out ushort arity, out BadImageFormatException mrEx);
 
             bool mangleName;
             PENamedTypeSymbol result;
@@ -221,11 +218,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             PENamedTypeSymbol containingType,
             TypeDefinitionHandle handle)
         {
-            GenericParameterHandleCollection genericParameterHandles;
-            ushort metadataArity;
-            BadImageFormatException mrEx = null;
 
-            GetGenericInfo(moduleSymbol, handle, out genericParameterHandles, out metadataArity, out mrEx);
+            GetGenericInfo(moduleSymbol, handle, out GenericParameterHandleCollection genericParameterHandles, out ushort metadataArity, out BadImageFormatException mrEx);
 
             ushort arity = 0;
             var containerMetadataArity = containingType.MetadataArity;
@@ -568,43 +562,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                Accessibility access = Accessibility.Private;
-
-                switch (_flags & TypeAttributes.VisibilityMask)
+                var access = (_flags & TypeAttributes.VisibilityMask) switch
                 {
-                    case TypeAttributes.NestedAssembly:
-                        access = Accessibility.Internal;
-                        break;
-
-                    case TypeAttributes.NestedFamORAssem:
-                        access = Accessibility.ProtectedOrInternal;
-                        break;
-
-                    case TypeAttributes.NestedFamANDAssem:
-                        access = Accessibility.ProtectedAndInternal;
-                        break;
-
-                    case TypeAttributes.NestedPrivate:
-                        access = Accessibility.Private;
-                        break;
-
-                    case TypeAttributes.Public:
-                    case TypeAttributes.NestedPublic:
-                        access = Accessibility.Public;
-                        break;
-
-                    case TypeAttributes.NestedFamily:
-                        access = Accessibility.Protected;
-                        break;
-
-                    case TypeAttributes.NotPublic:
-                        access = Accessibility.Internal;
-                        break;
-
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(_flags & TypeAttributes.VisibilityMask);
-                }
-
+                    TypeAttributes.NestedAssembly => Accessibility.Internal,
+                    TypeAttributes.NestedFamORAssem => Accessibility.ProtectedOrInternal,
+                    TypeAttributes.NestedFamANDAssem => Accessibility.ProtectedAndInternal,
+                    TypeAttributes.NestedPrivate => Accessibility.Private,
+                    TypeAttributes.Public or TypeAttributes.NestedPublic => Accessibility.Public,
+                    TypeAttributes.NestedFamily => Accessibility.Protected,
+                    TypeAttributes.NotPublic => Accessibility.Internal,
+                    _ => throw ExceptionUtilities.UnexpectedValue(_flags & TypeAttributes.VisibilityMask),
+                };
                 return access;
             }
         }
@@ -662,8 +630,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         internal override byte? GetNullableContextValue()
         {
-            byte? value;
-            if (!_lazyNullableContextValue.TryGetByte(out value))
+            if (!_lazyNullableContextValue.TryGetByte(out byte? value))
             {
                 value = ContainingPEModule.Module.HasNullableContextAttribute(_handle, out byte arg) ?
                     arg :
@@ -936,8 +903,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 {
                     foreach (var handle in this.ContainingPEModule.Module.GetFieldsOfTypeOrThrow(_handle))
                     {
-                        FieldSymbol field;
-                        if (handleToFieldMap.TryGetValue(handle, out field))
+                        if (handleToFieldMap.TryGetValue(handle, out FieldSymbol field))
                         {
                             result.Add(field);
                         }
@@ -1117,8 +1083,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                         if ((fieldFlags & FieldAttributes.Static) == 0)
                         {
                             // Instance field used to determine underlying type.
-                            ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers;
-                            TypeSymbol type = decoder.DecodeFieldSignature(fieldDef, out customModifiers);
+                            TypeSymbol type = decoder.DecodeFieldSignature(fieldDef, out ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers);
 
                             if (type.SpecialType.IsValidEnumUnderlyingType() && !customModifiers.AnyRequired())
                             {
@@ -1376,8 +1341,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             EnsureAllMembersAreLoaded();
 
-            ImmutableArray<Symbol> m;
-            if (!_lazyMembersByName.TryGetValue(name, out m))
+            if (!_lazyMembersByName.TryGetValue(name, out ImmutableArray<Symbol> m))
             {
                 m = ImmutableArray<Symbol>.Empty;
             }
@@ -1389,15 +1353,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             EnsureAllMembersAreLoaded();
 
-            ImmutableArray<Symbol> m;
-            if (!_lazyMembersByName.TryGetValue(name, out m))
+            if (!_lazyMembersByName.TryGetValue(name, out ImmutableArray<Symbol> m))
             {
                 m = ImmutableArray<Symbol>.Empty;
             }
 
             // nested types are not common, but we need to check just in case
-            ImmutableArray<PENamedTypeSymbol> t;
-            if (_lazyNestedTypes.TryGetValue(name, out t))
+            if (_lazyNestedTypes.TryGetValue(name, out ImmutableArray<PENamedTypeSymbol> t))
             {
                 m = m.Concat(StaticCast<Symbol>.From(t));
             }
@@ -1470,9 +1432,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             EnsureNestedTypesAreLoaded();
 
-            ImmutableArray<PENamedTypeSymbol> t;
 
-            if (_lazyNestedTypes.TryGetValue(name, out t))
+            if (_lazyNestedTypes.TryGetValue(name, out ImmutableArray<PENamedTypeSymbol> t))
             {
                 return StaticCast<NamedTypeSymbol>.From(t);
             }
@@ -1924,8 +1885,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 return null;
             }
 
-            PEMethodSymbol method;
-            bool found = methodHandleToSymbol.TryGetValue(methodDef, out method);
+            bool found = methodHandleToSymbol.TryGetValue(methodDef, out PEMethodSymbol method);
             return method;
         }
 
@@ -2006,8 +1966,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 if (uncommon.lazyDefaultMemberName == null)
                 {
-                    string defaultMemberName;
-                    this.ContainingPEModule.Module.HasDefaultMemberAttribute(_handle, out defaultMemberName);
+                    this.ContainingPEModule.Module.HasDefaultMemberAttribute(_handle, out string defaultMemberName);
 
                     // NOTE: the default member name is frequently null (e.g. if there is not indexer in the type).
                     // Make sure we set a non-null value so that we don't recompute it repeatedly.
@@ -2223,9 +2182,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             if (!handle.IsNil)
             {
                 var decoder = new MetadataDecoder(ContainingPEModule);
-                TypedConstant[] positionalArgs;
-                KeyValuePair<string, TypedConstant>[] namedArgs;
-                if (decoder.GetCustomAttribute(handle, out positionalArgs, out namedArgs))
+                if (decoder.GetCustomAttribute(handle, out TypedConstant[] positionalArgs, out KeyValuePair<string, TypedConstant>[] namedArgs))
                 {
                     AttributeUsageInfo info = AttributeData.DecodeAttributeUsageAttribute(positionalArgs[0], namedArgs.AsImmutableOrNull());
                     return info.HasValidAttributeTargets ? info : AttributeUsageInfo.Default;

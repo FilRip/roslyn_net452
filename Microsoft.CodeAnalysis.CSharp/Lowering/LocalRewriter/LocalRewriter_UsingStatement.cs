@@ -238,8 +238,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     iDisposableType,
                     @checked: false);
 
-                BoundAssignmentOperator tempAssignment;
-                BoundLocal boundTemp = _factory.StoreToTemp(tempInit, out tempAssignment, kind: SynthesizedLocalKind.Using);
+                BoundLocal boundTemp = _factory.StoreToTemp(tempInit, out BoundAssignmentOperator tempAssignment, kind: SynthesizedLocalKind.Using);
 
                 BoundStatement tryFinally = RewriteUsingStatementTryFinally(usingSyntax, tryBlock, boundTemp, awaitKeywordOpt, awaitOpt, patternDisposeInfo);
 

@@ -352,8 +352,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private NamespaceSymbol ResolveExternAliasTarget(BindingDiagnosticBag diagnostics)
         {
-            NamespaceSymbol? target;
-            if (!ContainingSymbol!.DeclaringCompilation.GetExternAliasTarget(Name, out target))
+            if (!ContainingSymbol!.DeclaringCompilation.GetExternAliasTarget(Name, out NamespaceSymbol target))
             {
                 diagnostics.Add(ErrorCode.ERR_BadExternAlias, Locations[0], Name);
             }

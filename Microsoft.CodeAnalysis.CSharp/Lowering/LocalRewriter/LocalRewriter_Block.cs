@@ -21,8 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return node.Update(node.Locals, node.LocalFunctions, builder.ToImmutableAndFree());
             }
 
-            LocalSymbol? synthesizedLocal;
-            BoundStatement? prologue = _instrumenter.CreateBlockPrologue(node, out synthesizedLocal);
+            BoundStatement? prologue = _instrumenter.CreateBlockPrologue(node, out LocalSymbol synthesizedLocal);
             if (prologue != null)
             {
                 builder.Insert(0, prologue);

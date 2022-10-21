@@ -11,9 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private BoundExpression RewriteInterpolatedStringConversion(BoundConversion conversion)
         {
-            BoundExpression format;
-            ArrayBuilder<BoundExpression> expressions;
-            MakeInterpolatedStringFormat((BoundInterpolatedString)conversion.Operand, out format, out expressions);
+            MakeInterpolatedStringFormat((BoundInterpolatedString)conversion.Operand, out BoundExpression format, out ArrayBuilder<BoundExpression> expressions);
             expressions.Insert(0, format);
             var stringFactory = _factory.WellKnownType(WellKnownType.System_Runtime_CompilerServices_FormattableStringFactory);
 

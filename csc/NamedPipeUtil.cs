@@ -12,9 +12,9 @@ namespace Microsoft.CodeAnalysis
 {
     internal static class NamedPipeUtil
     {
-        private const int PipeBufferSize = 65536;
+        //private const int PipeBufferSize = 65536;
 
-        private const int s_currentUserOnlyValue = 536870912;
+        //private const int s_currentUserOnlyValue = 536870912;
 
         private static readonly PipeOptions CurrentUserOption = (PlatformInformation.IsRunningOnMono ? ((PipeOptions)536870912) : PipeOptions.None);
 

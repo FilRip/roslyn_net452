@@ -169,8 +169,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            bool hasAnyDiagnostics;
-            attributeData = arguments.Binder.GetAttribute(syntax, type, out hasAnyDiagnostics);
+            attributeData = arguments.Binder.GetAttribute(syntax, type, out bool hasAnyDiagnostics);
             if (!attributeData.HasErrors)
             {
                 obsoleteData = attributeData.DecodeObsoleteAttribute(kind);
@@ -271,8 +270,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var diagnostics = BindingDiagnosticBag.GetInstance();
             var compilation = this.DeclaringCompilation;
 
-            ImmutableArray<Binder> binders;
-            ImmutableArray<AttributeSyntax> attributesToBind = this.GetAttributesToBind(attributesSyntaxLists, symbolPart, diagnostics, compilation, attributeMatchesOpt, binderOpt, out binders);
+            ImmutableArray<AttributeSyntax> attributesToBind = this.GetAttributesToBind(attributesSyntaxLists, symbolPart, diagnostics, compilation, attributeMatchesOpt, binderOpt, out ImmutableArray<Binder> binders);
 
             ImmutableArray<CSharpAttributeData> boundAttributes;
             WellKnownAttributeData wellKnownAttributeData;

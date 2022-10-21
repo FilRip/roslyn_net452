@@ -175,11 +175,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return ReportDiagnostic.Suppress;
             }
 
-            ReportDiagnostic report;
             bool isSpecified = false;
             bool specifiedWarnAsErrorMinus = false;
 
-            if (specificDiagnosticOptions.TryGetValue(id, out report))
+            if (specificDiagnosticOptions.TryGetValue(id, out ReportDiagnostic report))
             {
                 // 2. Command line options (/nowarn, /warnaserror)
                 isSpecified = true;

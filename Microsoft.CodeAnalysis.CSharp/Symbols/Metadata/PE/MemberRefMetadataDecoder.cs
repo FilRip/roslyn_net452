@@ -77,9 +77,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             NamedTypeSymbol namedType = _containingType as NamedTypeSymbol;
             if ((object)namedType != null)
             {
-                int cumulativeArity;
-                TypeSymbol typeArgument;
-                GetGenericTypeArgumentSymbol(position, namedType, out cumulativeArity, out typeArgument);
+                GetGenericTypeArgumentSymbol(position, namedType, out int cumulativeArity, out TypeSymbol typeArgument);
                 if ((object)typeArgument != null)
                 {
                     return typeArgument;
@@ -103,8 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             var containingType = namedType.ContainingType;
             if ((object)containingType != null)
             {
-                int containingTypeCumulativeArity;
-                GetGenericTypeArgumentSymbol(position, containingType, out containingTypeCumulativeArity, out typeArgument);
+                GetGenericTypeArgumentSymbol(position, containingType, out int containingTypeCumulativeArity, out typeArgument);
                 cumulativeArity += containingTypeCumulativeArity;
                 arityOffset = containingTypeCumulativeArity;
             }
@@ -136,8 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 string memberName = Module.GetMemberRefNameOrThrow(memberRef);
                 BlobHandle signatureHandle = Module.GetSignatureOrThrow(memberRef);
 
-                SignatureHeader signatureHeader;
-                BlobReader signaturePointer = this.DecodeSignatureHeaderOrThrow(signatureHandle, out signatureHeader);
+                BlobReader signaturePointer = this.DecodeSignatureHeaderOrThrow(signatureHandle, out SignatureHeader signatureHeader);
 
                 switch (signatureHeader.RawValue & SignatureHeader.CallingConventionOrKindMask)
                 {

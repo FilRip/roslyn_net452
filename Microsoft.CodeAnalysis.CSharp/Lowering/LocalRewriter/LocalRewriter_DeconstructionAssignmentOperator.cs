@@ -233,8 +233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression tuple;
             if (CanChangeValueBetweenReads(expression, localsMayBeAssignedOrCaptured: true))
             {
-                BoundAssignmentOperator assignmentToTemp;
-                BoundLocal savedTuple = _factory.StoreToTemp(expression, out assignmentToTemp);
+                BoundLocal savedTuple = _factory.StoreToTemp(expression, out BoundAssignmentOperator assignmentToTemp);
                 effects.Add(assignmentToTemp);
                 temps.Add(savedTuple.LocalSymbol);
                 tuple = savedTuple;
@@ -311,8 +310,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var loweredArg = VisitExpression(arg);
             if (CanChangeValueBetweenReads(loweredArg, localsMayBeAssignedOrCaptured: true, structThisCanChangeValueBetweenReads: true))
             {
-                BoundAssignmentOperator store;
-                var temp = _factory.StoreToTemp(loweredArg, out store);
+                var temp = _factory.StoreToTemp(loweredArg, out BoundAssignmentOperator store);
                 temps.Add(temp.LocalSymbol);
                 effects.Add(store);
                 return temp;

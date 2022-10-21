@@ -1197,44 +1197,28 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             ValidateSymbolInfoOptions(options);
 
-            CSharpSyntaxNode bindableNode;
-            BoundNode lowestBoundNode;
-            BoundNode highestBoundNode;
-            BoundNode boundParent;
-            GetBoundNodes(node, out bindableNode, out lowestBoundNode, out highestBoundNode, out boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return base.GetSymbolInfoForNode(options, lowestBoundNode, highestBoundNode, boundParent, binderOpt: null);
         }
 
         internal override CSharpTypeInfo GetTypeInfoWorker(CSharpSyntaxNode node, CancellationToken cancellationToken = default)
         {
-            CSharpSyntaxNode bindableNode;
-            BoundNode lowestBoundNode;
-            BoundNode highestBoundNode;
-            BoundNode boundParent;
-            GetBoundNodes(node, out bindableNode, out lowestBoundNode, out highestBoundNode, out boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return GetTypeInfoForNode(lowestBoundNode, highestBoundNode, boundParent);
         }
 
         internal override ImmutableArray<Symbol> GetMemberGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            CSharpSyntaxNode bindableNode;
-            BoundNode lowestBoundNode;
-            BoundNode highestBoundNode;
-            BoundNode boundParent;
-            GetBoundNodes(node, out bindableNode, out lowestBoundNode, out highestBoundNode, out boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return base.GetMemberGroupForNode(options, lowestBoundNode, boundParent, binderOpt: null);
         }
 
         internal override ImmutableArray<IPropertySymbol> GetIndexerGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            CSharpSyntaxNode bindableNode;
-            BoundNode lowestBoundNode;
-            BoundNode highestBoundNode;
-            BoundNode boundParent;
-            GetBoundNodes(node, out bindableNode, out lowestBoundNode, out highestBoundNode, out boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return base.GetIndexerGroupForNode(lowestBoundNode, binderOpt: null);
         }
@@ -1415,8 +1399,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ImmutableArray<BoundNode> GuardedGetBoundNodesFromMap(CSharpSyntaxNode node)
         {
-            ImmutableArray<BoundNode> result;
-            return _guardedBoundNodeMap.TryGetValue(node, out result) ? result : default;
+            return _guardedBoundNodeMap.TryGetValue(node, out ImmutableArray<BoundNode> result) ? result : default;
         }
 
         /// <summary>
@@ -1424,8 +1407,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal ImmutableArray<BoundNode> TestOnlyTryGetBoundNodesFromMap(CSharpSyntaxNode node)
         {
-            ImmutableArray<BoundNode> result;
-            return _guardedBoundNodeMap.TryGetValue(node, out result) ? result : default;
+            return _guardedBoundNodeMap.TryGetValue(node, out ImmutableArray<BoundNode> result) ? result : default;
         }
 
         // Adds every syntax/bound pair in a tree rooted at the given bound node to the map, and the
@@ -1447,8 +1429,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 NodeMapBuilder.AddToMap(bound, _guardedBoundNodeMap, SyntaxTree);
             }
 
-            ImmutableArray<BoundNode> result;
-            return _guardedBoundNodeMap.TryGetValue(syntax, out result) ? result : default;
+            return _guardedBoundNodeMap.TryGetValue(syntax, out ImmutableArray<BoundNode> result) ? result : default;
         }
 
         protected void UnguardedAddBoundTreeForStandaloneSyntax(SyntaxNode syntax, BoundNode bound, NullableWalker.SnapshotManager manager = null, ImmutableDictionary<Symbol, Symbol> remappedSymbols = null)
@@ -1905,11 +1886,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             upgradeableLock.EnterWrite();
 
-            NullableWalker.SnapshotManager snapshotManager;
             var remappedSymbols = _parentRemappedSymbolsOpt;
-            Binder binder;
 
-            BoundNode boundRoot = bind(bindableRoot, out binder);
+            BoundNode boundRoot = bind(bindableRoot, out Binder binder);
 
             if (IsSpeculativeSemanticModel)
             {
@@ -1964,7 +1943,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 #endif
 
-                boundRoot = RewriteNullableBoundNodesWithSnapshots(boundRoot, binder, diagnostics, createSnapshots: true, out snapshotManager, ref remappedSymbols);
+                boundRoot = RewriteNullableBoundNodesWithSnapshots(boundRoot, binder, diagnostics, createSnapshots: true, out NullableWalker.SnapshotManager snapshotManager, ref remappedSymbols);
                 diagnostics.Free();
                 GuardedAddBoundTreeForStandaloneSyntax(bindableRoot, boundRoot, snapshotManager, remappedSymbols);
             }

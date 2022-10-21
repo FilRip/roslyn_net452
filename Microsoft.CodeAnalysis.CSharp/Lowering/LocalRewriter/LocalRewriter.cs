@@ -486,8 +486,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static MethodSymbol UnsafeGetSpecialTypeMethod(SyntaxNode syntax, SpecialMember specialMember, CSharpCompilation compilation, BindingDiagnosticBag diagnostics)
         {
-            MethodSymbol method;
-            if (TryGetSpecialTypeMethod(syntax, specialMember, compilation, diagnostics, out method))
+            if (TryGetSpecialTypeMethod(syntax, specialMember, compilation, diagnostics, out MethodSymbol method))
             {
                 return method;
             }
@@ -518,8 +517,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var type = this.VisitType(node.Type);
 
             // Emit needs this helper
-            MethodSymbol getTypeFromHandle;
-            if (!TryGetWellKnownTypeMember(node.Syntax, WellKnownMember.System_Type__GetTypeFromHandle, out getTypeFromHandle))
+            if (!TryGetWellKnownTypeMember(node.Syntax, WellKnownMember.System_Type__GetTypeFromHandle, out MethodSymbol getTypeFromHandle))
             {
                 return new BoundTypeOfOperator(node.Syntax, sourceType, null, type, hasErrors: true);
             }
@@ -534,8 +532,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var type = this.VisitType(node.Type);
 
             // Emit needs this helper
-            MethodSymbol getTypeFromHandle;
-            if (!TryGetWellKnownTypeMember(node.Syntax, WellKnownMember.System_Type__GetTypeFromHandle, out getTypeFromHandle))
+            if (!TryGetWellKnownTypeMember(node.Syntax, WellKnownMember.System_Type__GetTypeFromHandle, out MethodSymbol getTypeFromHandle))
             {
                 return new BoundRefTypeOperator(node.Syntax, operand, null, type, hasErrors: true);
             }

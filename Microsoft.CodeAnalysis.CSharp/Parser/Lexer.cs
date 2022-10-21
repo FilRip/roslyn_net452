@@ -912,8 +912,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                     if (isEscaped)
                     {
-                        SyntaxDiagnosticInfo error;
-                        TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out error);
+                        TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out SyntaxDiagnosticInfo error);
                         AddError(error);
                     }
                     else
@@ -1349,8 +1348,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         //used in directives
         private int GetValueInt32(string text, bool isHex)
         {
-            int result;
-            if (!Int32.TryParse(text, isHex ? NumberStyles.AllowHexSpecifier : NumberStyles.None, CultureInfo.InvariantCulture, out result))
+            if (!Int32.TryParse(text, isHex ? NumberStyles.AllowHexSpecifier : NumberStyles.None, CultureInfo.InvariantCulture, out int result))
             {
                 //we've already lexed the literal, so the error must be from overflow
                 this.AddError(MakeError(ErrorCode.ERR_IntOverflow));
@@ -1381,8 +1379,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         private double GetValueDouble(string text)
         {
-            double result;
-            if (!RealParser.TryParseDouble(text, out result))
+            if (!RealParser.TryParseDouble(text, out double result))
             {
                 //we've already lexed the literal, so the error must be from overflow
                 this.AddError(MakeError(ErrorCode.ERR_FloatOverflow, "double"));
@@ -1393,8 +1390,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         private float GetValueSingle(string text)
         {
-            float result;
-            if (!RealParser.TryParseFloat(text, out result))
+            if (!RealParser.TryParseFloat(text, out float result))
             {
                 //we've already lexed the literal, so the error must be from overflow
                 this.AddError(MakeError(ErrorCode.ERR_FloatOverflow, "float"));
@@ -1428,8 +1424,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             //     rounded up to 0.1000000000000000000000000001.)
             //     [Bug #568494]
 
-            decimal result;
-            if (!decimal.TryParse(text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out result))
+            if (!decimal.TryParse(text, NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out decimal result))
             {
                 //we've already lexed the literal, so the error must be from overflow
                 this.AddError(this.MakeError(start, end - start, ErrorCode.ERR_FloatOverflow, "decimal"));
@@ -1831,8 +1826,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 {
                                     if (isEscaped)
                                     {
-                                        SyntaxDiagnosticInfo error;
-                                        TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out error);
+                                        TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out SyntaxDiagnosticInfo error);
                                         AddError(error);
                                     }
                                     else
@@ -1855,8 +1849,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 if (isEscaped)
                 {
-                    SyntaxDiagnosticInfo error;
-                    TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out error);
+                    TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out SyntaxDiagnosticInfo error);
                     AddError(error);
                 }
                 else
@@ -1995,8 +1988,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                             TextWindow.Reset(beforeConsumed);
                             // ^^^^^^^ otherwise \u005Cu1234 looks just like \u1234! (i.e. escape within escape)
                             isEscaped = true;
-                            SyntaxDiagnosticInfo error;
-                            consumedChar = TextWindow.NextUnicodeEscape(out consumedSurrogate, out error);
+                            consumedChar = TextWindow.NextUnicodeEscape(out consumedSurrogate, out SyntaxDiagnosticInfo error);
                             AddCrefError(error);
                             goto top;
                         }
@@ -2296,8 +2288,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 break;
                             }
 
-                            bool isTerminated;
-                            this.ScanMultiLineComment(out isTerminated);
+                            this.ScanMultiLineComment(out bool isTerminated);
                             if (!isTerminated)
                             {
                                 // The comment didn't end.  Report an error at the start point.
@@ -2671,8 +2662,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             while (true)
             {
-                bool hasFollowingDirective;
-                var text = this.LexDisabledText(out hasFollowingDirective);
+                var text = this.LexDisabledText(out bool hasFollowingDirective);
                 if (text != null)
                 {
                     this.AddTrivia(text, ref triviaList);
@@ -2926,8 +2916,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         // unknown single character
                         if (isEscaped)
                         {
-                            SyntaxDiagnosticInfo error;
-                            TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out error);
+                            TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out SyntaxDiagnosticInfo error);
                             AddError(error);
                         }
                         else
@@ -3030,7 +3019,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private CSharpSyntaxNode LexXmlDocComment(XmlDocCommentStyle style)
         {
             var saveMode = _mode;
-            bool isTerminated;
 
             var mode = style == XmlDocCommentStyle.SingleLine
                     ? LexerMode.XmlDocCommentStyleSingleLine
@@ -3044,7 +3032,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 _xmlParser.ReInitialize(mode);
             }
 
-            var docComment = _xmlParser.ParseDocumentationComment(out isTerminated);
+            var docComment = _xmlParser.ParseDocumentationComment(out bool isTerminated);
 
             // We better have finished with the whole comment. There should be error
             // code in the implementation of ParseXmlDocComment that ensures this.
@@ -3271,8 +3259,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 if (MatchesProductionForXmlChar(charValue))
                 {
-                    char lowSurrogate;
-                    char highSurrogate = SlidingTextWindow.GetCharsFromUtf32(charValue, out lowSurrogate);
+                    char highSurrogate = SlidingTextWindow.GetCharsFromUtf32(charValue, out char lowSurrogate);
 
                     _builder.Append(highSurrogate);
                     if (lowSurrogate != SlidingTextWindow.InvalidCharacter)
@@ -4042,8 +4029,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     // but I don't want to add an assert because XML character classification is expensive.
                     // check to see if it is an actual keyword
                     // NOTE: name attribute values don't respect keywords - everything is an identifier.
-                    SyntaxKind keywordKind;
-                    if (!InXmlNameAttributeValue && !info.IsVerbatim && !info.HasIdentifierEscapeSequence && _cache.TryGetKeywordKind(info.StringValue, out keywordKind))
+                    if (!InXmlNameAttributeValue && !info.IsVerbatim && !info.HasIdentifierEscapeSequence && _cache.TryGetKeywordKind(info.StringValue, out SyntaxKind keywordKind))
                     {
                         if (SyntaxFacts.IsContextualKeyword(keywordKind))
                         {
@@ -4129,9 +4115,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             {
                 int pos = TextWindow.Position;
 
-                char nextChar;
-                char nextSurrogate;
-                if (TextWindow.TryScanXmlEntity(out nextChar, out nextSurrogate)
+                if (TextWindow.TryScanXmlEntity(out char nextChar, out char nextSurrogate)
                     && nextChar == ch && nextSurrogate == SlidingTextWindow.InvalidCharacter)
                 {
                     return true;

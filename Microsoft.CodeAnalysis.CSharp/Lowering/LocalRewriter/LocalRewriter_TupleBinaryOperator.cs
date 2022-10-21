@@ -282,14 +282,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             var outerEffects = ArrayBuilder<BoundExpression>.GetInstance();
             var innerEffects = ArrayBuilder<BoundExpression>.GetInstance();
 
-            BoundExpression leftHasValue, leftValue;
-            bool isLeftNullable;
-            MakeNullableParts(left, temps, innerEffects, outerEffects, saveHasValue: true, out leftHasValue, out leftValue, out isLeftNullable);
+            MakeNullableParts(left, temps, innerEffects, outerEffects, saveHasValue: true, out BoundExpression leftHasValue, out BoundExpression leftValue, out bool isLeftNullable);
 
-            BoundExpression rightHasValue, rightValue;
-            bool isRightNullable;
             // no need for local for right.HasValue since used once
-            MakeNullableParts(right, temps, innerEffects, outerEffects, saveHasValue: false, out rightHasValue, out rightValue, out isRightNullable);
+            MakeNullableParts(right, temps, innerEffects, outerEffects, saveHasValue: false, out BoundExpression rightHasValue, out BoundExpression rightValue, out bool isRightNullable);
 
             // Produces:
             //     ... logical expression using leftValue and rightValue ...

@@ -478,15 +478,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             if (hasNoPrefix && DocumentationCommentXmlNames.AttributeEquals(attrNameText, DocumentationCommentXmlNames.CrefAttributeName) &&
                 !IsVerbatimCref())
             {
-                CrefSyntax cref;
-                this.ParseCrefAttribute(out startQuote, out cref, out endQuote);
+                this.ParseCrefAttribute(out startQuote, out CrefSyntax cref, out endQuote);
                 return SyntaxFactory.XmlCrefAttribute(attrName, equals, startQuote, cref, endQuote);
             }
             else if (hasNoPrefix && DocumentationCommentXmlNames.AttributeEquals(attrNameText, DocumentationCommentXmlNames.NameAttributeName) &&
                 XmlElementSupportsNameAttribute(elementName))
             {
-                IdentifierNameSyntax identifier;
-                this.ParseNameAttribute(out startQuote, out identifier, out endQuote);
+                this.ParseNameAttribute(out startQuote, out IdentifierNameSyntax identifier, out endQuote);
                 return SyntaxFactory.XmlNameAttribute(attrName, equals, startQuote, identifier, endQuote);
             }
             else
@@ -818,8 +816,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // NOTE: There are no errors in crefs - only warnings.  We accomplish this by wrapping every diagnostic in ErrorCode.WRN_ErrorOverride.
             if (InCref)
             {
-                int offset, width;
-                this.GetDiagnosticSpanForMissingToken(out offset, out width);
+                this.GetDiagnosticSpanForMissingToken(out int offset, out int width);
 
                 return GetExpectedTokenError(expected, actual, offset, width);
             }
@@ -998,9 +995,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 operatorToken = SyntaxFactory.MissingToken(SyntaxKind.PlusToken);
 
                 // Grab the offset and width before we consume the invalid keyword and change our position.
-                int offset;
-                int width;
-                GetDiagnosticSpanForMissingToken(out offset, out width);
+                GetDiagnosticSpanForMissingToken(out int offset, out int width);
 
                 if (SyntaxFacts.IsUnaryOperatorDeclarationToken(CurrentToken.Kind) || SyntaxFacts.IsBinaryExpressionOperatorToken(CurrentToken.Kind))
                 {

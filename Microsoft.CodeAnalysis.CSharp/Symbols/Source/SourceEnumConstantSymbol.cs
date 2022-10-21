@@ -200,8 +200,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     return Microsoft.CodeAnalysis.ConstantValue.Bad;
                 }
-                ConstantValue value;
-                var overflowKind = EnumConstantHelper.OffsetValue(otherValue, _otherConstantOffset, out value);
+                var overflowKind = EnumConstantHelper.OffsetValue(otherValue, _otherConstantOffset, out ConstantValue value);
                 if (overflowKind == EnumOverflowKind.OverflowReport)
                 {
                     // Report an error if the value is immediately

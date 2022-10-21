@@ -65,8 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             RefKind targetSymbolRefKind = RefKind.None)
         {
 
-            ImmutableArray<bool> dynamicTransformFlags;
-            if (containingModule.Module.HasDynamicAttribute(targetSymbolToken, out dynamicTransformFlags))
+            if (containingModule.Module.HasDynamicAttribute(targetSymbolToken, out ImmutableArray<bool> dynamicTransformFlags))
             {
                 return TransformTypeInternal(metadataType, containingModule.ContainingAssembly,
                     targetSymbolCustomModifierCount, targetSymbolRefKind, dynamicTransformFlags,

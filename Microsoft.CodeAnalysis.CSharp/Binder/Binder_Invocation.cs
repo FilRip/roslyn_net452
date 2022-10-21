@@ -147,8 +147,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             InvocationExpressionSyntax node,
             BindingDiagnosticBag diagnostics)
         {
-            BoundExpression result;
-            if (TryBindNameofOperator(node, diagnostics, out result))
+            if (TryBindNameofOperator(node, diagnostics, out BoundExpression result))
             {
                 return result; // all of the binding is done by BindNameofOperator
             }

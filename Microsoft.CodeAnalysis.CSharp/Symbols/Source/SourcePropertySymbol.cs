@@ -60,9 +60,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             bool isExpressionBodied = !hasAccessorList && GetArrowExpression(syntax) != null;
 
             binder = binder.WithUnsafeRegionIfNecessary(modifiersTokenList);
-            TypeSymbol? explicitInterfaceType;
-            string? aliasQualifierOpt;
-            string memberName = ExplicitInterfaceHelpers.GetMemberNameAndInterfaceSymbol(binder, explicitInterfaceSpecifier, name, diagnostics, out explicitInterfaceType, out aliasQualifierOpt);
+            string memberName = ExplicitInterfaceHelpers.GetMemberNameAndInterfaceSymbol(binder, explicitInterfaceSpecifier, name, diagnostics, out TypeSymbol explicitInterfaceType, out string aliasQualifierOpt);
 
             return new SourcePropertySymbol(
                 containingType,
@@ -414,8 +412,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private TypeWithAnnotations ComputeType(Binder binder, SyntaxNode syntax, BindingDiagnosticBag diagnostics)
         {
-            RefKind refKind;
-            var typeSyntax = GetTypeSyntax(syntax).SkipRef(out refKind);
+            var typeSyntax = GetTypeSyntax(syntax).SkipRef(out RefKind refKind);
             var type = binder.BindType(typeSyntax, diagnostics);
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = binder.GetNewCompoundUseSiteInfo(diagnostics);
 
@@ -450,9 +447,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 diagnostics.Add(ErrorCode.ERR_IndexerNeedsParam, parameterSyntaxOpt.GetLastToken().GetLocation());
             }
 
-            SyntaxToken arglistToken;
             var parameters = ParameterHelpers.MakeParameters(
-                binder, owner, parameterSyntaxOpt, out arglistToken,
+                binder, owner, parameterSyntaxOpt, out SyntaxToken arglistToken,
                 allowRefOrOut: false,
                 allowThis: false,
                 addRefReadOnlyModifier: addRefReadOnlyModifier,

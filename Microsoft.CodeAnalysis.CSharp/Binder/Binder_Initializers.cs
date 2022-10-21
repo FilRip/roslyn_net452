@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class Binder
@@ -32,8 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref ProcessedFieldInitializers processedInitializers)
         {
             var diagsForInstanceInitializers = BindingDiagnosticBag.GetInstance(withDiagnostics: true, diagnostics.AccumulatesDependencies);
-            ImportChain? firstImportChain;
-            processedInitializers.BoundInitializers = BindFieldInitializers(compilation, scriptInitializerOpt, fieldInitializers, diagsForInstanceInitializers, out firstImportChain);
+            processedInitializers.BoundInitializers = BindFieldInitializers(compilation, scriptInitializerOpt, fieldInitializers, diagsForInstanceInitializers, out ImportChain firstImportChain);
             processedInitializers.HasErrors = diagsForInstanceInitializers.HasAnyErrors();
             processedInitializers.FirstImportChain = firstImportChain;
             diagnostics.AddRange(diagsForInstanceInitializers);

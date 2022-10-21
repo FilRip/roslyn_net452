@@ -21,9 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifierOpt,
             string name)
         {
-            TypeSymbol discardedExplicitInterfaceType;
-            string discardedAliasOpt;
-            string methodName = GetMemberNameAndInterfaceSymbol(binder, explicitInterfaceSpecifierOpt, name, BindingDiagnosticBag.Discarded, out discardedExplicitInterfaceType, out discardedAliasOpt);
+            string methodName = GetMemberNameAndInterfaceSymbol(binder, explicitInterfaceSpecifierOpt, name, BindingDiagnosticBag.Discarded, out TypeSymbol discardedExplicitInterfaceType, out string discardedAliasOpt);
 
             return methodName;
         }

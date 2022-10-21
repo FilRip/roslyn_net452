@@ -346,9 +346,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             try
             {
-                int rva;
-                MethodImplAttributes implFlags;
-                moduleSymbol.Module.GetMethodDefPropsOrThrow(methodDef, out _name, out implFlags, out localflags, out rva);
+                moduleSymbol.Module.GetMethodDefPropsOrThrow(methodDef, out _name, out MethodImplAttributes implFlags, out localflags, out int rva);
                 _implFlags = (ushort)implFlags;
             }
             catch (BadImageFormatException)
@@ -466,9 +464,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 try
                 {
-                    int parameterCount;
-                    int typeParameterCount;
-                    MetadataDecoder.GetSignatureCountsOrThrow(_containingType.ContainingPEModule.Module, _handle, out parameterCount, out typeParameterCount);
+                    MetadataDecoder.GetSignatureCountsOrThrow(_containingType.ContainingPEModule.Module, _handle, out int parameterCount, out int typeParameterCount);
                     return typeParameterCount;
                 }
                 catch (BadImageFormatException)
@@ -567,10 +563,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 try
                 {
-                    int parameterCount;
-                    int typeParameterCount;
                     MetadataDecoder.GetSignatureCountsOrThrow(_containingType.ContainingPEModule.Module, _handle,
-                        out parameterCount, out typeParameterCount);
+                        out int parameterCount, out int typeParameterCount);
                     return parameterCount;
                 }
                 catch (BadImageFormatException)
@@ -745,9 +739,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             var moduleSymbol = _containingType.ContainingPEModule;
 
-            SignatureHeader signatureHeader;
-            BadImageFormatException mrEx;
-            ParamInfo<TypeSymbol>[] paramInfo = new MetadataDecoder(moduleSymbol, this).GetSignatureForMethod(_handle, out signatureHeader, out mrEx);
+            ParamInfo<TypeSymbol>[] paramInfo = new MetadataDecoder(moduleSymbol, this).GetSignatureForMethod(_handle, out SignatureHeader signatureHeader, out BadImageFormatException mrEx);
             bool makeBad = (mrEx != null);
 
             // If method is not generic, let's assign empty list for type parameters
@@ -965,8 +957,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         internal override byte? GetNullableContextValue()
         {
-            byte? value;
-            if (!_packedFlags.TryGetNullableContext(out value))
+            if (!_packedFlags.TryGetNullableContext(out byte? value))
             {
                 value = _containingType.ContainingPEModule.Module.HasNullableContextAttribute(_handle, out byte arg) ?
                     arg :

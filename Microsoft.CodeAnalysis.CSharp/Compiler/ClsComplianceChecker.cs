@@ -107,8 +107,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0; i < symbol.Modules.Length; i++)
             {
                 ModuleSymbol module = symbol.Modules[i];
-                Location attributeLocation;
-                bool? moduleDeclaredCompliance = GetDeclaredCompliance(module, out attributeLocation);
+                bool? moduleDeclaredCompliance = GetDeclaredCompliance(module, out Location attributeLocation);
 
                 Location warningLocation = i == 0 ? attributeLocation : module.Locations[0];
                 System.Diagnostics.Debug.Assert(warningLocation != null || !moduleDeclaredCompliance.HasValue || (i == 0 && _filterTree != null),
@@ -334,8 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (attribute.IsTargetAttribute(symbol, AttributeDescription.CLSCompliantAttribute))
                 {
-                    Location attributeLocation;
-                    if (TryGetAttributeWarningLocation(attribute, out attributeLocation))
+                    if (TryGetAttributeWarningLocation(attribute, out Location attributeLocation))
                     {
                         AttributeUsageInfo attributeUsage = attribute.AttributeClass.GetAttributeUsageInfo();
                         this.AddDiagnostic(ErrorCode.ERR_AttributeNotOnAccessor, attributeLocation, attribute.AttributeClass.Name, attributeUsage.GetValidTargetsErrorArgument());
@@ -597,8 +595,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         // TODO: it would be nice to report for each bad argument, but currently it's pointless since they
                         // would all have the same message and location.
-                        Location warningLocation;
-                        if (TryGetAttributeWarningLocation(attribute, out warningLocation))
+                        if (TryGetAttributeWarningLocation(attribute, out Location warningLocation))
                         {
                             this.AddDiagnostic(ErrorCode.WRN_CLS_ArrayArgumentToAttribute, warningLocation);
                             return;
@@ -613,8 +610,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         // TODO: it would be nice to report for each bad argument, but currently it's pointless since they
                         // would all have the same message and location.
-                        Location warningLocation;
-                        if (TryGetAttributeWarningLocation(attribute, out warningLocation))
+                        if (TryGetAttributeWarningLocation(attribute, out Location warningLocation))
                         {
                             this.AddDiagnostic(ErrorCode.WRN_CLS_ArrayArgumentToAttribute, warningLocation);
                             return;
@@ -631,8 +627,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             // TODO: it would be nice to report for each bad argument, but currently it's pointless since they
                             // would all have the same message and location.
-                            Location warningLocation;
-                            if (TryGetAttributeWarningLocation(attribute, out warningLocation))
+                            if (TryGetAttributeWarningLocation(attribute, out Location warningLocation))
                             {
                                 this.AddDiagnostic(ErrorCode.WRN_CLS_ArrayArgumentToAttribute, warningLocation);
                                 return;
@@ -682,8 +677,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             for (int i = startPos; i < parameters.Length; i++)
             {
-                Location attributeLocation;
-                if (TryGetClsComplianceAttributeLocation(parameters[i].GetAttributes(), parameters[i], out attributeLocation))
+                if (TryGetClsComplianceAttributeLocation(parameters[i].GetAttributes(), parameters[i], out Location attributeLocation))
                 {
                     this.AddDiagnostic(ErrorCode.WRN_CLS_MeaninglessOnParam, attributeLocation);
                 }
@@ -692,8 +686,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void CheckForMeaninglessOnReturn(MethodSymbol method)
         {
-            Location attributeLocation;
-            if (TryGetClsComplianceAttributeLocation(method.GetReturnTypeAttributes(), method, out attributeLocation))
+            if (TryGetClsComplianceAttributeLocation(method.GetReturnTypeAttributes(), method, out Location attributeLocation))
             {
                 this.AddDiagnostic(ErrorCode.WRN_CLS_MeaninglessOnReturn, attributeLocation);
             }
@@ -895,11 +888,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             foreach (Symbol other in sameNameSymbols)
             {
                 // Note: not checking accessor signatures, but checking accessor names.
-                ErrorCode code;
                 if (symbol.Kind == other.Kind &&
                     !symbol.IsAccessor() &&
                     !other.IsAccessor() &&
-                    TryGetCollisionErrorCode(symbol, other, out code))
+                    TryGetCollisionErrorCode(symbol, other, out ErrorCode code))
                 {
                     this.AddDiagnostic(code, symbol.Locations[0], symbol);
                     return;
@@ -1083,8 +1075,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 NamedTypeSymbol contextBaseType = context;
                 while ((object)contextBaseType != null)
                 {
-                    NamedTypeSymbol containingType;
-                    if (containingTypes.TryGetValue(contextBaseType.OriginalDefinition, out containingType))
+                    if (containingTypes.TryGetValue(contextBaseType.OriginalDefinition, out NamedTypeSymbol containingType))
                     {
                         return !TypeSymbol.Equals(containingType, contextBaseType, TypeCompareKind.ConsiderEverything2);
                     }
@@ -1123,14 +1114,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Not meaningful
 
-            Compliance compliance;
-            if (_declaredOrInheritedCompliance.TryGetValue(symbol, out compliance))
+            if (_declaredOrInheritedCompliance.TryGetValue(symbol, out Compliance compliance))
             {
                 return compliance;
             }
 
-            Location ignoredLocation;
-            bool? declaredCompliance = GetDeclaredCompliance(symbol, out ignoredLocation);
+            bool? declaredCompliance = GetDeclaredCompliance(symbol, out Location ignoredLocation);
             if (declaredCompliance.HasValue)
             {
                 compliance = declaredCompliance.GetValueOrDefault() ? Compliance.DeclaredTrue : Compliance.DeclaredFalse;

@@ -297,8 +297,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 if (_typeSyntax.IsVar)
                 {
-                    bool isVar;
-                    TypeWithAnnotations declType = this.TypeSyntaxBinder.BindTypeOrVarKeyword(_typeSyntax, BindingDiagnosticBag.Discarded, out isVar);
+                    TypeWithAnnotations declType = this.TypeSyntaxBinder.BindTypeOrVarKeyword(_typeSyntax, BindingDiagnosticBag.Discarded, out bool isVar);
                     return isVar;
                 }
 

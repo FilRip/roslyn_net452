@@ -168,8 +168,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             var key = new SynthesizedDelegateKey(parameterCount, byRefParameters, returnsVoid, generation);
 
-            SynthesizedDelegateValue result;
-            if (this.SynthesizedDelegates.TryGetValue(key, out result))
+            if (this.SynthesizedDelegates.TryGetValue(key, out SynthesizedDelegateValue result))
             {
                 return result.Delegate;
             }
@@ -203,8 +202,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             typeDescr.AssertIsGood();
 
             // Get anonymous type template
-            AnonymousTypeTemplateSymbol template;
-            if (!this.AnonymousTypeTemplates.TryGetValue(typeDescr.Key, out template))
+            if (!this.AnonymousTypeTemplates.TryGetValue(typeDescr.Key, out AnonymousTypeTemplateSymbol template))
             {
                 // NOTE: the newly created template may be thrown away if another thread wins
                 template = this.AnonymousTypeTemplates.GetOrAdd(typeDescr.Key, new AnonymousTypeTemplateSymbol(this, typeDescr));
@@ -281,9 +279,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 int nextIndex = moduleBeingBuilt.GetNextAnonymousTypeIndex();
                 foreach (var template in builder)
                 {
-                    string name;
-                    int index;
-                    if (!moduleBeingBuilt.TryGetAnonymousTypeName(template, out name, out index))
+                    if (!moduleBeingBuilt.TryGetAnonymousTypeName(template, out string name, out int index))
                     {
                         index = nextIndex++;
                         name = GeneratedNames.MakeAnonymousTypeTemplateName(index, this.Compilation.GetSubmissionSlotIndex(), moduleId);

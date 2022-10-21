@@ -432,8 +432,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static TypeWithAnnotations GetTypeOrReturnType(this Symbol symbol)
         {
-            TypeWithAnnotations returnType;
-            GetTypeOrReturnType(symbol, refKind: out _, out returnType, refCustomModifiers: out _);
+            GetTypeOrReturnType(symbol, refKind: out _, out TypeWithAnnotations returnType, refCustomModifiers: out _);
             return returnType;
         }
 

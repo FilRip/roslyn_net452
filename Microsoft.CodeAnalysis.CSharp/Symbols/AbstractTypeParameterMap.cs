@@ -22,8 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         protected sealed override TypeWithAnnotations SubstituteTypeParameter(TypeParameterSymbol typeParameter)
         {
             // It might need to be substituted directly.
-            TypeWithAnnotations result;
-            if (Mapping.TryGetValue(typeParameter, out result))
+            if (Mapping.TryGetValue(typeParameter, out TypeWithAnnotations result))
             {
                 return result;
             }

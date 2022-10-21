@@ -412,8 +412,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression VisitBinaryOperator(BinaryOperatorKind opKind, MethodSymbol methodOpt, TypeSymbol type, BoundExpression left, BoundExpression right)
         {
-            bool isChecked, isLifted, requiresLifted;
-            string opName = GetBinaryOperatorName(opKind, out isChecked, out isLifted, out requiresLifted);
+            string opName = GetBinaryOperatorName(opKind, out bool isChecked, out bool isLifted, out bool requiresLifted);
 
             // Fix up the null value for a nullable comparison vs null
             if ((object)left.Type == null && left.IsLiteralNull())
@@ -864,8 +863,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                             // An error is reported in diagnostics pass when a dynamic object initializer is encountered in an ET:
 
-                            InitializerKind elementKind;
-                            var value = VisitInitializer(a.Right, out elementKind);
+                            var value = VisitInitializer(a.Right, out InitializerKind elementKind);
                             switch (elementKind)
                             {
                                 case InitializerKind.CollectionInitializer:
@@ -930,8 +928,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var result = creation;
             if (initializerExpressionOpt == null) return result;
-            InitializerKind initializerKind;
-            var init = VisitInitializer(initializerExpressionOpt, out initializerKind);
+            var init = VisitInitializer(initializerExpressionOpt, out InitializerKind initializerKind);
             switch (initializerKind)
             {
                 case InitializerKind.CollectionInitializer:

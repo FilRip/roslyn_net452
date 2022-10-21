@@ -1,21 +1,15 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Microsoft.CodeAnalysis.CommandLine.NativeMethods
-// Assembly: vbc, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-// MVID: 59BA59CE-D1C9-469A-AF98-699E22DB28ED
-// Assembly location: C:\Code\Libs\Compilateurs\Work\Compilateur.NET\vbc.exe
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal static class NativeMethods
     {
         internal static readonly IntPtr NullPtr = IntPtr.Zero;
-        internal static readonly IntPtr InvalidIntPtr = new IntPtr(-1);
+        internal static readonly IntPtr InvalidIntPtr = new(-1);
         internal const uint NORMAL_PRIORITY_CLASS = 32;
         internal const uint CREATE_NO_WINDOW = 134217728;
         internal const int STARTF_USESTDHANDLES = 256;

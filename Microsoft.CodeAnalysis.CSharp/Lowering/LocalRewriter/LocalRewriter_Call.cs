@@ -166,7 +166,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             // We have already lowered each argument, but we may need some additional rewriting for the arguments,
             // such as generating a params array, re-ordering arguments based on argsToParamsOpt map, inserting arguments for optional parameters, etc.
-            ImmutableArray<LocalSymbol> temps;
             rewrittenArguments = MakeArguments(
                 syntax,
                 rewrittenArguments,
@@ -174,7 +173,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 expanded,
                 argsToParamsOpt,
                 ref argumentRefKindsOpt,
-                out temps,
+                out ImmutableArray<LocalSymbol> temps,
                 invokedAsExtensionMethod);
 
             return MakeCall(nodeOpt, syntax, rewrittenReceiver, method, rewrittenArguments, argumentRefKindsOpt, invokedAsExtensionMethod, resultKind, type, temps);
@@ -1081,8 +1080,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 }
 
-                BoundAssignmentOperator boundAssignmentToTemp;
-                BoundLocal boundTemp = _factory.StoreToTemp(argument, out boundAssignmentToTemp);
+                BoundLocal boundTemp = _factory.StoreToTemp(argument, out BoundAssignmentOperator boundAssignmentToTemp);
 
                 actualArguments[argIndex] = new BoundSequence(
                     argument.Syntax,

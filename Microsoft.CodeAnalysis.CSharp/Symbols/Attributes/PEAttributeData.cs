@@ -75,10 +75,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 #pragma warning disable 0252
             if ((object?)_lazyAttributeClass == ErrorTypeSymbol.UnknownResultType)
             {
-                TypeSymbol? attributeClass;
-                MethodSymbol? attributeConstructor;
 
-                if (!_decoder.GetCustomAttribute(_handle, out attributeClass, out attributeConstructor))
+                if (!_decoder.GetCustomAttribute(_handle, out TypeSymbol attributeClass, out MethodSymbol attributeConstructor))
                 {
                     // TODO: should we create CSErrorTypeSymbol for attribute class??
                     _lazyHasErrors = ThreeState.True;
@@ -98,10 +96,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             if (_lazyConstructorArguments.IsDefault || _lazyNamedArguments.IsDefault)
             {
-                TypedConstant[]? lazyConstructorArguments = null;
-                KeyValuePair<string, TypedConstant>[]? lazyNamedArguments = null;
 
-                if (!_decoder.GetCustomAttribute(_handle, out lazyConstructorArguments, out lazyNamedArguments))
+                if (!_decoder.GetCustomAttribute(_handle, out TypedConstant[] lazyConstructorArguments, out KeyValuePair<string, TypedConstant>[] lazyNamedArguments))
                 {
                     _lazyHasErrors = ThreeState.True;
                 }

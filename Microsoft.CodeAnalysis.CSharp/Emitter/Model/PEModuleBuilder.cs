@@ -555,10 +555,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     continue;
                 }
 
-                NamedTypeSymbol contender;
 
                 // Now check against other exported types
-                if (exportedNamesMap.TryGetValue(fullEmittedName, out contender))
+                if (exportedNamesMap.TryGetValue(fullEmittedName, out NamedTypeSymbol contender))
                 {
                     if ((object)type.ContainingAssembly == sourceAssembly)
                     {
@@ -727,9 +726,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 return (Cci.IAssemblyReference)this;
             }
 
-            Cci.IModuleReference reference;
 
-            if (AssemblyOrModuleSymbolToModuleRefMap.TryGetValue(assembly, out reference))
+            if (AssemblyOrModuleSymbolToModuleRefMap.TryGetValue(assembly, out Cci.IModuleReference reference))
             {
                 return (Cci.IAssemblyReference)reference;
             }
@@ -761,9 +759,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 return null;
             }
 
-            Cci.IModuleReference moduleRef;
 
-            if (AssemblyOrModuleSymbolToModuleRefMap.TryGetValue(module, out moduleRef))
+            if (AssemblyOrModuleSymbolToModuleRefMap.TryGetValue(module, out Cci.IModuleReference moduleRef))
             {
                 return moduleRef;
             }
@@ -1019,10 +1016,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             }
             else if (!needDeclaration && IsGenericType(fieldSymbol.ContainingType))
             {
-                object reference;
                 Cci.IFieldReference fieldRef;
 
-                if (_genericInstanceMap.TryGetValue(fieldSymbol, out reference))
+                if (_genericInstanceMap.TryGetValue(fieldSymbol, out object reference))
                 {
                     return (Cci.IFieldReference)reference;
                 }
@@ -1153,7 +1149,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             DiagnosticBag diagnostics,
             bool needDeclaration)
         {
-            object reference;
             Cci.IMethodReference methodRef;
             NamedTypeSymbol container = methodSymbol.ContainingType;
 
@@ -1176,7 +1171,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
                 if (methodIsGeneric || typeIsGeneric)
                 {
-                    if (_genericInstanceMap.TryGetValue(methodSymbol, out reference))
+                    if (_genericInstanceMap.TryGetValue(methodSymbol, out object reference))
                     {
                         return (Cci.IMethodReference)reference;
                     }
@@ -1228,9 +1223,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             {
                 if (methodSymbol.IsDefinition)
                 {
-                    object reference;
 
-                    if (_genericInstanceMap.TryGetValue(methodSymbol, out reference))
+                    if (_genericInstanceMap.TryGetValue(methodSymbol, out object reference))
                     {
                         methodRef = (Cci.IMethodReference)reference;
                     }
@@ -1310,10 +1304,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         private Cci.IParameterTypeInformation CreateParameterTypeInformationWrapper(ParameterSymbol param)
         {
-            object reference;
             Cci.IParameterTypeInformation paramRef;
 
-            if (_genericInstanceMap.TryGetValue(param, out reference))
+            if (_genericInstanceMap.TryGetValue(param, out object reference))
             {
                 return (Cci.IParameterTypeInformation)reference;
             }
@@ -1368,8 +1361,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
             lock (_fixedImplementationTypes)
             {
-                NamedTypeSymbol result;
-                if (_fixedImplementationTypes.TryGetValue(field, out result))
+                if (_fixedImplementationTypes.TryGetValue(field, out NamedTypeSymbol result))
                 {
                     return result;
                 }
@@ -1386,8 +1378,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             // Note that this method is called only after ALL fixed buffer types have been placed in the map.
             // At that point the map is all filled in and will not change further.  Therefore it is safe to
             // pull values from the map without locking.
-            NamedTypeSymbol result;
-            var found = _fixedImplementationTypes.TryGetValue(field, out result);
+            var found = _fixedImplementationTypes.TryGetValue(field, out NamedTypeSymbol result);
             return result;
         }
 

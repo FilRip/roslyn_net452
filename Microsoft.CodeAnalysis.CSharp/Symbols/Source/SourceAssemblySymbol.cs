@@ -1337,8 +1337,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 var diagnostics = BindingDiagnosticBag.GetInstance();
 
-                ImmutableArray<string> netModuleNames;
-                ImmutableArray<CSharpAttributeData> attributesFromNetModules = GetNetModuleAttributes(out netModuleNames);
+                ImmutableArray<CSharpAttributeData> attributesFromNetModules = GetNetModuleAttributes(out ImmutableArray<string> netModuleNames);
 
                 WellKnownAttributeData wellKnownData = null;
 
@@ -1429,8 +1428,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return null;
             }
 
-            ImmutableArray<string> netModuleNames;
-            ImmutableArray<CSharpAttributeData> attributesFromNetModules = GetNetModuleAttributes(out netModuleNames);
+            ImmutableArray<CSharpAttributeData> attributesFromNetModules = GetNetModuleAttributes(out ImmutableArray<string> netModuleNames);
 
             WellKnownAttributeData wellKnownData = null;
 
@@ -2012,9 +2010,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (_lazyInternalsVisibleToMap == null)
                 return SpecializedCollections.EmptyEnumerable<ImmutableArray<byte>>();
 
-            ConcurrentDictionary<ImmutableArray<byte>, Tuple<Location, string>> result = null;
 
-            _lazyInternalsVisibleToMap.TryGetValue(simpleName, out result);
+            _lazyInternalsVisibleToMap.TryGetValue(simpleName, out ConcurrentDictionary<ImmutableArray<byte>, Tuple<Location, string>> result);
 
             return (result != null) ? result.Keys : SpecializedCollections.EmptyEnumerable<ImmutableArray<byte>>();
         }
@@ -2153,9 +2150,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            AssemblyIdentity identity;
-            AssemblyIdentityParts parts;
-            if (!AssemblyIdentity.TryParseDisplayName(displayName, out identity, out parts))
+            if (!AssemblyIdentity.TryParseDisplayName(displayName, out AssemblyIdentity identity, out AssemblyIdentityParts parts))
             {
                 diagnostics.Add(ErrorCode.WRN_InvalidAssemblyName, GetAssemblyAttributeLocationForDiagnostic(nodeOpt), displayName);
                 AddOmittedAttributeIndex(index);
@@ -2194,8 +2189,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             //when two threads are attempting to update the internalsVisibleToMap one of these TryAdd()
             //calls can fail. We assume that the 'other' thread in that case will successfully add the same
             //contents eventually.
-            ConcurrentDictionary<ImmutableArray<byte>, Tuple<Location, string>> keys = null;
-            if (lazyInternalsVisibleToMap.TryGetValue(identity.Name, out keys))
+            if (lazyInternalsVisibleToMap.TryGetValue(identity.Name, out ConcurrentDictionary<ImmutableArray<byte>, Tuple<Location, string>> keys))
             {
                 keys.TryAdd(identity.PublicKey, locationAndValue);
             }
@@ -2265,8 +2259,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else if (attribute.IsTargetAttribute(this, AttributeDescription.AssemblyVersionAttribute))
             {
                 string verString = (string)attribute.CommonConstructorArguments[0].ValueInternal;
-                Version version;
-                if (!VersionHelper.TryParseAssemblyVersion(verString, allowWildcard: !_compilation.IsEmitDeterministic, version: out version))
+                if (!VersionHelper.TryParseAssemblyVersion(verString, allowWildcard: !_compilation.IsEmitDeterministic, version: out Version version))
                 {
                     Location attributeArgumentSyntaxLocation = attribute.GetAttributeArgumentSyntaxLocation(0, arguments.AttributeSyntaxOpt);
                     bool foundBadWildcard = _compilation.IsEmitDeterministic && verString?.Contains('*') == true;
@@ -2277,9 +2270,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else if (attribute.IsTargetAttribute(this, AttributeDescription.AssemblyFileVersionAttribute))
             {
-                Version dummy;
                 string verString = (string)attribute.CommonConstructorArguments[0].ValueInternal;
-                if (!VersionHelper.TryParse(verString, version: out dummy))
+                if (!VersionHelper.TryParse(verString, version: out Version dummy))
                 {
                     Location attributeArgumentSyntaxLocation = attribute.GetAttributeArgumentSyntaxLocation(0, arguments.AttributeSyntaxOpt);
                     diagnostics.Add(ErrorCode.WRN_InvalidVersionFormat, attributeArgumentSyntaxLocation);
@@ -2328,10 +2320,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else if (attribute.IsTargetAttribute(this, AttributeDescription.SatelliteContractVersionAttribute))
             {
                 //just check the format of this one, don't do anything else with it.
-                Version dummy;
                 string verString = (string)attribute.CommonConstructorArguments[0].ValueInternal;
 
-                if (!VersionHelper.TryParseAssemblyVersion(verString, allowWildcard: false, version: out dummy))
+                if (!VersionHelper.TryParseAssemblyVersion(verString, allowWildcard: false, version: out Version dummy))
                 {
                     Location attributeArgumentSyntaxLocation = attribute.GetAttributeArgumentSyntaxLocation(0, arguments.AttributeSyntaxOpt);
                     diagnostics.Add(ErrorCode.ERR_InvalidVersionFormat2, attributeArgumentSyntaxLocation);
@@ -2521,8 +2512,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 foreach (FieldSymbol field in _unassignedFieldsMap.Keys) // Not mutating, so no snapshot required.
                 {
-                    bool isInternalAccessibility;
-                    bool success = _unassignedFieldsMap.TryGetValue(field, out isInternalAccessibility);
+                    bool success = _unassignedFieldsMap.TryGetValue(field, out bool isInternalAccessibility);
 
                     if (isInternalAccessibility && internalsAreVisible)
                     {
@@ -2675,9 +2665,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 _lazyForwardedTypesFromSource = forwardedTypesFromSource;
             }
 
-            NamedTypeSymbol result;
 
-            if (_lazyForwardedTypesFromSource.TryGetValue(emittedName.FullName, out result))
+            if (_lazyForwardedTypesFromSource.TryGetValue(emittedName.FullName, out NamedTypeSymbol result))
             {
                 if ((forcedArity == -1 || result.Arity == forcedArity) &&
                     (!emittedName.UseCLSCompliantNameArityEncoding || result.Arity == 0 || result.MangleName))

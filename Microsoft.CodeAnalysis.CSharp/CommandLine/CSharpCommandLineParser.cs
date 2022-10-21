@@ -142,8 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 foreach (string arg in flattenedArgs)
                 {
-                    string? name, value;
-                    if (TryParseOption(arg, out name, out value) && (name == "ruleset"))
+                    if (TryParseOption(arg, out string name, out string value) && (name == "ruleset"))
                     {
                         var unquoted = RemoveQuotesAndSlashes(value);
 
@@ -163,8 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             foreach (string arg in flattenedArgs)
             {
 
-                string? name, value;
-                if (optionsEnded || !TryParseOption(arg, out name, out value))
+                if (optionsEnded || !TryParseOption(arg, out string name, out string value))
                 {
                     foreach (var path in ParseFileArgument(arg, baseDirectory, diagnostics))
                     {
@@ -450,8 +448,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             }
                             else
                             {
-                                Guid sqmSessionGuid;
-                                if (!Guid.TryParse(value, out sqmSessionGuid))
+                                if (!Guid.TryParse(value, out Guid sqmSessionGuid))
                                 {
                                     AddDiagnostic(diagnostics, ErrorCode.ERR_InvalidFormatForGuidForOption, value, name);
                                 }
@@ -874,8 +871,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             {
                                 foreach (var id in ParseWarnings(value))
                                 {
-                                    ReportDiagnostic ruleSetValue;
-                                    if (diagnosticOptions.TryGetValue(id, out ruleSetValue))
+                                    if (diagnosticOptions.TryGetValue(id, out ReportDiagnostic ruleSetValue))
                                     {
                                         warnAsErrors[id] = ruleSetValue;
                                     }
@@ -1404,8 +1400,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var parsedFeatures = ParseFeatures(features);
 
-            string? compilationName;
-            GetCompilationAndModuleNames(diagnostics, outputKind, sourceFiles, sourceFilesSpecified, moduleAssemblyName, ref outputFileName, ref moduleName, out compilationName);
+            GetCompilationAndModuleNames(diagnostics, outputKind, sourceFiles, sourceFilesSpecified, moduleAssemblyName, ref outputFileName, ref moduleName, out string compilationName);
 
             var parseOptions = new CSharpParseOptions
             (
@@ -1914,21 +1909,16 @@ namespace Microsoft.CodeAnalysis.CSharp
             IList<Diagnostic> diagnostics,
             bool embedded)
         {
-            string? filePath;
-            string? fullPath;
-            string? fileName;
-            string? resourceName;
-            string? accessibility;
 
             ParseResourceDescription(
                 resourceDescriptor,
                 baseDirectory,
                 false,
-                out filePath,
-                out fullPath,
-                out fileName,
-                out resourceName,
-                out accessibility);
+                out string filePath,
+                out string fullPath,
+                out string fileName,
+                out string resourceName,
+                out string accessibility);
 
             bool isPublic;
             if (accessibility == null)
@@ -2009,8 +1999,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             foreach (var id in items)
             {
-                ReportDiagnostic existing;
-                if (d.TryGetValue(id, out existing))
+                if (d.TryGetValue(id, out ReportDiagnostic existing))
                 {
                     // Rewrite the existing value with the latest one unless it is for /nowarn.
                     if (existing != ReportDiagnostic.Suppress)
@@ -2049,8 +2038,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static void AddDiagnostic(IList<Diagnostic> diagnostics, Dictionary<string, ReportDiagnostic> warningOptions, ErrorCode errorCode, params object[] arguments)
         {
             int code = (int)errorCode;
-            ReportDiagnostic value;
-            warningOptions.TryGetValue(CSharp.MessageProvider.Instance.GetIdForErrorCode(code), out value);
+            warningOptions.TryGetValue(CSharp.MessageProvider.Instance.GetIdForErrorCode(code), out ReportDiagnostic value);
             if (value != ReportDiagnostic.Suppress)
             {
                 AddDiagnostic(diagnostics, errorCode, arguments);

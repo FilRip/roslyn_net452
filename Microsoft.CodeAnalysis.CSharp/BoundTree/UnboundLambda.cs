@@ -494,8 +494,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Returns the inferred return type, or null if none can be inferred.
         public BoundLambda Bind(NamedTypeSymbol delegateType)
         {
-            BoundLambda? result;
-            if (!_bindingCache!.TryGetValue(delegateType, out result))
+            if (!_bindingCache!.TryGetValue(delegateType, out BoundLambda result))
             {
                 result = ReallyBind(delegateType);
                 result = ImmutableInterlocked.GetOrAdd(ref _bindingCache, delegateType, result);
@@ -815,8 +814,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var cacheKey = ReturnInferenceCacheKey.Create(delegateType, IsAsync);
 
-            BoundLambda? result;
-            if (!_returnInferenceCache!.TryGetValue(cacheKey, out result))
+            if (!_returnInferenceCache!.TryGetValue(cacheKey, out BoundLambda result))
             {
                 result = ReallyInferReturnType(delegateType, cacheKey.ParameterTypes, cacheKey.ParameterRefKinds);
                 result = ImmutableInterlocked.GetOrAdd(ref _returnInferenceCache, cacheKey, result);

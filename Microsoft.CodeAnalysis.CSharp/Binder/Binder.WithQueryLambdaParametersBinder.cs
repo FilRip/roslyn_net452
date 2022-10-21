@@ -37,8 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
 
                 BoundExpression translation;
-                ImmutableArray<string> path;
-                if (_rangeVariableMap.TryGetValue(qv, out path))
+                if (_rangeVariableMap.TryGetValue(qv, out ImmutableArray<string> path))
                 {
                     if (path.IsEmpty)
                     {

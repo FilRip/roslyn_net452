@@ -1,16 +1,10 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Microsoft.CodeAnalysis.CommandLine.FileMutex
-// Assembly: vbc, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-// MVID: 59BA59CE-D1C9-469A-AF98-699E22DB28ED
-// Assembly location: C:\Code\Libs\Compilateurs\Work\Compilateur.NET\vbc.exe
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class FileMutex : IDisposable
@@ -46,11 +40,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     this.IsLocked = true;
                     return true;
                 }
-                catch (IOException ex)
+                catch (IOException)
                 {
                     Thread.Sleep(1);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return false;
                 }

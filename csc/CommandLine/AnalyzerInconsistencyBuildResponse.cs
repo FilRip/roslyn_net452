@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
         public static AnalyzerInconsistencyBuildResponse Create(BinaryReader reader)
         {
             int num = reader.ReadInt32();
-            List<string> list = new List<string>(num);
+            List<string> list = new(num);
             for (int i = 0; i < num; i++)
             {
                 list.Add(BuildProtocolConstants.ReadLengthPrefixedString(reader) ?? "");

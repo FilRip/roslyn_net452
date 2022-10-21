@@ -129,9 +129,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return MakeInterfaceOverriddenOrHiddenMembers(member, memberIsFromSomeCompilation);
             }
 
-            ArrayBuilder<Symbol> hiddenBuilder;
-            ImmutableArray<Symbol> overriddenMembers;
-            FindOverriddenOrHiddenMembers(member, containingType, memberIsFromSomeCompilation, out hiddenBuilder, out overriddenMembers);
+            FindOverriddenOrHiddenMembers(member, containingType, memberIsFromSomeCompilation, out ArrayBuilder<Symbol> hiddenBuilder, out ImmutableArray<Symbol> overriddenMembers);
 
             ImmutableArray<Symbol> hiddenMembers = hiddenBuilder == null ? ImmutableArray<Symbol>.Empty : hiddenBuilder.ToImmutableAndFree();
             return OverriddenOrHiddenMembersResult.Create(overriddenMembers, hiddenMembers);
@@ -158,7 +156,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 (object)currType != null && (object)bestMatch == null && hiddenBuilder == null;
                 currType = currType.BaseTypeNoUseSiteDiagnostics)
             {
-                bool unused;
                 FindOverriddenOrHiddenMembersInType(
                     member,
                     memberIsFromSomeCompilation,
@@ -166,7 +163,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     knownOverriddenMember,
                     currType,
                     out bestMatch,
-                    out unused,
+                    out bool unused,
                     out hiddenBuilder);
             }
 
@@ -177,8 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static Symbol FindFirstHiddenMemberIfAny(Symbol member, bool memberIsFromSomeCompilation)
         {
-            ArrayBuilder<Symbol> hiddenBuilder;
-            FindOverriddenOrHiddenMembers(member, member.ContainingType, memberIsFromSomeCompilation, out hiddenBuilder,
+            FindOverriddenOrHiddenMembers(member, member.ContainingType, memberIsFromSomeCompilation, out ArrayBuilder<Symbol> hiddenBuilder,
                 overriddenMembers: out _);
 
             Symbol result = hiddenBuilder?.FirstOrDefault();
@@ -417,9 +413,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     continue;
                 }
 
-                Symbol currTypeBestMatch;
-                bool currTypeHasSameKindNonMatch;
-                ArrayBuilder<Symbol> currTypeHiddenBuilder;
 
                 FindOverriddenOrHiddenMembersInType(
                     member,
@@ -427,9 +420,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     containingType,
                     knownOverriddenMember: null,
                     currType,
-                    out currTypeBestMatch,
-                    out currTypeHasSameKindNonMatch,
-                    out currTypeHiddenBuilder);
+                    out Symbol currTypeBestMatch,
+                    out bool currTypeHasSameKindNonMatch,
+                    out ArrayBuilder<Symbol> currTypeHiddenBuilder);
 
                 bool haveBestMatch = (object)currTypeBestMatch != null;
 

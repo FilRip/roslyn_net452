@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>
@@ -98,12 +100,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             var deconstructionDiagnostics = new BindingDiagnosticBag(new DiagnosticBag(), diagnostics.DependenciesBag);
             BoundExpression boundRight = rightPlaceholder ?? BindValue(right, deconstructionDiagnostics, BindValueKind.RValue);
 
-            boundRight = FixTupleLiteral(locals.NestedVariables, boundRight, deconstruction, deconstructionDiagnostics);
+            boundRight = FixTupleLiteral(locals.NestedVariables!, boundRight, deconstruction, deconstructionDiagnostics);
             boundRight = BindToNaturalType(boundRight, diagnostics);
 
             bool resultIsUsed = resultIsUsedOverride || IsDeconstructionResultUsed(left);
-            var assignment = BindDeconstructionAssignment(deconstruction, left, boundRight, locals.NestedVariables, resultIsUsed, deconstructionDiagnostics);
-            DeconstructionVariable.FreeDeconstructionVariables(locals.NestedVariables);
+            var assignment = BindDeconstructionAssignment(deconstruction, left, boundRight, locals.NestedVariables!, resultIsUsed, deconstructionDiagnostics);
+            DeconstructionVariable.FreeDeconstructionVariables(locals.NestedVariables!);
 
             diagnostics.AddRange(deconstructionDiagnostics.DiagnosticBag);
             return assignment;
@@ -136,14 +138,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                             hasErrors: true);
             }
 
-            Conversion conversion;
             bool hasErrors = !MakeDeconstructionConversion(
                                     boundRHS.Type,
                                     node,
                                     boundRHS.Syntax,
                                     diagnostics,
                                     checkedVariables,
-                                    out conversion);
+                                    out Conversion conversion);
 
             if (conversion.Method != null)
             {
@@ -304,10 +305,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    var single = variable.Single;
+                    BoundExpression? single = variable.Single;
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-                    nestedConversion = this.Conversions.ClassifyConversionFromType(tupleOrDeconstructedTypes[i], single.Type, ref useSiteInfo);
-                    diagnostics.Add(single.Syntax, useSiteInfo);
+                    nestedConversion = this.Conversions.ClassifyConversionFromType(tupleOrDeconstructedTypes[i], single?.Type, ref useSiteInfo);
+                    diagnostics.Add(single!.Syntax, useSiteInfo);
 
                     if (!nestedConversion.IsImplicit)
                     {
@@ -380,7 +381,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    switch (variable.Single.Kind)
+                    switch (variable?.Single?.Kind)
                     {
                         case BoundKind.Local:
                             var local = (BoundLocal)variable.Single;
@@ -719,10 +720,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                             declaration = component;
                         }
 
-                        bool isVar;
                         bool isConst = false;
-                        AliasSymbol alias;
-                        var declType = BindVariableTypeWithAnnotations(component.Designation, diagnostics, component.Type, ref isConst, out isVar, out alias);
+                        var declType = BindVariableTypeWithAnnotations(component.Designation, diagnostics, component.Type, ref isConst, out bool isVar, out AliasSymbol alias);
                         if (component.Designation.Kind() == SyntaxKind.ParenthesizedVariableDesignation && !isVar)
                         {
                             // An explicit is not allowed with a parenthesized designation

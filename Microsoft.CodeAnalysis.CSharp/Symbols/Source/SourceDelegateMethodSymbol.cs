@@ -43,8 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var compilation = delegateType.DeclaringCompilation;
             Binder binder = delegateType.GetBinder(syntax.ParameterList);
-            RefKind refKind;
-            TypeSyntax returnTypeSyntax = syntax.ReturnType.SkipRef(out refKind);
+            TypeSyntax returnTypeSyntax = syntax.ReturnType.SkipRef(out RefKind refKind);
             var returnType = binder.BindType(returnTypeSyntax, diagnostics);
 
             // reuse types to avoid reporting duplicate errors if missing:
@@ -253,9 +252,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 this._refKind = refKind;
 
-                SyntaxToken arglistToken;
                 var parameters = ParameterHelpers.MakeParameters(
-                    binder, this, syntax.ParameterList, out arglistToken,
+                    binder, this, syntax.ParameterList, out SyntaxToken arglistToken,
                     allowRefOrOut: true,
                     allowThis: false,
                     addRefReadOnlyModifier: true,

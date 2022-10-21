@@ -50,8 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal override Binder GetBinder(SyntaxNode node)
         {
-            Binder binder;
-            return this.BinderMap.TryGetValue(node, out binder) ? binder : Next.GetBinder(node);
+            return this.BinderMap.TryGetValue(node, out Binder binder) ? binder : Next.GetBinder(node);
         }
 
         private void ComputeBinderMap()

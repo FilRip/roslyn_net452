@@ -170,24 +170,24 @@ namespace Microsoft.CodeAnalysis.CSharp
                 int r = 0;
                 while (l < left.Length && r < right.Length)
                 {
-                    var leftInterval = left[l];
+                    var (first, last) = left[l];
                     var rightInterval = right[r];
-                    if (tc.Related(LessThan, leftInterval.last, rightInterval.first))
+                    if (tc.Related(LessThan, last, rightInterval.first))
                     {
                         l++;
                     }
-                    else if (tc.Related(LessThan, rightInterval.last, leftInterval.first))
+                    else if (tc.Related(LessThan, rightInterval.last, first))
                     {
                         r++;
                     }
                     else
                     {
-                        Add(builder, Max(leftInterval.first, rightInterval.first), Min(leftInterval.last, rightInterval.last));
-                        if (tc.Related(LessThan, leftInterval.last, rightInterval.last))
+                        Add(builder, Max(first, rightInterval.first), Min(last, rightInterval.last));
+                        if (tc.Related(LessThan, last, rightInterval.last))
                         {
                             l++;
                         }
-                        else if (tc.Related(LessThan, rightInterval.last, leftInterval.last))
+                        else if (tc.Related(LessThan, rightInterval.last, last))
                         {
                             r++;
                         }
@@ -245,21 +245,21 @@ namespace Microsoft.CodeAnalysis.CSharp
                 int r = 0;
                 while (l < left.Length && r < right.Length)
                 {
-                    var leftInterval = left[l];
+                    var (first, last) = left[l];
                     var rightInterval = right[r];
-                    if (tc.Related(LessThan, leftInterval.last, rightInterval.first))
+                    if (tc.Related(LessThan, last, rightInterval.first))
                     {
-                        Add(builder, leftInterval.first, leftInterval.last);
+                        Add(builder, first, last);
                         l++;
                     }
-                    else if (tc.Related(LessThan, rightInterval.last, leftInterval.first))
+                    else if (tc.Related(LessThan, rightInterval.last, first))
                     {
                         Add(builder, rightInterval.first, rightInterval.last);
                         r++;
                     }
                     else
                     {
-                        Add(builder, Min(leftInterval.first, rightInterval.first), Max(leftInterval.last, rightInterval.last));
+                        Add(builder, Min(first, rightInterval.first), Max(last, rightInterval.last));
                         l++;
                         r++;
                     }
@@ -267,15 +267,15 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 while (l < left.Length)
                 {
-                    var leftInterval = left[l];
-                    Add(builder, leftInterval.first, leftInterval.last);
+                    var (first, last) = left[l];
+                    Add(builder, first, last);
                     l++;
                 }
 
                 while (r < right.Length)
                 {
-                    var rightInterval = right[r];
-                    Add(builder, rightInterval.first, rightInterval.last);
+                    var (first, last) = right[r];
+                    Add(builder, first, last);
                     r++;
                 }
 

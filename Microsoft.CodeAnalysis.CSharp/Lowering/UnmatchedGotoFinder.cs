@@ -44,8 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode Visit(BoundNode node)
         {
-            HashSet<LabelSymbol> unmatched;
-            if (node != null && _unmatchedLabelsCache.TryGetValue(node, out unmatched))
+            if (node != null && _unmatchedLabelsCache.TryGetValue(node, out HashSet<LabelSymbol> unmatched))
             {
                 if (unmatched != null)
                 {

@@ -1289,14 +1289,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HadAmbiguousWorseMethods(BindingDiagnosticBag diagnostics, ImmutableArray<Symbol> symbols, Location location, bool isQuery, BoundExpression receiver, string name)
         {
-            MemberResolutionResult<TMember> worseResult1;
-            MemberResolutionResult<TMember> worseResult2;
 
             // UNDONE: It is unfortunate that we simply choose the first two methods as the 
             // UNDONE: two to say that are ambiguous; they might not actually be ambiguous
             // UNDONE: with each other. We might consider building a better heuristic here.
 
-            int nWorse = TryGetFirstTwoWorseResults(out worseResult1, out worseResult2);
+            int nWorse = TryGetFirstTwoWorseResults(out MemberResolutionResult<TMember> worseResult1, out MemberResolutionResult<TMember> worseResult2);
             if (nWorse <= 1)
             {
                 return false;
@@ -1352,9 +1350,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HadAmbiguousBestMethods(BindingDiagnosticBag diagnostics, ImmutableArray<Symbol> symbols, Location location)
         {
-            MemberResolutionResult<TMember> validResult1;
-            MemberResolutionResult<TMember> validResult2;
-            var nValid = TryGetFirstTwoValidResults(out validResult1, out validResult2);
+            var nValid = TryGetFirstTwoValidResults(out MemberResolutionResult<TMember> validResult1, out MemberResolutionResult<TMember> validResult2);
             if (nValid <= 1)
             {
                 return false;

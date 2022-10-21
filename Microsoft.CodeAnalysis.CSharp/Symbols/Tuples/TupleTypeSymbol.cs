@@ -75,8 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             static NamedTypeSymbol getTupleUnderlyingType(ImmutableArray<TypeWithAnnotations> elementTypes, CSharpSyntaxNode? syntax, CSharpCompilation compilation, BindingDiagnosticBag? diagnostics)
             {
                 int numElements = elementTypes.Length;
-                int remainder;
-                int chainLength = NumberOfValueTuples(numElements, out remainder);
+                int chainLength = NumberOfValueTuples(numElements, out int remainder);
 
                 NamedTypeSymbol firstTupleType = compilation.GetWellKnownType(GetTupleType(remainder));
                 if (diagnostics is object && syntax is object)
@@ -228,8 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
 
             int numElements = elementTypes.Length;
-            int remainder;
-            int chainLength = NumberOfValueTuples(numElements, out remainder);
+            int chainLength = NumberOfValueTuples(numElements, out int remainder);
 
             NamedTypeSymbol currentSymbol = firstTupleType.Construct(ImmutableArray.Create(elementTypes, (chainLength - 1) * (ValueTupleRestPosition - 1), remainder));
             int loop = chainLength - 1;
@@ -255,8 +253,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static void VerifyTupleTypePresent(int cardinality, CSharpSyntaxNode? syntax, CSharpCompilation compilation, BindingDiagnosticBag diagnostics)
         {
 
-            int remainder;
-            int chainLength = NumberOfValueTuples(cardinality, out remainder);
+            int chainLength = NumberOfValueTuples(cardinality, out int remainder);
 
             NamedTypeSymbol firstTupleType = compilation.GetWellKnownType(GetTupleType(remainder));
             ReportUseSiteAndObsoleteDiagnostics(syntax, diagnostics, firstTupleType);
@@ -758,8 +755,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (!elementsMatchedByFields[i])
                 {
                     // We couldn't find a backing field for this element. It will be an error to access it.
-                    int fieldRemainder; // one-based
-                    int fieldChainLength = NumberOfValueTuples(i + 1, out fieldRemainder);
+                    // one-based
+                    int fieldChainLength = NumberOfValueTuples(i + 1, out int fieldRemainder);
                     NamedTypeSymbol container = getNestedTupleUnderlyingType(this, fieldChainLength - 1).OriginalDefinition;
 
                     var diagnosticInfo = container.IsErrorType() ?

@@ -1165,10 +1165,10 @@ namespace Microsoft.CodeAnalysis
                             continue;
                         }
 
-                        var namedArgumentDecoded = unmanagedCallersOnlyDecoder(name, value, !isProperty);
-                        if (namedArgumentDecoded.IsCallConvs)
+                        var (IsCallConvs, CallConvs) = unmanagedCallersOnlyDecoder(name, value, !isProperty);
+                        if (IsCallConvs)
                         {
-                            unmanagedConventionTypes = namedArgumentDecoded.CallConvs;
+                            unmanagedConventionTypes = CallConvs;
                             break;
                         }
                     }

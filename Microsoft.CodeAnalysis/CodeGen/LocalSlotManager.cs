@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     /// <summary>
@@ -131,7 +133,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             bool isSlotReusable)
         {
 
-            if (!isSlotReusable || !FreeSlots.TryPop(new LocalSignature(type, constraints), out LocalDefinition local))
+            if (!isSlotReusable || !FreeSlots.TryPop(new LocalSignature(type, constraints), out LocalDefinition? local))
             {
                 local = this.DeclareLocalImpl(type, symbol, name, kind, id, pdbAttributes, constraints, dynamicTransformFlags, tupleElementNames);
             }

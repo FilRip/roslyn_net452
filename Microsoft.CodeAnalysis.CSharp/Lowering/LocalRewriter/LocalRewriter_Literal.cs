@@ -45,10 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             var value = constantValue.DecimalValue;
-            bool isNegative;
-            byte scale;
-            uint low, mid, high;
-            value.GetBits(out isNegative, out scale, out low, out mid, out high);
+            value.GetBits(out bool isNegative, out byte scale, out uint low, out uint mid, out uint high);
 
             var arguments = new ArrayBuilder<BoundExpression>();
             SpecialMember member;

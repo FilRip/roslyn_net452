@@ -256,10 +256,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // The type of generated name. See TryParseGeneratedName.
         internal static GeneratedNameKind GetKind(string name)
         {
-            GeneratedNameKind kind;
-            int openBracketOffset;
-            int closeBracketOffset;
-            return TryParseGeneratedName(name, out kind, out openBracketOffset, out closeBracketOffset) ? kind : GeneratedNameKind.None;
+            return TryParseGeneratedName(name, out GeneratedNameKind kind, out int openBracketOffset, out int closeBracketOffset) ? kind : GeneratedNameKind.None;
         }
 
         // Parse the generated name. Returns true for names of the form
@@ -305,10 +302,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static bool TryParseSourceMethodNameFromGeneratedName(string generatedName, GeneratedNameKind requiredKind, out string methodName)
         {
-            int openBracketOffset;
-            int closeBracketOffset;
-            GeneratedNameKind kind;
-            if (!TryParseGeneratedName(generatedName, out kind, out openBracketOffset, out closeBracketOffset))
+            if (!TryParseGeneratedName(generatedName, out GeneratedNameKind kind, out int openBracketOffset, out int closeBracketOffset))
             {
                 methodName = null;
                 return false;
