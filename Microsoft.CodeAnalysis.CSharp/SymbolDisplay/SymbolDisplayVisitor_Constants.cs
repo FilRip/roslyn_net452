@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
-using System.Reflection;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {

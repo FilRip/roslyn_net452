@@ -4,12 +4,11 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -369,7 +368,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // In the event that we race to set the type of a local, we should
             // always deduce the same type, or deduce that the type is an error.
 
-            if ((object)_type == null)
+            if (_type == null)
             {
                 Interlocked.CompareExchange(ref _type, new TypeWithAnnotations.Boxed(newType), null);
             }

@@ -5,12 +5,8 @@
 #nullable disable
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -161,7 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         TypeSymbol type = constraintType.IsResolved ? constraintType.Type : constraintType.DefaultType;
 
-                        if (type is TypeParameterSymbol typeParameter && (object)typeParameter.ContainingSymbol == (object)container)
+                        if (type is TypeParameterSymbol typeParameter && typeParameter.ContainingSymbol == (object)container)
                         {
                             if (isValueType(typeParameter, constraintClauses, isValueTypeMap, inProgress))
                             {
@@ -221,7 +217,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     if (type is TypeParameterSymbol typeParameter)
                     {
-                        if ((object)typeParameter.ContainingSymbol == (object)container)
+                        if (typeParameter.ContainingSymbol == (object)container)
                         {
                             if (isReferenceTypeFromConstraintTypes(typeParameter, constraintClauses, isReferenceTypeFromConstraintTypesMap, inProgress))
                             {

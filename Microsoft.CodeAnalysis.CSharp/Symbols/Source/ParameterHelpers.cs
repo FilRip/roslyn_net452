@@ -6,9 +6,10 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -457,7 +458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else if (firstDefault != -1 && parameterIndex > firstDefault && !isDefault && !parameter.IsParams)
             {
                 // error CS1737: Optional parameters must appear after all required parameters
-                Location loc = ((ParameterSyntax)(BaseParameterSyntax)parameterSyntax).Identifier.GetNextToken(includeZeroWidth: true).GetLocation(); //could be missing
+                Location loc = ((ParameterSyntax)parameterSyntax).Identifier.GetNextToken(includeZeroWidth: true).GetLocation(); //could be missing
                 diagnostics.Add(ErrorCode.ERR_DefaultValueBeforeRequiredValue, loc);
             }
             else if (parameter.RefKind != RefKind.None &&

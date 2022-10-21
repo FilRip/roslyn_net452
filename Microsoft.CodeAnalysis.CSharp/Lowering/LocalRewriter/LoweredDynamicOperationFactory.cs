@@ -4,9 +4,10 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -499,7 +500,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var binderConstruction = MakeBinderConstruction(WellKnownMember.Microsoft_CSharp_RuntimeBinder_Binder__IsEvent, new[]
             {
                 // flags (unused):
-                _factory.Literal((int)0),
+                _factory.Literal(0),
 
                 // member name:
                 _factory.Literal(name),

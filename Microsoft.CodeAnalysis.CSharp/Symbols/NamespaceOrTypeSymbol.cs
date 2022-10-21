@@ -4,9 +4,10 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -315,7 +316,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-Done:
+        Done:
             if ((object?)namedType == null)
             {
                 if (isTopLevel)

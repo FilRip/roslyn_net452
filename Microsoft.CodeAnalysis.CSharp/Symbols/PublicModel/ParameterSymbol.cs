@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel

@@ -4,11 +4,12 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Immutable;
 using System.Threading;
-using Roslyn.Utilities;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -19,7 +20,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private TypeWithAnnotations.Boxed _lazyType;
 
         internal SubstitutedFieldSymbol(SubstitutedNamedTypeSymbol containingType, FieldSymbol substitutedFrom)
-            : base((FieldSymbol)substitutedFrom.OriginalDefinition)
+            : base(substitutedFrom.OriginalDefinition)
         {
             _containingType = containingType;
         }

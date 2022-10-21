@@ -7,13 +7,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -400,7 +401,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ITypeSymbol destination,
             bool isExplicitInSource = false)
         {
-            if ((object)destination == null)
+            if (destination == null)
             {
                 throw new ArgumentNullException(nameof(destination));
             }
@@ -827,7 +828,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             SymbolInfo symbolInfo = this.GetSymbolInfo(lambda, cancellationToken);
 
             LambdaSymbol lambdaSymbol;
-            if ((object)symbolInfo.Symbol != null)
+            if (symbolInfo.Symbol != null)
             {
                 lambdaSymbol = symbolInfo.Symbol.GetSymbol<LambdaSymbol>();
             }
@@ -1786,7 +1787,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             while (node != null);
 
-done:
+        done:
             return GetEnclosingBinderInternalWithinRoot(AdjustStartingNodeAccordingToNewRoot(startingNode, queryClause.Syntax),
                                       position, queryClause.Binder, queryClause.Syntax);
         }
@@ -2234,7 +2235,7 @@ done:
                         goto foundParent;
                 }
             }
-foundParent:;
+        foundParent:;
 
             var bindableParent = this.GetBindableSyntaxNode(parent);
 

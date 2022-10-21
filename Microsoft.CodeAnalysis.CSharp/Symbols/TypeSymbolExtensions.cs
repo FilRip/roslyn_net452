@@ -5,9 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -999,7 +1000,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
 
         private static readonly Func<TypeSymbol, Symbol, bool, bool> s_isTypeParameterWithSpecificContainerPredicate =
-             (type, parameterContainer, unused) => type.TypeKind == TypeKind.TypeParameter && (object)type.ContainingSymbol == (object)parameterContainer;
+             (type, parameterContainer, unused) => type.TypeKind == TypeKind.TypeParameter && type.ContainingSymbol == (object)parameterContainer;
 
         public static bool ContainsTypeParameters(this TypeSymbol type, HashSet<TypeParameterSymbol> parameters)
         {
@@ -1310,7 +1311,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             //  These are different objects, but represent the same "type parameter at index 1"
             //
             //  In short - we are not interested in the type parameters of unconstructed types.
-            if ((object)type.ConstructedFrom != (object)type)
+            if (type.ConstructedFrom != (object)type)
             {
                 foreach (var arg in type.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics)
                 {

@@ -5,14 +5,11 @@
 #nullable disable
 
 using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Text;
-using Microsoft.CodeAnalysis.Collections;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
@@ -705,7 +702,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         internal static char GetCharsFromUtf32(uint codepoint, out char lowSurrogate)
         {
-            if (codepoint < (uint)0x00010000)
+            if (codepoint < 0x00010000)
             {
                 lowSurrogate = InvalidCharacter;
                 return (char)codepoint;

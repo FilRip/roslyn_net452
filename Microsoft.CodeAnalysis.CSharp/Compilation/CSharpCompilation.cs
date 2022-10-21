@@ -6,13 +6,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Threading;
+
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeGen;
@@ -25,7 +25,9 @@ using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
+
 using static Microsoft.CodeAnalysis.CSharp.Binder;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -2075,12 +2077,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             // and an explicit built-in conversion from source to destination. In that scenario
             // this method returns the implicit conversion.
 
-            if ((object)source == null)
+            if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if ((object)destination == null)
+            if (destination == null)
             {
                 throw new ArgumentNullException(nameof(destination));
             }
@@ -2846,7 +2848,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 hasDeclarationErrors: false,
                                 emitMethodBodies: false,
                                 diagnostics: bindingDiagnostics,
-                                filterOpt: filterTree is object ? (Predicate<Symbol>?)(s => IsDefinedOrImplementedInSourceTree(s, filterTree, filterSpan)) : (Predicate<Symbol>?)null,
+                                filterOpt: filterTree is object ? (s => IsDefinedOrImplementedInSourceTree(s, filterTree, filterSpan)) : null,
                                 cancellationToken: cancellationToken);
 
                 DocumentationCommentCompiler.WriteDocumentationCommentXml(this, null, null, bindingDiagnostics, cancellationToken, filterTree, filterSpan);
@@ -2865,7 +2867,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     var updated = current.Add(tree);
 
-                    if ((object)updated == current)
+                    if (updated == current)
                     {
                         break;
                     }
@@ -2878,7 +2880,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     var recent = Interlocked.CompareExchange(ref _usageOfUsingsRecordedInTrees, updated, current);
 
-                    if (recent == (object)current)
+                    if (recent == current)
                     {
                         break;
                     }
@@ -3488,7 +3490,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override SemanticModel CommonGetSemanticModel(SyntaxTree syntaxTree, bool ignoreAccessibility)
         {
-            return this.GetSemanticModel((SyntaxTree)syntaxTree, ignoreAccessibility);
+            return this.GetSemanticModel(syntaxTree, ignoreAccessibility);
         }
 
         protected override ImmutableArray<SyntaxTree> CommonSyntaxTrees

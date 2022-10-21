@@ -4,10 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -186,8 +186,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static SimpleNameSyntax WithIdentifier(this SimpleNameSyntax simpleName, SyntaxToken identifier)
         {
             return simpleName.Kind() == SyntaxKind.IdentifierName
-                ? (SimpleNameSyntax)((IdentifierNameSyntax)simpleName).WithIdentifier(identifier)
-                : (SimpleNameSyntax)((GenericNameSyntax)simpleName).WithIdentifier(identifier);
+                ? ((IdentifierNameSyntax)simpleName).WithIdentifier(identifier)
+                : ((GenericNameSyntax)simpleName).WithIdentifier(identifier);
         }
 
         internal static bool IsTypeInContextWhichNeedsDynamicAttribute(this IdentifierNameSyntax typeNode)
@@ -358,13 +358,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                         return null;
                     case SyntaxKind.SimpleAssignmentExpression:
-                        if ((object)((AssignmentExpressionSyntax)parent).Left == expr)
+                        if (((AssignmentExpressionSyntax)parent).Left == expr)
                         {
                             return parent;
                         }
                         return null;
                     case SyntaxKind.ForEachVariableStatement:
-                        if ((object)((ForEachVariableStatementSyntax)parent).Variable == expr)
+                        if (((ForEachVariableStatementSyntax)parent).Variable == expr)
                         {
                             return parent;
                         }

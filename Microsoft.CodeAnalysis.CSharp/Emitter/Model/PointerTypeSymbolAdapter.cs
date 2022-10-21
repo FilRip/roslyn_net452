@@ -6,8 +6,10 @@
 
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -106,7 +108,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.IPointerTypeReference)this);
+            visitor.Visit(this);
         }
 
         Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)

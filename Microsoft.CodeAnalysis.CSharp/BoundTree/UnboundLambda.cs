@@ -6,13 +6,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -364,7 +365,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal UnboundLambda WithNoCache()
         {
             var data = Data.WithCaching(false);
-            if ((object)data == Data)
+            if (data == Data)
             {
                 return this;
             }
@@ -844,7 +845,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override bool Equals(object? obj)
             {
-                if ((object)this == obj)
+                if (this == obj)
                 {
                     return true;
                 }

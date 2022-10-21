@@ -10,11 +10,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -2988,7 +2990,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         }
                         else
                         {
-                            if ((object)membersByName == _lazyEarlyAttributeDecodingMembersDictionary)
+                            if (membersByName == _lazyEarlyAttributeDecodingMembersDictionary)
                             {
                                 // Avoid mutating the cached dictionary and especially avoid doing this possibly on multiple threads in parallel.
                                 membersByName = new Dictionary<string, ImmutableArray<Symbol>>(membersByName);

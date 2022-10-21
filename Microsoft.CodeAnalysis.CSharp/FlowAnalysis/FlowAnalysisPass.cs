@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             SyntaxNode syntax = body.Syntax;
 
             BoundStatement ret = (method.IsIterator && !method.IsAsync)
-                ? (BoundStatement)BoundYieldBreakStatement.Synthesized(syntax)
+                ? BoundYieldBreakStatement.Synthesized(syntax)
                 : BoundReturnStatement.Synthesized(syntax, RefKind.None, null);
 
             return body.Update(body.Locals, body.LocalFunctions, body.Statements.Add(ret));

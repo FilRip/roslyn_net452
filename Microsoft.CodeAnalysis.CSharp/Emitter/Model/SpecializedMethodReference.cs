@@ -5,8 +5,6 @@
 #nullable disable
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
@@ -25,7 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public override void Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.ISpecializedMethodReference)this);
+            visitor.Visit(this);
         }
 
         Cci.IMethodReference Cci.ISpecializedMethodReference.UnspecializedVersion

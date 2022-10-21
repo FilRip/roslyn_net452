@@ -6,9 +6,11 @@
 
 using System.Collections.Immutable;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 #if DEBUG
@@ -1011,7 +1013,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // formal parameter type.
 
             TypeSymbol formalParameterType = method.GetParameterType(result.Result.BadParameter);
-            formalParameterType.CheckAllConstraints(new ConstraintsHelper.CheckConstraintsArgsBoxed((CSharpCompilation)compilation, conversions, includeNullability: false, location, diagnostics));
+            formalParameterType.CheckAllConstraints(new ConstraintsHelper.CheckConstraintsArgsBoxed(compilation, conversions, includeNullability: false, location, diagnostics));
 
             return true;
         }

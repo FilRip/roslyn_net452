@@ -5,7 +5,7 @@
 #nullable disable
 
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
 
@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public override void Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.IGenericMethodInstanceReference)this);
+            visitor.Visit(this);
         }
 
         IEnumerable<Cci.ITypeReference> Cci.IGenericMethodInstanceReference.GetGenericArguments(EmitContext context)

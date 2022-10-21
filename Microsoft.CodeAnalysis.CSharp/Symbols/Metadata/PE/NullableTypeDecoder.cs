@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Reflection.Metadata;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE

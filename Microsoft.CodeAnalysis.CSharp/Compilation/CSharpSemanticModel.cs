@@ -10,10 +10,12 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -547,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var symbol = GetDeclaredSymbol((SingleVariableDesignationSyntax)declaration.Designation, cancellationToken);
-                if ((object)symbol == null)
+                if (symbol == null)
                 {
                     return SymbolInfo.None;
                 }
@@ -941,7 +943,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 switch (parent.Designation.Kind())
                 {
                     case SyntaxKind.SingleVariableDesignation:
-                        var (declarationType, annotation) = ((ITypeSymbol, CodeAnalysis.NullableAnnotation))TypeFromVariable((SingleVariableDesignationSyntax)parent.Designation, cancellationToken);
+                        var (declarationType, annotation) = TypeFromVariable((SingleVariableDesignationSyntax)parent.Designation, cancellationToken);
                         var declarationTypeSymbol = declarationType.GetSymbol();
                         var nullabilityInfo = annotation.ToNullabilityInfo(declarationTypeSymbol);
                         return new CSharpTypeInfo(declarationTypeSymbol, declarationTypeSymbol, nullabilityInfo, nullabilityInfo, Conversion.Identity);
@@ -2729,7 +2731,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// type), use Compilation.ClassifyConversion.</remarks>
         public Conversion ClassifyConversion(int position, ExpressionSyntax expression, ITypeSymbol destination, bool isExplicitInSource = false)
         {
-            if ((object)destination == null)
+            if (destination == null)
             {
                 throw new ArgumentNullException(nameof(destination));
             }
@@ -4354,7 +4356,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var tupleArgument = (ArgumentSyntax)identifierNameSyntax.Parent.Parent;
                 var tupleElement = GetDeclaredSymbol(tupleArgument, cancellationToken);
-                return (object)tupleElement == null ? SymbolInfo.None : new SymbolInfo(tupleElement, ImmutableArray<ISymbol>.Empty, CandidateReason.None);
+                return tupleElement == null ? SymbolInfo.None : new SymbolInfo(tupleElement, ImmutableArray<ISymbol>.Empty, CandidateReason.None);
             }
 
             if (parent3.IsKind(SyntaxKind.PropertyPatternClause) || parent3.IsKind(SyntaxKind.PositionalPatternClause))
@@ -4365,7 +4367,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CSharpSyntaxNode containingInvocation = parent3.Parent;
             SymbolInfo containingInvocationInfo = GetSymbolInfoWorker(containingInvocation, SymbolInfoOptions.PreferConstructorsToType | SymbolInfoOptions.ResolveAliases, cancellationToken);
 
-            if ((object)containingInvocationInfo.Symbol != null)
+            if (containingInvocationInfo.Symbol != null)
             {
                 ParameterSymbol param = FindNamedParameter(containingInvocationInfo.Symbol.GetSymbol().GetParameters(), argumentName);
                 return (object)param == null ? SymbolInfo.None : new SymbolInfo(param.GetPublicSymbol(), ImmutableArray<ISymbol>.Empty, CandidateReason.None);

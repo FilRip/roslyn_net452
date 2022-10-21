@@ -6,12 +6,12 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (boundSymbols.Length == 1)
                 {
                     var boundAlias = boundSymbols[0] as IAliasSymbol;
-                    if ((object)boundAlias != null && alias.Target.Equals(symbol))
+                    if (boundAlias != null && alias.Target.Equals(symbol))
                     {
                         builder.Add(CreatePart(SymbolDisplayPartKind.AliasName, alias, aliasName));
                         return true;
@@ -196,7 +196,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 .SelectMany(n => n.Usings)
                 .Concat(GetAncestorsOrThis<CompilationUnitSyntax>(startNode).SelectMany(c => c.Usings))
                 .Where(u => u.Alias != null)
-                .Select(u => semanticModel.GetDeclaredSymbol(u) as IAliasSymbol)
+                .Select(u => semanticModel.GetDeclaredSymbol(u))
                 .Where(u => u != null);
 
             var builder = ImmutableDictionary.CreateBuilder<INamespaceOrTypeSymbol, IAliasSymbol>();

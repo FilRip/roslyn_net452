@@ -8,12 +8,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 #pragma warning disable CS0660
@@ -246,7 +247,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal bool IsDerivedFrom(TypeSymbol type, TypeCompareKind comparison, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
 
-            if ((object)this == (object)type)
+            if (this == (object)type)
             {
                 return false;
             }
@@ -520,7 +521,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 DiagnosticInfo info = GetUseSiteInfo().DiagnosticInfo;
-                return (object)info != null && info.Code == (int)ErrorCode.ERR_BogusType;
+                return info != null && info.Code == (int)ErrorCode.ERR_BogusType;
             }
         }
 

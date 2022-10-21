@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Diagnostics.CodeAnalysis;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp

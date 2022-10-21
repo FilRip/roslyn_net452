@@ -4,10 +4,11 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.CodeGen

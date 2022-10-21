@@ -5,12 +5,13 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -298,7 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // symbol then we do not know its accessibility, modifiers, etc, all of which require knowing
             // the containing type, so we'll skip them.
 
-            if ((object)symbol.ContainingType != null || (symbol.ContainingSymbol is ITypeSymbol))
+            if (symbol.ContainingType != null || (symbol.ContainingSymbol is ITypeSymbol))
             {
                 AddAccessibilityIfRequired(symbol);
                 AddMemberModifiersIfRequired(symbol);
@@ -376,7 +377,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         containingType = symbol.ContainingType;
 
-                        if ((object)containingType != null)
+                        if (containingType != null)
                         {
                             includeType = IncludeNamedType(symbol.ContainingType);
                         }

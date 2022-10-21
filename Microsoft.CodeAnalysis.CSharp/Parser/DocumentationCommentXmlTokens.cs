@@ -5,6 +5,7 @@
 #nullable disable
 
 using Microsoft.CodeAnalysis.Syntax.InternalSyntax;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax

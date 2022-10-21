@@ -2,13 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Roslyn.Utilities;
+
 using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -52,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static bool IsInvoked(ExpressionSyntax node)
         {
-            node = (ExpressionSyntax)SyntaxFactory.GetStandaloneExpression(node);
+            node = SyntaxFactory.GetStandaloneExpression(node);
             var inv = node.Parent as InvocationExpressionSyntax;
             return inv != null && inv.Expression == node;
         }
@@ -62,7 +64,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static bool IsIndexed(ExpressionSyntax node)
         {
-            node = (ExpressionSyntax)SyntaxFactory.GetStandaloneExpression(node);
+            node = SyntaxFactory.GetStandaloneExpression(node);
             var indexer = node.Parent as ElementAccessExpressionSyntax;
             return indexer != null && indexer.Expression == node;
         }
@@ -231,7 +233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node != null)
             {
-                node = (ExpressionSyntax)SyntaxFactory.GetStandaloneExpression(node);
+                node = SyntaxFactory.GetStandaloneExpression(node);
                 var parent = node.Parent;
                 if (parent != null)
                 {

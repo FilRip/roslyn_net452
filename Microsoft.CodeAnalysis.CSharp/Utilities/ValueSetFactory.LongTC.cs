@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -56,7 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             long INumericTC<long>.Random(Random random)
             {
-                return ((long)random.Next() << 35) ^ ((long)random.Next() << 10) ^ (long)random.Next();
+                return ((long)random.Next() << 35) ^ ((long)random.Next() << 10) ^ random.Next();
             }
         }
     }

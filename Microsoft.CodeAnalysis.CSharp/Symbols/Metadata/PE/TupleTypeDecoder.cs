@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
-using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Reflection.Metadata;
+
+using Microsoft.CodeAnalysis.PooledObjects;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 {
@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             TypeSymbol type = metadataType.Type;
             TypeSymbol decoded = DecodeTupleTypesInternal(type, elementNames, hasTupleElementNamesAttribute);
-            return (object)decoded == (object)type ?
+            return decoded == (object)type ?
                 metadataType :
                 TypeWithAnnotations.Create(decoded, metadataType.NullableAnnotation, metadataType.CustomModifiers);
         }

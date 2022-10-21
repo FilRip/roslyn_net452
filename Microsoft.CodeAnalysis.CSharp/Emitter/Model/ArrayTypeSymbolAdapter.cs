@@ -2,11 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -50,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.IArrayTypeReference)this);
+            visitor.Visit(this);
         }
 
         bool Cci.ITypeReference.IsEnum => false;

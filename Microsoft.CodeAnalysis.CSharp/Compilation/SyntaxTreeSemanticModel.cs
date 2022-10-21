@@ -5,15 +5,15 @@
 #nullable disable
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If we didn't get anything and were in Type/Namespace only context, let's bind normally and see
                 // if any symbol comes out.
-                if ((object)result.Symbol == null && result.CandidateReason == CandidateReason.None && node is ExpressionSyntax && SyntaxFacts.IsInNamespaceOrTypeContext((ExpressionSyntax)node))
+                if (result.Symbol == null && result.CandidateReason == CandidateReason.None && node is ExpressionSyntax && SyntaxFacts.IsInNamespaceOrTypeContext((ExpressionSyntax)node))
                 {
                     var binder = this.GetEnclosingBinder(GetAdjustedNodePosition(node));
 
@@ -233,7 +233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         BoundExpression bound = binder.BindExpression((ExpressionSyntax)node, BindingDiagnosticBag.Discarded);
 
                         SymbolInfo info = GetSymbolInfoForNode(options, bound, bound, boundNodeForSyntacticParent: null, binderOpt: null);
-                        if ((object)info.Symbol != null)
+                        if (info.Symbol != null)
                         {
                             result = new SymbolInfo(null, ImmutableArray.Create<ISymbol>(info.Symbol), CandidateReason.NotATypeOrNamespace);
                         }
@@ -335,7 +335,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // if expression is not part of a member context then caller may really just have a
                 // reference to a type or namespace name
                 var type = node as TypeSyntax;
-                if ((object)type != null)
+                if (type != null)
                 {
                     // determine if this type is part of a base declaration being resolved
                     var basesBeingResolved = GetBasesBeingResolved(type);
@@ -532,7 +532,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             CheckSyntaxNode(expression);
 
-            if ((object)destination == null)
+            if (destination == null)
             {
                 throw new ArgumentNullException(nameof(destination));
             }
@@ -1282,7 +1282,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var declaredSymbol = GetDeclaredSymbol(variableDecl);
 
-            if ((object)declaredSymbol != null)
+            if (declaredSymbol != null)
             {
                 switch (variableDecl.Parent.Parent.Kind())
                 {
@@ -1984,7 +1984,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             foreach (var declarator in declarationSyntax.Declaration.Variables)
             {
-                var field = this.GetDeclaredSymbol(declarator, cancellationToken) as ISymbol;
+                var field = this.GetDeclaredSymbol(declarator, cancellationToken);
                 if (field != null)
                 {
                     builder.Add(field);
@@ -2075,7 +2075,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return null;
             }
 
-            var delegateType = (GetDeclaredSymbol(memberDecl, cancellationToken) as INamedTypeSymbol).GetSymbol();
+            var delegateType = GetDeclaredSymbol(memberDecl, cancellationToken).GetSymbol();
             if ((object)delegateType == null)
             {
                 return null;
@@ -2442,7 +2442,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case PrimaryConstructorBaseTypeSyntax { Parent: BaseListSyntax { Parent: RecordDeclarationSyntax recordDeclaration } } baseType
                         when recordDeclaration.PrimaryConstructorBaseTypeIfClass == declaredNode && TryGetSynthesizedRecordConstructor(recordDeclaration) is SynthesizedRecordConstructor ctor:
-                    if ((object)declaredSymbol.GetSymbol() == (object)ctor)
+                    if (declaredSymbol.GetSymbol() == (object)ctor)
                     {
                         // Only 'base arguments list' or nodes below it
                         return (node) => node != baseType.Type;

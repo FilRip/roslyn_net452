@@ -7,10 +7,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.RuntimeMembers;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -122,7 +124,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (_lazyWellKnownTypes == null)
                 {
-                    Interlocked.CompareExchange(ref _lazyWellKnownTypes, new NamedTypeSymbol[(int)WellKnownTypes.Count], null);
+                    Interlocked.CompareExchange(ref _lazyWellKnownTypes, new NamedTypeSymbol[WellKnownTypes.Count], null);
                 }
 
                 string mdName = type.GetMetadataName();
@@ -1032,7 +1034,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     return null;
                 }
-                return (NamedTypeSymbol)named.OriginalDefinition;
+                return named.OriginalDefinition;
             }
 
             protected override ImmutableArray<ParameterSymbol> GetParameters(MethodSymbol method)

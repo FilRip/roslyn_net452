@@ -6,9 +6,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Reflection.Metadata;
 using System.Threading;
+
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis.Emit;
-using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -34,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return _lazySignature;
             }
         }
-        void IReference.Dispatch(MetadataVisitor visitor) => visitor.Visit((IFunctionPointerTypeReference)this);
+        void IReference.Dispatch(MetadataVisitor visitor) => visitor.Visit(this);
 
         bool ITypeReference.IsEnum => false;
         Cci.PrimitiveTypeCode ITypeReference.TypeCode => Cci.PrimitiveTypeCode.FunctionPointer;

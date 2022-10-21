@@ -6,10 +6,11 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -231,7 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var rewrittenMethodSymbol = VisitMethodSymbol(node.Method);
             var rewrittenReceiver = (BoundExpression)this.Visit(node.ReceiverOpt);
-            var rewrittenArguments = (ImmutableArray<BoundExpression>)this.VisitList(node.Arguments);
+            var rewrittenArguments = this.VisitList(node.Arguments);
             var rewrittenType = this.VisitType(node.Type);
 
 
@@ -445,7 +446,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override BoundNode VisitFieldInfo(BoundFieldInfo node)
         {
-            var rewrittenField = ((FieldSymbol)node.Field.OriginalDefinition)
+            var rewrittenField = node.Field.OriginalDefinition
                 .AsMember((NamedTypeSymbol)this.VisitType(node.Field.ContainingType));
             return node.Update(rewrittenField, node.GetFieldFromHandle, node.Type);
         }
@@ -454,7 +455,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             BoundExpression receiverOpt = (BoundExpression)this.Visit(node.ReceiverOpt);
             TypeSymbol type = this.VisitType(node.Type);
-            var fieldSymbol = ((FieldSymbol)node.FieldSymbol.OriginalDefinition)
+            var fieldSymbol = node.FieldSymbol.OriginalDefinition
                 .AsMember((NamedTypeSymbol)this.VisitType(node.FieldSymbol.ContainingType));
             return node.Update(receiverOpt, fieldSymbol, node.ConstantValueOpt, node.ResultKind, type);
         }
@@ -543,7 +544,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else
             {
                 //  Method of a regular type
-                return ((MethodSymbol)method.OriginalDefinition)
+                return method.OriginalDefinition
                     .AsMember((NamedTypeSymbol)TypeMap.SubstituteType(method.ContainingType).AsTypeSymbolOnly())
                     .ConstructIfGeneric(TypeMap.SubstituteTypes(method.TypeArgumentsWithAnnotations));
             }
@@ -559,7 +560,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (!property.ContainingType.IsAnonymousType)
             {
                 //  Property of a regular type
-                return ((PropertySymbol)property.OriginalDefinition)
+                return property.OriginalDefinition
                     .AsMember((NamedTypeSymbol)TypeMap.SubstituteType(property.ContainingType).AsTypeSymbolOnly());
             }
 
@@ -586,13 +587,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private FieldSymbol VisitFieldSymbol(FieldSymbol field)
         {
             //  Property of a regular type
-            return ((FieldSymbol)field.OriginalDefinition)
+            return field.OriginalDefinition
                 .AsMember((NamedTypeSymbol)TypeMap.SubstituteType(field.ContainingType).AsTypeSymbolOnly());
         }
 
         public override BoundNode VisitObjectInitializerMember(BoundObjectInitializerMember node)
         {
-            ImmutableArray<BoundExpression> arguments = (ImmutableArray<BoundExpression>)this.VisitList(node.Arguments);
+            ImmutableArray<BoundExpression> arguments = this.VisitList(node.Arguments);
             TypeSymbol type = this.VisitType(node.Type);
             TypeSymbol receiverType = this.VisitType(node.ReceiverType);
 

@@ -4,11 +4,9 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -634,9 +632,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // losing surprising bits. 
                 switch (toSize)
                 {
-                    case 1: return unchecked((ulong)(byte)recursive);
-                    case 2: return unchecked((ulong)(ushort)recursive);
-                    case 4: return unchecked((ulong)(uint)recursive);
+                    case 1: return unchecked((byte)recursive);
+                    case 2: return unchecked((ushort)recursive);
+                    case 4: return unchecked((uint)recursive);
                 }
                 return recursive;
             }

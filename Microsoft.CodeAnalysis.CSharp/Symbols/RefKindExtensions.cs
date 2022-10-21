@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols

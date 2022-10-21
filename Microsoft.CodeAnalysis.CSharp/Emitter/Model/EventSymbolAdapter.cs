@@ -3,10 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -129,7 +130,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         void Cci.IReference.Dispatch(Cci.MetadataVisitor visitor)
         {
             CheckDefinitionInvariant();
-            visitor.Visit((Cci.IEventDefinition)this);
+            visitor.Visit(this);
         }
 
         Cci.IDefinition Cci.IReference.AsDefinition(EmitContext context)

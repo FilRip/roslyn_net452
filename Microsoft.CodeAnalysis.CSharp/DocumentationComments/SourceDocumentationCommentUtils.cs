@@ -4,11 +4,9 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
@@ -42,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (syntaxNode.Kind() == SyntaxKind.VariableDeclarator)
             {
                 CSharpSyntaxNode curr = syntaxNode;
-                while ((object)curr != null)
+                while (curr != null)
                 {
                     SyntaxKind kind = curr.Kind();
                     if (kind == SyntaxKind.FieldDeclaration || kind == SyntaxKind.EventFieldDeclaration)
@@ -53,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     curr = curr.Parent;
                 }
 
-                if ((object)curr != null)
+                if (curr != null)
                 {
                     syntaxNode = curr;
                 }
@@ -73,7 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 // In most cases, unprocessed doc comments are reported by UnprocessedDocumentationCommentFinder.
                                 // However, in places where doc comments *are* allowed, it's easier to determine which will
                                 // be unprocessed here.
-                                var tree = (SyntaxTree)trivia.SyntaxTree;
+                                var tree = trivia.SyntaxTree;
                                 if (tree.ReportDocumentationCommentDiagnostics())
                                 {
                                     int start = trivia.Position; // FullSpan start to include /** or ///

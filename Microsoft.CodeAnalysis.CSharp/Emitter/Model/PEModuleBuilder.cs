@@ -8,16 +8,17 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Threading;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit
@@ -183,7 +184,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             // this is a 64-bit mscorlib, which will produce a warning if /platform:x86 is
             // specified. A reference to the default mscorlib should always succeed without
             // warning so we ignore it here.
-            if ((object)assembly != (object)assembly.CorLibrary &&
+            if (assembly != (object)assembly.CorLibrary &&
                 !(refMachine == Machine.I386 && !assembly.Bit32Required))
             {
                 var machine = SourceModule.Machine;
@@ -696,7 +697,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             {
                 if (platformType == Cci.PlatformType.SystemType)
                 {
-                    return (object)namedType == (object)Compilation.GetWellKnownType(WellKnownType.System_Type);
+                    return namedType == (object)Compilation.GetWellKnownType(WellKnownType.System_Type);
                 }
 
                 return namedType.SpecialType == (SpecialType)platformType;

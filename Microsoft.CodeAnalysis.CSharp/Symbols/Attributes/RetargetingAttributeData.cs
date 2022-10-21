@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         internal override TypeSymbol GetSystemType(Symbol targetSymbol)
         {
             var retargetingAssembly = (RetargetingAssemblySymbol)(targetSymbol.Kind == SymbolKind.Assembly ? targetSymbol : targetSymbol.ContainingAssembly);
-            var underlyingAssembly = (SourceAssemblySymbol)retargetingAssembly.UnderlyingAssembly;
+            var underlyingAssembly = retargetingAssembly.UnderlyingAssembly;
 
             // Get the System.Type from the underlying assembly's Compilation
             TypeSymbol systemType = underlyingAssembly.DeclaringCompilation.GetWellKnownType(WellKnownType.System_Type);

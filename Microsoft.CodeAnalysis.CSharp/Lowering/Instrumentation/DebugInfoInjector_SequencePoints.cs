@@ -5,10 +5,10 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -124,7 +124,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case SyntaxKind.EventFieldDeclaration:
                     case SyntaxKind.FieldDeclaration:
                         var modifiers = ((BaseFieldDeclarationSyntax)declarationSyntax.Parent).Modifiers;
-                        GetFirstLocalOrFieldBreakpointSpan(modifiers.Any() ? modifiers[0] : (SyntaxToken?)null, declaratorSyntax, out node, out part);
+                        GetFirstLocalOrFieldBreakpointSpan(modifiers.Any() ? modifiers[0] : null, declaratorSyntax, out node, out part);
                         break;
 
                     case SyntaxKind.LocalDeclarationStatement:

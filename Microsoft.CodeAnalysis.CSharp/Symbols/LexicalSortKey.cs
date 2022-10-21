@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Threading;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -70,7 +69,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // WARNING: Only use this if the location is obtainable without allocating it (even if cached later). E.g., only
         // if the location object is stored in the constructor of the symbol.
         public LexicalSortKey(Location location, CSharpCompilation compilation)
-            : this((SyntaxTree)location.SourceTree, location.SourceSpan.Start, compilation)
+            : this(location.SourceTree, location.SourceSpan.Start, compilation)
         {
         }
 
@@ -86,7 +85,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // if the node is stored in the constructor of the symbol. In particular, do not call this on the result of a GetSyntax()
         // call on a SyntaxReference.
         public LexicalSortKey(SyntaxToken token, CSharpCompilation compilation)
-            : this((SyntaxTree)token.SyntaxTree, token.SpanStart, compilation)
+            : this(token.SyntaxTree, token.SpanStart, compilation)
         {
         }
 

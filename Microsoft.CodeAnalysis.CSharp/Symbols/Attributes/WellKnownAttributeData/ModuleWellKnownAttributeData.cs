@@ -4,9 +4,6 @@
 
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {

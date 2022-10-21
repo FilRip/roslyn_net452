@@ -5,11 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -750,7 +751,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // DoUncheckedConversion() keeps "single" floats as doubles internally to maintain higher
                     // precision, so make sure they get cast to floats here.
                     defaultValue = (parameterType.SpecialType == SpecialType.System_Single)
-                        ? (float)line
+                        ? line
                         : Binder.DoUncheckedConversion(parameterType.SpecialType, ConstantValue.Create(line));
                 }
                 else
@@ -1060,7 +1061,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private static TypedConstant VisitTypeOfExpression(BoundTypeOfOperator node, BindingDiagnosticBag diagnostics, ref bool attrHasErrors, bool curArgumentHasErrors)
             {
-                var typeOfArgument = (TypeSymbol?)node.SourceType.Type;
+                var typeOfArgument = node.SourceType.Type;
 
                 // typeof argument is allowed to be:
                 //  (a) an unbound type

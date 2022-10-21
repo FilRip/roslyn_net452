@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Text;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1367,7 +1369,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             foreach (var child in node.ChildBoundNodes)
             {
-                VisitRvalue(child as BoundExpression);
+                VisitRvalue(child);
             }
 
             return null;

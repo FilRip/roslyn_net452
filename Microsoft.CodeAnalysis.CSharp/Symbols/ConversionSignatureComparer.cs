@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections.Generic;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols

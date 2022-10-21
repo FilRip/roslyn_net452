@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
@@ -170,7 +169,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
             if (!hasBody)
             {
-                var nextToken = (SyntaxToken)SyntaxNavigator.Instance.GetNextToken(constructorDecl, predicate: null, stepInto: null);
+                var nextToken = SyntaxNavigator.Instance.GetNextToken(constructorDecl, predicate: null, stepInto: null);
                 return initializerOpt == null ?
                     position >= constructorDecl.ParameterList.CloseParenToken.Span.End && IsBeforeToken(position, nextToken) :
                     IsBetweenTokens(position, initializerOpt.ColonToken, nextToken);
@@ -439,7 +438,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             var bodyStatement = body as StatementSyntax;
             var firstExcluded = bodyStatement != null ?
                 GetFirstExcludedToken(bodyStatement) :
-                (SyntaxToken)SyntaxNavigator.Instance.GetNextToken(body, predicate: null, stepInto: null);
+                SyntaxNavigator.Instance.GetNextToken(body, predicate: null, stepInto: null);
 
             return IsBetweenTokens(position, firstIncluded, firstExcluded);
         }

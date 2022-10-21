@@ -9,10 +9,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
-using System.Runtime.CompilerServices;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -725,10 +727,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return false;
             }
 
-// very rare case. 
-// some implemented interfaces are related
-// will have to instantiate interfaces and check
-hasRelatedInterfaces:
+        // very rare case. 
+        // some implemented interfaces are related
+        // will have to instantiate interfaces and check
+        hasRelatedInterfaces:
             return type.InterfacesNoUseSiteDiagnostics(basesBeingResolved).HasDuplicates(Symbols.SymbolEqualityComparer.IgnoringDynamicTupleNamesAndNullability);
         }
 
@@ -791,7 +793,7 @@ hasRelatedInterfaces:
                 method,
                 in args,
                 method.TypeSubstitution,
-                ((MethodSymbol)method.OriginalDefinition).TypeParameters,
+                method.OriginalDefinition.TypeParameters,
                 method.TypeArgumentsWithAnnotations,
                 diagnosticsBuilder,
                 nullabilityDiagnosticsBuilderOpt,

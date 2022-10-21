@@ -4,16 +4,16 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
-using Roslyn.Utilities;
 using Microsoft.CodeAnalysis.Emit.NoPia;
+
+using Roslyn.Utilities;
 
 #if !DEBUG
 using SymbolAdapter = Microsoft.CodeAnalysis.CSharp.Symbol;
@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
         public NamedTypeSymbol GetSystemStringType(SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
         {
-            if ((object)_lazySystemStringType == (object)ErrorTypeSymbol.UnknownResultType)
+            if (_lazySystemStringType == (object)ErrorTypeSymbol.UnknownResultType)
             {
                 var typeSymbol = ModuleBeingBuilt.Compilation.GetSpecialType(SpecialType.System_String);
 
@@ -88,7 +88,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
         private MethodSymbol LazyGetWellKnownTypeMethod(ref MethodSymbol lazyMethod, WellKnownMember member, SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
         {
-            if ((object)lazyMethod == (object)ErrorMethodSymbol.UnknownMethod)
+            if (lazyMethod == (object)ErrorMethodSymbol.UnknownMethod)
             {
                 UseSiteInfo<AssemblySymbol> info;
                 var symbol = (MethodSymbol)Binder.GetWellKnownTypeMember(ModuleBeingBuilt.Compilation,
@@ -506,8 +506,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             var getMethod = property.AdaptedPropertySymbol.GetMethod?.GetCciAdapter();
             var setMethod = property.AdaptedPropertySymbol.SetMethod?.GetCciAdapter();
 
-            EmbeddedMethod embeddedGet = (object)getMethod != null ? EmbedMethod(type, getMethod, syntaxNodeOpt, diagnostics) : null;
-            EmbeddedMethod embeddedSet = (object)setMethod != null ? EmbedMethod(type, setMethod, syntaxNodeOpt, diagnostics) : null;
+            EmbeddedMethod embeddedGet = getMethod != null ? EmbedMethod(type, getMethod, syntaxNodeOpt, diagnostics) : null;
+            EmbeddedMethod embeddedSet = setMethod != null ? EmbedMethod(type, setMethod, syntaxNodeOpt, diagnostics) : null;
 
             EmbeddedProperty embedded = new EmbeddedProperty(property, embeddedGet, embeddedSet);
             EmbeddedProperty cached = EmbeddedPropertiesMap.GetOrAdd(property, embedded);
@@ -539,8 +539,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             var addMethod = @event.AdaptedEventSymbol.AddMethod?.GetCciAdapter();
             var removeMethod = @event.AdaptedEventSymbol.RemoveMethod?.GetCciAdapter();
 
-            EmbeddedMethod embeddedAdd = (object)addMethod != null ? EmbedMethod(type, addMethod, syntaxNodeOpt, diagnostics) : null;
-            EmbeddedMethod embeddedRemove = (object)removeMethod != null ? EmbedMethod(type, removeMethod, syntaxNodeOpt, diagnostics) : null;
+            EmbeddedMethod embeddedAdd = addMethod != null ? EmbedMethod(type, addMethod, syntaxNodeOpt, diagnostics) : null;
+            EmbeddedMethod embeddedRemove = removeMethod != null ? EmbedMethod(type, removeMethod, syntaxNodeOpt, diagnostics) : null;
 
             EmbeddedEvent embedded = new EmbeddedEvent(@event, embeddedAdd, embeddedRemove);
             EmbeddedEvent cached = EmbeddedEventsMap.GetOrAdd(@event, embedded);

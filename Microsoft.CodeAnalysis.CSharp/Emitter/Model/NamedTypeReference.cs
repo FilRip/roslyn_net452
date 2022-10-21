@@ -5,10 +5,11 @@
 #nullable disable
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit

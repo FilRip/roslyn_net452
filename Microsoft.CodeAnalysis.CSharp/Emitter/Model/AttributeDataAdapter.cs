@@ -5,7 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.Emit;
@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             PEModuleBuilder moduleBeingBuilt = (PEModuleBuilder)context.Module;
-            return (Cci.IMethodReference)moduleBeingBuilt.Translate(this.AttributeConstructor, (CSharpSyntaxNode)context.SyntaxNode, context.Diagnostics);
+            return moduleBeingBuilt.Translate(this.AttributeConstructor, (CSharpSyntaxNode)context.SyntaxNode, context.Diagnostics);
         }
 
         ImmutableArray<Cci.IMetadataNamedArgument> Cci.ICustomAttribute.GetNamedArguments(EmitContext context)

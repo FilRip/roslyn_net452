@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
@@ -42,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
         {
             get
             {
-                return (object)this == ((ISymbol)this).OriginalDefinition;
+                return this == ((ISymbol)this).OriginalDefinition;
             }
         }
 
@@ -57,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
             {
                 return false;
             }
-            else if ((object)otherType == this)
+            else if (otherType == this)
             {
                 return true;
             }

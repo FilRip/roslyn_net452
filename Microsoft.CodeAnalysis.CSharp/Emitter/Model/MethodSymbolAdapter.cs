@@ -4,14 +4,13 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -258,7 +257,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // NoPia method might come through here.
                 return ((PEModuleBuilder)context.Module).Translate(
-                    (MethodSymbol)AdaptedMethodSymbol.OriginalDefinition,
+                    AdaptedMethodSymbol.OriginalDefinition,
                     syntaxNodeOpt: (CSharpSyntaxNode)context.SyntaxNode,
                     diagnostics: context.Diagnostics,
                     needDeclaration: true);
@@ -273,7 +272,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return ((MethodSymbol)AdaptedMethodSymbol.OriginalDefinition).GetCciAdapter();
+                return AdaptedMethodSymbol.OriginalDefinition.GetCciAdapter();
             }
         }
 

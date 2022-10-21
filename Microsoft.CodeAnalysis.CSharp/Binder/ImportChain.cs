@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 
@@ -132,7 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static Cci.IAssemblyReference TryGetAssemblyScope(NamespaceSymbol @namespace, Emit.PEModuleBuilder moduleBuilder, DiagnosticBag diagnostics)
         {
             AssemblySymbol containingAssembly = @namespace.ContainingAssembly;
-            if ((object)containingAssembly != null && (object)containingAssembly != moduleBuilder.CommonCompilation.Assembly)
+            if ((object)containingAssembly != null && containingAssembly != moduleBuilder.CommonCompilation.Assembly)
             {
                 var referenceManager = ((CSharpCompilation)moduleBuilder.CommonCompilation).GetBoundReferenceManager();
 

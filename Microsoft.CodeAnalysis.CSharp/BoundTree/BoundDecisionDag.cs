@@ -5,12 +5,11 @@
 #nullable disable
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -182,7 +181,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         case BoundDagValueTest d:
                             return d.Value == inputConstant;
                         case BoundDagTypeTest d:
-                            return inputConstant.IsNull ? (bool?)false : null;
+                            return inputConstant.IsNull ? false : null;
                         case BoundDagRelationalTest d:
                             var f = ValueSetFactory.ForType(input.Type);
                             if (f is null) return null;

@@ -3,9 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {

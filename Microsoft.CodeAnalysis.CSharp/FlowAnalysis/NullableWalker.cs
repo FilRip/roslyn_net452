@@ -10,9 +10,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1767,7 +1769,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static object GetParameterAsDiagnosticArgument(ParameterSymbol? parameterOpt)
         {
             return parameterOpt is null ?
-                (object)"" :
+                "" :
                 new FormattedSymbol(parameterOpt, SymbolDisplayFormat.ShortFormat);
         }
 
@@ -1775,7 +1777,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var containingSymbol = parameterOpt?.ContainingSymbol;
             return containingSymbol is null ?
-                (object)"" :
+                "" :
                 new FormattedSymbol(containingSymbol, SymbolDisplayFormat.MinimallyQualifiedFormat);
         }
 
@@ -8538,7 +8540,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var assignment = node.DeconstructionOpt.DeconstructionAssignment;
 
                 // Visit the assignment as a deconstruction with an explicit type
-                VisitDeconstructionAssignmentOperator(assignment, sourceState.HasNullType ? (TypeWithState?)null : sourceState);
+                VisitDeconstructionAssignmentOperator(assignment, sourceState.HasNullType ? null : sourceState);
 
                 // https://github.com/dotnet/roslyn/issues/35010: if the iteration variable is a tuple deconstruction, we need to put something in the tree
                 Visit(node.IterationVariableType);
@@ -8640,7 +8642,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    VisitRvalue(child as BoundExpression);
+                    VisitRvalue(child);
                 }
             }
 

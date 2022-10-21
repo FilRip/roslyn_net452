@@ -4,14 +4,13 @@
 
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -3285,7 +3284,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Similarly, we honor IReadOnlyList<S> and IReadOnlyCollection<S> in the same way.
             if ((object)destinationArray != null && destinationArray.IsSZArray)
             {
-                var specialDefinition = ((TypeSymbol)source.OriginalDefinition).SpecialType;
+                var specialDefinition = source.OriginalDefinition.SpecialType;
 
                 if (specialDefinition == SpecialType.System_Collections_Generic_IList_T ||
                     specialDefinition == SpecialType.System_Collections_Generic_ICollection_T ||

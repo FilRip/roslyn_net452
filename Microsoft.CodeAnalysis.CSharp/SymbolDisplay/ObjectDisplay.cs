@@ -5,12 +5,10 @@
 #nullable disable
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
+
 using Microsoft.CodeAnalysis.PooledObjects;
-using ExceptionUtilities = Roslyn.Utilities.ExceptionUtilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {

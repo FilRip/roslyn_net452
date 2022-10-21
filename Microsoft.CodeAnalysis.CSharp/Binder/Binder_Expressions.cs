@@ -4,18 +4,18 @@
 
 #nullable disable
 
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -1652,7 +1652,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (refKind != RefKind.None || type.IsRefLikeType)
             {
                 var containingMethod = this.ContainingMemberOrLambda as MethodSymbol;
-                if ((object)containingMethod != null && (object)symbol.ContainingSymbol != (object)containingMethod)
+                if ((object)containingMethod != null && symbol.ContainingSymbol != (object)containingMethod)
                 {
                     // Not expecting symbol from constructed method.
 

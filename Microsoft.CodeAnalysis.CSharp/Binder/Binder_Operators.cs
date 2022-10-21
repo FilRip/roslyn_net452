@@ -5,12 +5,12 @@
 #nullable disable
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -771,7 +771,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 left = BindConditionalLogicalOperator(binary, left, right, diagnostics);
                 child = binary;
             }
-            while ((object)child != node);
+            while (child != node);
 
             return left;
         }
@@ -971,7 +971,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // * There must be an operator true/operator false that takes the left hand type of the operator.
 
             // Only classes and structs contain user-defined operators, so we know it is a named type symbol.
-            NamedTypeSymbol t = (NamedTypeSymbol)signature.Method.ContainingType;
+            NamedTypeSymbol t = signature.Method.ContainingType;
 
             // SPEC: The return type and the type of each parameter of the selected operator
             // SPEC: must be T.
@@ -1995,7 +1995,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Rope leftValue = valueLeft.RopeValue ?? Rope.Empty;
                 Rope rightValue = valueRight.RopeValue ?? Rope.Empty;
 
-                long newLength = (long)leftValue.Length + (long)rightValue.Length;
+                long newLength = leftValue.Length + (long)rightValue.Length;
                 return (newLength > int.MaxValue) ? ConstantValue.Bad : ConstantValue.CreateFromRope(Rope.Concat(leftValue, rightValue));
             }
 
@@ -2300,7 +2300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 receiver = eventAccess.ReceiverOpt;
                             }
 
-                            if ((object)fieldSymbol == null || fieldSymbol.IsStatic || (object)receiver == null)
+                            if ((object)fieldSymbol == null || fieldSymbol.IsStatic || receiver == null)
                             {
                                 return true;
                             }
@@ -2777,7 +2777,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return null;
                 }
 
-                return new BoundLiteral(node, ConstantValue.Create((int)-2147483648), GetSpecialType(SpecialType.System_Int32, diagnostics, node));
+                return new BoundLiteral(node, ConstantValue.Create(-2147483648), GetSpecialType(SpecialType.System_Int32, diagnostics, node));
             }
             else if (token.Value is ulong)
             {

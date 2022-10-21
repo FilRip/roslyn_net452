@@ -4,11 +4,7 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -28,7 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (ReferenceEquals(_lazyEnumUnderlyingType, ErrorTypeSymbol.UnknownResultType))
                 {
                     BindingDiagnosticBag diagnostics = BindingDiagnosticBag.GetInstance();
-                    if ((object)Interlocked.CompareExchange(ref _lazyEnumUnderlyingType, this.GetEnumUnderlyingType(diagnostics), ErrorTypeSymbol.UnknownResultType) ==
+                    if (Interlocked.CompareExchange(ref _lazyEnumUnderlyingType, this.GetEnumUnderlyingType(diagnostics), ErrorTypeSymbol.UnknownResultType) ==
                         (object)ErrorTypeSymbol.UnknownResultType)
                     {
                         AddDeclarationDiagnostics(diagnostics);

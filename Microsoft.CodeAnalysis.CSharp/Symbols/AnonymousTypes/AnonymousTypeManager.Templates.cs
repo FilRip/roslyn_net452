@@ -10,9 +10,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -72,7 +73,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             public override int GetHashCode()
             {
                 return Hash.Combine(
-                    Hash.Combine((int)_parameterCount, _generation),
+                    Hash.Combine(_parameterCount, _generation),
                     Hash.Combine(_returnsVoid.GetHashCode(), _byRefs.GetHashCode()));
             }
         }
@@ -447,7 +448,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             NamedTypeSymbol translatedType = TranslateAnonymousTypeSymbol(method.ContainingType);
             // find a method in anonymous type template by name
-            foreach (var member in ((NamedTypeSymbol)translatedType.OriginalDefinition).GetMembers(method.Name))
+            foreach (var member in translatedType.OriginalDefinition.GetMembers(method.Name))
             {
                 if (member.Kind == SymbolKind.Method)
                 {
@@ -472,7 +473,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             public int Compare(AnonymousTypeTemplateSymbol x, AnonymousTypeTemplateSymbol y)
             {
-                if ((object)x == (object)y)
+                if (x == (object)y)
                 {
                     return 0;
                 }

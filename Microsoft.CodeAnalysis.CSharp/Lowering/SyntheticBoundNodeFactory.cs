@@ -8,12 +8,13 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.CodeGen;
-using Microsoft.CodeAnalysis.CSharp.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -247,7 +248,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression This(LocalSymbol thisTempOpt)
         {
-            return (thisTempOpt != null) ? Local(thisTempOpt) : (BoundExpression)This();
+            return (thisTempOpt != null) ? Local(thisTempOpt) : This();
         }
 
         public BoundBaseReference Base(NamedTypeSymbol baseType)

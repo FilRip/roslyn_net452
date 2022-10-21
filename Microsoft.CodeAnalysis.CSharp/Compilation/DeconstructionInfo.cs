@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return _conversion.Kind == ConversionKind.Deconstruction
                     ? null
-                    : (Conversion?)_conversion;
+                    : _conversion;
             }
         }
 

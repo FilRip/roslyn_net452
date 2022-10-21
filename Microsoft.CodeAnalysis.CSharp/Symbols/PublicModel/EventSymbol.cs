@@ -4,7 +4,6 @@
 
 using System.Collections.Immutable;
 using System.Threading;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {

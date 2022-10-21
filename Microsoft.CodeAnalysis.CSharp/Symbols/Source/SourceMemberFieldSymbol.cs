@@ -4,16 +4,16 @@
 
 #nullable disable
 
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Threading;
 using Microsoft.CodeAnalysis.Text;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -474,7 +474,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             fieldsBeingBound = new ConsList<FieldSymbol>(this, fieldsBeingBound);
 
                             var initializerBinder = new ImplicitlyTypedFieldBinder(binder, fieldsBeingBound);
-                            var initializerOpt = initializerBinder.BindInferredVariableInitializer(diagnostics, RefKind.None, (EqualsValueClauseSyntax)declarator.Initializer, declarator);
+                            var initializerOpt = initializerBinder.BindInferredVariableInitializer(diagnostics, RefKind.None, declarator.Initializer, declarator);
 
                             if (initializerOpt != null)
                             {
@@ -561,7 +561,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return null;
             }
 
-            return ConstantValueUtils.EvaluateFieldConstant(this, (EqualsValueClauseSyntax)VariableDeclaratorNode.Initializer, dependencies, earlyDecodingWellKnownAttributes, diagnostics);
+            return ConstantValueUtils.EvaluateFieldConstant(this, VariableDeclaratorNode.Initializer, dependencies, earlyDecodingWellKnownAttributes, diagnostics);
         }
 
         internal override bool IsDefinedInSourceTree(SyntaxTree tree, TextSpan? definedWithinSpan, CancellationToken cancellationToken = default)

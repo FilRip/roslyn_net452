@@ -4,12 +4,12 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using Roslyn.Utilities;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 {

@@ -6,7 +6,6 @@
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
@@ -33,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public override void Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.ISpecializedNestedTypeReference)this);
+            visitor.Visit(this);
         }
 
         Cci.ITypeReference Cci.ITypeMemberReference.GetContainingType(EmitContext context)

@@ -5,11 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -1688,11 +1689,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                         trueTestImpliesTrueOther: out bool trueDecisionImpliesTrueOther,
                         falseTestImpliesTrueOther: out bool falseDecisionImpliesTrueOther,
                         foundExplicitNullTest: ref foundExplicitNullTest);
-                    whenTrue = trueDecisionImpliesTrueOther ? Tests.True.Instance : trueDecisionPermitsTrueOther ? this : (Tests)Tests.False.Instance;
-                    whenFalse = falseDecisionImpliesTrueOther ? Tests.True.Instance : falseDecisionPermitsTrueOther ? this : (Tests)Tests.False.Instance;
+                    whenTrue = trueDecisionImpliesTrueOther ? Tests.True.Instance : trueDecisionPermitsTrueOther ? this : Tests.False.Instance;
+                    whenFalse = falseDecisionImpliesTrueOther ? Tests.True.Instance : falseDecisionPermitsTrueOther ? this : Tests.False.Instance;
                 }
                 public override BoundDagTest ComputeSelectedTest() => this.Test;
-                public override Tests RemoveEvaluation(BoundDagEvaluation e) => e.Equals(Test) ? Tests.True.Instance : (Tests)this;
+                public override Tests RemoveEvaluation(BoundDagEvaluation e) => e.Equals(Test) ? Tests.True.Instance : this;
                 public override string Dump(Func<BoundDagTest, string> dump) => dump(this.Test);
                 public override bool Equals(object? obj) => this == obj || obj is One other && this.Test.Equals(other.Test);
                 public override int GetHashCode() => this.Test.GetHashCode();

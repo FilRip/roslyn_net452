@@ -8,11 +8,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -114,7 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // We only cache result equivalent to digging through type forwarders, which
                 // might produce a forwarder specific ErrorTypeSymbol. We don't want to 
                 // return that error symbol, unless digThroughForwardedTypes is true.
-                if (digThroughForwardedTypes || (!result.IsErrorType() && (object)result.ContainingAssembly == (object)this))
+                if (digThroughForwardedTypes || (!result.IsErrorType() && result.ContainingAssembly == (object)this))
                 {
                     return result;
                 }

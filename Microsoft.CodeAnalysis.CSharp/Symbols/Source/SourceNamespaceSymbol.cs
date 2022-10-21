@@ -7,11 +7,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -348,7 +348,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         // Check for collision with declarations from added modules.
                         foreach (NamespaceSymbol constituent in mergedAssemblyNamespace.ConstituentNamespaces)
                         {
-                            if ((object)constituent != (object)@namespace)
+                            if (constituent != (object)@namespace)
                             {
                                 // For whatever reason native compiler only detects conflicts against types.
                                 // It doesn't complain when source declares a type with the same name as 

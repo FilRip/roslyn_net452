@@ -6,9 +6,11 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1433,7 +1435,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         byte byteValue = value.ByteValue;
                         switch (destinationType)
                         {
-                            case SpecialType.System_Byte: return (byte)byteValue;
+                            case SpecialType.System_Byte: return byteValue;
                             case SpecialType.System_Char: return (char)byteValue;
                             case SpecialType.System_UInt16: return (ushort)byteValue;
                             case SpecialType.System_UInt32: return (uint)byteValue;
@@ -1454,7 +1456,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         switch (destinationType)
                         {
                             case SpecialType.System_Byte: return (byte)charValue;
-                            case SpecialType.System_Char: return (char)charValue;
+                            case SpecialType.System_Char: return charValue;
                             case SpecialType.System_UInt16: return (ushort)charValue;
                             case SpecialType.System_UInt32: return (uint)charValue;
                             case SpecialType.System_UInt64: return (ulong)charValue;
@@ -1475,7 +1477,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             case SpecialType.System_Byte: return (byte)uint16Value;
                             case SpecialType.System_Char: return (char)uint16Value;
-                            case SpecialType.System_UInt16: return (ushort)uint16Value;
+                            case SpecialType.System_UInt16: return uint16Value;
                             case SpecialType.System_UInt32: return (uint)uint16Value;
                             case SpecialType.System_UInt64: return (ulong)uint16Value;
                             case SpecialType.System_SByte: return (sbyte)uint16Value;
@@ -1496,14 +1498,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_Byte: return (byte)uint32Value;
                             case SpecialType.System_Char: return (char)uint32Value;
                             case SpecialType.System_UInt16: return (ushort)uint32Value;
-                            case SpecialType.System_UInt32: return (uint)uint32Value;
+                            case SpecialType.System_UInt32: return uint32Value;
                             case SpecialType.System_UInt64: return (ulong)uint32Value;
                             case SpecialType.System_SByte: return (sbyte)uint32Value;
                             case SpecialType.System_Int16: return (short)uint32Value;
                             case SpecialType.System_Int32: return (int)uint32Value;
                             case SpecialType.System_Int64: return (long)uint32Value;
                             case SpecialType.System_IntPtr: return (int)uint32Value;
-                            case SpecialType.System_UIntPtr: return (uint)uint32Value;
+                            case SpecialType.System_UIntPtr: return uint32Value;
                             case SpecialType.System_Single: return (double)(float)uint32Value;
                             case SpecialType.System_Double: return (double)uint32Value;
                             case SpecialType.System_Decimal: return (decimal)uint32Value;
@@ -1517,7 +1519,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_Char: return (char)uint64Value;
                             case SpecialType.System_UInt16: return (ushort)uint64Value;
                             case SpecialType.System_UInt32: return (uint)uint64Value;
-                            case SpecialType.System_UInt64: return (ulong)uint64Value;
+                            case SpecialType.System_UInt64: return uint64Value;
                             case SpecialType.System_SByte: return (sbyte)uint64Value;
                             case SpecialType.System_Int16: return (short)uint64Value;
                             case SpecialType.System_Int32: return (int)uint64Value;
@@ -1536,7 +1538,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_Byte: return (byte)nuintValue;
                             case SpecialType.System_Char: return (char)nuintValue;
                             case SpecialType.System_UInt16: return (ushort)nuintValue;
-                            case SpecialType.System_UInt32: return (uint)nuintValue;
+                            case SpecialType.System_UInt32: return nuintValue;
                             case SpecialType.System_UInt64: return (ulong)nuintValue;
                             case SpecialType.System_SByte: return (sbyte)nuintValue;
                             case SpecialType.System_Int16: return (short)nuintValue;
@@ -1557,7 +1559,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_UInt16: return (ushort)sbyteValue;
                             case SpecialType.System_UInt32: return (uint)sbyteValue;
                             case SpecialType.System_UInt64: return (ulong)sbyteValue;
-                            case SpecialType.System_SByte: return (sbyte)sbyteValue;
+                            case SpecialType.System_SByte: return sbyteValue;
                             case SpecialType.System_Int16: return (short)sbyteValue;
                             case SpecialType.System_Int32: return (int)sbyteValue;
                             case SpecialType.System_Int64: return (long)sbyteValue;
@@ -1578,7 +1580,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_UInt32: return (uint)int16Value;
                             case SpecialType.System_UInt64: return (ulong)int16Value;
                             case SpecialType.System_SByte: return (sbyte)int16Value;
-                            case SpecialType.System_Int16: return (short)int16Value;
+                            case SpecialType.System_Int16: return int16Value;
                             case SpecialType.System_Int32: return (int)int16Value;
                             case SpecialType.System_Int64: return (long)int16Value;
                             case SpecialType.System_IntPtr: return (int)int16Value;
@@ -1599,9 +1601,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_UInt64: return (ulong)int32Value;
                             case SpecialType.System_SByte: return (sbyte)int32Value;
                             case SpecialType.System_Int16: return (short)int32Value;
-                            case SpecialType.System_Int32: return (int)int32Value;
+                            case SpecialType.System_Int32: return int32Value;
                             case SpecialType.System_Int64: return (long)int32Value;
-                            case SpecialType.System_IntPtr: return (int)int32Value;
+                            case SpecialType.System_IntPtr: return int32Value;
                             case SpecialType.System_UIntPtr: return (uint)int32Value;
                             case SpecialType.System_Single: return (double)(float)int32Value;
                             case SpecialType.System_Double: return (double)int32Value;
@@ -1620,7 +1622,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_SByte: return (sbyte)int64Value;
                             case SpecialType.System_Int16: return (short)int64Value;
                             case SpecialType.System_Int32: return (int)int64Value;
-                            case SpecialType.System_Int64: return (long)int64Value;
+                            case SpecialType.System_Int64: return int64Value;
                             case SpecialType.System_IntPtr: return (int)int64Value;
                             case SpecialType.System_UIntPtr: return (uint)int64Value;
                             case SpecialType.System_Single: return (double)(float)int64Value;
@@ -1639,9 +1641,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_UInt64: return (ulong)nintValue;
                             case SpecialType.System_SByte: return (sbyte)nintValue;
                             case SpecialType.System_Int16: return (short)nintValue;
-                            case SpecialType.System_Int32: return (int)nintValue;
+                            case SpecialType.System_Int32: return nintValue;
                             case SpecialType.System_Int64: return (long)nintValue;
-                            case SpecialType.System_IntPtr: return (int)nintValue;
+                            case SpecialType.System_IntPtr: return nintValue;
                             case SpecialType.System_UIntPtr: return (uint)nintValue;
                             case SpecialType.System_Single: return (double)(float)nintValue;
                             case SpecialType.System_Double: return (double)nintValue;
@@ -1689,7 +1691,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SpecialType.System_UIntPtr: return (uint)decimalValue;
                             case SpecialType.System_Single: return (double)(float)decimalValue;
                             case SpecialType.System_Double: return (double)decimalValue;
-                            case SpecialType.System_Decimal: return (decimal)decimalValue;
+                            case SpecialType.System_Decimal: return decimalValue;
                             default: throw ExceptionUtilities.UnexpectedValue(destinationType);
                         }
                     default:

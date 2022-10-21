@@ -3,11 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -513,7 +514,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             conversion = conversions.ClassifyBuiltInConversion(expressionType, patternType, ref useSiteInfo);
             ConstantValue result = Binder.GetIsOperatorConstantResult(expressionType, patternType, conversion.Kind, operandConstantValue, operandCouldBeNull);
             return
-                (result == null) ? (bool?)null :
+                (result == null) ? null :
                 (result == ConstantValue.True) ? true :
                 (result == ConstantValue.False) ? false :
                 throw ExceptionUtilities.UnexpectedValue(result);

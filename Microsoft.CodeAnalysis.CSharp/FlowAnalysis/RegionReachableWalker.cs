@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {

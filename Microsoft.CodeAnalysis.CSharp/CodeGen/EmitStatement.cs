@@ -7,16 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
+
 using static Microsoft.CodeAnalysis.CSharp.Binder;
 
 namespace Microsoft.CodeAnalysis.CSharp.CodeGen
@@ -378,7 +380,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         private void EmitCondBranchCore(BoundExpression condition, ref object dest, bool sense)
         {
-oneMoreTime:
+        oneMoreTime:
 
             ILOpCode ilcode;
 
@@ -618,7 +620,7 @@ oneMoreTime:
                 foreach (var local in block.Locals)
                 {
                     var declaringReferences = local.DeclaringSyntaxReferences;
-                    DefineLocal(local, !declaringReferences.IsEmpty ? (CSharpSyntaxNode)declaringReferences[0].GetSyntax() : block.Syntax);
+                    DefineLocal(local, !declaringReferences.IsEmpty ? declaringReferences[0].GetSyntax() : block.Syntax);
                 }
             }
 
@@ -966,7 +968,7 @@ oneMoreTime:
             foreach (var local in catchBlock.Locals)
             {
                 var declaringReferences = local.DeclaringSyntaxReferences;
-                var localSyntax = !declaringReferences.IsEmpty ? (CSharpSyntaxNode)declaringReferences[0].GetSyntax() : catchBlock.Syntax;
+                var localSyntax = !declaringReferences.IsEmpty ? declaringReferences[0].GetSyntax() : catchBlock.Syntax;
                 DefineLocal(local, localSyntax);
             }
 

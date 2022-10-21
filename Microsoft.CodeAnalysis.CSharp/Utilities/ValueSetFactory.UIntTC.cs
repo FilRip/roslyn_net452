@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -43,7 +42,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return value + 1;
             }
 
-            public uint FromConstantValue(ConstantValue constantValue) => constantValue.IsBad ? (uint)0 : constantValue.UInt32Value;
+            public uint FromConstantValue(ConstantValue constantValue) => constantValue.IsBad ? 0 : constantValue.UInt32Value;
 
             public ConstantValue ToConstantValue(uint value) => ConstantValue.Create(value);
 

@@ -4,11 +4,11 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -274,7 +274,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // An internal type is accessible if we're in the same assembly or we have
                     // friend access to the assembly it was defined in.
-                    return (object)withinAssembly == (object)assembly || withinAssembly.HasInternalAccessTo(assembly);
+                    return withinAssembly == (object)assembly || withinAssembly.HasInternalAccessTo(assembly);
 
                 default:
                     throw ExceptionUtilities.UnexpectedValue(declaredAccessibility);
@@ -299,7 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             failedThroughTypeCheck = false;
 
             // easy case - members of containing type are accessible.
-            if ((object)containingType == (object)within)
+            if (containingType == (object)within)
             {
                 return true;
             }
@@ -447,7 +447,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // LangCompiler::CheckAccessCore
             {
                 var current = withinType.OriginalDefinition;
-                var originalThroughTypeOpt = (object)throughTypeOpt == null ? null : throughTypeOpt.OriginalDefinition as TypeSymbol;
+                var originalThroughTypeOpt = (object)throughTypeOpt == null ? null : throughTypeOpt.OriginalDefinition;
                 while ((object)current != null)
                 {
 
@@ -570,7 +570,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    current = (TypeSymbol)next.OriginalDefinition;
+                    current = next.OriginalDefinition;
                     current.AddUseSiteInfo(ref useSiteInfo);
                 }
             }

@@ -5,12 +5,10 @@
 #nullable disable
 
 using System;
-using System.Diagnostics;
 using System.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
-    using System.Reflection;
     using Microsoft.CodeAnalysis.Syntax.InternalSyntax;
 
     internal class DirectiveParser : SyntaxParser

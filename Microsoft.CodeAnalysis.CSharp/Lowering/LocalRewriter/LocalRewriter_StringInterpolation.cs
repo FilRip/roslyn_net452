@@ -4,7 +4,6 @@
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {

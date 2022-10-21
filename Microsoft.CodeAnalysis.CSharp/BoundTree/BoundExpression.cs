@@ -2,11 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Immutable;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Roslyn.Utilities;
 using System;
+using System.Collections.Immutable;
+
+using Microsoft.CodeAnalysis.CSharp.Symbols;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -613,11 +614,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static bool operator ==(BoundTypeOrValueData a, BoundTypeOrValueData b)
         {
-            return (object)a.ValueSymbol == (object)b.ValueSymbol &&
-                (object)a.ValueExpression == (object)b.ValueExpression &&
-                (object)a.ValueDiagnostics == (object)b.ValueDiagnostics &&
-                (object)a.TypeExpression == (object)b.TypeExpression &&
-                (object)a.TypeDiagnostics == (object)b.TypeDiagnostics;
+            return a.ValueSymbol == (object)b.ValueSymbol &&
+                a.ValueExpression == b.ValueExpression &&
+                a.ValueDiagnostics == b.ValueDiagnostics &&
+                a.TypeExpression == b.TypeExpression &&
+                a.TypeDiagnostics == b.TypeDiagnostics;
         }
 
         public static bool operator !=(BoundTypeOrValueData a, BoundTypeOrValueData b)

@@ -7,13 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
-using Microsoft.CodeAnalysis.Collections;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -154,7 +153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             NamespaceSymbol assemblyContainer = GetAssemblyNamespace(container);
 
-            if ((object)assemblyContainer == (object)container)
+            if (assemblyContainer == (object)container)
             {
                 // Trivial case, container isn't merged.
                 return namespaceSymbol;

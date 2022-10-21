@@ -6,16 +6,12 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.Collections;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -294,7 +290,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             foreach (var decl in this.declaration.Declarations)
             {
                 Tuple<NamedTypeSymbol, ImmutableArray<NamedTypeSymbol>> one = MakeOneDeclaredBases(newBasesBeingResolved, decl, diagnostics);
-                if ((object)one == null) continue;
+                if (one == null) continue;
 
                 var partBase = one.Item1;
                 var partInterfaces = one.Item2;

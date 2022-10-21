@@ -5,9 +5,10 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -378,7 +379,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             //  These are different objects, but represent the same "type parameter at index 1"	
             //	
             //  In short - we are not interested in the type arguments of unconstructed methods.	
-            if ((object)ConstructedFrom != (object)this)
+            if (ConstructedFrom != (object)this)
             {
                 foreach (var arg in this.TypeArgumentsWithAnnotations)
                 {
@@ -419,7 +420,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             MethodSymbol other = obj as MethodSymbol;
             if ((object)other == null) return false;
 
-            if ((object)this.OriginalDefinition != (object)other.OriginalDefinition &&
+            if (OriginalDefinition != (object)other.OriginalDefinition &&
                 this.OriginalDefinition != other.OriginalDefinition)
             {
                 return false;
@@ -431,8 +432,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // If both are declarations, then we don't need to check type arguments
             // If exactly one is a declaration, then they re not equal
-            bool selfIsDeclaration = (object)this == (object)this.ConstructedFrom;
-            bool otherIsDeclaration = (object)other == (object)other.ConstructedFrom;
+            bool selfIsDeclaration = this == (object)this.ConstructedFrom;
+            bool otherIsDeclaration = other == (object)other.ConstructedFrom;
             // PERF: VSadov specifically replaced the short-circuited operators in changeset #24717.
             if (selfIsDeclaration | otherIsDeclaration)
             {

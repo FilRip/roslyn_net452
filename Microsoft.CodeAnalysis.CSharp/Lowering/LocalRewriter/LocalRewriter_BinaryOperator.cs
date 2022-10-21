@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1834,7 +1834,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression call = _inExpressionLambda
                 ? new BoundBinaryOperator(syntax, operatorKind, null, method, default, loweredLeft, loweredRight, method.ReturnType)
-                : (BoundExpression)BoundCall.Synthesized(syntax, receiverOpt: null, method, loweredLeft, loweredRight);
+                : BoundCall.Synthesized(syntax, receiverOpt: null, method, loweredLeft, loweredRight);
             BoundExpression result = method.ReturnType.SpecialType == SpecialType.System_Delegate ?
                 MakeConversionNode(syntax, call, Conversion.ExplicitReference, type, @checked: false) :
                 call;

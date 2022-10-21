@@ -11,8 +11,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -659,8 +661,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var thisOriginalDefinition = this.OriginalDefinition;
             var otherOriginalDefinition = other.OriginalDefinition;
 
-            bool thisIsOriginalDefinition = ((object)this == (object)thisOriginalDefinition);
-            bool otherIsOriginalDefinition = ((object)other == (object)otherOriginalDefinition);
+            bool thisIsOriginalDefinition = (this == (object)thisOriginalDefinition);
+            bool otherIsOriginalDefinition = (other == (object)otherOriginalDefinition);
 
             if (thisIsOriginalDefinition && otherIsOriginalDefinition)
             {

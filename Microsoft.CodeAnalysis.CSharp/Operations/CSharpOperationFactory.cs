@@ -2,15 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Operations
@@ -394,7 +395,7 @@ namespace Microsoft.CodeAnalysis.Operations
                         var builder = ArrayBuilder<IVariableDeclaratorOperation>.GetInstance(multipleDeclaration.LocalDeclarations.Length);
                         foreach (var decl in multipleDeclaration.LocalDeclarations)
                         {
-                            builder.Add((IVariableDeclaratorOperation)CreateVariableDeclaratorInternal(decl, decl.Syntax));
+                            builder.Add(CreateVariableDeclaratorInternal(decl, decl.Syntax));
                         }
                         return builder.ToImmutableAndFree();
                     }
@@ -1160,7 +1161,7 @@ namespace Microsoft.CodeAnalysis.Operations
         private IOperation CreateBoundAssignmentOperatorOrMemberInitializerOperation(BoundAssignmentOperator boundAssignmentOperator)
         {
             return IsMemberInitializer(boundAssignmentOperator) ?
-                (IOperation)CreateBoundMemberInitializerOperation(boundAssignmentOperator) :
+                CreateBoundMemberInitializerOperation(boundAssignmentOperator) :
                 CreateBoundAssignmentOperatorOperation(boundAssignmentOperator);
         }
 

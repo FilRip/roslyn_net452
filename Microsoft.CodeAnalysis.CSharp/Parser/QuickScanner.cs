@@ -5,10 +5,7 @@
 #nullable disable
 
 using System;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
@@ -211,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             for (; i < n; i++)
             {
                 char c = charWindow[i];
-                int uc = unchecked((int)c);
+                int uc = unchecked(c);
 
                 var flags = uc < charPropLength ? (CharFlags)s_charProperties[uc] : CharFlags.Complex;
 
@@ -231,7 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
 
             state = QuickScanState.Bad; // ran out of characters in window
-exitWhile:
+        exitWhile:
 
             TextWindow.AdvanceChar(i - TextWindow.Offset);
 

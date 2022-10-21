@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
@@ -1142,7 +1142,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 SyntaxToken close = EatToken(closeKind);
 
                 return useSquareBrackets
-                    ? (BaseCrefParameterListSyntax)SyntaxFactory.CrefBracketedParameterList(open, list, close)
+                    ? SyntaxFactory.CrefBracketedParameterList(open, list, close)
                     : SyntaxFactory.CrefParameterList(open, list, close);
             }
             finally

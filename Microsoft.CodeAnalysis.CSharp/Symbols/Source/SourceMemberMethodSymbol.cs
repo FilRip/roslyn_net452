@@ -4,15 +4,14 @@
 
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -83,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             public void SetReturnsVoid(bool value)
             {
-                ThreadSafeFlagOperations.Set(ref _flags, (int)(ReturnsVoidIsSetBit | (value ? ReturnsVoidBit : 0)));
+                ThreadSafeFlagOperations.Set(ref _flags, ReturnsVoidIsSetBit | (value ? ReturnsVoidBit : 0));
             }
 
             public MethodKind MethodKind
@@ -795,9 +794,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 state.SpinWaitComplete(incompletePart, cancellationToken);
             }
 
-done:
-// Don't return until we've seen all of the CompletionParts. This ensures all
-// diagnostics have been reported (not necessarily on this thread).
+        done:
+            // Don't return until we've seen all of the CompletionParts. This ensures all
+            // diagnostics have been reported (not necessarily on this thread).
             CompletionPart allParts = CompletionPart.MethodSymbolAll;
             state.SpinWaitComplete(allParts, cancellationToken);
         }

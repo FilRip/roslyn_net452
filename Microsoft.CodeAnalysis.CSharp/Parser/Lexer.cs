@@ -5,12 +5,13 @@
 #nullable disable
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+
 using Microsoft.CodeAnalysis.Syntax.InternalSyntax;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
@@ -1671,7 +1672,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 char surrogateCharacter = SlidingTextWindow.InvalidCharacter;
                 bool isEscaped = false;
                 char ch = TextWindow.PeekChar();
-top:
+            top:
                 switch (ch)
                 {
                     case '\\':
@@ -1870,7 +1871,7 @@ top:
                 }
             }
 
-LoopExit:
+        LoopExit:
             var width = TextWindow.Width; // exact size of input characters
             if (_identLen > 0)
             {
@@ -1903,7 +1904,7 @@ LoopExit:
                 return true;
             }
 
-Fail:
+        Fail:
             info.Text = null;
             info.StringValue = null;
             TextWindow.Reset(start);
@@ -1974,7 +1975,7 @@ Fail:
                 // pairs aren't separately valid).
 
                 bool isEscaped = false;
-top:
+            top:
                 switch (consumedChar)
                 {
                     case '\\':
@@ -2134,7 +2135,7 @@ top:
                 }
             }
 
-LoopExit:
+        LoopExit:
             if (_identLen > 0)
             {
                 // NOTE: If we don't intern the string value, then we won't get a hit
@@ -2590,7 +2591,7 @@ LoopExit:
             int hashCode = Hash.FnvOffsetBias;  // FNV base
             bool onlySpaces = true;
 
-top:
+        top:
             char ch = TextWindow.PeekChar();
 
             switch (ch)
@@ -4092,7 +4093,7 @@ top:
 
                         // If it's valid in XML, then it was unexpected in cref mode.
                         // Otherwise, it's just bad XML.
-                        if (MatchesProductionForXmlChar((uint)bad))
+                        if (MatchesProductionForXmlChar(bad))
                         {
                             this.AddCrefError(ErrorCode.ERR_UnexpectedCharacter, info.Text);
                         }

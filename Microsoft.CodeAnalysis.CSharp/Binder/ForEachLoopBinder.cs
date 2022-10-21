@@ -4,15 +4,13 @@
 
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
-using Microsoft.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -962,7 +960,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 builder.ElementTypeWithAnnotations = TypeWithAnnotations.Create(
                     ((_syntax as ForEachStatementSyntax)?.Type.IsVar == true) ?
-                        (TypeSymbol)DynamicTypeSymbol.Instance :
+                        DynamicTypeSymbol.Instance :
                         GetSpecialType(SpecialType.System_Object, diagnostics, _syntax));
             }
             else
@@ -1387,7 +1385,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsIEnumerable(TypeSymbol type)
         {
-            switch (((TypeSymbol)type.OriginalDefinition).SpecialType)
+            switch (type.OriginalDefinition.SpecialType)
             {
                 case SpecialType.System_Collections_IEnumerable:
                 case SpecialType.System_Collections_Generic_IEnumerable_T:

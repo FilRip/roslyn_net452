@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -121,7 +120,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var members = ContainingType.InstanceConstructors;
                 foreach (var member in members)
                 {
-                    var ctor = (MethodSymbol)member;
+                    var ctor = member;
                     if (ctor.ParameterCount == 1 && ctor.Parameters[0].RefKind == RefKind.None &&
                         ctor.Parameters[0].Type.Equals(ContainingType, TypeCompareKind.AllIgnoreOptions))
                     {

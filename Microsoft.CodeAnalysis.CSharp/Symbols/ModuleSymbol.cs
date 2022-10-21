@@ -10,7 +10,9 @@ using System.Collections.Immutable;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
+
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -355,7 +357,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            if (namespaceSymbol.IsGlobalNamespace || (object)namespaceSymbol.ContainingNamespace == null)
+            if (namespaceSymbol.IsGlobalNamespace || namespaceSymbol.ContainingNamespace == null)
             {
                 return this.GlobalNamespace;
             }

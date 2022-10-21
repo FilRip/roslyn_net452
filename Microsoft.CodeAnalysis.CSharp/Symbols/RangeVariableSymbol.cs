@@ -5,10 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -61,7 +58,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                SyntaxToken token = (SyntaxToken)_locations[0].SourceTree.GetRoot().FindToken(_locations[0].SourceSpan.Start);
+                SyntaxToken token = _locations[0].SourceTree.GetRoot().FindToken(_locations[0].SourceSpan.Start);
                 CSharpSyntaxNode node = (CSharpSyntaxNode)token.Parent;
                 return ImmutableArray.Create<SyntaxReference>(node.GetReference());
             }

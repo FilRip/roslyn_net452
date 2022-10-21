@@ -4,12 +4,11 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
-using Cci = Microsoft.Cci;
 
 #if !DEBUG
 using MethodSymbolAdapter = Microsoft.CodeAnalysis.CSharp.Symbols.MethodSymbol;
@@ -197,7 +196,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         {
             get
             {
-                return (Cci.ISignature)UnderlyingMethod;
+                return UnderlyingMethod;
             }
         }
 

@@ -8,11 +8,11 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
@@ -322,7 +322,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     MetadataTypeName name = MetadataTypeName.FromFullName(type.ToDisplayString(SymbolDisplayFormat.QualifiedNameOnlyFormat), forcedArity: type.Arity);
                     string identifier = null;
 
-                    if ((object)type.ContainingModule == (object)_retargetingModule.UnderlyingModule)
+                    if (type.ContainingModule == (object)_retargetingModule.UnderlyingModule)
                     {
                         // This is a local type explicitly declared in source. Get information from TypeIdentifier attribute.
                         foreach (var attrData in type.GetAttributes())
@@ -625,7 +625,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     case SymbolKind.NamedType:
 
                         var namedType = (NamedTypeSymbol)symbol;
-                        if ((object)symbol.OriginalDefinition.ContainingModule == (object)_retargetingModule.UnderlyingModule &&
+                        if (symbol.OriginalDefinition.ContainingModule == (object)_retargetingModule.UnderlyingModule &&
                             namedType.IsExplicitDefinitionOfNoPiaLocalType)
                         {
                             return true;

@@ -4,11 +4,9 @@
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Roslyn.Utilities;
-using System.Diagnostics;
-using System;
 using Microsoft.CodeAnalysis.PooledObjects;
-using System.Collections.Generic;
+
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {

@@ -10,7 +10,9 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -1032,7 +1034,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 var otherLazy = other._extensions as LazyNullableTypeParameter;
 
-                if ((object)otherLazy != null)
+                if (otherLazy != null)
                 {
                     return _underlying.TypeSymbolEquals(otherLazy._underlying, comparison);
                 }

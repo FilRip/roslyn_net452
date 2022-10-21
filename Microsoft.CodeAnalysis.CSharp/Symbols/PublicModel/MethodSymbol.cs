@@ -5,10 +5,11 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Threading;
+
 using Microsoft.Cci;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel

@@ -8,13 +8,14 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.RuntimeMembers;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -331,11 +332,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return RemoveDynamicAnalysisInjectors(previous);
                 case DebugInfoInjector { Previous: var previous } injector:
                     var newPrevious = RemoveDynamicAnalysisInjectors(previous);
-                    if ((object)newPrevious == previous)
+                    if (newPrevious == previous)
                     {
                         return injector;
                     }
-                    else if ((object)newPrevious == Instrumenter.NoOp)
+                    else if (newPrevious == Instrumenter.NoOp)
                     {
                         return DebugInfoInjector.Singleton;
                     }
@@ -714,7 +715,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 var block = (BoundBlock)initializer;
                                 if (block.Statements.Length == 1)
                                 {
-                                    initializer = (BoundStatement)block.Statements.First();
+                                    initializer = block.Statements.First();
                                     if (initializer.Kind == BoundKind.ExpressionStatement)
                                     {
                                         goto case BoundKind.ExpressionStatement;

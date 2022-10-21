@@ -4,10 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
@@ -64,7 +61,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         public DirectiveTriviaSyntax? GetNextDirective(Func<DirectiveTriviaSyntax, bool>? predicate = null)
         {
-            var token = (SyntaxToken)this.ParentTrivia.Token;
+            var token = ParentTrivia.Token;
             bool next = false;
             while (token.Kind() != SyntaxKind.None)
             {
@@ -95,7 +92,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         public DirectiveTriviaSyntax? GetPreviousDirective(Func<DirectiveTriviaSyntax, bool>? predicate = null)
         {
-            var token = (SyntaxToken)this.ParentTrivia.Token;
+            var token = ParentTrivia.Token;
             bool next = false;
             while (token.Kind() != SyntaxKind.None)
             {

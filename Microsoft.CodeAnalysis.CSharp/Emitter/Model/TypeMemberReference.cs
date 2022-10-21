@@ -5,7 +5,9 @@
 #nullable disable
 
 using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit

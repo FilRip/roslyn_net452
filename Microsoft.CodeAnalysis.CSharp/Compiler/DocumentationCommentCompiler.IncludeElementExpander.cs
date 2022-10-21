@@ -4,19 +4,19 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -613,7 +613,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </remarks>
             private void RecordSyntaxDiagnostics(CSharpSyntaxNode treelessSyntax, Location sourceLocation)
             {
-                if (treelessSyntax.ContainsDiagnostics && ((SyntaxTree)sourceLocation.SourceTree).ReportDocumentationCommentDiagnostics())
+                if (treelessSyntax.ContainsDiagnostics && sourceLocation.SourceTree.ReportDocumentationCommentDiagnostics())
                 {
                     // NOTE: treelessSyntax doesn't have its own SyntaxTree, so we have to access the diagnostics
                     // via the Dummy tree.
@@ -629,7 +629,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </remarks>
             private void RecordBindingDiagnostics(BindingDiagnosticBag bindingDiagnostics, Location sourceLocation)
             {
-                if (((SyntaxTree)sourceLocation.SourceTree).ReportDocumentationCommentDiagnostics())
+                if (sourceLocation.SourceTree.ReportDocumentationCommentDiagnostics())
                 {
                     if (bindingDiagnostics.DiagnosticBag?.IsEmptyWithoutResolution == false)
                     {

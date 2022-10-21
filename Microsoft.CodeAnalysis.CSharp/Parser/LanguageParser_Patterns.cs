@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
@@ -526,7 +525,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             var list = _pool.AllocateSeparated<SubpatternSyntax>();
             try
             {
-tryAgain:
+            tryAgain:
 
                 if (this.IsPossibleSubpatternElement() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {

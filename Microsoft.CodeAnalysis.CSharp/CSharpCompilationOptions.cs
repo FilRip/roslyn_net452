@@ -8,7 +8,9 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp

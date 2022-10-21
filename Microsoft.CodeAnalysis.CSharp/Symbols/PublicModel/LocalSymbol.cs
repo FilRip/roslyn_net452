@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Threading;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel

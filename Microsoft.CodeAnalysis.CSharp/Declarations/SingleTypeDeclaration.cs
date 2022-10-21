@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -200,7 +200,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var otherDecl = other._decl;
 
                 // same as itself
-                if ((object)thisDecl == otherDecl)
+                if (thisDecl == otherDecl)
                 {
                     return true;
                 }

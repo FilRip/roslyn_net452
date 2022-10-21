@@ -4,9 +4,8 @@
 
 #nullable disable
 
-using System.Collections.Immutable;
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 
@@ -34,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             BindingDiagnosticBag diagnostics)
         {
             var compilation = symbol.DeclaringCompilation;
-            var binderFactory = compilation.GetBinderFactory((SyntaxTree)symbol.Locations[0].SourceTree);
+            var binderFactory = compilation.GetBinderFactory(symbol.Locations[0].SourceTree);
             var binder = binderFactory.GetBinder(equalsValueNode);
             if (earlyDecodingWellKnownAttributes)
             {

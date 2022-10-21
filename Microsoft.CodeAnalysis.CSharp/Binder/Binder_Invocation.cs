@@ -4,14 +4,14 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -973,7 +973,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         typeContainingConstructor: null, delegateTypeBeingInvoked: delegateTypeOpt, queryClause: queryClause);
                 }
 
-                return CreateBadCall(node, methodGroup.Name, invokedAsExtensionMethod && analyzedArguments.Arguments.Count > 0 && (object)methodGroup.Receiver == (object)analyzedArguments.Arguments[0] ? null : methodGroup.Receiver,
+                return CreateBadCall(node, methodGroup.Name, invokedAsExtensionMethod && analyzedArguments.Arguments.Count > 0 && methodGroup.Receiver == analyzedArguments.Arguments[0] ? null : methodGroup.Receiver,
                     GetOriginalMethods(result), methodGroup.ResultKind, methodGroup.TypeArguments.ToImmutable(), analyzedArguments, invokedAsExtensionMethod: invokedAsExtensionMethod, isDelegate: ((object)delegateTypeOpt != null));
             }
 
@@ -1013,7 +1013,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ParameterSymbol receiverParameter = method.Parameters.First();
 
                 // we will have a different receiver if ReplaceTypeOrValueReceiver has unwrapped TypeOrValue
-                if ((object)receiver != receiverArgument)
+                if (receiver != receiverArgument)
                 {
                     // Because the receiver didn't pass through CoerceArguments, we need to apply an appropriate conversion here.
                     receiverArgument = CreateConversion(receiver, methodResult.Result.ConversionForArg(0),
@@ -1454,7 +1454,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private BoundExpression ReplaceTypeOrValueReceiver(BoundExpression receiver, bool useType, BindingDiagnosticBag diagnostics)
         {
-            if ((object)receiver == null)
+            if (receiver == null)
             {
                 return null;
             }
@@ -1491,7 +1491,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static NamedTypeSymbol GetDelegateType(BoundExpression expr)
         {
-            if ((object)expr != null && expr.Kind != BoundKind.TypeExpression)
+            if (expr != null && expr.Kind != BoundKind.TypeExpression)
             {
                 var type = expr.Type as NamedTypeSymbol;
                 if (((object)type != null) && type.IsDelegateType())
@@ -1533,7 +1533,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 var returnType = GetCommonTypeOrReturnType(methods) ?? new ExtendedErrorTypeSymbol(this.Compilation, string.Empty, arity: 0, errorInfo: null);
-                var methodContainer = (object)receiver != null && (object)receiver.Type != null
+                var methodContainer = receiver != null && (object)receiver.Type != null
                     ? receiver.Type
                     : this.ContainingType;
                 method = new ErrorMethodSymbol(methodContainer, returnType, name);

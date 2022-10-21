@@ -5,9 +5,11 @@
 #nullable disable
 
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -58,7 +60,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             interfaces.Add(compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_IAsyncStateMachine));
             _interfaces = interfaces.ToImmutableAndFree();
 
-            _constructor = isIterator ? (MethodSymbol)new IteratorConstructor(this) : new AsyncConstructor(this);
+            _constructor = isIterator ? new IteratorConstructor(this) : new AsyncConstructor(this);
         }
 
         public override TypeKind TypeKind

@@ -5,9 +5,10 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -286,7 +287,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 int parameterCount = memberParameters.Length + (isVararg ? 1 : 0);
                 if (argumentPosition >= parameterCount)
                 {
-                    return expanded ? parameterCount - 1 : (int?)null;
+                    return expanded ? parameterCount - 1 : null;
                 }
 
                 return argumentPosition;

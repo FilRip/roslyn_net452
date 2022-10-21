@@ -6,11 +6,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
@@ -973,7 +974,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var argNodes = _pool.AllocateSeparated<AttributeArgumentSyntax>();
                 try
                 {
-tryAgain:
+                tryAgain:
                     if (this.CurrentToken.Kind != SyntaxKind.CloseParenToken)
                     {
                         if (this.IsPossibleAttributeArgument() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
@@ -1827,7 +1828,7 @@ tryAgain:
                     argumentList = this.ParseParenthesizedArgumentList();
                 }
 
-                list.Add(argumentList is object ? _syntaxFactory.PrimaryConstructorBaseType(firstType, argumentList) : (BaseTypeSyntax)_syntaxFactory.SimpleBaseType(firstType));
+                list.Add(argumentList is object ? _syntaxFactory.PrimaryConstructorBaseType(firstType, argumentList) : _syntaxFactory.SimpleBaseType(firstType));
 
                 // any additional types
                 while (true)
@@ -2386,7 +2387,7 @@ tryAgain:
                         return result;
                     }
 
-parse_member_name:;
+                parse_member_name:;
                     // If we've seen the ref keyword, we know we must have an indexer, method, property, or local.
                     bool typeIsRef = type.IsRef;
 
@@ -2769,7 +2770,7 @@ parse_member_name:;
                         return result;
                     }
 
-parse_member_name:;
+                parse_member_name:;
                     // If we've seen the ref keyword, we know we must have an indexer, method, or property.
                     if (type.Kind != SyntaxKind.RefType)
                     {
@@ -4037,7 +4038,7 @@ parse_member_name:;
 
             if (this.CurrentToken.Kind != closeKind)
             {
-tryAgain:
+            tryAgain:
                 if (this.IsPossibleParameter() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
                     // first parameter
@@ -5113,7 +5114,7 @@ tryAgain:
         {
             if (this.CurrentToken.Kind != SyntaxKind.CloseBraceToken)
             {
-tryAgain:
+            tryAgain:
 
                 if (this.IsPossibleEnumMemberDeclaration() || this.CurrentToken.Kind == SyntaxKind.CommaToken || this.CurrentToken.Kind == SyntaxKind.SemicolonToken)
                 {
@@ -6407,7 +6408,7 @@ tryAgain:
                 }
             }
 
-done:
+        done:
             return result;
         }
 
@@ -6741,7 +6742,7 @@ done:
                         goto done; // token not consumed
                 }
             }
-done:;
+        done:;
 
             return type;
         }
@@ -8465,7 +8466,7 @@ done:;
         {
             if (this.CurrentToken.Kind != SyntaxKind.CloseParenToken && this.CurrentToken.Kind != SyntaxKind.SemicolonToken)
             {
-tryAgain:
+            tryAgain:
                 if (this.IsPossibleExpression() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
                     // first argument
@@ -9483,14 +9484,14 @@ tryAgain:
                         continue; // already reported earlier, no need to report again
                     case SyntaxKind.StaticKeyword:
                         modifier = CheckFeatureAvailability(modifier, MessageID.IDS_FeatureStaticLocalFunctions);
-                        if ((object)modifier == modifiers[i])
+                        if (modifier == modifiers[i])
                         {
                             continue;
                         }
                         break;
                     case SyntaxKind.ExternKeyword:
                         modifier = CheckFeatureAvailability(modifier, MessageID.IDS_FeatureExternLocalFunctions);
-                        if ((object)modifier == modifiers[i])
+                        if (modifier == modifiers[i])
                         {
                             continue;
                         }
@@ -10703,7 +10704,7 @@ tryAgain:
             {
                 if (this.CurrentToken.Kind != closeKind && this.CurrentToken.Kind != SyntaxKind.SemicolonToken)
                 {
-tryAgain:
+                tryAgain:
                     if (list.IsNull)
                     {
                         list = _pool.AllocateSeparated<ArgumentSyntax>();
@@ -11569,7 +11570,7 @@ tryAgain:
         {
             if (this.CurrentToken.Kind != SyntaxKind.CloseBraceToken)
             {
-tryAgain:
+            tryAgain:
                 if (this.IsPossibleExpression() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
                     // first argument
@@ -11693,8 +11694,8 @@ tryAgain:
             }
 
             return type is null
-                ? (ExpressionSyntax)_syntaxFactory.ImplicitObjectCreationExpression(@new, argumentList, initializer)
-                : (ExpressionSyntax)_syntaxFactory.ObjectCreationExpression(@new, type, argumentList, initializer);
+                ? _syntaxFactory.ImplicitObjectCreationExpression(@new, argumentList, initializer)
+                : _syntaxFactory.ObjectCreationExpression(@new, type, argumentList, initializer);
         }
 
         private bool IsImplicitObjectCreation()
@@ -11834,7 +11835,7 @@ tryAgain:
 
             if (this.CurrentToken.Kind != SyntaxKind.CloseBraceToken)
             {
-tryAgain:
+            tryAgain:
                 if (this.IsInitializerMember() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
                     // We have at least one initializer expression.
@@ -11971,7 +11972,7 @@ tryAgain:
 
             if (this.CurrentToken.Kind != SyntaxKind.CloseBraceToken)
             {
-tryAgain:
+            tryAgain:
                 if (this.IsPossibleExpression() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
                     // first argument
@@ -12069,7 +12070,7 @@ tryAgain:
             {
                 if (this.CurrentToken.Kind != SyntaxKind.CloseBraceToken)
                 {
-tryAgain:
+                tryAgain:
                     if (this.IsPossibleVariableInitializer() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                     {
                         list.Add(this.ParseVariableInitializer());
@@ -12328,7 +12329,7 @@ tryAgain:
             {
                 if (this.CurrentToken.Kind != SyntaxKind.CloseParenToken)
                 {
-tryAgain:
+                tryAgain:
                     if (this.CurrentToken.Kind == SyntaxKind.CommaToken || this.IsPossibleLambdaParameter())
                     {
                         // first parameter

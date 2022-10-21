@@ -5,10 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -705,7 +706,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // In the former case, we use a lazy diagnostic that may end up being ignored later, to avoid causing a
                 // binding cycle.
                 diagnostics.Add(unmanagedCallersOnlyAttributeData == UnmanagedCallersOnlyAttributeData.Uninitialized
-                                    ? (DiagnosticInfo)new LazyUnmanagedCallersOnlyMethodCalledDiagnosticInfo(symbol, isDelegateConversion)
+                                    ? new LazyUnmanagedCallersOnlyMethodCalledDiagnosticInfo(symbol, isDelegateConversion)
                                     : new CSDiagnosticInfo(isDelegateConversion
                                                                ? ErrorCode.ERR_UnmanagedCallersOnlyMethodsCannotBeConvertedToDelegate
                                                                : ErrorCode.ERR_UnmanagedCallersOnlyMethodsCannotBeCalledDirectly,

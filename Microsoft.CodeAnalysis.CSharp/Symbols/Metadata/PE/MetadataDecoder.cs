@@ -8,8 +8,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if (string.Equals(m.Name, moduleName, StringComparison.OrdinalIgnoreCase))
                 {
-                    if ((object)m == (object)moduleSymbol)
+                    if (m == (object)moduleSymbol)
                     {
                         return moduleSymbol.LookupTopLevelMetadataType(ref emittedName, out isNoPiaLocalType);
                     }

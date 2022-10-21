@@ -7,9 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -96,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (var constraint in result)
             {
-                ((TypeSymbol)constraint.Type.OriginalDefinition).AddUseSiteInfo(ref useSiteInfo);
+                constraint.Type.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
             }
 
             return result;
@@ -309,7 +310,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if ((object)result != null)
             {
-                ((TypeSymbol)result.OriginalDefinition).AddUseSiteInfo(ref useSiteInfo);
+                result.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
             }
 
             return result;

@@ -6,11 +6,12 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1060,7 +1061,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     bool inParameterOrReturnType = extraInfo == NodeUsage.CrefParameterOrReturnType;
 
-                    result = (object)memberSyntax == null
+                    result = memberSyntax == null
                         ? MakeCrefBinderInternal(crefSyntax, VisitCore(parent.Parent), inParameterOrReturnType)
                         : MakeCrefBinder(crefSyntax, memberSyntax, _factory, inParameterOrReturnType);
 
@@ -1108,7 +1109,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     result = this.buckStopsHereBinder;
 
                     Binder outerBinder = VisitCore(GetEnclosingDocumentationComment(parent));
-                    if ((object)outerBinder != null)
+                    if (outerBinder != null)
                     {
                         // The rest of the doc comment is going to report something for containing symbol -
                         // that shouldn't change just because we're in a name attribute.
@@ -1116,7 +1117,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     MemberDeclarationSyntax memberSyntax = GetAssociatedMemberForXmlSyntax(parent);
-                    if ((object)memberSyntax != null)
+                    if (memberSyntax != null)
                     {
                         switch (elementKind)
                         {
@@ -1223,7 +1224,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // NOTE: don't care about enums, since they don't have type parameters.
                 TypeDeclarationSyntax typeDeclSyntax = memberSyntax as TypeDeclarationSyntax;
-                if ((object)typeDeclSyntax != null && typeDeclSyntax.Arity > 0)
+                if (typeDeclSyntax != null && typeDeclSyntax.Arity > 0)
                 {
                     Binder outerBinder = VisitCore(memberSyntax.Parent);
                     SourceNamedTypeSymbol typeSymbol = ((NamespaceOrTypeSymbol)outerBinder.ContainingMemberOrLambda).GetSourceTypeMember(typeDeclSyntax);
@@ -1277,7 +1278,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BaseTypeDeclarationSyntax typeDeclSyntax = memberSyntax as BaseTypeDeclarationSyntax;
 
-            Binder binder = (object)typeDeclSyntax == null
+            Binder binder = typeDeclSyntax == null
                 ? factory.GetBinder(memberSyntax)
                 : factory.GetBinder(memberSyntax, typeDeclSyntax.OpenBraceToken.SpanStart);
 
@@ -1310,7 +1311,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             StructuredTriviaSyntax structuredTrivia = GetEnclosingDocumentationComment(xmlSyntax);
             SyntaxTrivia containingTrivia = structuredTrivia.ParentTrivia;
-            SyntaxToken associatedToken = (SyntaxToken)containingTrivia.Token;
+            SyntaxToken associatedToken = containingTrivia.Token;
 
             CSharpSyntaxNode curr = (CSharpSyntaxNode)associatedToken.Parent;
             while (curr != null)

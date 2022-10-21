@@ -7,12 +7,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1277,7 +1276,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!argsOpt.IsDefault)
             {
-moreArguments:
+            moreArguments:
                 for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
                 {
                     var argument = argsOpt[argIndex];
@@ -1381,7 +1380,7 @@ moreArguments:
             if (!argsOpt.IsDefault)
             {
 
-moreArguments:
+            moreArguments:
                 for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
                 {
                     var argument = argsOpt[argIndex];
@@ -1545,7 +1544,7 @@ moreArguments:
 
             if (!argsOpt.IsDefault)
             {
-moreArguments:
+            moreArguments:
                 for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
                 {
                     // check val escape of all arguments

@@ -7,10 +7,12 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.Emit;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -245,7 +247,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         void IReference.Dispatch(MetadataVisitor visitor)
         {
             CheckDefinitionInvariant();
-            visitor.Visit((IPropertyDefinition)this);
+            visitor.Visit(this);
         }
 
         IDefinition IReference.AsDefinition(EmitContext context)

@@ -4,15 +4,15 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -307,7 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             BoundExpression expr = (BoundExpression)this.Visit(node.Expression);
-            return (expr != null) ? node.Update(expr) : (BoundStatement)F.StatementList();
+            return (expr != null) ? node.Update(expr) : F.StatementList();
         }
 
         public sealed override BoundNode VisitAwaitExpression(BoundAwaitExpression node)

@@ -6,13 +6,13 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Reflection.Metadata;
+
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
+
 using Roslyn.Utilities;
 
-using static System.Linq.ImmutableArrayExtensions;
 using static Microsoft.CodeAnalysis.CSharp.Binder;
 
 namespace Microsoft.CodeAnalysis.CSharp.CodeGen
@@ -996,7 +996,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             {
                 var receiver = fieldAccess.ReceiverOpt;
                 TypeSymbol fieldType = field.Type;
-                if (fieldType.IsValueType && (object)fieldType == (object)receiver.Type)
+                if (fieldType.IsValueType && fieldType == (object)receiver.Type)
                 {
                     //Handle emitting a field of a self-containing struct (only possible in mscorlib)
                     //since "val.field" is the same as val, we only need to emit val.
@@ -1575,7 +1575,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 // Other scenarios are uncommon since base class cannot be sealed and 
                 // referring to a derived type in a different module is not an easy thing to do.
                 if (IsThisReceiver(receiver) && actualMethodTargetedByTheCall.ContainingType.IsSealed &&
-                        (object)actualMethodTargetedByTheCall.ContainingModule == (object)_method.ContainingModule)
+                        actualMethodTargetedByTheCall.ContainingModule == (object)_method.ContainingModule)
                 {
                     // special case for target is in a sealed class and "this" receiver.
                     callKind = CallKind.Call;

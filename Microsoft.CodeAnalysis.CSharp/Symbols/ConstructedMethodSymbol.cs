@@ -5,9 +5,6 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -17,8 +14,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal ConstructedMethodSymbol(MethodSymbol constructedFrom, ImmutableArray<TypeWithAnnotations> typeArgumentsWithAnnotations)
             : base(containingSymbol: constructedFrom.ContainingType,
-                   map: new TypeMap(constructedFrom.ContainingType, ((MethodSymbol)constructedFrom.OriginalDefinition).TypeParameters, typeArgumentsWithAnnotations),
-                   originalDefinition: (MethodSymbol)constructedFrom.OriginalDefinition,
+                   map: new TypeMap(constructedFrom.ContainingType, constructedFrom.OriginalDefinition.TypeParameters, typeArgumentsWithAnnotations),
+                   originalDefinition: constructedFrom.OriginalDefinition,
                    constructedFrom: constructedFrom)
         {
             _typeArgumentsWithAnnotations = typeArgumentsWithAnnotations;

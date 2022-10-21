@@ -4,10 +4,9 @@
 
 #nullable disable
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -45,6 +44,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal new ErrorCode Code => (ErrorCode)base.Code;
 
-        internal static bool IsEmpty(DiagnosticInfo info) => (object)info == EmptyErrorInfo;
+        internal static bool IsEmpty(DiagnosticInfo info) => info == EmptyErrorInfo;
     }
 }

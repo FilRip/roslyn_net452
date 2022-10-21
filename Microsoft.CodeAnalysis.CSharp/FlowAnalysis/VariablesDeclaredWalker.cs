@@ -6,11 +6,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
-using System.Diagnostics;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -144,7 +143,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 else
                 {
                     // Deconstruction foreach declares multiple variables.
-                    ((BoundTupleExpression)deconstructionAssignment.Left).VisitAllElements((x, self) => self.Visit(x), this);
+                    deconstructionAssignment.Left.VisitAllElements((x, self) => self.Visit(x), this);
                 }
             }
         }

@@ -6,15 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml.Linq;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Syntax;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
+
 using InternalSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1623,7 +1625,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             SyntaxTrivia trivia = leadingTrivia.First();
             DocumentationCommentTriviaSyntax structure = (DocumentationCommentTriviaSyntax)trivia.GetStructure()!;
             XmlEmptyElementSyntax elementSyntax = (XmlEmptyElementSyntax)structure.Content[1];
-            XmlAttributeSyntax attributeSyntax = (XmlAttributeSyntax)elementSyntax.Attributes[0];
+            XmlAttributeSyntax attributeSyntax = elementSyntax.Attributes[0];
             return attributeSyntax.Kind() == SyntaxKind.XmlCrefAttribute ? ((XmlCrefAttributeSyntax)attributeSyntax).Cref : null;
         }
 

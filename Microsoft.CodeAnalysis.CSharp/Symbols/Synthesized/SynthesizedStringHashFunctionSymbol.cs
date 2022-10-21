@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.CodeGen;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols

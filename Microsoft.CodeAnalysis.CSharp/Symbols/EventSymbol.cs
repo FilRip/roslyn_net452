@@ -4,9 +4,8 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -316,7 +315,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 DiagnosticInfo? info = GetUseSiteInfo().DiagnosticInfo;
-                return (object?)info != null && info.Code == (int)ErrorCode.ERR_BindToBogus;
+                return info != null && info.Code == (int)ErrorCode.ERR_BindToBogus;
             }
         }
 

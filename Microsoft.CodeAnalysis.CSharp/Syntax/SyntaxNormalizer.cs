@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
@@ -66,7 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             var normalizer = new SyntaxNormalizer(trivia.FullSpan, GetDeclarationDepth(trivia.Token), indentWhitespace, eolWhitespace, useElasticTrivia);
             var result = normalizer.RewriteTrivia(
                 trivia,
-                GetDeclarationDepth((SyntaxToken)trivia.ElementAt(0).Token),
+                GetDeclarationDepth(trivia.ElementAt(0).Token),
                 isTrailing: false,
                 indentAfterLineBreak: false,
                 mustHaveSeparator: false,
@@ -981,7 +980,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 return 0;
             }
 
-            return GetDeclarationDepth((SyntaxToken)trivia.Token);
+            return GetDeclarationDepth(trivia.Token);
         }
 
         private static int GetDeclarationDepth(SyntaxNode? node)

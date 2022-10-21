@@ -3,9 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.PooledObjects;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -25,16 +24,16 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             uint hashCode = 0;
             if (text != null)
             {
-                hashCode = unchecked((uint)2166136261);
+                hashCode = unchecked(2166136261);
 
                 int i = 0;
                 goto start;
 
-again:
+            again:
                 hashCode = unchecked((text[i] ^ hashCode) * 16777619);
                 i = i + 1;
 
-start:
+            start:
                 if (i < text.Length)
                     goto again;
             }
@@ -84,7 +83,7 @@ start:
                                 F.Parameter(text),
                                 F.Null(text.Type)),
                             F.Block(
-                                F.Assignment(F.Local(hashCode), F.Literal((uint)2166136261)),
+                                F.Assignment(F.Local(hashCode), F.Literal(2166136261)),
                                 F.Assignment(F.Local(i), F.Literal(0)),
                                 F.Goto(start),
                                 F.Label(again),
@@ -145,7 +144,7 @@ start:
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
             SyntheticBoundNodeFactory F = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            F.CurrentFunction = (MethodSymbol)this.OriginalDefinition;
+            F.CurrentFunction = OriginalDefinition;
 
             try
             {
@@ -183,7 +182,7 @@ start:
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
             SyntheticBoundNodeFactory F = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            F.CurrentFunction = (MethodSymbol)this.OriginalDefinition;
+            F.CurrentFunction = OriginalDefinition;
 
             try
             {
@@ -357,7 +356,7 @@ start:
                 argBuilder.Add(F.Parameter(param));
             }
 
-            BoundExpression invocation = F.Call(useBaseReference ? (BoundExpression)F.Base(baseType: methodToInvoke.ContainingType) : F.This(),
+            BoundExpression invocation = F.Call(useBaseReference ? F.Base(baseType: methodToInvoke.ContainingType) : F.This(),
                                                 methodToInvoke,
                                                 argBuilder.ToImmutableAndFree());
 

@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.Text;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -69,7 +70,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var slotIndex = _stack.Top.SlotIndex;
-tryAgain:
+            tryAgain:
                 if (slotIndex < node.SlotCount - 1)
                 {
                     slotIndex++;

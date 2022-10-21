@@ -12,12 +12,14 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -111,7 +113,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 //       whether containerAsType is not null, but 
                 //       instead check if it did not change after 
                 //       the cast.
-                if ((object)containerAsType == (object)container)
+                if (containerAsType == (object)container)
                 {
                     // this should be relatively uncommon
                     // most symbols that may be contained in a type
@@ -276,7 +278,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return (object)this == (object)OriginalDefinition;
+                return this == (object)OriginalDefinition;
             }
         }
 
@@ -617,7 +619,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // this part is expected to disappear when inlining "someSymbol == null"
-            return (object)left == (object)right || right.Equals(left);
+            return left == (object)right || right.Equals(left);
         }
 
         /// <summary>
@@ -642,7 +644,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // this part is expected to disappear when inlining "someSymbol != null"
-            return (object)left != (object)right && !right.Equals(left);
+            return left != (object)right && !right.Equals(left);
         }
 
         public sealed override bool Equals(object obj)

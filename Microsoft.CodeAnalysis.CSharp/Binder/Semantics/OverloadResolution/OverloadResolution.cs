@@ -6,12 +6,13 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
+
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -509,7 +510,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 break;
 
                             default:
-outerDefault:
+                            outerDefault:
                                 actualCallKind = Cci.CallingConvention.Unmanaged;
                                 actualUnmanagedCallingConventionTypes = unmanagedCallingConventionTypes;
                                 break;
@@ -669,7 +670,7 @@ outerDefault:
 
         private static void ClearContainingTypeMap<TMember>(ref Dictionary<NamedTypeSymbol, ArrayBuilder<TMember>> containingTypeMapOpt) where TMember : Symbol
         {
-            if ((object)containingTypeMapOpt != null)
+            if (containingTypeMapOpt != null)
             {
                 foreach (ArrayBuilder<TMember> builder in containingTypeMapOpt.Values)
                 {
@@ -1012,7 +1013,7 @@ outerDefault:
             // Note: we need to confirm the "arrayness" on the original definition because
             // it's possible that the type becomes an array as a result of substitution.
             ParameterSymbol final = member.GetParameters().Last();
-            return final.IsParams && ((ParameterSymbol)final.OriginalDefinition).Type.IsSZArray();
+            return final.IsParams && final.OriginalDefinition.Type.IsSZArray();
         }
 
         /// <summary>

@@ -8,18 +8,18 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Emit;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
+
 using Roslyn.Utilities;
+
 using CommonAssemblyWellKnownAttributeData = Microsoft.CodeAnalysis.CommonAssemblyWellKnownAttributeData<Microsoft.CodeAnalysis.CSharp.Symbols.NamedTypeSymbol>;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
@@ -492,7 +492,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 keyFile = this.AssemblyKeyFileAttributeSetting;
 
-                if ((object)keyFile == (object)WellKnownAttributeData.StringMissingValue)
+                if (keyFile == (object)WellKnownAttributeData.StringMissingValue)
                 {
                     keyFile = null;
                 }
@@ -504,7 +504,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 keyContainer = this.AssemblyKeyContainerAttributeSetting;
 
-                if ((object)keyContainer == (object)WellKnownAttributeData.StringMissingValue)
+                if (keyContainer == (object)WellKnownAttributeData.StringMissingValue)
                 {
                     keyContainer = null;
                 }
@@ -768,7 +768,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 string assemblyKeyContainerAttributeSetting = this.AssemblyKeyContainerAttributeSetting;
 
-                if ((object)assemblyKeyContainerAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
+                if (assemblyKeyContainerAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
                 {
                     if (_compilation.Options.OutputKind == OutputKind.NetModule)
                     {
@@ -815,7 +815,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 string assemblyKeyFileAttributeSetting = this.AssemblyKeyFileAttributeSetting;
 
-                if ((object)assemblyKeyFileAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
+                if (assemblyKeyFileAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
                 {
                     if (_compilation.Options.OutputKind == OutputKind.NetModule)
                     {
@@ -843,7 +843,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (_compilation.Options.PublicSign &&
                 !_compilation.Options.OutputKind.IsNetModule() &&
-                (object)this.AssemblyKeyFileAttributeSetting != (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
+                AssemblyKeyFileAttributeSetting != (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
             {
                 diagnostics.Add(ErrorCode.WRN_AttributeIgnoredWhenPublicSigning, NoLocation.Singleton, AttributeDescription.AssemblyKeyFileAttribute.FullName);
             }
@@ -949,7 +949,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 var fileRef = pair.Key as PortableExecutableReference;
 
-                if ((object)fileRef != null && (object)fileRef.FilePath != null)
+                if (fileRef != null && (object)fileRef.FilePath != null)
                 {
                     string fileName = FileNameUtilities.GetFileName(fileRef.FilePath);
                     string moduleName = _modules[pair.Value].Name;
@@ -1386,7 +1386,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 {
                                     DiagnosticInfo info = ((ErrorTypeSymbol)forwarded).ErrorInfo;
 
-                                    if ((object)info != null)
+                                    if (info != null)
                                     {
                                         diagnostics.Add(info, NoLocation.Singleton);
                                     }
@@ -1782,7 +1782,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                if ((object)this.CorLibrary != (object)this)
+                if (CorLibrary != (object)this)
                 {
                     return false;
                 }
@@ -1905,7 +1905,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // If its value is different from the supplied through options, an error should have been reported by now.
 
                 if (!string.IsNullOrEmpty(_compilation.Options.CryptoKeyContainer) &&
-                    (object)AssemblyKeyContainerAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
+                    AssemblyKeyContainerAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
                 {
                     var stringType = _compilation.GetSpecialType(SpecialType.System_String);
 
@@ -1914,7 +1914,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 if (!String.IsNullOrEmpty(_compilation.Options.CryptoKeyFile) &&
-                    (object)AssemblyKeyFileAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
+                    AssemblyKeyFileAttributeSetting == (object)CommonAssemblyWellKnownAttributeData.StringMissingValue)
                 {
                     var stringType = _compilation.GetSpecialType(SpecialType.System_String);
 
@@ -2069,7 +2069,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static Location GetAssemblyAttributeLocationForDiagnostic(AttributeSyntax attributeSyntaxOpt)
         {
-            return (object)attributeSyntaxOpt != null ? attributeSyntaxOpt.Location : NoLocation.Singleton;
+            return attributeSyntaxOpt != null ? attributeSyntaxOpt.Location : NoLocation.Singleton;
         }
 
         private void DecodeTypeForwardedToAttribute(ref DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation> arguments)
@@ -2415,7 +2415,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else if (attribute.IsTargetAttribute(this, AttributeDescription.CaseSensitiveExtensionAttribute))
             {
-                if ((object)arguments.AttributeSyntaxOpt != null)
+                if (arguments.AttributeSyntaxOpt != null)
                 {
                     // [Extension] attribute should not be set explicitly.
                     diagnostics.Add(ErrorCode.ERR_ExplicitExtension, arguments.AttributeSyntaxOpt.Location);
@@ -2451,7 +2451,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     // CS0591: Invalid value for argument to '{0}' attribute
                     Location attributeArgumentSyntaxLocation = attribute.GetAttributeArgumentSyntaxLocation(i, nodeOpt);
-                    diagnostics.Add(ErrorCode.ERR_InvalidAttributeArgument, attributeArgumentSyntaxLocation, (object)nodeOpt != null ? nodeOpt.GetErrorDisplayName() : "");
+                    diagnostics.Add(ErrorCode.ERR_InvalidAttributeArgument, attributeArgumentSyntaxLocation, nodeOpt != null ? nodeOpt.GetErrorDisplayName() : "");
                 }
             }
         }

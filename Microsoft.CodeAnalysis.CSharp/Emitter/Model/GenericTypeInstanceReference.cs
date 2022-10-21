@@ -4,15 +4,11 @@
 
 #nullable disable
 
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
+
+using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
-using System.Diagnostics;
-using System.Linq;
+using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
@@ -30,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public sealed override void Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.IGenericTypeInstanceReference)this);
+            visitor.Visit(this);
         }
 
         ImmutableArray<Cci.ITypeReference> Cci.IGenericTypeInstanceReference.GetGenericArguments(EmitContext context)

@@ -6,6 +6,7 @@
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -36,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     return 2;
                 }
-                return max == 0 ? (byte?)null : b;
+                return max == 0 ? null : b;
             }
         }
 

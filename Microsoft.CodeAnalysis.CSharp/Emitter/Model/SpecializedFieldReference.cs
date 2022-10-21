@@ -5,7 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
-using System.Diagnostics;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
 
@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public override void Dispatch(Cci.MetadataVisitor visitor)
         {
-            visitor.Visit((Cci.ISpecializedFieldReference)this);
+            visitor.Visit(this);
         }
 
         Cci.IFieldReference Cci.ISpecializedFieldReference.UnspecializedVersion

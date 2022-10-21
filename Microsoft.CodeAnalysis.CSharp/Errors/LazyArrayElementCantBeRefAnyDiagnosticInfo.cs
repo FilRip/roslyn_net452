@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
-using System.Threading;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp

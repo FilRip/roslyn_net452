@@ -5,7 +5,9 @@
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Threading;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols

@@ -8,11 +8,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Text;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
@@ -1300,7 +1301,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             System.Diagnostics.Debug.Assert((object)x != null);
             System.Diagnostics.Debug.Assert((object)y != null);
-            System.Diagnostics.Debug.Assert((object)x != (object)y);
+            System.Diagnostics.Debug.Assert(x != (object)y);
             System.Diagnostics.Debug.Assert(x.Kind == y.Kind);
 
             code = ErrorCode.Void;

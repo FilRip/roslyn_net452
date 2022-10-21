@@ -5,11 +5,10 @@
 #nullable disable
 
 using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {

@@ -6,8 +6,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.Collections;
+
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
@@ -132,7 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         {
             if (((Cci.IMethodReference)this).AsGenericMethodInstanceReference != null)
             {
-                visitor.Visit((Cci.IGenericMethodInstanceReference)this);
+                visitor.Visit(this);
             }
             else if (((Cci.IMethodReference)this).AsSpecializedMethodReference != null)
             {

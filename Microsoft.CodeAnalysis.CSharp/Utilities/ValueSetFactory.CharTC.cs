@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
@@ -58,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             char INumericTC<char>.Random(Random random)
             {
-                return (char)random.Next((int)char.MinValue, 1 + (int)char.MaxValue);
+                return (char)random.Next(char.MinValue, 1 + char.MaxValue);
             }
 
             ConstantValue INumericTC<char>.ToConstantValue(char value) => ConstantValue.Create(value);
