@@ -8,9 +8,9 @@ using System;
 
 namespace Roslyn.Utilities
 {
-    internal static class CompilerPathUtilities
+    public static class CompilerPathUtilities
     {
-        internal static void RequireAbsolutePath(string path, string argumentName)
+        public static void RequireAbsolutePath(string path, string argumentName)
         {
             if (path == null)
             {

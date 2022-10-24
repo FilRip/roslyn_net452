@@ -14,7 +14,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal static partial class GeneratedNames
+    public static partial class GeneratedNames
     {
         internal const string SynthesizedLocalNamePrefix = "CS$";
         internal const char DotReplacementInTypeNames = '-';
@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private const char GenerationSeparator = '#';
         private const char LocalFunctionNameTerminator = '|';
 
-        internal static bool IsGeneratedMemberName(string memberName)
+        public static bool IsGeneratedMemberName(string memberName)
         {
             return memberName.Length > 0 && memberName[0] == '<';
         }
@@ -300,7 +300,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return false;
         }
 
-        internal static bool TryParseSourceMethodNameFromGeneratedName(string generatedName, GeneratedNameKind requiredKind, out string methodName)
+        public static bool TryParseSourceMethodNameFromGeneratedName(string generatedName, GeneratedNameKind requiredKind, out string methodName)
         {
             if (!TryParseGeneratedName(generatedName, out GeneratedNameKind kind, out int openBracketOffset, out int closeBracketOffset))
             {

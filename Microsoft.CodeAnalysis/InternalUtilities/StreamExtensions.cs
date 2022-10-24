@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Roslyn.Utilities
 {
-    internal static class StreamExtensions
+    public static class StreamExtensions
     {
         /// <summary>
         /// Attempts to read all of the requested bytes from the stream into the buffer

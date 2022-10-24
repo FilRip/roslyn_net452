@@ -64,8 +64,8 @@ namespace Microsoft.CodeAnalysis
     /// </summary>
     public abstract partial class CommonCompiler
     {
-        internal const int Failed = 1;
-        internal const int Succeeded = 0;
+        public const int Failed = 1;
+        public const int Succeeded = 0;
 
         /// <summary>
         /// Fallback encoding that is lazily retrieved if needed. If <see cref="EncodedStringText.CreateFallbackEncoding"/> is
@@ -216,7 +216,7 @@ namespace Microsoft.CodeAnalysis
             };
         }
 
-        internal virtual MetadataReferenceResolver GetCommandLineMetadataReferenceResolver(TouchedFileLogger? loggerOpt)
+        public virtual MetadataReferenceResolver GetCommandLineMetadataReferenceResolver(TouchedFileLogger? loggerOpt)
         {
             var pathResolver = new CompilerRelativePathResolver(FileSystem, Arguments.ReferencePaths, Arguments.BaseDirectory!);
             return new LoggingMetadataFileReferenceResolver(pathResolver, GetMetadataProvider(), loggerOpt);

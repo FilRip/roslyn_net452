@@ -9,9 +9,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
-    internal static class ReflectionUtilities
+    public static class ReflectionUtilities
     {
         private static readonly Type Missing = typeof(void);
 
@@ -94,12 +96,12 @@ namespace Roslyn.Utilities
             return null;
         }
 
-        internal static MethodInfo? GetDeclaredMethod(this TypeInfo typeInfo, string name, params Type[] paramTypes)
+        public static MethodInfo? GetDeclaredMethod(this TypeInfo typeInfo, string name, params Type[] paramTypes)
         {
             return FindItem(typeInfo.GetDeclaredMethods(name), paramTypes);
         }
 
-        internal static ConstructorInfo? GetDeclaredConstructor(this TypeInfo typeInfo, params Type[] paramTypes)
+        public static ConstructorInfo? GetDeclaredConstructor(this TypeInfo typeInfo, params Type[] paramTypes)
         {
             return FindItem(typeInfo.DeclaredConstructors, paramTypes);
         }

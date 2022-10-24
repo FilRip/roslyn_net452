@@ -428,7 +428,7 @@ namespace Microsoft.CodeAnalysis
             return !(info.IsValueType || info.IsPointer || info.IsByRef || info.ContainsGenericParameters);
         }
 
-        protected abstract bool HasSubmissionResult();
+        public abstract bool HasSubmissionResult();
 
         public Compilation WithScriptCompilationInfo(ScriptCompilationInfo? info) => CommonWithScriptCompilationInfo(info);
         protected abstract Compilation CommonWithScriptCompilationInfo(ScriptCompilationInfo? info);

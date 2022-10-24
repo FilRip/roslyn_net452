@@ -804,7 +804,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Get
         End Property
 
-        Protected Overrides Function HasSubmissionResult() As Boolean
+        Public Overrides Function HasSubmissionResult() As Boolean
             Debug.Assert(IsSubmission)
 
             ' submission can be empty or comprise of a script file

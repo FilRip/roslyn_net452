@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static string InvalidSizeOfPublicKeyToken => GetResourceString("InvalidSizeOfPublicKeyToken");
 
-        internal static string InvalidCharactersInAssemblyName => GetResourceString("InvalidCharactersInAssemblyName");
+        public static string InvalidCharactersInAssemblyName => GetResourceString("InvalidCharactersInAssemblyName");
 
         internal static string InvalidCharactersInAssemblyCultureName => GetResourceString("InvalidCharactersInAssemblyCultureName");
 

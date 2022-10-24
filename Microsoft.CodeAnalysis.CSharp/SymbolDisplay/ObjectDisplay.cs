@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// </remarks>
     /// <seealso cref="T:Microsoft.CodeAnalysis.VisualBasic.ObjectDisplay.ObjectDisplay"/>
 #pragma warning restore CA1200 // Avoid using cref tags with a prefix
-    internal static class ObjectDisplay
+    public static class ObjectDisplay
     {
         /// <summary>
         /// Returns a string representation of an object of primitive type.
@@ -122,7 +122,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return null;
         }
 
-        internal static string NullLiteral
+        public static string NullLiteral
         {
             get
             {
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static string FormatLiteral(bool value)
+        public static string FormatLiteral(bool value)
         {
             return value ? "true" : "false";
         }
@@ -312,7 +312,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="c">The value that the resulting character literal should have.</param>
         /// <param name="options">Options used to customize formatting of an object value.</param>
         /// <returns>A character literal with the given value.</returns>
-        internal static string FormatLiteral(char c, ObjectDisplayOptions options)
+        public static string FormatLiteral(char c, ObjectDisplayOptions options)
         {
             const char quote = '\'';
 
@@ -355,7 +355,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return pooledBuilder.ToStringAndFree();
         }
 
-        internal static string FormatLiteral(sbyte value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(sbyte value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             if (options.IncludesOption(ObjectDisplayOptions.UseHexadecimalNumbers))
             {
@@ -369,7 +369,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static string FormatLiteral(byte value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(byte value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             if (options.IncludesOption(ObjectDisplayOptions.UseHexadecimalNumbers))
             {
@@ -381,7 +381,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static string FormatLiteral(short value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(short value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             if (options.IncludesOption(ObjectDisplayOptions.UseHexadecimalNumbers))
             {
@@ -395,7 +395,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static string FormatLiteral(ushort value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(ushort value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             if (options.IncludesOption(ObjectDisplayOptions.UseHexadecimalNumbers))
             {
@@ -407,7 +407,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static string FormatLiteral(int value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(int value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             if (options.IncludesOption(ObjectDisplayOptions.UseHexadecimalNumbers))
             {
@@ -419,7 +419,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static string FormatLiteral(uint value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(uint value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             var pooledBuilder = PooledStringBuilder.GetInstance();
             var sb = pooledBuilder.Builder;
@@ -442,7 +442,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return pooledBuilder.ToStringAndFree();
         }
 
-        internal static string FormatLiteral(long value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(long value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             var pooledBuilder = PooledStringBuilder.GetInstance();
             var sb = pooledBuilder.Builder;
@@ -465,7 +465,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return pooledBuilder.ToStringAndFree();
         }
 
-        internal static string FormatLiteral(ulong value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(ulong value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             var pooledBuilder = PooledStringBuilder.GetInstance();
             var sb = pooledBuilder.Builder;
@@ -488,21 +488,21 @@ namespace Microsoft.CodeAnalysis.CSharp
             return pooledBuilder.ToStringAndFree();
         }
 
-        internal static string FormatLiteral(double value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(double value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             var result = value.ToString("R", GetFormatCulture(cultureInfo));
 
             return options.IncludesOption(ObjectDisplayOptions.IncludeTypeSuffix) ? result + "D" : result;
         }
 
-        internal static string FormatLiteral(float value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(float value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             var result = value.ToString("R", GetFormatCulture(cultureInfo));
 
             return options.IncludesOption(ObjectDisplayOptions.IncludeTypeSuffix) ? result + "F" : result;
         }
 
-        internal static string FormatLiteral(decimal value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
+        public static string FormatLiteral(decimal value, ObjectDisplayOptions options, CultureInfo cultureInfo = null)
         {
             var result = value.ToString(GetFormatCulture(cultureInfo));
 

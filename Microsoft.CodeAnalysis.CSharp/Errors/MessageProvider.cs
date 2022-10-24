@@ -16,7 +16,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal sealed class MessageProvider : CommonMessageProvider, IObjectWritable
+    public sealed class MessageProvider : CommonMessageProvider, IObjectWritable
     {
         public static readonly MessageProvider Instance = new();
 

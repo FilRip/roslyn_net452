@@ -8,7 +8,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal enum GeneratedNameKind
+    public enum GeneratedNameKind
     {
         None = 0,
 

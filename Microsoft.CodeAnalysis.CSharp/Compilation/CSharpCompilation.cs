@@ -751,7 +751,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal CSharpCompilation? PreviousSubmission => ScriptCompilationInfo?.PreviousScriptCompilation;
 
-        protected override bool HasSubmissionResult()
+        public override bool HasSubmissionResult()
         {
 
             // A submission may be empty or comprised of a single script file.

@@ -260,7 +260,7 @@ namespace Roslyn.Utilities
             }
         }
 
-        internal static string NormalizeDirectoryPath(string path)
+        public static string NormalizeDirectoryPath(string path)
         {
             return NormalizeAbsolutePath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
@@ -363,7 +363,7 @@ namespace Roslyn.Utilities
         }
 
         /// <exception cref="IOException"/>
-        internal static DateTime GetFileTimeStamp(string fullPath)
+        public static DateTime GetFileTimeStamp(string fullPath)
         {
             Debug.Assert(PathUtilities.IsAbsolute(fullPath));
             try

@@ -274,7 +274,7 @@ namespace Microsoft.CodeAnalysis
             return CreateFromAssemblyInternal(assembly);
         }
 
-        internal static MetadataReference CreateFromAssemblyInternal(Assembly assembly)
+        public static MetadataReference CreateFromAssemblyInternal(Assembly assembly)
         {
             return CreateFromAssemblyInternal(assembly, default);
         }
@@ -305,7 +305,7 @@ namespace Microsoft.CodeAnalysis
             return CreateFromAssemblyInternal(assembly, properties, documentation);
         }
 
-        internal static PortableExecutableReference CreateFromAssemblyInternal(
+        public static PortableExecutableReference CreateFromAssemblyInternal(
             Assembly assembly,
             MetadataReferenceProperties properties,
             DocumentationProvider? documentation = null)
@@ -343,7 +343,7 @@ namespace Microsoft.CodeAnalysis
             return new MetadataImageReference(metadata, properties, documentation, location, display: null);
         }
 
-        internal static bool HasMetadata(Assembly assembly)
+        public static bool HasMetadata(Assembly assembly)
         {
             return !assembly.IsDynamic && !string.IsNullOrEmpty(assembly.Location);
         }

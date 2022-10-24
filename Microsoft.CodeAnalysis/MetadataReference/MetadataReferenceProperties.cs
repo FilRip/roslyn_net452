@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Returns <see cref="MetadataReferenceProperties"/> with <see cref="HasRecursiveAliases"/> set to specified value.
         /// </summary>
-        internal MetadataReferenceProperties WithRecursiveAliases(bool value)
+        public MetadataReferenceProperties WithRecursiveAliases(bool value)
         {
             return new MetadataReferenceProperties(_kind, _aliases, _embedInteropTypes, value);
         }
