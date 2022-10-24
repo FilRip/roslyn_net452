@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundFunctionPointerInvocation
+    public partial class BoundFunctionPointerInvocation
     {
         public FunctionPointerTypeSymbol FunctionPointer
         {

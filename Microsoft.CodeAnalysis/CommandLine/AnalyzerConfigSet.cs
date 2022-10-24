@@ -20,6 +20,8 @@ using static Microsoft.CodeAnalysis.AnalyzerConfig;
 using AnalyzerOptions = System.Collections.Immutable.ImmutableDictionary<string, string>;
 using TreeOptions = System.Collections.Immutable.ImmutableDictionary<string, Microsoft.CodeAnalysis.ReportDiagnostic>;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

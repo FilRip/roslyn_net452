@@ -12,6 +12,8 @@ using Roslyn.Utilities;
 
 using static System.Linq.ImmutableArrayExtensions;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal static partial class SymbolExtensions

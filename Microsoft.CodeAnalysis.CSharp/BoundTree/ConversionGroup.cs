@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// determine which BoundConversion nodes should be considered as a unit.
     /// </summary>
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    internal sealed class ConversionGroup
+    public sealed class ConversionGroup
     {
         internal ConversionGroup(Conversion conversion, TypeWithAnnotations explicitType = default)
         {

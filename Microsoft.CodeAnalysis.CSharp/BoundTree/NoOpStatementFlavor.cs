@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal enum NoOpStatementFlavor
+    public enum NoOpStatementFlavor
     {
         Default,
 

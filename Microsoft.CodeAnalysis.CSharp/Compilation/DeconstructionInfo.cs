@@ -4,6 +4,8 @@
 
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     // Deconstructions are represented internally as a tree of conversions, but

@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     internal static class SyntaxReplacer

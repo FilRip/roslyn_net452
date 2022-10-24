@@ -9,9 +9,11 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal sealed class LambdaSymbol : SourceMethodSymbolWithAttributes
+    public sealed class LambdaSymbol : SourceMethodSymbolWithAttributes
     {
         private readonly Binder _binder;
         private readonly Symbol _containingSymbol;

@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
         // Diagnostics are generated in a separate pass when we emit.
         internal ImmutableArray<Symbol> BindXmlNameAttribute(XmlNameAttributeSyntax syntax, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)

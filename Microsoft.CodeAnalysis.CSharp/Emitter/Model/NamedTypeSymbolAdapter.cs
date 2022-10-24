@@ -840,7 +840,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class NamedTypeSymbol
+    public partial class NamedTypeSymbol
     {
 #if DEBUG
         private NamedTypeSymbolAdapter _lazyAdapter;

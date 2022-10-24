@@ -10,7 +10,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal enum MessageID
+    public enum MessageID
     {
         None = 0,
         MessageBase = 1200,

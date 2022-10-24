@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal struct AliasAndExternAliasDirective
+    public struct AliasAndExternAliasDirective
     {
         public readonly AliasSymbol Alias;
         public readonly SyntaxReference? ExternAliasDirectiveReference;

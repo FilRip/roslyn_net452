@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.DiaSymReader;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public sealed class CompilationTestData

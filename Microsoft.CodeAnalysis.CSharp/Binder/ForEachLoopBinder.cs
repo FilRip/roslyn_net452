@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <remarks>
     /// This binder produces BoundForEachStatements.  The lowering described in the spec is performed in ControlFlowRewriter.
     /// </remarks>
-    internal sealed class ForEachLoopBinder : LoopBinder
+    public sealed class ForEachLoopBinder : LoopBinder
     {
         private const string GetEnumeratorMethodName = WellKnownMemberNames.GetEnumeratorMethodName;
         private const string CurrentPropertyName = WellKnownMemberNames.CurrentPropertyName;

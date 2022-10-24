@@ -6,6 +6,8 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public abstract class AnalyzerConfigOptions

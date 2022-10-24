@@ -5,6 +5,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Collections
 {
     public readonly partial struct ImmutableSegmentedDictionary<TKey, TValue>

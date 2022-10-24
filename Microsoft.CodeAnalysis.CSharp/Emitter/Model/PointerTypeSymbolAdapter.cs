@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class PointerTypeSymbol
+    public partial class PointerTypeSymbol
     {
 #if DEBUG
         private PointerTypeSymbolAdapter _lazyAdapter;

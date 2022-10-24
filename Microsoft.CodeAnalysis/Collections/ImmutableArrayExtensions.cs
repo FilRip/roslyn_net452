@@ -19,6 +19,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 using System.Linq;
 #endif
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

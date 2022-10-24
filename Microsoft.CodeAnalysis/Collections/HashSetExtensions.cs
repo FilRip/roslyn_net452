@@ -5,6 +5,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     internal static class HashSetExtensions

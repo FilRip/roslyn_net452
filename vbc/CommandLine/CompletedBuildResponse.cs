@@ -23,9 +23,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
         {
             int returnCode = reader.ReadInt32();
             bool flag = reader.ReadBoolean();
-            string str = BuildProtocolConstants.ReadLengthPrefixedString(reader);
+            string? str = BuildProtocolConstants.ReadLengthPrefixedString(reader);
             int num = flag ? 1 : 0;
-            string output = str;
+            string? output = str;
             return new CompletedBuildResponse(returnCode, num != 0, output);
         }
 

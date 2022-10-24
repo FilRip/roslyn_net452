@@ -8,6 +8,8 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public sealed class CustomObsoleteDiagnosticInfo : DiagnosticInfo
@@ -27,6 +29,7 @@ namespace Microsoft.CodeAnalysis
             Data = baseInfo.Data;
         }
 
+#nullable disable
         public override string MessageIdentifier
         {
             get
@@ -40,6 +43,7 @@ namespace Microsoft.CodeAnalysis
                 return base.MessageIdentifier;
             }
         }
+#nullable restore
 
         public override DiagnosticDescriptor Descriptor
         {

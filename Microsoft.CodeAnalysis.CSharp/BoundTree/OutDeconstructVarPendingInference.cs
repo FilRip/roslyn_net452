@@ -4,9 +4,11 @@
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class OutDeconstructVarPendingInference
+    public partial class OutDeconstructVarPendingInference
     {
         public BoundDeconstructValuePlaceholder? Placeholder;
 

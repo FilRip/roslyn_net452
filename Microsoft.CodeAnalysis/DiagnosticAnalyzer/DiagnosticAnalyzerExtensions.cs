@@ -5,6 +5,8 @@
 using System.Collections.Immutable;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public static class DiagnosticAnalyzerExtensions

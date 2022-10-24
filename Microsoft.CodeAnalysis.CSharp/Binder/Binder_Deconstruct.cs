@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     ///         an array of nested Conversions (like a tuple conversion),
     ///     - a BoundExpression as its Operand.
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         internal BoundExpression BindDeconstruction(AssignmentExpressionSyntax node, BindingDiagnosticBag diagnostics, bool resultIsUsedOverride = false)
         {
@@ -305,10 +305,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    BoundExpression? single = variable.Single;
+                    var single = variable.Single;
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-                    nestedConversion = this.Conversions.ClassifyConversionFromType(tupleOrDeconstructedTypes[i], single?.Type, ref useSiteInfo);
-                    diagnostics.Add(single!.Syntax, useSiteInfo);
+                    nestedConversion = this.Conversions.ClassifyConversionFromType(tupleOrDeconstructedTypes[i], single.Type, ref useSiteInfo);
+                    diagnostics.Add(single.Syntax, useSiteInfo);
 
                     if (!nestedConversion.IsImplicit)
                     {
@@ -381,7 +381,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    switch (variable?.Single?.Kind)
+                    switch (variable.Single.Kind)
                     {
                         case BoundKind.Local:
                             var local = (BoundLocal)variable.Single;

@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // than XElement.Parse.
                     doc = XDocument.Parse(unprocessed, LoadOptions.PreserveWhitespace);
                 }
-                catch (XmlException e)
+                catch (XmlException)
                 {
                     // If one of the trees wasn't diagnosing doc comments, then an error might have slipped through.
                     // Otherwise, we shouldn't see exceptions from XDocument.Parse.

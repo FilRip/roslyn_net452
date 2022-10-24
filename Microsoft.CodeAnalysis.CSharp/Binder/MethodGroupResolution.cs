@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// Packages up the various parts returned when resolving a method group. 
     /// </summary>
-    internal struct MethodGroupResolution
+    public struct MethodGroupResolution
     {
         public readonly MethodGroup MethodGroup;
         public readonly Symbol OtherSymbol;

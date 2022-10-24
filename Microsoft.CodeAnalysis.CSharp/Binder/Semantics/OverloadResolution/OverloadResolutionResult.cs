@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// method was selected if overload resolution succeeded, as well as detailed information about
     /// each method that was considered. 
     /// </summary>
-    internal class OverloadResolutionResult<TMember> where TMember : Symbol
+    public class OverloadResolutionResult<TMember> where TMember : Symbol
     {
         private MemberResolutionResult<TMember> _bestResult;
         private ThreeState _bestResultState;

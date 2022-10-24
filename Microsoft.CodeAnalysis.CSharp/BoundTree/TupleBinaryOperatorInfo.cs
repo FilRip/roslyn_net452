@@ -7,6 +7,8 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal enum TupleBinaryOperatorInfoKind
@@ -23,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// The first element is a Single (describing the binary operator and conversions that are involved in <c>a == d</c>).
     /// The second element is a Multiple containing two Singles (one for the <c>b == e</c> comparison and the other for <c>c == f</c>).
     /// </summary>
-    internal abstract class TupleBinaryOperatorInfo
+    public abstract class TupleBinaryOperatorInfo
     {
         internal abstract TupleBinaryOperatorInfoKind InfoKind { get; }
         internal readonly TypeSymbol? LeftConvertedTypeOpt;
@@ -89,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Holds the information for a tuple comparison, either at the top-level (like <c>(a, b) == ...</c>) or nested (like <c>(..., (a, b)) == (..., ...)</c>).
         /// </summary>
-        internal class Multiple : TupleBinaryOperatorInfo
+        public class Multiple : TupleBinaryOperatorInfo
         {
             internal readonly ImmutableArray<TupleBinaryOperatorInfo> Operators;
 

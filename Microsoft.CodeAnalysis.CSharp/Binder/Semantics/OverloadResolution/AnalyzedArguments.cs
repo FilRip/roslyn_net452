@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 namespace Microsoft.CodeAnalysis.CSharp
 {
     // Note: instances of this object are pooled
-    internal sealed class AnalyzedArguments
+    public sealed class AnalyzedArguments
     {
         public readonly ArrayBuilder<BoundExpression> Arguments;
         public readonly ArrayBuilder<IdentifierNameSyntax> Names;

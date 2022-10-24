@@ -73,13 +73,13 @@ namespace Microsoft.CodeAnalysis.CommandLine
           Stream inStream,
           CancellationToken cancellationToken)
         {
-            byte[] lengthBuffer = new byte[4];
+            byte[]? lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(inStream, lengthBuffer, 4, cancellationToken).ConfigureAwait(false);
             int int32 = BitConverter.ToInt32(lengthBuffer, 0);
             if (int32 > 5242880)
                 throw new ArgumentException(string.Format("Request is over {0}MB in length", 5));
             cancellationToken.ThrowIfCancellationRequested();
-            byte[] requestBuffer = new byte[int32];
+            byte[]? requestBuffer = new byte[int32];
             await BuildProtocolConstants.ReadAllAsync(inStream, requestBuffer, int32, cancellationToken).ConfigureAwait(false);
             cancellationToken.ThrowIfCancellationRequested();
             BuildRequest buildRequest;
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public async Task WriteAsync(Stream outStream, CancellationToken cancellationToken = default)
         {
-            BinaryWriter writer;
+            BinaryWriter? writer;
             using (MemoryStream memoryStream = new())
             {
                 writer = new BinaryWriter(memoryStream, Encoding.Unicode);

@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// A <see cref="NonMissingAssemblySymbol"/> is a special kind of <see cref="AssemblySymbol"/> that represents
     /// an assembly that is not missing, i.e. the "real" thing.
     /// </summary>
-    internal abstract class NonMissingAssemblySymbol : AssemblySymbol
+    public abstract class NonMissingAssemblySymbol : AssemblySymbol
     {
         /// <summary>
         /// This is a cache similar to the one used by MetaImport::GetTypeByName

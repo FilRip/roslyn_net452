@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     /// <summary>

@@ -155,7 +155,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         #endregion
     }
 
-    internal partial class EventSymbol
+    public partial class EventSymbol
     {
 #if DEBUG
         private EventSymbolAdapter? _lazyAdapter;

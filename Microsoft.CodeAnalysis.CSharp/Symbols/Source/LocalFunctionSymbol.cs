@@ -11,9 +11,11 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal sealed class LocalFunctionSymbol : SourceMethodSymbolWithAttributes
+    public sealed class LocalFunctionSymbol : SourceMethodSymbolWithAttributes
     {
         private readonly Binder _binder;
         private readonly Symbol _containingSymbol;

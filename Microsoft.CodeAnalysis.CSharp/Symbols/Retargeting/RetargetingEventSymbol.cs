@@ -8,6 +8,8 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 {
     internal sealed class RetargetingEventSymbol : WrappedEventSymbol

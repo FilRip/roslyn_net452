@@ -9,6 +9,8 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.Emit;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public static class CSharpFileSystemExtensions

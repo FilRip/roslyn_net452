@@ -7,6 +7,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal static partial class BoundNodeExtensions

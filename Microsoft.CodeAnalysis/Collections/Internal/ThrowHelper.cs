@@ -40,6 +40,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Collections.Internal
 {
     internal static class ThrowHelper

@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 namespace Microsoft.CodeAnalysis.CSharp
 {
     // pooled class used for input to overload resolution
-    internal sealed class MethodGroup
+    public sealed class MethodGroup
     {
         internal BoundExpression Receiver { get; private set; }
         internal ArrayBuilder<MethodSymbol> Methods { get; }

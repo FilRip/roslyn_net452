@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -352,7 +354,7 @@ namespace Microsoft.CodeAnalysis
             {
                 return null;
             }
-
+#nullable restore
             var suppressMessageState = new SuppressMessageAttributeState(compilation);
             if (!suppressMessageState.IsDiagnosticSuppressed(
                     this,
@@ -363,7 +365,7 @@ namespace Microsoft.CodeAnalysis
 
             return new SuppressionInfo(this.Id, attribute);
         }
-
+#nullable enable
         /// <summary>
         /// Returns true if this diagnostic is enabled by default by the author of the diagnostic.
         /// </summary>

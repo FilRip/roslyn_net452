@@ -9,7 +9,7 @@
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal partial class TypeSymbol
+    public partial class TypeSymbol
     {
         /// <summary>
         /// Represents the method by which this type implements a given interface type

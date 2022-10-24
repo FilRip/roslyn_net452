@@ -10,6 +10,8 @@ using System.Threading;
 using Microsoft.CodeAnalysis.FlowAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     /// <summary>

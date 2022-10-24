@@ -13,6 +13,8 @@ using Roslyn.Utilities;
 
 using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public static partial class SyntaxFacts

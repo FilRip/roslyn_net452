@@ -6,9 +6,11 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    partial class BoundDagTemp
+    public partial class BoundDagTemp
     {
         /// <summary>
         /// Does this dag temp represent the original input of the pattern-matching operation?

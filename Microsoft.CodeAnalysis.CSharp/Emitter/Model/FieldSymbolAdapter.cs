@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class FieldSymbol
+    public partial class FieldSymbol
     {
 #if DEBUG
         private FieldSymbolAdapter _lazyAdapter;

@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class TypeParameterSymbol
+    public partial class TypeParameterSymbol
     {
 #if DEBUG
         private TypeParameterSymbolAdapter _lazyAdapter;

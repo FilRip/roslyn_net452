@@ -17,7 +17,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal abstract partial class
+    public abstract partial class
 #if DEBUG
         SymbolAdapter
 #else
@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class Symbol
+    public partial class Symbol
     {
 #if DEBUG
         internal SymbolAdapter GetCciAdapter() => GetCciAdapterImpl();
@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     }
 
 #if DEBUG
-    internal partial class SymbolAdapter
+    public partial class SymbolAdapter
     {
         internal abstract Symbol AdaptedSymbol { get; }
 

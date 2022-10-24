@@ -11,10 +11,12 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    internal abstract partial class BoundNode
+    public abstract partial class BoundNode
     {
         private readonly BoundKind _kind;
         private BoundNodeAttributes _attributes;

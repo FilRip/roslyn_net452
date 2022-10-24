@@ -6,9 +6,11 @@ using System.Diagnostics.CodeAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    partial class BoundDagEvaluation
+    public partial class BoundDagEvaluation
     {
         public override bool Equals([NotNullWhen(true)] object? obj) => obj is BoundDagEvaluation other && this.Equals(other);
         public virtual bool Equals(BoundDagEvaluation other)
@@ -40,7 +42,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    partial class BoundDagIndexEvaluation
+    public partial class BoundDagIndexEvaluation
     {
         public override int GetHashCode() => base.GetHashCode() ^ this.Index;
         public override bool Equals(BoundDagEvaluation obj)

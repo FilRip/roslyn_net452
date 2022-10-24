@@ -14,7 +14,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal abstract partial class NamedTypeSymbol
+    public abstract partial class NamedTypeSymbol
     {
         internal const int ValueTupleRestPosition = 8; // The Rest field is in 8th position
         internal const int ValueTupleRestIndex = ValueTupleRestPosition - 1;
@@ -906,7 +906,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <summary>
         /// The main purpose of this type is to store element names and also cache some information related to tuples.
         /// </summary>
-        internal sealed class TupleExtraData
+        public sealed class TupleExtraData
         {
             /// <summary>
             /// Element names, if provided.

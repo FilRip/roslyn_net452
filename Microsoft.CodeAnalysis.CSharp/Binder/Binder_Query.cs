@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// This portion of the binder converts a QueryExpressionSyntax into a BoundExpression
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         private const string transparentIdentifierPrefix = "<>h__TransparentIdentifier";
 

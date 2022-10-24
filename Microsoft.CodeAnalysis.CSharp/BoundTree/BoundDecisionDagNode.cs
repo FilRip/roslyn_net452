@@ -6,9 +6,11 @@ using System.Runtime.CompilerServices;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    partial class BoundDecisionDagNode
+    public partial class BoundDecisionDagNode
     {
         public override bool Equals(object? other)
         {

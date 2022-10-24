@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.Syntax;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static class CSharpExtensions

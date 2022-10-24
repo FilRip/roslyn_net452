@@ -7,7 +7,7 @@ using System;
 namespace Microsoft.CodeAnalysis.CSharp
 {
     [Flags]
-    internal enum BoundMethodGroupFlags
+    public enum BoundMethodGroupFlags
     {
         None = 0,
         SearchExtensionMethods = 1,

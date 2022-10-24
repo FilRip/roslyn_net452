@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// Information to be deduced while binding a foreach loop so that the loop can be lowered
     /// to a while over an enumerator.  Not applicable to the array or string forms.
     /// </summary>
-    internal sealed class ForEachEnumeratorInfo
+    public sealed class ForEachEnumeratorInfo
     {
         // Types identified by the algorithm in the spec (8.8.4).
         public readonly TypeSymbol CollectionType;

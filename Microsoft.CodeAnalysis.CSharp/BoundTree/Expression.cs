@@ -6,9 +6,11 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.Operations;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundObjectCreationExpression : IBoundInvalidNode
+    public partial class BoundObjectCreationExpression : IBoundInvalidNode
     {
         internal static ImmutableArray<BoundExpression> GetChildInitializers(BoundExpression? objectOrCollectionInitializer)
         {
@@ -30,104 +32,104 @@ namespace Microsoft.CodeAnalysis.CSharp
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => CSharpOperationFactory.CreateInvalidChildrenFromArgumentsExpression(receiverOpt: null, Arguments, InitializerExpressionOpt);
     }
 
-    internal sealed partial class BoundObjectInitializerMember : IBoundInvalidNode
+    public sealed partial class BoundObjectInitializerMember : IBoundInvalidNode
     {
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => StaticCast<BoundNode>.From(Arguments);
     }
 
-    internal sealed partial class BoundCollectionElementInitializer : IBoundInvalidNode
+    public sealed partial class BoundCollectionElementInitializer : IBoundInvalidNode
     {
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => CSharpOperationFactory.CreateInvalidChildrenFromArgumentsExpression(ImplicitReceiverOpt, Arguments);
     }
 
-    internal sealed partial class BoundDeconstructionAssignmentOperator : BoundExpression
+    public sealed partial class BoundDeconstructionAssignmentOperator : BoundExpression
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Left, this.Right);
     }
 
-    internal partial class BoundBadExpression : IBoundInvalidNode
+    public partial class BoundBadExpression : IBoundInvalidNode
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.ChildBoundNodes);
 
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => StaticCast<BoundNode>.From(this.ChildBoundNodes);
     }
 
-    internal partial class BoundCall : IBoundInvalidNode
+    public partial class BoundCall : IBoundInvalidNode
     {
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => CSharpOperationFactory.CreateInvalidChildrenFromArgumentsExpression(ReceiverOpt, Arguments);
     }
 
-    internal partial class BoundIndexerAccess : IBoundInvalidNode
+    public partial class BoundIndexerAccess : IBoundInvalidNode
     {
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => CSharpOperationFactory.CreateInvalidChildrenFromArgumentsExpression(ReceiverOpt, Arguments);
     }
 
-    internal partial class BoundDynamicIndexerAccess
+    public partial class BoundDynamicIndexerAccess
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.Arguments.Insert(0, this.Receiver));
     }
 
-    internal partial class BoundAnonymousObjectCreationExpression
+    public partial class BoundAnonymousObjectCreationExpression
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.Arguments);
     }
 
-    internal partial class BoundAttribute
+    public partial class BoundAttribute
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.ConstructorArguments.AddRange(StaticCast<BoundExpression>.From(this.NamedArguments)));
     }
 
-    internal partial class BoundQueryClause
+    public partial class BoundQueryClause
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Value);
     }
 
-    internal partial class BoundArgListOperator
+    public partial class BoundArgListOperator
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.Arguments);
     }
 
-    internal partial class BoundNameOfOperator
+    public partial class BoundNameOfOperator
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Argument);
     }
 
-    internal partial class BoundPointerElementAccess
+    public partial class BoundPointerElementAccess
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Expression, this.Index);
     }
 
-    internal partial class BoundRefTypeOperator
+    public partial class BoundRefTypeOperator
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Operand);
     }
 
-    internal partial class BoundDynamicMemberAccess
+    public partial class BoundDynamicMemberAccess
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Receiver);
     }
 
-    internal partial class BoundMakeRefOperator
+    public partial class BoundMakeRefOperator
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Operand);
     }
 
-    internal partial class BoundRefValueOperator
+    public partial class BoundRefValueOperator
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Operand);
     }
 
-    internal partial class BoundDynamicInvocation
+    public partial class BoundDynamicInvocation
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.Arguments.Insert(0, this.Expression));
     }
 
-    internal partial class BoundFixedLocalCollectionInitializer
+    public partial class BoundFixedLocalCollectionInitializer
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Expression);
     }
 
-    internal partial class BoundStackAllocArrayCreationBase
+    public partial class BoundStackAllocArrayCreationBase
     {
         internal static ImmutableArray<BoundExpression> GetChildInitializers(BoundArrayInitialization? arrayInitializer)
         {
@@ -135,53 +137,53 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundStackAllocArrayCreation
+    public partial class BoundStackAllocArrayCreation
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(GetChildInitializers(this.InitializerOpt).Insert(0, this.Count));
     }
 
-    internal partial class BoundConvertedStackAllocExpression
+    public partial class BoundConvertedStackAllocExpression
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(GetChildInitializers(this.InitializerOpt).Insert(0, this.Count));
     }
 
-    internal partial class BoundDynamicObjectCreationExpression
+    public partial class BoundDynamicObjectCreationExpression
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.Arguments.AddRange(BoundObjectCreationExpression.GetChildInitializers(this.InitializerExpressionOpt)));
     }
 
-    partial class BoundThrowExpression
+    public partial class BoundThrowExpression
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Expression);
     }
 
-    internal abstract partial class BoundMethodOrPropertyGroup
+    public abstract partial class BoundMethodOrPropertyGroup
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.ReceiverOpt);
     }
 
-    internal partial class BoundSequence
+    public partial class BoundSequence
     {
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(this.SideEffects.Add(this.Value));
     }
 
-    internal partial class BoundStatementList
+    public partial class BoundStatementList
     {
         protected override ImmutableArray<BoundNode?> Children =>
             (this.Kind == BoundKind.StatementList || this.Kind == BoundKind.Scope) ? StaticCast<BoundNode?>.From(this.Statements) : ImmutableArray<BoundNode?>.Empty;
     }
 
-    internal partial class BoundPassByCopy
+    public partial class BoundPassByCopy
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Expression);
     }
 
-    internal partial class BoundIndexOrRangePatternIndexerAccess
+    public partial class BoundIndexOrRangePatternIndexerAccess
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(Receiver, Argument);
     }
 
-    internal partial class BoundFunctionPointerInvocation : IBoundInvalidNode
+    public partial class BoundFunctionPointerInvocation : IBoundInvalidNode
     {
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => CSharpOperationFactory.CreateInvalidChildrenFromArgumentsExpression(receiverOpt: this.InvokedExpression, Arguments);
         protected override ImmutableArray<BoundNode?> Children => StaticCast<BoundNode?>.From(((IBoundInvalidNode)this).InvalidNodeChildren);

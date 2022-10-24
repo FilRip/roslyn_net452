@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// BoundExpressions to be used for emit. The expressions are assumed
     /// to be lowered and will not be visited by <see cref="BoundTreeWalker"/>.
     /// </summary>
-    internal abstract class PseudoVariableExpressions
+    public abstract class PseudoVariableExpressions
     {
         internal abstract BoundExpression GetValue(BoundPseudoVariable variable, DiagnosticBag diagnostics);
         internal abstract BoundExpression GetAddress(BoundPseudoVariable variable);

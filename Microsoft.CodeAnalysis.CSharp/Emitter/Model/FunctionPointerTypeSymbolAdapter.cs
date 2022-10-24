@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class FunctionPointerTypeSymbol
+    public partial class FunctionPointerTypeSymbol
     {
 #if DEBUG
         private FunctionPointerTypeSymbolAdapter? _lazyAdapter;

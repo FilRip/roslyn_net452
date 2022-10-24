@@ -6,6 +6,8 @@ using System.Threading;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     internal static class AnalyzerOptionsExtensions

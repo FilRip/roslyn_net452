@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.Interop;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract partial class Compilation

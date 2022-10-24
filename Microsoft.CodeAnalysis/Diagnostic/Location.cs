@@ -9,6 +9,8 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.Symbols;
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

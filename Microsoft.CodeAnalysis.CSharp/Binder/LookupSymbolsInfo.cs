@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal sealed class LookupSymbolsInfo : AbstractLookupSymbolsInfo<Symbol>
+    public sealed class LookupSymbolsInfo : AbstractLookupSymbolsInfo<Symbol>
     {
         // TODO: tune pool size.
         private const int poolSize = 64;

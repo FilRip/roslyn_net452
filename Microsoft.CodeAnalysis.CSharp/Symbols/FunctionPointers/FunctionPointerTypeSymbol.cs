@@ -14,7 +14,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal sealed partial class FunctionPointerTypeSymbol : TypeSymbol
+    public sealed partial class FunctionPointerTypeSymbol : TypeSymbol
     {
         public static FunctionPointerTypeSymbol CreateFromSource(FunctionPointerTypeSyntax syntax, Binder typeBinder, BindingDiagnosticBag diagnostics, ConsList<TypeSymbol> basesBeingResolved, bool suppressUseSiteDiagnostics)
             => new FunctionPointerTypeSymbol(

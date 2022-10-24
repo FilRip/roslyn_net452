@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a local variable in a method body.
     /// </summary>
-    internal abstract class LocalSymbol : Symbol, ILocalSymbolInternal
+    public abstract class LocalSymbol : Symbol, ILocalSymbolInternal
     {
         protected LocalSymbol()
         {

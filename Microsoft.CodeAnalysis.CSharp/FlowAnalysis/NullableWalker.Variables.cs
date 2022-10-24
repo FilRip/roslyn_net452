@@ -10,9 +10,11 @@ using System.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class NullableWalker
+    public partial class NullableWalker
     {
         /// <summary>
         /// An immutable copy of <see cref="Variables"/>.
@@ -78,7 +80,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// for that method where the parameter or local are declared, even if the variable is used in a nested scope.
         /// </summary>
         [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        internal sealed class Variables
+        public sealed class Variables
         {
             // Members of variables are tracked up to a fixed depth, to avoid cycles. The
             // MaxSlotDepth value is arbitrary but large enough to allow most scenarios.

@@ -15,7 +15,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal sealed partial class NullableWalker
+    public sealed partial class NullableWalker
     {
         /// <summary>
         /// Learn something about the input from a test of a given expression against a given pattern.  The given

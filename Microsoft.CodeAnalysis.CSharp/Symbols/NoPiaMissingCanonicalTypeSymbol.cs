@@ -4,6 +4,8 @@
 
 using System.Runtime.CompilerServices;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>

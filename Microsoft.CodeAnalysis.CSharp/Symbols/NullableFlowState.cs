@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// When in doubt we conservatively use <see cref="NullableFlowState.NotNull"/>
     /// to minimize diagnostics.
     /// </summary>
-    internal enum NullableFlowState : byte
+    public enum NullableFlowState : byte
     {
         /// <summary>
         /// Not null.

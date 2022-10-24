@@ -17,6 +17,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public abstract class CSharpCompiler : CommonCompiler

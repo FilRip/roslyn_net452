@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a namespace.
     /// </summary>
-    internal abstract partial class NamespaceSymbol : NamespaceOrTypeSymbol, INamespaceSymbolInternal
+    public abstract partial class NamespaceSymbol : NamespaceOrTypeSymbol, INamespaceSymbolInternal
     {
         // PERF: initialization of the following fields will allocate, so we make them lazy
         private ImmutableArray<NamedTypeSymbol> _lazyTypesMightContainExtensionMethods;

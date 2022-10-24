@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
-        internal readonly struct NamespaceOrTypeOrAliasSymbolWithAnnotations
+        public readonly struct NamespaceOrTypeOrAliasSymbolWithAnnotations
         {
             private readonly TypeWithAnnotations _typeWithAnnotations;
             private readonly Symbol _symbol;

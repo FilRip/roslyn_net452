@@ -8,6 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Syntax;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>

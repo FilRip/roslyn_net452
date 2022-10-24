@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>

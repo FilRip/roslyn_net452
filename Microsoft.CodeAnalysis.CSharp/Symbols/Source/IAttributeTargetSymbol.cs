@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Implemented by symbols that can be targeted by an attribute declaration (i.e. source symbols).
     /// </summary>
-    internal interface IAttributeTargetSymbol
+    public interface IAttributeTargetSymbol
     {
         /// <summary>
         /// Returns the owner of attributes that apply to this symbol.

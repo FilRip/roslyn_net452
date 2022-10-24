@@ -10,9 +10,9 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class AbstractFlowPass<TLocalState, TLocalFunctionState>
+    public partial class AbstractFlowPass<TLocalState, TLocalFunctionState>
     {
-        internal abstract class AbstractLocalFunctionState
+        public abstract class AbstractLocalFunctionState
         {
             /// <summary>
             /// This is the state from the local function which makes the

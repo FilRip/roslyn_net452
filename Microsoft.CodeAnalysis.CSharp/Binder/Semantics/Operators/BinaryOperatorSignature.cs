@@ -12,7 +12,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal struct BinaryOperatorSignature : IEquatable<BinaryOperatorSignature>
+    public struct BinaryOperatorSignature : IEquatable<BinaryOperatorSignature>
     {
         public static BinaryOperatorSignature Error = default;
 

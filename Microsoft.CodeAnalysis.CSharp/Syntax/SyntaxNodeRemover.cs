@@ -10,6 +10,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     internal static class SyntaxNodeRemover

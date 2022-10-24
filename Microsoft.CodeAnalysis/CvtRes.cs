@@ -16,6 +16,8 @@ using DWORD = System.UInt32;
 using WCHAR = System.Char;
 using WORD = System.UInt16;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     internal class RESOURCE

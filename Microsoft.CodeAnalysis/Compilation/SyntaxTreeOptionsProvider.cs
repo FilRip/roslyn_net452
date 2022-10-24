@@ -7,6 +7,8 @@ using System.Threading;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract class SyntaxTreeOptionsProvider

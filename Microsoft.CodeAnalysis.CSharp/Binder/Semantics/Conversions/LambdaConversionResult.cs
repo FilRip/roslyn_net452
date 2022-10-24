@@ -7,7 +7,7 @@
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal enum LambdaConversionResult
+    public enum LambdaConversionResult
     {
         Success,
         BadTargetType,

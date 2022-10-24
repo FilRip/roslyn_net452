@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>

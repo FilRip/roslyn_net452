@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal enum ErrorCode
+    public enum ErrorCode
     {
         Void = InternalErrorCode.Void,
         Unknown = InternalErrorCode.Unknown,

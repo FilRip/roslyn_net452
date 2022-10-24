@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.Debugging;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     /// <summary>

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Immutable;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract partial class CommonCompiler

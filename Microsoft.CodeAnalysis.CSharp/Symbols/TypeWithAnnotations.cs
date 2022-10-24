@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// A struct that combines a single type with annotations
     /// </summary>
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    internal readonly struct TypeWithAnnotations : IFormattable
+    public readonly struct TypeWithAnnotations : IFormattable
     {
         [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
         internal sealed class Boxed

@@ -6,6 +6,8 @@ using System.Collections.Immutable;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     /// <summary>

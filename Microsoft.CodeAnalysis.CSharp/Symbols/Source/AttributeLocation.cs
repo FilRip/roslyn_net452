@@ -12,7 +12,7 @@ using Roslyn.Utilities;
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     [Flags]
-    internal enum AttributeLocation : short
+    public enum AttributeLocation : short
     {
         None = 0,
 

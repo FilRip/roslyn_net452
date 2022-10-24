@@ -202,7 +202,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class ParameterSymbol
+    public partial class ParameterSymbol
     {
 #if DEBUG
         private ParameterSymbolAdapter _lazyAdapter;

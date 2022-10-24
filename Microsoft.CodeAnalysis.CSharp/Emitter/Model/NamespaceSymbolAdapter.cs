@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         CodeAnalysis.Symbols.INamespaceSymbolInternal Cci.INamespace.GetInternalSymbol() => AdaptedNamespaceSymbol;
     }
 
-    internal partial class NamespaceSymbol
+    public partial class NamespaceSymbol
     {
 #if DEBUG
         private NamespaceSymbolAdapter _lazyAdapter;

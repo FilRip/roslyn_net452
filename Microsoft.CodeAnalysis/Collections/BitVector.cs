@@ -10,6 +10,8 @@ using Roslyn.Utilities;
 
 using Word = System.UInt64;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]

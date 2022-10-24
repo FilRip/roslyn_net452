@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     /// <summary>

@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

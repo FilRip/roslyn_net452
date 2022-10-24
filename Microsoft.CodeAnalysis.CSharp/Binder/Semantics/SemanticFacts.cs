@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 namespace Microsoft.CodeAnalysis.CSharp
 {
 
-    internal partial class Symbol
+    public partial class Symbol
     {
         /// <summary>
         /// Checks if 'symbol' is accessible from within named type 'within'.  If 'symbol' is accessed off

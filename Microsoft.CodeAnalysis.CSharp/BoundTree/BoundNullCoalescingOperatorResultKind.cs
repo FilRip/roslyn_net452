@@ -8,7 +8,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// Represents the operand type used for the result of a null-coalescing
     /// operator. Used when determining nullability.
     /// </summary>
-    internal enum BoundNullCoalescingOperatorResultKind
+    public enum BoundNullCoalescingOperatorResultKind
     {
         /// <summary>
         /// No valid type for operator.

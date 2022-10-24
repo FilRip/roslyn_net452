@@ -18,6 +18,8 @@ using System.Threading;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     /// <summary>
@@ -520,7 +522,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             private ImmutableArray<TExtension> GetLanguageSpecificAnalyzers(Assembly analyzerAssembly, ImmutableSortedDictionary<string, ImmutableSortedSet<string>> analyzerTypeNameMap, string language, ref bool reportedError)
             {
+#nullable restore
                 if (!analyzerTypeNameMap.TryGetValue(language, out ImmutableSortedSet<string> languageSpecificAnalyzerTypeNames))
+#nullable enable
                 {
                     return ImmutableArray<TExtension>.Empty;
                 }

@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// An ArrayTypeSymbol represents an array type, such as int[] or object[,].
     /// </summary>
-    internal abstract partial class ArrayTypeSymbol : TypeSymbol
+    public abstract partial class ArrayTypeSymbol : TypeSymbol
     {
         private readonly TypeWithAnnotations _elementTypeWithAnnotations;
         private readonly NamedTypeSymbol _baseType;

@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a type other than an array, a pointer, a type parameter, and dynamic.
     /// </summary>
-    internal abstract partial class NamedTypeSymbol : TypeSymbol, INamedTypeSymbolInternal
+    public abstract partial class NamedTypeSymbol : TypeSymbol, INamedTypeSymbolInternal
     {
         private bool _hasNoBaseCycles;
 

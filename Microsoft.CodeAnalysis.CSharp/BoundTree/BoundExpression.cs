@@ -9,9 +9,11 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundExpression
+    public partial class BoundExpression
     {
         internal BoundExpression WithSuppression(bool suppress = true)
         {
@@ -123,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Type?.GetITypeSymbol(TopLevelNullability.FlowState.ToAnnotation());
     }
 
-    internal partial class BoundPassByCopy
+    public partial class BoundPassByCopy
     {
         public override ConstantValue? ConstantValue
         {
@@ -142,7 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundCall
+    public partial class BoundCall
     {
         public override Symbol ExpressionSymbol
         {
@@ -153,7 +155,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundTypeExpression
+    public partial class BoundTypeExpression
     {
         public override Symbol ExpressionSymbol
         {
@@ -173,7 +175,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundNamespaceExpression
+    public partial class BoundNamespaceExpression
     {
         public override Symbol ExpressionSymbol
         {
@@ -181,7 +183,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundLocal
+    public partial class BoundLocal
     {
         public override ConstantValue? ConstantValue
         {
@@ -204,7 +206,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundFieldAccess
+    public partial class BoundFieldAccess
     {
         public override ConstantValue? ConstantValue
         {
@@ -217,7 +219,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundPropertyAccess
+    public partial class BoundPropertyAccess
     {
         public override Symbol? ExpressionSymbol
         {
@@ -225,7 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundIndexerAccess
+    public partial class BoundIndexerAccess
     {
         public override Symbol? ExpressionSymbol
         {
@@ -241,7 +243,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundDynamicIndexerAccess
+    public partial class BoundDynamicIndexerAccess
     {
         internal string? TryGetIndexedPropertyName()
         {
@@ -257,7 +259,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundEventAccess
+    public partial class BoundEventAccess
     {
         public override Symbol ExpressionSymbol
         {
@@ -265,7 +267,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundParameter
+    public partial class BoundParameter
     {
         public override Symbol ExpressionSymbol
         {
@@ -273,7 +275,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundBinaryOperator
+    public partial class BoundBinaryOperator
     {
         public override ConstantValue? ConstantValue
         {
@@ -286,7 +288,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundInterpolatedStringBase
+    public partial class BoundInterpolatedStringBase
     {
         public sealed override ConstantValue? ConstantValue
         {
@@ -294,7 +296,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundUserDefinedConditionalLogicalOperator
+    public partial class BoundUserDefinedConditionalLogicalOperator
     {
         public override Symbol ExpressionSymbol
         {
@@ -302,7 +304,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundUnaryOperator
+    public partial class BoundUnaryOperator
     {
         public override ConstantValue? ConstantValue
         {
@@ -315,7 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundIncrementOperator
+    public partial class BoundIncrementOperator
     {
         public override Symbol? ExpressionSymbol
         {
@@ -323,7 +325,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundCompoundAssignmentOperator
+    public partial class BoundCompoundAssignmentOperator
     {
         public override Symbol? ExpressionSymbol
         {
@@ -331,7 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundLiteral
+    public partial class BoundLiteral
     {
         public override ConstantValue? ConstantValue
         {
@@ -339,7 +341,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundConversion
+    public partial class BoundConversion
     {
         public override ConstantValue? ConstantValue
         {
@@ -407,7 +409,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundObjectCreationExpression
+    public partial class BoundObjectCreationExpression
     {
         public override ConstantValue? ConstantValue
         {
@@ -442,7 +444,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundAnonymousObjectCreationExpression
+    public partial class BoundAnonymousObjectCreationExpression
     {
         public override Symbol ExpressionSymbol
         {
@@ -450,7 +452,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundAnonymousPropertyDeclaration
+    public partial class BoundAnonymousPropertyDeclaration
     {
         public override Symbol ExpressionSymbol
         {
@@ -458,7 +460,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundLambda
+    public partial class BoundLambda
     {
         public override Symbol ExpressionSymbol
         {
@@ -466,7 +468,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundAttribute
+    public partial class BoundAttribute
     {
         public override Symbol? ExpressionSymbol
         {
@@ -474,7 +476,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundDefaultLiteral
+    public partial class BoundDefaultLiteral
     {
         public override ConstantValue? ConstantValue
         {
@@ -482,7 +484,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundConditionalOperator
+    public partial class BoundConditionalOperator
     {
         public override ConstantValue? ConstantValue
         {
@@ -503,7 +505,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundUnconvertedConditionalOperator
+    public partial class BoundUnconvertedConditionalOperator
     {
         public override ConstantValue? ConstantValue
         {
@@ -514,7 +516,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundSizeOfOperator
+    public partial class BoundSizeOfOperator
     {
         public override ConstantValue? ConstantValue
         {
@@ -525,7 +527,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundRangeVariable
+    public partial class BoundRangeVariable
     {
         public override Symbol ExpressionSymbol
         {
@@ -536,7 +538,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundLabel
+    public partial class BoundLabel
     {
         public override Symbol ExpressionSymbol
         {
@@ -547,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundObjectInitializerMember
+    public partial class BoundObjectInitializerMember
     {
         public override Symbol? ExpressionSymbol
         {
@@ -558,7 +560,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundCollectionElementInitializer
+    public partial class BoundCollectionElementInitializer
     {
         public override Symbol ExpressionSymbol
         {
@@ -569,7 +571,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundBaseReference
+    public partial class BoundBaseReference
     {
         public override bool SuppressVirtualCalls
         {
@@ -577,7 +579,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundNameOfOperator
+    public partial class BoundNameOfOperator
     {
         public override ConstantValue ConstantValue
         {
@@ -592,7 +594,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     //       BoundTypeOrValueExpression from the bound tree generator, which would otherwise generate
     //       a constructor that may spuriously set hasErrors to true if either field had errors.
     //       A BoundTypeOrValueExpression should never have errors if it is present in the tree.
-    internal struct BoundTypeOrValueData : System.IEquatable<BoundTypeOrValueData>
+    public struct BoundTypeOrValueData : IEquatable<BoundTypeOrValueData>
     {
         public Symbol ValueSymbol { get; }
         public BoundExpression ValueExpression { get; }
@@ -645,7 +647,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundTupleExpression
+    public partial class BoundTupleExpression
     {
         /// <summary>
         /// Applies action to all the nested elements of this tuple.

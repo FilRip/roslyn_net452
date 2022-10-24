@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal abstract class LoopBinder : LocalScopeBinder
+    public abstract class LoopBinder : LocalScopeBinder
     {
         private readonly GeneratedLabelSymbol _breakLabel;
         private readonly GeneratedLabelSymbol _continueLabel;

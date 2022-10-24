@@ -18,6 +18,8 @@ using Microsoft.CodeAnalysis.RuntimeMembers;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter : BoundTreeRewriterWithStackGuard
@@ -102,7 +104,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 statement.CheckLocalsDefined();
                 var loweredStatement = localRewriter.VisitStatement(statement);
+#nullable restore
                 loweredStatement.CheckLocalsDefined();
+#nullable enable
                 sawLambdas = localRewriter._sawLambdas;
                 sawLocalFunctions = localRewriter._availableLocalFunctionOrdinal != 0;
                 sawAwaitInExceptionHandler = localRewriter._sawAwaitInExceptionHandler;
@@ -386,7 +390,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private BoundExpression PlaceholderReplacement(BoundValuePlaceholderBase placeholder)
         {
+#nullable restore
             var value = _placeholderReplacementMapDoNotUseDirectly[placeholder];
+#nullable enable
             AssertPlaceholderReplacement(placeholder, value);
             return value;
         }
@@ -419,8 +425,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private void RemovePlaceholderReplacement(BoundValuePlaceholderBase placeholder)
         {
+#nullable restore
             bool removed = _placeholderReplacementMapDoNotUseDirectly.Remove(placeholder);
-
+#nullable enable
         }
 
         public sealed override BoundNode VisitOutDeconstructVarPendingInference(OutDeconstructVarPendingInference node)
@@ -444,7 +451,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static BoundExpression BadExpression(BoundExpression node)
         {
+#nullable restore
             return BadExpression(node.Syntax, node.Type, ImmutableArray.Create(node));
+#nullable enable
         }
 
         private static BoundExpression BadExpression(SyntaxNode syntax, TypeSymbol resultType, BoundExpression child)
@@ -512,7 +521,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitTypeOfOperator(BoundTypeOfOperator node)
         {
-
+#nullable restore
             var sourceType = (BoundTypeExpression?)this.Visit(node.SourceType);
             var type = this.VisitType(node.Type);
 
@@ -523,6 +532,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return node.Update(sourceType, getTypeFromHandle, type);
+#nullable enable
         }
 
         public override BoundNode VisitRefTypeOperator(BoundRefTypeOperator node)
@@ -552,7 +562,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var block = (BoundBlock)initializer;
                         var statement = RewriteExpressionStatement((BoundExpressionStatement)block.Statements.Single(), suppressInstrumentation: true);
+#nullable restore
                         statements.Add(block.Update(block.Locals, block.LocalFunctions, ImmutableArray.Create(statement)));
+#nullable enable
                     }
                     else
                     {
@@ -672,7 +684,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // array[Range] is compiled to:
                 // System.Runtime.CompilerServices.RuntimeHelpers.GetSubArray(array, Range)
 
+#nullable restore
                 var elementType = ((ArrayTypeSymbol)node.Expression.Type).ElementTypeWithAnnotations;
+#nullable enable
 
                 resultExpr = F.Call(
                     receiver: null,
@@ -701,7 +715,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (syntax is ExpressionSyntax { Parent: { } parent } && parent.Kind() == SyntaxKind.EqualsValueClause) // Should be the initial value.
             {
+#nullable restore
                 switch (parent.Parent.Kind())
+#nullable enable
                 {
                     case SyntaxKind.VariableDeclarator:
                     case SyntaxKind.PropertyDeclaration:
@@ -852,6 +868,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // the assumption should be confirmed or changed when https://github.com/dotnet/roslyn/issues/24160 is fixed
                     return true;
 
+#nullable restore
                 case BoundKind.EventAccess:
                     var eventAccess = (BoundEventAccess)expr;
                     if (eventAccess.IsUsableAsField)
@@ -873,6 +890,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     return true;
 
+#nullable enable
                 case BoundKind.Sequence:
                     return CanBePassedByReference(((BoundSequence)expr).Value);
 

@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// This portion of the binder converts an AwaitExpressionSyntax into a BoundExpression
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         private BoundExpression BindAwait(AwaitExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {

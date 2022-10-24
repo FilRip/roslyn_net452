@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public static bool WasOpen(string mutexName)
         {
-            Mutex result = null;
+            Mutex? result = null;
             try
             {
                 return Mutex.TryOpenExisting(mutexName, out result);

@@ -8,19 +8,21 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class DeconstructionVariablePendingInference
+    public partial class DeconstructionVariablePendingInference
     {
         protected override ErrorCode InferenceFailedError => ErrorCode.ERR_TypeInferenceFailedForImplicitlyTypedDeconstructionVariable;
     }
 
-    internal partial class OutVariablePendingInference
+    public partial class OutVariablePendingInference
     {
         protected override ErrorCode InferenceFailedError => ErrorCode.ERR_TypeInferenceFailedForImplicitlyTypedOutVariable;
     }
 
-    internal partial class VariablePendingInference : BoundExpression
+    public partial class VariablePendingInference : BoundExpression
     {
         internal BoundExpression SetInferredTypeWithAnnotations(TypeWithAnnotations type, BindingDiagnosticBag? diagnosticsOpt)
         {

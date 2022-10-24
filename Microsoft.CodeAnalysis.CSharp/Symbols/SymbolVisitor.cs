@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal abstract class CSharpSymbolVisitor
+    public abstract class CSharpSymbolVisitor
     {
         public virtual void Visit(Symbol symbol)
         {

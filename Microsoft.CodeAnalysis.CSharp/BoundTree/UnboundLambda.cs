@@ -16,6 +16,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal interface IBoundLambdaOrFunction
@@ -26,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         bool WasCompilerGenerated { get; }
     }
 
-    internal sealed partial class BoundLocalFunctionStatement : IBoundLambdaOrFunction
+    public sealed partial class BoundLocalFunctionStatement : IBoundLambdaOrFunction
     {
         MethodSymbol IBoundLambdaOrFunction.Symbol { get { return Symbol; } }
 
@@ -35,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         BoundBlock? IBoundLambdaOrFunction.Body { get => this.Body; }
     }
 
-    internal readonly struct InferredLambdaReturnType
+    public readonly struct InferredLambdaReturnType
     {
         internal readonly int NumExpressions;
         internal readonly bool HadExpressionlessReturn;
@@ -61,7 +63,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundLambda : IBoundLambdaOrFunction
+    public sealed partial class BoundLambda : IBoundLambdaOrFunction
     {
         public MessageID MessageID { get { return Syntax.Kind() == SyntaxKind.AnonymousMethodExpression ? MessageID.IDS_AnonMethod : MessageID.IDS_Lambda; } }
 
@@ -328,7 +330,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class UnboundLambda
+    public partial class UnboundLambda
     {
         private readonly NullableWalker.VariableState? _nullableState;
 
@@ -411,7 +413,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public bool ParameterIsDiscard(int index) { return Data.ParameterIsDiscard(index); }
     }
 
-    internal abstract class UnboundLambdaState
+    public abstract class UnboundLambdaState
     {
         private UnboundLambda _unboundLambda = null!; // we would prefer this readonly, but we have an initialization cycle.
         internal readonly Binder Binder;

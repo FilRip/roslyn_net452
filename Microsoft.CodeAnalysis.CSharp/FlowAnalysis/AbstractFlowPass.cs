@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// href="https://en.wikipedia.org/wiki/Data-flow_analysis"/>) that moves upward through the <see cref="Join(ref
     /// TLocalState, ref TLocalState)"/> operation.
     /// </remarks>
-    internal abstract partial class AbstractFlowPass<TLocalState, TLocalFunctionState> : BoundTreeVisitor
+    public abstract partial class AbstractFlowPass<TLocalState, TLocalFunctionState> : BoundTreeVisitor
         where TLocalState : AbstractFlowPass<TLocalState, TLocalFunctionState>.ILocalState
         where TLocalFunctionState : AbstractFlowPass<TLocalState, TLocalFunctionState>.AbstractLocalFunctionState
     {
@@ -375,7 +375,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// pending branches to a label in that block we process the branch.  Otherwise we relay it
         /// up to the enclosing construct as a pending branch of the enclosing construct.
         /// </summary>
-        internal class PendingBranch
+        public class PendingBranch
         {
             public readonly BoundNode Branch;
             public bool IsConditionalState;
@@ -3172,6 +3172,6 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <remarks>
     /// This should be nested inside <see cref="AbstractFlowPass{TLocalState, TLocalFunctionState}"/> but is not due to https://github.com/dotnet/roslyn/issues/36992 .
     /// </remarks>
-    internal enum RegionPlace { Before, Inside, After };
+    public enum RegionPlace { Before, Inside, After };
 }
 

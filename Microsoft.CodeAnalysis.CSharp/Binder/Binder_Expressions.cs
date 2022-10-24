@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// This portion of the binder converts an <see cref="ExpressionSyntax"/> into a <see cref="BoundExpression"/>.
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         /// <summary>
         /// Determines whether "this" reference is available within the current context.

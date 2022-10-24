@@ -17,20 +17,22 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>
     /// Nullability flow analysis.
     /// </summary>
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-    internal sealed partial class NullableWalker
+    public sealed partial class NullableWalker
         : LocalDataFlowPass<NullableWalker.LocalState, NullableWalker.LocalFunctionState>
     {
         /// <summary>
         /// Used to copy variable slots and types from the NullableWalker for the containing method
         /// or lambda to the NullableWalker created for a nested lambda or local function.
         /// </summary>
-        internal sealed class VariableState
+        public sealed class VariableState
         {
             // Consider referencing the Variables instance directly from the original NullableWalker
             // rather than cloning. (Items are added to the collections but never replaced so the
@@ -1055,7 +1057,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             var binder = method is SynthesizedSimpleProgramEntryPointSymbol entryPoint ?
                              entryPoint.GetBodyBinder(ignoreAccessibility: false) :
+#nullable restore
                              compilation.GetBinderFactory(node.SyntaxTree).GetBinder(node.Syntax);
+#nullable enable
             var conversions = binder.Conversions;
             Analyze(compilation,
                 method,
@@ -3166,7 +3170,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 SetAnalyzedNullability(node.ImplicitReceiverOpt, new VisitResult(node.ImplicitReceiverOpt.Type, NullableAnnotation.NotAnnotated, NullableFlowState.NotNull));
             }
             SetUnknownResultNullability(node);
+#nullable restore
             SetUpdatedSymbol(node, node.AddMethod, reinferredMethod);
+#nullable enable
         }
 
         private void SetNotNullResult(BoundExpression node)
@@ -3216,7 +3222,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private int GetOrCreatePlaceholderSlot(BoundExpression node)
         {
+#nullable restore
             if (IsEmptyStructType(node.Type))
+#nullable enable
             {
                 return -1;
             }
@@ -5285,7 +5293,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                             conversion = GenerateConversion(_conversions, argumentNoConversion, argumentResultType, parameterType.Type, fromExplicitCast: false, extensionMethodThisArgument: false);
                             if (!conversion.Exists && !argumentNoConversion.IsSuppressed)
                             {
+#nullable restore
                                 ReportNullabilityMismatchInArgument(argumentNoConversion.Syntax, argumentResultType, parameter, parameterType.Type, forOutput: false);
+#nullable enable
                             }
                         }
 
@@ -6467,10 +6477,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (IsNullabilityMismatch(invokeParameter.TypeWithAnnotations, unboundLambda.ParameterTypeWithAnnotations(i), requireIdentity: true))
                 {
                     // Should the warning be reported using location of specific lambda parameter?
+#nullable restore
                     ReportDiagnostic(ErrorCode.WRN_NullabilityMismatchInParameterTypeOfTargetDelegate, location,
                         unboundLambda.ParameterName(i),
                         unboundLambda.MessageID.Localize(),
                         delegateType);
+#nullable enable
                 }
             }
         }
@@ -7030,7 +7042,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // (see NullableReferenceTypesTests.ImplicitConversions_07).
             var method = conversion.Method;
 
+#nullable restore
             var parameter = method.Parameters[0];
+#nullable enable
             var parameterAnnotations = GetParameterAnnotations(parameter);
             var parameterType = ApplyLValueAnnotations(parameter.TypeWithAnnotations, parameterAnnotations);
             TypeWithState underlyingOperandType = default;
@@ -7205,6 +7219,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var conversion = _conversions.ClassifyStandardConversion(null, operandType.Type, targetType.Type, ref discardedUseSiteInfo);
             if (reportWarnings && !conversion.Exists)
             {
+#nullable restore
                 if (assignmentKind == AssignmentKind.Argument)
                 {
                     ReportNullabilityMismatchInArgument(diagnosticLocation, operandType.Type, parameterOpt, targetType.Type, forOutput: false);
@@ -7213,6 +7228,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     ReportNullabilityMismatchInAssignment(diagnosticLocation, operandType.Type, targetType.Type);
                 }
+#nullable enable
             }
 
             return VisitConversion(
@@ -7663,14 +7679,18 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
 
                 int n = variables.Count;
+#nullable restore
                 if (!invocation.InvokedAsExtensionMethod)
+#nullable enable
                 {
                     _ = CheckPossibleNullReceiver(right);
 
                     // update the deconstruct method with any inferred type parameters of the containing type
                     if (deconstructMethod.OriginalDefinition != deconstructMethod)
                     {
+#nullable restore
                         deconstructMethod = deconstructMethod.OriginalDefinition.AsMember((NamedTypeSymbol)rightResult.Type);
+#nullable enable
                     }
                 }
                 else
@@ -8392,7 +8412,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 reinferredGetEnumeratorMethod = method;
             }
             else if (conversion.IsIdentity ||
+#nullable restore
                 (conversion.Kind == ConversionKind.ExplicitReference && resultType.SpecialType == SpecialType.System_String))
+#nullable enable
             {
                 // This is case 3 or 6.
                 targetTypeWithAnnotations = resultTypeWithState.ToTypeWithAnnotations(compilation);
@@ -8454,7 +8476,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // directly get our source type from there instead of doing method reinference.
                 currentPropertyGetterTypeWithState = arrayType.ElementTypeWithAnnotations.ToTypeWithState();
             }
+#nullable restore
             else if (resultType.SpecialType == SpecialType.System_String)
+#nullable enable
             {
                 // There are frameworks where System.String does not implement IEnumerable, but we still lower it to a for loop
                 // using the indexer over the individual characters anyway. So the type must be not annotated char.
@@ -8504,7 +8528,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var disposeAsyncMethod = (MethodSymbol)AsMemberOfType(reinferredGetEnumeratorMethod.ReturnType, originalDisposeMethod);
                         EnsureAwaitablePlaceholdersInitialized();
                         var result = new VisitResult(GetReturnTypeWithState(disposeAsyncMethod), disposeAsyncMethod.ReturnTypeWithAnnotations);
+#nullable restore
                         _awaitablePlaceholdersOpt.Add(disposalPlaceholder, (disposalPlaceholder, result));
+#nullable enable
                         addedPlaceholder = true;
                     }
 
@@ -8874,7 +8900,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             var placeholder = awaitableInfo.AwaitableInstancePlaceholder;
 
             EnsureAwaitablePlaceholdersInitialized();
+#nullable restore
             _awaitablePlaceholdersOpt.Add(placeholder, (node.Expression, _visitResult));
+#nullable enable
             Visit(awaitableInfo);
             _awaitablePlaceholdersOpt.Remove(placeholder);
 
@@ -8929,7 +8957,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitDefaultExpression(BoundDefaultExpression node)
         {
-
             var result = base.VisitDefaultExpression(node);
             TypeSymbol type = node.Type;
             if (EmptyStructTypeCache.IsTrackableStructType(type))
@@ -8950,7 +8977,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitIsOperator(BoundIsOperator node)
         {
-
             var operand = node.Operand;
             var typeExpr = node.TargetType;
 
@@ -9561,7 +9587,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <see cref="Variables"/> chain, and the <see cref="Id"/> field in this type matches <see cref="Variables.Id"/>.
         /// </summary>
         [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
-        internal struct LocalState : ILocalDataFlowState
+        public struct LocalState : ILocalDataFlowState
         {
             private sealed class Boxed
             {
@@ -9886,7 +9912,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal sealed class LocalFunctionState : AbstractLocalFunctionState
+        public sealed class LocalFunctionState : AbstractLocalFunctionState
         {
             /// <summary>
             /// Defines the starting state used in the local function body to

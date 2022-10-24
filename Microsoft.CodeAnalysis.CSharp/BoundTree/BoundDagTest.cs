@@ -6,9 +6,11 @@ using System.Diagnostics.CodeAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    partial class BoundDagTest
+    public partial class BoundDagTest
     {
         public override bool Equals([NotNullWhen(true)] object? obj) => this.Equals(obj as BoundDagTest);
 

@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a label in method body
     /// </summary>
-    internal abstract class LabelSymbol : Symbol
+    public abstract class LabelSymbol : Symbol
     {
         /// <summary>
         /// Returns false because label can't be defined externally.

@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal abstract partial class BoundTreeVisitor
+    public abstract partial class BoundTreeVisitor
     {
         protected BoundTreeVisitor()
         {

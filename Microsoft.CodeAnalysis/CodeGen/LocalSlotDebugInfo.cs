@@ -6,6 +6,8 @@ using System;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public struct LocalSlotDebugInfo : IEquatable<LocalSlotDebugInfo>

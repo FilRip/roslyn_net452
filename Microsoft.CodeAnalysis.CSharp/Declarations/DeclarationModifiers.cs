@@ -9,7 +9,7 @@ using System;
 namespace Microsoft.CodeAnalysis.CSharp
 {
     [Flags]
-    internal enum DeclarationModifiers : uint
+    public enum DeclarationModifiers : uint
     {
         None = 0,
         Abstract = 1 << 0,

@@ -7,7 +7,7 @@
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
         protected enum OverflowChecks
         {

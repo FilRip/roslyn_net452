@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class ConversionsBase
+    public partial class ConversionsBase
     {
         private static TypeSymbol GetUnderlyingEffectiveType(TypeSymbol type, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {

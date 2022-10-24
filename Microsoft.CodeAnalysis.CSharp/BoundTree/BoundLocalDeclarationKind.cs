@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// - In `M(out int x)`, `x` has `LocalDeclarationKind.WithExplicitType`
     /// - In `M(out var x)`, `x` has `LocalDeclarationKind.WithInferredType`
     /// </summary>
-    internal enum BoundLocalDeclarationKind
+    public enum BoundLocalDeclarationKind
     {
         None = 0,
         WithExplicitType,

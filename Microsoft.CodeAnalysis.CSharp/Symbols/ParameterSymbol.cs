@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a parameter of a method or indexer.
     /// </summary>
-    internal abstract partial class ParameterSymbol : Symbol, IParameterSymbolInternal
+    public abstract partial class ParameterSymbol : Symbol, IParameterSymbolInternal
     {
         internal const string ValueParameterName = "value";
 

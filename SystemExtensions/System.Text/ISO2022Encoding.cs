@@ -318,7 +318,7 @@ namespace System.Text
 		// to halfwidth katakana.  I found no description of that behavior, however that block of 0208 is
 		// undefined, so we maintain that behavior when decoding.  We will never generate characters using
 		// that technique, but the decoder will process them.
-		//
+#nullable enable
 		private unsafe int GetBytesCP5022xJP(char* chars, int charCount,
 												  byte* bytes, int byteCount, ISO2022Encoder? encoder)
 		{
@@ -531,6 +531,7 @@ namespace System.Text
 			// Return our length
 			return buffer.Count;
 		}
+#nullable disable
 
 		private unsafe int GetBytesCP50225KR(char* chars, int charCount, byte* bytes, int byteCount, ISO2022Encoder encoder)
 		{

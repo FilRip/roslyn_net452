@@ -30,6 +30,8 @@ using Microsoft.DiaSymReader;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -561,7 +563,7 @@ namespace Microsoft.CodeAnalysis
             return result;
         }
 
-        internal CommonReferenceManager GetBoundReferenceManager()
+        public CommonReferenceManager GetBoundReferenceManager()
         {
             return CommonGetBoundReferenceManager();
         }

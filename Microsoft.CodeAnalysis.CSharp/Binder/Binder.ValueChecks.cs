@@ -16,7 +16,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
         /// <summary>
         /// For the purpose of escape verification we operate with the depth of local scopes.
@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Expression capabilities and requirements.
         /// </summary>
         [Flags]
-        internal enum BindValueKind : ushort
+        public enum BindValueKind : ushort
         {
             ///////////////////
             // All expressions can be classified according to the following 4 capabilities:

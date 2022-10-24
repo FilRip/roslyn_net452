@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents an attribute applied to a Symbol.
     /// </summary>
-    internal abstract partial class CSharpAttributeData : AttributeData
+    public abstract partial class CSharpAttributeData : AttributeData
     {
         private ThreeState _lazyIsSecurityAttribute = ThreeState.Unknown;
 

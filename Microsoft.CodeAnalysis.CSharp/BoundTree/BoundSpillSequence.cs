@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundSpillSequence
+    public partial class BoundSpillSequence
     {
         public BoundSpillSequence(
             SyntaxNode syntax,

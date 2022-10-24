@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
         /// <summary>
         /// Represents a small change from the enclosing/next binder.

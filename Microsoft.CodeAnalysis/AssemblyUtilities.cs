@@ -12,6 +12,8 @@ using System.Reflection.PortableExecutable;
 
 using Microsoft.CodeAnalysis;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     internal static class AssemblyUtilities

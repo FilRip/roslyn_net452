@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal sealed class DiscardSymbol : Symbol
+    public sealed class DiscardSymbol : Symbol
     {
         public DiscardSymbol(TypeWithAnnotations typeWithAnnotations)
         {

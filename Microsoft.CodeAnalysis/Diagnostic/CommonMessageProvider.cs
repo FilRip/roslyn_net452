@@ -8,6 +8,8 @@ using System.Globalization;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

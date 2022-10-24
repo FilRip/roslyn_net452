@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a compiler generated field or captured variable.
     /// </summary>
-    internal abstract class SynthesizedFieldSymbolBase : FieldSymbol
+    public abstract class SynthesizedFieldSymbolBase : FieldSymbol
     {
         private readonly NamedTypeSymbol _containingType;
         private readonly string _name;

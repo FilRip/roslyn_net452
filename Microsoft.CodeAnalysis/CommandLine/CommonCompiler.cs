@@ -22,6 +22,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public readonly struct BuildPaths
@@ -320,7 +322,9 @@ namespace Microsoft.CodeAnalysis
 
                 if (!editorConfig.IsGlobal)
                 {
+#nullable restore
                     if (processedDirs.Contains(directory))
+#nullable enable
                     {
                         diagnostics.Add(Diagnostic.Create(
                             MessageProvider,
@@ -450,7 +454,9 @@ namespace Microsoft.CodeAnalysis
                 embeddedTreeMap.Add(tree.FilePath, tree);
 
                 // also embed the text of any #line directive targets of embedded tree
+#nullable restore
                 ResolveEmbeddedFilesFromExternalSourceDirectives(tree, compilation.Options.SourceReferenceResolver, embeddedFileOrderedSet, diagnostics);
+#nullable enable
             }
 
             var embeddedTextBuilder = ImmutableArray.CreateBuilder<EmbeddedText?>(embeddedFileOrderedSet.Count);
@@ -646,11 +652,13 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(Arguments.ErrorLogOptions?.Path != null);
 
             var diagnostics = DiagnosticBag.GetInstance();
+#nullable restore
             var errorLog = OpenFile(Arguments.ErrorLogOptions.Path,
                                     diagnostics,
                                     FileMode.Create,
                                     FileAccess.Write,
                                     FileShare.ReadWrite | FileShare.Delete);
+#nullable enable
 
             SarifErrorLogger? logger;
             if (errorLog == null)
@@ -861,7 +869,9 @@ namespace Microsoft.CodeAnalysis
             if (reportAnalyzer)
             {
                 Debug.Assert(analyzerDriver is object);
+#nullable restore
                 ReportAnalyzerExecutionTime(consoleOutput, analyzerDriver, Culture, compilation.Options.ConcurrentBuild);
+#nullable enable
             }
 
             return exitCode;
@@ -946,7 +956,9 @@ namespace Microsoft.CodeAnalysis
                 if (Arguments.AnalyzerConfigPaths.Length > 0)
                 {
                     Debug.Assert(analyzerConfigSet is object);
+#nullable restore
                     analyzerConfigProvider = analyzerConfigProvider.WithGlobalOptions(new CompilerAnalyzerConfigOptions(analyzerConfigSet.GetOptionsForSourcePath(string.Empty).AnalyzerOptions));
+#nullable enable
 
                     // TODO(https://github.com/dotnet/roslyn/issues/31916): The compiler currently doesn't support
                     // configuring diagnostic reporting on additional text files individually.
@@ -1351,6 +1363,7 @@ namespace Microsoft.CodeAnalysis
 
         private bool WriteTouchedFiles(DiagnosticBag diagnostics, TouchedFileLogger? touchedFilesLogger, string? finalXmlFilePath)
         {
+#nullable restore
             if (Arguments.TouchedFilesPath != null)
             {
                 Debug.Assert(touchedFilesLogger != null);
@@ -1371,12 +1384,14 @@ namespace Microsoft.CodeAnalysis
                     return false;
                 }
 
+#nullable enable
                 string? filePath = null;
                 try
                 {
                     filePath = readFilesPath;
                     using (var writer = new StreamWriter(readStream))
                     {
+#nullable restore
                         touchedFilesLogger.WriteReadPaths(writer);
                     }
 
@@ -1394,6 +1409,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
+#nullable enable
             return true;
         }
 
@@ -1412,10 +1428,12 @@ namespace Microsoft.CodeAnalysis
         private static void ReportAnalyzerExecutionTime(TextWriter consoleOutput, AnalyzerDriver analyzerDriver, CultureInfo culture, bool isConcurrentBuild)
         {
             Debug.Assert(analyzerDriver.AnalyzerExecutionTimes != null);
+#nullable restore
             if (analyzerDriver.AnalyzerExecutionTimes.IsEmpty)
             {
                 return;
             }
+#nullable enable
 
             var totalAnalyzerExecutionTime = analyzerDriver.AnalyzerExecutionTimes.Sum(kvp => kvp.Value.TotalSeconds);
             Func<double, string> getFormattedTime = d => d.ToString("##0.000", culture);

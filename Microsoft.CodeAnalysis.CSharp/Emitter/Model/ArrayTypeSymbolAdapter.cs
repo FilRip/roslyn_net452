@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         Cci.IDefinition? Cci.IReference.AsDefinition(EmitContext context) => null;
     }
 
-    internal partial class ArrayTypeSymbol
+    public partial class ArrayTypeSymbol
     {
 #if DEBUG
         private ArrayTypeSymbolAdapter? _lazyAdapter;

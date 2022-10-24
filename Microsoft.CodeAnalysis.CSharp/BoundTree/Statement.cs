@@ -6,9 +6,11 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.Operations;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundNode : IBoundNodeWithIOperationChildren
+    public partial class BoundNode : IBoundNodeWithIOperationChildren
     {
         ImmutableArray<BoundNode?> IBoundNodeWithIOperationChildren.Children => this.Children;
 
@@ -19,19 +21,19 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected virtual ImmutableArray<BoundNode?> Children => ImmutableArray<BoundNode?>.Empty;
     }
 
-    internal partial class BoundBadStatement : IBoundInvalidNode
+    public partial class BoundBadStatement : IBoundInvalidNode
     {
         protected override ImmutableArray<BoundNode?> Children => this.ChildBoundNodes!;
 
         ImmutableArray<BoundNode> IBoundInvalidNode.InvalidNodeChildren => this.ChildBoundNodes;
     }
 
-    partial class BoundFixedStatement
+    public partial class BoundFixedStatement
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Declarations, this.Body);
     }
 
-    partial class BoundPointerIndirectionOperator
+    public partial class BoundPointerIndirectionOperator
     {
         protected override ImmutableArray<BoundNode?> Children => ImmutableArray.Create<BoundNode?>(this.Operand);
     }

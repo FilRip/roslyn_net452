@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// This portion of the binder converts StatementSyntax nodes into BoundStatements
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         /// <summary>
         /// This is the set of parameters and local variables that were used as arguments to

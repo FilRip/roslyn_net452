@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             {
                 int argumentId = reader.ReadInt32();
                 int argumentIndex = reader.ReadInt32();
-                string value = BuildProtocolConstants.ReadLengthPrefixedString(reader);
+                string? value = BuildProtocolConstants.ReadLengthPrefixedString(reader);
                 return new Argument((BuildProtocolConstants.ArgumentId)argumentId, argumentIndex, value);
             }
 

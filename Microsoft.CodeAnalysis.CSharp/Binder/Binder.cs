@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// A Binder converts names in to symbols and syntax nodes into bound trees. It is context
     /// dependent, relative to a location in source code.
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         internal CSharpCompilation Compilation { get; }
 

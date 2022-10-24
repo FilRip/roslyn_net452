@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     // Implements simple cache of limited size that could hold 

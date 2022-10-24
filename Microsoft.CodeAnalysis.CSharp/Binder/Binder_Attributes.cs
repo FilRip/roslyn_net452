@@ -17,7 +17,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
         #region Bind All Attributes
 
@@ -385,7 +385,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // TODO: should we create an entry even if there are binding errors?
             var fieldSymbol = namedArgumentNameSymbol as FieldSymbol;
+#nullable restore
             IdentifierNameSyntax nameSyntax = namedArgument.NameEquals.Name;
+#nullable enable
             BoundExpression lvalue;
             if (fieldSymbol is object)
             {
@@ -414,7 +416,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private Symbol BindNamedAttributeArgumentName(AttributeArgumentSyntax namedArgument, NamedTypeSymbol attributeType, BindingDiagnosticBag diagnostics, out bool wasError, out LookupResultKind resultKind)
         {
+#nullable restore
             var identifierName = namedArgument.NameEquals.Name;
+#nullable enable
             var name = identifierName.Identifier.ValueText;
             LookupResult result = LookupResult.GetInstance();
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
@@ -475,6 +479,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
+#nullable restore
             if (invalidNamedArgument)
             {
                 return new ExtendedErrorTypeSymbol(attributeType,
@@ -496,6 +501,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return namedArgumentType;
+#nullable enable
         }
 
         protected MethodSymbol BindAttributeConstructor(
@@ -884,7 +890,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded; // ignoring, since already bound argument and parameter
+#nullable restore
             Conversion conversion = conversions.ClassifyBuiltInConversion((TypeSymbol)argument.TypeInternal, parameter.Type, ref discardedUseSiteInfo);
+#nullable enable
 
             // NOTE: Won't always succeed, even though we've performed overload resolution.
             // For example, passing int[] to params object[] actually treats the int[] as an element of the object[].

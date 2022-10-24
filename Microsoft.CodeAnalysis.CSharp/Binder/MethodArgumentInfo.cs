@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// Information about the arguments of a call that can turned into a BoundCall later without recalculating
     /// default arguments.
     /// </summary>
-    internal sealed record MethodArgumentInfo(
+    public sealed record MethodArgumentInfo(
         MethodSymbol Method,
         ImmutableArray<BoundExpression> Arguments,
         ImmutableArray<int> ArgsToParamsOpt,

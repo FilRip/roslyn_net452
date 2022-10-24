@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <see cref="NullableAnnotationExtensions.EnsureCompatible(NullableAnnotation, NullableAnnotation)"/>.  If the order here is changed
     /// then those implementations may have to be revised (or simplified).
     /// </remarks>
-    internal enum NullableAnnotation : byte
+    public enum NullableAnnotation : byte
     {
         /// <summary>
         /// Type is not annotated - string, int, T (including the case when T is unconstrained).

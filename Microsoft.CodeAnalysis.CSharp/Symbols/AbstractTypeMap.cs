@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Abstract base class for mutable and immutable type maps.
     /// </summary>
-    internal abstract class AbstractTypeMap
+    public abstract class AbstractTypeMap
     {
         /// <summary>
         /// Substitute for a type declaration.  May use alpha renaming if the container is substituted.

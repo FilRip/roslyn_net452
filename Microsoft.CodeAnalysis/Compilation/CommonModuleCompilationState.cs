@@ -9,6 +9,8 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public class CommonModuleCompilationState

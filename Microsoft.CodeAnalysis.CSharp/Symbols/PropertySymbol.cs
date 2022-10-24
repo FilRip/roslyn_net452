@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a property or indexer.
     /// </summary>
-    internal abstract partial class PropertySymbol : Symbol
+    public abstract partial class PropertySymbol : Symbol
     {
         /// <summary>
         /// As a performance optimization, cache parameter types and refkinds - overload resolution uses them a lot.

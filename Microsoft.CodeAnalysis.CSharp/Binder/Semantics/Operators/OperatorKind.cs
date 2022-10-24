@@ -9,7 +9,7 @@ using System;
 namespace Microsoft.CodeAnalysis.CSharp
 {
     [Flags]
-    internal enum UnaryOperatorKind
+    public enum UnaryOperatorKind
     {
         // NOTE: these types should line up with the elements in BinaryOperatorKind
 
@@ -286,7 +286,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     }
 
     [Flags]
-    internal enum BinaryOperatorKind
+    public enum BinaryOperatorKind
     {
         // NOTE: these types should line up with the elements in UnaryOperatorKind
 

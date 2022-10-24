@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 
 using Microsoft.CodeAnalysis.Collections.Internal;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Collections
 {
     internal static class SegmentedArray

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public abstract partial class CompilerDiagnosticAnalyzer : DiagnosticAnalyzer

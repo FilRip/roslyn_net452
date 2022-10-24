@@ -5,6 +5,8 @@
 using System.Diagnostics;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Collections
 {
     /// <summary>

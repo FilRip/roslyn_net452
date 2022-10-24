@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// This portion of the binder converts a AnonymousObjectCreationExpressionSyntax into 
     /// a bound anonymous object creation node
     /// </summary>
-    internal partial class Binder
+    public partial class Binder
     {
         private BoundExpression BindAnonymousObjectCreation(AnonymousObjectCreationExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {

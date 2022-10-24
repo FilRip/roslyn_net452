@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public sealed partial class DesktopAssemblyIdentityComparer : AssemblyIdentityComparer

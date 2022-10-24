@@ -14,7 +14,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class LocalScopeBinder : Binder
+    public partial class LocalScopeBinder : Binder
     {
         private ImmutableArray<LocalSymbol> _locals;
         private ImmutableArray<LocalFunctionSymbol> _localFunctions;

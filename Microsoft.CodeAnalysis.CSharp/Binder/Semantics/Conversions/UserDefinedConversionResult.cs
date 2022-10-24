@@ -8,7 +8,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal enum UserDefinedConversionResultKind : byte
+    public enum UserDefinedConversionResultKind : byte
     {
         NoApplicableOperators,
         NoBestSourceType,
@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         Valid
     }
 
-    internal struct UserDefinedConversionResult
+    public struct UserDefinedConversionResult
     {
         public readonly ImmutableArray<UserDefinedConversionAnalysis> Results;
         public readonly int Best;

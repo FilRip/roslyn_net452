@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundSwitchStatement : IBoundSwitchStatement
+    public partial class BoundSwitchStatement : IBoundSwitchStatement
     {
         BoundNode IBoundSwitchStatement.Value => this.Expression;
         ImmutableArray<BoundStatementList> IBoundSwitchStatement.Cases => StaticCast<BoundStatementList>.From(this.SwitchSections);

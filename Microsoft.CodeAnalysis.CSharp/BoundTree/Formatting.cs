@@ -8,7 +8,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal abstract partial class BoundExpression
+    public abstract partial class BoundExpression
     {
         /// <summary>
         /// Returns a serializable object that is used for displaying this expression in a diagnostic message.
@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundArgListOperator
+    public sealed partial class BoundArgListOperator
     {
         public override object Display
         {
@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundLiteral
+    public sealed partial class BoundLiteral
     {
         public override object Display
         {
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundLambda
+    public sealed partial class BoundLambda
     {
         public override object Display
         {
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class UnboundLambda
+    public sealed partial class UnboundLambda
     {
         public override object Display
         {
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundMethodGroup
+    public sealed partial class BoundMethodGroup
     {
         public override object Display
         {
@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundThrowExpression
+    public sealed partial class BoundThrowExpression
     {
         public override object Display
         {
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundTupleExpression
+    public partial class BoundTupleExpression
     {
         public override object Display
         {
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundPropertyGroup
+    public sealed partial class BoundPropertyGroup
     {
         public override object Display
         {
@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class OutVariablePendingInference
+    public partial class OutVariablePendingInference
     {
         public override object Display
         {
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class OutDeconstructVarPendingInference
+    public partial class OutDeconstructVarPendingInference
     {
         public override object Display
         {
@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundDiscardExpression
+    public partial class BoundDiscardExpression
     {
         public override object Display
         {
@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class DeconstructionVariablePendingInference
+    public partial class DeconstructionVariablePendingInference
     {
         public override object Display
         {
@@ -139,7 +139,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundDefaultLiteral
+    public partial class BoundDefaultLiteral
     {
         public override object Display
         {
@@ -147,35 +147,35 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundStackAllocArrayCreation
+    public partial class BoundStackAllocArrayCreation
     {
         public override object Display
             => (Type is null) ? string.Format("stackalloc {0}[{1}]", ElementType, Count.WasCompilerGenerated ? null : Count.Syntax.ToString()) : base.Display;
     }
 
-    internal partial class BoundUnconvertedSwitchExpression
+    public partial class BoundUnconvertedSwitchExpression
     {
         public override object Display
             => (Type is null) ? MessageID.IDS_FeatureSwitchExpression.Localize() : base.Display;
     }
 
-    internal partial class BoundUnconvertedConditionalOperator
+    public partial class BoundUnconvertedConditionalOperator
     {
         public override object Display
             => (Type is null) ? MessageID.IDS_FeatureTargetTypedConditional.Localize() : base.Display;
     }
 
-    internal partial class BoundPassByCopy
+    public partial class BoundPassByCopy
     {
         public override object Display => Expression.Display;
     }
 
-    internal partial class BoundUnconvertedAddressOfOperator
+    public partial class BoundUnconvertedAddressOfOperator
     {
         public override object Display => string.Format("&{0}", Operand.Display);
     }
 
-    internal partial class BoundUnconvertedObjectCreationExpression
+    public partial class BoundUnconvertedObjectCreationExpression
     {
         public override object Display
         {

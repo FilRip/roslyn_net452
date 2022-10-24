@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// Represents a pointer type such as "int *". Pointer types
     /// are used only in unsafe code.
     /// </summary>
-    internal sealed partial class PointerTypeSymbol : TypeSymbol
+    public sealed partial class PointerTypeSymbol : TypeSymbol
     {
         private readonly TypeWithAnnotations _pointedAtType;
 

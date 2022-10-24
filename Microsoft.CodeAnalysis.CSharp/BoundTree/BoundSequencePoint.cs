@@ -4,9 +4,11 @@
 
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundSequencePoint
+    public partial class BoundSequencePoint
     {
         public static BoundStatement Create(SyntaxNode? syntax, TextSpan? part, BoundStatement statement, bool hasErrors = false)
         {

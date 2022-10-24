@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal abstract partial class AbstractFlowPass<TLocalState, TLocalFunctionState>
+    public abstract partial class AbstractFlowPass<TLocalState, TLocalFunctionState>
     {
         public override BoundNode VisitSwitchStatement(BoundSwitchStatement node)
         {

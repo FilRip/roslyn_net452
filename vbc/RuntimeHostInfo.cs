@@ -10,9 +10,9 @@ namespace Microsoft.CodeAnalysis
 {
     internal static class RuntimeHostInfo
     {
-        internal static bool IsCoreClrRuntime => !RuntimeHostInfo.IsDesktopRuntime;
+        internal static bool IsCoreClrRuntime => !IsDesktopRuntime;
 
-        internal static string ToolExtension => !RuntimeHostInfo.IsCoreClrRuntime ? "exe" : "dll";
+        internal static string ToolExtension => !IsCoreClrRuntime ? "exe" : "dll";
 
         private static string NativeToolSuffix => !PlatformInformation.IsWindows ? "" : ".exe";
 
@@ -21,10 +21,10 @@ namespace Microsoft.CodeAnalysis
           string commandLineArguments)
         {
             string path = toolFilePathWithoutExtension + RuntimeHostInfo.NativeToolSuffix;
-            if (RuntimeHostInfo.IsCoreClrRuntime && File.Exists(path))
+            if (IsCoreClrRuntime && File.Exists(path))
                 return (path, commandLineArguments, path);
             string str = toolFilePathWithoutExtension + "." + RuntimeHostInfo.ToolExtension;
-            if (!RuntimeHostInfo.IsDotNetHost(out string pathToDotNet))
+            if (!IsDotNetHost(out string? pathToDotNet))
                 return (str, commandLineArguments, str);
             commandLineArguments = "exec \"" + str + "\" " + commandLineArguments;
             return (pathToDotNet, commandLineArguments, str);

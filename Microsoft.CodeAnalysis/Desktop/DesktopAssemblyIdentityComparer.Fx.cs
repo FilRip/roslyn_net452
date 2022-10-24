@@ -10,6 +10,8 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     // TODO: Consider reducing the table memory footprint.

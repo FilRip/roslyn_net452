@@ -6,9 +6,11 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class BoundObjectCreationExpression
+    public partial class BoundObjectCreationExpression
     {
         public BoundObjectCreationExpression(SyntaxNode syntax, MethodSymbol constructor, ImmutableArray<BoundExpression> arguments, ImmutableArray<string> argumentNamesOpt,
                                              ImmutableArray<RefKind> argumentRefKindsOpt, bool expanded, ImmutableArray<int> argsToParamsOpt, BitVector defaultArguments, ConstantValue? constantValueOpt,

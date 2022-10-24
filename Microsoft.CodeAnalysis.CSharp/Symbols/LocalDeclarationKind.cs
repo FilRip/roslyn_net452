@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Specifies the syntactic construct that a user defined variable comes from.
     /// </summary>
-    internal enum LocalDeclarationKind : byte
+    public enum LocalDeclarationKind : byte
     {
         /// <summary>
         /// The local is not user defined nor it is a copy of a user defined local (e.g. with a substituted type).

@@ -13,7 +13,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal partial class Binder
+    public partial class Binder
     {
         // A binder that finds query variables (BoundRangeVariableSymbol) and can bind them
         // to the appropriate rewriting involving lambda parameters when transparent identifiers are involved.

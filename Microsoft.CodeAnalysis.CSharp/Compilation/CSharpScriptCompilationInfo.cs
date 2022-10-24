@@ -4,6 +4,8 @@
 
 using System;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public sealed class CSharpScriptCompilationInfo : ScriptCompilationInfo

@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
         {
             int returnCode = reader.ReadInt32();
             bool utf8output = reader.ReadBoolean();
-            string output = BuildProtocolConstants.ReadLengthPrefixedString(reader);
+            string? output = BuildProtocolConstants.ReadLengthPrefixedString(reader);
             return new CompletedBuildResponse(returnCode, utf8output, output);
         }
 

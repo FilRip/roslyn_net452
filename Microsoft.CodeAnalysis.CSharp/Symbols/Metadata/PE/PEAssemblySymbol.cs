@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
     /// <summary>
     /// Represents an assembly imported from a PE.
     /// </summary>
-    internal sealed class PEAssemblySymbol : MetadataOrSourceAssemblySymbol
+    public sealed class PEAssemblySymbol : MetadataOrSourceAssemblySymbol
     {
         /// <summary>
         /// An Assembly object providing metadata for the assembly.

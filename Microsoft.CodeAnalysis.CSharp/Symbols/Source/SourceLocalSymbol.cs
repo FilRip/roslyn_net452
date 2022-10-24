@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents a local variable in a method body.
     /// </summary>
-    internal class SourceLocalSymbol : LocalSymbol
+    public class SourceLocalSymbol : LocalSymbol
     {
         private readonly Binder _scopeBinder;
 

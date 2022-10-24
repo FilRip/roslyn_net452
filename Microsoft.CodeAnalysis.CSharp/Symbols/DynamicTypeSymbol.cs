@@ -12,7 +12,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal sealed partial class DynamicTypeSymbol : TypeSymbol
+    public sealed partial class DynamicTypeSymbol : TypeSymbol
     {
         internal static readonly DynamicTypeSymbol Instance = new DynamicTypeSymbol();
 

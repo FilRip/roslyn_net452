@@ -12,7 +12,7 @@ using Roslyn.Utilities;
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     [Flags]
-    internal enum TypeParameterConstraintKind
+    public enum TypeParameterConstraintKind
     {
         None = 0x00,
         ReferenceType = 0x01,

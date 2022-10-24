@@ -18,6 +18,8 @@ using Roslyn.Utilities;
 
 using static Microsoft.CodeAnalysis.Diagnostics.AnalyzerDriver;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public class CompilationWithAnalyzers

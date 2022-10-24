@@ -15,6 +15,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     using MetadataOrDiagnostic = System.Object;
@@ -52,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// 
         /// The only public entry point of this class is CreateSourceAssembly() method.
         /// </summary>
-        internal sealed class ReferenceManager : CommonReferenceManager<CSharpCompilation, AssemblySymbol>
+        public sealed class ReferenceManager : CommonReferenceManager<CSharpCompilation, AssemblySymbol>
         {
             public ReferenceManager(string simpleAssemblyName, AssemblyIdentityComparer identityComparer, Dictionary<MetadataReference, MetadataOrDiagnostic>? observedMetadata)
                 : base(simpleAssemblyName, identityComparer, observedMetadata)

@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

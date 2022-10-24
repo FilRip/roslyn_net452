@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal enum UserDefinedConversionAnalysisKind : byte
+    public enum UserDefinedConversionAnalysisKind : byte
     {
         ApplicableInNormalForm,
         ApplicableInLiftedForm
     }
 
-    internal sealed class UserDefinedConversionAnalysis
+    public sealed class UserDefinedConversionAnalysis
     {
         public readonly TypeSymbol FromType;
         public readonly TypeSymbol ToType;

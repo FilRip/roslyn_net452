@@ -8,6 +8,8 @@ using System.Reflection;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     public sealed class MetadataConstant : Cci.IMetadataExpression

@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal sealed class GeneratedLabelSymbol : LabelSymbol
+    public sealed class GeneratedLabelSymbol : LabelSymbol
     {
         private readonly string _name;
 

@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// A specific location for binding.
     /// </summary>
     [Flags]
-    internal enum BinderFlags : uint
+    public enum BinderFlags : uint
     {
         None, // No specific location
         SuppressConstraintChecks = 1 << 0,

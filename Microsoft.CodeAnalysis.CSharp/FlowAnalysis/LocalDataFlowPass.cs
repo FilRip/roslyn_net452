@@ -7,16 +7,18 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>
     /// Does a data flow analysis for state attached to local variables and fields of struct locals.
     /// </summary>
-    internal abstract partial class LocalDataFlowPass<TLocalState, TLocalFunctionState> : AbstractFlowPass<TLocalState, TLocalFunctionState>
+    public abstract partial class LocalDataFlowPass<TLocalState, TLocalFunctionState> : AbstractFlowPass<TLocalState, TLocalFunctionState>
         where TLocalState : LocalDataFlowPass<TLocalState, TLocalFunctionState>.ILocalDataFlowState
         where TLocalFunctionState : AbstractFlowPass<TLocalState, TLocalFunctionState>.AbstractLocalFunctionState
     {
-        internal interface ILocalDataFlowState : ILocalState
+        public interface ILocalDataFlowState : ILocalState
         {
             /// <summary>
             /// True if new variables introduced in <see cref="AbstractFlowPass{TLocalState, TLocalFunctionState}" /> should be set

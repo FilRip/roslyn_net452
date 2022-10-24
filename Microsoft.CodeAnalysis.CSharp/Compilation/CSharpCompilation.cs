@@ -30,6 +30,8 @@ using Roslyn.Utilities;
 
 using static Microsoft.CodeAnalysis.CSharp.Binder;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>
@@ -1029,7 +1031,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return GetBoundReferenceManager();
         }
 
-        internal new ReferenceManager GetBoundReferenceManager()
+        public new ReferenceManager GetBoundReferenceManager()
         {
             if (_lazyAssemblySymbol is null)
             {
@@ -1971,8 +1973,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             var syntax = method.ExtractReturnTypeSyntax();
             var dumbInstance = new BoundLiteral(syntax, ConstantValue.Null, namedType);
             var binder = GetBinder(syntax);
+#nullable restore
             var success = binder.GetAwaitableExpressionInfo(dumbInstance, out BoundExpression result, syntax, diagnostics);
-
+#nullable enable
             return success &&
                 (result!.Type!.IsVoidType() || result.Type!.SpecialType == SpecialType.System_Int32);
         }
@@ -2195,10 +2198,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ConcurrentSet<MethodSymbol>? _moduleInitializerMethods;
 
+#nullable restore
         internal void AddModuleInitializerMethod(MethodSymbol method)
         {
             LazyInitializer.EnsureInitialized(ref _moduleInitializerMethods).Add(method);
         }
+#nullable enable
 
         #endregion
 

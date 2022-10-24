@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class PropertySymbol
+    public partial class PropertySymbol
     {
 #if DEBUG
         private PropertySymbolAdapter _lazyAdapter;

@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     /// <summary>

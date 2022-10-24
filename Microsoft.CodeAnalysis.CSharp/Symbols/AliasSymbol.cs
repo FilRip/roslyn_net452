@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     ///     IList&lt;Symbol&gt; SemanticModel.LookupSymbols(CSharpSyntaxNode location, NamespaceOrTypeSymbol container = null, string name = null, int? arity = null, LookupOptions options = LookupOptions.Default, List&lt;Symbol> results = null);
     /// </pre>
     /// </summary>
-    internal abstract class AliasSymbol : Symbol
+    public abstract class AliasSymbol : Symbol
     {
         private readonly ImmutableArray<Location> _locations;  // NOTE: can be empty for the "global" alias.
         private readonly string _aliasName;

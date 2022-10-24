@@ -4,6 +4,8 @@
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

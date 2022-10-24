@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// Multiple options can be combined together.  LookupOptions.AreValid checks for valid combinations.
     /// </remarks>
     [Flags]
-    internal enum LookupOptions
+    public enum LookupOptions
     {
         /// <summary>
         /// Consider all symbols, using normal accessibility rules.

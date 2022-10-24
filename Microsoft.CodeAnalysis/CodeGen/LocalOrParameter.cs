@@ -4,6 +4,8 @@
 
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]

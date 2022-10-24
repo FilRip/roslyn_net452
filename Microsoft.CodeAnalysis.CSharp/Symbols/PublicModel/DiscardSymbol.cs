@@ -4,6 +4,8 @@
 
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
     internal sealed class DiscardSymbol : Symbol, IDiscardSymbol

@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// <summary>
     /// Represents source or metadata assembly.
     /// </summary>
-    internal abstract class MetadataOrSourceAssemblySymbol
+    public abstract class MetadataOrSourceAssemblySymbol
         : NonMissingAssemblySymbol
     {
         /// <summary>

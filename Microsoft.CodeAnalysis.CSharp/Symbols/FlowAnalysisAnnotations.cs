@@ -9,7 +9,7 @@ using System;
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     [Flags]
-    internal enum FlowAnalysisAnnotations
+    public enum FlowAnalysisAnnotations
     {
         None = 0,
         AllowNull = 1 << 0,

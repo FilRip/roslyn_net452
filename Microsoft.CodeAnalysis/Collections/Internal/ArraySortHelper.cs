@@ -23,6 +23,8 @@ using System.Runtime.InteropServices;
 using Half = System.Single;
 #endif
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Collections.Internal
 {
     #region ArraySortHelper for single arrays

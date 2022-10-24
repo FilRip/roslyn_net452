@@ -15,7 +15,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal partial class
+    public partial class
 #if DEBUG
         MethodSymbolAdapter : SymbolAdapter,
 #else
@@ -531,7 +531,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    internal partial class MethodSymbol
+    public partial class MethodSymbol
     {
 #if DEBUG
         private MethodSymbolAdapter _lazyAdapter;
@@ -661,7 +661,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     }
 
 #if DEBUG
-    internal partial class MethodSymbolAdapter
+    public partial class MethodSymbolAdapter
     {
         internal MethodSymbolAdapter(MethodSymbol underlyingMethodSymbol)
         {

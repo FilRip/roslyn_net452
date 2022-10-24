@@ -11,7 +11,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal struct SymbolCompletionState
+    public struct SymbolCompletionState
     {
         /// <summary>
         /// This field keeps track of the <see cref="CompletionPart"/>s for which we already retrieved

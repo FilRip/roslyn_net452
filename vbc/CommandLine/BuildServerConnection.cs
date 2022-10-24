@@ -34,8 +34,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
           ICompilerServerLogger logger,
           CancellationToken cancellationToken)
         {
-            string pipeName = sharedCompilationId ?? BuildServerConnection.GetPipeNameForPath(buildPaths.ClientDirectory);
-            return BuildServerConnection.RunServerCompilationCoreAsync(requestId, language, arguments, buildPaths, pipeName, keepAlive, libEnvVariable, new int?(), new CreateServerFunc(BuildServerConnection.TryCreateServerCore), logger, cancellationToken);
+            string? pipeName = sharedCompilationId ?? GetPipeNameForPath(buildPaths.ClientDirectory);
+            return RunServerCompilationCoreAsync(requestId, language, arguments, buildPaths, pipeName, keepAlive, libEnvVariable, new int?(), new CreateServerFunc(TryCreateServerCore), logger, cancellationToken);
         }
 
         internal static async Task<BuildResponse> RunServerCompilationCoreAsync(
@@ -57,11 +57,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 throw new ArgumentException(nameof(buildPaths));
             if (string.IsNullOrWhiteSpace(BuildProtocolConstants.GetCommitHash()))
                 return new IncorrectHashBuildResponse();
-            Task<NamedPipeClientStream> server = tryConnectToServer(pipeName, buildPaths, timeoutOverride, createServerFunc, logger, cancellationToken);
+            Task<NamedPipeClientStream?>? server = tryConnectToServer(pipeName, buildPaths, timeoutOverride, createServerFunc, logger, cancellationToken);
             if (server == null)
                 return new RejectedBuildResponse("Failed to connect to server");
-            using (NamedPipeClientStream pipe = await server.ConfigureAwait(false))
-                return pipe == null ? new RejectedBuildResponse("Failed to connect to server") : await BuildServerConnection.TryCompileAsync(pipe, BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", new Guid?(requestId), keepAlive, libDirectory), logger, cancellationToken).ConfigureAwait(false);
+            using (NamedPipeClientStream? pipe = await server.ConfigureAwait(false))
+                return pipe == null ? new RejectedBuildResponse("Failed to connect to server") : await TryCompileAsync(pipe, BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", new Guid?(requestId), keepAlive, libDirectory), logger, cancellationToken).ConfigureAwait(false);
 
             static Task<NamedPipeClientStream?>? tryConnectToServer(
               string pipeName,
@@ -75,14 +75,14 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 string clientDirectory = buildPaths.ClientDirectory;
                 int timeoutMs1 = timeoutOverride ?? 20000;
                 int num1 = timeoutOverride ?? 1000;
-                Task<NamedPipeClientStream> server = null;
-                IServerMutex serverMutex = null;
+                Task<NamedPipeClientStream?>? server = null;
+                IServerMutex? serverMutex = null;
                 try
                 {
                     bool createdNew = false;
                     try
                     {
-                        serverMutex = BuildServerConnection.OpenOrCreateMutex(BuildServerConnection.GetClientMutexName(pipeName), out createdNew);
+                        serverMutex = OpenOrCreateMutex(GetClientMutexName(pipeName), out createdNew);
                     }
                     catch
                     {
@@ -95,14 +95,14 @@ namespace Microsoft.CodeAnalysis.CommandLine
                             if (!serverMutex.TryLock(timeoutMs1))
                                 return null;
                         }
-                        catch (AbandonedMutexException ex)
+                        catch (AbandonedMutexException)
                         {
                         }
                     }
-                    int num2 = BuildServerConnection.WasServerMutexOpen(BuildServerConnection.GetServerMutexName(pipeName)) ? 1 : 0;
+                    int num2 = WasServerMutexOpen(GetServerMutexName(pipeName)) ? 1 : 0;
                     int timeoutMs2 = num2 != 0 ? num1 : timeoutMs1;
                     if (num2 != 0 || createServerFunc(clientDirectory, pipeName, logger))
-                        server = BuildServerConnection.TryConnectToServerAsync(pipeName, timeoutMs2, logger, cancellationToken);
+                        server = TryConnectToServerAsync(pipeName, timeoutMs2, logger, cancellationToken);
                     return server;
                 }
                 finally
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
           ICompilerServerLogger logger,
           CancellationToken cancellationToken = default)
         {
-            byte[] buffer = new byte[0];
+            byte[]? buffer = new byte[0];
             while (!cancellationToken.IsCancellationRequested)
             {
                 if (pipeStream.IsConnected)
@@ -184,7 +184,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                         await Task.Delay(100, cancellationToken).ConfigureAwait(false);
                         int num = await pipeStream.ReadAsync(buffer, 0, 0, cancellationToken).ConfigureAwait(false);
                     }
-                    catch (OperationCanceledException ex)
+                    catch (OperationCanceledException)
                     {
                     }
                     catch (Exception ex)
@@ -207,7 +207,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
           ICompilerServerLogger logger,
           CancellationToken cancellationToken)
         {
-            NamedPipeClientStream pipeStream = null;
+            NamedPipeClientStream? pipeStream = null;
             try
             {
                 logger.Log("Attempt to open named pipe '{0}'", (object)pipeName);
@@ -320,7 +320,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             {
                 if (!PlatformInformation.IsRunningOnMono)
                     return ServerNamedMutex.WasOpen(mutexName);
-                IServerMutex serverMutex = null;
+                IServerMutex? serverMutex = null;
                 bool createdNew = false;
                 try
                 {

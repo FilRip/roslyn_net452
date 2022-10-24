@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// A small cache for remembering empty struct types for flow analysis.
     /// </summary>
-    internal class EmptyStructTypeCache
+    public class EmptyStructTypeCache
     {
         private SmallDictionary<NamedTypeSymbol, bool> _cache;
 

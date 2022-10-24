@@ -15,7 +15,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal abstract partial class ConversionsBase
+    public abstract partial class ConversionsBase
     {
         private const int MaximumRecursionDepth = 50;
 

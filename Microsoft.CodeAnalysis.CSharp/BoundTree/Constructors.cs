@@ -6,9 +6,11 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    internal sealed partial class BoundFieldAccess
+    public sealed partial class BoundFieldAccess
     {
         public BoundFieldAccess(
             SyntaxNode syntax,
@@ -79,7 +81,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundCall
+    public partial class BoundCall
     {
         public BoundCall(
             SyntaxNode syntax,
@@ -196,7 +198,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundObjectCreationExpression
+    public sealed partial class BoundObjectCreationExpression
     {
         public BoundObjectCreationExpression(SyntaxNode syntax, MethodSymbol constructor, params BoundExpression[] arguments)
             : this(syntax, constructor, ImmutableArray.Create<BoundExpression>(arguments), default, default, false, default, default, null, null, constructor.ContainingType)
@@ -208,7 +210,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundIndexerAccess
+    public partial class BoundIndexerAccess
     {
         public static BoundIndexerAccess ErrorAccess(
             SyntaxNode node,
@@ -260,7 +262,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Update(receiverOpt, indexer, arguments, argumentNamesOpt, argumentRefKindsOpt, expanded, argsToParamsOpt, defaultArguments, this.OriginalIndexersOpt, type);
     }
 
-    internal sealed partial class BoundConversion
+    public sealed partial class BoundConversion
     {
         /// <remarks>
         /// This method is intended for passes other than the LocalRewriter.
@@ -364,7 +366,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Update(operand, conversion, isBaseConversion, @checked, explicitCastInCode, constantValueOpt, conversionGroupOpt, this.OriginalUserDefinedConversionsOpt, type);
     }
 
-    internal sealed partial class BoundBinaryOperator
+    public sealed partial class BoundBinaryOperator
     {
         public BoundBinaryOperator(
             SyntaxNode syntax,
@@ -414,7 +416,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Update(operatorKind, constantValueOpt, methodOpt, resultKind, this.OriginalUserDefinedOperatorsOpt, left, right, type);
     }
 
-    internal sealed partial class BoundUserDefinedConditionalLogicalOperator
+    public sealed partial class BoundUserDefinedConditionalLogicalOperator
     {
         public BoundUserDefinedConditionalLogicalOperator(
             SyntaxNode syntax,
@@ -454,7 +456,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Update(operatorKind, logicalOperator, trueOperator, falseOperator, resultKind, this.OriginalUserDefinedOperatorsOpt, left, right, type);
     }
 
-    internal sealed partial class BoundParameter
+    public sealed partial class BoundParameter
     {
         public BoundParameter(SyntaxNode syntax, ParameterSymbol parameterSymbol, bool hasErrors = false)
             : this(syntax, parameterSymbol, parameterSymbol.Type, hasErrors)
@@ -467,7 +469,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundTypeExpression
+    public sealed partial class BoundTypeExpression
     {
         public BoundTypeExpression(SyntaxNode syntax, AliasSymbol? aliasOpt, BoundTypeExpression? boundContainingTypeOpt, ImmutableArray<BoundExpression> boundDimensionsOpt, TypeWithAnnotations typeWithAnnotations, bool hasErrors = false)
             : this(syntax, aliasOpt, boundContainingTypeOpt, boundDimensionsOpt, typeWithAnnotations, typeWithAnnotations.Type, hasErrors)
@@ -495,7 +497,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundNamespaceExpression
+    public sealed partial class BoundNamespaceExpression
     {
         public BoundNamespaceExpression(SyntaxNode syntax, NamespaceSymbol namespaceSymbol, bool hasErrors = false)
             : this(syntax, namespaceSymbol, null, hasErrors)
@@ -513,7 +515,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundAssignmentOperator
+    public sealed partial class BoundAssignmentOperator
     {
         public BoundAssignmentOperator(SyntaxNode syntax, BoundExpression left, BoundExpression right,
             TypeSymbol type, bool isRef = false, bool hasErrors = false)
@@ -522,7 +524,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundBadExpression
+    public sealed partial class BoundBadExpression
     {
         public BoundBadExpression(SyntaxNode syntax, LookupResultKind resultKind, ImmutableArray<Symbol?> symbols, ImmutableArray<BoundExpression> childBoundNodes, TypeSymbol type)
             : this(syntax, resultKind, symbols, childBoundNodes, type, true)
@@ -530,7 +532,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundStatementList
+    public partial class BoundStatementList
     {
         public static BoundStatementList Synthesized(SyntaxNode syntax, params BoundStatement[] statements)
         {
@@ -553,7 +555,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundReturnStatement
+    public sealed partial class BoundReturnStatement
     {
         public static BoundReturnStatement Synthesized(SyntaxNode syntax, RefKind refKind, BoundExpression expression, bool hasErrors = false)
         {
@@ -561,7 +563,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundYieldBreakStatement
+    public sealed partial class BoundYieldBreakStatement
     {
         public static BoundYieldBreakStatement Synthesized(SyntaxNode syntax, bool hasErrors = false)
         {
@@ -569,7 +571,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundGotoStatement
+    public sealed partial class BoundGotoStatement
     {
         public BoundGotoStatement(SyntaxNode syntax, LabelSymbol label, bool hasErrors = false)
             : this(syntax, label, caseExpressionOpt: null, labelExpressionOpt: null, hasErrors: hasErrors)
@@ -577,7 +579,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundBlock
+    public partial class BoundBlock
     {
         public BoundBlock(SyntaxNode syntax, ImmutableArray<LocalSymbol> locals, ImmutableArray<BoundStatement> statements, bool hasErrors = false) : this(syntax, locals, ImmutableArray<LocalFunctionSymbol>.Empty, statements, hasErrors)
         {
@@ -600,7 +602,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal sealed partial class BoundDefaultExpression
+    public sealed partial class BoundDefaultExpression
     {
         public BoundDefaultExpression(SyntaxNode syntax, TypeSymbol type, bool hasErrors = false)
             : this(syntax, targetType: null, type.GetDefaultValue(), type, hasErrors)
@@ -610,7 +612,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override ConstantValue? ConstantValue => ConstantValueOpt;
     }
 
-    internal partial class BoundTryStatement
+    public partial class BoundTryStatement
     {
         public BoundTryStatement(SyntaxNode syntax, BoundBlock tryBlock, ImmutableArray<BoundCatchBlock> catchBlocks, BoundBlock? finallyBlockOpt, LabelSymbol? finallyLabelOpt = null)
             : this(syntax, tryBlock, catchBlocks, finallyBlockOpt, finallyLabelOpt, preferFaultHandler: false, hasErrors: false)
@@ -618,7 +620,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundAddressOfOperator
+    public partial class BoundAddressOfOperator
     {
         public BoundAddressOfOperator(SyntaxNode syntax, BoundExpression operand, TypeSymbol type, bool hasErrors = false)
              : this(syntax, operand, isManaged: false, type, hasErrors)
@@ -626,7 +628,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
-    internal partial class BoundDagTemp
+    public partial class BoundDagTemp
     {
         public BoundDagTemp(SyntaxNode syntax, TypeSymbol type, BoundDagEvaluation? source)
             : this(syntax, type, source, index: 0, hasErrors: false)
@@ -636,7 +638,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static BoundDagTemp ForOriginalInput(BoundExpression expr) => new BoundDagTemp(expr.Syntax, expr.Type!, source: null);
     }
 
-    internal partial class BoundCompoundAssignmentOperator
+    public partial class BoundCompoundAssignmentOperator
     {
         public BoundCompoundAssignmentOperator(SyntaxNode syntax,
             BinaryOperatorSignature @operator,
@@ -661,7 +663,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Update(@operator, left, right, leftConversion, finalConversion, resultKind, this.OriginalUserDefinedOperatorsOpt, type);
     }
 
-    internal partial class BoundUnaryOperator
+    public partial class BoundUnaryOperator
     {
         public BoundUnaryOperator(
             SyntaxNode syntax,
@@ -685,7 +687,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => Update(operatorKind, operand, constantValueOpt, methodOpt, resultKind, this.OriginalUserDefinedOperatorsOpt, type);
     }
 
-    internal partial class BoundIncrementOperator
+    public partial class BoundIncrementOperator
     {
         public BoundIncrementOperator(
             CSharpSyntaxNode syntax,

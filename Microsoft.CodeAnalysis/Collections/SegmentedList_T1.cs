@@ -17,6 +17,8 @@ using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis.Collections.Internal;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Collections
 {
     /// <summary>

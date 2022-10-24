@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract partial class CommonCompiler

@@ -4,6 +4,8 @@
 
 using System.Linq;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal static class CSharpCompilationExtensions
