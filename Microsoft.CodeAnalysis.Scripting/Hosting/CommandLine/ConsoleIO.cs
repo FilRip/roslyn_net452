@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 {
     public class ConsoleIO
     {
-        public static readonly ConsoleIO Default = new ConsoleIO(Console.Out, Console.Error, Console.In);
+        public static readonly ConsoleIO Default = new(Console.Out, Console.Error, Console.In);
 
         public TextWriter Error { get; }
         public TextWriter Out { get; }

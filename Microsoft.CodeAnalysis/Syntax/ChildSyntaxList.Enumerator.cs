@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public partial struct ChildSyntaxList
@@ -34,6 +36,7 @@ namespace Microsoft.CodeAnalysis
                 _childIndex = -1;
             }
 
+#nullable restore
             /// <summary>Advances the enumerator to the next element of the <see cref="ChildSyntaxList" />.</summary>
             /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
             [MemberNotNullWhen(true, nameof(_node))]
@@ -79,6 +82,7 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
+#nullable enable
             internal SyntaxNode? TryMoveNextAndGetCurrentAsNode()
             {
                 while (MoveNext())

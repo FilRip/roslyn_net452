@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.FlowAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Operations
 {
     internal sealed partial class OperationCloner : OperationVisitor<object?, IOperation>

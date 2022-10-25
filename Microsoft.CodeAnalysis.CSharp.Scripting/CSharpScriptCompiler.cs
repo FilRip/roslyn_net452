@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting
     {
         public static readonly ScriptCompiler Instance = new CSharpScriptCompiler();
 
-        internal static readonly CSharpParseOptions DefaultParseOptions = new CSharpParseOptions(kind: SourceCodeKind.Script, languageVersion: LanguageVersion.Latest);
+        internal static readonly CSharpParseOptions DefaultParseOptions = new(kind: SourceCodeKind.Script, languageVersion: LanguageVersion.Latest);
 
         private CSharpScriptCompiler()
         {

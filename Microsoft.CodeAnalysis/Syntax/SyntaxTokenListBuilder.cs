@@ -5,6 +5,8 @@
 using System;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax
 {
     public class SyntaxTokenListBuilder
@@ -34,6 +36,7 @@ namespace Microsoft.CodeAnalysis.Syntax
         public void Add(SyntaxToken item)
         {
             Debug.Assert(item.Node is object);
+#nullable restore
             this.Add(item.Node);
         }
 

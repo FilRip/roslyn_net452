@@ -7,6 +7,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class UICultureUtilities

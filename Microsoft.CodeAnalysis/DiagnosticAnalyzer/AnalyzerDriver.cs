@@ -68,6 +68,10 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         private CancellationTokenRegistration? _lazyQueueRegistration;
 
         private AnalyzerExecutor? _lazyAnalyzerExecutor;
+        private CompilationData? _lazyCurrentCompilationData;
+
+#nullable restore
+
         protected AnalyzerExecutor AnalyzerExecutor
         {
             get
@@ -77,7 +81,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
         }
 
-        private CompilationData? _lazyCurrentCompilationData;
         protected CompilationData CurrentCompilationData
         {
             get
@@ -86,6 +89,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return _lazyCurrentCompilationData;
             }
         }
+
+#nullable enable
 
         protected CachingSemanticModelProvider SemanticModelProvider => CurrentCompilationData.SemanticModelProvider;
 
@@ -101,7 +106,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyUnsuppressedAnalyzers != null);
+#nullable restore
                 return _lazyUnsuppressedAnalyzers;
+#nullable enable
             }
         }
 
@@ -118,7 +125,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyPerSymbolAnalyzerActionsCache != null);
+#nullable restore
                 return _lazyPerSymbolAnalyzerActionsCache;
+#nullable enable
             }
         }
 
@@ -137,7 +146,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyCompilationEndAnalyzers != null);
+#nullable restore
                 return _lazyCompilationEndAnalyzers;
+#nullable enable
             }
         }
 
@@ -193,7 +204,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyNonConfigurableAnalyzers != null);
+#nullable restore
                 return _lazyNonConfigurableAnalyzers;
+#nullable enable
             }
         }
 
@@ -207,7 +220,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazySymbolStartAnalyzers != null);
+#nullable restore
                 return _lazySymbolStartAnalyzers;
+#nullable enable
             }
         }
 
@@ -221,7 +236,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyTreatAllCodeAsNonGeneratedCode.HasValue);
+#nullable restore
                 return _lazyTreatAllCodeAsNonGeneratedCode.Value;
+#nullable enable
             }
         }
 
@@ -240,7 +257,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyGeneratedCodeFilesMap != null);
+#nullable restore
                 return _lazyGeneratedCodeFilesMap;
+#nullable enable
             }
         }
 
@@ -254,7 +273,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyGeneratedCodeSymbolsForTreeMap != null);
+#nullable restore
                 return _lazyGeneratedCodeSymbolsForTreeMap;
+#nullable enable
             }
         }
 
@@ -268,7 +289,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazySuppressedAnalyzersForTreeMap != null);
+#nullable restore
                 return _lazySuppressedAnalyzersForTreeMap;
+#nullable enable
             }
         }
 
@@ -282,7 +305,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyIsGeneratedCodeSymbolMap != null);
+#nullable restore
                 return _lazyIsGeneratedCodeSymbolMap;
+#nullable enable
             }
         }
 
@@ -327,7 +352,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyCompilationEventQueue != null);
+#nullable restore
                 return _lazyCompilationEventQueue;
+#nullable enable
             }
         }
 
@@ -341,7 +368,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyDiagnosticQueue != null);
+#nullable restore
                 return _lazyDiagnosticQueue;
+#nullable enable
             }
         }
 
@@ -673,6 +702,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             if (WhenInitializedTask.IsFaulted)
             {
+#nullable restore
                 OnDriverException(WhenInitializedTask, this.AnalyzerExecutor, analysisScope.Analyzers);
             }
             else if (!WhenInitializedTask.IsCanceled)
@@ -688,6 +718,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 }
             }
         }
+
+#nullable enable
 
         private static void OnDriverException(Task faultedTask, AnalyzerExecutor analyzerExecutor, ImmutableArray<DiagnosticAnalyzer> analyzers)
         {
@@ -929,6 +961,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 //  1. Diagnostics which are already suppressed in source via pragma/suppress message attribute.
                 //  2. Diagnostics explicitly tagged as not configurable by analyzer authors - this includes compiler error diagnostics.
                 //  3. Diagnostics which are marked as error by default by diagnostic authors.
+#nullable restore
                 var suppressableDiagnostics = reportedDiagnostics.Where(d => !d.IsSuppressed &&
                                                                              !d.IsNotConfigurable() &&
                                                                              d.DefaultSeverity != DiagnosticSeverity.Error &&
@@ -1149,7 +1182,10 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 Debug.Assert(GeneratedCodeSymbolsForTreeMap != null);
                 Debug.Assert(_lazyGeneratedCodeAttribute != null);
 
+#nullable enable
+
                 ImmutableHashSet<ISymbol>? generatedCodeSymbols;
+#nullable restore
                 lock (GeneratedCodeSymbolsForTreeMap)
                 {
                     if (GeneratedCodeSymbolsForTreeMap.TryGetValue(tree, out generatedCodeSymbols))
@@ -1171,6 +1207,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         Debug.Assert(existingGeneratedCodeSymbols.SetEquals(generatedCodeSymbols));
                     }
                 }
+
+#nullable enable
 
                 return generatedCodeSymbols;
 
@@ -1272,6 +1310,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public bool IsInitialized => _lazyInitializeTask != null;
 
+#nullable restore
         /// <summary>
         /// Return a task that completes when the driver is initialized.
         /// </summary>
@@ -1295,6 +1334,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return _lazyPrimaryTask;
             }
         }
+
+#nullable enable
 
         internal ImmutableDictionary<DiagnosticAnalyzer, TimeSpan> AnalyzerExecutionTimes => AnalyzerExecutor.AnalyzerExecutionTimes;
         internal TimeSpan ResetAnalyzerExecutionTime(DiagnosticAnalyzer analyzer) => AnalyzerExecutor.ResetAnalyzerExecutionTime(analyzer);
@@ -2249,7 +2290,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyDoNotAnalyzeGeneratedCode.HasValue);
+#nullable restore
                 return _lazyDoNotAnalyzeGeneratedCode.Value;
+#nullable enable
             }
         }
 
@@ -2485,12 +2528,14 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         {
             Debug.Assert(analysisState != null);
 
+#nullable restore
             if (!analysisState.IsDeclarationComplete(symbol, declarationIndex))
             {
                 return;
             }
 
             CurrentCompilationData.ClearDeclarationAnalysisData(declaration);
+#nullable enable
         }
 
         private DeclarationAnalysisData ComputeDeclarationAnalysisData(
@@ -2937,8 +2982,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                                 Debug.Assert(operationBlock.Parent.IsImplicit);
                                 Debug.Assert(operationBlock.Parent.Parent is IConstructorBodyOperation ctorBody &&
                                     ctorBody.Initializer == operationBlock.Parent);
+#nullable restore
                                 Debug.Assert(!operationBlock.Parent.Parent.IsImplicit);
-
                                 operationsToAnalyze.Add(operationBlock.Parent.Parent);
 
                                 break;

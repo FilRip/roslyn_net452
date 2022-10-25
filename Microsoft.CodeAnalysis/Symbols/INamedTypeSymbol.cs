@@ -7,6 +7,8 @@ using System.Collections.Immutable;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

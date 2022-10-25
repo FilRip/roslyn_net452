@@ -20,6 +20,8 @@ using System.Threading;
 using System.Runtime.CompilerServices;
 #endif
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.PooledObjects
 {
 #if NET20

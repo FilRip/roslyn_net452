@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     internal class SourceTextComparer : IEqualityComparer<SourceText?>

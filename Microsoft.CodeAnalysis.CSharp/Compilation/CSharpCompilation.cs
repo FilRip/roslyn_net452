@@ -326,7 +326,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         #region Constructors and Factories
 
-        private static readonly CSharpCompilationOptions s_defaultOptions = new CSharpCompilationOptions(OutputKind.ConsoleApplication);
+        private static readonly CSharpCompilationOptions s_defaultOptions = new(OutputKind.ConsoleApplication);
         private static readonly CSharpCompilationOptions s_defaultSubmissionOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary).WithReferencesSupersedeLowerVersions(true);
 
         /// <summary>
@@ -1251,7 +1251,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             get
             {
                 GetBoundReferenceManager();
+#nullable restore
                 return _lazyAssemblySymbol;
+#nullable enable
             }
         }
 
@@ -1555,7 +1557,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal TypeSymbol GetTypeByReflectionType(Type type, BindingDiagnosticBag diagnostics)
         {
             var result = Assembly.GetTypeByReflectionType(type, includeReferences: true);
-            if ((object)result == null)
+            if (result is null)
             {
                 var errorType = new ExtendedErrorTypeSymbol(this, type.Name, 0, CreateReflectionTypeNotFoundError(type));
                 diagnostics.Add(errorType.ErrorInfo, NoLocation.Singleton);
@@ -1585,7 +1587,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 TypeSymbol symbol = Assembly.GetTypeByReflectionType(HostObjectType, includeReferences: true);
 
-                if ((object)symbol == null)
+                if (symbol is null)
                 {
                     MetadataTypeName mdName = MetadataTypeName.FromNamespaceAndTypeName(HostObjectType.Namespace ?? String.Empty,
                                                                                         HostObjectType.Name,
@@ -1769,7 +1771,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
 
                         entryPointCandidates.Clear();
+#nullable restore
                         entryPointCandidates.Add(simpleProgramEntryPointSymbol);
+#nullable enable
                     }
                 }
 
@@ -1875,6 +1879,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // We can't add those Errors to the general diagnostics bag because it would break previously-working programs.
                     // The fact that these warnings are not added when csc is invoked with /main is possibly a bug, and is tracked at
                     // https://github.com/dotnet/roslyn/issues/18964
+#nullable restore
                     foreach (var diagnostic in noMainFoundDiagnostics.DiagnosticBag.AsEnumerable())
                     {
                         if (diagnostic.Code == (int)ErrorCode.WRN_InvalidMainSig || diagnostic.Code == (int)ErrorCode.WRN_MainCantBeGeneric)
@@ -1882,6 +1887,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             diagnostics.Add(diagnostic);
                         }
                     }
+#nullable enable
 
                     diagnostics.AddDependencies(noMainFoundDiagnostics);
                 }
@@ -2044,7 +2050,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             public readonly MethodSymbol? MethodSymbol;
             public readonly ImmutableBindingDiagnostic<AssemblySymbol> Diagnostics;
 
-            public static readonly EntryPoint None = new EntryPoint(null, ImmutableBindingDiagnostic<AssemblySymbol>.Empty);
+            public static readonly EntryPoint None = new(null, ImmutableBindingDiagnostic<AssemblySymbol>.Empty);
 
             public EntryPoint(MethodSymbol? methodSymbol, ImmutableBindingDiagnostic<AssemblySymbol> diagnostics)
             {
@@ -2146,7 +2152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal ArrayTypeSymbol CreateArrayTypeSymbol(TypeSymbol elementType, int rank = 1, NullableAnnotation elementNullableAnnotation = NullableAnnotation.Oblivious)
         {
-            if ((object)elementType == null)
+            if (elementType is null)
             {
                 throw new ArgumentNullException(nameof(elementType));
             }
@@ -2164,7 +2170,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal PointerTypeSymbol CreatePointerTypeSymbol(TypeSymbol elementType, NullableAnnotation elementNullableAnnotation = NullableAnnotation.Oblivious)
         {
-            if ((object)elementType == null)
+            if (elementType is null)
             {
                 throw new ArgumentNullException(nameof(elementType));
             }
@@ -2286,7 +2292,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 WeakReference<BinderFactory>? previousWeakReference = slot;
                 if (previousWeakReference != null && previousWeakReference.TryGetTarget(out BinderFactory previousFactory))
                 {
+#nullable restore
                     return previousFactory;
+#nullable enable
                 }
 
                 if (Interlocked.CompareExchange(ref slot!, newWeakReference, previousWeakReference) == previousWeakReference)
@@ -2373,6 +2381,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                                 if (node is object && GetExternAliasTarget(node.Identifier.ValueText, out NamespaceSymbol target))
                                 {
+#nullable restore
                                     externAliasesToCheck.Add(target);
                                 }
                             }
@@ -2419,6 +2428,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             CompleteTrees(filterTree);
         }
 
+#nullable enable
+
         public override void CompleteTrees(SyntaxTree? filterTree)
         {
             // By definition, a tree is complete when all of its compiler diagnostics have been reported.
@@ -2462,10 +2473,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 TryAdd(new ImportInfo(syntax.SyntaxTree, syntax.Kind(), syntax.Span), default);
         }
 
+#nullable restore
+
         internal void RecordImportDependencies(UsingDirectiveSyntax syntax, ImmutableArray<AssemblySymbol> dependencies)
         {
             _lazyImportInfos.TryUpdate(new ImportInfo(syntax.SyntaxTree, syntax.Kind(), syntax.Span), dependencies, default);
         }
+
+#nullable enable
 
         private struct ImportInfo : IEquatable<ImportInfo>
         {
@@ -2543,7 +2558,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private readonly DiagnosticBag _additionalCodegenWarnings = new DiagnosticBag();
+        private readonly DiagnosticBag _additionalCodegenWarnings = new();
 
         internal DeclarationTable Declarations
         {
@@ -2619,6 +2634,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (stage == CompilationStage.Parse || (stage > CompilationStage.Parse && includeEarlierStages))
             {
                 var syntaxTrees = this.SyntaxTrees;
+#nullable restore
                 if (this.Options.ConcurrentBuild)
                 {
                     RoslynParallel.For(
@@ -2699,6 +2715,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
+
         private static void AppendLoadDirectiveDiagnostics(DiagnosticBag builder, SyntaxAndDeclarationManager syntaxAndDeclarations, SyntaxTree syntaxTree, Func<IEnumerable<Diagnostic>, IEnumerable<Diagnostic>>? locationFilterOpt = null)
         {
             if (syntaxAndDeclarations.GetLazyState().LoadDirectiveMap.TryGetValue(syntaxTree, out ImmutableArray<LoadDirective> loadDirectives))
@@ -2728,7 +2746,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                                                                        sourceLinkStream: null,
                                                                        embeddedTexts: null,
                                                                        testData: null,
+#nullable restore
                                                                        diagnostics: diagnostics.DiagnosticBag,
+#nullable enable
                                                                        cancellationToken: cancellationToken)
                                                 : null,
                 emittingPdb: false,
@@ -2822,6 +2842,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             compileMethodBodiesAndDocComments(filterTree: otherTree, filterSpan: null, discarded, cancellationToken);
                             registeredUsageOfUsingsInTree(otherTree);
+#nullable restore
                             discarded.DiagnosticBag.Clear();
                         }
                     }
@@ -2829,6 +2850,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     discarded.DiagnosticBag.Free();
                 }
             }
+#nullable enable
 
             if (reportUnusedUsings)
             {
@@ -2920,7 +2942,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (locationFilterOpt != null)
             {
+#nullable restore
                 result = locationFilterOpt(result, syntaxTree, filterSpanWithinTree);
+#nullable enable
             }
 
             // NOTE: Concatenate the CLS diagnostics *after* filtering by tree/span, because they're already filtered.

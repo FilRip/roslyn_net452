@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
     public static class ObjectFormatterHelpers
     {
-        internal static readonly object VoidValue = new object();
+        internal static readonly object VoidValue = new();
 
         public const int NumberRadixDecimal = 10;
         internal const int NumberRadixHexadecimal = 16;

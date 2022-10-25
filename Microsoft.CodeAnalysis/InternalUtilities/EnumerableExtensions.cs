@@ -19,6 +19,8 @@ using Roslyn.Utilities;
 using System.Diagnostics;
 #endif
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static partial class EnumerableExtensions

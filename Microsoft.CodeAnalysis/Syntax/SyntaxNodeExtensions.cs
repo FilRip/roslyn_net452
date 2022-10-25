@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static partial class SyntaxNodeExtensions

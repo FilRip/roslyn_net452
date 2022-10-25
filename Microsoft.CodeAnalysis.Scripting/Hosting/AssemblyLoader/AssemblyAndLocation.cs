@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             Hash.Combine(Assembly, Hash.Combine(Location, Hash.Combine(GlobalAssemblyCache, 0)));
 
         public override bool Equals(object obj) =>
-            obj is AssemblyAndLocation && Equals((AssemblyAndLocation)obj);
+            obj is AssemblyAndLocation location && Equals(location);
 
         public override string ToString() =>
             Assembly + " @ " + (GlobalAssemblyCache ? "<GAC>" : Location);

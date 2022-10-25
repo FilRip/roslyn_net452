@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.Scripting.Hosting;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Scripting
 {
     using static ParameterValidationHelpers;

@@ -8,6 +8,8 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public class TextKeyedCache<T> where T : class

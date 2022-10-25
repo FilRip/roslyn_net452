@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CodeGen;
 
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     internal class ReturnValueParameter : IParameterDefinition

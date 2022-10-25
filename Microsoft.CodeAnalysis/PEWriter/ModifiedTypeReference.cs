@@ -11,6 +11,8 @@ using Roslyn.Utilities;
 
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     public sealed class ModifiedTypeReference : IModifiedTypeReference

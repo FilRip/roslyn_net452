@@ -4,6 +4,8 @@
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -57,7 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             NamedTypeSymbol currentLinkType = tupleType;
             FieldSymbol underlyingField = tupleField.TupleUnderlyingField;
 
-            if ((object)underlyingField == null)
+            if (underlyingField is null)
             {
                 // Use-site error must have been reported elsewhere.
                 return _factory.BadExpression(tupleField.Type);

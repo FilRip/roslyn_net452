@@ -9,6 +9,8 @@ using Roslyn.Utilities;
 
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     internal class InheritedTypeParameter : IGenericTypeParameter

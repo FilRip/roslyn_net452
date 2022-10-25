@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="partialName">Optional partial name.</param>
         /// <param name="architectureFilter">Optional architecture filter.</param>
-        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>))
+        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
             return GetAssemblyIdentities(FusionAssemblyIdentity.ToAssemblyNameObject(partialName), architectureFilter);
         }
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="partialName">The optional partial name.</param>
         /// <param name="architectureFilter">The optional architecture filter.</param>
-        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>))
+        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
             FusionAssemblyIdentity.IAssemblyName nameObj;
             if (partialName != null)
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="architectureFilter">Optional architecture filter.</param>
         /// <returns>Unique simple names of GAC assemblies.</returns>
-        public override IEnumerable<string> GetAssemblySimpleNames(ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>))
+        public override IEnumerable<string> GetAssemblySimpleNames(ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
             var q = from nameObject in GetAssemblyObjects(partialNameFilter: null, architectureFilter: architectureFilter)
                     select FusionAssemblyIdentity.GetName(nameObject);
@@ -169,7 +169,6 @@ namespace Microsoft.CodeAnalysis
 
             while (true)
             {
-
                 hr = enumerator.GetNextAssembly(out applicationContext, out FusionAssemblyIdentity.IAssemblyName nameObject, 0);
                 if (hr != 0)
                 {
@@ -232,7 +231,7 @@ namespace Microsoft.CodeAnalysis
 
             fixed (char* p = new char[MAX_PATH])
             {
-                ASSEMBLY_INFO info = new ASSEMBLY_INFO
+                ASSEMBLY_INFO info = new()
                 {
                     cbAssemblyInfo = (uint)Marshal.SizeOf<ASSEMBLY_INFO>(),
                     pszCurrentAssemblyPathBuf = p,

@@ -103,6 +103,8 @@ namespace Microsoft.CodeAnalysis
                 return boundReferences;
             }
 
+#nullable enable
+
             public override bool IsMatchingAssembly(TAssemblySymbol? assembly)
             {
                 throw ExceptionUtilities.Unreachable;

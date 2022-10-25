@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
 #pragma warning disable CA1200 // Avoid using cref tags with a prefix
@@ -86,7 +88,9 @@ namespace Microsoft.CodeAnalysis
             get
             {
                 Debug.Assert(Node is object);
+#nullable restore
                 return Node;
+#nullable enable
             }
         }
 

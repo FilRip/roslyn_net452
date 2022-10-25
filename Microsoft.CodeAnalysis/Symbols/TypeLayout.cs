@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

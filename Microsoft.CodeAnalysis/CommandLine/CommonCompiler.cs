@@ -207,7 +207,7 @@ namespace Microsoft.CodeAnalysis
             return Culture.Name;
         }
 
-        internal virtual Func<string, MetadataReferenceProperties, PortableExecutableReference> GetMetadataProvider()
+        public virtual Func<string, MetadataReferenceProperties, PortableExecutableReference> GetMetadataProvider()
         {
             return (path, properties) =>
             {

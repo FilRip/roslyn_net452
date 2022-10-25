@@ -4,6 +4,8 @@
 
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     internal sealed class GeneratorSyntaxWalker : SyntaxWalker
@@ -28,6 +30,7 @@ namespace Microsoft.CodeAnalysis
             _semanticModel = null;
         }
 
+#nullable restore
         public override void Visit(SyntaxNode node)
         {
             Debug.Assert(_semanticModel is object && _semanticModel.SyntaxTree == node.SyntaxTree);

@@ -88,9 +88,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
                 Me._shouldVisitTrivia = Me._triviaSet.Count > 0 OrElse Me._visitStructuredTrivia
             End Sub
 
-            Private Shared ReadOnly s_noNodes As HashSet(Of SyntaxNode) = New HashSet(Of SyntaxNode)()
-            Private Shared ReadOnly s_noTokens As HashSet(Of SyntaxToken) = New HashSet(Of SyntaxToken)()
-            Private Shared ReadOnly s_noTrivia As HashSet(Of SyntaxTrivia) = New HashSet(Of SyntaxTrivia)()
+            Private Shared ReadOnly s_noNodes As New HashSet(Of SyntaxNode)()
+            Private Shared ReadOnly s_noTokens As New HashSet(Of SyntaxToken)()
+            Private Shared ReadOnly s_noTrivia As New HashSet(Of SyntaxTrivia)()
 
             Public Overrides ReadOnly Property VisitIntoStructuredTrivia As Boolean
                 Get

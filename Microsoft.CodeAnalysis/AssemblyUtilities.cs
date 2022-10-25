@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Roslyn.Utilities
 {
-    internal static class AssemblyUtilities
+    public static class AssemblyUtilities
     {
         /// <summary>
         /// Given a path to an assembly, identifies files in the same directory

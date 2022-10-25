@@ -41,6 +41,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
         public CommandLineScriptGlobals(TextWriter outputWriter, ObjectFormatter objectFormatter)
         {
+#pragma warning disable IDE0016
             if (outputWriter == null)
             {
                 throw new ArgumentNullException(nameof(outputWriter));
@@ -50,6 +51,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             {
                 throw new ArgumentNullException(nameof(objectFormatter));
             }
+#pragma warning restore IDE0016
 
             PrintOptions = new PrintOptions();
 

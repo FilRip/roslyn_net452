@@ -8,6 +8,8 @@ using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public sealed class SyntaxNavigator
@@ -190,6 +192,7 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(stepInto != null);
             foreach (var trivia in triviaList)
             {
+#nullable restore
                 if (trivia.TryGetStructure(out var structure) && stepInto(trivia))
                 {
                     var token = GetFirstToken(structure, predicate, stepInto);
@@ -198,6 +201,7 @@ namespace Microsoft.CodeAnalysis
                         return token;
                     }
                 }
+#nullable enable
             }
 
             return default;

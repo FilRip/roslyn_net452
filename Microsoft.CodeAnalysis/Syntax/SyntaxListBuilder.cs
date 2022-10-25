@@ -5,6 +5,8 @@
 using System;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax
 {
     public class SyntaxListBuilder
@@ -142,7 +144,9 @@ namespace Microsoft.CodeAnalysis.Syntax
         public void AddRange(SyntaxTokenList list, int offset, int length)
         {
             Debug.Assert(list.Node is object);
+#nullable restore
             this.AddRange(new SyntaxList<SyntaxNode>(list.Node.CreateRed()), offset, length);
+#nullable enable
         }
 
         private void Grow(int size)

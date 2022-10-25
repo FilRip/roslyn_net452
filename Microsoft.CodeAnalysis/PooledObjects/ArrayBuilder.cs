@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.PooledObjects
 {
     [DebuggerDisplay("Count = {Count,nq}")]
@@ -251,7 +253,7 @@ namespace Microsoft.CodeAnalysis.PooledObjects
 
         public T Last()
         {
-            return _builder[_builder.Count - 1];
+            return _builder[^1];
         }
 
         public T First()

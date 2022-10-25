@@ -29,7 +29,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' </summary>
             Private ReadOnly _conditionalsMap As ImmutableDictionary(Of String, Stack(Of Tuple(Of InternalSyntax.CConst, Integer)))
 
-            Friend Shared ReadOnly Uninitialized As ConditionalSymbolsMap = New ConditionalSymbolsMap()
+            Friend Shared ReadOnly Uninitialized As New ConditionalSymbolsMap()
             ' Only used by Uninitialized instance
             Private Sub New()
             End Sub
@@ -116,7 +116,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             _preprocessorState = Scanner.ApplyDirective(_preprocessorState, DirectCast(directive.Green(), InternalSyntax.DirectiveTriviaSyntax))
                             Dim newPreprocessorSymbols = _preprocessorState.SymbolsMap
 
-                            If Not prevPreprocessorSymbols Is newPreprocessorSymbols Then
+                            If prevPreprocessorSymbols IsNot newPreprocessorSymbols Then
                                 Dim name As String = DirectCast(directive, ConstDirectiveTriviaSyntax).Name.ValueText
 #If DEBUG Then
                                 Dim values As Stack(Of Tuple(Of InternalSyntax.CConst, Integer)) = Nothing

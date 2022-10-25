@@ -10,6 +10,8 @@ using System.Threading;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     /// <summary>

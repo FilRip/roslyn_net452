@@ -47,6 +47,8 @@ namespace Microsoft.Cci
             throw ExceptionUtilities.Unreachable;
         }
 
+#nullable enable
+
         public override bool Equals(object? obj)
         {
             throw ExceptionUtilities.Unreachable;

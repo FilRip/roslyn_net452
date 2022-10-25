@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public struct FileKey : IEquatable<FileKey>

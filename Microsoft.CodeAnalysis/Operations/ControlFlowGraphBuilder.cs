@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     internal sealed partial class ControlFlowGraphBuilder : OperationVisitor<int?, IOperation>
@@ -48,10 +50,16 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         /// </summary>
         private ImplicitInstanceInfo _currentImplicitInstance;
 
-        private ControlFlowGraphBuilder(Compilation compilation, CaptureIdDispenser? captureIdDispenser, ArrayBuilder<BasicBlockBuilder> blocks)
+#nullable restore
+        private ControlFlowGraphBuilder(Compilation compilation,
+#nullable enable
+                                        CaptureIdDispenser? captureIdDispenser,
+                                        ArrayBuilder<BasicBlockBuilder> blocks)
         {
             Debug.Assert(compilation != null);
+#nullable restore
             _compilation = compilation;
+#nullable enable
             _captureIdDispenser = captureIdDispenser ?? new CaptureIdDispenser();
             _blocks = blocks;
             _regionMap = PooledDictionary<BasicBlockBuilder, RegionBuilder>.GetInstance();
@@ -63,7 +71,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             get
             {
                 Debug.Assert(_currentRegion != null);
+#nullable restore
                 return _currentRegion;
+#nullable enable
             }
         }
 
@@ -75,6 +85,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         public static ControlFlowGraph Create(IOperation body, ControlFlowGraph? parent = null, ControlFlowRegion? enclosing = null, CaptureIdDispenser? captureIdDispenser = null, in Context context = default)
         {
             Debug.Assert(body != null);
+#nullable restore
             Debug.Assert(((Operation)body).OwningSemanticModel != null);
 
 #if DEBUG
@@ -96,6 +107,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 Debug.Assert(parent != null);
             }
 #endif
+#nullable enable
 
             var blocks = ArrayBuilder<BasicBlockBuilder>.GetInstance();
             var builder = new ControlFlowGraphBuilder(((Operation)body).OwningSemanticModel!.Compilation, captureIdDispenser, blocks);
@@ -245,7 +257,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 if (current.Ordinal < firstBlockOrdinal || current.Ordinal > lastBlockOrdinal)
                 {
                     Debug.Assert(outOfRangeBlocksToVisit != null);
+#nullable restore
                     outOfRangeBlocksToVisit.Push(current);
+#nullable enable
                     continue;
                 }
 
@@ -290,6 +304,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 // To simplify implementation, we dispatch exception from every reachable basic block and rely
                 // on dispatchedExceptionsFromRegions cache to avoid doing duplicate work.
                 Debug.Assert(current.Region != null);
+#nullable restore
                 dispatchException(current.Region);
             }
             while (toVisit.Count != 0);
@@ -382,6 +397,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 return continueDispatch;
             }
 
+#nullable enable
             void dispatchException([DisallowNull] ControlFlowRegion? fromRegion)
             {
                 do
@@ -420,8 +436,10 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         // If filter throws, dispatch is resumed at the next catch with an original exception
                         Debug.Assert(enclosing!.Kind == ControlFlowRegionKind.FilterAndHandler);
                         Debug.Assert(enclosing.EnclosingRegion != null);
+#nullable restore
                         ControlFlowRegion tryAndCatch = enclosing.EnclosingRegion;
                         Debug.Assert(tryAndCatch.Kind == ControlFlowRegionKind.TryAndCatch);
+#nullable enable
 
                         int index = tryAndCatch.NestedRegions.IndexOf(enclosing, startIndex: 1);
 
@@ -561,6 +579,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                                     !subRegion.HasRegions && subRegion.FirstBlock == subRegion.LastBlock)
                                 {
                                     Debug.Assert(subRegion.FirstBlock != null);
+#nullable restore
                                     BasicBlockBuilder block = subRegion.FirstBlock;
 
                                     if (!block.HasStatements && block.BranchValue == null)
@@ -577,6 +596,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                                         region.Regions.RemoveAt(i);
                                         result = true;
                                     }
+#nullable enable
                                 }
                             }
                         }
@@ -602,6 +622,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         {
             Debug.Assert(subRegion.Kind != ControlFlowRegionKind.Root);
             Debug.Assert(subRegion.Enclosing != null);
+#nullable restore
             RegionBuilder enclosing = subRegion.Enclosing;
 
 #if DEBUG
@@ -649,6 +670,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             subRegion.Free();
         }
+
+#nullable enable
 
         /// <summary>
         /// Do a pass to eliminate blocks without statements that can be merged with predecessor(s).
@@ -742,6 +765,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                             {
                                 // Nothing useful is happening in this finally, let's remove it
                                 Debug.Assert(currentRegion.Enclosing != null);
+#nullable restore
                                 RegionBuilder tryAndFinally = currentRegion.Enclosing;
                                 Debug.Assert(tryAndFinally.Kind == ControlFlowRegionKind.TryAndFinally);
                                 Debug.Assert(tryAndFinally.Regions!.Count == 2);
@@ -787,6 +811,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                             // It is safe to drop an unreachable empty basic block
                             if (block.HasPredecessors)
                             {
+#nullable enable
                                 BasicBlockBuilder? predecessor = block.GetSingletonPredecessorOrDefault();
 
                                 if (predecessor == null)
@@ -843,6 +868,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                                 {
                                     // Let's drop an unreachable compiler generated return that VB optimistically adds at the end of a method body
                                     Debug.Assert(next.Destination != null);
+#nullable restore
                                     if (next.Destination.Kind != BasicBlockKind.Exit ||
                                         !value.IsImplicit ||
                                         value.Kind != OperationKind.LocalReference ||
@@ -850,6 +876,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                                     {
                                         continue;
                                     }
+#nullable enable
                                 }
                                 else
                                 {
@@ -1025,6 +1052,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             void removeBlock(BasicBlockBuilder block, RegionBuilder region)
             {
                 Debug.Assert(!region.IsEmpty);
+#nullable restore
                 Debug.Assert(region.FirstBlock.Ordinal >= 0);
                 Debug.Assert(region.FirstBlock.Ordinal <= region.LastBlock.Ordinal);
                 Debug.Assert(region.FirstBlock.Ordinal <= block.Ordinal);
@@ -1056,6 +1084,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         enclosing = enclosing.Enclosing;
                     }
                 }
+
+#nullable enable
 
                 Debug.Assert(region.FirstBlock.Ordinal <= region.LastBlock.Ordinal);
 
@@ -1290,6 +1320,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                 if (prevBlock.FallThrough.Destination == null)
                 {
+#nullable restore
                     LinkBlocks(prevBlock, block);
                 }
             }
@@ -1334,6 +1365,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             RegionBuilder enclosed = _currentRegion;
 
+#nullable enable
+
 #if DEBUG
             // We shouldn't be leaving regions that are still associated with stack frames
             foreach ((EvalStackFrame? frameOpt, IOperation? operationOpt) in _evalStack)
@@ -1348,7 +1381,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 #endif
             _currentRegion = _currentRegion.Enclosing;
             Debug.Assert(enclosed.LastBlock != null);
+#nullable restore
             _currentRegion?.ExtendToInclude(enclosed.LastBlock);
+#nullable enable
             _currentBasicBlock = null;
         }
 
@@ -1608,6 +1643,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                     AppendNewBlock(whenFalse);
 
+#nullable restore
                     result = VisitRequired(operation.WhenFalse);
                 }
                 else if (operation.WhenFalse is IConversionOperation whenFalseConversion && whenFalseConversion.Operand.Kind == OperationKind.Throw)
@@ -1645,6 +1681,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 return result;
             }
         }
+
+#nullable enable
 
         private void VisitAndCapture(IOperation operation, int captureId)
         {
@@ -1723,6 +1761,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             Debug.Assert(frame == frameOpt);
             Debug.Assert(operationOpt == null);
 
+#nullable restore
             if (frame.RegionBuilderOpt != null && mergeNestedRegions)
             {
                 while (_currentRegion != frame.RegionBuilderOpt)
@@ -1747,6 +1786,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     MergeSubRegionAndFree(toMerge, _blocks, _regionMap, canHaveEmptyRegion: true);
                 }
             }
+#nullable enable
         }
 
         private void PopStackFrameAndLeaveRegion(EvalStackFrame frame)
@@ -1788,7 +1828,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         {
             Debug.Assert(owner != null);
             int captureId = _captureIdDispenser.GetNextId();
+#nullable restore
             owner.AddCaptureId(captureId);
+#nullable enable
             return captureId;
         }
 
@@ -1828,10 +1870,12 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 Debug.Assert(operationOpt != null);
 
                 // Declarations cannot have control flow, so we don't need to spill them.
+#nullable restore
                 if (operationOpt.Kind != OperationKind.FlowCaptureReference
                     && operationOpt.Kind != OperationKind.DeclarationExpression
                     && operationOpt.Kind != OperationKind.Discard
                     && operationOpt.Kind != OperationKind.OmittedArgument)
+#nullable enable
                 {
                     // Here we need to decide what region should own the new capture. Due to the spilling operations occurred before,
                     // we currently might be in a region that is not associated with the stack frame we are in, but it is one of its
@@ -1842,7 +1886,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     // Obviously, we shouldn’t be leaving the region associated with the frame.
                     EvalStackFrame? currentFrame = _evalStack[currentFrameIndex].frameOpt;
                     Debug.Assert(currentFrame != null);
-                    RegionBuilder? currentSpillRegion = currentFrame.RegionBuilderOpt;
+                    RegionBuilder? currentSpillRegion = currentFrame?.RegionBuilderOpt;
                     Debug.Assert(currentSpillRegion != null);
 
                     if (_currentRegion != currentSpillRegion)
@@ -1874,6 +1918,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         RegionBuilder candidate = CurrentRegionRequired;
                         do
                         {
+#nullable restore
                             Debug.Assert(candidate.IsStackSpillRegion);
                             if (candidate.HasCaptureIds && candidate.CaptureIds.Any((id, set) => set.Contains(id), idsStillOnTheStack))
                             {
@@ -1890,6 +1935,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     }
 
                     int captureId = GetNextCaptureId(currentSpillRegion);
+
+#nullable enable
 
                     AddStatement(new FlowCaptureOperation(captureId, operationOpt.Syntax, operationOpt)
 #if DEBUG
@@ -1953,7 +2000,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             Debug.Assert(frameOpt == null);
             Debug.Assert(operationOpt != null);
 
+#nullable restore
             return operationOpt;
+#nullable enable
         }
 
         private IOperation PeekOperand()
@@ -1964,7 +2013,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             Debug.Assert(frameOpt == null);
             Debug.Assert(operationOpt != null);
 
+#nullable restore
             return operationOpt;
+#nullable enable
         }
 
         private void VisitAndPushArray<T>(ImmutableArray<T> array, Func<T, IOperation>? unwrapper = null) where T : IOperation
@@ -2332,8 +2383,10 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             condition = new FlowCaptureReferenceOperation(resultId, binOp.Syntax, booleanType, constantValue: null);
             Debug.Assert(binOp.Type is not null);
+#nullable restore
             return new ConversionOperation(condition, _compilation.ClassifyConvertibleConversion(condition, binOp.Type, out _), isTryCast: false, isChecked: false,
                                            semanticModel: null, binOp.Syntax, binOp.Type, binOp.GetConstantValue(), isImplicit: true);
+#nullable enable
         }
 
         private IOperation CreateConversion(IOperation operand, ITypeSymbol type)
@@ -2405,7 +2458,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             if (!ITypeSymbolHelpers.IsDynamicType(left.Type))
             {
+#nullable restore
                 resultFromLeft = CreateConversion(resultFromLeft, binOp.Type);
+#nullable enable
             }
 
             AddStatement(new FlowCaptureOperation(resultId, binOp.Syntax, resultFromLeft));
@@ -2707,9 +2762,11 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         var conditional = (IConditionalOperation)condition;
 
                         Debug.Assert(conditional.WhenFalse is not null);
+#nullable restore
                         if (ITypeSymbolHelpers.IsBooleanType(conditional.WhenTrue.Type) &&
                             ITypeSymbolHelpers.IsBooleanType(conditional.WhenFalse.Type))
                         {
+#nullable enable
                             BasicBlockBuilder? whenFalse = null;
                             VisitConditionalBranchCore(conditional.Condition, ref whenFalse, jumpIfTrue: false);
                             VisitConditionalBranchCore(conditional.WhenTrue, ref dest, jumpIfTrue);
@@ -2739,7 +2796,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                             IOperation convertedTestExpression = NullCheckAndConvertCoalesceValue(coalesce, whenNull);
 
-                            dest = dest ?? new BasicBlockBuilder(BasicBlockKind.Block);
+                            dest ??= new BasicBlockBuilder(BasicBlockKind.Block);
                             ConditionalBranch(convertedTestExpression, jumpIfTrue, dest);
                             _currentBasicBlock = null;
 
@@ -2765,9 +2822,10 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     {
                         IOperation? rewrittenThrow = base.Visit(conversion.Operand, null);
                         Debug.Assert(rewrittenThrow != null);
+#nullable restore
                         Debug.Assert(rewrittenThrow.Kind == OperationKind.None);
                         Debug.Assert(rewrittenThrow.Children.IsEmpty());
-                        dest = dest ?? new BasicBlockBuilder(BasicBlockKind.Block);
+                        dest ??= new BasicBlockBuilder(BasicBlockKind.Block);
                         return;
                     }
                     goto default;
@@ -2777,7 +2835,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         EvalStackFrame frame = PushStackFrame();
 
                         condition = VisitRequired(condition);
-                        dest = dest ?? new BasicBlockBuilder(BasicBlockKind.Block);
+                        dest ??= new BasicBlockBuilder(BasicBlockKind.Block);
                         ConditionalBranch(condition, jumpIfTrue, dest);
                         _currentBasicBlock = null;
 
@@ -2813,6 +2871,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             IOperation operationValue = operation.Value;
             SyntaxNode valueSyntax = operationValue.Syntax;
+#nullable enable
             ITypeSymbol? valueTypeOpt = operationValue.Type;
 
             PushOperand(VisitRequired(operationValue));
@@ -2894,10 +2953,15 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 AppendNewBlock(whenNull);
 
                 Debug.Assert(conversion is not null);
-                IOperation? rewrittenThrow = base.Visit(conversion.Operand, null);
+
+                IOperation? rewrittenThrow =
+#nullable restore
+                                             base.Visit(conversion.Operand, null);
+
                 Debug.Assert(rewrittenThrow != null);
                 Debug.Assert(rewrittenThrow.Kind == OperationKind.None);
                 Debug.Assert(rewrittenThrow.Children.IsEmpty());
+#nullable enable
             }
             else
             {
@@ -2929,6 +2993,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             // If we're in a statement context, we elide the capture of the result of the assignment, as it will
             // just be wrapped in an expression statement that isn't used anywhere and isn't observed by anything.
             Debug.Assert(operation.Parent != null);
+#nullable restore
             bool isStatement = _currentStatement == operation || operation.Parent.Kind == OperationKind.ExpressionStatement;
             Debug.Assert(captureIdForResult == null || !isStatement);
 
@@ -3000,6 +3065,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 // after:
 
                 int intermediateResult = -1;
+#nullable enable
                 EvalStackFrame? intermediateFrame = null;
 
                 if (!isStatement)
@@ -3007,6 +3073,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     intermediateFrame = PushStackFrame();
                     SpillEvalStack();
                     Debug.Assert(intermediateFrame.RegionBuilderOpt != null);
+#nullable restore
                     intermediateResult = GetNextCaptureId(intermediateFrame.RegionBuilderOpt);
                     AddStatement(
                         new FlowCaptureOperation(intermediateResult,
@@ -3113,6 +3180,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             return new BasicBlockBuilder.Branch() { Destination = destination, Kind = ControlFlowBranchSemantics.Regular };
         }
 
+#nullable enable
+
         private static IOperation MakeInvalidOperation(ITypeSymbol? type, IOperation child)
         {
             return new InvalidOperation(ImmutableArray.Create<IOperation>(child),
@@ -3163,6 +3232,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             if (method != null)
             {
+#nullable restore
                 foreach (ISymbol candidate in valueType.GetMembers(method.Name))
                 {
                     if (candidate.OriginalDefinition.Equals(method))
@@ -3184,6 +3254,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             return TryCallNullableMember(value, nullableMember) ??
                    MakeInvalidOperation(ITypeSymbolHelpers.GetNullableUnderlyingType(value.Type), value);
         }
+
+#nullable enable
 
         public override IOperation? VisitConditionalAccess(IConditionalAccessOperation operation, int? captureIdForResult)
         {
@@ -3241,6 +3313,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 if (_currentStatement != operation)
                 {
                     Debug.Assert(_currentStatement is not null);
+#nullable restore
                     var expressionStatement = (IExpressionStatementOperation)_currentStatement;
                     result = new ExpressionStatementOperation(result, semanticModel: null, expressionStatement.Syntax,
                                                               IsImplicit(expressionStatement));
@@ -3352,6 +3425,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             return VisitConditionalAccessTestExpression(testExpression);
         }
 
+#nullable enable
+
         private IOperation VisitConditionalAccessTestExpression(IOperation testExpression)
         {
             Debug.Assert(!_currentConditionalAccessTracker.IsDefault);
@@ -3425,6 +3500,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 EnterRegion(locals);
 
                 Debug.Assert(operation.Condition is not null);
+#nullable restore
                 VisitConditionalBranch(operation.Condition, ref @break, jumpIfTrue: operation.ConditionIsUntil);
 
                 VisitStatement(operation.Body);
@@ -3470,6 +3546,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             AppendNewBlock(@break);
             return FinishVisitingStatement(operation);
         }
+
+#nullable enable
 
         public override IOperation? VisitTry(ITryOperation operation, int? captureIdForResult)
         {
@@ -3537,6 +3615,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         LeaveRegion();
 
                         Debug.Assert(!filterRegion.IsEmpty);
+#nullable restore
                         Debug.Assert(filterRegion.LastBlock.FallThrough.Destination == null);
                         Debug.Assert(!filterRegion.FirstBlock.HasPredecessors);
                     }
@@ -3609,6 +3688,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             return FinishVisitingStatement(operation);
         }
+
+#nullable enable
 
         private void AddExceptionStore(ITypeSymbol exceptionType, IOperation? exceptionDeclarationOrExpression)
         {
@@ -4118,6 +4199,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 // Monitor.Enter($lock, ref $lockTaken);
                 Debug.Assert(lockStatement.LockTakenSymbol is not null);
                 Debug.Assert(enterMethod is not null);
+#nullable restore
                 lockTaken = new LocalReferenceOperation(lockStatement.LockTakenSymbol, isDeclaration: true, semanticModel: null, lockedValue.Syntax,
                                                          lockStatement.LockTakenSymbol.Type, constantValue: null, isImplicit: true);
                 AddStatement(new InvocationOperation(enterMethod, instance: null, isVirtual: false,
@@ -4164,6 +4246,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 ConditionalBranch(condition, jumpIfTrue: false, endOfFinally);
                 _currentBasicBlock = null;
             }
+
+#nullable enable
 
             // Monitor.Exit($lock);
             var exitMethod = (IMethodSymbol?)_compilation.CommonGetWellKnownTypeMember(WellKnownMember.System_Threading_Monitor__Exit)?.GetISymbol();
@@ -4281,6 +4365,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             if (info?.NeedsDispose == true)
             {
                 var afterTryFinally = new BasicBlockBuilder(BasicBlockKind.Block);
+#nullable restore
                 Debug.Assert(_currentRegion.Kind == ControlFlowRegionKind.Try);
                 UnconditionalBranch(afterTryFinally);
 
@@ -4308,6 +4393,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             LeaveRegion();
 
             return FinishVisitingStatement(operation);
+
+#nullable enable
 
             IOperation applyConversion(IConvertibleConversion? conversionOpt, IOperation operand, ITypeSymbol? targetType)
             {
@@ -4504,11 +4591,14 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             {
                 Debug.Assert(isObjectLoop && loopObject is not null);
                 bool isInitialization = (helper == WellKnownMember.Microsoft_VisualBasic_CompilerServices_ObjectFlowControl_ForLoopControl__ForLoopInitObj);
+#nullable restore
                 var loopObjectReference = new LocalReferenceOperation(loopObject,
                                                                        isDeclaration: isInitialization,
                                                                        semanticModel: null,
                                                                        operation.LoopControlVariable.Syntax, loopObject.Type,
                                                                        constantValue: null, isImplicit: true);
+
+#nullable enable
 
                 var method = (IMethodSymbol?)_compilation.CommonGetWellKnownTypeMember(helper)?.GetISymbol();
                 int parametersCount = WellKnownMembers.GetDescriptor(helper).ParametersCount;
@@ -5118,6 +5208,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     if (isNullable)
                     {
                         Debug.Assert(controlVariableReferenceForAssignment.Type != null);
+#nullable restore
                         increment = MakeNullable(increment, controlVariableReferenceForAssignment.Type);
                     }
 
@@ -5165,6 +5256,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         internal override IOperation VisitAggregateQuery(IAggregateQueryOperation operation, int? captureIdForResult)
         {
             SpillEvalStack();
+
+#nullable enable
 
             IOperation? previousAggregationGroup = _currentAggregationGroup;
             _currentAggregationGroup = VisitAndCapture(operation.Group);
@@ -5277,6 +5370,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                             if (isLifted)
                             {
+#nullable restore
                                 if (!leftIsNullable)
                                 {
                                     if (leftOperand.Type != null)
@@ -5291,6 +5385,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                                     rightOperand = MakeNullable(rightOperand, operation.Value.Type);
                                 }
                             }
+
+#nullable enable
 
                             condition = new BinaryOperation(BinaryOperatorKind.Equals,
                                                                      leftOperand,
@@ -5589,7 +5685,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             // We can't use the IdentifierToken as the syntax for the local reference, so we use the
             // entire declarator as the node
             var localRef = new LocalReferenceOperation(localSymbol, isDeclaration: true, semanticModel: null, declarator.Syntax, localSymbol.Type, constantValue: null, isImplicit: true);
+#nullable restore
             var assignment = new SimpleAssignmentOperation(isRef: localSymbol.IsRef, localRef, initializer, semanticModel: null, assignmentSyntax, localRef.Type, constantValue: null, isImplicit: true);
+#nullable enable
             AddStatement(assignment);
 
             PopStackFrameAndLeaveRegion(frame);
@@ -5964,6 +6062,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             ImplicitInstanceInfo savedCurrentImplicitInstance = _currentImplicitInstance;
             Debug.Assert(operation.Type is not null);
+#nullable restore
             _currentImplicitInstance = new ImplicitInstanceInfo((INamedTypeSymbol)operation.Type);
             Debug.Assert(_currentImplicitInstance.AnonymousTypePropertyValues is not null);
 
@@ -6021,17 +6120,21 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             }
         }
 
+#nullable enable
+
         public override IOperation? VisitLocalFunction(ILocalFunctionOperation operation, int? captureIdForResult)
         {
             StartVisitingStatement(operation);
 
             RegionBuilder owner = CurrentRegionRequired;
 
+#nullable restore
             while (owner.IsStackSpillRegion)
             {
                 Debug.Assert(owner.Enclosing != null);
                 owner = owner.Enclosing;
             }
+#nullable enable
 
             owner.Add(operation.Symbol, operation);
             return FinishVisitingStatement(operation);
@@ -6275,11 +6378,13 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             // We do this to keep the graph sane, so that users don't have to track a tuple captured via flow control when it's not really
             // the tuple that's been captured, it's the operands to the tuple.
             EvalStackFrame frame = PushStackFrame();
+#nullable restore
             PushTargetAndUnwrapTupleIfNecessary(left);
             IOperation visitedRight = VisitRequired(right);
             IOperation visitedLeft = PopTargetAndWrapTupleIfNecessary(left);
             PopStackFrame(frame);
             return (visitedLeft, visitedRight);
+#nullable enable
         }
 
         public override IOperation VisitTuple(ITupleOperation operation, int? captureIdForResult)
@@ -6428,7 +6533,10 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 operation.Property.ContainingType == _currentImplicitInstance.AnonymousType)
             {
                 Debug.Assert(_currentImplicitInstance.AnonymousTypePropertyValues is not null);
-                if (_currentImplicitInstance.AnonymousTypePropertyValues.TryGetValue(operation.Property, out IOperation? captured))
+#nullable restore
+                if (_currentImplicitInstance.AnonymousTypePropertyValues.TryGetValue(operation.Property,
+#nullable enable
+                                                                                     out IOperation? captured))
                 {
                     return captured is IFlowCaptureReferenceOperation reference ?
                                GetCaptureReference(reference.Id.Value, operation) :
@@ -6595,7 +6703,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             {
                 Debug.Assert(operation.EventReference != null);
 
+#nullable restore
                 PushOperand(VisitRequired(operation.EventReference));
+#nullable enable
                 visitedHandler = VisitRequired(operation.HandlerValue);
                 visitedEventReference = PopOperand();
             }

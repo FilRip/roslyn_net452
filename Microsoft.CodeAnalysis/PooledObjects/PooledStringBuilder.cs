@@ -5,6 +5,8 @@
 using System.Diagnostics;
 using System.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.PooledObjects
 {
     /// <summary>

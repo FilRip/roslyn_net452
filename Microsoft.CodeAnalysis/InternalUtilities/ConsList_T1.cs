@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     /// <summary>

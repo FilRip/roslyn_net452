@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public readonly partial struct SeparatedSyntaxList<TNode> : IEquatable<SeparatedSyntaxList<TNode>>, IReadOnlyList<TNode> where TNode : SyntaxNode
@@ -393,6 +395,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
+#nullable restore
             var nodesToInsertWithSeparators = new List<SyntaxNodeOrToken>();
             foreach (var item in nodes)
             {

@@ -5,6 +5,8 @@
 using System.IO;
 using System.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     internal abstract class SourceTextWriter : TextWriter

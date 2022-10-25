@@ -4,6 +4,8 @@
 
 using System;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
     // The null-suppression uses in this type are covered under the following issue to

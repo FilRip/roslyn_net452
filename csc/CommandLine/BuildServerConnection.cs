@@ -189,7 +189,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 logger.Log("Attempt to connect named pipe '{0}'", (object)pipeName);
                 try
                 {
-                    await Task.Run(() => pipeStream.Connect(timeoutMs)).ConfigureAwait(false);
+                    await Task.Run(() => pipeStream.Connect(timeoutMs), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception ex) when (ex is IOException || ex is TimeoutException)
                 {

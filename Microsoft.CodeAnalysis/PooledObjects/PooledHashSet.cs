@@ -5,6 +5,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.PooledObjects
 {
     // HashSet that can be recycled via an object pool

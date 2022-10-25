@@ -11,8 +11,8 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 {
     internal class SynchronizedList<T> : IList<T>
     {
-        private readonly object _guard = new object();
-        private readonly List<T> _list = new List<T>();
+        private readonly object _guard = new();
+        private readonly List<T> _list = new();
 
         public T this[int index]
         {

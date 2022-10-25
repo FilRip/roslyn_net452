@@ -4,6 +4,8 @@
 
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static partial class ISymbolExtensions
@@ -22,6 +24,7 @@ namespace Microsoft.CodeAnalysis
 
             var reducedFrom = method.ReducedFrom;
             Debug.Assert(reducedFrom is object);
+#nullable restore
             if (!reducedFrom.IsGenericMethod)
             {
                 // not generic, no inferences were made
@@ -75,6 +78,7 @@ namespace Microsoft.CodeAnalysis
             return field.CorrespondingTupleField is object;
         }
 
+#nullable enable
         /// <summary>
         /// Return the name of the field if the field is an explicitly named tuple element.
         /// Otherwise returns null.

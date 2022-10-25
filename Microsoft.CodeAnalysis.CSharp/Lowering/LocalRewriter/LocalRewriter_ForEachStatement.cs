@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class LocalRewriter
@@ -35,7 +37,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression collectionExpression = GetUnconvertedCollectionExpression(node);
             TypeSymbol? nodeExpressionType = collectionExpression.Type;
+#nullable restore
             if (nodeExpressionType.Kind == SymbolKind.ArrayType)
+#nullable enable
             {
                 ArrayTypeSymbol arrayType = (ArrayTypeSymbol)nodeExpressionType;
                 if (arrayType.IsSZArray)
@@ -111,6 +115,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression rewrittenExpression = VisitExpression(collectionExpression);
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
 
+#nullable restore
             MethodArgumentInfo getEnumeratorInfo = enumeratorInfo.GetEnumeratorInfo;
             TypeSymbol enumeratorType = getEnumeratorInfo.Method.ReturnType;
             TypeSymbol elementType = enumeratorInfo.ElementType;
@@ -232,11 +237,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (enumeratorInfo.IsAsync)
             {
                 disposeMethod = (MethodSymbol)Binder.GetWellKnownTypeMember(_compilation, WellKnownMember.System_IAsyncDisposable__DisposeAsync, _diagnostics, syntax: forEachSyntax);
-                return (object)disposeMethod != null;
+                return disposeMethod is object;
             }
 
             return Binder.TryGetSpecialTypeMember(_compilation, SpecialMember.System_IDisposable__Dispose, forEachSyntax, _diagnostics, out disposeMethod);
         }
+
+#nullable enable
 
         /// <summary>
         /// There are three possible cases where we need disposal:
@@ -267,6 +274,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 idisposableTypeSymbol = disposeMethod.ContainingType;
+#nullable restore
                 var conversions = new TypeConversions(_factory.CurrentFunction.ContainingAssembly.CorLibrary);
 
                 CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo();
@@ -299,6 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     receiver = boundEnumeratorVar;
                 }
+#nullable enable
 
                 // ((IDisposable)e).Dispose() or e.Dispose() or await ((IAsyncDisposable)e).DisposeAsync() or await e.DisposeAsync()
                 disposeCall = MakeCallWithNoExplicitArgument(disposeInfo, forEachSyntax, receiver);
@@ -364,11 +373,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 LocalSymbol disposableVar = _factory.SynthesizedLocal(idisposableTypeSymbol);
 
                 // Reference to d.
+#nullable restore
                 BoundLocal boundDisposableVar = MakeBoundLocal(forEachSyntax, disposableVar, idisposableTypeSymbol);
 
-                BoundTypeExpression boundIDisposableTypeExpr = new BoundTypeExpression(forEachSyntax,
+                BoundTypeExpression boundIDisposableTypeExpr = new(forEachSyntax,
                     aliasOpt: null,
                     type: idisposableTypeSymbol);
+#nullable enable
 
                 // e as IDisposable
                 BoundExpression disposableVarInitValue = new BoundAsOperator(forEachSyntax,
@@ -449,7 +460,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="convertedReceiverType">Type of the receiver after applying the conversion.</param>
         private BoundExpression ConvertReceiverForInvocation(CSharpSyntaxNode syntax, BoundExpression receiver, MethodSymbol method, Conversion receiverConversion, TypeSymbol convertedReceiverType)
         {
+#nullable restore
             if (!receiver.Type.IsReferenceType && method.ContainingType.IsInterface)
+#nullable enable
             {
 
                 // NOTE: The spec says that disposing of a struct enumerator won't cause any
@@ -538,7 +551,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             InstrumentForEachStatementCollectionVarDeclaration(node, ref arrayVarDecl);
 
             // Reference to a.
+#nullable restore
             BoundLocal boundArrayVar = MakeBoundLocal(forEachSyntax, collectionTemp, collectionType);
+#nullable enable
 
             // int p
             LocalSymbol positionVar = _factory.SynthesizedLocal(intType, syntax: forEachSyntax, kind: SynthesizedLocalKind.ForEachArrayIndex);
@@ -596,7 +611,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             //     /*node.Body*/
             // }
 
+#nullable restore
             BoundStatement loopBody = CreateBlockDeclaringIterationVariables(iterationVariables, iterationVariableDecl, rewrittenBody, forEachSyntax);
+#nullable enable
 
             // for (Collection a = /*node.Expression*/, int p = 0; p < a.Length; p = p + 1) {
             //     V v = (V)a[p];   /* OR */   (D1 d1, ...) = (V)a[p];
@@ -724,12 +741,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression collectionExpression = GetUnconvertedCollectionExpression(node);
 
+#nullable restore
             ArrayTypeSymbol arrayType = (ArrayTypeSymbol)collectionExpression.Type;
 
             TypeSymbol intType = _compilation.GetSpecialType(SpecialType.System_Int32);
             TypeSymbol boolType = _compilation.GetSpecialType(SpecialType.System_Boolean);
 
             BoundExpression rewrittenExpression = VisitExpression(collectionExpression);
+#nullable enable
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
 
             // A[] a
@@ -741,6 +760,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             InstrumentForEachStatementCollectionVarDeclaration(node, ref arrayVarDecl);
 
             // Reference to a.
+#nullable restore
             BoundLocal boundArrayVar = MakeBoundLocal(forEachSyntax, arrayVar, arrayType);
 
             // int p
@@ -859,6 +879,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             MethodSymbol getUpperBoundMethod = UnsafeGetSpecialTypeMethod(forEachSyntax, SpecialMember.System_Array__GetUpperBound);
 
             BoundExpression rewrittenExpression = VisitExpression(collectionExpression);
+#nullable enable
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
 
             // A[...] a
@@ -929,7 +950,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             //     /* node.Body */
             // }
 
+#nullable restore
             BoundStatement innermostLoopBody = CreateBlockDeclaringIterationVariables(iterationVariables, iterationVarDecl, rewrittenBody, forEachSyntax);
+#nullable enable
 
             // work from most-nested to least-nested
             // for (int p_0 = a.GetLowerBound(0); p_0 <= q_0; p_0 = p_0 + 1)
@@ -1002,6 +1025,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundStatement result = new BoundBlock(
                 forEachSyntax,
                 ImmutableArray.Create(arrayVar).Concat(upperVar.AsImmutableOrNull()),
+#nullable restore
                 ImmutableArray.Create(arrayVarDecl).Concat(upperVarDecl.AsImmutableOrNull()).Add(forLoop));
 
             InstrumentForEachStatement(node, ref result);
@@ -1069,6 +1093,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         type: intType)));
         }
 
+#nullable enable
         private void InstrumentForEachStatementCollectionVarDeclaration(BoundForEachStatement original, [NotNullIfNotNull("collectionVarDecl")] ref BoundStatement? collectionVarDecl)
         {
             if (this.Instrument)
@@ -1113,7 +1138,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundStatement MakeWhileTrueLoop(BoundForEachStatement loop, BoundBlock body)
         {
             SyntaxNode syntax = loop.Syntax;
-            GeneratedLabelSymbol startLabel = new GeneratedLabelSymbol("still-true");
+            GeneratedLabelSymbol startLabel = new("still-true");
             BoundStatement startLabelStatement = new BoundLabelStatement(syntax, startLabel);
 
             if (this.Instrument)

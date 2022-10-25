@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed class LoweredDynamicOperationFactory
@@ -200,7 +202,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             _factory.Syntax = loweredReceiver.Syntax;
 
             CSharpBinderFlags binderFlags = 0;
+#nullable restore
             if (hasImplicitReceiver && _factory.TopLevelMethod.RequiresInstanceReceiver)
+#nullable enable
             {
                 binderFlags |= CSharpBinderFlags.InvokeSimpleName;
             }
@@ -537,10 +541,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         //     GetS().M(d); // becomes Site(GetS(), d) without ref on the target obj arg
         internal static RefKind GetReceiverRefKind(BoundExpression loweredReceiver)
         {
+#nullable restore
             if (!loweredReceiver.Type.IsValueType)
             {
                 return RefKind.None;
             }
+#nullable enable
 
             switch (loweredReceiver.Kind)
             {
@@ -686,9 +692,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static NamedTypeSymbol CreateCallSiteContainer(SyntheticBoundNodeFactory factory, int methodOrdinal, int localFunctionOrdinal)
         {
-
             // We don't reuse call-sites during EnC. Each edit creates a new container and sites.
+#nullable restore
             int generation = factory.CompilationState.ModuleBuilderOpt.CurrentGenerationOrdinal;
+#nullable enable
+
             var containerName = GeneratedNames.MakeDynamicCallSiteContainerName(methodOrdinal, localFunctionOrdinal, generation);
 
             var synthesizedContainer = new DynamicSiteContainer(containerName, factory.TopLevelMethod, factory.CurrentFunction);
@@ -711,7 +719,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             callSiteType = callSiteType.Construct(new[] { delegateTypeOverContainerTypeParameters });
             var field = new SynthesizedFieldSymbol(containerDefinition, callSiteType, fieldName, isPublic: true, isStatic: true);
             _factory.AddField(containerDefinition, field);
+#nullable restore
             return _currentDynamicCallSiteContainer.IsGenericType ? field.AsMember(_currentDynamicCallSiteContainer) : field;
+#nullable enable
         }
 
         internal NamedTypeSymbol? GetDelegateType(
@@ -778,7 +788,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             int parameterCount = delegateSignature.Length - (returnsVoid ? 0 : 1);
+#nullable restore
             int generation = _factory.CompilationState.ModuleBuilderOpt.CurrentGenerationOrdinal;
+#nullable enable
             var synthesizedType = _factory.Compilation.AnonymousTypeManager.SynthesizeDelegate(parameterCount, byRefs, returnsVoid, generation);
             return synthesizedType.Construct(delegateSignature);
         }

@@ -17,6 +17,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>
@@ -180,6 +182,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable restore
+
         public void AddNestedType(NamedTypeSymbol nestedType)
         {
             // It is only valid to call this on a bound node factory with a module builder.
@@ -255,6 +259,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return new BoundBaseReference(Syntax, baseType) { WasCompilerGenerated = true };
         }
+
+#nullable enable
 
         public BoundBadExpression BadExpression(TypeSymbol type)
         {
@@ -396,7 +402,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundAssignmentOperator AssignmentExpression(BoundExpression left, BoundExpression right, bool isRef = false)
         {
+#nullable restore
             return new BoundAssignmentOperator(Syntax, left, right, left.Type, isRef: isRef) { WasCompilerGenerated = true };
+#nullable enable
         }
 
         public BoundBlock Block()
@@ -466,6 +474,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #else
                     CompoundUseSiteInfo<AssemblySymbol>.Discarded;
 #endif 
+#nullable restore
                 var conversion = Compilation.Conversions.ClassifyConversionFromType(expression.Type, CurrentFunction.ReturnType, ref useSiteInfo);
                 if (conversion.Kind != ConversionKind.Identity)
                 {
@@ -486,6 +495,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             CompilationState.AddSynthesizedMethod(CurrentFunction, body);
             CurrentFunction = null;
         }
+
+#nullable enable
 
         public LocalSymbol SynthesizedLocal(
             TypeSymbol type,
@@ -726,13 +737,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression ComplexConditionalReceiver(BoundExpression valueTypeReceiver, BoundExpression referenceTypeReceiver)
         {
+#nullable restore
             return new BoundComplexConditionalReceiver(Syntax, valueTypeReceiver, referenceTypeReceiver, valueTypeReceiver.Type) { WasCompilerGenerated = true };
         }
 
         public BoundExpression Coalesce(BoundExpression left, BoundExpression right)
         {
-
             return new BoundNullCoalescingOperator(Syntax, left, right, Conversion.Identity, BoundNullCoalescingOperatorResultKind.LeftType, left.Type) { WasCompilerGenerated = true };
+#nullable enable
         }
 
         public BoundStatement If(BoundExpression condition, BoundStatement thenClause, BoundStatement? elseClauseOpt = null)
@@ -840,6 +852,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public BoundSequence Sequence(BoundExpression[] sideEffects, BoundExpression result, TypeSymbol? type = null)
         {
             var resultType = type ?? result.Type;
+#nullable restore
             return new BoundSequence(Syntax, ImmutableArray<LocalSymbol>.Empty, sideEffects.AsImmutableOrNull(), result, resultType) { WasCompilerGenerated = true };
         }
 
@@ -940,9 +953,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new BoundLabelStatement(Syntax, label) { WasCompilerGenerated = true };
         }
 
+#nullable enable
+
         public BoundLiteral Literal(Boolean value)
         {
-            return new BoundLiteral(Syntax, ConstantValue.Create(value), SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Boolean)) { WasCompilerGenerated = true };
+            return new BoundLiteral(Syntax, ConstantValue.Create(value), SpecialType(CodeAnalysis.SpecialType.System_Boolean)) { WasCompilerGenerated = true };
         }
 
         public BoundLiteral Literal(string? value)
@@ -953,7 +968,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundLiteral StringLiteral(ConstantValue stringConst)
         {
-            return new BoundLiteral(Syntax, stringConst, SpecialType(Microsoft.CodeAnalysis.SpecialType.System_String)) { WasCompilerGenerated = true };
+            return new BoundLiteral(Syntax, stringConst, SpecialType(CodeAnalysis.SpecialType.System_String)) { WasCompilerGenerated = true };
         }
 
         public BoundLiteral StringLiteral(String stringValue)
@@ -963,11 +978,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundArrayLength ArrayLength(BoundExpression array)
         {
-            return new BoundArrayLength(Syntax, array, SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Int32));
+            return new BoundArrayLength(Syntax, array, SpecialType(CodeAnalysis.SpecialType.System_Int32));
         }
 
         public BoundArrayAccess ArrayAccessFirstElement(BoundExpression array)
         {
+#nullable restore
             int rank = ((ArrayTypeSymbol)array.Type).Rank;
             ImmutableArray<BoundExpression> firstElementIndices = ArrayBuilder<BoundExpression>.GetInstance(rank, Literal(0)).ToImmutableAndFree();
             return ArrayAccess(array, firstElementIndices);
@@ -1000,6 +1016,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return new BoundSequencePointWithSpan(syntax, statement, span);
         }
+
+#nullable enable
 
         public BoundStatement HiddenSequencePoint(BoundStatement? statementOpt = null)
         {
@@ -1061,7 +1079,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression TypeofDynamicOperationContextType()
         {
+#nullable restore
             return Typeof(this.CompilationState.DynamicOperationContextType);
+#nullable enable
         }
 
         public BoundExpression Sizeof(TypeSymbol type)
@@ -1212,7 +1232,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // A conversion to unbox a nullable value is produced when binding a pattern-matching
                 // operation from an operand of type T? to a pattern of type T.
+#nullable restore
                 return this.Call(arg, this.SpecialMethod(CodeAnalysis.SpecialMember.System_Nullable_T_get_Value).AsMember((NamedTypeSymbol)arg.Type));
+#nullable enable
             }
 
             return new BoundConversion(Syntax, arg, conversion, @checked: isChecked, explicitCastInCode: true, conversionGroupOpt: null, null, type) { WasCompilerGenerated = true };
@@ -1321,7 +1343,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal BoundExpression Not(BoundExpression expression)
         {
+#nullable restore
             return new BoundUnaryOperator(expression.Syntax, UnaryOperatorKind.BoolLogicalNegation, expression, null, null, LookupResultKind.Viable, expression.Type);
+#nullable enable
         }
 
         /// <summary>
@@ -1385,6 +1409,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     isPinned: false,
                     refKind: refKind),
                 null,
+#nullable restore
                 type);
 
             store = new BoundAssignmentOperator(

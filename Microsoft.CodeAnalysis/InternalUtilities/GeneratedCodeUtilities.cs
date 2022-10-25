@@ -10,6 +10,8 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class GeneratedCodeUtilities

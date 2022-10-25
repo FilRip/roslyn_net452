@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
     public partial struct SyntaxList<TNode> : IEquatable<SyntaxList<TNode>>

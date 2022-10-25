@@ -215,6 +215,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 Debug.Assert(_lazyPendingMemberSymbolsMap != null, $"{nameof(_lazyPendingMemberSymbolsMap)} was expected to be a non-null value.");
 
+#nullable restore
                 if (_lazyPendingMemberSymbolsMap.TryGetValue(symbol, out var existingDependentSymbols))
                 {
                     if (existingDependentSymbols == null)
@@ -227,6 +228,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         Debug.Assert(existingDependentSymbols.IsSubsetOf(dependentSymbols), $"{nameof(existingDependentSymbols)} was expected to be a subset of {nameof(dependentSymbols)}");
                     }
                 }
+#nullable enable
             }
 
             public void ClearSymbolScopeTask(ISymbol symbol)
@@ -364,6 +366,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                     Debug.Assert(pendingMemberSymbols != null);
 
+#nullable restore
                     var removed = pendingMemberSymbols.Remove(processedMemberSymbol);
 
                     if (pendingMemberSymbols.Count > 0 ||

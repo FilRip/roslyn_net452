@@ -5,6 +5,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static partial class SpecializedCollections

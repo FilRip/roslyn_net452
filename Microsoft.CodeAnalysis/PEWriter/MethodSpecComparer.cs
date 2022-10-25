@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     internal sealed class MethodSpecComparer : IEqualityComparer<IGenericMethodInstanceReference>

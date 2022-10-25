@@ -7,13 +7,17 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class LocalRewriter
     {
         public override BoundNode VisitLiteral(BoundLiteral node)
         {
+#nullable restore
             return MakeLiteral(node.Syntax, node.ConstantValue, node.Type, oldNodeOpt: node);
+#nullable enable
         }
 
         private BoundExpression MakeLiteral(SyntaxNode syntax, ConstantValue constantValue, TypeSymbol? type, BoundLiteral? oldNodeOpt = null)
@@ -56,10 +60,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // If we are building static constructor of System.Decimal, accessing static fields 
                 // would be bad.
                 var curMethod = _factory.CurrentFunction;
+#nullable restore
                 if ((curMethod.MethodKind != MethodKind.SharedConstructor ||
                    curMethod.ContainingType.SpecialType != SpecialType.System_Decimal) &&
                    !_inExpressionLambda)
                 {
+#nullable enable
                     Symbol? useField = null;
 
                     if (value == decimal.Zero)
@@ -127,8 +133,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundExpression MakeDateTimeLiteral(SyntaxNode syntax, ConstantValue constantValue)
         {
 
-            var arguments = new ArrayBuilder<BoundExpression>();
-            arguments.Add(new BoundLiteral(syntax, ConstantValue.Create(constantValue.DateTimeValue.Ticks), _compilation.GetSpecialType(SpecialType.System_Int64)));
+            var arguments = new ArrayBuilder<BoundExpression>()
+            {
+                new BoundLiteral(syntax, ConstantValue.Create(constantValue.DateTimeValue.Ticks), _compilation.GetSpecialType(SpecialType.System_Int64))
+            };
 
             var ctor = (MethodSymbol)_compilation.Assembly.GetSpecialTypeMember(SpecialMember.System_DateTime__CtorInt64);
 

@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis.Operations;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

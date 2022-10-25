@@ -4,6 +4,8 @@
 
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     internal sealed class TypeSpecComparer : IEqualityComparer<ITypeReference>

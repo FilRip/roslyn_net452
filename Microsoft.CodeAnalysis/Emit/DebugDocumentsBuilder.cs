@@ -8,6 +8,8 @@ using System.Collections.Generic;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Emit
 {
     public sealed class DebugDocumentsBuilder
@@ -68,6 +70,7 @@ namespace Microsoft.CodeAnalysis.Emit
             }
 
             var key = (path, basePath);
+#nullable restore
             if (!_normalizedPathsCache.TryGetValue(key, out string normalizedPath))
             {
                 normalizedPath = _resolver.NormalizePath(path, basePath) ?? path;

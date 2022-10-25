@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static class GreenNodeExtensions

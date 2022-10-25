@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class ImmutableArrayExtensions

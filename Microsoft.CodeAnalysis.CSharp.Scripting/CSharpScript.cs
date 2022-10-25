@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <typeparam name="T">The return type of the submission</typeparam>
         /// <exception cref="CompilationErrorException">Specified code has errors.</exception>
-        public static Task<ScriptState<T>> RunAsync<T>(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<ScriptState<T>> RunAsync<T>(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default)
         {
             return Create<T>(code, options, globalsType ?? globals?.GetType()).RunAsync(globals, cancellationToken);
         }
@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting
         /// <param name="globalsType">Type of global object, <paramref name="globals"/>.GetType() is used if not specified.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <exception cref="CompilationErrorException">Specified code has errors.</exception>
-        public static Task<ScriptState<object>> RunAsync(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<ScriptState<object>> RunAsync(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default)
         {
             return RunAsync<object>(code, options, globals, globalsType, cancellationToken);
         }
@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting
         /// <typeparam name="T">The return type of the submission</typeparam>
         /// <return>Returns the value returned by running the script.</return>
         /// <exception cref="CompilationErrorException">Specified code has errors.</exception>
-        public static Task<T> EvaluateAsync<T>(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<T> EvaluateAsync<T>(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default)
         {
             return RunAsync<T>(code, options, globals, globalsType, cancellationToken).GetEvaluationResultAsync();
         }
@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <return>Returns the value returned by running the script.</return>
         /// <exception cref="CompilationErrorException">Specified code has errors.</exception>
-        public static Task<object> EvaluateAsync(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static Task<object> EvaluateAsync(string code, ScriptOptions options = null, object globals = null, Type globalsType = null, CancellationToken cancellationToken = default)
         {
             return EvaluateAsync<object>(code, options, globals, globalsType, cancellationToken);
         }

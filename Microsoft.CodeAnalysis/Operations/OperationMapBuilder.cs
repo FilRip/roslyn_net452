@@ -8,6 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Operations;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static class OperationMapBuilder

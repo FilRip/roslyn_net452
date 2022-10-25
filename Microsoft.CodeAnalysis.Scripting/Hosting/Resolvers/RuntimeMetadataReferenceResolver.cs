@@ -14,6 +14,8 @@ using System.Runtime.CompilerServices;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Scripting.Hosting
 {
     /// <summary>

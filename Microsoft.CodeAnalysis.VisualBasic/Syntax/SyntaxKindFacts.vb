@@ -766,8 +766,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Select
         End Function
 
-        Private Shared ReadOnly s_contextualKeywordToSyntaxKindMap As Dictionary(Of String, SyntaxKind) =
-            New Dictionary(Of String, SyntaxKind)(CaseInsensitiveComparison.Comparer) From
+        Private Shared ReadOnly s_contextualKeywordToSyntaxKindMap As New Dictionary(Of String, SyntaxKind)(CaseInsensitiveComparison.Comparer) From
             {
                    {"aggregate", SyntaxKind.AggregateKeyword},
                    {"all", SyntaxKind.AllKeyword},
@@ -824,8 +823,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return If(s_contextualKeywordToSyntaxKindMap.TryGetValue(text, kind), kind, SyntaxKind.None)
         End Function
 
-        Private Shared ReadOnly s_preprocessorKeywordToSyntaxKindMap As Dictionary(Of String, SyntaxKind) =
-            New Dictionary(Of String, SyntaxKind)(CaseInsensitiveComparison.Comparer) From
+        Private Shared ReadOnly s_preprocessorKeywordToSyntaxKindMap As New Dictionary(Of String, SyntaxKind)(CaseInsensitiveComparison.Comparer) From
             {
                    {"if", SyntaxKind.IfKeyword},
                    {"elseif", SyntaxKind.ElseIfKeyword},

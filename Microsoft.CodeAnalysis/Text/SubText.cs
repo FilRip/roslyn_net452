@@ -5,6 +5,8 @@
 using System;
 using System.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     /// <summary>

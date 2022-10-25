@@ -5,6 +5,8 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

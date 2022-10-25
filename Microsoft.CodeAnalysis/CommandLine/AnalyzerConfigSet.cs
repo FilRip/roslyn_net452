@@ -557,6 +557,8 @@ namespace Microsoft.CodeAnalysis
                 return globalConfig;
             }
 
+#nullable restore
+
             private Section GetSection(string sectionName)
             {
                 Debug.Assert(_values is object);
@@ -578,6 +580,9 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 _duplicates.TryGetValue(section.Name, out var duplicateDict);
+
+#nullable enable
+
                 foreach ((var key, var value) in section.Properties)
                 {
                     if (isGlobalSection && (Section.PropertiesKeyComparer.Equals(key, GlobalKey) || Section.PropertiesKeyComparer.Equals(key, GlobalLevelKey)))

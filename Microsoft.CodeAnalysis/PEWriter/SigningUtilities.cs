@@ -42,6 +42,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static int CalculateStrongNameSignatureSize(CommonPEModuleBuilder module, RSAParameters? privateKey)
         {
+#nullable enable
             ISourceAssemblySymbolInternal? assembly = module.SourceAssemblyOpt;
             if (assembly == null && !privateKey.HasValue)
             {

@@ -9,6 +9,8 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class XmlUtilities

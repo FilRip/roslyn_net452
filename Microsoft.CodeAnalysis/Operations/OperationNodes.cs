@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.FlowAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Operations
 {
     /// <summary>

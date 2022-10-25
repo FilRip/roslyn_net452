@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal sealed class ShadowCopyAnalyzerAssemblyLoader : DefaultAnalyzerAssemblyLoader
+    public sealed class ShadowCopyAnalyzerAssemblyLoader : DefaultAnalyzerAssemblyLoader
     {
         /// <summary>
         /// The base directory for shadow copies. Each instance of

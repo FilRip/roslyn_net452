@@ -4,6 +4,8 @@
 
 using System.Reflection;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Symbols
 {
     public interface ISourceAssemblySymbolInternal : IAssemblySymbolInternal

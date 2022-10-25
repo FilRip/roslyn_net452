@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     internal partial class ControlFlowGraphBuilder

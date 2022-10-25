@@ -9,6 +9,8 @@ using System.Runtime.Serialization;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     /// <summary>
@@ -62,6 +64,7 @@ namespace Microsoft.CodeAnalysis.Text
 
         public bool Equals(TextChange other)
         {
+#nullable restore
             return
                 EqualityComparer<TextSpan>.Default.Equals(this.Span, other.Span) &&
                 EqualityComparer<string>.Default.Equals(this.NewText, other.NewText);

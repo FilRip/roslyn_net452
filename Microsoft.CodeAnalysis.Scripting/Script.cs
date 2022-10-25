@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// </summary>
         public Script<TResult> ContinueWith<TResult>(string code, ScriptOptions options = null)
         {
-            options = options ?? InheritOptions(Options);
+            options ??= InheritOptions(Options);
             return new Script<TResult>(Compiler, Builder, SourceText.From(code ?? "", options.FileEncoding), options, GlobalsType, this);
         }
 
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         {
             if (code == null)
                 throw new ArgumentNullException(nameof(code));
-            options = options ?? InheritOptions(Options);
+            options ??= InheritOptions(Options);
             return new Script<TResult>(Compiler, Builder, SourceText.From(code, options.FileEncoding), options, GlobalsType, this);
         }
 
@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// </param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The result of the last code snippet.</returns>
-        internal Task<object> EvaluateAsync(object globals = null, CancellationToken cancellationToken = default(CancellationToken)) =>
+        internal Task<object> EvaluateAsync(object globals = null, CancellationToken cancellationToken = default) =>
             CommonEvaluateAsync(globals, cancellationToken);
 
         internal abstract Task<object> CommonEvaluateAsync(object globals, CancellationToken cancellationToken);
@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// </param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A <see cref="ScriptState"/> that represents the state after running the script, including all declared variables and return value.</returns>
-        public Task<ScriptState> RunAsync(object globals = null, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default(CancellationToken)) =>
+        public Task<ScriptState> RunAsync(object globals = null, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default) =>
             CommonRunAsync(globals, catchException, cancellationToken);
 
         internal abstract Task<ScriptState> CommonRunAsync(object globals, Func<Exception, bool> catchException, CancellationToken cancellationToken);
@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// </param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A <see cref="ScriptState"/> that represents the state after running the script, including all declared variables and return value.</returns>
-        public Task<ScriptState> RunFromAsync(ScriptState previousState, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default(CancellationToken)) =>
+        public Task<ScriptState> RunFromAsync(ScriptState previousState, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default) =>
             CommonRunFromAsync(previousState, catchException, cancellationToken);
 
         internal abstract Task<ScriptState> CommonRunFromAsync(ScriptState previousState, Func<Exception, bool> catchException, CancellationToken cancellationToken);
@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// Forces the script through the compilation step.
         /// If not called directly, the compilation step will occur on the first call to Run.
         /// </summary>
-        public ImmutableArray<Diagnostic> Compile(CancellationToken cancellationToken = default(CancellationToken)) =>
+        public ImmutableArray<Diagnostic> Compile(CancellationToken cancellationToken = default) =>
             CommonCompile(cancellationToken);
 
         internal abstract ImmutableArray<Diagnostic> CommonCompile(CancellationToken cancellationToken);
@@ -402,7 +402,7 @@ namespace Microsoft.CodeAnalysis.Scripting
             if (lastExecutedScriptInChainOpt != null && script != lastExecutedScriptInChainOpt)
             {
                 scriptsReversed.Free();
-                return default(ImmutableArray<Func<object[], Task>>);
+                return default;
             }
 
             var executors = ArrayBuilder<Func<object[], Task>>.GetInstance(scriptsReversed.Count);
@@ -426,7 +426,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// </param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The result of the last code snippet.</returns>
-        internal new Task<T> EvaluateAsync(object globals = null, CancellationToken cancellationToken = default(CancellationToken)) =>
+        internal new Task<T> EvaluateAsync(object globals = null, CancellationToken cancellationToken = default) =>
             RunAsync(globals, cancellationToken).GetEvaluationResultAsync();
 
         /// <summary>
@@ -458,7 +458,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// <returns>A <see cref="ScriptState"/> that represents the state after running the script, including all declared variables and return value.</returns>
         /// <exception cref="CompilationErrorException">Compilation has errors.</exception>
         /// <exception cref="ArgumentException">The type of <paramref name="globals"/> doesn't match <see cref="Script.GlobalsType"/>.</exception>
-        public new Task<ScriptState<T>> RunAsync(object globals = null, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default(CancellationToken))
+        public new Task<ScriptState<T>> RunAsync(object globals = null, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default)
         {
             // The following validation and executor construction may throw;
             // do so synchronously so that the exception is not wrapped in the task.
@@ -478,7 +478,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// <remarks>
         /// The delegate doesn't hold on this script or its compilation.
         /// </remarks>
-        public ScriptRunner<T> CreateDelegate(CancellationToken cancellationToken = default(CancellationToken))
+        public ScriptRunner<T> CreateDelegate(CancellationToken cancellationToken = default)
         {
             var precedingExecutors = GetPrecedingExecutors(cancellationToken);
             var currentExecutor = GetExecutor(cancellationToken);
@@ -518,7 +518,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// <returns>A <see cref="ScriptState"/> that represents the state after running the script, including all declared variables and return value.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="previousState"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="previousState"/> is not a previous execution state of this script.</exception>
-        public new Task<ScriptState<T>> RunFromAsync(ScriptState previousState, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default(CancellationToken))
+        public new Task<ScriptState<T>> RunFromAsync(ScriptState previousState, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default)
         {
             // The following validation and executor construction may throw;
             // do so synchronously so that the exception is not wrapped in the task.

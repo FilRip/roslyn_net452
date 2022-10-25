@@ -12,6 +12,8 @@ using System.Reflection.PortableExecutable;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

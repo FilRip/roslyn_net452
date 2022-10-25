@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     public sealed class ManagedResource

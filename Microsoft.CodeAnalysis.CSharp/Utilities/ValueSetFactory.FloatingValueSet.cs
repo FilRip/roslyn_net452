@@ -148,6 +148,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override int GetHashCode() => this._numbers.GetHashCode();
 
+#nullable enable
+
             public override bool Equals(object? obj) => this == obj ||
                 obj is FloatingValueSet<TFloating, TFloatingTC> other &&
                 this._hasNaN == other._hasNaN &&

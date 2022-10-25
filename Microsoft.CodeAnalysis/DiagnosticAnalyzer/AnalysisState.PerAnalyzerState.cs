@@ -79,11 +79,15 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         return true;
                     }
 
+#nullable restore
+
                     if (!_lazyFilesWithAnalysisData.TryGetValue(file.Value, out var state))
                     {
                         // We haven't even started analysis for this file.
                         return true;
                     }
+
+#nullable enable
 
                     // See if we have completed analysis for this file.
                     return state.StateKind != StateKind.FullyProcessed;
@@ -179,6 +183,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     return false;
                 }
 
+#nullable restore
+
                 if (_lazyFilesWithAnalysisData.TryGetValue(file, out state))
                 {
                     if (state.StateKind != StateKind.ReadyToProcess)
@@ -227,6 +233,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                 _lazyFilesWithAnalysisData[file] = AnalyzerStateData.FullyProcessedInstance;
             }
+
+#nullable enable
 
             private Dictionary<int, DeclarationAnalyzerStateData> EnsureDeclarationDataMap_NoLock(ISymbol symbol, Dictionary<int, DeclarationAnalyzerStateData>? declarationDataMap)
             {
@@ -392,7 +400,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             public bool TryStartSymbolEndAnalysis(ISymbol symbol, [NotNullWhen(returnValue: true)] out AnalyzerStateData? state)
             {
                 Debug.Assert(_lazyPendingSymbolEndAnalyses != null);
+#nullable restore
                 return TryStartProcessingEntity(symbol, _lazyPendingSymbolEndAnalyses, _analyzerStateDataPool, out state);
+#nullable enable
             }
 
             public void MarkSymbolComplete(ISymbol symbol)
@@ -528,7 +538,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             public bool IsSymbolEndAnalysisComplete(ISymbol symbol)
             {
                 Debug.Assert(_lazyPendingSymbolEndAnalyses != null);
+#nullable restore
                 return IsEntityFullyProcessed(symbol, _lazyPendingSymbolEndAnalyses);
+#nullable enable
             }
 
             public bool OnSymbolDeclaredEventProcessed(SymbolDeclaredCompilationEvent symbolDeclaredEvent)

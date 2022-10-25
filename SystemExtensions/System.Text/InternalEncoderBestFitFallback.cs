@@ -1,35 +1,35 @@
 namespace System.Text
 {
-	internal class InternalEncoderBestFitFallback : EncoderFallback
-	{
-		internal BaseCodePageEncoding encoding;
+    internal class InternalEncoderBestFitFallback : EncoderFallback
+    {
+        internal BaseCodePageEncoding encoding;
 
-		internal char[] arrayBestFit;
+        internal char[] arrayBestFit;
 
-		public override int MaxCharCount => 1;
+        public override int MaxCharCount => 1;
 
-		internal InternalEncoderBestFitFallback(BaseCodePageEncoding _encoding)
-		{
-			encoding = _encoding;
-		}
+        internal InternalEncoderBestFitFallback(BaseCodePageEncoding _encoding)
+        {
+            encoding = _encoding;
+        }
 
-		public override EncoderFallbackBuffer CreateFallbackBuffer()
-		{
-			return new InternalEncoderBestFitFallbackBuffer(this);
-		}
+        public override EncoderFallbackBuffer CreateFallbackBuffer()
+        {
+            return new InternalEncoderBestFitFallbackBuffer(this);
+        }
 
-		public override bool Equals(object value)
-		{
-			if (value is InternalEncoderBestFitFallback internalEncoderBestFitFallback)
-			{
-				return encoding.CodePage == internalEncoderBestFitFallback.encoding.CodePage;
-			}
-			return false;
-		}
+        public override bool Equals(object value)
+        {
+            if (value is InternalEncoderBestFitFallback internalEncoderBestFitFallback)
+            {
+                return encoding.CodePage == internalEncoderBestFitFallback.encoding.CodePage;
+            }
+            return false;
+        }
 
-		public override int GetHashCode()
-		{
-			return encoding.CodePage;
-		}
-	}
+        public override int GetHashCode()
+        {
+            return encoding.CodePage;
+        }
+    }
 }

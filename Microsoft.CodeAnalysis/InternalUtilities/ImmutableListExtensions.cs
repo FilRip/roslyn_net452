@@ -5,6 +5,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     internal static class ImmutableListExtensions

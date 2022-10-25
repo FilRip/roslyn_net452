@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     internal static class RoslynLazyInitializer

@@ -5,6 +5,8 @@
 using System.Diagnostics;
 using System.Reflection.Metadata;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     /// <summary>

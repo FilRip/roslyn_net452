@@ -182,7 +182,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     receiverOpt,
                     method,
                     arguments,
-                    argumentNamesOpt: default(ImmutableArray<string>),
+                    argumentNamesOpt: default,
                     argumentRefKindsOpt: method.ParameterRefKinds,
                     isDelegateCall: false,
                     expanded: false,

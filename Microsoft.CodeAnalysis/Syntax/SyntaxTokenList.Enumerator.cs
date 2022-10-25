@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -93,7 +95,9 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 Debug.Assert(_singleNodeOrList is object);
+#nullable restore
                 _current = GetGreenNodeAt(_singleNodeOrList, _index);
+#nullable enable
                 Debug.Assert(_current is object);
                 return true;
             }

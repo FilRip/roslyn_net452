@@ -16,6 +16,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
 

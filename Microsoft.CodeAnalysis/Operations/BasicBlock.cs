@@ -5,6 +5,8 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     /// <summary>

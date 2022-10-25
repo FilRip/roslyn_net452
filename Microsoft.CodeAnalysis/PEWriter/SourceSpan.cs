@@ -7,6 +7,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CodeGen
 {
     [SuppressMessage("Performance", "RS0008", Justification = "Equality not actually implemented")]

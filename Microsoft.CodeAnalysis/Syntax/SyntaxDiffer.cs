@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public class SyntaxDiffer
@@ -417,6 +419,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+#nullable restore
         private int GetSimilarity(in SyntaxNodeOrToken node1, in SyntaxNodeOrToken node2)
         {
             // count the characters in the common/identical nodes
@@ -498,6 +501,7 @@ namespace Microsoft.CodeAnalysis
 
             return w;
         }
+#nullable enable
 
         private static bool AreIdentical(in SyntaxNodeOrToken node1, in SyntaxNodeOrToken node2)
         {

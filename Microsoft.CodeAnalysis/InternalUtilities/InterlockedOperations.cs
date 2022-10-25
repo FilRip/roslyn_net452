@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class InterlockedOperations

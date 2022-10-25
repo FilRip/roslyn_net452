@@ -8,6 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static class FailFast

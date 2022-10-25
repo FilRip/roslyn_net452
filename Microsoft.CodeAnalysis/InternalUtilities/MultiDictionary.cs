@@ -9,6 +9,8 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     // Note that this is not threadsafe for concurrent reading and writing.
@@ -34,8 +36,7 @@ namespace Roslyn.Utilities
                     }
                     else
                     {
-                        var set = v._value as ImmutableHashSet<V>;
-                        if (set == null)
+                        if (v._value is not ImmutableHashSet<V> set)
                         {
                             _value = (V)v._value;
                             _values = default;
@@ -118,8 +119,7 @@ namespace Roslyn.Utilities
                     // This code pattern triggered a code-gen bug on Mac:
                     // https://github.com/dotnet/coreclr/issues/4801
 
-                    var set = _value as ImmutableHashSet<V>;
-                    if (set == null)
+                    if (_value is not ImmutableHashSet<V> set)
                     {
                         return 1;
                     }
@@ -169,8 +169,7 @@ namespace Roslyn.Utilities
 
             public bool Contains(V v)
             {
-                var set = _value as ImmutableHashSet<V>;
-                if (set == null)
+                if (_value is not ImmutableHashSet<V> set)
                 {
                     return _equalityComparer.Equals((V)_value!, v);
                 }

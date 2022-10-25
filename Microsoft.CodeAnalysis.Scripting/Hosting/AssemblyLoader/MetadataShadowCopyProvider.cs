@@ -50,11 +50,11 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
         // Cache for files that are shadow-copied:
         // (original path, last write timestamp) -> (public shadow copy, private metadata instance that owns the PE image)
-        private readonly Dictionary<FileKey, CacheEntry<MetadataShadowCopy>> _shadowCopies = new Dictionary<FileKey, CacheEntry<MetadataShadowCopy>>();
+        private readonly Dictionary<FileKey, CacheEntry<MetadataShadowCopy>> _shadowCopies = new();
 
         // Cache for files that are not shadow-copied:
         // (path, last write timestamp) -> (public metadata, private metadata instance that owns the PE image)
-        private readonly Dictionary<FileKey, CacheEntry<Metadata>> _noShadowCopyCache = new Dictionary<FileKey, CacheEntry<Metadata>>();
+        private readonly Dictionary<FileKey, CacheEntry<Metadata>> _noShadowCopyCache = new();
 
         // files that should not be copied:
         private HashSet<string> _lazySuppressedFiles;
@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
         {
             if (_lazySuppressedFiles != null && _lazySuppressedFiles.Contains(key.FullPath))
             {
-                existing = default(CacheEntry<MetadataShadowCopy>);
+                existing = default;
                 return true;
             }
 

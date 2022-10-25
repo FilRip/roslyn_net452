@@ -6,6 +6,8 @@ using System;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
     // Avoid implementing IEnumerable so we do not get any unintentional boxing.

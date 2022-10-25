@@ -10,6 +10,9 @@ using Roslyn.Utilities;
 #if STATS
 using System.Threading;
 #endif
+
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 {
     /// <summary>

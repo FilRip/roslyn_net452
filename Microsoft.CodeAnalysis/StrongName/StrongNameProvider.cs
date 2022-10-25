@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 
 using Microsoft.Cci;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

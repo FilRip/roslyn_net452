@@ -45,9 +45,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(info.Symbol IsNot Nothing)
             Debug.Assert(info.Symbol.Kind = SymbolKind.Method)
 
-            Dim walker As New IteratorAndAsyncCaptureWalker(info)
-
-            walker._convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = True
+            Dim walker As New IteratorAndAsyncCaptureWalker(info) With {
+                ._convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = True
+            }
 
             walker.Analyze()
             Debug.Assert(Not walker.InvalidRegionDetected)
@@ -160,7 +160,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 ' Unreachable for AmbiguousLocalsPseudoSymbol: ambiguous implicit 
                 ' receiver should not ever be considered unassigned
-                Debug.Assert(Not TypeOf sym Is AmbiguousLocalsPseudoSymbol)
+                Debug.Assert(TypeOf sym IsNot AmbiguousLocalsPseudoSymbol)
 
                 If sym IsNot Nothing Then
                     CaptureVariable(sym, node)
@@ -208,12 +208,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Public Overrides Function VisitSequence(node As BoundSequence) As BoundNode
-            Dim result As BoundNode = Nothing
-
             For Each local In node.Locals
                 SetSlotState(GetOrCreateSlot(local), True)
             Next
-            result = MyBase.VisitSequence(node)
+            Dim result As BoundNode = MyBase.VisitSequence(node)
             For Each local In node.Locals
                 CheckAssigned(local, node.Syntax)
             Next

@@ -61,61 +61,26 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 return obj.ToString();
             }
 
-            switch (GetPrimitiveSpecialType(type))
+            return GetPrimitiveSpecialType(type) switch
             {
-                case SpecialType.System_Int32:
-                    return FormatLiteral((int)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_String:
-                    return FormatLiteral((string)obj, options.QuoteStringsAndCharacters, options.EscapeNonPrintableCharacters, options.NumberRadix);
-
-                case SpecialType.System_Boolean:
-                    return FormatLiteral((bool)obj);
-
-                case SpecialType.System_Char:
-                    return FormatLiteral((char)obj, options.QuoteStringsAndCharacters, options.EscapeNonPrintableCharacters, options.IncludeCharacterCodePoints, options.NumberRadix);
-
-                case SpecialType.System_Int64:
-                    return FormatLiteral((long)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_Double:
-                    return FormatLiteral((double)obj, options.CultureInfo);
-
-                case SpecialType.System_Byte:
-                    return FormatLiteral((byte)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_Decimal:
-                    return FormatLiteral((decimal)obj, options.CultureInfo);
-
-                case SpecialType.System_UInt32:
-                    return FormatLiteral((uint)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_UInt64:
-                    return FormatLiteral((ulong)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_Single:
-                    return FormatLiteral((float)obj, options.CultureInfo);
-
-                case SpecialType.System_Int16:
-                    return FormatLiteral((short)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_UInt16:
-                    return FormatLiteral((ushort)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_DateTime:
-                    return FormatLiteral((DateTime)obj, options.CultureInfo);
-
-                case SpecialType.System_SByte:
-                    return FormatLiteral((sbyte)obj, options.NumberRadix, options.CultureInfo);
-
-                case SpecialType.System_Object:
-                case SpecialType.System_Void:
-                case SpecialType.None:
-                    return null;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(GetPrimitiveSpecialType(type));
-            }
+                SpecialType.System_Int32 => FormatLiteral((int)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_String => FormatLiteral((string)obj, options.QuoteStringsAndCharacters, options.EscapeNonPrintableCharacters, options.NumberRadix),
+                SpecialType.System_Boolean => FormatLiteral((bool)obj),
+                SpecialType.System_Char => FormatLiteral((char)obj, options.QuoteStringsAndCharacters, options.EscapeNonPrintableCharacters, options.IncludeCharacterCodePoints, options.NumberRadix),
+                SpecialType.System_Int64 => FormatLiteral((long)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_Double => FormatLiteral((double)obj, options.CultureInfo),
+                SpecialType.System_Byte => FormatLiteral((byte)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_Decimal => FormatLiteral((decimal)obj, options.CultureInfo),
+                SpecialType.System_UInt32 => FormatLiteral((uint)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_UInt64 => FormatLiteral((ulong)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_Single => FormatLiteral((float)obj, options.CultureInfo),
+                SpecialType.System_Int16 => FormatLiteral((short)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_UInt16 => FormatLiteral((ushort)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_DateTime => FormatLiteral((DateTime)obj, options.CultureInfo),
+                SpecialType.System_SByte => FormatLiteral((sbyte)obj, options.NumberRadix, options.CultureInfo),
+                SpecialType.System_Object or SpecialType.System_Void or SpecialType.None => null,
+                _ => throw ExceptionUtilities.UnexpectedValue(GetPrimitiveSpecialType(type)),
+            };
         }
     }
 }

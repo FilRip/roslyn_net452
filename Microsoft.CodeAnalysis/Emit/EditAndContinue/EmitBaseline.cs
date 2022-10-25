@@ -38,10 +38,12 @@ namespace Microsoft.CodeAnalysis.Emit
         internal readonly int ImplementingMethod;
         internal readonly int Index;
 
+#nullable enable
         public override bool Equals(object? obj)
         {
-            return obj is MethodImplKey && Equals((MethodImplKey)obj);
+            return obj is MethodImplKey cle && Equals(cle);
         }
+#nullable restore
 
         public bool Equals(MethodImplKey other)
         {
@@ -236,6 +238,7 @@ namespace Microsoft.CodeAnalysis.Emit
         /// </summary>
         public ModuleMetadata OriginalMetadata { get; }
 
+#nullable enable
         // Symbols hydrated from the original metadata. Lazy since we don't know the language at the time the baseline is constructed.
         public MetadataSymbols? LazyMetadataSymbols;
 
@@ -243,6 +246,7 @@ namespace Microsoft.CodeAnalysis.Emit
         public readonly CommonPEModuleBuilder? PEModuleBuilder;
         public readonly Guid ModuleVersionId;
         public readonly bool HasPortablePdb;
+#nullable restore
 
         /// <summary>
         /// Metadata generation ordinal. Zero for
@@ -299,10 +303,13 @@ namespace Microsoft.CodeAnalysis.Emit
         internal readonly IReadOnlyDictionary<int, int> TypeToEventMap;
         internal readonly IReadOnlyDictionary<int, int> TypeToPropertyMap;
         internal readonly IReadOnlyDictionary<MethodImplKey, int> MethodImpls;
+#nullable enable
         private readonly IReadOnlyDictionary<AnonymousTypeKey, AnonymousTypeValue>? _anonymousTypeMap;
         public readonly ImmutableDictionary<ISymbolInternal, ImmutableArray<ISymbolInternal>> SynthesizedMembers;
 
+#nullable restore
         private EmitBaseline(
+#nullable enable
             EmitBaseline? initialBaseline,
             ModuleMetadata module,
             Compilation? compilation,
@@ -333,6 +340,7 @@ namespace Microsoft.CodeAnalysis.Emit
             IReadOnlyDictionary<int, int> typeToPropertyMap,
             IReadOnlyDictionary<MethodImplKey, int> methodImpls)
         {
+#nullable restore
             Debug.Assert(module != null);
             Debug.Assert((ordinal == 0) == (encId == default));
             Debug.Assert((ordinal == 0) == (initialBaseline == null));

@@ -1172,7 +1172,7 @@ lUnsplitAndFinish:
                 ' If receiver is nothing it means that the method being
                 ' accessed is shared; we still want to visit the original receiver
                 ' to handle shared methods called on instance receiver.
-                Dim originalReceiver As BoundExpression = If(methodGroup IsNot Nothing, methodGroup.ReceiverOpt, Nothing)
+                Dim originalReceiver As BoundExpression = methodGroup?.ReceiverOpt
                 If originalReceiver IsNot Nothing AndAlso Not originalReceiver.WasCompilerGenerated Then
                     Debug.Assert(method.IsShared)
 
@@ -1293,7 +1293,7 @@ lUnsplitAndFinish:
                 ' If receiver is nothing it means that the method being
                 ' accessed is shared; we still want to visit the original receiver
                 ' to handle shared methods called on instance receiver.
-                Dim originalReceiver As BoundExpression = If(methodGroup IsNot Nothing, methodGroup.ReceiverOpt, Nothing)
+                Dim originalReceiver As BoundExpression = methodGroup?.ReceiverOpt
                 If originalReceiver IsNot Nothing AndAlso Not originalReceiver.WasCompilerGenerated Then
                     Debug.Assert(method.IsShared)
 
@@ -1707,7 +1707,7 @@ lUnsplitAndFinish:
                 ' If receiver is nothing it means that the property being
                 ' accessed is shared; we still want to visit the original receiver
                 ' to handle shared properties accessed on instance receiver.
-                Dim originalReceiver As BoundExpression = If(propertyGroup IsNot Nothing, propertyGroup.ReceiverOpt, Nothing)
+                Dim originalReceiver As BoundExpression = propertyGroup?.ReceiverOpt
                 If originalReceiver IsNot Nothing AndAlso Not originalReceiver.WasCompilerGenerated Then
                     Debug.Assert(node.PropertySymbol.IsShared)
 
@@ -1827,7 +1827,7 @@ lUnsplitAndFinish:
                     Me.SetState(savedState)
                 End If
 
-                curIndex = curIndex + 1
+                curIndex += 1
             Next
 
             For Each localState In caseBlockStateBuilder

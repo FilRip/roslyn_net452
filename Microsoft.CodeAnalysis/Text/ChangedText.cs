@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     internal sealed class ChangedText : SourceText
@@ -266,7 +268,7 @@ namespace Microsoft.CodeAnalysis.Text
         /// </summary>
         protected override TextLineCollection GetLinesCore()
         {
-
+#nullable restore
             if (!_info.WeakOldText.TryGetTarget(out SourceText oldText) || !oldText.TryGetLines(out TextLineCollection oldLineInfo))
             {
                 // no old line starts? do it the hard way.

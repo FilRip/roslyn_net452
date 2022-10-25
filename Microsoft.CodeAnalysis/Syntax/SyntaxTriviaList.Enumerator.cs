@@ -15,6 +15,7 @@ namespace Microsoft.CodeAnalysis
         [StructLayout(LayoutKind.Auto)]
         public struct Enumerator
         {
+#nullable enable
             private SyntaxToken _token;
             private GreenNode? _singleNodeOrList;
             private int _baseIndex;
@@ -23,6 +24,7 @@ namespace Microsoft.CodeAnalysis
             private int _index;
             private GreenNode? _current;
             private int _position;
+#nullable restore
 
             internal Enumerator(in SyntaxTriviaList list)
             {

@@ -5,6 +5,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Syntax
 {
     public class SyntaxTriviaListBuilder

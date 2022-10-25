@@ -8,6 +8,8 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class Hash

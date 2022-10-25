@@ -15,6 +15,8 @@ using Microsoft.CodeAnalysis.Syntax.InternalSyntax;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]

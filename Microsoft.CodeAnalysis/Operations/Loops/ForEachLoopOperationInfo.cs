@@ -4,6 +4,8 @@
 
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Operations
 {
     public class ForEachLoopOperationInfo

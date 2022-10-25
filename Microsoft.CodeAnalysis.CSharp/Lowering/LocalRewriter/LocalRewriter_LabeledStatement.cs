@@ -4,6 +4,8 @@
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -21,8 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (this.Instrument)
             {
-                var labeledSyntax = node.Syntax as LabeledStatementSyntax;
-                if (labeledSyntax != null)
+                if (node.Syntax is LabeledStatementSyntax labeledSyntax)
                 {
                     labelStatement = _instrumenter.InstrumentLabelStatement(node, labelStatement);
                 }

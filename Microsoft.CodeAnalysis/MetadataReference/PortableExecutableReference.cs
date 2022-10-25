@@ -8,6 +8,8 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>

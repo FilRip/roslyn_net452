@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
     internal sealed class CSharpSymbolChanges : SymbolChanges

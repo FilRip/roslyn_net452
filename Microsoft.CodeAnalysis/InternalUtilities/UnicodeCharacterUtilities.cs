@@ -5,6 +5,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     /// <summary>

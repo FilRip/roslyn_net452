@@ -7,6 +7,8 @@ using System.Runtime.Serialization;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     /// <summary>

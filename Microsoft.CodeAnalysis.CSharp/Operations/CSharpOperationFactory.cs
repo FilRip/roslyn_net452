@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Operations
 {
     internal sealed partial class CSharpOperationFactory
@@ -478,6 +480,7 @@ namespace Microsoft.CodeAnalysis.Operations
                 case BoundKind.LocalDeclaration:
                     {
                         BoundTypeExpression? declaredTypeOpt = ((BoundLocalDeclaration)declaration).DeclaredTypeOpt;
+#nullable restore
                         return CreateFromArray<BoundExpression, IOperation>(declaredTypeOpt.BoundDimensionsOpt);
                     }
                 case BoundKind.MultipleLocalDeclarations:
@@ -487,8 +490,11 @@ namespace Microsoft.CodeAnalysis.Operations
                         ImmutableArray<BoundExpression> dimensions;
                         if (declarations.Length > 0)
                         {
+#nullable enable
                             BoundTypeExpression? declaredTypeOpt = declarations[0].DeclaredTypeOpt;
+#nullable restore
                             dimensions = declaredTypeOpt.BoundDimensionsOpt;
+#nullable enable
                         }
                         else
                         {
@@ -948,7 +954,7 @@ namespace Microsoft.CodeAnalysis.Operations
         {
             bool isImplicit = boundConversion.WasCompilerGenerated || !boundConversion.ExplicitCastInCode;
             BoundExpression boundOperand = boundConversion.Operand;
-            if (boundConversion.ConversionKind == CSharp.ConversionKind.MethodGroup)
+            if (boundConversion.ConversionKind == ConversionKind.MethodGroup)
             {
                 SyntaxNode syntax = boundConversion.Syntax;
                 ITypeSymbol? type = boundConversion.GetPublicTypeSymbol();
@@ -957,7 +963,9 @@ namespace Microsoft.CodeAnalysis.Operations
                 if (boundConversion.Type is FunctionPointerTypeSymbol)
                 {
                     return new AddressOfOperation(
+#nullable restore
                         CreateBoundMethodGroupSingleMethodOperation((BoundMethodGroup)boundConversion.Operand, boundConversion.SymbolOpt, suppressVirtualCalls: false),
+#nullable enable
                         _semanticModel, syntax, type, boundConversion.WasCompilerGenerated);
                 }
 
@@ -1082,7 +1090,9 @@ namespace Microsoft.CodeAnalysis.Operations
             ITypeSymbol? type = boundIsOperator.GetPublicTypeSymbol();
             bool isNegated = false;
             bool isImplicit = boundIsOperator.WasCompilerGenerated;
+#nullable restore
             return new IsTypeOperation(value, typeOperand, isNegated, _semanticModel, syntax, type, isImplicit);
+#nullable enable
         }
 
         private ISizeOfOperation CreateBoundSizeOfOperatorOperation(BoundSizeOfOperator boundSizeOfOperator)
@@ -1092,7 +1102,9 @@ namespace Microsoft.CodeAnalysis.Operations
             ITypeSymbol? type = boundSizeOfOperator.GetPublicTypeSymbol();
             ConstantValue? constantValue = boundSizeOfOperator.ConstantValue;
             bool isImplicit = boundSizeOfOperator.WasCompilerGenerated;
+#nullable restore
             return new SizeOfOperation(typeOperand, _semanticModel, syntax, type, constantValue, isImplicit);
+#nullable enable
         }
 
         private ITypeOfOperation CreateBoundTypeOfOperatorOperation(BoundTypeOfOperator boundTypeOfOperator)
@@ -1101,7 +1113,9 @@ namespace Microsoft.CodeAnalysis.Operations
             SyntaxNode syntax = boundTypeOfOperator.Syntax;
             ITypeSymbol? type = boundTypeOfOperator.GetPublicTypeSymbol();
             bool isImplicit = boundTypeOfOperator.WasCompilerGenerated;
+#nullable restore
             return new TypeOfOperation(typeOperand, _semanticModel, syntax, type, isImplicit);
+#nullable enable
         }
 
         private IArrayCreationOperation CreateBoundArrayCreationOperation(BoundArrayCreation boundArrayCreation)
@@ -1294,7 +1308,9 @@ namespace Microsoft.CodeAnalysis.Operations
             }
 
             stack.Free();
+#nullable restore
             return left;
+#nullable enable
 
             IBinaryOperation createBoundBinaryOperatorOperation(BoundBinaryOperator boundBinaryOperator, IOperation left, IOperation right)
             {
@@ -1821,6 +1837,7 @@ namespace Microsoft.CodeAnalysis.Operations
                         // this happen for 'for loop' initializer
                         // We generate a DeclarationGroup for this scenario to maintain tree shape consistency across IOperation.
                         // var statement points to VariableDeclarationSyntax
+#nullable restore
                         varStatement = node.Parent;
 
                         varDeclaration = node.Parent;
@@ -1892,6 +1909,8 @@ namespace Microsoft.CodeAnalysis.Operations
             bool isImplicit = boundLabelStatement.WasCompilerGenerated;
             return new LabeledOperation(label, operation: null, _semanticModel, syntax, isImplicit);
         }
+
+#nullable enable
 
         private ILabeledOperation CreateBoundLabeledStatementOperation(BoundLabeledStatement boundLabeledStatement)
         {

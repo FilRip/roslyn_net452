@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     internal static class RoslynDebug

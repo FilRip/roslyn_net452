@@ -5,6 +5,8 @@
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     internal static class ITypeReferenceExtensions

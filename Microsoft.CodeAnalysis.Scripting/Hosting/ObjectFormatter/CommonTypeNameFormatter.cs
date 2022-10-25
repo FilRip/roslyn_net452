@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 throw new ArgumentNullException(nameof(arrayType));
             }
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             // print the inner-most element type first:
             Type elementType = arrayType.GetElementType();

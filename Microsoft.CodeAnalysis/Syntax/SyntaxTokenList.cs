@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -260,7 +262,9 @@ namespace Microsoft.CodeAnalysis
         private GreenNode? GetGreenNodeAt(int i)
         {
             Debug.Assert(Node is object);
+#nullable restore
             return GetGreenNodeAt(Node, i);
+#nullable enable
         }
 
         /// <summary>

@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -28,12 +30,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 rewrittenCondition = _instrumenter.InstrumentForStatementCondition(node, rewrittenCondition, _factory);
             }
 
+#nullable restore
             return RewriteForStatement(
                 node,
                 rewrittenInitializer,
                 rewrittenCondition,
                 rewrittenIncrement,
                 rewrittenBody);
+#nullable enable
         }
 
         private BoundStatement RewriteForStatementWithoutInnerLocals(
@@ -140,17 +144,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (this.Instrument)
             {
-                switch (original.Kind)
+                branchBack = original.Kind switch
                 {
-                    case BoundKind.ForEachStatement:
-                        branchBack = _instrumenter.InstrumentForEachStatementConditionalGotoStart((BoundForEachStatement)original, branchBack);
-                        break;
-                    case BoundKind.ForStatement:
-                        branchBack = _instrumenter.InstrumentForStatementConditionalGotoStartOrBreak((BoundForStatement)original, branchBack);
-                        break;
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(original.Kind);
-                }
+                    BoundKind.ForEachStatement => _instrumenter.InstrumentForEachStatementConditionalGotoStart((BoundForEachStatement)original, branchBack),
+                    BoundKind.ForStatement => _instrumenter.InstrumentForStatementConditionalGotoStartOrBreak((BoundForStatement)original, branchBack),
+                    _ => throw ExceptionUtilities.UnexpectedValue(original.Kind),
+                };
             }
 
             statementBuilder.Add(branchBack);

@@ -5,6 +5,8 @@
 using System;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     public static partial class ControlFlowGraphExtensions

@@ -16,6 +16,8 @@ using Microsoft.CodeAnalysis.Interop;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -74,7 +76,11 @@ namespace Microsoft.CodeAnalysis
             {
                 try
                 {
-                    string? resolvedKeyFile = ResolveStrongNameKeyFile(keyFilePath, FileSystem, _keyFileSearchPaths);
+                    string? resolvedKeyFile = ResolveStrongNameKeyFile(
+#nullable restore
+                        keyFilePath,
+                        FileSystem,
+                        _keyFileSearchPaths);
                     if (resolvedKeyFile == null)
                     {
                         return new StrongNameKeys(StrongNameKeys.GetKeyFileError(messageProvider, keyFilePath, Properties.Resources.FileNotFound));
@@ -106,6 +112,7 @@ namespace Microsoft.CodeAnalysis
                     return new StrongNameKeys(StrongNameKeys.GetContainerError(messageProvider, keyContainerName, ex.Message));
                 }
             }
+#nullable enable
 
             return new StrongNameKeys(keyPair, publicKey, privateKey: null, container, keyFilePath, hasCounterSignature);
         }

@@ -5,6 +5,8 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -45,6 +47,7 @@ namespace Microsoft.CodeAnalysis
             {
                 VerifySealed(expected: false);
                 Debug.Assert(value != null);
+#nullable restore
                 Debug.Assert(!value.IsUninitialized);
 
                 _obsoleteAttributeData = value;

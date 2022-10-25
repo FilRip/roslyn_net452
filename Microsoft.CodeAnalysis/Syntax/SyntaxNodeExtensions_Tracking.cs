@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.Collections;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static partial class SyntaxNodeExtensions
@@ -143,6 +145,7 @@ namespace Microsoft.CodeAnalysis
             return id;
         }
 
+#nullable restore
         private static SyntaxNode GetRoot(SyntaxNode node)
         {
             while (true)

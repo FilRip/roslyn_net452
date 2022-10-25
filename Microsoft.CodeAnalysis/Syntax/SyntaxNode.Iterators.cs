@@ -10,6 +10,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract partial class SyntaxNode

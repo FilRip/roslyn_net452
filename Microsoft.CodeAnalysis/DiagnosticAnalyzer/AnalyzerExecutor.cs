@@ -74,7 +74,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         private bool IsAnalyzerSuppressedForTree(DiagnosticAnalyzer analyzer, SyntaxTree tree)
         {
             Debug.Assert(_isAnalyzerSuppressedForTree != null);
+#nullable restore
             return _isAnalyzerSuppressedForTree(analyzer, tree, Compilation.Options.SyntaxTreeOptionsProvider);
+#nullable enable
         }
 
         /// <summary>
@@ -240,6 +242,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             return compilation != null && analyzerOptions != null;
         }
 
+#nullable restore
         internal Compilation Compilation
         {
             get
@@ -268,6 +271,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return _analyzerExecutionTimeMap.ToImmutableDictionary(pair => pair.Key, pair => TimeSpan.FromTicks(pair.Value.Value));
             }
         }
+
+#nullable enable
 
         /// <summary>
         /// Executes the <see cref="DiagnosticAnalyzer.Initialize(AnalysisContext)"/> for the given analyzer.
@@ -364,8 +369,10 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             var supportedSuppressions = _analyzerManager.GetSupportedSuppressionDescriptors(suppressor, this);
             Func<SuppressionDescriptor, bool> isSupportedSuppression = supportedSuppressions.Contains;
             Action<SuppressionAnalysisContext> action = suppressor.ReportSuppressions;
+#nullable restore
             var context = new SuppressionAnalysisContext(Compilation, AnalyzerOptions,
                 reportedDiagnostics, _addSuppression, isSupportedSuppression, _getSemanticModel, _cancellationToken);
+#nullable enable
 
             ExecuteAndCatchIfThrows(
                 suppressor,
@@ -501,7 +508,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
 
             var symbol = symbolDeclaredEvent.Symbol;
+#nullable restore
             var addDiagnostic = GetAddDiagnostic(symbol, symbolDeclaredEvent.DeclaringSyntaxReferences, analyzer, getTopMostNodeForAnalysis);
+#nullable enable
 
             using var _ = PooledDelegates.GetPooledFunction((d, arg) => arg.self.IsSupportedDiagnostic(arg.analyzer, d), (self: this, analyzer), out Func<Diagnostic, bool> isSupportedDiagnostic);
 
@@ -636,7 +645,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             Debug.Assert(!IsAnalyzerSuppressedForSymbol(analyzer, symbolDeclaredEvent.Symbol));
 
             var symbol = symbolDeclaredEvent.Symbol;
+#nullable restore
             var addDiagnostic = GetAddDiagnostic(symbol, symbolDeclaredEvent.DeclaringSyntaxReferences, analyzer, getTopMostNodeForAnalysis);
+#nullable enable
 
             using var _ = PooledDelegates.GetPooledFunction((d, arg) => arg.self.IsSupportedDiagnostic(arg.analyzer, d), (self: this, analyzer), out Func<Diagnostic, bool> isSupportedDiagnostic);
 
@@ -795,11 +806,13 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             Debug.Assert(file.SourceTree != null);
 
             var tree = file.SourceTree;
+#nullable restore
             if (isGeneratedCode && _shouldSkipAnalysisOnGeneratedCode(analyzer) ||
                 IsAnalyzerSuppressedForTree(analyzer, tree))
             {
                 return;
             }
+#nullable enable
 
             var diagReporter = GetAddSyntaxDiagnostic(file, analyzer);
 
@@ -884,7 +897,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     _cancellationToken.ThrowIfCancellationRequested();
 
+#nullable restore
                     var context = new AdditionalFileAnalysisContext(additionalFile, AnalyzerOptions, diagReporter.AddDiagnosticAction, isSupportedDiagnostic, Compilation, _cancellationToken);
+#nullable enable
 
                     // Catch Exception from action.
                     ExecuteAndCatchIfThrows(
@@ -1075,6 +1090,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         {
             Debug.Assert(declaredNode != null);
             Debug.Assert(declaredSymbol != null);
+#nullable restore
             Debug.Assert(CanHaveExecutableCodeBlock(declaredSymbol));
             Debug.Assert(startActions.Any() || endActions.Any() || actions.Any());
             Debug.Assert(!executableBlocks.IsEmpty);
@@ -1084,6 +1100,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 return;
             }
+
+#nullable enable
 
             // Compute the sets of code block end, code block, and stateful node actions.
 
@@ -1185,7 +1203,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                     var executableNodeActionsByKind = GetNodeActionsByKind(syntaxNodeActions);
                     var syntaxNodesToAnalyze = (IEnumerable<SyntaxNode>)getNodesToAnalyze(executableBlocks);
+#nullable restore
                     ExecuteSyntaxNodeActions(syntaxNodesToAnalyze, executableNodeActionsByKind, analyzer, declaredSymbol, semanticModel, getKind, diagReporter.AddDiagnosticAction, isSupportedDiagnostic, analyzerState?.ExecutableNodesAnalysisState as SyntaxNodeAnalyzerStateData);
+#nullable enable
                 }
                 else if (operationActions != null)
                 {
@@ -1263,6 +1283,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             Debug.Assert(nodeActions != null && nodeActions.Any());
 
             var nodeActionsByKind = PooledDictionary<TLanguageKindEnum, ArrayBuilder<SyntaxNodeAnalyzerAction<TLanguageKindEnum>>>.GetInstance();
+#nullable restore
             foreach (var nodeAction in nodeActions)
             {
                 foreach (var kind in nodeAction.Kinds)
@@ -1275,6 +1296,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     actionsForKind.Add(nodeAction);
                 }
             }
+#nullable enable
 
             var tuples = nodeActionsByKind.Select(kvp => KeyValuePairUtil.Create(kvp.Key, kvp.Value.ToImmutableAndFree()));
             var map = ImmutableSegmentedDictionary.CreateRange(tuples);
@@ -1760,7 +1782,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return true;
             }
 
+#nullable restore
             return _analyzerManager.IsSupportedDiagnostic(analyzer, diagnostic, _isCompilerAnalyzer, this);
+#nullable enable
         }
 
         private Action<Diagnostic> GetAddDiagnostic(ISymbol contextSymbol, ImmutableArray<SyntaxReference> cachedDeclaringReferences, DiagnosticAnalyzer analyzer, Func<ISymbol, SyntaxReference, Compilation, CancellationToken, SyntaxNode> getTopMostNodeForAnalysis)
@@ -1787,6 +1811,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     return;
                 }
+
+#nullable restore
 
                 if (addCategorizedLocalDiagnostic == null)
                 {
@@ -1837,6 +1863,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 _addCategorizedNonLocalDiagnostic(diagnostic, analyzer);
             };
         }
+
+#nullable enable
 
         private AnalyzerDiagnosticReporter GetAddSemanticDiagnostic(SyntaxTree tree, DiagnosticAnalyzer analyzer)
         {
@@ -2004,6 +2032,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         internal TimeSpan ResetAnalyzerExecutionTime(DiagnosticAnalyzer analyzer)
         {
             Debug.Assert(_analyzerExecutionTimeMap != null);
+#nullable restore
             if (!_analyzerExecutionTimeMap.TryRemove(analyzer, out var executionTime))
             {
                 return TimeSpan.Zero;

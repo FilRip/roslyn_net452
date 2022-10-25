@@ -17,6 +17,8 @@ using Roslyn.Utilities;
 
 using MetadataOrDiagnostic = System.Object;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract class CommonReferenceManager

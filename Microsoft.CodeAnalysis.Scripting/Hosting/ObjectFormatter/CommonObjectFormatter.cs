@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
         protected abstract CommonPrimitiveFormatter PrimitiveFormatter { get; }
 
         protected virtual BuilderOptions GetInternalBuilderOptions(PrintOptions printOptions) =>
-            new BuilderOptions(
+            new(
                 indentation: "  ",
                 newLine: Environment.NewLine,
                 ellipsis: printOptions.Ellipsis,
@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 maximumOutputLength: printOptions.MaximumOutputLength);
 
         protected virtual CommonPrimitiveFormatterOptions GetPrimitiveOptions(PrintOptions printOptions) =>
-            new CommonPrimitiveFormatterOptions(
+            new(
                 numberRadix: printOptions.NumberRadix,
                 includeCodePoints: false,
                 quoteStringsAndCharacters: true,
@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 cultureInfo: CultureInfo.CurrentUICulture);
 
         protected virtual CommonTypeNameFormatterOptions GetTypeNameOptions(PrintOptions printOptions) =>
-            new CommonTypeNameFormatterOptions(
+            new(
                 arrayBoundRadix: printOptions.NumberRadix,
                 showNamespaces: false);
 

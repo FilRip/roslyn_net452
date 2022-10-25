@@ -11,6 +11,8 @@ using System.Runtime.InteropServices;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public partial struct SyntaxTokenList
@@ -108,10 +110,12 @@ namespace Microsoft.CodeAnalysis
 
                     _index--;
 
+#nullable restore
                     Debug.Assert(_singleNodeOrList is object);
                     _current = GetGreenNodeAt(_singleNodeOrList, _index);
                     Debug.Assert(_current is object);
                     _position -= _current.FullWidth;
+#nullable enable
 
                     return true;
                 }

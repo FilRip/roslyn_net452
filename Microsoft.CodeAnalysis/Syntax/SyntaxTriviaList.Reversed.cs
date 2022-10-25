@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public partial struct SyntaxTriviaList
@@ -108,6 +110,7 @@ namespace Microsoft.CodeAnalysis
                     Debug.Assert(_singleNodeOrList is object);
                     _index--;
 
+#nullable restore
                     _current = GetGreenNodeAt(_singleNodeOrList, _index);
                     Debug.Assert(_current is object);
                     _position -= _current.FullWidth;

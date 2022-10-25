@@ -17,6 +17,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     using MetadataOrDiagnostic = System.Object;
@@ -284,6 +286,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     switch (compilationReference.Properties.Kind)
                     {
+#nullable restore
                         case MetadataImageKind.Assembly:
                             existingReference = TryAddAssembly(
                                 compilationReference.Compilation.Assembly.Identity,
@@ -317,6 +320,8 @@ namespace Microsoft.CodeAnalysis
 
                 // PE reference
 
+#nullable enable
+
                 var peReference = (PortableExecutableReference)boundReference;
                 Metadata? metadata = GetMetadata(peReference, MessageProvider, location, diagnostics);
                 Debug.Assert(metadata != null || diagnostics.HasAnyErrors());
@@ -333,6 +338,7 @@ namespace Microsoft.CodeAnalysis
                             {
                                 PEAssembly? assembly = assemblyMetadata.GetAssembly();
                                 Debug.Assert(assembly is object);
+#nullable restore
                                 existingReference = TryAddAssembly(
                                     assembly.Identity,
                                     peReference,
@@ -341,6 +347,7 @@ namespace Microsoft.CodeAnalysis
                                     location,
                                     assemblyReferencesBySimpleName,
                                     supersedeLowerVersions);
+#nullable enable
 
                                 if (existingReference != null)
                                 {
@@ -681,10 +688,12 @@ namespace Microsoft.CodeAnalysis
                 foreach (var other in sameSimpleNameIdentities)
                 {
                     Debug.Assert(other.Identity is object);
+#nullable restore
                     if (identity.Version == other.Identity.Version)
                     {
                         return other.Reference;
                     }
+#nullable enable
                 }
 
                 // Keep all versions of the assembly and the first identity in the list the one with the highest version:
@@ -711,6 +720,7 @@ namespace Microsoft.CodeAnalysis
                     // ReferenceMatchesDefinition is not necessarily symmetric.
                     // (e.g. System.Numerics.Vectors, Version=4.1+ matches System.Numerics.Vectors, Version=4.0, but not the other way around.)
                     Debug.Assert(other.Identity is object);
+#nullable restore
                     if (other.Identity.IsStrongName &&
                         IdentityComparer.ReferenceMatchesDefinition(identity, other.Identity) &&
                         IdentityComparer.ReferenceMatchesDefinition(other.Identity, identity))
@@ -783,6 +793,8 @@ namespace Microsoft.CodeAnalysis
             return equivalent.Reference;
         }
 
+#nullable enable
+
         protected void GetCompilationReferences(
             TCompilation compilation,
             DiagnosticBag diagnostics,
@@ -800,6 +812,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     Debug.Assert(referenceDirective.Location is object);
 
+#nullable restore
                     if (compilation.Options.MetadataReferenceResolver == null)
                     {
                         diagnostics.Add(MessageProvider.CreateDiagnostic(MessageProvider.ERR_MetadataReferencesNotSupported, referenceDirective.Location));
@@ -814,7 +827,13 @@ namespace Microsoft.CodeAnalysis
                         continue;
                     }
 
-                    MetadataReference? boundReference = ResolveReferenceDirective(referenceDirective.File, referenceDirective.Location, compilation);
+#nullable enable
+
+                    MetadataReference? boundReference = ResolveReferenceDirective(
+#nullable restore
+                                                                                  referenceDirective.File,
+                                                                                  referenceDirective.Location,
+                                                                                  compilation);
                     if (boundReference == null)
                     {
                         diagnostics.Add(MessageProvider.CreateDiagnostic(MessageProvider.ERR_MetadataFileNotFound, referenceDirective.Location, referenceDirective.File));
@@ -860,6 +879,8 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+#nullable enable
+
         /// <summary>
         /// For each given directive return a bound PE reference, or null if the binding fails.
         /// </summary>
@@ -870,6 +891,8 @@ namespace Microsoft.CodeAnalysis
 
             // checked earlier:
             Debug.Assert(compilation.Options.MetadataReferenceResolver != null);
+
+#nullable restore
 
             var references = compilation.Options.MetadataReferenceResolver.ResolveReference(reference, basePath, MetadataReferenceProperties.Assembly.WithRecursiveAliases(true));
             if (references.IsDefaultOrEmpty)

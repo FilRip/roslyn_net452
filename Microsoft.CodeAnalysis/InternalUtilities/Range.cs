@@ -6,6 +6,9 @@
 using System.Runtime.CompilerServices;
 
 using Roslyn.Utilities;
+
+#nullable enable
+
 namespace System
 {
     /// <summary>Represent a range has start and end indexes.</summary>

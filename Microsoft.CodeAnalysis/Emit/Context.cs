@@ -5,6 +5,8 @@
 using System;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Emit
 {
     public readonly struct EmitContext

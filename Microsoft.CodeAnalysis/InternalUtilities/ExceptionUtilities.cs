@@ -5,6 +5,8 @@
 using System;
 using System.Diagnostics;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class ExceptionUtilities

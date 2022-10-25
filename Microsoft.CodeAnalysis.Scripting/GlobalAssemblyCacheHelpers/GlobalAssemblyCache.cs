@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="partialName">Optional partial name.</param>
         /// <param name="architectureFilter">Optional architecture filter.</param>
-        public abstract IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>));
+        public abstract IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default);
 
         /// <summary>
         /// Enumerates assemblies in the GAC returning those that match given partial name and
@@ -52,14 +52,14 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         /// <param name="partialName">The optional partial name.</param>
         /// <param name="architectureFilter">The optional architecture filter.</param>
-        public abstract IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>));
+        public abstract IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default);
 
         /// <summary>
         /// Enumerates assemblies in the GAC returning their simple names.
         /// </summary>
         /// <param name="architectureFilter">Optional architecture filter.</param>
         /// <returns>Unique simple names of GAC assemblies.</returns>
-        public abstract IEnumerable<string> GetAssemblySimpleNames(ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>));
+        public abstract IEnumerable<string> GetAssemblySimpleNames(ImmutableArray<ProcessorArchitecture> architectureFilter = default);
 
         /// <summary>
         /// Looks up specified partial assembly name in the GAC and returns the best matching <see cref="AssemblyIdentity"/>.
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="ArgumentNullException"><paramref name="displayName"/> is null.</exception>
         public AssemblyIdentity ResolvePartialName(
             string displayName,
-            ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>),
+            ImmutableArray<ProcessorArchitecture> architectureFilter = default,
             CultureInfo preferredCulture = null)
         {
             return ResolvePartialName(displayName, out string location, architectureFilter, preferredCulture);
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis
         public abstract AssemblyIdentity ResolvePartialName(
             string displayName,
             out string location,
-            ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>),
+            ImmutableArray<ProcessorArchitecture> architectureFilter = default,
             CultureInfo preferredCulture = null);
     }
 }

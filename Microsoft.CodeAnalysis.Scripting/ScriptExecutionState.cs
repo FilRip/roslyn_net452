@@ -150,7 +150,7 @@ namespace Microsoft.CodeAnalysis.Scripting
                 }
 
                 exceptionHolderOpt.Value = exception;
-                return default(TResult);
+                return default;
             }
         }
 

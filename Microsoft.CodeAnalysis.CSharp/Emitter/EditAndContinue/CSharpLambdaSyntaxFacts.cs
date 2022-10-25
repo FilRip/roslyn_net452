@@ -4,6 +4,8 @@
 
 using Microsoft.CodeAnalysis.Emit;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
     internal class CSharpLambdaSyntaxFacts : LambdaSyntaxFacts

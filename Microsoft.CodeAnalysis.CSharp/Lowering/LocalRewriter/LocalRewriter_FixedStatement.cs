@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -51,7 +53,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
+#nullable restore
             statementBuilder.Add(rewrittenBody);
+#nullable enable
             statementBuilder.Add(_factory.HiddenSequencePoint());
 
 
@@ -131,6 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case SyntaxKind.AnonymousMethodExpression:
                         // Stop looking.
                         return false;
+#nullable restore
                     case SyntaxKind.CatchClause:
                         // If we're in the catch of a try-catch-finally, then
                         // we're still in the scope of the try-finally handler.
@@ -144,6 +149,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         node = node.Parent;
                         node = node.Parent;
                         break;
+#nullable enable
                     default:
                         if (node is MemberDeclarationSyntax)
                         {
@@ -199,6 +205,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression? initializer = localDecl.InitializerOpt;
 
             LocalSymbol localSymbol = localDecl.LocalSymbol;
+#nullable restore
             var fixedCollectionInitializer = (BoundFixedLocalCollectionInitializer)initializer;
 
             if (fixedCollectionInitializer.GetPinnableOpt is { })
@@ -249,6 +256,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             initializerExpr = ((BoundAddressOfOperator)initializerExpr).Operand;
 
             // intervening parens may have been skipped by the binder; find the declarator
+#nullable enable
             VariableDeclaratorSyntax? declarator = fixedInitializer.Syntax.FirstAncestorOrSelf<VariableDeclaratorSyntax>();
 
             pinnedTemp = factory.SynthesizedLocal(
@@ -311,6 +319,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             VariableDeclaratorSyntax? declarator = fixedInitializer.Syntax.FirstAncestorOrSelf<VariableDeclaratorSyntax>();
 
             // pinned ref int pinnedTemp
+#nullable restore
             pinnedTemp = factory.SynthesizedLocal(
                 getPinnableMethod.ReturnType,
                 syntax: declarator,
@@ -324,6 +333,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             int currentConditionalAccessID = 0;
 
             bool needNullCheck = !initializerType.IsValueType;
+
+#nullable enable
 
             if (needNullCheck)
             {

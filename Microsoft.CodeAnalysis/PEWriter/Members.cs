@@ -17,6 +17,8 @@ using Microsoft.CodeAnalysis.Emit;
 
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     /// <summary>

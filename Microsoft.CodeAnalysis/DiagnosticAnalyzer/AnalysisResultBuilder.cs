@@ -95,7 +95,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             lock (_gate)
             {
+#nullable restore
                 return _analyzerExecutionTimeOpt[analyzer];
+#nullable enable
             }
         }
 
@@ -344,10 +346,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             foreach (var analyzer in analyzers)
             {
+#nullable restore
                 if (diagnostics.TryGetValue(analyzer, out ImmutableArray<Diagnostic>.Builder diagnosticsByAnalyzer))
                 {
                     builder.AddRange(diagnosticsByAnalyzer);
                 }
+#nullable enable
             }
         }
 

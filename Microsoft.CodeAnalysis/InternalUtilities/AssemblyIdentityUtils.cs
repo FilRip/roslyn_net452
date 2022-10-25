@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     internal static class AssemblyIdentityUtils

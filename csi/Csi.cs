@@ -15,8 +15,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting.Hosting
             try
             {
                 string directoryName = Path.GetDirectoryName(typeof(Csi).GetTypeInfo().Assembly.ManifestModule.FullyQualifiedName);
-                BuildPaths buildPaths = new BuildPaths(directoryName, Directory.GetCurrentDirectory(), RuntimeMetadataReferenceResolver.GetDesktopFrameworkDirectory(), Path.GetTempPath());
-                CSharpInteractiveCompiler compiler = new CSharpInteractiveCompiler(Path.Combine(directoryName, "csi.rsp"), buildPaths, args, new NotImplementedAnalyzerLoader());
+                BuildPaths buildPaths = new(directoryName, Directory.GetCurrentDirectory(), RuntimeMetadataReferenceResolver.GetDesktopFrameworkDirectory(), Path.GetTempPath());
+                CSharpInteractiveCompiler compiler = new(Path.Combine(directoryName, "csi.rsp"), buildPaths, args, new NotImplementedAnalyzerLoader());
                 return new CommandLineRunner(ConsoleIO.Default, compiler, CSharpScriptCompiler.Instance, CSharpObjectFormatter.Instance).RunInteractive();
             }
             catch (Exception ex)

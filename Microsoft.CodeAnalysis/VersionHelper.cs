@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public static class VersionHelper

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     public sealed class DebugSourceDocument

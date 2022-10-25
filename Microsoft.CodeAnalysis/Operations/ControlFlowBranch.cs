@@ -8,6 +8,8 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis
 {
     /// <summary>
@@ -84,6 +86,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         {
             var builder = ArrayBuilder<ControlFlowRegion>.GetInstance();
 
+#nullable restore
             while (!source.ContainsBlock(destinationOrdinal))
             {
                 Debug.Assert(source.Kind != ControlFlowRegionKind.Root);
@@ -91,6 +94,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 builder.Add(source);
                 source = source.EnclosingRegion;
             }
+#nullable enable
 
             return builder;
         }

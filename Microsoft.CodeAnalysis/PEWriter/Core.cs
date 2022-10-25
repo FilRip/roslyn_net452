@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using EmitContext = Microsoft.CodeAnalysis.Emit.EmitContext;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     /// <summary>

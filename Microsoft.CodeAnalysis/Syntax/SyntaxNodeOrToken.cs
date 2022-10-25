@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -136,7 +138,9 @@ namespace Microsoft.CodeAnalysis
             get
             {
                 Debug.Assert(UnderlyingNode is not null);
+#nullable restore
                 return UnderlyingNode;
+#nullable enable
             }
         }
 

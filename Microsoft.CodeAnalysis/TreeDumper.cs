@@ -12,6 +12,8 @@ using System.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     // These classes are for debug and testing purposes only. It is frequently handy to be 

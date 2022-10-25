@@ -9,6 +9,8 @@ using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     /// <summary>

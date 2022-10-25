@@ -7,6 +7,8 @@ using System.Diagnostics;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]

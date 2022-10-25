@@ -5,6 +5,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Operations
 {
     /// <summary>

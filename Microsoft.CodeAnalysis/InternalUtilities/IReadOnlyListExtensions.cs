@@ -4,6 +4,8 @@
 
 using System.Collections.Generic;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     internal static class IReadOnlyListExtensions

@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public partial class CommonReferenceManager<TCompilation, TAssemblySymbol>

@@ -242,14 +242,12 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 // handle special types only if a proxy isn't defined
                 if (proxy == null)
                 {
-                    IDictionary dictionary;
-                    IEnumerable enumerable;
-                    if ((dictionary = obj as IDictionary) != null)
+                    if (obj is IDictionary dictionary)
                     {
                         FormatDictionaryMembers(result, dictionary, inlineMembers);
                         membersFormatted = true;
                     }
-                    else if ((enumerable = obj as IEnumerable) != null)
+                    else if (obj is IEnumerable enumerable)
                     {
                         FormatSequenceMembers(result, enumerable, inlineMembers);
                         membersFormatted = true;
@@ -438,8 +436,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                     {
                         if (value != null && !VisitedObjects.Contains(value))
                         {
-                            Array array;
-                            if ((array = value as Array) != null)  // TODO (tomat): n-dim arrays
+                            if (value is Array array)  // TODO (tomat): n-dim arrays
                             {
                                 int i = 0;
                                 foreach (object item in array)
@@ -583,7 +580,6 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 try
                 {
                     IDictionaryEnumerator enumerator = dict.GetEnumerator();
-                    IDisposable disposable = enumerator as IDisposable;
                     try
                     {
                         while (enumerator.MoveNext())
@@ -602,7 +598,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                     }
                     finally
                     {
-                        if (disposable != null)
+                        if (enumerator is IDisposable disposable)
                         {
                             disposable.Dispose();
                         }

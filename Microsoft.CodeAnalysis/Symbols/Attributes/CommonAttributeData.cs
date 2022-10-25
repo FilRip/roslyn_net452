@@ -15,6 +15,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public abstract class AttributeData
@@ -198,6 +200,7 @@ namespace Microsoft.CodeAnalysis
             // We should not end up in this code path unless we know we have one of them.
 
             Debug.Assert(AttributeConstructor is object);
+#nullable restore
             var parameters = AttributeConstructor.Parameters;
             ImmutableArray<TypedConstant> args = this.CommonConstructorArguments;
 
@@ -263,6 +266,8 @@ namespace Microsoft.CodeAnalysis
                     throw ExceptionUtilities.UnexpectedValue(kind);
             }
         }
+
+#nullable enable
 
         /// <summary>
         /// Decode the arguments to ObsoleteAttribute. ObsoleteAttribute can have 0, 1 or 2 arguments.
@@ -355,6 +360,8 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(this.CommonConstructorArguments.Length == 0);
             return ObsoleteAttributeData.Experimental;
         }
+
+#nullable restore
 
         public static void DecodeMethodImplAttribute<T, TAttributeSyntaxNode, TAttributeData, TAttributeLocation>(
             ref DecodeWellKnownAttributeArguments<TAttributeSyntaxNode, TAttributeData, TAttributeLocation> arguments,

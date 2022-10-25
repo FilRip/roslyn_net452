@@ -70,6 +70,7 @@ namespace Microsoft.CodeAnalysis.Text
         /// <paramref name="defaultEncoding"/> is null and the stream appears to be a binary file.
         /// </exception>
         /// <exception cref="IOException">An IO error occurred while reading from the stream.</exception>
+#nullable enable
         internal static SourceText Create(Stream stream,
             Encoding? defaultEncoding = null,
             SourceHashAlgorithm checksumAlgorithm = SourceHashAlgorithm.Sha1,
@@ -141,6 +142,7 @@ namespace Microsoft.CodeAnalysis.Text
 
             return SourceText.From(data, encoding, checksumAlgorithm, throwIfBinaryDetected, canBeEmbedded);
         }
+#nullable restore
 
         // FilRip : Remove this method by the one above
         /*private static SourceText Decode(

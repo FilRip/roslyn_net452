@@ -34,7 +34,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Private Shared ReadOnly s_triviaKeyEquality As Func(Of GreenNode, TriviaInfo, Boolean) =
             Function(key, value) (key Is value._leadingTrivia) OrElse ((key.RawKind = value._leadingTrivia.RawKind) AndAlso (key.FullWidth = value._leadingTrivia.FullWidth) AndAlso (key.ToFullString() = value._leadingTrivia.ToFullString()))
 
-            Private Shared ReadOnly s_triviaInfoCache As CachingFactory(Of GreenNode, TriviaInfo) = New CachingFactory(Of GreenNode, TriviaInfo)(s_triviaInfoCacheSize, Nothing, s_triviaKeyHasher, s_triviaKeyEquality)
+            Private Shared ReadOnly s_triviaInfoCache As New CachingFactory(Of GreenNode, TriviaInfo)(s_triviaInfoCacheSize, Nothing, s_triviaKeyHasher, s_triviaKeyEquality)
 
             Private Shared Function ShouldCacheTriviaInfo(leadingTrivia As GreenNode, trailingTrivia As GreenNode) As Boolean
                 Debug.Assert(leadingTrivia IsNot Nothing)
@@ -176,7 +176,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Dim info = TryCast(Me._trailingTriviaOrTriviaInfo, TriviaInfo)
 
             Dim followingTrivia = If(info IsNot Nothing, info._trailingTrivia, TryCast(Me._trailingTriviaOrTriviaInfo, GreenNode))
-            Dim precedingTrivia = If(info IsNot Nothing, info._leadingTrivia, Nothing)
+            Dim precedingTrivia = info?._leadingTrivia
 
             If followingTrivia IsNot Nothing Then
                 ' Don't propagate NoMissing in Init
@@ -456,7 +456,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         Friend Shared Function Create(kind As SyntaxKind, Optional leading As GreenNode = Nothing, Optional trailing As GreenNode = Nothing, Optional text As String = Nothing) As SyntaxToken
 
             ' use default token text if text is nothing. If it's empty or anything else, use the given one
-            Dim tokenText = If(text Is Nothing, SyntaxFacts.GetText(kind), text)
+            Dim tokenText = If(text, SyntaxFacts.GetText(kind))
 
             If CInt(kind) >= SyntaxKind.AddHandlerKeyword Then
 
@@ -473,8 +473,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Throw ExceptionUtilities.UnexpectedValue(kind)
         End Function
 
-        Public Shared Narrowing Operator CType(token As SyntaxToken) As Microsoft.CodeAnalysis.SyntaxToken
-            Return New Microsoft.CodeAnalysis.SyntaxToken(Nothing, token, position:=0, index:=0)
+        Public Shared Narrowing Operator CType(token As SyntaxToken) As CodeAnalysis.SyntaxToken
+            Return New CodeAnalysis.SyntaxToken(Nothing, token, position:=0, index:=0)
         End Operator
 
         Public Overrides Function IsEquivalentTo(other As GreenNode) As Boolean

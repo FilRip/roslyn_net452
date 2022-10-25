@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
     /// <summary>

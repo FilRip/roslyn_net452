@@ -10,6 +10,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public sealed class StrongNameKeys
@@ -107,6 +109,7 @@ namespace Microsoft.CodeAnalysis
                 return None;
             }
 
+#nullable restore
             try
             {
                 var fileContent = ImmutableArray.Create(File.ReadAllBytes(keyFilePath));
@@ -117,6 +120,7 @@ namespace Microsoft.CodeAnalysis
                 return new StrongNameKeys(GetKeyFileError(messageProvider, keyFilePath, ex.Message));
             }
         }
+#nullable enable
 
         //Last seen key file blob and corresponding public key.
         //In IDE typing scenarios we often need to infer public key from the same
@@ -210,6 +214,7 @@ namespace Microsoft.CodeAnalysis
             else
             {
                 Debug.Assert(keyFilePath is object);
+#nullable restore
                 return GetKeyFileError(messageProvider, keyFilePath, message);
             }
         }
@@ -224,8 +229,10 @@ namespace Microsoft.CodeAnalysis
             return messageProvider.CreateDiagnostic(messageProvider.ERR_PublicKeyFileFailure, Location.None, path, message);
         }
 
+#nullable enable
         public static bool IsValidPublicKeyString(string? publicKey)
         {
+#nullable restore
             if (string.IsNullOrEmpty(publicKey) || publicKey.Length % 2 != 0)
             {
                 return false;

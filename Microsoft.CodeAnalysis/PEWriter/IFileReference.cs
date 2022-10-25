@@ -5,6 +5,8 @@
 using System.Collections.Immutable;
 using System.Reflection;
 
+#nullable enable
+
 namespace Microsoft.Cci
 {
     /// <summary>

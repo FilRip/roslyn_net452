@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
         // Synchronizes assembly reference tracking.
         // Needs to be thread-safe since assembly loading may be triggered at any time by CLR type loader.
-        private readonly object _referencesLock = new object();
+        private readonly object _referencesLock = new();
 
         // loaded assembly -> loaded assembly info
         private readonly Dictionary<Assembly, LoadedAssembly> _assembliesLoadedFromLocation;
@@ -143,7 +143,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             }
             catch (FileNotFoundException)
             {
-                return default(AssemblyAndLocation);
+                return default;
             }
             finally
             {
@@ -372,15 +372,11 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
         {
             try
             {
-                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
-                {
-                    using (var peReader = new PEReader(stream))
-                    {
-                        var metadataReader = peReader.GetMetadataReader();
-                        mvid = metadataReader.GetGuid(metadataReader.GetModuleDefinition().Mvid);
-                        return true;
-                    }
-                }
+                using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                using var peReader = new PEReader(stream);
+                var metadataReader = peReader.GetMetadataReader();
+                mvid = metadataReader.GetGuid(metadataReader.GetModuleDefinition().Mvid);
+                return true;
             }
             catch
             {
@@ -435,7 +431,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             AssemblyAndLocation assemblyAndLocation = Load(originalPath);
             if (assemblyAndLocation.IsDefault)
             {
-                return default(AssemblyAndLocation);
+                return default;
             }
 
             lock (_referencesLock)

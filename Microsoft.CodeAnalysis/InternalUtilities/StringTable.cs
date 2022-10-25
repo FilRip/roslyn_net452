@@ -13,6 +13,8 @@ using Microsoft.CodeAnalysis;
 using System.Diagnostics;
 #endif
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     /// <summary>

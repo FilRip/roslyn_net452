@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -37,7 +39,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             var lhsTemps = ArrayBuilder<LocalSymbol>.GetInstance();
             var lhsEffects = ArrayBuilder<BoundExpression>.GetInstance();
             ArrayBuilder<Binder.DeconstructionVariable> lhsTargets = GetAssignmentTargetsAndSideEffects(left, lhsTemps, lhsEffects);
-            BoundExpression? result = RewriteDeconstruction(lhsTargets, conversion, left.Type, right, isUsed);
+            BoundExpression? result = RewriteDeconstruction(lhsTargets,
+                                                            conversion,
+#nullable restore
+                                                            left.Type,
+                                                            right, isUsed);
             Binder.DeconstructionVariable.FreeDeconstructionVariables(lhsTargets);
             if (result is null)
             {
@@ -49,6 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return _factory.Sequence(lhsTemps.ToImmutableAndFree(), lhsEffects.ToImmutableAndFree(), result);
         }
 
+#nullable enable
         private BoundExpression? RewriteDeconstruction(
             ArrayBuilder<Binder.DeconstructionVariable> lhsTargets,
             Conversion conversion,
@@ -139,8 +146,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     BoundExpression? leftTarget = leftTargets[i].Single;
 
+#nullable restore
                     resultPart = EvaluateConversionToTemp(rightPart, underlyingConversions[i], leftTarget.Type, temps,
                         effects.conversions);
+#nullable enable
 
                     if (leftTarget.Kind != BoundKind.DiscardExpression)
                     {
@@ -206,6 +215,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // var (x, y) = GetTuple();
             // var (x, y) = ((byte, byte)) (1, 2);
             // var (a, _) = ((short, short))((int, int))(1L, 2L);
+#nullable restore
             if (right.Type.IsTupleType)
             {
                 inInit = false;
@@ -383,6 +393,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 assignments.Free();
             }
 
+#nullable enable
             internal BoundExpression? PopLast()
             {
                 if (init.Count == 0)

@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public struct AttributeUsageInfo : IEquatable<AttributeUsageInfo>

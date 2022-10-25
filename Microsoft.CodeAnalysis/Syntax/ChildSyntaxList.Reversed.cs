@@ -10,6 +10,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     public readonly partial struct ChildSyntaxList
@@ -28,7 +30,10 @@ namespace Microsoft.CodeAnalysis
             public Enumerator GetEnumerator()
             {
                 Debug.Assert(_node is object);
+#nullable restore
                 return new Enumerator(_node, _count);
+#nullable enable
+
             }
 
             IEnumerator<SyntaxNodeOrToken> IEnumerable<SyntaxNodeOrToken>.GetEnumerator()
@@ -91,7 +96,9 @@ namespace Microsoft.CodeAnalysis
                     get
                     {
                         Debug.Assert(_node is object);
+#nullable restore
                         return ItemInternal(_node, _childIndex);
+#nullable enable
                     }
                 }
 

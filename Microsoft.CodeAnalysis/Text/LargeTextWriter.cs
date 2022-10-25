@@ -7,6 +7,8 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     internal sealed class LargeTextWriter : SourceTextWriter

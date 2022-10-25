@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CodeGen;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Emit
 {
     internal readonly struct AddedOrChangedMethodInfo

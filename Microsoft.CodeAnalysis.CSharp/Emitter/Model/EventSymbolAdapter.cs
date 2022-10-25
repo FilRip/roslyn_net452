@@ -77,6 +77,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
+#nullable enable
         Cci.IMethodReference? Cci.IEventDefinition.Caller
         {
             get
@@ -90,6 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             return ((PEModuleBuilder)context.Module).Translate(AdaptedEventSymbol.Type, syntaxNodeOpt: (CSharpSyntaxNode?)context.SyntaxNode, diagnostics: context.Diagnostics);
         }
+#nullable restore
 
         #endregion
 
@@ -158,7 +160,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     public partial class EventSymbol
     {
 #if DEBUG
+#nullable enable
         private EventSymbolAdapter? _lazyAdapter;
+#nullable restore
 
         protected sealed override SymbolAdapter GetCciAdapterImpl() => GetCciAdapter();
 

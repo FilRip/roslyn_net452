@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -199,6 +201,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             int position = 0;
+#nullable restore
             if (!TryParseNameToken(displayName, ref position, out string simpleName))
             {
                 return false;
@@ -207,12 +210,15 @@ namespace Microsoft.CodeAnalysis
             var parsedParts = AssemblyIdentityParts.Name;
             var seen = AssemblyIdentityParts.Name;
 
+#nullable enable
             Version? version = null;
             string? culture = null;
             bool isRetargetable = false;
             var contentType = AssemblyContentType.Default;
             var publicKey = default(ImmutableArray<byte>);
             var publicKeyToken = default(ImmutableArray<byte>);
+
+#nullable restore
 
             while (position < displayName.Length)
             {
@@ -410,6 +416,8 @@ namespace Microsoft.CodeAnalysis
             parts = parsedParts;
             return true;
         }
+
+#nullable enable
 
         private static bool TryParseNameToken(string displayName, ref int position, [NotNullWhen(true)] out string? value)
         {
@@ -724,11 +732,13 @@ namespace Microsoft.CodeAnalysis
             }
 
             bool quoted = false;
+#nullable restore
             if (IsWhiteSpace(name[0]) || IsWhiteSpace(name[name.Length - 1]))
             {
                 result.Append('"');
                 quoted = true;
             }
+#nullable enable
 
             for (int i = 0; i < name.Length; i++)
             {

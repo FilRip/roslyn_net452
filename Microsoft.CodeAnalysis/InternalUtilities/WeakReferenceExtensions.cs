@@ -4,6 +4,8 @@
 
 using System;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     // Helpers that are missing from Dev11 implementation:

@@ -4,6 +4,8 @@
 
 using System.Text;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Text
 {
     internal class StringTextWriter : SourceTextWriter

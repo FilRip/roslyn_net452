@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csi", "csi\csi.csproj", "{4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.CodeAnalysis.CSharp.Scripting", "Microsoft.CodeAnalysis.CSharp.Scripting\Microsoft.CodeAnalysis.CSharp.Scripting.csproj", "{623101D0-5739-4BDF-AA85-6D2C47CF3DAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VBCSCompiler", "VBCSCompiler\VBCSCompiler.csproj", "{CA00C092-AC9F-436A-97DF-98F4B9D136FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{623101D0-5739-4BDF-AA85-6D2C47CF3DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{623101D0-5739-4BDF-AA85-6D2C47CF3DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{623101D0-5739-4BDF-AA85-6D2C47CF3DAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA00C092-AC9F-436A-97DF-98F4B9D136FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA00C092-AC9F-436A-97DF-98F4B9D136FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA00C092-AC9F-436A-97DF-98F4B9D136FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA00C092-AC9F-436A-97DF-98F4B9D136FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

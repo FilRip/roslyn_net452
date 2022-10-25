@@ -4,6 +4,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     /// <summary>

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
+#nullable enable
+
 namespace Roslyn.Utilities
 {
     public static class FileUtilities
@@ -237,7 +239,7 @@ namespace Roslyn.Utilities
         /// <param name="path">Path to normalize.</param>
         /// <exception cref="IOException"/>
         /// <returns>Normalized path.</returns>
-        internal static string NormalizeAbsolutePath(string path)
+        public static string NormalizeAbsolutePath(string path)
         {
             // we can only call GetFullPath on an absolute path to avoid dependency on process state (current directory):
             Debug.Assert(PathUtilities.IsAbsolute(path));
@@ -279,7 +281,7 @@ namespace Roslyn.Utilities
             }
         }
 
-        internal static Stream OpenRead(string fullPath)
+        public static Stream OpenRead(string fullPath)
         {
             Debug.Assert(PathUtilities.IsAbsolute(fullPath));
 
@@ -297,14 +299,14 @@ namespace Roslyn.Utilities
             }
         }
 
-        internal static Stream OpenAsyncRead(string fullPath)
+        public static Stream OpenAsyncRead(string fullPath)
         {
             Debug.Assert(PathUtilities.IsAbsolute(fullPath));
 
             return RethrowExceptionsAsIOException(() => new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous));
         }
 
-        internal static T RethrowExceptionsAsIOException<T>(Func<T> operation)
+        public static T RethrowExceptionsAsIOException<T>(Func<T> operation)
         {
             try
             {
@@ -324,7 +326,7 @@ namespace Roslyn.Utilities
         /// Used to create a file given a path specified by the user.
         /// paramName - Provided by the Public surface APIs to have a clearer message. Internal API just rethrow the exception
         /// </summary>
-        internal static Stream CreateFileStreamChecked(Func<string, Stream> factory, string path, string? paramName = null)
+        public static Stream CreateFileStreamChecked(Func<string, Stream> factory, string path, string? paramName = null)
         {
             try
             {
@@ -381,7 +383,7 @@ namespace Roslyn.Utilities
         }
 
         /// <exception cref="IOException"/>
-        internal static long GetFileLength(string fullPath)
+        public static long GetFileLength(string fullPath)
         {
             Debug.Assert(PathUtilities.IsAbsolute(fullPath));
             try

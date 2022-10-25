@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.Operations
 {
     public struct DisposeOperationInfo

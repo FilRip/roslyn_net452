@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis
                 var gacAssemblyName = CreateAssemblyNameFromFile(assemblyPath);
 
                 if (gacAssemblyName.ProcessorArchitecture != ProcessorArchitecture.None &&
-                    architectureFilter != default(ImmutableArray<ProcessorArchitecture>) &&
+                    architectureFilter != default &&
                     architectureFilter.Length > 0 &&
                     !architectureFilter.Contains(gacAssemblyName.ProcessorArchitecture))
                 {
@@ -133,12 +133,12 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>))
+        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
             return GetAssemblyIdentitiesAndPaths(partialName, architectureFilter).Select(identityAndPath => identityAndPath.Item1);
         }
 
-        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>))
+        public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
             AssemblyName name;
             try
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis
             return GetAssemblyIdentities(name, architectureFilter);
         }
 
-        public override IEnumerable<string> GetAssemblySimpleNames(ImmutableArray<ProcessorArchitecture> architectureFilter = default(ImmutableArray<ProcessorArchitecture>))
+        public override IEnumerable<string> GetAssemblySimpleNames(ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
             return GetAssemblyIdentitiesAndPaths(name: null, version: null, publicKeyToken: null, architectureFilter: architectureFilter).
                 Select(identityAndPath => identityAndPath.Identity.Name).Distinct();

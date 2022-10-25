@@ -11,6 +11,8 @@ using System.Linq;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     /// <summary>
@@ -146,6 +148,7 @@ namespace Microsoft.CodeAnalysis
                 effectiveRuleset = effectiveRuleset.WithEffectiveAction(ruleSetInclude.Action);
                 Debug.Assert(effectiveRuleset is object);
 
+#nullable restore
                 // If the included ruleset's global option is stricter, then make that the effective option.
                 if (IsStricterThan(effectiveRuleset.GeneralDiagnosticOption, effectiveGeneralOption))
                 {
@@ -316,6 +319,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (diagnosticsOpt != null && messageProviderOpt != null)
                 {
+#nullable restore
                     diagnosticsOpt.Add(Diagnostic.Create(messageProviderOpt, messageProviderOpt.ERR_CantReadRulesetFile, resolvedPath, e.Message));
                 }
             }
