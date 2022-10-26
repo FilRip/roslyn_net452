@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal readonly ImmutableArray<RefKind> parameterRefKinds;
 
         internal static readonly ParameterSignature NoParams =
-            new ParameterSignature(ImmutableArray<TypeWithAnnotations>.Empty, default);
+            new(ImmutableArray<TypeWithAnnotations>.Empty, default);
 
         private ParameterSignature(ImmutableArray<TypeWithAnnotations> parameterTypesWithAnnotations,
                                    ImmutableArray<RefKind> parameterRefKinds)

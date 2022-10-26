@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             internal readonly ImmutableArray<TupleBinaryOperatorInfo> Operators;
 
             internal static readonly Multiple ErrorInstance =
-                new Multiple(operators: ImmutableArray<TupleBinaryOperatorInfo>.Empty, leftConvertedTypeOpt: null, rightConvertedTypeOpt: null);
+                new(operators: ImmutableArray<TupleBinaryOperatorInfo>.Empty, leftConvertedTypeOpt: null, rightConvertedTypeOpt: null);
 
             internal Multiple(ImmutableArray<TupleBinaryOperatorInfo> operators, TypeSymbol? leftConvertedTypeOpt, TypeSymbol? rightConvertedTypeOpt)
                 : base(leftConvertedTypeOpt, rightConvertedTypeOpt)

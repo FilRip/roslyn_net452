@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private readonly SyntheticBoundNodeFactory _bound;
         private readonly TypeMap _typeMap;
-        private readonly Dictionary<ParameterSymbol, BoundExpression> _parameterMap = new Dictionary<ParameterSymbol, BoundExpression>();
+        private readonly Dictionary<ParameterSymbol, BoundExpression> _parameterMap = new();
         private readonly bool _ignoreAccessibility;
         private int _recursionDepth;
 

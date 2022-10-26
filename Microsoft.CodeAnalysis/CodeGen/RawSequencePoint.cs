@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public readonly TextSpan Span;
 
         // Special text span indicating a hidden sequence point.
-        public static readonly TextSpan HiddenSequencePointSpan = new TextSpan(0x7FFFFFFF, 0);
+        public static readonly TextSpan HiddenSequencePointSpan = new(0x7FFFFFFF, 0);
 
         public RawSequencePoint(SyntaxTree syntaxTree, int ilMarker, TextSpan span)
         {

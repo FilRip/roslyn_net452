@@ -732,7 +732,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 return (Cci.IAssemblyReference)reference;
             }
 
-            AssemblyReference asmRef = new AssemblyReference(assembly);
+            AssemblyReference asmRef = new(assembly);
 
             AssemblyReference cachedAsmRef = (AssemblyReference)AssemblyOrModuleSymbolToModuleRefMap.GetOrAdd(assembly, asmRef);
 

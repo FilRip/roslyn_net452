@@ -142,7 +142,7 @@ namespace Roslyn.Utilities
 
         public override string ToString()
         {
-            StringBuilder result = new StringBuilder("ConsList[");
+            StringBuilder result = new("ConsList[");
             bool any = false;
             for (ConsList<T> list = this; list._tail != null; list = list._tail)
             {

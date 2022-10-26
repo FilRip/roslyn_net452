@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <summary>
         /// Holds a collection of all the locations of anonymous types and delegates from source
         /// </summary>
-        private readonly ConcurrentDictionary<Location, bool> _sourceLocationsSeen = new ConcurrentDictionary<Location, bool>();
+        private readonly ConcurrentDictionary<Location, bool> _sourceLocationsSeen = new();
 #endif
 
         [Conditional("DEBUG")]
@@ -361,7 +361,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private class SynthesizedDelegateSymbolComparer : IComparer<SynthesizedDelegateSymbol>
         {
-            public static readonly SynthesizedDelegateSymbolComparer Instance = new SynthesizedDelegateSymbolComparer();
+            public static readonly SynthesizedDelegateSymbolComparer Instance = new();
 
             public int Compare(SynthesizedDelegateSymbol x, SynthesizedDelegateSymbol y)
             {

@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 {
     public partial class SuppressMessageAttributeState
     {
-        private static readonly SmallDictionary<string, TargetScope> s_suppressMessageScopeTypes = new SmallDictionary<string, TargetScope>(StringComparer.OrdinalIgnoreCase)
+        private static readonly SmallDictionary<string, TargetScope> s_suppressMessageScopeTypes = new(StringComparer.OrdinalIgnoreCase)
             {
                 { string.Empty, TargetScope.None },
                 { "module", TargetScope.Module },
@@ -42,8 +42,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private class GlobalSuppressions
         {
-            private readonly Dictionary<string, SuppressMessageInfo> _compilationWideSuppressions = new Dictionary<string, SuppressMessageInfo>();
-            private readonly Dictionary<ISymbol, Dictionary<string, SuppressMessageInfo>> _globalSymbolSuppressions = new Dictionary<ISymbol, Dictionary<string, SuppressMessageInfo>>();
+            private readonly Dictionary<string, SuppressMessageInfo> _compilationWideSuppressions = new();
+            private readonly Dictionary<ISymbol, Dictionary<string, SuppressMessageInfo>> _globalSymbolSuppressions = new();
 
             public void AddCompilationWideSuppression(SuppressMessageInfo info)
             {

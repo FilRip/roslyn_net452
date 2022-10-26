@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis
         public readonly IEqualityComparer<K> Comparer;
 
         // https://github.com/dotnet/roslyn/issues/40344
-        public static readonly SmallDictionary<K, V> Empty = new SmallDictionary<K, V>(null!);
+        public static readonly SmallDictionary<K, V> Empty = new(null!);
 
         public SmallDictionary() : this(EqualityComparer<K>.Default) { }
 
@@ -504,7 +504,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        public KeyCollection Keys => new KeyCollection(this);
+        public KeyCollection Keys => new(this);
 
         public struct KeyCollection : IEnumerable<K>
         {
@@ -619,7 +619,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        public ValueCollection Values => new ValueCollection(this);
+        public ValueCollection Values => new(this);
 
         public struct ValueCollection : IEnumerable<V>
         {
@@ -763,7 +763,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            public KeyValuePair<K, V> Current => new KeyValuePair<K, V>(_current!.Key, _current!.Value);
+            public KeyValuePair<K, V> Current => new(_current!.Key, _current!.Value);
 
             public bool MoveNext()
             {

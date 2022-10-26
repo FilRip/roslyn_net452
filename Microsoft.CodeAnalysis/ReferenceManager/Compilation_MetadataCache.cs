@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis
         /// 
         /// Guarded by <see cref="CommonReferenceManager.SymbolCacheAndReferenceManagerStateGuard"/>.
         /// </summary>
-        private readonly WeakList<IAssemblySymbolInternal> _retargetingAssemblySymbols = new WeakList<IAssemblySymbolInternal>();
+        private readonly WeakList<IAssemblySymbolInternal> _retargetingAssemblySymbols = new();
 
         /// <summary>
         /// Adds given retargeting assembly for this compilation into the cache.

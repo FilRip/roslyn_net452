@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// </summary>
         private sealed class GroupedAnalyzerActions : IGroupedAnalyzerActions
         {
-            public static readonly GroupedAnalyzerActions Empty = new GroupedAnalyzerActions(ImmutableArray<(DiagnosticAnalyzer, GroupedAnalyzerActionsForAnalyzer)>.Empty, AnalyzerActions.Empty);
+            public static readonly GroupedAnalyzerActions Empty = new(ImmutableArray<(DiagnosticAnalyzer, GroupedAnalyzerActionsForAnalyzer)>.Empty, AnalyzerActions.Empty);
 
             private GroupedAnalyzerActions(ImmutableArray<(DiagnosticAnalyzer, GroupedAnalyzerActionsForAnalyzer)> groupedActionsAndAnalyzers, in AnalyzerActions analyzerActions)
             {

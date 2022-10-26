@@ -145,7 +145,7 @@ namespace Microsoft.CodeAnalysis
             // not possible to target the wrong file. It's just possible that the user won't
             // receive a warning that this section is ignored on windows in this edge case.
 
-            SectionNameLexer nameLexer = new SectionNameLexer(sectionName);
+            SectionNameLexer nameLexer = new(sectionName);
             bool sawStartChar = false;
             int logicalIndex = 0;
             while (!nameLexer.IsDone)

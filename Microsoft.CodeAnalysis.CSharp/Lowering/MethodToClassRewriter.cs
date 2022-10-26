@@ -27,12 +27,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // The lambda rewriter also saves/restores the proxies across passes, since local function
         // reference rewriting is done in a separate pass but still requires the frame proxies
         // created in the first pass.
-        protected Dictionary<Symbol, CapturedSymbolReplacement> proxies = new Dictionary<Symbol, CapturedSymbolReplacement>();
+        protected Dictionary<Symbol, CapturedSymbolReplacement> proxies = new();
 
         // A mapping from every local variable to its replacement local variable.  Local variables are replaced when
         // their types change due to being inside of a generic method.  Otherwise we reuse the original local (even
         // though its containing method is not correct because the code is moved into another method)
-        protected readonly Dictionary<LocalSymbol, LocalSymbol> localMap = new Dictionary<LocalSymbol, LocalSymbol>();
+        protected readonly Dictionary<LocalSymbol, LocalSymbol> localMap = new();
 
         // A mapping for types in the original method to types in its replacement.  This is mainly necessary
         // when the original method was generic, as type parameters in the original method are mapping into
@@ -422,7 +422,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // NOTE: Need to check for cast of stackalloc on RHS.
                 // If LHS isLocal, then genAddr is a noop so regular case works fine.
 
-                SyntheticBoundNodeFactory factory = new SyntheticBoundNodeFactory(this.CurrentMethod, rewrittenLeft.Syntax, this.CompilationState, this.Diagnostics);
+                SyntheticBoundNodeFactory factory = new(this.CurrentMethod, rewrittenLeft.Syntax, this.CompilationState, this.Diagnostics);
                 BoundLocal tempLocal = factory.StoreToTemp(rewrittenRight, out BoundAssignmentOperator tempAssignment);
 
                 BoundAssignmentOperator rewrittenAssignment = node.Update(rewrittenLeft, tempLocal, node.IsRef, rewrittenType);

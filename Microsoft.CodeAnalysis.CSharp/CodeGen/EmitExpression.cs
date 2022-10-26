@@ -380,8 +380,8 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             }
 
             // labels
-            object whenNotNullLabel = new object();
-            object doneLabel = new object();
+            object whenNotNullLabel = new();
+            object doneLabel = new();
             LocalDefinition cloneTemp = null;
 
             var notConstrained = !receiverType.IsReferenceType && !receiverType.IsValueType;
@@ -3045,8 +3045,8 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         private void EmitConditionalOperator(BoundConditionalOperator expr, bool used)
         {
 
-            object consequenceLabel = new object();
-            object doneLabel = new object();
+            object consequenceLabel = new();
+            object doneLabel = new();
 
             EmitCondBranch(expr.Condition, ref consequenceLabel, sense: true);
             EmitExpression(expr.Alternative, used);
@@ -3150,7 +3150,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 EmitBox(expr.Type, expr.LeftOperand.Syntax);
             }
 
-            object ifLeftNotNullLabel = new object();
+            object ifLeftNotNullLabel = new();
             _builder.EmitBranch(ILOpCode.Brtrue, ifLeftNotNullLabel);
 
             if (used)

@@ -1417,7 +1417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var syntaxNode = new LiteralExpressionSyntax(greenNode, null, 0);
 
             TypeSymbol expectedAttributeType = corLibrary.GetSpecialType(SpecialType.System_Int32);
-            BoundLiteral intMaxValueLiteral = new BoundLiteral(syntaxNode, ConstantValue.Create(int.MaxValue), expectedAttributeType);
+            BoundLiteral intMaxValueLiteral = new(syntaxNode, ConstantValue.Create(int.MaxValue), expectedAttributeType);
             return ClassifyStandardImplicitConversion(intMaxValueLiteral, expectedAttributeType, destination, ref useSiteInfo);
         }
 

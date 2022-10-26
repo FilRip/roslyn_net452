@@ -280,8 +280,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
         }
 
-        private SyntaxListBuilder _leadingTriviaCache = new SyntaxListBuilder(10);
-        private SyntaxListBuilder _trailingTriviaCache = new SyntaxListBuilder(10);
+        private SyntaxListBuilder _leadingTriviaCache = new(10);
+        private SyntaxListBuilder _trailingTriviaCache = new(10);
 
         private static int GetFullWidth(SyntaxListBuilder builder)
         {

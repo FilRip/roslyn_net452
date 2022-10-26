@@ -774,7 +774,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     var defaultImplicitlyDeclared = providedName != defaultName;
 
                     // Add a field with default name. It should be present regardless.
-                    TupleErrorFieldSymbol defaultTupleField = new TupleErrorFieldSymbol(this,
+                    TupleErrorFieldSymbol defaultTupleField = new(this,
                                                                                         defaultName,
                                                                                         i,
                                                                                         defaultImplicitlyDeclared ? null : location,

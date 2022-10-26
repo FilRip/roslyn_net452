@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
 
             internal Action<GeneratorPostInitializationContext>? PostInitCallback { get; set; }
 
-            public GeneratorInfo ToImmutable() => new GeneratorInfo(EditCallback, SyntaxContextReceiverCreator, PostInitCallback);
+            public GeneratorInfo ToImmutable() => new(EditCallback, SyntaxContextReceiverCreator, PostInitCallback);
         }
     }
 }

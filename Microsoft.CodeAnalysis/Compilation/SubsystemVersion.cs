@@ -39,32 +39,32 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Subsystem version not specified
         /// </summary>
-        public static SubsystemVersion None => new SubsystemVersion();
+        public static SubsystemVersion None => new();
 
         /// <summary>
         /// Subsystem version: Windows 2000
         /// </summary>
-        public static SubsystemVersion Windows2000 => new SubsystemVersion(5, 0);
+        public static SubsystemVersion Windows2000 => new(5, 0);
 
         /// <summary>
         /// Subsystem version: Windows XP 
         /// </summary>
-        public static SubsystemVersion WindowsXP => new SubsystemVersion(5, 1);
+        public static SubsystemVersion WindowsXP => new(5, 1);
 
         /// <summary>
         /// Subsystem version: Windows Vista
         /// </summary>
-        public static SubsystemVersion WindowsVista => new SubsystemVersion(6, 0);
+        public static SubsystemVersion WindowsVista => new(6, 0);
 
         /// <summary>
         /// Subsystem version: Windows 7
         /// </summary>
-        public static SubsystemVersion Windows7 => new SubsystemVersion(6, 1);
+        public static SubsystemVersion Windows7 => new(6, 1);
 
         /// <summary>
         /// Subsystem version: Windows 8
         /// </summary>
-        public static SubsystemVersion Windows8 => new SubsystemVersion(6, 2);
+        public static SubsystemVersion Windows8 => new(6, 2);
 
         private SubsystemVersion(int major, int minor)
         {

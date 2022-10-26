@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// The absolute span of this token in characters, including its leading and trailing trivia.
         /// </summary>
-        public TextSpan FullSpan => new TextSpan(Position, FullWidth);
+        public TextSpan FullSpan => new(Position, FullWidth);
 
         /// <summary>
         /// Determines whether this token represents a language construct that was actually parsed from source code.

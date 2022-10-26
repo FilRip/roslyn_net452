@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis
     /// </summary>
     public class StrongNameFileSystem
     {
-        internal static readonly StrongNameFileSystem Instance = new StrongNameFileSystem();
+        internal static readonly StrongNameFileSystem Instance = new();
         internal readonly string? _customTempPath;
 
         public StrongNameFileSystem(string? customTempPath = null)

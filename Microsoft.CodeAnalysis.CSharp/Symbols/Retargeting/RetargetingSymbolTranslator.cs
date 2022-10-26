@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         /// Retargeting map from underlying module to this one.
         /// </summary>
         private readonly ConcurrentDictionary<Symbol, Symbol> _symbolMap =
-            new ConcurrentDictionary<Symbol, Symbol>(concurrencyLevel: 2, capacity: 4);
+            new(concurrencyLevel: 2, capacity: 4);
 
         private readonly Func<Symbol, RetargetingMethodSymbol> _createRetargetingMethod;
         private readonly Func<Symbol, RetargetingNamespaceSymbol> _createRetargetingNamespace;
@@ -537,7 +537,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     }
 
 
-                    TypeMap substitution = new TypeMap(newParameters.ToImmutableAndFree(), newArguments.ToImmutable());
+                    TypeMap substitution = new(newParameters.ToImmutableAndFree(), newArguments.ToImmutable());
 
                     constructedType = substitution.SubstituteNamedType(newDefinition).WithTupleDataFrom(type);
                 }

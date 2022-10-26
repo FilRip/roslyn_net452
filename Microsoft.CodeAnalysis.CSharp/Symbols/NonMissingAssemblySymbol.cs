@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         /// <remarks></remarks>
         private readonly ConcurrentDictionary<MetadataTypeName.Key, NamedTypeSymbol> _emittedNameToTypeMap =
-            new ConcurrentDictionary<MetadataTypeName.Key, NamedTypeSymbol>();
+            new();
 
         private NamespaceSymbol _globalNamespace;
 

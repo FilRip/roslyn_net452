@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis
         /// A verbose format for displaying symbols (useful for testing).
         /// </summary>
         public static readonly SymbolDisplayFormat TestFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                 propertyStyle: SymbolDisplayPropertyStyle.ShowReadWriteDescriptor,
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis
         /// this.QualifiedNameOnly = containingSymbol.QualifiedNameOnly + "." + this.Name
         /// </summary>
         public static readonly SymbolDisplayFormat QualifiedNameOnlyFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
 
@@ -216,7 +216,7 @@ namespace Microsoft.CodeAnalysis
         /// this.QualifiedNameArity = containingSymbol.QualifiedNameArity + "." + this.Name + "`" + this.Arity
         /// </summary>
         public static readonly SymbolDisplayFormat QualifiedNameArityFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                 compilerInternalOptions: SymbolDisplayCompilerInternalOptions.UseArityForGenericTypes | SymbolDisplayCompilerInternalOptions.UseValueTuple);
@@ -225,7 +225,7 @@ namespace Microsoft.CodeAnalysis
         /// A succinct format for displaying symbols.
         /// </summary>
         public static readonly SymbolDisplayFormat ShortFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameOnly,
                 propertyStyle: SymbolDisplayPropertyStyle.NameOnly,
@@ -239,7 +239,7 @@ namespace Microsoft.CodeAnalysis
         /// The format used for displaying symbols when visualizing IL.
         /// </summary>
         public static readonly SymbolDisplayFormat ILVisualizationFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                 memberOptions: SymbolDisplayMemberOptions.IncludeContainingType | SymbolDisplayMemberOptions.IncludeParameters | SymbolDisplayMemberOptions.IncludeType | SymbolDisplayMemberOptions.IncludeRef,
@@ -254,7 +254,7 @@ namespace Microsoft.CodeAnalysis
         /// Only expected to be applied to interface types (and their type arguments).
         /// </summary>
         public static readonly SymbolDisplayFormat ExplicitInterfaceImplementationFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
                 typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                 genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,

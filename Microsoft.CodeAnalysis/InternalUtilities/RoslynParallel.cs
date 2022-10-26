@@ -12,7 +12,7 @@ namespace Roslyn.Utilities
 {
     public static class RoslynParallel
     {
-        internal static readonly ParallelOptions DefaultParallelOptions = new ParallelOptions();
+        internal static readonly ParallelOptions DefaultParallelOptions = new();
 
         /// <inheritdoc cref="Parallel.For(int, int, ParallelOptions, Action{int})"/>
         public static ParallelLoopResult For(int fromInclusive, int toExclusive, Action<int> body, CancellationToken cancellationToken)

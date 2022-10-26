@@ -748,7 +748,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 Debug.Assert(_handlers.Count > 1);
 
                 ExceptionHandlerScope tryScope = null;
-                ScopeBounds tryBounds = new ScopeBounds();
+                ScopeBounds tryBounds = new();
 
                 foreach (var handlerScope in _handlers)
                 {
@@ -874,7 +874,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// </summary>
         private sealed class ScopeComparer : IComparer<Cci.LocalScope>
         {
-            public static readonly ScopeComparer Instance = new ScopeComparer();
+            public static readonly ScopeComparer Instance = new();
 
             private ScopeComparer() { }
 

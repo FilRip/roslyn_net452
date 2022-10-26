@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private readonly AwaitInFinallyAnalysis _analysis;
 
         private AwaitCatchFrame _currentAwaitCatchFrame;
-        private AwaitFinallyFrame _currentAwaitFinallyFrame = new AwaitFinallyFrame();
+        private AwaitFinallyFrame _currentAwaitFinallyFrame = new();
 
         private AsyncExceptionHandlerRewriter(
             MethodSymbol containingMethod,

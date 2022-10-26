@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         // TODO: normalize the result by removing variables that are unassigned in an unmodified
         // flow analysis.
-        private readonly HashSet<Symbol> _dataFlowsIn = new HashSet<Symbol>();
+        private readonly HashSet<Symbol> _dataFlowsIn = new();
 
         private DataFlowsInWalker(CSharpCompilation compilation, Symbol member, BoundNode node, BoundNode firstInRegion, BoundNode lastInRegion,
             HashSet<Symbol> unassignedVariables, HashSet<PrefixUnaryExpressionSyntax> unassignedVariableAddressOfSyntaxes)

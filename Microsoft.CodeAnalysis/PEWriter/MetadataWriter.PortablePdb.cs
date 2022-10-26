@@ -33,7 +33,7 @@ namespace Microsoft.Cci
         /// </summary>
         internal sealed class ImportScopeEqualityComparer : IEqualityComparer<IImportScope>
         {
-            public static readonly ImportScopeEqualityComparer Instance = new ImportScopeEqualityComparer();
+            public static readonly ImportScopeEqualityComparer Instance = new();
 
             public bool Equals(IImportScope x, IImportScope y)
             {
@@ -47,8 +47,8 @@ namespace Microsoft.Cci
             }
         }
 
-        private readonly Dictionary<DebugSourceDocument, DocumentHandle> _documentIndex = new Dictionary<DebugSourceDocument, DocumentHandle>();
-        private readonly Dictionary<IImportScope, ImportScopeHandle> _scopeIndex = new Dictionary<IImportScope, ImportScopeHandle>(ImportScopeEqualityComparer.Instance);
+        private readonly Dictionary<DebugSourceDocument, DocumentHandle> _documentIndex = new();
+        private readonly Dictionary<IImportScope, ImportScopeHandle> _scopeIndex = new(ImportScopeEqualityComparer.Instance);
 
         private void SerializeMethodDebugInfo(IMethodBody bodyOpt, int methodRid, StandaloneSignatureHandle localSignatureHandleOpt, ref LocalVariableHandle lastLocalVariableHandle, ref LocalConstantHandle lastLocalConstantHandle)
         {

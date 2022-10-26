@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
     {
         private sealed class Data
         {
-            public static readonly Data Disposed = new Data();
+            public static readonly Data Disposed = new();
 
             public readonly ImmutableArray<ModuleMetadata> Modules;
             public readonly PEAssembly? Assembly;
@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis
         /// <remarks>
         /// Guarded by <see cref="CommonReferenceManager.SymbolCacheAndReferenceManagerStateGuard"/>.
         /// </remarks>
-        internal readonly WeakList<IAssemblySymbolInternal> CachedSymbols = new WeakList<IAssemblySymbolInternal>();
+        internal readonly WeakList<IAssemblySymbolInternal> CachedSymbols = new();
 
         // creates a copy
         private AssemblyMetadata(AssemblyMetadata other, bool shareCachedSymbols)

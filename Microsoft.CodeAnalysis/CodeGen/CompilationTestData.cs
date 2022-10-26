@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         }
 
         // The map is used for storing a list of methods and their associated IL.
-        public readonly ConcurrentDictionary<IMethodSymbolInternal, MethodData> Methods = new ConcurrentDictionary<IMethodSymbolInternal, MethodData>();
+        public readonly ConcurrentDictionary<IMethodSymbolInternal, MethodData> Methods = new();
 
         // The emitted module.
         public CommonPEModuleBuilder? Module;
@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             return _lazyMethodsByName;
         }
 
-        private static readonly SymbolDisplayFormat _testDataKeyFormat = new SymbolDisplayFormat(
+        private static readonly SymbolDisplayFormat _testDataKeyFormat = new(
             compilerInternalOptions: SymbolDisplayCompilerInternalOptions.UseMetadataMethodNames | SymbolDisplayCompilerInternalOptions.UseValueTuple,
             globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 SymbolDisplayMiscellaneousOptions.UseAsterisksInMultiDimensionalArrays |
                 SymbolDisplayMiscellaneousOptions.UseErrorTypeSymbolName);
 
-        private static readonly SymbolDisplayFormat _testDataOperatorKeyFormat = new SymbolDisplayFormat(
+        private static readonly SymbolDisplayFormat _testDataOperatorKeyFormat = new(
              _testDataKeyFormat.CompilerInternalOptions,
              _testDataKeyFormat.GlobalNamespaceStyle,
              _testDataKeyFormat.TypeQualificationStyle,

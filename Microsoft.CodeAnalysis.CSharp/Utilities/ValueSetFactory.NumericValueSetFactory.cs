@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private sealed class NumericValueSetFactory<T, TTC> : IValueSetFactory<T> where TTC : struct, INumericTC<T>
         {
-            public static readonly NumericValueSetFactory<T, TTC> Instance = new NumericValueSetFactory<T, TTC>();
+            public static readonly NumericValueSetFactory<T, TTC> Instance = new();
 
             IValueSet IValueSetFactory.AllValues => NumericValueSet<T, TTC>.AllValues;
 

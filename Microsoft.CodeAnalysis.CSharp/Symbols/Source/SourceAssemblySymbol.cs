@@ -91,19 +91,19 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         ///  (a) Key: Unassigned field symbol.
         ///  (b) Value: True if the unassigned field is effectively internal, false otherwise.
         /// </summary>
-        private readonly ConcurrentDictionary<FieldSymbol, bool> _unassignedFieldsMap = new ConcurrentDictionary<FieldSymbol, bool>();
+        private readonly ConcurrentDictionary<FieldSymbol, bool> _unassignedFieldsMap = new();
 
         /// <summary>
         /// private fields declared in this assembly but never read
         /// </summary>
-        private readonly ConcurrentSet<FieldSymbol> _unreadFields = new ConcurrentSet<FieldSymbol>();
+        private readonly ConcurrentSet<FieldSymbol> _unreadFields = new();
 
         /// <summary>
         /// We imitate the native compiler's policy of not warning about unused fields
         /// when the enclosing type is used by an extern method for a ref argument.
         /// Here we keep track of those types.
         /// </summary>
-        internal ConcurrentSet<TypeSymbol> TypesReferencedInExternalMethods = new ConcurrentSet<TypeSymbol>();
+        internal ConcurrentSet<TypeSymbol> TypesReferencedInExternalMethods = new();
 
         /// <summary>
         /// The warnings for unused fields.
@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _compilation = compilation;
             _assemblySimpleName = assemblySimpleName;
 
-            ArrayBuilder<ModuleSymbol> moduleBuilder = new ArrayBuilder<ModuleSymbol>(1 + netModules.Length);
+            ArrayBuilder<ModuleSymbol> moduleBuilder = new(1 + netModules.Length);
 
             moduleBuilder.Add(new SourceModuleSymbol(this, compilation.Declarations, moduleName));
 
@@ -1097,7 +1097,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private class NameCollisionForAddedModulesTypeComparer : IComparer<NamedTypeSymbol>
         {
-            public static readonly NameCollisionForAddedModulesTypeComparer Singleton = new NameCollisionForAddedModulesTypeComparer();
+            public static readonly NameCollisionForAddedModulesTypeComparer Singleton = new();
 
             private NameCollisionForAddedModulesTypeComparer() { }
 

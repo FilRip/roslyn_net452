@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         /// retargeting map for symbols.
         /// </summary>
         private readonly Dictionary<AssemblySymbol, DestinationData> _retargetingAssemblyMap =
-            new Dictionary<AssemblySymbol, DestinationData>();
+            new();
 
         private struct DestinationData
         {

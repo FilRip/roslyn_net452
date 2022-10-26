@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Default label(s) are indexed on a special DefaultKey object.
         // Invalid case labels with null constant value are indexed on the labelName.
         private Dictionary<object, SourceLabelSymbol> _lazySwitchLabelsMap;
-        private static readonly object s_defaultKey = new object();
+        private static readonly object s_defaultKey = new();
 
         private Dictionary<object, SourceLabelSymbol> LabelsByValue
         {
@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ConvertPatternExpression(SwitchGoverningType, node, caseExpression, out constantValueOpt, hasErrors, diagnostics);
         }
 
-        private static readonly object s_nullKey = new object();
+        private static readonly object s_nullKey = new();
         protected static object KeyForConstant(ConstantValue constantValue)
         {
             return constantValue.IsNull ? s_nullKey : constantValue.Value;

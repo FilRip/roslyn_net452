@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 /// non-deterministic compilation, and if we generate duplicate proxies we'll generate
                 /// wasteful code in the best case and incorrect code in the worst.
                 /// </remarks>
-                public readonly SetWithInsertionOrder<Symbol> DeclaredVariables = new SetWithInsertionOrder<Symbol>();
+                public readonly SetWithInsertionOrder<Symbol> DeclaredVariables = new();
 
                 /// <summary>
                 /// The bound node representing this scope. This roughly corresponds to the bound
@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 /// is used when recording captured variables as we must know what the lifetime
                 /// of a captured variable is to determine the lifetime of its capture environment.
                 /// </summary>
-                private readonly SmallDictionary<Symbol, Scope> _localToScope = new SmallDictionary<Symbol, Scope>();
+                private readonly SmallDictionary<Symbol, Scope> _localToScope = new();
 
 #if DEBUG
                 /// <summary>
@@ -299,7 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 /// variable to be replaced by closure conversion. Instead, it should be left for
                 /// expression tree conversion.
                 /// </summary>
-                private readonly HashSet<Symbol> _freeVariables = new HashSet<Symbol>();
+                private readonly HashSet<Symbol> _freeVariables = new();
 #endif
 
                 private readonly MethodSymbol _topLevelMethod;

@@ -141,7 +141,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             foreach (uint hashValue in stringHashMap.Keys)
             {
                 ConstantValue hashConstant = ConstantValue.Create(hashValue);
-                object hashBucketLabel = new object();
+                object hashBucketLabel = new();
 
                 jumpTableLabels[i] = new KeyValuePair<ConstantValue, object>(hashConstant, hashBucketLabel);
                 hashBucketLabelsMap[hashValue] = hashBucketLabel;

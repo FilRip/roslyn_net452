@@ -100,8 +100,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// <summary>
         /// Maps {array type, method kind} tuples to implementing pseudo-methods.
         /// </summary>
-        private readonly ConcurrentDictionary<(byte methodKind, IReferenceOrISignature arrayType), ArrayMethod> _dict =
-            new ConcurrentDictionary<(byte, IReferenceOrISignature), ArrayMethod>();
+        private readonly ConcurrentDictionary<(byte methodKind, IReferenceOrISignature arrayType), ArrayMethod> _dict = new();
 
         /// <summary>
         /// lazily fetches or creates a new array method.
@@ -122,22 +121,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         private static ArrayMethod MakeArrayMethod(Cci.IArrayTypeReference arrayType, ArrayMethodKind id)
         {
-            switch (id)
+            return id switch
             {
-                case ArrayMethodKind.CTOR:
-                    return new ArrayConstructor(arrayType);
-
-                case ArrayMethodKind.GET:
-                    return new ArrayGet(arrayType);
-
-                case ArrayMethodKind.SET:
-                    return new ArraySet(arrayType);
-
-                case ArrayMethodKind.ADDRESS:
-                    return new ArrayAddress(arrayType);
-            }
-
-            throw ExceptionUtilities.UnexpectedValue(id);
+                ArrayMethodKind.CTOR => new ArrayConstructor(arrayType),
+                ArrayMethodKind.GET => new ArrayGet(arrayType),
+                ArrayMethodKind.SET => new ArraySet(arrayType),
+                ArrayMethodKind.ADDRESS => new ArrayAddress(arrayType),
+                _ => throw ExceptionUtilities.UnexpectedValue(id),
+            };
         }
 
 
@@ -228,10 +219,10 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         // cache common parameter instances 
         // (we can do this since the only data we have is the index)
-        private static readonly ArrayMethodParameterInfo s_index0 = new ArrayMethodParameterInfo(0);
-        private static readonly ArrayMethodParameterInfo s_index1 = new ArrayMethodParameterInfo(1);
-        private static readonly ArrayMethodParameterInfo s_index2 = new ArrayMethodParameterInfo(2);
-        private static readonly ArrayMethodParameterInfo s_index3 = new ArrayMethodParameterInfo(3);
+        private static readonly ArrayMethodParameterInfo s_index0 = new(0);
+        private static readonly ArrayMethodParameterInfo s_index1 = new(1);
+        private static readonly ArrayMethodParameterInfo s_index2 = new(2);
+        private static readonly ArrayMethodParameterInfo s_index3 = new(3);
 
         protected ArrayMethodParameterInfo(ushort index)
         {
@@ -240,15 +231,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public static ArrayMethodParameterInfo GetIndexParameter(ushort index)
         {
-            switch (index)
+            return index switch
             {
-                case 0: return s_index0;
-                case 1: return s_index1;
-                case 2: return s_index2;
-                case 3: return s_index3;
-            }
-
-            return new ArrayMethodParameterInfo(index);
+                0 => s_index0,
+                1 => s_index1,
+                2 => s_index2,
+                3 => s_index3,
+                _ => new ArrayMethodParameterInfo(index),
+            };
         }
 
         public ImmutableArray<Cci.ICustomModifier> RefCustomModifiers

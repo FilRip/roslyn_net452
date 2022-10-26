@@ -52,20 +52,20 @@ namespace Microsoft.CodeAnalysis.CodeGen
         // fields mapped to metadata blocks
         private ImmutableArray<SynthesizedStaticField> _orderedSynthesizedFields;
         private readonly ConcurrentDictionary<ImmutableArray<byte>, MappedField> _mappedFields =
-            new ConcurrentDictionary<ImmutableArray<byte>, MappedField>(ByteSequenceComparer.Instance);
+            new(ByteSequenceComparer.Instance);
 
         private ModuleVersionIdField? _mvidField;
         // Dictionary that maps from analysis kind to instrumentation payload field.
-        private readonly ConcurrentDictionary<int, InstrumentationPayloadRootField> _instrumentationPayloadRootFields = new ConcurrentDictionary<int, InstrumentationPayloadRootField>();
+        private readonly ConcurrentDictionary<int, InstrumentationPayloadRootField> _instrumentationPayloadRootFields = new();
 
         // synthesized methods
         private ImmutableArray<Cci.IMethodDefinition> _orderedSynthesizedMethods;
         private readonly ConcurrentDictionary<string, Cci.IMethodDefinition> _synthesizedMethods =
-            new ConcurrentDictionary<string, Cci.IMethodDefinition>();
+            new();
 
         // field types for different block sizes.
         private ImmutableArray<Cci.ITypeReference> _orderedProxyTypes;
-        private readonly ConcurrentDictionary<uint, Cci.ITypeReference> _proxyTypes = new ConcurrentDictionary<uint, Cci.ITypeReference>();
+        private readonly ConcurrentDictionary<uint, Cci.ITypeReference> _proxyTypes = new();
 
         public PrivateImplementationDetails(
             CommonPEModuleBuilder moduleBuilder,
@@ -289,7 +289,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         private sealed class FieldComparer : IComparer<SynthesizedStaticField>
         {
-            public static readonly FieldComparer Instance = new FieldComparer();
+            public static readonly FieldComparer Instance = new();
 
             private FieldComparer()
             {

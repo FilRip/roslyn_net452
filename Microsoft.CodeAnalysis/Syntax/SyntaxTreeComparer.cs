@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
 {
     internal class SyntaxTreeComparer : IEqualityComparer<SyntaxTree>
     {
-        public static readonly SyntaxTreeComparer Instance = new SyntaxTreeComparer();
+        public static readonly SyntaxTreeComparer Instance = new();
 
         public bool Equals(SyntaxTree? x, SyntaxTree? y)
         {

@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private sealed class FloatingValueSetFactory<TFloating, TFloatingTC> : IValueSetFactory<TFloating> where TFloatingTC : struct, IFloatingTC<TFloating>
         {
-            public static readonly FloatingValueSetFactory<TFloating, TFloatingTC> Instance = new FloatingValueSetFactory<TFloating, TFloatingTC>();
+            public static readonly FloatingValueSetFactory<TFloating, TFloatingTC> Instance = new();
 
             private FloatingValueSetFactory() { }
 

@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// By default there is a root finally frame.
         /// Root frame does not have a handler, but may contain nested frames.
         /// </summary>
-        private IteratorFinallyFrame _currentFinallyFrame = new IteratorFinallyFrame();
+        private IteratorFinallyFrame _currentFinallyFrame = new();
 
         /// <summary>
         /// Finally state of the next Finally frame if such created.

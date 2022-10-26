@@ -645,7 +645,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         internal IEnumerable<string> ParseResponseFile(string fullPath, IList<Diagnostic> errors)
         {
-            List<string> lines = new List<string>();
+            List<string> lines = new();
             try
             {
                 Debug.Assert(PathUtilities.IsAbsolute(fullPath));
@@ -671,7 +671,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         internal static IEnumerable<string> ParseResponseLines(IEnumerable<string> lines)
         {
-            List<string> arguments = new List<string>();
+            List<string> arguments = new();
 
             foreach (string line in lines)
             {

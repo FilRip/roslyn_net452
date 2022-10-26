@@ -375,14 +375,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         }
 
         private SynthesizedEmbeddedAttributeSymbol CreateParameterlessEmbeddedAttributeSymbol(string name, NamespaceSymbol containingNamespace, BindingDiagnosticBag diagnostics)
-            => new SynthesizedEmbeddedAttributeSymbol(
+            => new(
                     name,
                     containingNamespace,
                     SourceModule,
                     baseType: GetWellKnownType(WellKnownType.System_Attribute, diagnostics));
 
         private SynthesizedEmbeddedNullableAttributeSymbol CreateNullableAttributeSymbol(string name, NamespaceSymbol containingNamespace, BindingDiagnosticBag diagnostics)
-            => new SynthesizedEmbeddedNullableAttributeSymbol(
+            => new(
                     name,
                     containingNamespace,
                     SourceModule,
@@ -390,7 +390,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     GetSpecialType(SpecialType.System_Byte, diagnostics));
 
         private SynthesizedEmbeddedNullableContextAttributeSymbol CreateNullableContextAttributeSymbol(string name, NamespaceSymbol containingNamespace, BindingDiagnosticBag diagnostics)
-            => new SynthesizedEmbeddedNullableContextAttributeSymbol(
+            => new(
                     name,
                     containingNamespace,
                     SourceModule,
@@ -398,7 +398,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     GetSpecialType(SpecialType.System_Byte, diagnostics));
 
         private SynthesizedEmbeddedNullablePublicOnlyAttributeSymbol CreateNullablePublicOnlyAttributeSymbol(string name, NamespaceSymbol containingNamespace, BindingDiagnosticBag diagnostics)
-            => new SynthesizedEmbeddedNullablePublicOnlyAttributeSymbol(
+            => new(
                     name,
                     containingNamespace,
                     SourceModule,
@@ -406,7 +406,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     GetSpecialType(SpecialType.System_Boolean, diagnostics));
 
         private SynthesizedEmbeddedNativeIntegerAttributeSymbol CreateNativeIntegerAttributeSymbol(string name, NamespaceSymbol containingNamespace, BindingDiagnosticBag diagnostics)
-            => new SynthesizedEmbeddedNativeIntegerAttributeSymbol(
+            => new(
                     name,
                     containingNamespace,
                     SourceModule,

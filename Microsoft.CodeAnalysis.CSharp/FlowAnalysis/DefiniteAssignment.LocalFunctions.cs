@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => CreateLocalFunctionState();
 
         private LocalFunctionState CreateLocalFunctionState()
-            => new LocalFunctionState(
+            => new(
                 // The bottom state should assume all variables, even new ones, are assigned
                 new LocalState(BitVector.AllSet(variableBySlot.Count), normalizeToBottom: true),
                 UnreachableState());

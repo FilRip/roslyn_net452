@@ -550,7 +550,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             static MemberResolutionResult<TMember> makeWrongCallingConvention(MemberResolutionResult<TMember> result)
-                => new MemberResolutionResult<TMember>(result.Member, result.LeastOverriddenMember, MemberAnalysisResult.WrongCallingConvention());
+                => new(result.Member, result.LeastOverriddenMember, MemberAnalysisResult.WrongCallingConvention());
         }
 #nullable disable
 
@@ -652,7 +652,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static Dictionary<NamedTypeSymbol, ArrayBuilder<TMember>> PartitionMembersByContainingType<TMember>(ArrayBuilder<TMember> members) where TMember : Symbol
         {
-            Dictionary<NamedTypeSymbol, ArrayBuilder<TMember>> containingTypeMap = new Dictionary<NamedTypeSymbol, ArrayBuilder<TMember>>();
+            Dictionary<NamedTypeSymbol, ArrayBuilder<TMember>> containingTypeMap = new();
             for (int i = 0; i < members.Count; i++)
             {
                 TMember member = members[i];

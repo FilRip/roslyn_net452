@@ -81,14 +81,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         private SynthesizedClosureEnvironment _lazyStaticLambdaFrame;
 
         // A mapping from every lambda parameter to its corresponding method's parameter.
-        private readonly Dictionary<ParameterSymbol, ParameterSymbol> _parameterMap = new Dictionary<ParameterSymbol, ParameterSymbol>();
+        private readonly Dictionary<ParameterSymbol, ParameterSymbol> _parameterMap = new();
 
         // for each block with lifted (captured) variables, the corresponding frame type
-        private readonly Dictionary<BoundNode, Analysis.ClosureEnvironment> _frames = new Dictionary<BoundNode, Analysis.ClosureEnvironment>();
+        private readonly Dictionary<BoundNode, Analysis.ClosureEnvironment> _frames = new();
 
         // the current set of frame pointers in scope.  Each is either a local variable (where introduced),
         // or the "this" parameter when at the top level.  Keys in this map are never constructed types.
-        private readonly Dictionary<NamedTypeSymbol, Symbol> _framePointers = new Dictionary<NamedTypeSymbol, Symbol>();
+        private readonly Dictionary<NamedTypeSymbol, Symbol> _framePointers = new();
 
         // The set of original locals that should be assigned to proxies
         // if lifted. This is useful for the expression evaluator where

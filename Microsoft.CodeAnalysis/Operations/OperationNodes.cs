@@ -539,7 +539,7 @@ namespace Microsoft.CodeAnalysis.Operations
         /// never be exposed from a public API.
         /// </summary>
         public static BlockOperation CreateTemporaryBlock(ImmutableArray<IOperation> statements, SemanticModel semanticModel, SyntaxNode syntax)
-            => new BlockOperation(statements, semanticModel, syntax);
+            => new(statements, semanticModel, syntax);
 
         private BlockOperation(ImmutableArray<IOperation> statements, SemanticModel semanticModel, SyntaxNode syntax)
             : base(semanticModel, syntax, isImplicit: true)

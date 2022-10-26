@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.Emit
     /// </summary>
     public class ErrorType : Cci.INamespaceTypeReference
     {
-        public static readonly ErrorType Singleton = new ErrorType();
+        public static readonly ErrorType Singleton = new();
 
         /// <summary>
         /// For the name we will use a word "Error" followed by a guid, generated on the spot.
@@ -198,12 +198,12 @@ namespace Microsoft.CodeAnalysis.Emit
         /// </summary>
         private sealed class ErrorAssembly : Cci.IAssemblyReference
         {
-            public static readonly ErrorAssembly Singleton = new ErrorAssembly();
+            public static readonly ErrorAssembly Singleton = new();
 
             /// <summary>
             /// For the name we will use a word "Error" followed by a guid, generated on the spot.
             /// </summary>
-            private static readonly AssemblyIdentity s_identity = new AssemblyIdentity(
+            private static readonly AssemblyIdentity s_identity = new(
                 name: "Error" + Guid.NewGuid().ToString("B"),
                 version: AssemblyIdentity.NullVersion,
                 cultureName: "",

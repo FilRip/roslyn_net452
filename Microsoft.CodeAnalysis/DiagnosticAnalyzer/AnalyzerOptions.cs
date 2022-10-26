@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     /// </summary>
     public class AnalyzerOptions
     {
-        internal static readonly AnalyzerOptions Empty = new AnalyzerOptions(ImmutableArray<AdditionalText>.Empty);
+        internal static readonly AnalyzerOptions Empty = new(ImmutableArray<AdditionalText>.Empty);
 
         /// <summary>
         /// A set of additional non-code text files that can be used by analyzers.

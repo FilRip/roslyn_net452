@@ -1273,7 +1273,7 @@ namespace Microsoft.CodeAnalysis.Collections
             }
 
             public Enumerator GetEnumerator()
-                => new Enumerator(_dictionary);
+                => new(_dictionary);
 
             public void CopyTo(TKey[] array, int index)
             {
@@ -1473,7 +1473,7 @@ namespace Microsoft.CodeAnalysis.Collections
             }
 
             public Enumerator GetEnumerator()
-                => new Enumerator(_dictionary);
+                => new(_dictionary);
 
             public void CopyTo(TValue[] array, int index)
             {

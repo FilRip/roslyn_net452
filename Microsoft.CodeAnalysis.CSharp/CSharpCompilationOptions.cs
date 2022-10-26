@@ -376,7 +376,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         public CSharpCompilationOptions WithUsings(IEnumerable<string>? usings) =>
-            new CSharpCompilationOptions(this) { Usings = usings.AsImmutableOrEmpty() };
+            new(this) { Usings = usings.AsImmutableOrEmpty() };
 
         public CSharpCompilationOptions WithUsings(params string[]? usings) => WithUsings((IEnumerable<string>?)usings);
 
@@ -477,7 +477,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         public new CSharpCompilationOptions WithSpecificDiagnosticOptions(IEnumerable<KeyValuePair<string, ReportDiagnostic>>? values) =>
-            new CSharpCompilationOptions(this) { SpecificDiagnosticOptions = values.ToImmutableDictionaryOrEmpty() };
+            new(this) { SpecificDiagnosticOptions = values.ToImmutableDictionaryOrEmpty() };
 
         public new CSharpCompilationOptions WithReportSuppressedDiagnostics(bool reportSuppressedDiagnostics)
         {

@@ -4053,7 +4053,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return methods;
             }
 
-            HashSet<Symbol> hiddenSymbols = new HashSet<Symbol>();
+            HashSet<Symbol> hiddenSymbols = new();
             foreach (MethodSymbol method in methods)
             {
                 OverriddenOrHiddenMembersResult overriddenOrHiddenMembers = method.OverriddenOrHiddenMembers;

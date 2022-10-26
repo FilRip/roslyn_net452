@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis
 
         private static void ClearReadOnlyFlagOnFiles(string directoryPath)
         {
-            DirectoryInfo directory = new DirectoryInfo(directoryPath);
+            DirectoryInfo directory = new(directoryPath);
 
             foreach (var file in directory.EnumerateFiles(searchPattern: "*", searchOption: SearchOption.AllDirectories))
             {

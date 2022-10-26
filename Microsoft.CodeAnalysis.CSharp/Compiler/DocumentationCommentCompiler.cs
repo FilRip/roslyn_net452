@@ -139,7 +139,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CSharpCompilation compilation = symbol.DeclaringCompilation;
 
             PooledStringBuilder pooled = PooledStringBuilder.GetInstance();
-            StringWriter writer = new StringWriter(pooled.Builder);
+            StringWriter writer = new(pooled.Builder);
 
             var compiler = new DocumentationCommentCompiler(
                 assemblyName: null,
@@ -964,7 +964,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static string ToBadCrefString(CrefSyntax cref)
         {
-            using (StringWriter tmp = new StringWriter(CultureInfo.InvariantCulture))
+            using (StringWriter tmp = new(CultureInfo.InvariantCulture))
             {
                 cref.WriteTo(tmp);
                 return "!:" + tmp.ToString().Replace("{", "&lt;").Replace("}", "&gt;");
@@ -1197,7 +1197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             string message = e.Message;
             try
             {
-                ResourceManager manager = new ResourceManager("System.Xml", typeof(XmlException).GetTypeInfo().Assembly);
+                ResourceManager manager = new("System.Xml", typeof(XmlException).GetTypeInfo().Assembly);
                 string locationTemplate = manager.GetString("Xml_MessageWithErrorPosition");
                 string locationString = string.Format(locationTemplate, "", e.LineNumber, e.LinePosition); // first arg is where the problem description goes
                 int position = message.IndexOf(locationString, StringComparison.Ordinal); // Expect exact match

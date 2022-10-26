@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
 
         private sealed class Walker : OperationWalker<Dictionary<SyntaxNode, IOperation>>
         {
-            internal static readonly Walker Instance = new Walker();
+            internal static readonly Walker Instance = new();
 
             public override object? DefaultVisit(IOperation operation, Dictionary<SyntaxNode, IOperation> argument)
             {

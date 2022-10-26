@@ -426,7 +426,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    SymbolDistinguisher distinguisher = new SymbolDistinguisher(this.Compilation, inferredType.Type, iterationVariableType.Type);
+                    SymbolDistinguisher distinguisher = new(this.Compilation, inferredType.Type, iterationVariableType.Type);
                     diagnostics.Add(ErrorCode.ERR_NoExplicitConv, foreachKeyword.GetLocation(), distinguisher.First, distinguisher.Second);
                 }
                 hasErrors = true;
@@ -457,7 +457,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // We're wrapping the collection expression in a (non-synthesized) conversion so that its converted
             // type (i.e. builder.CollectionType) will be available in the binding API.
-            BoundConversion convertedCollectionExpression = new BoundConversion(
+            BoundConversion convertedCollectionExpression = new(
                 collectionExpr.Syntax,
                 collectionExpr,
                 builder.CollectionConversion,

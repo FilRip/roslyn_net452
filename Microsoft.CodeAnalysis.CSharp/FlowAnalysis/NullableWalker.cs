@@ -7164,7 +7164,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             static VisitResult withType(VisitResult visitResult, TypeSymbol newType) =>
-                new VisitResult(TypeWithState.Create(newType, visitResult.RValueType.State),
+                new(TypeWithState.Create(newType, visitResult.RValueType.State),
                                 TypeWithAnnotations.Create(newType, visitResult.LValueType.NullableAnnotation));
         }
 
@@ -9935,7 +9935,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private sealed class NullabilityInfoTypeComparer : IEqualityComparer<(NullabilityInfo info, TypeSymbol? type)>
         {
-            public static readonly NullabilityInfoTypeComparer Instance = new NullabilityInfoTypeComparer();
+            public static readonly NullabilityInfoTypeComparer Instance = new();
 
             public bool Equals((NullabilityInfo info, TypeSymbol? type) x, (NullabilityInfo info, TypeSymbol? type) y)
             {
@@ -9951,7 +9951,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private sealed class ExpressionAndSymbolEqualityComparer : IEqualityComparer<(BoundNode? expr, Symbol symbol)>
         {
-            internal static readonly ExpressionAndSymbolEqualityComparer Instance = new ExpressionAndSymbolEqualityComparer();
+            internal static readonly ExpressionAndSymbolEqualityComparer Instance = new();
 
             private ExpressionAndSymbolEqualityComparer() { }
 

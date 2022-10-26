@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
         }
 
         private static NullableContextState GetContextForFileStart()
-            => new NullableContextState(
+            => new(
                 position: 0,
                 warningsState: NullableContextState.State.Unknown,
                 annotationsState: NullableContextState.State.Unknown);
@@ -171,7 +171,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         private sealed class PositionComparer : IComparer<NullableContextState>
         {
-            internal static readonly PositionComparer Instance = new PositionComparer();
+            internal static readonly PositionComparer Instance = new();
 
             public int Compare(NullableContextState x, NullableContextState y)
             {

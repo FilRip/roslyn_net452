@@ -396,18 +396,18 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         private BoundLocal _assignmentLocal;
 
         private readonly Dictionary<LocalSymbol, LocalDefUseInfo> _locals =
-            new Dictionary<LocalSymbol, LocalDefUseInfo>();
+            new();
 
         // we need to guarantee same stack patterns at branches and labels.
         // we do that by placing a fake dummy local at one end of a branch and force that it is accessible at another.
         // if any stack local tries to intervene and misbalance the stack, it will clash with the dummy and will be rejected.
         private readonly SmallDictionary<object, DummyLocal> _dummyVariables =
-            new SmallDictionary<object, DummyLocal>(ReferenceEqualityComparer.Instance);
+            new(ReferenceEqualityComparer.Instance);
 
 
         // fake local that represents the eval stack.
         // when we need to ensure that eval stack is not blocked by stack Locals, we record an access to empty.
-        public static readonly DummyLocal empty = new DummyLocal();
+        public static readonly DummyLocal empty = new();
 
         private int _recursionDepth;
 

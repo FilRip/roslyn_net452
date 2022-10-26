@@ -35,8 +35,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             NamedTypeSymbolAdapter, FieldSymbolAdapter, MethodSymbolAdapter, EventSymbolAdapter, PropertySymbolAdapter, ParameterSymbolAdapter, TypeParameterSymbolAdapter,
             EmbeddedType, EmbeddedField, EmbeddedMethod, EmbeddedEvent, EmbeddedProperty, EmbeddedParameter, EmbeddedTypeParameter>
     {
-        private readonly ConcurrentDictionary<AssemblySymbol, string> _assemblyGuidMap = new ConcurrentDictionary<AssemblySymbol, string>(ReferenceEqualityComparer.Instance);
-        private readonly ConcurrentDictionary<Symbol, bool> _reportedSymbolsMap = new ConcurrentDictionary<Symbol, bool>(ReferenceEqualityComparer.Instance);
+        private readonly ConcurrentDictionary<AssemblySymbol, string> _assemblyGuidMap = new(ReferenceEqualityComparer.Instance);
+        private readonly ConcurrentDictionary<Symbol, bool> _reportedSymbolsMap = new(ReferenceEqualityComparer.Instance);
         private NamedTypeSymbol _lazySystemStringType = ErrorTypeSymbol.UnknownResultType;
         private readonly MethodSymbol[] _lazyWellKnownTypeMethods;
 
@@ -346,7 +346,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         {
 
             var adapter = namedType.GetCciAdapter();
-            EmbeddedType embedded = new EmbeddedType(this, adapter);
+            EmbeddedType embedded = new(this, adapter);
             EmbeddedType cached = EmbeddedTypesMap.GetOrAdd(adapter, embedded);
 
             bool isInterface = (namedType.IsInterface);
@@ -408,7 +408,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             DiagnosticBag diagnostics)
         {
 
-            EmbeddedField embedded = new EmbeddedField(type, field);
+            EmbeddedField embedded = new(type, field);
             EmbeddedField cached = EmbeddedFieldsMap.GetOrAdd(field, embedded);
 
             if (embedded != cached)
@@ -442,7 +442,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             DiagnosticBag diagnostics)
         {
 
-            EmbeddedMethod embedded = new EmbeddedMethod(type, method);
+            EmbeddedMethod embedded = new(type, method);
             EmbeddedMethod cached = EmbeddedMethodsMap.GetOrAdd(method, embedded);
 
             if (embedded != cached)
@@ -507,7 +507,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             EmbeddedMethod embeddedGet = getMethod != null ? EmbedMethod(type, getMethod, syntaxNodeOpt, diagnostics) : null;
             EmbeddedMethod embeddedSet = setMethod != null ? EmbedMethod(type, setMethod, syntaxNodeOpt, diagnostics) : null;
 
-            EmbeddedProperty embedded = new EmbeddedProperty(property, embeddedGet, embeddedSet);
+            EmbeddedProperty embedded = new(property, embeddedGet, embeddedSet);
             EmbeddedProperty cached = EmbeddedPropertiesMap.GetOrAdd(property, embedded);
 
             if (embedded != cached)
@@ -540,7 +540,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             EmbeddedMethod embeddedAdd = addMethod != null ? EmbedMethod(type, addMethod, syntaxNodeOpt, diagnostics) : null;
             EmbeddedMethod embeddedRemove = removeMethod != null ? EmbedMethod(type, removeMethod, syntaxNodeOpt, diagnostics) : null;
 
-            EmbeddedEvent embedded = new EmbeddedEvent(@event, embeddedAdd, embeddedRemove);
+            EmbeddedEvent embedded = new(@event, embeddedAdd, embeddedRemove);
             EmbeddedEvent cached = EmbeddedEventsMap.GetOrAdd(@event, embedded);
 
             if (embedded != cached)

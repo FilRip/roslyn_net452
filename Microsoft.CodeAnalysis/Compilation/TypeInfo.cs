@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis
 {
     public readonly struct TypeInfo : IEquatable<TypeInfo>
     {
-        internal static readonly TypeInfo None = new TypeInfo(type: null, convertedType: null, nullability: default, convertedNullability: default);
+        internal static readonly TypeInfo None = new(type: null, convertedType: null, nullability: default, convertedNullability: default);
 
         /// <summary>
         /// The type of the expression represented by the syntax node. For expressions that do not

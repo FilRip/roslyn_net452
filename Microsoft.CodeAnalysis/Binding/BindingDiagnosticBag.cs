@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis
         public ImmutableArray<Diagnostic> Diagnostics => _diagnostics.NullToEmpty();
         public ImmutableArray<TAssemblySymbol> Dependencies => _dependencies.NullToEmpty();
 
-        public static ImmutableBindingDiagnostic<TAssemblySymbol> Empty => new ImmutableBindingDiagnostic<TAssemblySymbol>(default, default);
+        public static ImmutableBindingDiagnostic<TAssemblySymbol> Empty => new(default, default);
 
         public ImmutableBindingDiagnostic(ImmutableArray<Diagnostic> diagnostics, ImmutableArray<TAssemblySymbol> dependencies)
         {
@@ -312,7 +312,7 @@ namespace Microsoft.CodeAnalysis
             _dependencies = dependencies.NullToEmpty();
         }
 
-        public ImmutableBindingDiagnostic<TAssemblySymbol> NullToEmpty() => new ImmutableBindingDiagnostic<TAssemblySymbol>(Diagnostics, Dependencies);
+        public ImmutableBindingDiagnostic<TAssemblySymbol> NullToEmpty() => new(Diagnostics, Dependencies);
 
         public static bool operator ==(ImmutableBindingDiagnostic<TAssemblySymbol> first, ImmutableBindingDiagnostic<TAssemblySymbol> second)
         {

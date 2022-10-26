@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #if DEBUG
         protected string DumpLabels()
         {
-            StringBuilder result = new StringBuilder();
+            StringBuilder result = new();
             result.Append("Labels{");
             bool first = true;
             foreach (var key in _labels.Keys)

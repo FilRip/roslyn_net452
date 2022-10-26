@@ -51,11 +51,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private readonly HashSet<Symbol> _dataFlowsOut = new HashSet<Symbol>();
+        private readonly HashSet<Symbol> _dataFlowsOut = new();
 
 #if DEBUG
         // we'd like to ensure that only variables get returned in DataFlowsOut that were assigned to inside the region.
-        private readonly HashSet<Symbol> _assignedInside = new HashSet<Symbol>();
+        private readonly HashSet<Symbol> _assignedInside = new();
 #endif
 
         private HashSet<Symbol> Analyze(ref bool badRegion)

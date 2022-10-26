@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// <see cref="Diagnostic"/> to be suppressed, which must be from <see cref="SuppressionAnalysisContext.ReportedDiagnostics"/>
         /// for the suppression context in which this suppression is being created.</param>
         public static Suppression Create(SuppressionDescriptor descriptor, Diagnostic suppressedDiagnostic)
-            => new Suppression(descriptor, suppressedDiagnostic);
+            => new(descriptor, suppressedDiagnostic);
 
         /// <summary>
         /// Descriptor for this suppression.

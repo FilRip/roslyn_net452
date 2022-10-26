@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             public RangeVariableSymbol rangeVariable;
 
             // the clauses, above.  The top of the stack is the leftmost clause
-            public readonly Stack<QueryClauseSyntax> clauses = new Stack<QueryClauseSyntax>();
+            public readonly Stack<QueryClauseSyntax> clauses = new();
 
             // the SELECT clause above (or a groupby clause in its place)
             public SelectOrGroupClauseSyntax selectOrGroup;
@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // given names in reverse order.  So, for example, if the strings are ["a", "b"], the query
             // variable is represented by the expression TRANSPARENT.b.a where TRANSPARENT is a parameter
             // of the current lambda expression.
-            public readonly Dictionary<RangeVariableSymbol, ArrayBuilder<string>> allRangeVariables = new Dictionary<RangeVariableSymbol, ArrayBuilder<string>>();
+            public readonly Dictionary<RangeVariableSymbol, ArrayBuilder<string>> allRangeVariables = new();
 
             public static RangeVariableMap RangeVariableMap(params RangeVariableSymbol[] parameters)
             {

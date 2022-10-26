@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = new CompoundUseSiteInfo<AssemblySymbol>(diagnostics, ContainingAssembly);
+            CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = new(diagnostics, ContainingAssembly);
 
             if (declaration.Kind is DeclarationKind.Record or DeclarationKind.RecordStruct)
             {

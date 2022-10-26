@@ -47,19 +47,19 @@ namespace Microsoft.CodeAnalysis
         // the solution. We share string instances for each diagnostic ID to avoid creating
         // excess strings
         private readonly ConcurrentDictionary<ReadOnlyMemory<char>, string> _diagnosticIdCache =
-            new ConcurrentDictionary<ReadOnlyMemory<char>, string>(CharMemoryEqualityComparer.Instance);
+            new(CharMemoryEqualityComparer.Instance);
 
         // PERF: Most files will probably have the same options, so share the dictionary instances
         private readonly ConcurrentCache<List<Section>, AnalyzerConfigOptionsResult> _optionsCache =
-            new ConcurrentCache<List<Section>, AnalyzerConfigOptionsResult>(50, SequenceEqualComparer.Instance); // arbitrary size
+            new(50, SequenceEqualComparer.Instance); // arbitrary size
 
         private readonly ObjectPool<TreeOptions.Builder> _treeOptionsPool =
-            new ObjectPool<TreeOptions.Builder>(() => ImmutableDictionary.CreateBuilder<string, ReportDiagnostic>(Section.PropertiesKeyComparer));
+            new(() => ImmutableDictionary.CreateBuilder<string, ReportDiagnostic>(Section.PropertiesKeyComparer));
 
         private readonly ObjectPool<AnalyzerOptions.Builder> _analyzerOptionsPool =
-            new ObjectPool<AnalyzerOptions.Builder>(() => ImmutableDictionary.CreateBuilder<string, string>(Section.PropertiesKeyComparer));
+            new(() => ImmutableDictionary.CreateBuilder<string, string>(Section.PropertiesKeyComparer));
 
-        private readonly ObjectPool<List<Section>> _sectionKeyPool = new ObjectPool<List<Section>>(() => new List<Section>());
+        private readonly ObjectPool<List<Section>> _sectionKeyPool = new(() => new List<Section>());
 
         private StrongBox<AnalyzerConfigOptionsResult>? _lazyConfigOptions;
 
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         private static readonly DiagnosticDescriptor InvalidAnalyzerConfigSeverityDescriptor
-            = new DiagnosticDescriptor(
+            = new(
                 "InvalidSeverityInAnalyzerConfig",
                 Properties.Resources.WRN_InvalidSeverityInAnalyzerConfig_Title,
                 Properties.Resources.WRN_InvalidSeverityInAnalyzerConfig,
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis
                 isEnabledByDefault: true);
 
         private static readonly DiagnosticDescriptor MultipleGlobalAnalyzerKeysDescriptor
-            = new DiagnosticDescriptor(
+            = new(
                 "MultipleGlobalAnalyzerKeys",
                 Properties.Resources.WRN_MultipleGlobalAnalyzerKeys_Title,
                 Properties.Resources.WRN_MultipleGlobalAnalyzerKeys,
@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis
                 isEnabledByDefault: true);
 
         private static readonly DiagnosticDescriptor InvalidGlobalAnalyzerSectionDescriptor
-            = new DiagnosticDescriptor(
+            = new(
                 "InvalidGlobalSectionName",
                 Properties.Resources.WRN_InvalidGlobalSectionName_Title,
                 Properties.Resources.WRN_InvalidGlobalSectionName,
@@ -463,7 +463,7 @@ namespace Microsoft.CodeAnalysis
         /// <returns>A <see cref="GlobalAnalyzerConfig" /> that contains the merged partial configs, or <c>null</c> if there were no partial configs</returns>
         internal static GlobalAnalyzerConfig MergeGlobalConfigs(ArrayBuilder<AnalyzerConfig> analyzerConfigs, out ImmutableArray<Diagnostic> diagnostics)
         {
-            GlobalAnalyzerConfigBuilder globalAnalyzerConfigBuilder = new GlobalAnalyzerConfigBuilder();
+            GlobalAnalyzerConfigBuilder globalAnalyzerConfigBuilder = new();
             DiagnosticBag diagnosticBag = DiagnosticBag.GetInstance();
             for (int i = 0; i < analyzerConfigs.Count; i++)
             {
@@ -545,14 +545,14 @@ namespace Microsoft.CodeAnalysis
                 Section globalSection = GetSection(string.Empty);
                 _values.Remove(string.Empty);
 
-                ArrayBuilder<Section> namedSectionBuilder = new ArrayBuilder<Section>(_values.Count);
+                ArrayBuilder<Section> namedSectionBuilder = new(_values.Count);
                 foreach (var sectionName in _values.Keys.Order())
                 {
                     namedSectionBuilder.Add(GetSection(sectionName));
                 }
 
                 // create the global config
-                GlobalAnalyzerConfig globalConfig = new GlobalAnalyzerConfig(globalSection, namedSectionBuilder.ToImmutableAndFree());
+                GlobalAnalyzerConfig globalConfig = new(globalSection, namedSectionBuilder.ToImmutableAndFree());
                 _values = null;
                 return globalConfig;
             }

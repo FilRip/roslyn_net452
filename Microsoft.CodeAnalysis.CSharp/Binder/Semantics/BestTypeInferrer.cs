@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // All non-null types are candidates for best type inference.
             IEqualityComparer<TypeSymbol> comparer = conversions.IncludeNullability ? Symbols.SymbolEqualityComparer.ConsiderEverything : Symbols.SymbolEqualityComparer.IgnoringNullable;
-            HashSet<TypeSymbol> candidateTypes = new HashSet<TypeSymbol>(comparer);
+            HashSet<TypeSymbol> candidateTypes = new(comparer);
             foreach (BoundExpression expr in exprs)
             {
                 TypeSymbol? type = expr.Type;

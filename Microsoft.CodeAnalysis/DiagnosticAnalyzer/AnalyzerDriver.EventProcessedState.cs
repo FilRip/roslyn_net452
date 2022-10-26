@@ -13,8 +13,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// </summary>
         private sealed class EventProcessedState
         {
-            public static readonly EventProcessedState Processed = new EventProcessedState(EventProcessedStateKind.Processed);
-            public static readonly EventProcessedState NotProcessed = new EventProcessedState(EventProcessedStateKind.NotProcessed);
+            public static readonly EventProcessedState Processed = new(EventProcessedStateKind.Processed);
+            public static readonly EventProcessedState NotProcessed = new(EventProcessedStateKind.NotProcessed);
 
             public EventProcessedStateKind Kind { get; }
 

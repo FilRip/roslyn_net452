@@ -503,7 +503,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 fixedArguments.Add(IsUnfixed(iParam) ? TypeWithAnnotations.Create(_methodTypeParameters[iParam]) : _fixedResults[iParam]);
             }
 
-            TypeMap typeMap = new TypeMap(_constructedContainingTypeOfMethod, _methodTypeParameters, fixedArguments.ToImmutableAndFree());
+            TypeMap typeMap = new(_constructedContainingTypeOfMethod, _methodTypeParameters, fixedArguments.ToImmutableAndFree());
             return typeMap.SubstituteType(delegateOrFunctionPointerType).Type;
         }
 
@@ -2934,7 +2934,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private sealed class EqualsIgnoringDynamicTupleNamesAndNullabilityComparer : EqualityComparer<TypeWithAnnotations>
         {
-            internal static readonly EqualsIgnoringDynamicTupleNamesAndNullabilityComparer Instance = new EqualsIgnoringDynamicTupleNamesAndNullabilityComparer();
+            internal static readonly EqualsIgnoringDynamicTupleNamesAndNullabilityComparer Instance = new();
 
             public override int GetHashCode(TypeWithAnnotations obj)
             {

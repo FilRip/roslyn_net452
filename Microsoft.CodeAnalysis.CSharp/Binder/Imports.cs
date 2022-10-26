@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]
     internal sealed class Imports
     {
-        internal static readonly Imports Empty = new Imports(
+        internal static readonly Imports Empty = new(
             ImmutableDictionary<string, AliasAndUsingDirective>.Empty,
             ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty,
             ImmutableArray<AliasAndExternAliasDirective>.Empty);

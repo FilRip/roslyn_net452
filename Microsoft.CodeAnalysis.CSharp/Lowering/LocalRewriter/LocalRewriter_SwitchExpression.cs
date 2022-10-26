@@ -51,8 +51,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 BoundDecisionDag decisionDag = ShareTempsIfPossibleAndEvaluateInput(
                     node.DecisionDag, loweredSwitchGoverningExpression, result, out BoundExpression savedInputExpression);
 
-                object restorePointForEnclosingStatement = new object();
-                object restorePointForSwitchBody = new object();
+                object restorePointForEnclosingStatement = new();
+                object restorePointForSwitchBody = new();
 
                 // lower the decision dag.
                 (ImmutableArray<BoundStatement> loweredDag, ImmutableDictionary<SyntaxNode, ImmutableArray<BoundStatement>> switchSections) =

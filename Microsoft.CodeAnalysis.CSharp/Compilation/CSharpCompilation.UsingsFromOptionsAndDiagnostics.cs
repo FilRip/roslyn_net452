@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private class UsingsFromOptionsAndDiagnostics
         {
-            public static readonly UsingsFromOptionsAndDiagnostics Empty = new UsingsFromOptionsAndDiagnostics() { UsingNamespacesOrTypes = ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty, Diagnostics = null };
+            public static readonly UsingsFromOptionsAndDiagnostics Empty = new() { UsingNamespacesOrTypes = ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty, Diagnostics = null };
 
             public ImmutableArray<NamespaceOrTypeAndUsingDirective> UsingNamespacesOrTypes { get; init; }
             public DiagnosticBag? Diagnostics { get; init; }

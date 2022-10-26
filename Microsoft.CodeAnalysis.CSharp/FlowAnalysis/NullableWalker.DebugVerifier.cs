@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             private readonly ImmutableDictionary<BoundExpression, (NullabilityInfo Info, TypeSymbol? Type)> _analyzedNullabilityMap;
             private readonly SnapshotManager? _snapshotManager;
-            private readonly HashSet<BoundExpression> _visitedExpressions = new HashSet<BoundExpression>();
+            private readonly HashSet<BoundExpression> _visitedExpressions = new();
             private int _recursionDepth;
 
             private DebugVerifier(ImmutableDictionary<BoundExpression, (NullabilityInfo Info, TypeSymbol? Type)> analyzedNullabilityMap, SnapshotManager? snapshotManager)

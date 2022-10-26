@@ -175,7 +175,7 @@ namespace Microsoft.Cci
         {
             theResources = SortResources(theResources);
 
-            Directory typeDirectory = new Directory(string.Empty, 0);
+            Directory typeDirectory = new(string.Empty, 0);
             Directory nameDirectory = null;
             Directory languageDirectory = null;
             int lastTypeID = int.MinValue;

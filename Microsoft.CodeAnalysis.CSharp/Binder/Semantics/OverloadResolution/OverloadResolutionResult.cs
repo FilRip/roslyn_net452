@@ -1111,7 +1111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             int parm = badArg.Result.ParameterFromArgument(arg);
-            SourceLocation sourceLocation = new SourceLocation(argument.Syntax);
+            SourceLocation sourceLocation = new(argument.Syntax);
 
             // Early out: if the bad argument is an __arglist parameter then simply report that:
 
@@ -1237,13 +1237,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // have the same format as the display value of the parameter).
                     if (argument.Display is TypeSymbol argType)
                     {
-                        SignatureOnlyParameterSymbol displayArg = new SignatureOnlyParameterSymbol(
+                        SignatureOnlyParameterSymbol displayArg = new(
                             TypeWithAnnotations.Create(argType),
                             ImmutableArray<CustomModifier>.Empty,
                             isParams: false,
                             refKind: refArg);
 
-                        SymbolDistinguisher distinguisher = new SymbolDistinguisher(binder.Compilation, displayArg, UnwrapIfParamsArray(parameter, isLastParameter));
+                        SymbolDistinguisher distinguisher = new(binder.Compilation, displayArg, UnwrapIfParamsArray(parameter, isLastParameter));
 
                         // CS1503: Argument {0}: cannot convert from '{1}' to '{2}'
                         diagnostics.Add(

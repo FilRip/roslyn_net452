@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private readonly HashSet<LabeledStatementSyntax> _entryPoints = new HashSet<LabeledStatementSyntax>();
+        private readonly HashSet<LabeledStatementSyntax> _entryPoints = new();
 
         private void Analyze(ref bool badRegion)
         {

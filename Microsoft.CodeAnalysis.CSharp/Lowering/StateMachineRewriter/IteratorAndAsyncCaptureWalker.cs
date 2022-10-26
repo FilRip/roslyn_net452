@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         // In Release builds we hoist only variables (locals and parameters) that are captured. 
         // This set will contain such variables after the bound tree is visited.
-        private readonly OrderedSet<Symbol> _variablesToHoist = new OrderedSet<Symbol>();
+        private readonly OrderedSet<Symbol> _variablesToHoist = new();
 
         // Contains variables that are captured but can't be hoisted since their type can't be allocated on heap.
         // The value is a list of all uses of each such variable.
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // The initializing expressions for compiler-generated ref local temps.  If the temp needs to be hoisted, then any
         // variables in its initializing expression will need to be hoisted too.
-        private readonly Dictionary<LocalSymbol, BoundExpression> _boundRefLocalInitializers = new Dictionary<LocalSymbol, BoundExpression>();
+        private readonly Dictionary<LocalSymbol, BoundExpression> _boundRefLocalInitializers = new();
 
         private IteratorAndAsyncCaptureWalker(CSharpCompilation compilation, MethodSymbol method, BoundNode node, HashSet<Symbol> initiallyAssignedVariables)
             : base(compilation,

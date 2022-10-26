@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// </summary>
         private sealed class CategorizedDiagnosticQueue : DiagnosticQueue
         {
-            private readonly object _gate = new object();
+            private readonly object _gate = new();
             private Dictionary<DiagnosticAnalyzer, SimpleDiagnosticQueue>? _lazyLocalSemanticDiagnostics;
             private Dictionary<DiagnosticAnalyzer, SimpleDiagnosticQueue>? _lazyLocalSyntaxDiagnostics;
             private Dictionary<DiagnosticAnalyzer, SimpleDiagnosticQueue>? _lazyNonLocalDiagnostics;

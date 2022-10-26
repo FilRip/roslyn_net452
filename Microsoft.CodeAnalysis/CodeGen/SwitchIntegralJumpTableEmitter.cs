@@ -291,7 +291,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             // and the second half is mid to last.
             int mid = (low + high + 1) / 2;
 
-            object secondHalfLabel = new object();
+            object secondHalfLabel = new();
 
             // Emit a conditional branch to the second half
             // before emitting the first half buckets.

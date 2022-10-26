@@ -61,10 +61,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private readonly HashSet<Symbol> _readInside = new HashSet<Symbol>();
-        private readonly HashSet<Symbol> _writtenInside = new HashSet<Symbol>();
-        private readonly HashSet<Symbol> _readOutside = new HashSet<Symbol>();
-        private readonly HashSet<Symbol> _writtenOutside = new HashSet<Symbol>();
+        private readonly HashSet<Symbol> _readInside = new();
+        private readonly HashSet<Symbol> _writtenInside = new();
+        private readonly HashSet<Symbol> _readOutside = new();
+        private readonly HashSet<Symbol> _writtenOutside = new();
 
         private ReadWriteWalker(CSharpCompilation compilation, Symbol member, BoundNode node, BoundNode firstInRegion, BoundNode lastInRegion,
             HashSet<PrefixUnaryExpressionSyntax> unassignedVariableAddressOfSyntaxes)

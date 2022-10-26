@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                IncludeElementExpander expander = new IncludeElementExpander(
+                IncludeElementExpander expander = new(
                     memberSymbol,
                     sourceIncludeElementNodes,
                     compilation,
@@ -238,7 +238,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    XComment failureComment = new XComment(commentMessage);
+                    XComment failureComment = new(commentMessage);
                     return new XNode[] { failureComment, container }; // Already copied.
                 }
             }

@@ -12,7 +12,7 @@ namespace Roslyn.Utilities
     /// </summary>
     internal sealed class CharMemoryEqualityComparer : IEqualityComparer<ReadOnlyMemory<char>>
     {
-        public static readonly CharMemoryEqualityComparer Instance = new CharMemoryEqualityComparer();
+        public static readonly CharMemoryEqualityComparer Instance = new();
 
         private CharMemoryEqualityComparer() { }
 

@@ -270,7 +270,7 @@ namespace Microsoft.CodeAnalysis
 
             uint expAsDword = br.ReadUInt32();
 
-            RSAParameters rsaParameters = new RSAParameters();
+            RSAParameters rsaParameters = new();
             rsaParameters.Exponent = ExponentAsBytes(expAsDword);
             rsaParameters.Modulus = br.ReadReversed(modulusLength);
             if (includePrivateParameters)

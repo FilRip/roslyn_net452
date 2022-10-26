@@ -186,14 +186,14 @@ namespace Microsoft.CodeAnalysis
         private static readonly ImmutableArray<byte> s_SILVERLIGHT_PUBLICKEY_STR_L = ImmutableArray.Create(new byte[] { 0x31, 0xbf, 0x38, 0x56, 0xad, 0x36, 0x4e, 0x35 });
         private static readonly ImmutableArray<byte> s_RIA_SERVICES_KEY_TOKEN = ImmutableArray.Create(new byte[] { 0xdd, 0xd0, 0xda, 0x4d, 0x3e, 0x67, 0x82, 0x17 });
 
-        private static readonly AssemblyVersion s_VER_VS_COMPATIBILITY_ASSEMBLYVERSION_STR_L = new AssemblyVersion(8, 0, 0, 0);
-        private static readonly AssemblyVersion s_VER_VS_ASSEMBLYVERSION_STR_L = new AssemblyVersion(10, 0, 0, 0);
-        private static readonly AssemblyVersion s_VER_SQL_ASSEMBLYVERSION_STR_L = new AssemblyVersion(9, 0, 242, 0);
-        private static readonly AssemblyVersion s_VER_LINQ_ASSEMBLYVERSION_STR_L = new AssemblyVersion(3, 0, 0, 0);
-        private static readonly AssemblyVersion s_VER_LINQ_ASSEMBLYVERSION_STR_2_L = new AssemblyVersion(3, 5, 0, 0);
-        private static readonly AssemblyVersion s_VER_SQL_ORCAS_ASSEMBLYVERSION_STR_L = new AssemblyVersion(3, 5, 0, 0);
-        private static readonly AssemblyVersion s_VER_ASSEMBLYVERSION_STR_L = new AssemblyVersion(4, 0, 0, 0);
-        private static readonly AssemblyVersion s_VER_VC_STLCLR_ASSEMBLYVERSION_STR_L = new AssemblyVersion(2, 0, 0, 0);
+        private static readonly AssemblyVersion s_VER_VS_COMPATIBILITY_ASSEMBLYVERSION_STR_L = new(8, 0, 0, 0);
+        private static readonly AssemblyVersion s_VER_VS_ASSEMBLYVERSION_STR_L = new(10, 0, 0, 0);
+        private static readonly AssemblyVersion s_VER_SQL_ASSEMBLYVERSION_STR_L = new(9, 0, 242, 0);
+        private static readonly AssemblyVersion s_VER_LINQ_ASSEMBLYVERSION_STR_L = new(3, 0, 0, 0);
+        private static readonly AssemblyVersion s_VER_LINQ_ASSEMBLYVERSION_STR_2_L = new(3, 5, 0, 0);
+        private static readonly AssemblyVersion s_VER_SQL_ORCAS_ASSEMBLYVERSION_STR_L = new(3, 5, 0, 0);
+        private static readonly AssemblyVersion s_VER_ASSEMBLYVERSION_STR_L = new(4, 0, 0, 0);
+        private static readonly AssemblyVersion s_VER_VC_STLCLR_ASSEMBLYVERSION_STR_L = new(2, 0, 0, 0);
         private const string NULL = null;
         private const bool TRUE = true;
 
@@ -204,7 +204,7 @@ namespace Microsoft.CodeAnalysis
         // :: -> .
 
         // copied from ndp\clr\src\fusion\binder\fxretarget.cpp
-        private static readonly FrameworkRetargetingDictionary s_arRetargetPolicy = new FrameworkRetargetingDictionary()
+        private static readonly FrameworkRetargetingDictionary s_arRetargetPolicy = new()
         {
             // ECMA v1.0 redirect    
             {"System", s_ECMA_PUBLICKEY_STR_L, new AssemblyVersion(1, 0, 0, 0), NULL, NULL, s_ECMA_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},
@@ -312,7 +312,7 @@ namespace Microsoft.CodeAnalysis
         };
 
         // Copied from ndp\clr\src\inc\fxretarget.h
-        private static readonly FrameworkAssemblyDictionary s_arFxPolicy = new FrameworkAssemblyDictionary()
+        private static readonly FrameworkAssemblyDictionary s_arFxPolicy = new()
         {
             {"Accessibility", s_MICROSOFT_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},
             {"CustomMarshalers", s_MICROSOFT_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},

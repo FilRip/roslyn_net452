@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Instance representing sealed custom attribute bag with no attributes.
         /// </summary>
-        public static readonly CustomAttributesBag<T> Empty = new CustomAttributesBag<T>(CustomAttributeBagCompletionPart.All, ImmutableArray<T>.Empty);
+        public static readonly CustomAttributesBag<T> Empty = new(CustomAttributeBagCompletionPart.All, ImmutableArray<T>.Empty);
 
         private CustomAttributesBag(CustomAttributeBagCompletionPart part, ImmutableArray<T> customAttributes)
         {

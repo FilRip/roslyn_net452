@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         Symbol existingDefinition = submissionSymbols.Symbols.First();
                         if (existingDefinition.Kind != SymbolKind.NamedType || arity == 0)
                         {
-                            CSDiagnosticInfo diagInfo = new CSDiagnosticInfo(ErrorCode.ERR_ConflictingAliasAndDefinition, name, existingDefinition.GetKindText());
+                            CSDiagnosticInfo diagInfo = new(ErrorCode.ERR_ConflictingAliasAndDefinition, name, existingDefinition.GetKindText());
                             var error = new ExtendedErrorTypeSymbol((NamespaceOrTypeSymbol)null, name, arity, diagInfo, unreported: true);
                             result.SetFrom(LookupResult.Good(error)); // force lookup to be done w/ error symbol as result
                             break;

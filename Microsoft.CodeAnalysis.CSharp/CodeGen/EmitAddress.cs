@@ -204,8 +204,8 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         private void EmitConditionalOperatorAddress(BoundConditionalOperator expr, AddressKind addressKind)
         {
 
-            object consequenceLabel = new object();
-            object doneLabel = new object();
+            object consequenceLabel = new();
+            object doneLabel = new();
 
             EmitCondBranch(expr.Condition, ref consequenceLabel, sense: true);
             AddExpressionTemp(EmitAddress(expr.Alternative, addressKind));

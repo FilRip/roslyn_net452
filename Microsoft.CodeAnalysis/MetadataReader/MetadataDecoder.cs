@@ -719,7 +719,7 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 TypeSymbol type = DecodeModifierTypeOrThrow(ref signatureReader);
-                ModifierInfo<TypeSymbol> modifier = new ModifierInfo<TypeSymbol>(isOptional, type);
+                ModifierInfo<TypeSymbol> modifier = new(isOptional, type);
 
                 if (modifiers == null)
                 {
@@ -1972,16 +1972,16 @@ namespace Microsoft.CodeAnalysis
                 // metadata tables and we'd prefer not to manipulate the corresponding symbol objects; 2) we bump TypeDefs
                 // to the front of the search order (i.e. ahead of symbols) because a MethodDef can correspond to a TypeDef
                 // but not to a type ref (i.e. symbol).
-                Queue<TypeDefinitionHandle> typeDefsToSearch = new Queue<TypeDefinitionHandle>();
-                Queue<TypeSymbol> typeSymbolsToSearch = new Queue<TypeSymbol>();
+                Queue<TypeDefinitionHandle> typeDefsToSearch = new();
+                Queue<TypeSymbol> typeSymbolsToSearch = new();
 
                 // A method def represents a method defined in this module, so we can
                 // just search the method defs of this module.
                 EnqueueTypeDefInterfacesAndBaseTypeOrThrow(typeDefsToSearch, typeSymbolsToSearch, searchTypeDef);
 
                 //catch both cycles and duplicate interfaces
-                HashSet<TypeDefinitionHandle> visitedTypeDefTokens = new HashSet<TypeDefinitionHandle>();
-                HashSet<TypeSymbol> visitedTypeSymbols = new HashSet<TypeSymbol>();
+                HashSet<TypeDefinitionHandle> visitedTypeDefTokens = new();
+                HashSet<TypeSymbol> visitedTypeSymbols = new();
 
                 bool hasMoreTypeDefs;
                 while ((hasMoreTypeDefs = (typeDefsToSearch.Count > 0)) || typeSymbolsToSearch.Count > 0)

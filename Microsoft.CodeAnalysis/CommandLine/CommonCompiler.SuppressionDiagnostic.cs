@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private sealed class SuppressionDiagnostic : Diagnostic
         {
-            private static readonly DiagnosticDescriptor s_suppressionDiagnosticDescriptor = new DiagnosticDescriptor(
+            private static readonly DiagnosticDescriptor s_suppressionDiagnosticDescriptor = new(
                 "SP0001",
                 CodeAnalysis.Properties.Resources.SuppressionDiagnosticDescriptorTitle,
                 CodeAnalysis.Properties.Resources.SuppressionDiagnosticDescriptorMessage,

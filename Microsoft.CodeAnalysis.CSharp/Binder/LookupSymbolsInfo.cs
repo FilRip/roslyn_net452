@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         // TODO: tune pool size.
         private const int poolSize = 64;
-        private static readonly ObjectPool<LookupSymbolsInfo> s_pool = new ObjectPool<LookupSymbolsInfo>(() => new LookupSymbolsInfo(), poolSize);
+        private static readonly ObjectPool<LookupSymbolsInfo> s_pool = new(() => new LookupSymbolsInfo(), poolSize);
 
         private LookupSymbolsInfo()
             : base(StringComparer.Ordinal)

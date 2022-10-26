@@ -33,11 +33,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             private EnumeratedValueSet(bool included, ImmutableHashSet<T> membersIncludedOrExcluded) =>
                 (this._included, this._membersIncludedOrExcluded) = (included, membersIncludedOrExcluded);
 
-            public static readonly EnumeratedValueSet<T, TTC> AllValues = new EnumeratedValueSet<T, TTC>(included: false, ImmutableHashSet<T>.Empty);
+            public static readonly EnumeratedValueSet<T, TTC> AllValues = new(included: false, ImmutableHashSet<T>.Empty);
 
-            public static readonly EnumeratedValueSet<T, TTC> NoValues = new EnumeratedValueSet<T, TTC>(included: true, ImmutableHashSet<T>.Empty);
+            public static readonly EnumeratedValueSet<T, TTC> NoValues = new(included: true, ImmutableHashSet<T>.Empty);
 
-            internal static EnumeratedValueSet<T, TTC> Including(T value) => new EnumeratedValueSet<T, TTC>(included: true, ImmutableHashSet<T>.Empty.Add(value));
+            internal static EnumeratedValueSet<T, TTC> Including(T value) => new(included: true, ImmutableHashSet<T>.Empty.Add(value));
 
             public bool IsEmpty => _included && _membersIncludedOrExcluded.IsEmpty;
 

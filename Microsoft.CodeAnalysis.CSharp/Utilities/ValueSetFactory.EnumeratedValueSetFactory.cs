@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private sealed class EnumeratedValueSetFactory<T, TTC> : IValueSetFactory<T> where TTC : struct, IEquatableValueTC<T> where T : notnull
         {
-            public static readonly EnumeratedValueSetFactory<T, TTC> Instance = new EnumeratedValueSetFactory<T, TTC>();
+            public static readonly EnumeratedValueSetFactory<T, TTC> Instance = new();
 
             IValueSet IValueSetFactory.AllValues => EnumeratedValueSet<T, TTC>.AllValues;
 

@@ -25,7 +25,7 @@ namespace Roslyn.Utilities
         }
 
         public ConfiguredYieldAwaiter GetAwaiter()
-            => new ConfiguredYieldAwaiter(_awaitable.GetAwaiter(), _continueOnCapturedContext);
+            => new(_awaitable.GetAwaiter(), _continueOnCapturedContext);
 
         public readonly struct ConfiguredYieldAwaiter
             : INotifyCompletion, ICriticalNotifyCompletion

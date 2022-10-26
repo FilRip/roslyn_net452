@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private const string s_titleSuffix = "_Title";
         private const string s_descriptionSuffix = "_Description";
-        private static readonly Lazy<ImmutableDictionary<ErrorCode, string>> s_categoriesMap = new Lazy<ImmutableDictionary<ErrorCode, string>>(CreateCategoriesMap);
+        private static readonly Lazy<ImmutableDictionary<ErrorCode, string>> s_categoriesMap = new(CreateCategoriesMap);
         public static readonly ImmutableHashSet<string> NullableWarnings;
 
         static ErrorFacts()

@@ -320,9 +320,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             NamedTypeSymbol result = null;
 
-            Guid interfaceGuidValue = new Guid();
+            Guid interfaceGuidValue = new();
             bool haveInterfaceGuidValue = false;
-            Guid scopeGuidValue = new Guid();
+            Guid scopeGuidValue = new();
             bool haveScopeGuidValue = false;
 
             if (isInterface && interfaceGuid != null)
@@ -367,7 +367,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 string candidateGuid;
                 bool haveCandidateGuidValue = false;
-                Guid candidateGuidValue = new Guid();
+                Guid candidateGuidValue = new();
 
                 // The type must be of the same kind (interface, struct, delegate or enum).
                 switch (candidate.TypeKind)

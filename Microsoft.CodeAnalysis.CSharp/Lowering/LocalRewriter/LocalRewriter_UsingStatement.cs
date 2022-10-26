@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundStatement MakeLocalUsingDeclarationStatement(BoundUsingLocalDeclarations usingDeclarations, ImmutableArray<BoundStatement> statements)
         {
             LocalDeclarationStatementSyntax syntax = (LocalDeclarationStatementSyntax)usingDeclarations.Syntax;
-            BoundBlock body = new BoundBlock(syntax, ImmutableArray<LocalSymbol>.Empty, statements);
+            BoundBlock body = new(syntax, ImmutableArray<LocalSymbol>.Empty, statements);
 
             var usingStatement = MakeDeclarationUsingStatement(syntax,
                                                                body,
@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             LocalSymbol localSymbol = localDeclaration.LocalSymbol;
             TypeSymbol localType = localSymbol.Type;
 
-            BoundLocal boundLocal = new BoundLocal(declarationSyntax, localSymbol, localDeclaration.InitializerOpt.ConstantValue, localType);
+            BoundLocal boundLocal = new(declarationSyntax, localSymbol, localDeclaration.InitializerOpt.ConstantValue, localType);
 
             BoundStatement? rewrittenDeclaration = VisitStatement(localDeclaration);
 

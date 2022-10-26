@@ -29,7 +29,7 @@ namespace Microsoft.DiaSymReader
         internal const int STREAM_SEEK_END = 2;
 
         private readonly int _chunkSize;
-        private readonly List<byte[]> _chunks = new List<byte[]>();
+        private readonly List<byte[]> _chunks = new();
         private int _position;
         private int _length;
 

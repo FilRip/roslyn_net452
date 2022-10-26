@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     public sealed class CachingSemanticModelProvider : SemanticModelProvider
     {
         private static readonly ConditionalWeakTable<Compilation, PerCompilationProvider>.CreateValueCallback s_createProviderCallback
-            = new ConditionalWeakTable<Compilation, PerCompilationProvider>.CreateValueCallback(compilation => new PerCompilationProvider(compilation));
+            = new(compilation => new PerCompilationProvider(compilation));
 
         private readonly ConditionalWeakTable<Compilation, PerCompilationProvider> _providerCache;
 

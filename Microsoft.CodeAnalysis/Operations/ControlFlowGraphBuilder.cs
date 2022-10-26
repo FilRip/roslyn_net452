@@ -21,8 +21,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
     internal sealed partial class ControlFlowGraphBuilder : OperationVisitor<int?, IOperation>
     {
         private readonly Compilation _compilation;
-        private readonly BasicBlockBuilder _entry = new BasicBlockBuilder(BasicBlockKind.Entry);
-        private readonly BasicBlockBuilder _exit = new BasicBlockBuilder(BasicBlockKind.Exit);
+        private readonly BasicBlockBuilder _entry = new(BasicBlockKind.Entry);
+        private readonly BasicBlockBuilder _exit = new(BasicBlockKind.Exit);
 
         private readonly ArrayBuilder<BasicBlockBuilder> _blocks;
         private readonly PooledDictionary<BasicBlockBuilder, RegionBuilder> _regionMap;
@@ -4554,8 +4554,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             ITypeSymbol booleanType = _compilation.GetSpecialType(SpecialType.System_Boolean);
             BasicBlockBuilder @continue = GetLabeledOrNewBlock(operation.ContinueLabel);
             BasicBlockBuilder? @break = GetLabeledOrNewBlock(operation.ExitLabel);
-            BasicBlockBuilder checkConditionBlock = new BasicBlockBuilder(BasicBlockKind.Block);
-            BasicBlockBuilder bodyBlock = new BasicBlockBuilder(BasicBlockKind.Block);
+            BasicBlockBuilder checkConditionBlock = new(BasicBlockKind.Block);
+            BasicBlockBuilder bodyBlock = new(BasicBlockKind.Block);
 
             var loopRegion = new RegionBuilder(ControlFlowRegionKind.LocalLifetime, locals: locals);
             EnterRegion(loopRegion);
@@ -5123,7 +5123,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 }
                 else
                 {
-                    BasicBlockBuilder afterIncrement = new BasicBlockBuilder(BasicBlockKind.Block);
+                    BasicBlockBuilder afterIncrement = new(BasicBlockKind.Block);
                     IOperation controlVariableReferenceForAssignment;
                     bool isNullable = ITypeSymbolHelpers.IsNullableType(operation.StepValue.Type);
 
@@ -5135,7 +5135,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                         // Spill control variable reference, we are going to have branches here.
                         SpillEvalStack();
 
-                        BasicBlockBuilder whenNotNull = new BasicBlockBuilder(BasicBlockKind.Block);
+                        BasicBlockBuilder whenNotNull = new(BasicBlockKind.Block);
 
                         EvalStackFrame nullCheckFrame = PushStackFrame();
                         IOperation condition = new BinaryOperation(BinaryOperatorKind.Or,

@@ -272,7 +272,7 @@ namespace Microsoft.CodeAnalysis
             }
             else
             {
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new();
                 foreach (Diagnostic diag in Bag) // NOTE: don't force resolution
                 {
                     builder.AppendLine(diag.ToString());
@@ -297,7 +297,7 @@ namespace Microsoft.CodeAnalysis
                     return bag;
                 }
 
-                ConcurrentQueue<Diagnostic> newBag = new ConcurrentQueue<Diagnostic>();
+                ConcurrentQueue<Diagnostic> newBag = new();
                 return Interlocked.CompareExchange(ref _lazyBag, newBag, null) ?? newBag;
             }
         }

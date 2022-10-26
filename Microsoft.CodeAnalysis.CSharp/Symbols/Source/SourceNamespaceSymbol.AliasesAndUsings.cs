@@ -976,7 +976,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             private class ExternAliasesAndDiagnostics
             {
-                public static readonly ExternAliasesAndDiagnostics Empty = new ExternAliasesAndDiagnostics() { ExternAliases = ImmutableArray<AliasAndExternAliasDirective>.Empty, Diagnostics = ImmutableArray<Diagnostic>.Empty };
+                public static readonly ExternAliasesAndDiagnostics Empty = new() { ExternAliases = ImmutableArray<AliasAndExternAliasDirective>.Empty, Diagnostics = ImmutableArray<Diagnostic>.Empty };
 
                 public ImmutableArray<AliasAndExternAliasDirective> ExternAliases { get; init; }
                 public ImmutableArray<Diagnostic> Diagnostics { get; init; }
@@ -985,7 +985,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             private class UsingsAndDiagnostics
             {
                 public static readonly UsingsAndDiagnostics Empty =
-                    new UsingsAndDiagnostics()
+                    new()
                     {
                         UsingAliases = ImmutableArray<AliasAndUsingDirective>.Empty,
                         UsingAliasesMap = null,
@@ -1011,7 +1011,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             private SymbolCompletionState _state;
 
             public static readonly MergedGlobalAliasesAndUsings Empty =
-                new MergedGlobalAliasesAndUsings()
+                new()
                 {
                     UsingAliasesMap = ImmutableDictionary<string, AliasAndUsingDirective>.Empty,
                     UsingNamespacesOrTypes = ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty,

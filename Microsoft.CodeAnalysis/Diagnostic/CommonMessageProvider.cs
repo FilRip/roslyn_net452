@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Caches the return values for <see cref="GetIdForErrorCode(int)"/>.
         /// </summary>
-        private static readonly ConcurrentDictionary<(string prefix, int code), string> s_errorIdCache = new ConcurrentDictionary<(string prefix, int code), string>();
+        private static readonly ConcurrentDictionary<(string prefix, int code), string> s_errorIdCache = new();
 
         /// <summary>
         /// Given an error code, get the severity (warning or error) of the code.

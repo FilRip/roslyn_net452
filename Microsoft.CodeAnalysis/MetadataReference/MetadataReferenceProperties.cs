@@ -25,12 +25,12 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Default properties for a module reference.
         /// </summary>
-        public static MetadataReferenceProperties Module => new MetadataReferenceProperties(MetadataImageKind.Module);
+        public static MetadataReferenceProperties Module => new(MetadataImageKind.Module);
 
         /// <summary>
         /// Default properties for an assembly reference.
         /// </summary>
-        public static MetadataReferenceProperties Assembly => new MetadataReferenceProperties(MetadataImageKind.Assembly);
+        public static MetadataReferenceProperties Assembly => new(MetadataImageKind.Assembly);
 
         /// <summary>
         /// Initializes reference properties.

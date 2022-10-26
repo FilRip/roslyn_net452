@@ -399,7 +399,7 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
         public IEnumerable<string> GetReferencedManagedModulesOrThrow()
         {
-            HashSet<EntityHandle> nameTokens = new HashSet<EntityHandle>();
+            HashSet<EntityHandle> nameTokens = new();
             foreach (var handle in MetadataReader.TypeReferences)
             {
                 TypeReference typeRef = MetadataReader.GetTypeReference(handle);
@@ -657,7 +657,7 @@ namespace Microsoft.CodeAnalysis
             // merged, even if they are equal according to the provided comparer.  This improves the error
             // experience because types retain their exact namespaces.
 
-            Dictionary<string, ArrayBuilder<TypeDefinitionHandle>> namespaces = new Dictionary<string, ArrayBuilder<TypeDefinitionHandle>>();
+            Dictionary<string, ArrayBuilder<TypeDefinitionHandle>> namespaces = new();
 
             GetTypeNamespaceNamesOrThrow(namespaces);
             GetForwardedTypeNamespaceNamesOrThrow(namespaces);
@@ -761,7 +761,7 @@ namespace Microsoft.CodeAnalysis
 
         private class NamespaceHandleEqualityComparer : IEqualityComparer<NamespaceDefinitionHandle>
         {
-            public static readonly NamespaceHandleEqualityComparer Singleton = new NamespaceHandleEqualityComparer();
+            public static readonly NamespaceHandleEqualityComparer Singleton = new();
 
             private NamespaceHandleEqualityComparer()
             {
@@ -3472,7 +3472,7 @@ namespace Microsoft.CodeAnalysis
         // rather than allocating on each call to MetadataReader.GetString(handle).
         private sealed class StringTableDecoder : MetadataStringDecoder
         {
-            public static readonly StringTableDecoder Instance = new StringTableDecoder();
+            public static readonly StringTableDecoder Instance = new();
 
             private StringTableDecoder() : base(System.Text.Encoding.UTF8) { }
 

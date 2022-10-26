@@ -262,7 +262,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             processHandlerMethod = processHandlerMethod.AsMember(fieldType);
 
             // _tokenTable
-            BoundFieldAccess fieldAccess = new BoundFieldAccess(
+            BoundFieldAccess fieldAccess = new(
                 syntax,
                 field.IsStatic ? null : new BoundThisReference(syntax, accessor.ThisParameter.Type),
                 field,
@@ -277,7 +277,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 arg0: fieldAccess);
 
             // value
-            BoundParameter parameterAccess = new BoundParameter(
+            BoundParameter parameterAccess = new(
                 syntax,
                 accessor.Parameters[0]);
 
@@ -361,13 +361,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 null :
                 new BoundThisReference(syntax, thisParameter.Type) { WasCompilerGenerated = true };
 
-            BoundFieldAccess boundBackingField = new BoundFieldAccess(syntax,
+            BoundFieldAccess boundBackingField = new(syntax,
                 receiver: fieldReceiver,
                 fieldSymbol: eventSymbol.AssociatedField,
                 constantValueOpt: null)
             { WasCompilerGenerated = true };
 
-            BoundParameter boundParameter = new BoundParameter(syntax,
+            BoundParameter boundParameter = new(syntax,
                 parameterSymbol: accessor.Parameters[0])
             { WasCompilerGenerated = true };
 
@@ -405,7 +405,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             Binder.ReportUseSite(compareExchangeMethod, diagnostics, syntax);
 
-            GeneratedLabelSymbol loopLabel = new GeneratedLabelSymbol("loop");
+            GeneratedLabelSymbol loopLabel = new("loop");
 
             const int numTemps = 3;
 

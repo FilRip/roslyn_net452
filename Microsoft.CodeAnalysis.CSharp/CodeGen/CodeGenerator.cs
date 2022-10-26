@@ -43,11 +43,11 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         // not 0 when in a protected region with a handler. 
         private int _tryNestingLevel;
 
-        private readonly SynthesizedLocalOrdinalsDispenser _synthesizedLocalOrdinals = new SynthesizedLocalOrdinalsDispenser();
+        private readonly SynthesizedLocalOrdinalsDispenser _synthesizedLocalOrdinals = new();
         private int _uniqueNameId;
 
         // label used when return is emitted in a form of store/goto
-        private static readonly object s_returnLabel = new object();
+        private static readonly object s_returnLabel = new();
 
         private int _asyncCatchHandlerOffset = -1;
         private ArrayBuilder<int> _asyncYieldPoints;

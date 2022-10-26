@@ -22,8 +22,8 @@ namespace Microsoft.CodeAnalysis
 
         private XmlLocation(string path, int lineNumber, int columnNumber)
         {
-            LinePosition start = new LinePosition(lineNumber, columnNumber);
-            LinePosition end = new LinePosition(lineNumber, columnNumber + 1);
+            LinePosition start = new(lineNumber, columnNumber);
+            LinePosition end = new(lineNumber, columnNumber + 1);
             _positionSpan = new FileLinePositionSpan(path, start, end);
         }
 

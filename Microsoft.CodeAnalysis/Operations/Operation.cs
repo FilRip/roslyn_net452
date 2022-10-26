@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis
         /// Always prefer this over <see cref="IOperation.Children"/> in the compiler layer, as this does not introduce allocations.
         /// </remarks>
         // Making this public is tracked by https://github.com/dotnet/roslyn/issues/49475
-        internal Operation.Enumerable ChildOperations => new Operation.Enumerable(this);
+        internal Operation.Enumerable ChildOperations => new(this);
 
         protected abstract IOperation GetCurrent(int slot, int index);
         protected abstract (bool hasNext, int nextSlot, int nextIndex) MoveNext(int previousSlot, int previousIndex);
@@ -200,6 +200,6 @@ namespace Microsoft.CodeAnalysis
         }
 
         private static readonly ObjectPool<Queue<IOperation>> s_queuePool =
-            new ObjectPool<Queue<IOperation>>(() => new Queue<IOperation>(), 10);
+            new(() => new Queue<IOperation>(), 10);
     }
 }

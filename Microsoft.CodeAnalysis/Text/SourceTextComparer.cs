@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.Text
 {
     internal class SourceTextComparer : IEqualityComparer<SourceText?>
     {
-        public static readonly SourceTextComparer Instance = new SourceTextComparer();
+        public static readonly SourceTextComparer Instance = new();
 
         public bool Equals(SourceText? x, SourceText? y)
         {

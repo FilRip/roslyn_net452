@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis
             return !string.IsNullOrEmpty(location.GetLineSpan().Path);
         }
 
-        private static readonly Uri s_fileRoot = new Uri("file:///");
+        private static readonly Uri s_fileRoot = new("file:///");
 
         protected static string GetUri(string path)
         {

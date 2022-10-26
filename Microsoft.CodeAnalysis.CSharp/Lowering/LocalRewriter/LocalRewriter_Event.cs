@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression delegateCreationArgument = boundTemp ?? rewrittenReceiverOpt ?? _factory.Type(eventType);
 
-            BoundDelegateCreationExpression removeDelegate = new BoundDelegateCreationExpression(
+            BoundDelegateCreationExpression removeDelegate = new(
                 syntax: syntax,
                 argument: delegateCreationArgument,
                 methodOpt: eventSymbol.RemoveMethod,
@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 NamedTypeSymbol func2Type = _factory.WellKnownType(WellKnownType.System_Func_T2).Construct(eventType, tokenType);
 
-                BoundDelegateCreationExpression addDelegate = new BoundDelegateCreationExpression(
+                BoundDelegateCreationExpression addDelegate = new(
                     syntax: syntax,
                     argument: delegateCreationArgument,
                     methodOpt: eventSymbol.AddMethod,
@@ -214,7 +214,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             NamedTypeSymbol fieldType = (NamedTypeSymbol)fieldSymbol.Type;
 
             // _tokenTable
-            BoundFieldAccess fieldAccess = new BoundFieldAccess(
+            BoundFieldAccess fieldAccess = new(
                 syntax,
                 fieldSymbol.IsStatic ? null : rewrittenReceiver,
                 fieldSymbol,

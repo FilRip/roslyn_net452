@@ -26,9 +26,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             private readonly ImmutableArray<(T first, T last)> _intervals;
 
-            public static readonly NumericValueSet<T, TTC> AllValues = new NumericValueSet<T, TTC>(default(TTC).MinValue, default(TTC).MaxValue);
+            public static readonly NumericValueSet<T, TTC> AllValues = new(default(TTC).MinValue, default(TTC).MaxValue);
 
-            public static readonly NumericValueSet<T, TTC> NoValues = new NumericValueSet<T, TTC>(ImmutableArray<(T first, T last)>.Empty);
+            public static readonly NumericValueSet<T, TTC> NoValues = new(ImmutableArray<(T first, T last)>.Empty);
 
             internal NumericValueSet(T first, T last) : this(ImmutableArray.Create((first, last)))
             {

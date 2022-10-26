@@ -278,7 +278,7 @@ namespace Microsoft.CodeAnalysis
         private sealed class DiagnosticDescriptorSet
         {
             // DiagnosticDescriptor -> integer index
-            private readonly Dictionary<DiagnosticDescriptor, int> _distinctDescriptors = new Dictionary<DiagnosticDescriptor, int>(SarifDiagnosticComparer.Instance);
+            private readonly Dictionary<DiagnosticDescriptor, int> _distinctDescriptors = new(SarifDiagnosticComparer.Instance);
 
             /// <summary>
             /// The total number of descriptors in the set.

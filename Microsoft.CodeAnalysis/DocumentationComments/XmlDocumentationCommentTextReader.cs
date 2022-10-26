@@ -18,10 +18,10 @@ namespace Microsoft.CodeAnalysis
     public partial class XmlDocumentationCommentTextReader
     {
         private XmlReader _reader;
-        private readonly Reader _textReader = new Reader();
+        private readonly Reader _textReader = new();
 
         private static readonly ObjectPool<XmlDocumentationCommentTextReader> s_pool =
-            new ObjectPool<XmlDocumentationCommentTextReader>(() => new XmlDocumentationCommentTextReader(), size: 2);
+            new(() => new XmlDocumentationCommentTextReader(), size: 2);
 
         public static XmlException ParseAndGetException(string text)
         {
@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis
             return retVal;
         }
 
-        private static readonly XmlReaderSettings s_xmlSettings = new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit };
+        private static readonly XmlReaderSettings s_xmlSettings = new();
 
         // internal for testing
         internal XmlException ParseInternal(string text)

@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     internal sealed class OverriddenOrHiddenMembersResult
     {
         public static readonly OverriddenOrHiddenMembersResult Empty =
-            new OverriddenOrHiddenMembersResult(
+            new(
                 ImmutableArray<Symbol>.Empty,
                 ImmutableArray<Symbol>.Empty);
 

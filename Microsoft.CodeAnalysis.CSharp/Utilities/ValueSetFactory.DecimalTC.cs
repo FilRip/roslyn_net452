@@ -23,8 +23,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             private const uint transitionHigh = 0x19999999;
             private const byte maxScale = 28;
 
-            private static readonly decimal normalZero = new decimal(lo: 0, mid: 0, hi: 0, isNegative: false, scale: maxScale);
-            private static readonly decimal epsilon = new decimal(lo: 1, mid: 0, hi: 0, isNegative: false, scale: maxScale);
+            private static readonly decimal normalZero = new(lo: 0, mid: 0, hi: 0, isNegative: false, scale: maxScale);
+            private static readonly decimal epsilon = new(lo: 1, mid: 0, hi: 0, isNegative: false, scale: maxScale);
 
             decimal INumericTC<decimal>.MinValue => decimal.MinValue;
 
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     this.scale = scale;
                 }
 
-                public decimal Value => new decimal(lo: (int)low, mid: (int)mid, hi: (int)high, isNegative: isNegative, scale: scale);
+                public decimal Value => new(lo: (int)low, mid: (int)mid, hi: (int)high, isNegative: isNegative, scale: scale);
 
                 public DecimalRep Normalize()
                 {

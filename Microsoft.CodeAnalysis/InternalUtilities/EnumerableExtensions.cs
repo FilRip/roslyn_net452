@@ -496,7 +496,7 @@ namespace Roslyn.Utilities
 
         private static IEnumerable<IList<T>> TransposeInternal<T>(this IEnumerable<IEnumerable<T>> data)
         {
-            List<IEnumerator<T>> enumerators = new List<IEnumerator<T>>();
+            List<IEnumerator<T>> enumerators = new();
 
             var width = 0;
             foreach (var e in data)

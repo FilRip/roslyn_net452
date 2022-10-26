@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private readonly HashSet<PrefixUnaryExpressionSyntax> _result = new HashSet<PrefixUnaryExpressionSyntax>();
+        private readonly HashSet<PrefixUnaryExpressionSyntax> _result = new();
 
         private HashSet<PrefixUnaryExpressionSyntax> Analyze(ref bool badRegion)
         {

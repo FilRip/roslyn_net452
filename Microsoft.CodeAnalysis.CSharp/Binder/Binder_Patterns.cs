@@ -554,7 +554,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref bool hasErrors)
         {
             TypeWithAnnotations declType = BindType(typeSyntax, diagnostics, out AliasSymbol aliasOpt);
-            BoundTypeExpression boundDeclType = new BoundTypeExpression(typeSyntax, aliasOpt, typeWithAnnotations: declType);
+            BoundTypeExpression boundDeclType = new(typeSyntax, aliasOpt, typeWithAnnotations: declType);
             hasErrors |= CheckValidPatternType(typeSyntax, inputType, declType.Type, diagnostics: diagnostics);
             return boundDeclType;
         }
@@ -875,7 +875,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     foundField = CheckIsTupleElement(subpatternSyntax.NameColon.Name, (NamedTypeSymbol)declType, name, i, diagnostics);
                 }
 
-                BoundSubpattern boundSubpattern = new BoundSubpattern(
+                BoundSubpattern boundSubpattern = new(
                     subpatternSyntax,
                     foundField,
                     BindPattern(subpatternSyntax.Pattern, elementType, GetValEscape(elementType, inputValEscape), permitDesignations, isError, diagnostics));
@@ -1203,7 +1203,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BindingDiagnosticBag diagnostics)
         {
             // TODO: consider refactoring out common code with BindObjectInitializerMember
-            BoundImplicitReceiver implicitReceiver = new BoundImplicitReceiver(memberName, inputType);
+            BoundImplicitReceiver implicitReceiver = new(memberName, inputType);
             string name = memberName.Identifier.ValueText;
 
             BoundExpression boundMember = BindInstanceMemberAccess(

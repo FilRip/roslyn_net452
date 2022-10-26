@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
     /// </summary>
     internal abstract class PENamedTypeSymbol : NamedTypeSymbol
     {
-        private static readonly Dictionary<string, ImmutableArray<PENamedTypeSymbol>> s_emptyNestedTypes = new Dictionary<string, ImmutableArray<PENamedTypeSymbol>>(EmptyComparer.Instance);
+        private static readonly Dictionary<string, ImmutableArray<PENamedTypeSymbol>> s_emptyNestedTypes = new(EmptyComparer.Instance);
 
         private readonly NamespaceOrTypeSymbol _container;
         private readonly TypeDefinitionHandle _handle;
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         // a separate class with a noUncommonProperties singleton used for cases when type is "common".
         // this is done purely to save memory with expectation that "uncommon" cases are indeed uncommon. 
         #region "Uncommon properties"
-        private static readonly UncommonProperties s_noUncommonProperties = new UncommonProperties();
+        private static readonly UncommonProperties s_noUncommonProperties = new();
         private UncommonProperties _lazyUncommonProperties;
 
         private UncommonProperties GetUncommonProperties()
@@ -1034,7 +1034,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private class DeclarationOrderTypeSymbolComparer : IComparer<Symbol>
         {
-            public static readonly DeclarationOrderTypeSymbolComparer Instance = new DeclarationOrderTypeSymbolComparer();
+            public static readonly DeclarationOrderTypeSymbolComparer Instance = new();
 
             private DeclarationOrderTypeSymbolComparer() { }
 

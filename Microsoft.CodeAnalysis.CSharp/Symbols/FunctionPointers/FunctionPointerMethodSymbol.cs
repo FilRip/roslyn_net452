@@ -324,14 +324,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
 
         public static FunctionPointerMethodSymbol CreateFromMetadata(CallingConvention callingConvention, ImmutableArray<ParamInfo<TypeSymbol>> retAndParamTypes)
-            => new FunctionPointerMethodSymbol(callingConvention, retAndParamTypes);
+            => new(callingConvention, retAndParamTypes);
 
         public FunctionPointerMethodSymbol SubstituteParameterSymbols(
             TypeWithAnnotations substitutedReturnType,
             ImmutableArray<TypeWithAnnotations> substitutedParameterTypes,
             ImmutableArray<CustomModifier> refCustomModifiers = default,
             ImmutableArray<ImmutableArray<CustomModifier>> paramRefCustomModifiers = default)
-            => new FunctionPointerMethodSymbol(
+            => new(
                 this.CallingConvention,
                 this.RefKind,
                 substitutedReturnType,

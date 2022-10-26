@@ -1321,14 +1321,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="trivias">An array of trivia.</param>
         public static SyntaxTriviaList TriviaList(params SyntaxTrivia[] trivias)
-            => new SyntaxTriviaList(trivias);
+            => new(trivias);
 
         /// <summary>
         /// Creates a list of trivia.
         /// </summary>
         /// <param name="trivias">A sequence of trivia.</param>
         public static SyntaxTriviaList TriviaList(IEnumerable<SyntaxTrivia> trivias)
-            => new SyntaxTriviaList(trivias);
+            => new(trivias);
 
         /// <summary>
         /// Creates an empty separated list.

@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis
         {
         }
 
-        internal static MetadataId CreateNewId() => new MetadataId();
+        internal static MetadataId CreateNewId() => new();
     }
 
     /// <summary>

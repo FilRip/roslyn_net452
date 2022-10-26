@@ -612,7 +612,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => New(ctor, args.ToImmutableArray());
 
         public BoundObjectCreationExpression New(MethodSymbol ctor, ImmutableArray<BoundExpression> args)
-            => new BoundObjectCreationExpression(Syntax, ctor, args) { WasCompilerGenerated = true };
+            => new(Syntax, ctor, args) { WasCompilerGenerated = true };
 
         public BoundObjectCreationExpression New(WellKnownMember wm, ImmutableArray<BoundExpression> args)
         {
@@ -905,7 +905,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             CheckSwitchSections(sections);
-            GeneratedLabelSymbol breakLabel = new GeneratedLabelSymbol("break");
+            GeneratedLabelSymbol breakLabel = new("break");
             var caseBuilder = ArrayBuilder<(ConstantValue Value, LabelSymbol label)>.GetInstance();
             var statements = ArrayBuilder<BoundStatement>.GetInstance();
             statements.Add(null!); // placeholder at statements[0] for the dispatch

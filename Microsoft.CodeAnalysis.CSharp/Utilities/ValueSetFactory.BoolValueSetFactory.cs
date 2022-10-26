@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private sealed class BoolValueSetFactory : IValueSetFactory<bool>
         {
-            public static readonly BoolValueSetFactory Instance = new BoolValueSetFactory();
+            public static readonly BoolValueSetFactory Instance = new();
 
             private BoolValueSetFactory() { }
 

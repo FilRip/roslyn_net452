@@ -15,7 +15,7 @@ namespace Roslyn.Utilities
     /// </summary>
     public sealed class EmptyComparer : IEqualityComparer<object>
     {
-        public static readonly EmptyComparer Instance = new EmptyComparer();
+        public static readonly EmptyComparer Instance = new();
 
         private EmptyComparer()
         {

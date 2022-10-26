@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.Telemetry
     /// </summary>
     internal class AnalyzerActionCounts
     {
-        internal static readonly AnalyzerActionCounts Empty = new AnalyzerActionCounts(in AnalyzerActions.Empty);
+        internal static readonly AnalyzerActionCounts Empty = new(in AnalyzerActions.Empty);
 
         internal AnalyzerActionCounts(in AnalyzerActions analyzerActions) :
             this(

@@ -213,35 +213,35 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new Conversion(kind);
         }
 
-        internal static Conversion UnsetConversion => new Conversion(ConversionKind.UnsetConversionKind);
-        internal static Conversion NoConversion => new Conversion(ConversionKind.NoConversion);
-        internal static Conversion Identity => new Conversion(ConversionKind.Identity);
-        internal static Conversion ImplicitConstant => new Conversion(ConversionKind.ImplicitConstant);
-        internal static Conversion ImplicitNumeric => new Conversion(ConversionKind.ImplicitNumeric);
-        internal static Conversion ImplicitReference => new Conversion(ConversionKind.ImplicitReference);
-        internal static Conversion ImplicitEnumeration => new Conversion(ConversionKind.ImplicitEnumeration);
-        internal static Conversion ImplicitThrow => new Conversion(ConversionKind.ImplicitThrow);
-        internal static Conversion ObjectCreation => new Conversion(ConversionKind.ObjectCreation);
-        internal static Conversion AnonymousFunction => new Conversion(ConversionKind.AnonymousFunction);
-        internal static Conversion Boxing => new Conversion(ConversionKind.Boxing);
-        internal static Conversion NullLiteral => new Conversion(ConversionKind.NullLiteral);
-        internal static Conversion DefaultLiteral => new Conversion(ConversionKind.DefaultLiteral);
-        internal static Conversion NullToPointer => new Conversion(ConversionKind.ImplicitNullToPointer);
-        internal static Conversion PointerToVoid => new Conversion(ConversionKind.ImplicitPointerToVoid);
-        internal static Conversion PointerToPointer => new Conversion(ConversionKind.ExplicitPointerToPointer);
-        internal static Conversion PointerToInteger => new Conversion(ConversionKind.ExplicitPointerToInteger);
-        internal static Conversion IntegerToPointer => new Conversion(ConversionKind.ExplicitIntegerToPointer);
-        internal static Conversion Unboxing => new Conversion(ConversionKind.Unboxing);
-        internal static Conversion ExplicitReference => new Conversion(ConversionKind.ExplicitReference);
-        internal static Conversion IntPtr => new Conversion(ConversionKind.IntPtr);
-        internal static Conversion ExplicitEnumeration => new Conversion(ConversionKind.ExplicitEnumeration);
-        internal static Conversion ExplicitNumeric => new Conversion(ConversionKind.ExplicitNumeric);
-        internal static Conversion ImplicitDynamic => new Conversion(ConversionKind.ImplicitDynamic);
-        internal static Conversion ExplicitDynamic => new Conversion(ConversionKind.ExplicitDynamic);
-        internal static Conversion InterpolatedString => new Conversion(ConversionKind.InterpolatedString);
-        internal static Conversion Deconstruction => new Conversion(ConversionKind.Deconstruction);
-        internal static Conversion PinnedObjectToPointer => new Conversion(ConversionKind.PinnedObjectToPointer);
-        internal static Conversion ImplicitPointer => new Conversion(ConversionKind.ImplicitPointer);
+        internal static Conversion UnsetConversion => new(ConversionKind.UnsetConversionKind);
+        internal static Conversion NoConversion => new(ConversionKind.NoConversion);
+        internal static Conversion Identity => new(ConversionKind.Identity);
+        internal static Conversion ImplicitConstant => new(ConversionKind.ImplicitConstant);
+        internal static Conversion ImplicitNumeric => new(ConversionKind.ImplicitNumeric);
+        internal static Conversion ImplicitReference => new(ConversionKind.ImplicitReference);
+        internal static Conversion ImplicitEnumeration => new(ConversionKind.ImplicitEnumeration);
+        internal static Conversion ImplicitThrow => new(ConversionKind.ImplicitThrow);
+        internal static Conversion ObjectCreation => new(ConversionKind.ObjectCreation);
+        internal static Conversion AnonymousFunction => new(ConversionKind.AnonymousFunction);
+        internal static Conversion Boxing => new(ConversionKind.Boxing);
+        internal static Conversion NullLiteral => new(ConversionKind.NullLiteral);
+        internal static Conversion DefaultLiteral => new(ConversionKind.DefaultLiteral);
+        internal static Conversion NullToPointer => new(ConversionKind.ImplicitNullToPointer);
+        internal static Conversion PointerToVoid => new(ConversionKind.ImplicitPointerToVoid);
+        internal static Conversion PointerToPointer => new(ConversionKind.ExplicitPointerToPointer);
+        internal static Conversion PointerToInteger => new(ConversionKind.ExplicitPointerToInteger);
+        internal static Conversion IntegerToPointer => new(ConversionKind.ExplicitIntegerToPointer);
+        internal static Conversion Unboxing => new(ConversionKind.Unboxing);
+        internal static Conversion ExplicitReference => new(ConversionKind.ExplicitReference);
+        internal static Conversion IntPtr => new(ConversionKind.IntPtr);
+        internal static Conversion ExplicitEnumeration => new(ConversionKind.ExplicitEnumeration);
+        internal static Conversion ExplicitNumeric => new(ConversionKind.ExplicitNumeric);
+        internal static Conversion ImplicitDynamic => new(ConversionKind.ImplicitDynamic);
+        internal static Conversion ExplicitDynamic => new(ConversionKind.ExplicitDynamic);
+        internal static Conversion InterpolatedString => new(ConversionKind.InterpolatedString);
+        internal static Conversion Deconstruction => new(ConversionKind.Deconstruction);
+        internal static Conversion PinnedObjectToPointer => new(ConversionKind.PinnedObjectToPointer);
+        internal static Conversion ImplicitPointer => new(ConversionKind.ImplicitPointer);
 
         // trivial conversions that could be underlying in nullable conversion
         // NOTE: tuple conversions can be underlying as well, but they are not trivial 

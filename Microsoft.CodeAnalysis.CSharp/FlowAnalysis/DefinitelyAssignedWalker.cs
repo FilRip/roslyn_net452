@@ -19,8 +19,8 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// </summary>
     internal sealed class DefinitelyAssignedWalker : AbstractRegionDataFlowPass
     {
-        private readonly HashSet<Symbol> _definitelyAssignedOnEntry = new HashSet<Symbol>();
-        private readonly HashSet<Symbol> _definitelyAssignedOnExit = new HashSet<Symbol>();
+        private readonly HashSet<Symbol> _definitelyAssignedOnEntry = new();
+        private readonly HashSet<Symbol> _definitelyAssignedOnExit = new();
 
         private DefinitelyAssignedWalker(
             CSharpCompilation compilation,

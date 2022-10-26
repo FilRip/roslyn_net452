@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private readonly HashSet<Symbol> _result = new HashSet<Symbol>();
+        private readonly HashSet<Symbol> _result = new();
 
         private HashSet<Symbol> Analyze(ref bool badRegion)
         {

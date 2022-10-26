@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         private SequencePointList _next;  // Linked list of all points.
 
         // No sequence points.
-        private static readonly SequencePointList s_empty = new SequencePointList();
+        private static readonly SequencePointList s_empty = new();
 
         // Construct a list with no sequence points.
         private SequencePointList()
@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 if (i == totalPoints || seqPointBuilder[i].SyntaxTree != seqPointBuilder[i - 1].SyntaxTree)
                 {
                     // Create a new list
-                    SequencePointList next = new SequencePointList(seqPointBuilder[i - 1].SyntaxTree, GetSubArray(seqPointBuilder, last, i - last, builder));
+                    SequencePointList next = new(seqPointBuilder[i - 1].SyntaxTree, GetSubArray(seqPointBuilder, last, i - last, builder));
                     last = i;
 
                     // Link together with any additional.

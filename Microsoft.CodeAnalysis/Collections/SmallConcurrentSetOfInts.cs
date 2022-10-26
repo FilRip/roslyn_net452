@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 if (nextSet == null)
                 {
                     // Need to add a new 'block'.
-                    SmallConcurrentSetOfInts tail = new SmallConcurrentSetOfInts(initialValue: i);
+                    SmallConcurrentSetOfInts tail = new(initialValue: i);
 
                     nextSet = Interlocked.CompareExchange(ref set._next, tail, null);
                     if (nextSet == null)

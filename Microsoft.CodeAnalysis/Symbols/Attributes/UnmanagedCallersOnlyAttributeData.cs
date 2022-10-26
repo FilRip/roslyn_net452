@@ -13,9 +13,9 @@ namespace Microsoft.CodeAnalysis
 {
     public sealed class UnmanagedCallersOnlyAttributeData
     {
-        public static readonly UnmanagedCallersOnlyAttributeData Uninitialized = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
-        public static readonly UnmanagedCallersOnlyAttributeData AttributePresentDataNotBound = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
-        private static readonly UnmanagedCallersOnlyAttributeData PlatformDefault = new UnmanagedCallersOnlyAttributeData(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
+        public static readonly UnmanagedCallersOnlyAttributeData Uninitialized = new(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
+        public static readonly UnmanagedCallersOnlyAttributeData AttributePresentDataNotBound = new(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
+        private static readonly UnmanagedCallersOnlyAttributeData PlatformDefault = new(callingConventionTypes: ImmutableHashSet<INamedTypeSymbolInternal>.Empty);
 
         public const string CallConvsPropertyName = "CallConvs";
 

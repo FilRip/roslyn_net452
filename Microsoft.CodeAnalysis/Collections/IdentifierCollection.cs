@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis
         //
         // Note: we use a case insensitive comparer so that we can quickly lookup if we know a name
         // regardless of its case.
-        private readonly Dictionary<string, object> _map = new Dictionary<string, object>(
+        private readonly Dictionary<string, object> _map = new(
             StringComparer.OrdinalIgnoreCase);
 
         public IdentifierCollection()

@@ -53,12 +53,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// <summary>
         /// Set of exception diagnostics reported for exceptions thrown by the analyzers.
         /// </summary>
-        private readonly ConcurrentSet<Diagnostic> _exceptionDiagnostics = new ConcurrentSet<Diagnostic>();
+        private readonly ConcurrentSet<Diagnostic> _exceptionDiagnostics = new();
 
         /// <summary>
         /// Lock to track the set of active tasks computing tree diagnostics and task computing compilation diagnostics.
         /// </summary>
-        private readonly object _executingTasksLock = new object();
+        private readonly object _executingTasksLock = new();
         private readonly Dictionary<SourceOrAdditionalFile, Tuple<Task, CancellationTokenSource>>? _executingConcurrentTreeTasksOpt;
         private Tuple<Task, CancellationTokenSource>? _executingCompilationOrNonConcurrentTreeTask;
 
@@ -78,8 +78,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// <summary>
         /// Pool of event queues to serve each diagnostics request.
         /// </summary>
-        private readonly ObjectPool<AsyncQueue<CompilationEvent>> _eventQueuePool = new ObjectPool<AsyncQueue<CompilationEvent>>(() => new AsyncQueue<CompilationEvent>());
-        private static readonly AsyncQueue<CompilationEvent> s_EmptyEventQueue = new AsyncQueue<CompilationEvent>();
+        private readonly ObjectPool<AsyncQueue<CompilationEvent>> _eventQueuePool = new(() => new AsyncQueue<CompilationEvent>());
+        private static readonly AsyncQueue<CompilationEvent> s_EmptyEventQueue = new();
 
         /// <summary>
         /// Underlying <see cref="Compilation"/> with a non-null <see cref="Compilation.EventQueue"/>, used to drive analyzer execution.

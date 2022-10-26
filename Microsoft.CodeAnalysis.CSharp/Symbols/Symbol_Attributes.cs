@@ -599,7 +599,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             int totalAttributesCount = boundAttributes.Length;
-            HashSet<NamedTypeSymbol> uniqueAttributeTypes = new HashSet<NamedTypeSymbol>();
+            HashSet<NamedTypeSymbol> uniqueAttributeTypes = new();
             var arguments = new DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation>();
             arguments.Diagnostics = diagnostics;
             arguments.AttributesCount = totalAttributesCount;

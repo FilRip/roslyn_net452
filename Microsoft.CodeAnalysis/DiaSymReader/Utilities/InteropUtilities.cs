@@ -17,7 +17,7 @@ namespace Microsoft.DiaSymReader
 
     internal class InteropUtilities
     {
-        private static readonly IntPtr s_ignoreIErrorInfo = new IntPtr(-1);
+        private static readonly IntPtr s_ignoreIErrorInfo = new(-1);
 
         internal static T[] NullToEmpty<T>(T[] items) => (items == null) ? EmptyArray<T>.Instance : items;
 

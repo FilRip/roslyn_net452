@@ -546,7 +546,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         private static readonly ObjectPool<ImmutableHashSet<string>.Builder> s_memberNameBuilderPool =
-            new ObjectPool<ImmutableHashSet<string>.Builder>(() => ImmutableHashSet.CreateBuilder<string>());
+            new(() => ImmutableHashSet.CreateBuilder<string>());
 
         private static ImmutableHashSet<string> ToImmutableAndFree(ImmutableHashSet<string>.Builder builder)
         {

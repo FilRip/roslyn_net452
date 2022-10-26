@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal const string ImplicitTypeName = "<invalid-global-code>";
 
         // InterfaceInfo for a common case of a type not implementing anything directly or indirectly.
-        private static readonly InterfaceInfo s_noInterfaces = new InterfaceInfo();
+        private static readonly InterfaceInfo s_noInterfaces = new();
 
         private ImmutableHashSet<Symbol> _lazyAbstractMembers;
         private InterfaceInfo _lazyInterfaceInfo;
@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             internal MultiDictionary<NamedTypeSymbol, NamedTypeSymbol> interfacesAndTheirBaseInterfaces;
 
             internal static readonly MultiDictionary<NamedTypeSymbol, NamedTypeSymbol> EmptyInterfacesAndTheirBaseInterfaces =
-                                                new MultiDictionary<NamedTypeSymbol, NamedTypeSymbol>(0, SymbolEqualityComparer.CLRSignature);
+                                                new(0, SymbolEqualityComparer.CLRSignature);
 
             // Key is implemented member (method, property, or event), value is implementing member (from the 
             // perspective of this type).  Don't allocate until someone needs it.
@@ -2067,7 +2067,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         protected class ExplicitInterfaceImplementationTargetMemberEqualityComparer : IEqualityComparer<Symbol>
         {
-            public static readonly ExplicitInterfaceImplementationTargetMemberEqualityComparer Instance = new ExplicitInterfaceImplementationTargetMemberEqualityComparer();
+            public static readonly ExplicitInterfaceImplementationTargetMemberEqualityComparer Instance = new();
 
             private ExplicitInterfaceImplementationTargetMemberEqualityComparer() { }
             public bool Equals(Symbol x, Symbol y)

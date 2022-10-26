@@ -17,7 +17,7 @@ namespace Microsoft.Cci
     public abstract class ReferenceIndexer : ReferenceIndexerBase
     {
         protected readonly MetadataWriter metadataWriter;
-        private readonly HashSet<IImportScope> _alreadySeenScopes = new HashSet<IImportScope>();
+        private readonly HashSet<IImportScope> _alreadySeenScopes = new();
 
         public ReferenceIndexer(MetadataWriter metadataWriter)
             : base(metadataWriter.Context)

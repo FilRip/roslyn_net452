@@ -14,10 +14,10 @@ namespace Microsoft.Cci
 {
     public sealed class DebugSourceDocument
     {
-        public static readonly Guid CorSymLanguageTypeCSharp = new Guid("{3f5162f8-07c6-11d3-9053-00c04fa302a1}");
-        public static readonly Guid CorSymLanguageTypeBasic = new Guid("{3a12d0b8-c26c-11d0-b442-00a0244a1dd2}");
-        private static readonly Guid s_corSymLanguageVendorMicrosoft = new Guid("{994b45c4-e6e9-11d2-903f-00c04fa302a1}");
-        private static readonly Guid s_corSymDocumentTypeText = new Guid("{5a869d0b-6611-11d3-bd2a-0000f80849bd}");
+        public static readonly Guid CorSymLanguageTypeCSharp = new("{3f5162f8-07c6-11d3-9053-00c04fa302a1}");
+        public static readonly Guid CorSymLanguageTypeBasic = new("{3a12d0b8-c26c-11d0-b442-00a0244a1dd2}");
+        private static readonly Guid s_corSymLanguageVendorMicrosoft = new("{994b45c4-e6e9-11d2-903f-00c04fa302a1}");
+        private static readonly Guid s_corSymDocumentTypeText = new("{5a869d0b-6611-11d3-bd2a-0000f80849bd}");
 
         private readonly string _location;
         private readonly Guid _language;

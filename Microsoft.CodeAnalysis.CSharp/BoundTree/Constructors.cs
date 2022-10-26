@@ -635,7 +635,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
         }
 
-        public static BoundDagTemp ForOriginalInput(BoundExpression expr) => new BoundDagTemp(expr.Syntax, expr.Type!, source: null);
+        public static BoundDagTemp ForOriginalInput(BoundExpression expr) => new(expr.Syntax, expr.Type!, source: null);
     }
 
     public partial class BoundCompoundAssignmentOperator

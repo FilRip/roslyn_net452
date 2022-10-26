@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         /// as we load types from the module.
         /// </summary>
         internal readonly ConcurrentDictionary<TypeDefinitionHandle, TypeSymbol> TypeHandleToTypeMap =
-                                    new ConcurrentDictionary<TypeDefinitionHandle, TypeSymbol>(concurrencyLevel: 2, capacity: DefaultTypeMapCapacity);
+                                    new(concurrencyLevel: 2, capacity: DefaultTypeMapCapacity);
 
         /// <summary>
         /// This is a map from TypeRef row id to the target <see cref="TypeSymbol"/>. 
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         /// by <see cref="MetadataDecoder"/> as we resolve TypeRefs from the module.
         /// </summary>
         internal readonly ConcurrentDictionary<TypeReferenceHandle, TypeSymbol> TypeRefHandleToTypeMap =
-                                    new ConcurrentDictionary<TypeReferenceHandle, TypeSymbol>(concurrencyLevel: 2, capacity: DefaultTypeMapCapacity);
+                                    new(concurrencyLevel: 2, capacity: DefaultTypeMapCapacity);
 
         internal readonly ImmutableArray<MetadataLocation> MetadataLocation;
 

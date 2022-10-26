@@ -1051,7 +1051,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 errorCode = ErrorCode.ERR_GenericConstraintNotSatisfiedValType;
             }
 
-            SymbolDistinguisher distinguisher = new SymbolDistinguisher(args.CurrentCompilation, constraintType.Type, typeArgument.Type);
+            SymbolDistinguisher distinguisher = new(args.CurrentCompilation, constraintType.Type, typeArgument.Type);
             diagnosticsBuilder.Add(new TypeParameterDiagnosticInfo(typeParameter, new UseSiteInfo<AssemblySymbol>(new CSDiagnosticInfo(errorCode, containingSymbol.ConstructedFrom(), distinguisher.First, typeParameter, distinguisher.Second))));
             hasError = true;
 

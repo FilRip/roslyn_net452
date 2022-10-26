@@ -1517,7 +1517,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #nullable enable
         private sealed class DagStateEquivalence : IEqualityComparer<DagState>
         {
-            public static readonly DagStateEquivalence Instance = new DagStateEquivalence();
+            public static readonly DagStateEquivalence Instance = new();
 
             private DagStateEquivalence() { }
 
@@ -1631,7 +1631,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </summary>
             public sealed class True : Tests
             {
-                public static readonly True Instance = new True();
+                public static readonly True Instance = new();
                 public override string Dump(Func<BoundDagTest, string> dump) => "TRUE";
                 public override void Filter(
                     DecisionDagBuilder builder,
@@ -1651,7 +1651,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </summary>
             public sealed class False : Tests
             {
-                public static readonly False Instance = new False();
+                public static readonly False Instance = new();
                 public override string Dump(Func<BoundDagTest, string> dump) => "FALSE";
                 public override void Filter(
                     DecisionDagBuilder builder,

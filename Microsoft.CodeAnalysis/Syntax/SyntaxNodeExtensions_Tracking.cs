@@ -20,10 +20,10 @@ namespace Microsoft.CodeAnalysis
     public static partial class SyntaxNodeExtensions
     {
         private static readonly ConditionalWeakTable<SyntaxNode, SyntaxAnnotation> s_nodeToIdMap
-            = new ConditionalWeakTable<SyntaxNode, SyntaxAnnotation>();
+            = new();
 
         private static readonly ConditionalWeakTable<SyntaxNode, CurrentNodes> s_rootToCurrentNodesMap
-            = new ConditionalWeakTable<SyntaxNode, CurrentNodes>();
+            = new();
 
         internal const string IdAnnotationKind = "Id";
 

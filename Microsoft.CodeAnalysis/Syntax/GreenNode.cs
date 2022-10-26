@@ -35,10 +35,10 @@ namespace Microsoft.CodeAnalysis
         private int _fullWidth;
 
         private static readonly ConditionalWeakTable<GreenNode, DiagnosticInfo[]> s_diagnosticsTable =
-            new ConditionalWeakTable<GreenNode, DiagnosticInfo[]>();
+            new();
 
         private static readonly ConditionalWeakTable<GreenNode, SyntaxAnnotation[]> s_annotationsTable =
-            new ConditionalWeakTable<GreenNode, SyntaxAnnotation[]>();
+            new();
 
         private static readonly DiagnosticInfo[] s_noDiagnostics = new DiagnosticInfo[0] { };
         private static readonly SyntaxAnnotation[] s_noAnnotations = new SyntaxAnnotation[0] { };

@@ -576,7 +576,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         internal sealed class MetadataReferenceEqualityComparer : IEqualityComparer<MetadataReference>
         {
-            internal static readonly MetadataReferenceEqualityComparer Instance = new MetadataReferenceEqualityComparer();
+            internal static readonly MetadataReferenceEqualityComparer Instance = new();
 
             public bool Equals(MetadataReference? x, MetadataReference? y)
             {

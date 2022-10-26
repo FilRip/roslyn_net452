@@ -357,7 +357,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     public sealed class HostSessionStartAnalysisScope : HostAnalysisScope
     {
         private ImmutableHashSet<DiagnosticAnalyzer> _concurrentAnalyzers = ImmutableHashSet<DiagnosticAnalyzer>.Empty;
-        private readonly ConcurrentDictionary<DiagnosticAnalyzer, GeneratedCodeAnalysisFlags> _generatedCodeConfigurationMap = new ConcurrentDictionary<DiagnosticAnalyzer, GeneratedCodeAnalysisFlags>();
+        private readonly ConcurrentDictionary<DiagnosticAnalyzer, GeneratedCodeAnalysisFlags> _generatedCodeConfigurationMap = new();
 
         public bool IsConcurrentAnalyzer(DiagnosticAnalyzer analyzer)
         {
@@ -371,7 +371,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public void RegisterCompilationStartAction(DiagnosticAnalyzer analyzer, Action<CompilationStartAnalysisContext> action)
         {
-            CompilationStartAnalyzerAction analyzerAction = new CompilationStartAnalyzerAction(action, analyzer);
+            CompilationStartAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddCompilationStartAction(analyzerAction);
         }
 
@@ -487,7 +487,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
     public abstract class HostAnalysisScope
     {
-        private readonly ConcurrentDictionary<DiagnosticAnalyzer, StrongBox<AnalyzerActions>> _analyzerActions = new ConcurrentDictionary<DiagnosticAnalyzer, StrongBox<AnalyzerActions>>();
+        private readonly ConcurrentDictionary<DiagnosticAnalyzer, StrongBox<AnalyzerActions>> _analyzerActions = new();
 
         public virtual AnalyzerActions GetAnalyzerActions(DiagnosticAnalyzer analyzer)
         {
@@ -496,25 +496,25 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public void RegisterCompilationAction(DiagnosticAnalyzer analyzer, Action<CompilationAnalysisContext> action)
         {
-            CompilationAnalyzerAction analyzerAction = new CompilationAnalyzerAction(action, analyzer);
+            CompilationAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddCompilationAction(analyzerAction);
         }
 
         public void RegisterCompilationEndAction(DiagnosticAnalyzer analyzer, Action<CompilationAnalysisContext> action)
         {
-            CompilationAnalyzerAction analyzerAction = new CompilationAnalyzerAction(action, analyzer);
+            CompilationAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddCompilationEndAction(analyzerAction);
         }
 
         public void RegisterSemanticModelAction(DiagnosticAnalyzer analyzer, Action<SemanticModelAnalysisContext> action)
         {
-            SemanticModelAnalyzerAction analyzerAction = new SemanticModelAnalyzerAction(action, analyzer);
+            SemanticModelAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddSemanticModelAction(analyzerAction);
         }
 
         public void RegisterSyntaxTreeAction(DiagnosticAnalyzer analyzer, Action<SyntaxTreeAnalysisContext> action)
         {
-            SyntaxTreeAnalyzerAction analyzerAction = new SyntaxTreeAnalyzerAction(action, analyzer);
+            SyntaxTreeAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddSyntaxTreeAction(analyzerAction);
         }
 
@@ -526,7 +526,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public void RegisterSymbolAction(DiagnosticAnalyzer analyzer, Action<SymbolAnalysisContext> action, ImmutableArray<SymbolKind> symbolKinds)
         {
-            SymbolAnalyzerAction analyzerAction = new SymbolAnalyzerAction(action, symbolKinds, analyzer);
+            SymbolAnalyzerAction analyzerAction = new(action, symbolKinds, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddSymbolAction(analyzerAction);
 
             // The SymbolAnalyzerAction does not handle SymbolKind.Parameter because the compiler
@@ -591,49 +591,49 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         public void RegisterCodeBlockStartAction<TLanguageKindEnum>(DiagnosticAnalyzer analyzer, Action<CodeBlockStartAnalysisContext<TLanguageKindEnum>> action) where TLanguageKindEnum : struct
         {
-            CodeBlockStartAnalyzerAction<TLanguageKindEnum> analyzerAction = new CodeBlockStartAnalyzerAction<TLanguageKindEnum>(action, analyzer);
+            CodeBlockStartAnalyzerAction<TLanguageKindEnum> analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddCodeBlockStartAction(analyzerAction);
         }
 
         public void RegisterCodeBlockEndAction(DiagnosticAnalyzer analyzer, Action<CodeBlockAnalysisContext> action)
         {
-            CodeBlockAnalyzerAction analyzerAction = new CodeBlockAnalyzerAction(action, analyzer);
+            CodeBlockAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddCodeBlockEndAction(analyzerAction);
         }
 
         public void RegisterCodeBlockAction(DiagnosticAnalyzer analyzer, Action<CodeBlockAnalysisContext> action)
         {
-            CodeBlockAnalyzerAction analyzerAction = new CodeBlockAnalyzerAction(action, analyzer);
+            CodeBlockAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddCodeBlockAction(analyzerAction);
         }
 
         public void RegisterSyntaxNodeAction<TLanguageKindEnum>(DiagnosticAnalyzer analyzer, Action<SyntaxNodeAnalysisContext> action, ImmutableArray<TLanguageKindEnum> syntaxKinds) where TLanguageKindEnum : struct
         {
-            SyntaxNodeAnalyzerAction<TLanguageKindEnum> analyzerAction = new SyntaxNodeAnalyzerAction<TLanguageKindEnum>(action, syntaxKinds, analyzer);
+            SyntaxNodeAnalyzerAction<TLanguageKindEnum> analyzerAction = new(action, syntaxKinds, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddSyntaxNodeAction(analyzerAction);
         }
 
         public void RegisterOperationBlockStartAction(DiagnosticAnalyzer analyzer, Action<OperationBlockStartAnalysisContext> action)
         {
-            OperationBlockStartAnalyzerAction analyzerAction = new OperationBlockStartAnalyzerAction(action, analyzer);
+            OperationBlockStartAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddOperationBlockStartAction(analyzerAction);
         }
 
         public void RegisterOperationBlockEndAction(DiagnosticAnalyzer analyzer, Action<OperationBlockAnalysisContext> action)
         {
-            OperationBlockAnalyzerAction analyzerAction = new OperationBlockAnalyzerAction(action, analyzer);
+            OperationBlockAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddOperationBlockEndAction(analyzerAction);
         }
 
         public void RegisterOperationBlockAction(DiagnosticAnalyzer analyzer, Action<OperationBlockAnalysisContext> action)
         {
-            OperationBlockAnalyzerAction analyzerAction = new OperationBlockAnalyzerAction(action, analyzer);
+            OperationBlockAnalyzerAction analyzerAction = new(action, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddOperationBlockAction(analyzerAction);
         }
 
         public void RegisterOperationAction(DiagnosticAnalyzer analyzer, Action<OperationAnalysisContext> action, ImmutableArray<OperationKind> operationKinds)
         {
-            OperationAnalyzerAction analyzerAction = new OperationAnalyzerAction(action, operationKinds, analyzer);
+            OperationAnalyzerAction analyzerAction = new(action, operationKinds, analyzer);
             this.GetOrCreateAnalyzerActions(analyzer).Value.AddOperationAction(analyzerAction);
         }
 
@@ -652,7 +652,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     // the driver needs to apply all relevant actions rather then applying the actions of individual analyzers.
     public struct AnalyzerActions
     {
-        public static readonly AnalyzerActions Empty = new AnalyzerActions(concurrent: false);
+        public static readonly AnalyzerActions Empty = new(concurrent: false);
 
         private ImmutableArray<CompilationStartAnalyzerAction> _compilationStartActions;
         private ImmutableArray<CompilationAnalyzerAction> _compilationEndActions;
@@ -978,7 +978,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 throw new ArgumentNullException(nameof(otherActions));
             }
 
-            AnalyzerActions actions = new AnalyzerActions(concurrent: _concurrent || otherActions.Concurrent);
+            AnalyzerActions actions = new(concurrent: _concurrent || otherActions.Concurrent);
             actions._compilationStartActions = _compilationStartActions.AddRange(otherActions._compilationStartActions);
             actions._compilationEndActions = _compilationEndActions.AddRange(otherActions._compilationEndActions);
             actions._compilationActions = _compilationActions.AddRange(otherActions._compilationActions);

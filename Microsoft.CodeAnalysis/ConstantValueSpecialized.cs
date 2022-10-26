@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis
         {
             private ConstantValueBad() { }
 
-            public static readonly ConstantValueBad Instance = new ConstantValueBad();
+            public static readonly ConstantValueBad Instance = new();
 
             public override ConstantValueTypeDiscriminator Discriminator
             {
@@ -66,8 +66,8 @@ namespace Microsoft.CodeAnalysis
         {
             private ConstantValueNull() { }
 
-            public static readonly ConstantValueNull Instance = new ConstantValueNull();
-            public static readonly ConstantValueNull Uninitialized = new ConstantValueNull();
+            public static readonly ConstantValueNull Instance = new();
+            public static readonly ConstantValueNull Uninitialized = new();
 
             public override ConstantValueTypeDiscriminator Discriminator
             {
@@ -318,22 +318,22 @@ namespace Microsoft.CodeAnalysis
         // default value of a value type constant. (reference type constants use Null as default)
         private class ConstantValueDefault : ConstantValueDiscriminated
         {
-            public static readonly ConstantValueDefault SByte = new ConstantValueDefault(ConstantValueTypeDiscriminator.SByte);
-            public static readonly ConstantValueDefault Byte = new ConstantValueDefault(ConstantValueTypeDiscriminator.Byte);
-            public static readonly ConstantValueDefault Int16 = new ConstantValueDefault(ConstantValueTypeDiscriminator.Int16);
-            public static readonly ConstantValueDefault UInt16 = new ConstantValueDefault(ConstantValueTypeDiscriminator.UInt16);
-            public static readonly ConstantValueDefault Int32 = new ConstantValueDefault(ConstantValueTypeDiscriminator.Int32);
-            public static readonly ConstantValueDefault UInt32 = new ConstantValueDefault(ConstantValueTypeDiscriminator.UInt32);
-            public static readonly ConstantValueDefault Int64 = new ConstantValueDefault(ConstantValueTypeDiscriminator.Int64);
-            public static readonly ConstantValueDefault UInt64 = new ConstantValueDefault(ConstantValueTypeDiscriminator.UInt64);
-            public static readonly ConstantValueDefault NInt = new ConstantValueDefault(ConstantValueTypeDiscriminator.NInt);
-            public static readonly ConstantValueDefault NUInt = new ConstantValueDefault(ConstantValueTypeDiscriminator.NUInt);
-            public static readonly ConstantValueDefault Char = new ConstantValueDefault(ConstantValueTypeDiscriminator.Char);
+            public static readonly ConstantValueDefault SByte = new(ConstantValueTypeDiscriminator.SByte);
+            public static readonly ConstantValueDefault Byte = new(ConstantValueTypeDiscriminator.Byte);
+            public static readonly ConstantValueDefault Int16 = new(ConstantValueTypeDiscriminator.Int16);
+            public static readonly ConstantValueDefault UInt16 = new(ConstantValueTypeDiscriminator.UInt16);
+            public static readonly ConstantValueDefault Int32 = new(ConstantValueTypeDiscriminator.Int32);
+            public static readonly ConstantValueDefault UInt32 = new(ConstantValueTypeDiscriminator.UInt32);
+            public static readonly ConstantValueDefault Int64 = new(ConstantValueTypeDiscriminator.Int64);
+            public static readonly ConstantValueDefault UInt64 = new(ConstantValueTypeDiscriminator.UInt64);
+            public static readonly ConstantValueDefault NInt = new(ConstantValueTypeDiscriminator.NInt);
+            public static readonly ConstantValueDefault NUInt = new(ConstantValueTypeDiscriminator.NUInt);
+            public static readonly ConstantValueDefault Char = new(ConstantValueTypeDiscriminator.Char);
             public static readonly ConstantValueDefault Single = new ConstantValueSingleZero();
             public static readonly ConstantValueDefault Double = new ConstantValueDoubleZero();
             public static readonly ConstantValueDefault Decimal = new ConstantValueDecimalZero();
-            public static readonly ConstantValueDefault DateTime = new ConstantValueDefault(ConstantValueTypeDiscriminator.DateTime);
-            public static readonly ConstantValueDefault Boolean = new ConstantValueDefault(ConstantValueTypeDiscriminator.Boolean);
+            public static readonly ConstantValueDefault DateTime = new(ConstantValueTypeDiscriminator.DateTime);
+            public static readonly ConstantValueDefault Boolean = new(ConstantValueTypeDiscriminator.Boolean);
 
             protected ConstantValueDefault(ConstantValueTypeDiscriminator discriminator)
                 : base(discriminator)
@@ -492,20 +492,20 @@ namespace Microsoft.CodeAnalysis
 
         private class ConstantValueOne : ConstantValueDiscriminated
         {
-            public static readonly ConstantValueOne SByte = new ConstantValueOne(ConstantValueTypeDiscriminator.SByte);
-            public static readonly ConstantValueOne Byte = new ConstantValueOne(ConstantValueTypeDiscriminator.Byte);
-            public static readonly ConstantValueOne Int16 = new ConstantValueOne(ConstantValueTypeDiscriminator.Int16);
-            public static readonly ConstantValueOne UInt16 = new ConstantValueOne(ConstantValueTypeDiscriminator.UInt16);
-            public static readonly ConstantValueOne Int32 = new ConstantValueOne(ConstantValueTypeDiscriminator.Int32);
-            public static readonly ConstantValueOne UInt32 = new ConstantValueOne(ConstantValueTypeDiscriminator.UInt32);
-            public static readonly ConstantValueOne Int64 = new ConstantValueOne(ConstantValueTypeDiscriminator.Int64);
-            public static readonly ConstantValueOne UInt64 = new ConstantValueOne(ConstantValueTypeDiscriminator.UInt64);
-            public static readonly ConstantValueOne NInt = new ConstantValueOne(ConstantValueTypeDiscriminator.NInt);
-            public static readonly ConstantValueOne NUInt = new ConstantValueOne(ConstantValueTypeDiscriminator.NUInt);
-            public static readonly ConstantValueOne Single = new ConstantValueOne(ConstantValueTypeDiscriminator.Single);
-            public static readonly ConstantValueOne Double = new ConstantValueOne(ConstantValueTypeDiscriminator.Double);
+            public static readonly ConstantValueOne SByte = new(ConstantValueTypeDiscriminator.SByte);
+            public static readonly ConstantValueOne Byte = new(ConstantValueTypeDiscriminator.Byte);
+            public static readonly ConstantValueOne Int16 = new(ConstantValueTypeDiscriminator.Int16);
+            public static readonly ConstantValueOne UInt16 = new(ConstantValueTypeDiscriminator.UInt16);
+            public static readonly ConstantValueOne Int32 = new(ConstantValueTypeDiscriminator.Int32);
+            public static readonly ConstantValueOne UInt32 = new(ConstantValueTypeDiscriminator.UInt32);
+            public static readonly ConstantValueOne Int64 = new(ConstantValueTypeDiscriminator.Int64);
+            public static readonly ConstantValueOne UInt64 = new(ConstantValueTypeDiscriminator.UInt64);
+            public static readonly ConstantValueOne NInt = new(ConstantValueTypeDiscriminator.NInt);
+            public static readonly ConstantValueOne NUInt = new(ConstantValueTypeDiscriminator.NUInt);
+            public static readonly ConstantValueOne Single = new(ConstantValueTypeDiscriminator.Single);
+            public static readonly ConstantValueOne Double = new(ConstantValueTypeDiscriminator.Double);
             public static readonly ConstantValueOne Decimal = new ConstantValueDecimalOne();
-            public static readonly ConstantValueOne Boolean = new ConstantValueOne(ConstantValueTypeDiscriminator.Boolean);
+            public static readonly ConstantValueOne Boolean = new(ConstantValueTypeDiscriminator.Boolean);
 
             protected ConstantValueOne(ConstantValueTypeDiscriminator discriminator)
                 : base(discriminator)

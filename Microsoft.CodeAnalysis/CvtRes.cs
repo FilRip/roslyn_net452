@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis
             // If the first word is 0xFFFF then this is an ID
             // return the ID instead
 
-            RESOURCE_STRING pstring = new RESOURCE_STRING();
+            RESOURCE_STRING pstring = new();
 
             WCHAR firstWord = fhIn.ReadChar();
 
@@ -150,7 +150,7 @@ namespace Microsoft.CodeAnalysis
 
                 //keep reading until null reached.
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
 
                 WCHAR curChar = firstWord;
 

@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override string ToString() => GetDebuggerDisplay();
 
-        public TypeWithState WithNotNullState() => new TypeWithState(Type, NullableFlowState.NotNull);
+        public TypeWithState WithNotNullState() => new(Type, NullableFlowState.NotNull);
 
         public TypeWithState WithSuppression(bool suppress) => suppress ? new TypeWithState(Type, NullableFlowState.NotNull) : this;
 

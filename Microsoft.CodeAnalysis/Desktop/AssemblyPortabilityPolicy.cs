@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis
             return reader.ReadToDescendant(elementName, elementNamespace) && reader.Depth == depth;
         }
 
-        private static readonly XmlReaderSettings s_xmlSettings = new XmlReaderSettings()
+        private static readonly XmlReaderSettings s_xmlSettings = new()
         {
             DtdProcessing = DtdProcessing.Prohibit,
         };

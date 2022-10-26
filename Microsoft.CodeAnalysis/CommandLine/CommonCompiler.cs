@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis
         /// Fallback encoding that is lazily retrieved if needed. If <see cref="EncodedStringText.CreateFallbackEncoding"/> is
         /// evaluated and stored, the value is used if a PDB is created for this compilation.
         /// </summary>
-        private readonly Lazy<Encoding> _fallbackEncoding = new Lazy<Encoding>(EncodedStringText.CreateFallbackEncoding);
+        private readonly Lazy<Encoding> _fallbackEncoding = new(EncodedStringText.CreateFallbackEncoding);
 
         public CommonMessageProvider MessageProvider { get; }
         public CommandLineArguments Arguments { get; }
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         internal ICommonCompilerFileSystem FileSystem { get; set; } = StandardFileSystem.Instance;
 
-        private readonly HashSet<Diagnostic> _reportedDiagnostics = new HashSet<Diagnostic>();
+        private readonly HashSet<Diagnostic> _reportedDiagnostics = new();
 
         public abstract Compilation? CreateCompilation(
             TextWriter consoleOutput,
@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis
         {
             var commandLineReferenceResolver = GetCommandLineMetadataReferenceResolver(touchedFiles);
 
-            List<MetadataReference> resolved = new List<MetadataReference>();
+            List<MetadataReference> resolved = new();
             Arguments.ResolveMetadataReferences(commandLineReferenceResolver, diagnostics, this.MessageProvider, resolved);
 
             if (Arguments.IsScriptRunner)
@@ -1359,7 +1359,7 @@ namespace Microsoft.CodeAnalysis
         protected virtual Diagnostics.AnalyzerOptions CreateAnalyzerOptions(
             ImmutableArray<AdditionalText> additionalTextFiles,
             AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
-            => new Diagnostics.AnalyzerOptions(additionalTextFiles, analyzerConfigOptionsProvider);
+            => new(additionalTextFiles, analyzerConfigOptionsProvider);
 
         private bool WriteTouchedFiles(DiagnosticBag diagnostics, TouchedFileLogger? touchedFilesLogger, string? finalXmlFilePath)
         {
@@ -1644,8 +1644,8 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private static string CreateDeterminismKey(CommandLineArguments args, string[] rawArgs, string baseDirectory, CommandLineParser parser)
         {
-            List<Diagnostic> diagnostics = new List<Diagnostic>();
-            List<string> flattenedArgs = new List<string>();
+            List<Diagnostic> diagnostics = new();
+            List<string> flattenedArgs = new();
             parser.FlattenArgs(rawArgs, diagnostics, flattenedArgs, null, baseDirectory);
 
             var builder = new StringBuilder();

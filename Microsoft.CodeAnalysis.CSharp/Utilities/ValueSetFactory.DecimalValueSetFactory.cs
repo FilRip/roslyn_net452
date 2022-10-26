@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private sealed class DecimalValueSetFactory : IValueSetFactory<decimal>, IValueSetFactory
         {
-            public static readonly DecimalValueSetFactory Instance = new DecimalValueSetFactory();
+            public static readonly DecimalValueSetFactory Instance = new();
 
             private readonly IValueSetFactory<decimal> _underlying = NumericValueSetFactory<decimal, DecimalTC>.Instance;
 

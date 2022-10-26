@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
             CSharpSyntaxNode syntax = this.GetNonNullSyntaxNode();
-            SyntheticBoundNodeFactory factory = new SyntheticBoundNodeFactory(this, syntax, compilationState, diagnostics);
+            SyntheticBoundNodeFactory factory = new(this, syntax, compilationState, diagnostics);
             factory.CurrentFunction = this;
             ArrayBuilder<BoundStatement> body = ArrayBuilder<BoundStatement>.GetInstance();
 

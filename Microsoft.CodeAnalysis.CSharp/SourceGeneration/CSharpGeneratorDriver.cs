@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="optionsProvider">An <see cref="AnalyzerConfigOptionsProvider"/> that can be used to retrieve analyzer config values by the generators in this driver, or <c>null</c> if there are none.</param>
         /// <returns>A new <see cref="CSharpGeneratorDriver"/> instance.</returns>
         public static CSharpGeneratorDriver Create(IEnumerable<ISourceGenerator> generators, IEnumerable<AdditionalText>? additionalTexts = null, CSharpParseOptions? parseOptions = null, AnalyzerConfigOptionsProvider? optionsProvider = null)
-            => new CSharpGeneratorDriver(parseOptions ?? CSharpParseOptions.Default, generators.ToImmutableArray(), optionsProvider ?? CompilerAnalyzerConfigOptionsProvider.Empty, additionalTexts.AsImmutableOrEmpty());
+            => new(parseOptions ?? CSharpParseOptions.Default, generators.ToImmutableArray(), optionsProvider ?? CompilerAnalyzerConfigOptionsProvider.Empty, additionalTexts.AsImmutableOrEmpty());
 
         public override SyntaxTree ParseGeneratedSourceText(GeneratedSourceText input, string fileName, CancellationToken cancellationToken)
             => CSharpSyntaxTree.ParseTextLazy(input.Text, (CSharpParseOptions)_state.ParseOptions, fileName);
@@ -60,6 +60,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override CommonMessageProvider MessageProvider => CSharp.MessageProvider.Instance;
 
-        public override AdditionalSourcesCollection CreateSourcesCollection() => new AdditionalSourcesCollection(".cs");
+        public override AdditionalSourcesCollection CreateSourcesCollection() => new(".cs");
     }
 }

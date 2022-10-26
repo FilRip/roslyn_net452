@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
         internal sealed class Boxed
         {
-            internal static readonly Boxed Sentinel = new Boxed(default);
+            internal static readonly Boxed Sentinel = new(default);
 
             internal readonly TypeWithAnnotations Value;
             internal Boxed(TypeWithAnnotations value)
@@ -59,12 +59,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override string ToString() => Type.ToString();
 
-        private static readonly SymbolDisplayFormat DebuggerDisplayFormat = new SymbolDisplayFormat(
+        private static readonly SymbolDisplayFormat DebuggerDisplayFormat = new(
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
             genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
             miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes | SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier);
 
-        internal static readonly SymbolDisplayFormat TestDisplayFormat = new SymbolDisplayFormat(
+        internal static readonly SymbolDisplayFormat TestDisplayFormat = new(
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
             genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
             miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes | SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier | SymbolDisplayMiscellaneousOptions.IncludeNotNullableReferenceTypeModifier);
@@ -373,8 +373,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal sealed class EqualsComparer : EqualityComparer<TypeWithAnnotations>
         {
-            internal static readonly EqualsComparer ConsiderEverythingComparer = new EqualsComparer(TypeCompareKind.ConsiderEverything);
-            internal static readonly EqualsComparer IgnoreNullableModifiersForReferenceTypesComparer = new EqualsComparer(TypeCompareKind.IgnoreNullableModifiersForReferenceTypes);
+            internal static readonly EqualsComparer ConsiderEverythingComparer = new(TypeCompareKind.ConsiderEverything);
+            internal static readonly EqualsComparer IgnoreNullableModifiersForReferenceTypesComparer = new(TypeCompareKind.IgnoreNullableModifiersForReferenceTypes);
 
             private readonly TypeCompareKind _compareKind;
 

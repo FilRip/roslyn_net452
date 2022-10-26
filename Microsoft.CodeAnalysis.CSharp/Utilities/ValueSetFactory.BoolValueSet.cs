@@ -16,10 +16,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             private readonly bool _hasFalse, _hasTrue;
 
-            internal static readonly BoolValueSet AllValues = new BoolValueSet(hasFalse: true, hasTrue: true);
-            internal static readonly BoolValueSet None = new BoolValueSet(hasFalse: false, hasTrue: false);
-            internal static readonly BoolValueSet OnlyTrue = new BoolValueSet(hasFalse: false, hasTrue: true);
-            internal static readonly BoolValueSet OnlyFalse = new BoolValueSet(hasFalse: true, hasTrue: false);
+            internal static readonly BoolValueSet AllValues = new(hasFalse: true, hasTrue: true);
+            internal static readonly BoolValueSet None = new(hasFalse: false, hasTrue: false);
+            internal static readonly BoolValueSet OnlyTrue = new(hasFalse: false, hasTrue: true);
+            internal static readonly BoolValueSet OnlyFalse = new(hasFalse: true, hasTrue: false);
 
             private BoolValueSet(bool hasFalse, bool hasTrue) => (_hasFalse, _hasTrue) = (hasFalse, hasTrue);
 

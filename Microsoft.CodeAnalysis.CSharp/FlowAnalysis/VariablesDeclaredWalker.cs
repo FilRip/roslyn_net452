@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private HashSet<Symbol> _variablesDeclared = new HashSet<Symbol>();
+        private HashSet<Symbol> _variablesDeclared = new();
 
         internal VariablesDeclaredWalker(CSharpCompilation compilation, Symbol member, BoundNode node, BoundNode firstInRegion, BoundNode lastInRegion)
             : base(compilation, member, node, firstInRegion, lastInRegion)

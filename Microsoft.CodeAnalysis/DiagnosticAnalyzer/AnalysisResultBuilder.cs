@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         private static readonly ImmutableDictionary<string, OneOrMany<AdditionalText>> s_emptyPathToAdditionalTextMap =
             ImmutableDictionary<string, OneOrMany<AdditionalText>>.Empty.WithComparers(PathUtilities.Comparer);
 
-        private readonly object _gate = new object();
+        private readonly object _gate = new();
         private readonly Dictionary<DiagnosticAnalyzer, TimeSpan>? _analyzerExecutionTimeOpt;
         private readonly HashSet<DiagnosticAnalyzer> _completedAnalyzers;
         private readonly Dictionary<DiagnosticAnalyzer, AnalyzerActionCounts> _analyzerActionCounts;

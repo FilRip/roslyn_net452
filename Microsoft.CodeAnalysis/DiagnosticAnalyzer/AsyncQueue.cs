@@ -22,11 +22,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     {
         // Continuations run asynchronously to ensure user code does not execute within protected regions and lead to
         // delays, deadlocks, and/or state corruption.
-        private readonly TaskCompletionSource<bool> _whenCompleted = new TaskCompletionSource<bool>(); // FilRip Remove parameter TaskCreationOptions.RunContinuationsAsynchronously
+        private readonly TaskCompletionSource<bool> _whenCompleted = new(); // FilRip Remove parameter TaskCreationOptions.RunContinuationsAsynchronously
 
         // Note: All of the below fields are accessed in parallel and may only be accessed
         // when protected by lock (SyncObject)
-        private readonly Queue<TElement> _data = new Queue<TElement>();
+        private readonly Queue<TElement> _data = new();
         private Queue<TaskCompletionSource<Optional<TElement>>> _waiters;
         private bool _completed;
         private bool _disallowEnqueue;

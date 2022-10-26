@@ -449,7 +449,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private object? _info;
 
-        private static readonly object Sentinel = new object(); // Indicates unknown state.
+        private static readonly object Sentinel = new(); // Indicates unknown state.
 
         public static readonly CachedUseSiteInfo<TAssemblySymbol> Uninitialized = new(Sentinel); // Indicates unknown state.
 

@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // symbols cannot conflict with using alias names
                         if (Next is WithExternAndUsingAliasesBinder withUsingAliases && withUsingAliases.IsUsingAlias(name, originalBinder.IsSemanticModelBinder, basesBeingResolved))
                         {
-                            CSDiagnosticInfo diagInfo = new CSDiagnosticInfo(ErrorCode.ERR_ConflictAliasAndMember, name, _container);
+                            CSDiagnosticInfo diagInfo = new(ErrorCode.ERR_ConflictAliasAndMember, name, _container);
                             var error = new ExtendedErrorTypeSymbol((NamespaceOrTypeSymbol)null, name, arity, diagInfo, unreported: true);
                             result.SetFrom(LookupResult.Good(error)); // force lookup to be done w/ error symbol as result
                         }

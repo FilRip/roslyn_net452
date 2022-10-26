@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis
     {
         private readonly ImmutableArray<CustomModifier> _typeCustomModifiers;
         private readonly ImmutableArray<CustomModifier> _refCustomModifiers;
-        public static readonly CustomModifiersTuple Empty = new CustomModifiersTuple(ImmutableArray<CustomModifier>.Empty, ImmutableArray<CustomModifier>.Empty);
+        public static readonly CustomModifiersTuple Empty = new(ImmutableArray<CustomModifier>.Empty, ImmutableArray<CustomModifier>.Empty);
 
         private CustomModifiersTuple(ImmutableArray<CustomModifier> typeCustomModifiers, ImmutableArray<CustomModifier> refCustomModifiers)
         {

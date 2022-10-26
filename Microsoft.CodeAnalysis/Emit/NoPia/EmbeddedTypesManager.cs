@@ -67,11 +67,11 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
     {
         public readonly TPEModuleBuilder ModuleBeingBuilt;
 
-        public readonly ConcurrentDictionary<TNamedTypeSymbol, TEmbeddedType> EmbeddedTypesMap = new ConcurrentDictionary<TNamedTypeSymbol, TEmbeddedType>(ReferenceEqualityComparer.Instance);
-        public readonly ConcurrentDictionary<TFieldSymbol, TEmbeddedField> EmbeddedFieldsMap = new ConcurrentDictionary<TFieldSymbol, TEmbeddedField>(ReferenceEqualityComparer.Instance);
-        public readonly ConcurrentDictionary<TMethodSymbol, TEmbeddedMethod> EmbeddedMethodsMap = new ConcurrentDictionary<TMethodSymbol, TEmbeddedMethod>(ReferenceEqualityComparer.Instance);
-        public readonly ConcurrentDictionary<TPropertySymbol, TEmbeddedProperty> EmbeddedPropertiesMap = new ConcurrentDictionary<TPropertySymbol, TEmbeddedProperty>(ReferenceEqualityComparer.Instance);
-        public readonly ConcurrentDictionary<TEventSymbol, TEmbeddedEvent> EmbeddedEventsMap = new ConcurrentDictionary<TEventSymbol, TEmbeddedEvent>(ReferenceEqualityComparer.Instance);
+        public readonly ConcurrentDictionary<TNamedTypeSymbol, TEmbeddedType> EmbeddedTypesMap = new(ReferenceEqualityComparer.Instance);
+        public readonly ConcurrentDictionary<TFieldSymbol, TEmbeddedField> EmbeddedFieldsMap = new(ReferenceEqualityComparer.Instance);
+        public readonly ConcurrentDictionary<TMethodSymbol, TEmbeddedMethod> EmbeddedMethodsMap = new(ReferenceEqualityComparer.Instance);
+        public readonly ConcurrentDictionary<TPropertySymbol, TEmbeddedProperty> EmbeddedPropertiesMap = new(ReferenceEqualityComparer.Instance);
+        public readonly ConcurrentDictionary<TEventSymbol, TEmbeddedEvent> EmbeddedEventsMap = new(ReferenceEqualityComparer.Instance);
 
         private ImmutableArray<TEmbeddedType> _frozen;
 
@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
 
         private sealed class TypeComparer : IComparer<TEmbeddedType>
         {
-            public static readonly TypeComparer Instance = new TypeComparer();
+            public static readonly TypeComparer Instance = new();
 
             private TypeComparer()
             {

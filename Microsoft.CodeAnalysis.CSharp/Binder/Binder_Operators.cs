@@ -3472,7 +3472,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (!operandType.ContainsTypeParameter() && !targetType.ContainsTypeParameter() ||
                         operandType.IsVoidType())
                     {
-                        SymbolDistinguisher distinguisher = new SymbolDistinguisher(compilation, operandType, targetType);
+                        SymbolDistinguisher distinguisher = new(compilation, operandType, targetType);
                         Error(diagnostics, ErrorCode.ERR_NoExplicitBuiltinConv, node, distinguisher.First, distinguisher.Second);
                         hasErrors = true;
                     }

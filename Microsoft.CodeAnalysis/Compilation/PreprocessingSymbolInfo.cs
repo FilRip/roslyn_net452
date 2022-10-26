@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
 {
     public struct PreprocessingSymbolInfo : IEquatable<PreprocessingSymbolInfo>
     {
-        public static readonly PreprocessingSymbolInfo None = new PreprocessingSymbolInfo(null, false);
+        public static readonly PreprocessingSymbolInfo None = new(null, false);
 
         /// <summary>
         /// The symbol that was referred to by the identifier, if any. 

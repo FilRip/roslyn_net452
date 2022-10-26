@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             internal readonly ImmutableArray<AnonymousTypePropertySymbol> Properties;
 
             /// <summary> Maps member names to symbol(s) </summary>
-            private readonly MultiDictionary<string, Symbol> _nameToSymbols = new MultiDictionary<string, Symbol>();
+            private readonly MultiDictionary<string, Symbol> _nameToSymbols = new();
 
             /// <summary> Anonymous type manager owning this template </summary>
             internal readonly AnonymousTypeManager Manager;
@@ -90,11 +90,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     // Add a type parameter
                     AnonymousTypeParameterSymbol typeParameter =
-                        new AnonymousTypeParameterSymbol(this, fieldIndex, GeneratedNames.MakeAnonymousTypeParameterName(field.Name));
+                        new(this, fieldIndex, GeneratedNames.MakeAnonymousTypeParameterName(field.Name));
                     typeParametersBuilder.Add(typeParameter);
 
                     // Add a property
-                    AnonymousTypePropertySymbol property = new AnonymousTypePropertySymbol(this, field, TypeWithAnnotations.Create(typeParameter), fieldIndex);
+                    AnonymousTypePropertySymbol property = new(this, field, TypeWithAnnotations.Create(typeParameter), fieldIndex);
                     propertiesBuilder.Add(property);
 
                     // Property related symbols

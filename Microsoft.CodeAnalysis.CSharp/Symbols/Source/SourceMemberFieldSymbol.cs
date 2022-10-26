@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 diagnostics.Add(ErrorCode.ERR_VolatileStruct, this.ErrorLocation, this, type);
             }
 
-            CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = new CompoundUseSiteInfo<AssemblySymbol>(diagnostics, ContainingAssembly);
+            CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = new(diagnostics, ContainingAssembly);
             if (!this.IsNoMoreVisibleThan(type, ref useSiteInfo))
             {
                 // Inconsistent accessibility: field type '{1}' is less accessible than field '{0}'

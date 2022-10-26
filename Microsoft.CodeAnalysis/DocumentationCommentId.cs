@@ -39,8 +39,8 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private static readonly ListPool<ISymbol> s_symbolListPool = new ListPool<ISymbol>();
-        private static readonly ListPool<INamespaceOrTypeSymbol> s_namespaceOrTypeListPool = new ListPool<INamespaceOrTypeSymbol>();
+        private static readonly ListPool<ISymbol> s_symbolListPool = new();
+        private static readonly ListPool<INamespaceOrTypeSymbol> s_namespaceOrTypeListPool = new();
 
         /// <summary>
         /// Creates an id string used by external documentation comment files to identify declarations
@@ -1402,7 +1402,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            private static readonly ListPool<ParameterInfo> s_parameterListPool = new ListPool<ParameterInfo>();
+            private static readonly ListPool<ParameterInfo> s_parameterListPool = new();
 
             private static bool ParseParameterList(string id, ref int index, Compilation compilation, ISymbol typeParameterContext, List<ParameterInfo> parameters)
             {

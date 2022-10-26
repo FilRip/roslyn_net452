@@ -30,6 +30,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         }
 
         public CompilationStartedEvent WithAdditionalFiles(ImmutableArray<AdditionalText> additionalFiles)
-            => new CompilationStartedEvent(Compilation, additionalFiles);
+            => new(Compilation, additionalFiles);
     }
 }

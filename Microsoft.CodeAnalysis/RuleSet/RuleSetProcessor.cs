@@ -274,7 +274,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private static XmlReaderSettings GetDefaultXmlReaderSettings()
         {
-            XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+            XmlReaderSettings xmlReaderSettings = new();
 
             xmlReaderSettings.CheckCharacters = true;
             xmlReaderSettings.CloseInput = true;

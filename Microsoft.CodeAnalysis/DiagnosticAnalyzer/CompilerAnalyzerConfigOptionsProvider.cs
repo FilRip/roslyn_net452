@@ -32,9 +32,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             => _treeDict.TryGetValue(textFile, out var options) ? options : CompilerAnalyzerConfigOptions.Empty;
 
         internal CompilerAnalyzerConfigOptionsProvider WithAdditionalTreeOptions(ImmutableDictionary<object, AnalyzerConfigOptions> treeDict)
-            => new CompilerAnalyzerConfigOptionsProvider(_treeDict.AddRange(treeDict), GlobalOptions);
+            => new(_treeDict.AddRange(treeDict), GlobalOptions);
 
         internal CompilerAnalyzerConfigOptionsProvider WithGlobalOptions(AnalyzerConfigOptions globalOptions)
-            => new CompilerAnalyzerConfigOptionsProvider(_treeDict, globalOptions);
+            => new(_treeDict, globalOptions);
     }
 }

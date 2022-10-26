@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis
         /// <remarks>
         /// These are also the rules used for VB identifier comparison.
         /// </remarks>
-        private static readonly OneToOneUnicodeComparer s_comparer = new OneToOneUnicodeComparer();
+        private static readonly OneToOneUnicodeComparer s_comparer = new();
 
         /// <summary>
         /// Returns a StringComparer that compares strings according to Unicode rules for case-insensitive

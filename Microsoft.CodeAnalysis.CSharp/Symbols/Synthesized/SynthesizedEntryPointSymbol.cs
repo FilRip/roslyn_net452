@@ -333,7 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var arguments = Parameters.SelectAsArray((p, s) => (BoundExpression)new BoundParameter(s, p, p.Type), _userMainReturnTypeSyntax);
 
                 // Main(args) or Main()
-                BoundCall userMainInvocation = new BoundCall(
+                BoundCall userMainInvocation = new(
                         syntax: _userMainReturnTypeSyntax,
                         receiverOpt: null,
                         method: userMain,
