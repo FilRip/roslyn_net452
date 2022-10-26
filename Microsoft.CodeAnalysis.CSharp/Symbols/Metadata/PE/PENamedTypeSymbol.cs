@@ -2197,7 +2197,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             get { return null; }
         }
 
-        public IEnumerable<object> fieldDefs { get; set; }
+        public IEnumerable<object> FieldDefs { get; set; }
 
         /// <summary>
         /// Returns the index of the first member of the specific kind.

@@ -178,8 +178,7 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 // Otherwise, use a HashSet
-                var hashSet = _uniqueSymbolOrArities as HashSet<int>;
-                if (hashSet == null)
+                if (_uniqueSymbolOrArities is not HashSet<int> hashSet)
                 {
                     hashSet = new HashSet<int>();
                     _uniqueSymbolOrArities = hashSet;

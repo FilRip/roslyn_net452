@@ -115,7 +115,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, empty As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(empty)
             Me._empty = empty
@@ -124,7 +124,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, empty As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(empty)
@@ -134,7 +134,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors as DiagnosticInfo(), ByVal annotations as SyntaxAnnotation(), empty As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(empty)
             Me._empty = empty
@@ -143,7 +143,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader as ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _empty = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _empty isnot Nothing
                 AdjustFlagsAndWidth(_empty)
@@ -210,7 +210,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, endKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -221,7 +221,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, endKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(endKeyword)
@@ -233,7 +233,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), endKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -244,7 +244,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _endKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _endKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_endKeyword)
@@ -335,7 +335,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, options As GreenNode, [imports] As GreenNode, attributes As GreenNode, members As GreenNode, endOfFileToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If options IsNot Nothing Then
                 AdjustFlagsAndWidth(options)
@@ -360,7 +360,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, options As GreenNode, [imports] As GreenNode, attributes As GreenNode, members As GreenNode, endOfFileToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             If options IsNot Nothing Then
@@ -386,7 +386,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), options As GreenNode, [imports] As GreenNode, attributes As GreenNode, members As GreenNode, endOfFileToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If options IsNot Nothing Then
                 AdjustFlagsAndWidth(options)
@@ -411,7 +411,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _options = DirectCast(reader.ReadValue(), GreenNode)
             If _options IsNot Nothing Then
                 AdjustFlagsAndWidth(_options)
@@ -564,7 +564,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, optionKeyword As InternalSyntax.KeywordSyntax, nameKeyword As InternalSyntax.KeywordSyntax, valueKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(optionKeyword)
             Me._optionKeyword = optionKeyword
@@ -579,7 +579,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, optionKeyword As InternalSyntax.KeywordSyntax, nameKeyword As InternalSyntax.KeywordSyntax, valueKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(optionKeyword)
@@ -595,7 +595,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), optionKeyword As InternalSyntax.KeywordSyntax, nameKeyword As InternalSyntax.KeywordSyntax, valueKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(optionKeyword)
             Me._optionKeyword = optionKeyword
@@ -610,7 +610,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _optionKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _optionKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_optionKeyword)
@@ -717,7 +717,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, importsKeyword As InternalSyntax.KeywordSyntax, importsClauses As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(importsKeyword)
             Me._importsKeyword = importsKeyword
@@ -730,7 +730,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, importsKeyword As InternalSyntax.KeywordSyntax, importsClauses As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(importsKeyword)
@@ -744,7 +744,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), importsKeyword As InternalSyntax.KeywordSyntax, importsClauses As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(importsKeyword)
             Me._importsKeyword = importsKeyword
@@ -757,7 +757,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _importsKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _importsKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_importsKeyword)
@@ -873,7 +873,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, [alias] As ImportAliasClauseSyntax, name As NameSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If [alias] IsNot Nothing Then
                 AdjustFlagsAndWidth([alias])
@@ -886,7 +886,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, [alias] As ImportAliasClauseSyntax, name As NameSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If [alias] IsNot Nothing Then
@@ -900,7 +900,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), [alias] As ImportAliasClauseSyntax, name As NameSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If [alias] IsNot Nothing Then
                 AdjustFlagsAndWidth([alias])
@@ -913,7 +913,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _alias = DirectCast(reader.ReadValue(), ImportAliasClauseSyntax)
             If _alias IsNot Nothing Then
                 AdjustFlagsAndWidth(_alias)
@@ -1001,7 +1001,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, equalsToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -1012,7 +1012,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, equalsToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(identifier)
@@ -1024,7 +1024,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As InternalSyntax.IdentifierTokenSyntax, equalsToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -1035,7 +1035,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _identifier = DirectCast(reader.ReadValue(), IdentifierTokenSyntax)
             If _identifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_identifier)
@@ -1121,7 +1121,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, xmlNamespace As XmlAttributeSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -1134,7 +1134,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, xmlNamespace As XmlAttributeSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanToken)
@@ -1148,7 +1148,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanToken As InternalSyntax.PunctuationSyntax, xmlNamespace As XmlAttributeSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -1161,7 +1161,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lessThanToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanToken)
@@ -1258,7 +1258,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, namespaceStatement As NamespaceStatementSyntax, members As GreenNode, endNamespaceStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(namespaceStatement)
             Me._namespaceStatement = namespaceStatement
@@ -1273,7 +1273,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, namespaceStatement As NamespaceStatementSyntax, members As GreenNode, endNamespaceStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(namespaceStatement)
@@ -1289,7 +1289,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), namespaceStatement As NamespaceStatementSyntax, members As GreenNode, endNamespaceStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(namespaceStatement)
             Me._namespaceStatement = namespaceStatement
@@ -1304,7 +1304,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _namespaceStatement = DirectCast(reader.ReadValue(), NamespaceStatementSyntax)
             If _namespaceStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_namespaceStatement)
@@ -1410,7 +1410,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, namespaceKeyword As InternalSyntax.KeywordSyntax, name As NameSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(namespaceKeyword)
             Me._namespaceKeyword = namespaceKeyword
@@ -1421,7 +1421,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, namespaceKeyword As InternalSyntax.KeywordSyntax, name As NameSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(namespaceKeyword)
@@ -1433,7 +1433,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), namespaceKeyword As InternalSyntax.KeywordSyntax, name As NameSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(namespaceKeyword)
             Me._namespaceKeyword = namespaceKeyword
@@ -1444,7 +1444,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _namespaceKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _namespaceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_namespaceKeyword)
@@ -1660,7 +1660,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, moduleStatement As ModuleStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endModuleStatement As EndBlockStatementSyntax)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(moduleStatement)
             Me._moduleStatement = moduleStatement
@@ -1671,7 +1671,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, moduleStatement As ModuleStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endModuleStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(moduleStatement)
@@ -1683,7 +1683,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), moduleStatement As ModuleStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endModuleStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(moduleStatement)
             Me._moduleStatement = moduleStatement
@@ -1694,7 +1694,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _moduleStatement = DirectCast(reader.ReadValue(), ModuleStatementSyntax)
             If _moduleStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_moduleStatement)
@@ -1786,7 +1786,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, structureStatement As StructureStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endStructureStatement As EndBlockStatementSyntax)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(structureStatement)
             Me._structureStatement = structureStatement
@@ -1797,7 +1797,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, structureStatement As StructureStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endStructureStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(structureStatement)
@@ -1809,7 +1809,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), structureStatement As StructureStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endStructureStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(structureStatement)
             Me._structureStatement = structureStatement
@@ -1820,7 +1820,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _structureStatement = DirectCast(reader.ReadValue(), StructureStatementSyntax)
             If _structureStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_structureStatement)
@@ -1912,7 +1912,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, interfaceStatement As InterfaceStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endInterfaceStatement As EndBlockStatementSyntax)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(interfaceStatement)
             Me._interfaceStatement = interfaceStatement
@@ -1923,7 +1923,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, interfaceStatement As InterfaceStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endInterfaceStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(interfaceStatement)
@@ -1935,7 +1935,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), interfaceStatement As InterfaceStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endInterfaceStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(interfaceStatement)
             Me._interfaceStatement = interfaceStatement
@@ -1946,7 +1946,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _interfaceStatement = DirectCast(reader.ReadValue(), InterfaceStatementSyntax)
             If _interfaceStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_interfaceStatement)
@@ -2038,7 +2038,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, classStatement As ClassStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endClassStatement As EndBlockStatementSyntax)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(classStatement)
             Me._classStatement = classStatement
@@ -2049,7 +2049,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, classStatement As ClassStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endClassStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(classStatement)
@@ -2061,7 +2061,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), classStatement As ClassStatementSyntax, [inherits] As GreenNode, [implements] As GreenNode, members As GreenNode, endClassStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, [inherits], [implements], members)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(classStatement)
             Me._classStatement = classStatement
@@ -2072,7 +2072,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _classStatement = DirectCast(reader.ReadValue(), ClassStatementSyntax)
             If _classStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_classStatement)
@@ -2165,7 +2165,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, enumStatement As EnumStatementSyntax, members As GreenNode, endEnumStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(enumStatement)
             Me._enumStatement = enumStatement
@@ -2180,7 +2180,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, enumStatement As EnumStatementSyntax, members As GreenNode, endEnumStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(enumStatement)
@@ -2196,7 +2196,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), enumStatement As EnumStatementSyntax, members As GreenNode, endEnumStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(enumStatement)
             Me._enumStatement = enumStatement
@@ -2211,7 +2211,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _enumStatement = DirectCast(reader.ReadValue(), EnumStatementSyntax)
             If _enumStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_enumStatement)
@@ -2343,7 +2343,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, inheritsKeyword As InternalSyntax.KeywordSyntax, types As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(inheritsKeyword)
             Me._inheritsKeyword = inheritsKeyword
@@ -2356,7 +2356,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, inheritsKeyword As InternalSyntax.KeywordSyntax, types As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(inheritsKeyword)
@@ -2370,7 +2370,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), inheritsKeyword As InternalSyntax.KeywordSyntax, types As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(inheritsKeyword)
             Me._inheritsKeyword = inheritsKeyword
@@ -2383,7 +2383,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _inheritsKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _inheritsKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_inheritsKeyword)
@@ -2468,7 +2468,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, implementsKeyword As InternalSyntax.KeywordSyntax, types As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(implementsKeyword)
             Me._implementsKeyword = implementsKeyword
@@ -2481,7 +2481,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, implementsKeyword As InternalSyntax.KeywordSyntax, types As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(implementsKeyword)
@@ -2495,7 +2495,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), implementsKeyword As InternalSyntax.KeywordSyntax, types As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(implementsKeyword)
             Me._implementsKeyword = implementsKeyword
@@ -2508,7 +2508,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _implementsKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _implementsKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_implementsKeyword)
@@ -2750,7 +2750,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, moduleKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(moduleKeyword)
             Me._moduleKeyword = moduleKeyword
@@ -2759,7 +2759,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, moduleKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(moduleKeyword)
@@ -2769,7 +2769,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, moduleKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(moduleKeyword)
             Me._moduleKeyword = moduleKeyword
@@ -2778,7 +2778,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _moduleKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _moduleKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_moduleKeyword)
@@ -2854,7 +2854,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, structureKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(structureKeyword)
             Me._structureKeyword = structureKeyword
@@ -2863,7 +2863,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, structureKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(structureKeyword)
@@ -2873,7 +2873,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, structureKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(structureKeyword)
             Me._structureKeyword = structureKeyword
@@ -2882,7 +2882,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _structureKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _structureKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_structureKeyword)
@@ -2958,7 +2958,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, interfaceKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(interfaceKeyword)
             Me._interfaceKeyword = interfaceKeyword
@@ -2967,7 +2967,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, interfaceKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(interfaceKeyword)
@@ -2977,7 +2977,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, interfaceKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(interfaceKeyword)
             Me._interfaceKeyword = interfaceKeyword
@@ -2986,7 +2986,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _interfaceKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _interfaceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_interfaceKeyword)
@@ -3062,7 +3062,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, classKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(classKeyword)
             Me._classKeyword = classKeyword
@@ -3071,7 +3071,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, classKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(classKeyword)
@@ -3081,7 +3081,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, classKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, identifier, typeParameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(classKeyword)
             Me._classKeyword = classKeyword
@@ -3090,7 +3090,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _classKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _classKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_classKeyword)
@@ -3170,7 +3170,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, enumKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, underlyingType As AsClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -3193,7 +3193,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, enumKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, underlyingType As AsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -3217,7 +3217,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, enumKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, underlyingType As AsClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -3240,7 +3240,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -3390,7 +3390,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, ofKeyword As InternalSyntax.KeywordSyntax, parameters As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -3407,7 +3407,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, ofKeyword As InternalSyntax.KeywordSyntax, parameters As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -3425,7 +3425,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, ofKeyword As InternalSyntax.KeywordSyntax, parameters As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -3442,7 +3442,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -3563,7 +3563,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, varianceKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterConstraintClause As TypeParameterConstraintClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If varianceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(varianceKeyword)
@@ -3580,7 +3580,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, varianceKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterConstraintClause As TypeParameterConstraintClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If varianceKeyword IsNot Nothing Then
@@ -3598,7 +3598,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), varianceKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterConstraintClause As TypeParameterConstraintClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If varianceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(varianceKeyword)
@@ -3615,7 +3615,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _varianceKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _varianceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_varianceKeyword)
@@ -3753,7 +3753,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, constraint As ConstraintSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(asKeyword)
             Me._asKeyword = asKeyword
@@ -3764,7 +3764,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, constraint As ConstraintSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(asKeyword)
@@ -3776,7 +3776,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), asKeyword As InternalSyntax.KeywordSyntax, constraint As ConstraintSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(asKeyword)
             Me._asKeyword = asKeyword
@@ -3787,7 +3787,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _asKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _asKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_asKeyword)
@@ -3877,7 +3877,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, openBraceToken As InternalSyntax.PunctuationSyntax, constraints As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(asKeyword)
             Me._asKeyword = asKeyword
@@ -3894,7 +3894,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, openBraceToken As InternalSyntax.PunctuationSyntax, constraints As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(asKeyword)
@@ -3912,7 +3912,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), asKeyword As InternalSyntax.KeywordSyntax, openBraceToken As InternalSyntax.PunctuationSyntax, constraints As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(asKeyword)
             Me._asKeyword = asKeyword
@@ -3929,7 +3929,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _asKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _asKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_asKeyword)
@@ -4077,7 +4077,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, constraintKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(constraintKeyword)
             Me._constraintKeyword = constraintKeyword
@@ -4086,7 +4086,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, constraintKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(constraintKeyword)
@@ -4096,7 +4096,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), constraintKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(constraintKeyword)
             Me._constraintKeyword = constraintKeyword
@@ -4105,7 +4105,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _constraintKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _constraintKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_constraintKeyword)
@@ -4172,7 +4172,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, type As TypeSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -4181,7 +4181,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, type As TypeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(type)
@@ -4191,7 +4191,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), type As TypeSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -4200,7 +4200,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _type = DirectCast(reader.ReadValue(), TypeSyntax)
             If _type IsNot Nothing Then
                 AdjustFlagsAndWidth(_type)
@@ -4268,7 +4268,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, identifier As InternalSyntax.IdentifierTokenSyntax, initializer As EqualsValueSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -4285,7 +4285,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, identifier As InternalSyntax.IdentifierTokenSyntax, initializer As EqualsValueSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -4303,7 +4303,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, identifier As InternalSyntax.IdentifierTokenSyntax, initializer As EqualsValueSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -4320,7 +4320,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -4493,7 +4493,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subOrFunctionStatement As MethodStatementSyntax, statements As GreenNode, endSubOrFunctionStatement As EndBlockStatementSyntax)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(subOrFunctionStatement)
             Me._subOrFunctionStatement = subOrFunctionStatement
@@ -4504,7 +4504,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subOrFunctionStatement As MethodStatementSyntax, statements As GreenNode, endSubOrFunctionStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(subOrFunctionStatement)
@@ -4516,7 +4516,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), subOrFunctionStatement As MethodStatementSyntax, statements As GreenNode, endSubOrFunctionStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(subOrFunctionStatement)
             Me._subOrFunctionStatement = subOrFunctionStatement
@@ -4527,7 +4527,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _subOrFunctionStatement = DirectCast(reader.ReadValue(), MethodStatementSyntax)
             If _subOrFunctionStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_subOrFunctionStatement)
@@ -4615,7 +4615,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subNewStatement As SubNewStatementSyntax, statements As GreenNode, endSubStatement As EndBlockStatementSyntax)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(subNewStatement)
             Me._subNewStatement = subNewStatement
@@ -4626,7 +4626,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subNewStatement As SubNewStatementSyntax, statements As GreenNode, endSubStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(subNewStatement)
@@ -4638,7 +4638,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), subNewStatement As SubNewStatementSyntax, statements As GreenNode, endSubStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(subNewStatement)
             Me._subNewStatement = subNewStatement
@@ -4649,7 +4649,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _subNewStatement = DirectCast(reader.ReadValue(), SubNewStatementSyntax)
             If _subNewStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_subNewStatement)
@@ -4737,7 +4737,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, operatorStatement As OperatorStatementSyntax, statements As GreenNode, endOperatorStatement As EndBlockStatementSyntax)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(operatorStatement)
             Me._operatorStatement = operatorStatement
@@ -4748,7 +4748,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, operatorStatement As OperatorStatementSyntax, statements As GreenNode, endOperatorStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(operatorStatement)
@@ -4760,7 +4760,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), operatorStatement As OperatorStatementSyntax, statements As GreenNode, endOperatorStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(operatorStatement)
             Me._operatorStatement = operatorStatement
@@ -4771,7 +4771,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _operatorStatement = DirectCast(reader.ReadValue(), OperatorStatementSyntax)
             If _operatorStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_operatorStatement)
@@ -4860,7 +4860,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, accessorStatement As AccessorStatementSyntax, statements As GreenNode, endAccessorStatement As EndBlockStatementSyntax)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(accessorStatement)
             Me._accessorStatement = accessorStatement
@@ -4871,7 +4871,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, accessorStatement As AccessorStatementSyntax, statements As GreenNode, endAccessorStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(accessorStatement)
@@ -4883,7 +4883,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), accessorStatement As AccessorStatementSyntax, statements As GreenNode, endAccessorStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, statements)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(accessorStatement)
             Me._accessorStatement = accessorStatement
@@ -4894,7 +4894,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _accessorStatement = DirectCast(reader.ReadValue(), AccessorStatementSyntax)
             If _accessorStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_accessorStatement)
@@ -4985,7 +4985,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, propertyStatement As PropertyStatementSyntax, accessors As GreenNode, endPropertyStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(propertyStatement)
             Me._propertyStatement = propertyStatement
@@ -5000,7 +5000,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, propertyStatement As PropertyStatementSyntax, accessors As GreenNode, endPropertyStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(propertyStatement)
@@ -5016,7 +5016,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), propertyStatement As PropertyStatementSyntax, accessors As GreenNode, endPropertyStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(propertyStatement)
             Me._propertyStatement = propertyStatement
@@ -5031,7 +5031,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _propertyStatement = DirectCast(reader.ReadValue(), PropertyStatementSyntax)
             If _propertyStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_propertyStatement)
@@ -5136,7 +5136,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, eventStatement As EventStatementSyntax, accessors As GreenNode, endEventStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(eventStatement)
             Me._eventStatement = eventStatement
@@ -5151,7 +5151,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, eventStatement As EventStatementSyntax, accessors As GreenNode, endEventStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(eventStatement)
@@ -5167,7 +5167,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), eventStatement As EventStatementSyntax, accessors As GreenNode, endEventStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(eventStatement)
             Me._eventStatement = eventStatement
@@ -5182,7 +5182,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _eventStatement = DirectCast(reader.ReadValue(), EventStatementSyntax)
             If _eventStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_eventStatement)
@@ -5423,7 +5423,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, parameters As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -5438,7 +5438,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, parameters As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -5454,7 +5454,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, parameters As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -5469,7 +5469,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -5583,7 +5583,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, handlesClause As HandlesClauseSyntax, implementsClause As ImplementsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
 
             AdjustFlagsAndWidth(subOrFunctionKeyword)
             Me._subOrFunctionKeyword = subOrFunctionKeyword
@@ -5610,7 +5610,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, handlesClause As HandlesClauseSyntax, implementsClause As ImplementsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(subOrFunctionKeyword)
@@ -5638,7 +5638,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, handlesClause As HandlesClauseSyntax, implementsClause As ImplementsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
 
             AdjustFlagsAndWidth(subOrFunctionKeyword)
             Me._subOrFunctionKeyword = subOrFunctionKeyword
@@ -5665,7 +5665,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
             Dim _subOrFunctionKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _subOrFunctionKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_subOrFunctionKeyword)
@@ -5841,7 +5841,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, subKeyword As InternalSyntax.KeywordSyntax, newKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(subKeyword)
             Me._subKeyword = subKeyword
@@ -5852,7 +5852,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, subKeyword As InternalSyntax.KeywordSyntax, newKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(subKeyword)
@@ -5864,7 +5864,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, subKeyword As InternalSyntax.KeywordSyntax, newKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(subKeyword)
             Me._subKeyword = subKeyword
@@ -5875,7 +5875,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _subKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _subKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_subKeyword)
@@ -5973,7 +5973,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, declareKeyword As InternalSyntax.KeywordSyntax, charsetKeyword As InternalSyntax.KeywordSyntax, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, libKeyword As InternalSyntax.KeywordSyntax, libraryName As LiteralExpressionSyntax, aliasKeyword As InternalSyntax.KeywordSyntax, aliasName As LiteralExpressionSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 12
+            MyBase.SlotCount = 12
 
             AdjustFlagsAndWidth(declareKeyword)
             Me._declareKeyword = declareKeyword
@@ -6006,7 +6006,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, declareKeyword As InternalSyntax.KeywordSyntax, charsetKeyword As InternalSyntax.KeywordSyntax, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, libKeyword As InternalSyntax.KeywordSyntax, libraryName As LiteralExpressionSyntax, aliasKeyword As InternalSyntax.KeywordSyntax, aliasName As LiteralExpressionSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 12
+            MyBase.SlotCount = 12
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(declareKeyword)
@@ -6040,7 +6040,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, declareKeyword As InternalSyntax.KeywordSyntax, charsetKeyword As InternalSyntax.KeywordSyntax, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, libKeyword As InternalSyntax.KeywordSyntax, libraryName As LiteralExpressionSyntax, aliasKeyword As InternalSyntax.KeywordSyntax, aliasName As LiteralExpressionSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 12
+            MyBase.SlotCount = 12
 
             AdjustFlagsAndWidth(declareKeyword)
             Me._declareKeyword = declareKeyword
@@ -6073,7 +6073,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 12
+            MyBase.SlotCount = 12
             Dim _declareKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _declareKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_declareKeyword)
@@ -6300,7 +6300,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, delegateKeyword As InternalSyntax.KeywordSyntax, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(delegateKeyword)
             Me._delegateKeyword = delegateKeyword
@@ -6321,7 +6321,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, delegateKeyword As InternalSyntax.KeywordSyntax, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(delegateKeyword)
@@ -6343,7 +6343,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, delegateKeyword As InternalSyntax.KeywordSyntax, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, typeParameterList As TypeParameterListSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(delegateKeyword)
             Me._delegateKeyword = delegateKeyword
@@ -6364,7 +6364,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Dim _delegateKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _delegateKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_delegateKeyword)
@@ -6519,7 +6519,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, customKeyword As InternalSyntax.KeywordSyntax, eventKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, implementsClause As ImplementsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             If customKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(customKeyword)
@@ -6542,7 +6542,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, customKeyword As InternalSyntax.KeywordSyntax, eventKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, implementsClause As ImplementsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Me.SetFactoryContext(context)
 
             If customKeyword IsNot Nothing Then
@@ -6566,7 +6566,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, customKeyword As InternalSyntax.KeywordSyntax, eventKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, implementsClause As ImplementsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             If customKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(customKeyword)
@@ -6589,7 +6589,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Dim _customKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _customKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_customKeyword)
@@ -6746,7 +6746,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, operatorKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.SyntaxToken, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(operatorKeyword)
             Me._operatorKeyword = operatorKeyword
@@ -6761,7 +6761,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, operatorKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.SyntaxToken, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(operatorKeyword)
@@ -6777,7 +6777,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, operatorKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.SyntaxToken, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(operatorKeyword)
             Me._operatorKeyword = operatorKeyword
@@ -6792,7 +6792,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Dim _operatorKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _operatorKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_operatorKeyword)
@@ -6910,7 +6910,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, propertyKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, parameterList As ParameterListSyntax, asClause As AsClauseSyntax, initializer As EqualsValueSyntax, implementsClause As ImplementsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(propertyKeyword)
             Me._propertyKeyword = propertyKeyword
@@ -6933,7 +6933,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, propertyKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, parameterList As ParameterListSyntax, asClause As AsClauseSyntax, initializer As EqualsValueSyntax, implementsClause As ImplementsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(propertyKeyword)
@@ -6957,7 +6957,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, propertyKeyword As InternalSyntax.KeywordSyntax, identifier As InternalSyntax.IdentifierTokenSyntax, parameterList As ParameterListSyntax, asClause As AsClauseSyntax, initializer As EqualsValueSyntax, implementsClause As ImplementsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(propertyKeyword)
             Me._propertyKeyword = propertyKeyword
@@ -6980,7 +6980,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Dim _propertyKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _propertyKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_propertyKeyword)
@@ -7136,7 +7136,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, accessorKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(accessorKeyword)
             Me._accessorKeyword = accessorKeyword
@@ -7145,7 +7145,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, accessorKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(accessorKeyword)
@@ -7155,7 +7155,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, accessorKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(accessorKeyword)
             Me._accessorKeyword = accessorKeyword
@@ -7164,7 +7164,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _accessorKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _accessorKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_accessorKeyword)
@@ -7240,7 +7240,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, implementsKeyword As InternalSyntax.KeywordSyntax, interfaceMembers As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(implementsKeyword)
             Me._implementsKeyword = implementsKeyword
@@ -7253,7 +7253,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, implementsKeyword As InternalSyntax.KeywordSyntax, interfaceMembers As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(implementsKeyword)
@@ -7267,7 +7267,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), implementsKeyword As InternalSyntax.KeywordSyntax, interfaceMembers As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(implementsKeyword)
             Me._implementsKeyword = implementsKeyword
@@ -7280,7 +7280,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _implementsKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _implementsKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_implementsKeyword)
@@ -7366,7 +7366,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, handlesKeyword As InternalSyntax.KeywordSyntax, events As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(handlesKeyword)
             Me._handlesKeyword = handlesKeyword
@@ -7379,7 +7379,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, handlesKeyword As InternalSyntax.KeywordSyntax, events As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(handlesKeyword)
@@ -7393,7 +7393,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), handlesKeyword As InternalSyntax.KeywordSyntax, events As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(handlesKeyword)
             Me._handlesKeyword = handlesKeyword
@@ -7406,7 +7406,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _handlesKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _handlesKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_handlesKeyword)
@@ -7517,7 +7517,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(keyword)
             Me._keyword = keyword
@@ -7526,7 +7526,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(keyword)
@@ -7536,7 +7536,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(keyword)
             Me._keyword = keyword
@@ -7545,7 +7545,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _keyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _keyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_keyword)
@@ -7612,7 +7612,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -7621,7 +7621,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(identifier)
@@ -7631,7 +7631,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As InternalSyntax.IdentifierTokenSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -7640,7 +7640,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _identifier = DirectCast(reader.ReadValue(), IdentifierTokenSyntax)
             If _identifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_identifier)
@@ -7709,7 +7709,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withEventsContainer As WithEventsEventContainerSyntax, dotToken As InternalSyntax.PunctuationSyntax, [property] As IdentifierNameSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(withEventsContainer)
             Me._withEventsContainer = withEventsContainer
@@ -7722,7 +7722,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withEventsContainer As WithEventsEventContainerSyntax, dotToken As InternalSyntax.PunctuationSyntax, [property] As IdentifierNameSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(withEventsContainer)
@@ -7736,7 +7736,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), withEventsContainer As WithEventsEventContainerSyntax, dotToken As InternalSyntax.PunctuationSyntax, [property] As IdentifierNameSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(withEventsContainer)
             Me._withEventsContainer = withEventsContainer
@@ -7749,7 +7749,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _withEventsContainer = DirectCast(reader.ReadValue(), WithEventsEventContainerSyntax)
             If _withEventsContainer IsNot Nothing Then
                 AdjustFlagsAndWidth(_withEventsContainer)
@@ -7853,7 +7853,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, eventContainer As EventContainerSyntax, dotToken As InternalSyntax.PunctuationSyntax, eventMember As IdentifierNameSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(eventContainer)
             Me._eventContainer = eventContainer
@@ -7866,7 +7866,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, eventContainer As EventContainerSyntax, dotToken As InternalSyntax.PunctuationSyntax, eventMember As IdentifierNameSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(eventContainer)
@@ -7880,7 +7880,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), eventContainer As EventContainerSyntax, dotToken As InternalSyntax.PunctuationSyntax, eventMember As IdentifierNameSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(eventContainer)
             Me._eventContainer = eventContainer
@@ -7893,7 +7893,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _eventContainer = DirectCast(reader.ReadValue(), EventContainerSyntax)
             If _eventContainer IsNot Nothing Then
                 AdjustFlagsAndWidth(_eventContainer)
@@ -8000,7 +8000,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, missingIdentifier As InternalSyntax.IdentifierTokenSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -8019,7 +8019,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, missingIdentifier As InternalSyntax.IdentifierTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -8039,7 +8039,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, missingIdentifier As InternalSyntax.IdentifierTokenSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -8058,7 +8058,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -8176,7 +8176,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, declarators As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -8195,7 +8195,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, declarators As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -8215,7 +8215,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, declarators As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -8234,7 +8234,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -8347,7 +8347,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, names As GreenNode, asClause As AsClauseSyntax, initializer As EqualsValueSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If names IsNot Nothing Then
                 AdjustFlagsAndWidth(names)
@@ -8366,7 +8366,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, names As GreenNode, asClause As AsClauseSyntax, initializer As EqualsValueSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If names IsNot Nothing Then
@@ -8386,7 +8386,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), names As GreenNode, asClause As AsClauseSyntax, initializer As EqualsValueSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If names IsNot Nothing Then
                 AdjustFlagsAndWidth(names)
@@ -8405,7 +8405,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _names = DirectCast(reader.ReadValue(), GreenNode)
             If _names IsNot Nothing Then
                 AdjustFlagsAndWidth(_names)
@@ -8579,7 +8579,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax)
             MyBase.New(kind, asKeyword)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -8592,7 +8592,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, asKeyword)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -8606,7 +8606,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), asKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax)
             MyBase.New(kind, errors, annotations, asKeyword)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -8619,7 +8619,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -8712,7 +8712,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, newExpression As NewExpressionSyntax)
             MyBase.New(kind, asKeyword)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(newExpression)
             Me._newExpression = newExpression
@@ -8721,7 +8721,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, asKeyword As InternalSyntax.KeywordSyntax, newExpression As NewExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, asKeyword)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(newExpression)
@@ -8731,7 +8731,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), asKeyword As InternalSyntax.KeywordSyntax, newExpression As NewExpressionSyntax)
             MyBase.New(kind, errors, annotations, asKeyword)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(newExpression)
             Me._newExpression = newExpression
@@ -8740,7 +8740,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _newExpression = DirectCast(reader.ReadValue(), NewExpressionSyntax)
             If _newExpression IsNot Nothing Then
                 AdjustFlagsAndWidth(_newExpression)
@@ -8839,7 +8839,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withKeyword As InternalSyntax.KeywordSyntax, openBraceToken As InternalSyntax.PunctuationSyntax, initializers As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(withKeyword)
             Me._withKeyword = withKeyword
@@ -8856,7 +8856,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withKeyword As InternalSyntax.KeywordSyntax, openBraceToken As InternalSyntax.PunctuationSyntax, initializers As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(withKeyword)
@@ -8874,7 +8874,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), withKeyword As InternalSyntax.KeywordSyntax, openBraceToken As InternalSyntax.PunctuationSyntax, initializers As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(withKeyword)
             Me._withKeyword = withKeyword
@@ -8891,7 +8891,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _withKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _withKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_withKeyword)
@@ -9011,7 +9011,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, fromKeyword As InternalSyntax.KeywordSyntax, initializer As CollectionInitializerSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(fromKeyword)
             Me._fromKeyword = fromKeyword
@@ -9022,7 +9022,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, fromKeyword As InternalSyntax.KeywordSyntax, initializer As CollectionInitializerSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(fromKeyword)
@@ -9034,7 +9034,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), fromKeyword As InternalSyntax.KeywordSyntax, initializer As CollectionInitializerSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(fromKeyword)
             Me._fromKeyword = fromKeyword
@@ -9045,7 +9045,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _fromKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _fromKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_fromKeyword)
@@ -9198,7 +9198,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, keyKeyword)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -9207,7 +9207,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyKeyword)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(expression)
@@ -9217,7 +9217,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations, keyKeyword)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -9226,7 +9226,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -9299,7 +9299,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyKeyword As InternalSyntax.KeywordSyntax, dotToken As InternalSyntax.PunctuationSyntax, name As IdentifierNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, keyKeyword)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(dotToken)
             Me._dotToken = dotToken
@@ -9314,7 +9314,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyKeyword As InternalSyntax.KeywordSyntax, dotToken As InternalSyntax.PunctuationSyntax, name As IdentifierNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyKeyword)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(dotToken)
@@ -9330,7 +9330,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyKeyword As InternalSyntax.KeywordSyntax, dotToken As InternalSyntax.PunctuationSyntax, name As IdentifierNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations, keyKeyword)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(dotToken)
             Me._dotToken = dotToken
@@ -9345,7 +9345,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _dotToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _dotToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_dotToken)
@@ -9467,7 +9467,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, equalsToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(equalsToken)
             Me._equalsToken = equalsToken
@@ -9478,7 +9478,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, equalsToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(equalsToken)
@@ -9490,7 +9490,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), equalsToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(equalsToken)
             Me._equalsToken = equalsToken
@@ -9501,7 +9501,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _equalsToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _equalsToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_equalsToken)
@@ -9589,7 +9589,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, [default] As EqualsValueSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -9614,7 +9614,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, [default] As EqualsValueSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -9640,7 +9640,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, [default] As EqualsValueSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -9665,7 +9665,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -9820,7 +9820,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, nullable As InternalSyntax.PunctuationSyntax, arrayBounds As ArgumentListSyntax, arrayRankSpecifiers As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -9841,7 +9841,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, nullable As InternalSyntax.PunctuationSyntax, arrayBounds As ArgumentListSyntax, arrayRankSpecifiers As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(identifier)
@@ -9863,7 +9863,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As InternalSyntax.IdentifierTokenSyntax, nullable As InternalSyntax.PunctuationSyntax, arrayBounds As ArgumentListSyntax, arrayRankSpecifiers As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -9884,7 +9884,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _identifier = DirectCast(reader.ReadValue(), IdentifierTokenSyntax)
             If _identifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_identifier)
@@ -10015,7 +10015,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, commaTokens As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -10030,7 +10030,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, commaTokens As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -10046,7 +10046,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, commaTokens As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -10061,7 +10061,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -10167,7 +10167,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, attributes As GreenNode, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -10182,7 +10182,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, attributes As GreenNode, greaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanToken)
@@ -10198,7 +10198,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanToken As InternalSyntax.PunctuationSyntax, attributes As GreenNode, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -10213,7 +10213,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lessThanToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanToken)
@@ -10319,7 +10319,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, target As AttributeTargetSyntax, name As TypeSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If target IsNot Nothing Then
                 AdjustFlagsAndWidth(target)
@@ -10336,7 +10336,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, target As AttributeTargetSyntax, name As TypeSyntax, argumentList As ArgumentListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If target IsNot Nothing Then
@@ -10354,7 +10354,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), target As AttributeTargetSyntax, name As TypeSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If target IsNot Nothing Then
                 AdjustFlagsAndWidth(target)
@@ -10371,7 +10371,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _target = DirectCast(reader.ReadValue(), AttributeTargetSyntax)
             If _target IsNot Nothing Then
                 AdjustFlagsAndWidth(_target)
@@ -10480,7 +10480,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeModifier As InternalSyntax.KeywordSyntax, colonToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(attributeModifier)
             Me._attributeModifier = attributeModifier
@@ -10491,7 +10491,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeModifier As InternalSyntax.KeywordSyntax, colonToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(attributeModifier)
@@ -10503,7 +10503,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeModifier As InternalSyntax.KeywordSyntax, colonToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(attributeModifier)
             Me._attributeModifier = attributeModifier
@@ -10514,7 +10514,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _attributeModifier = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _attributeModifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeModifier)
@@ -10601,7 +10601,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -10612,7 +10612,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             If attributeLists IsNot Nothing Then
@@ -10624,7 +10624,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(attributeLists)
@@ -10635,7 +10635,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _attributeLists = DirectCast(reader.ReadValue(), GreenNode)
             If _attributeLists IsNot Nothing Then
                 AdjustFlagsAndWidth(_attributeLists)
@@ -10706,7 +10706,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -10715,7 +10715,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(expression)
@@ -10725,7 +10725,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -10734,7 +10734,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -10801,7 +10801,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, questionToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(questionToken)
             Me._questionToken = questionToken
@@ -10812,7 +10812,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, questionToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(questionToken)
@@ -10824,7 +10824,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), questionToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(questionToken)
             Me._questionToken = questionToken
@@ -10835,7 +10835,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _questionToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _questionToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_questionToken)
@@ -10922,7 +10922,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whileStatement As WhileStatementSyntax, statements As GreenNode, endWhileStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(whileStatement)
             Me._whileStatement = whileStatement
@@ -10937,7 +10937,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whileStatement As WhileStatementSyntax, statements As GreenNode, endWhileStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(whileStatement)
@@ -10953,7 +10953,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), whileStatement As WhileStatementSyntax, statements As GreenNode, endWhileStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(whileStatement)
             Me._whileStatement = whileStatement
@@ -10968,7 +10968,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _whileStatement = DirectCast(reader.ReadValue(), WhileStatementSyntax)
             If _whileStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_whileStatement)
@@ -11075,7 +11075,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, usingStatement As UsingStatementSyntax, statements As GreenNode, endUsingStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(usingStatement)
             Me._usingStatement = usingStatement
@@ -11090,7 +11090,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, usingStatement As UsingStatementSyntax, statements As GreenNode, endUsingStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(usingStatement)
@@ -11106,7 +11106,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), usingStatement As UsingStatementSyntax, statements As GreenNode, endUsingStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(usingStatement)
             Me._usingStatement = usingStatement
@@ -11121,7 +11121,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _usingStatement = DirectCast(reader.ReadValue(), UsingStatementSyntax)
             If _usingStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_usingStatement)
@@ -11229,7 +11229,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, syncLockStatement As SyncLockStatementSyntax, statements As GreenNode, endSyncLockStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(syncLockStatement)
             Me._syncLockStatement = syncLockStatement
@@ -11244,7 +11244,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, syncLockStatement As SyncLockStatementSyntax, statements As GreenNode, endSyncLockStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(syncLockStatement)
@@ -11260,7 +11260,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), syncLockStatement As SyncLockStatementSyntax, statements As GreenNode, endSyncLockStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(syncLockStatement)
             Me._syncLockStatement = syncLockStatement
@@ -11275,7 +11275,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _syncLockStatement = DirectCast(reader.ReadValue(), SyncLockStatementSyntax)
             If _syncLockStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_syncLockStatement)
@@ -11383,7 +11383,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withStatement As WithStatementSyntax, statements As GreenNode, endWithStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(withStatement)
             Me._withStatement = withStatement
@@ -11398,7 +11398,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withStatement As WithStatementSyntax, statements As GreenNode, endWithStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(withStatement)
@@ -11414,7 +11414,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), withStatement As WithStatementSyntax, statements As GreenNode, endWithStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(withStatement)
             Me._withStatement = withStatement
@@ -11429,7 +11429,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _withStatement = DirectCast(reader.ReadValue(), WithStatementSyntax)
             If _withStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_withStatement)
@@ -11535,7 +11535,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, modifiers As GreenNode, declarators As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If modifiers IsNot Nothing Then
                 AdjustFlagsAndWidth(modifiers)
@@ -11550,7 +11550,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, modifiers As GreenNode, declarators As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If modifiers IsNot Nothing Then
@@ -11566,7 +11566,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), modifiers As GreenNode, declarators As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If modifiers IsNot Nothing Then
                 AdjustFlagsAndWidth(modifiers)
@@ -11581,7 +11581,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _modifiers = DirectCast(reader.ReadValue(), GreenNode)
             If _modifiers IsNot Nothing Then
                 AdjustFlagsAndWidth(_modifiers)
@@ -11668,7 +11668,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, labelToken As InternalSyntax.SyntaxToken, colonToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(labelToken)
             Me._labelToken = labelToken
@@ -11679,7 +11679,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, labelToken As InternalSyntax.SyntaxToken, colonToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(labelToken)
@@ -11691,7 +11691,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), labelToken As InternalSyntax.SyntaxToken, colonToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(labelToken)
             Me._labelToken = labelToken
@@ -11702,7 +11702,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _labelToken = DirectCast(reader.ReadValue(), SyntaxToken)
             If _labelToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_labelToken)
@@ -11788,7 +11788,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, goToKeyword As InternalSyntax.KeywordSyntax, label As LabelSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(goToKeyword)
             Me._goToKeyword = goToKeyword
@@ -11799,7 +11799,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, goToKeyword As InternalSyntax.KeywordSyntax, label As LabelSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(goToKeyword)
@@ -11811,7 +11811,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), goToKeyword As InternalSyntax.KeywordSyntax, label As LabelSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(goToKeyword)
             Me._goToKeyword = goToKeyword
@@ -11822,7 +11822,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _goToKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _goToKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_goToKeyword)
@@ -11908,7 +11908,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, labelToken As InternalSyntax.SyntaxToken)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(labelToken)
             Me._labelToken = labelToken
@@ -11917,7 +11917,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, labelToken As InternalSyntax.SyntaxToken, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(labelToken)
@@ -11927,7 +11927,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), labelToken As InternalSyntax.SyntaxToken)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(labelToken)
             Me._labelToken = labelToken
@@ -11936,7 +11936,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _labelToken = DirectCast(reader.ReadValue(), SyntaxToken)
             If _labelToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_labelToken)
@@ -12004,7 +12004,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, stopOrEndKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(stopOrEndKeyword)
             Me._stopOrEndKeyword = stopOrEndKeyword
@@ -12013,7 +12013,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, stopOrEndKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(stopOrEndKeyword)
@@ -12023,7 +12023,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), stopOrEndKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(stopOrEndKeyword)
             Me._stopOrEndKeyword = stopOrEndKeyword
@@ -12032,7 +12032,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _stopOrEndKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _stopOrEndKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_stopOrEndKeyword)
@@ -12100,7 +12100,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, exitKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(exitKeyword)
             Me._exitKeyword = exitKeyword
@@ -12111,7 +12111,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, exitKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(exitKeyword)
@@ -12123,7 +12123,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), exitKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(exitKeyword)
             Me._exitKeyword = exitKeyword
@@ -12134,7 +12134,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _exitKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _exitKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_exitKeyword)
@@ -12220,7 +12220,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, continueKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(continueKeyword)
             Me._continueKeyword = continueKeyword
@@ -12231,7 +12231,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, continueKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(continueKeyword)
@@ -12243,7 +12243,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), continueKeyword As InternalSyntax.KeywordSyntax, blockKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(continueKeyword)
             Me._continueKeyword = continueKeyword
@@ -12254,7 +12254,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _continueKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _continueKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_continueKeyword)
@@ -12340,7 +12340,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, returnKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(returnKeyword)
             Me._returnKeyword = returnKeyword
@@ -12353,7 +12353,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, returnKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(returnKeyword)
@@ -12367,7 +12367,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), returnKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(returnKeyword)
             Me._returnKeyword = returnKeyword
@@ -12380,7 +12380,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _returnKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _returnKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_returnKeyword)
@@ -12471,7 +12471,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax, statements As GreenNode, elseClause As SingleLineElseClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -12492,7 +12492,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax, statements As GreenNode, elseClause As SingleLineElseClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(ifKeyword)
@@ -12514,7 +12514,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), ifKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax, statements As GreenNode, elseClause As SingleLineElseClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -12535,7 +12535,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _ifKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _ifKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_ifKeyword)
@@ -12678,7 +12678,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseKeyword As InternalSyntax.KeywordSyntax, statements As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -12691,7 +12691,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseKeyword As InternalSyntax.KeywordSyntax, statements As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseKeyword)
@@ -12705,7 +12705,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elseKeyword As InternalSyntax.KeywordSyntax, statements As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -12718,7 +12718,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _elseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseKeyword)
@@ -12811,7 +12811,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifStatement As IfStatementSyntax, statements As GreenNode, elseIfBlocks As GreenNode, elseBlock As ElseBlockSyntax, endIfStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(ifStatement)
             Me._ifStatement = ifStatement
@@ -12834,7 +12834,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifStatement As IfStatementSyntax, statements As GreenNode, elseIfBlocks As GreenNode, elseBlock As ElseBlockSyntax, endIfStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(ifStatement)
@@ -12858,7 +12858,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), ifStatement As IfStatementSyntax, statements As GreenNode, elseIfBlocks As GreenNode, elseBlock As ElseBlockSyntax, endIfStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(ifStatement)
             Me._ifStatement = ifStatement
@@ -12881,7 +12881,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _ifStatement = DirectCast(reader.ReadValue(), IfStatementSyntax)
             If _ifStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_ifStatement)
@@ -13030,7 +13030,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -13045,7 +13045,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(ifKeyword)
@@ -13061,7 +13061,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), ifKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -13076,7 +13076,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _ifKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _ifKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_ifKeyword)
@@ -13181,7 +13181,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseIfStatement As ElseIfStatementSyntax, statements As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseIfStatement)
             Me._elseIfStatement = elseIfStatement
@@ -13194,7 +13194,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseIfStatement As ElseIfStatementSyntax, statements As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseIfStatement)
@@ -13208,7 +13208,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elseIfStatement As ElseIfStatementSyntax, statements As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseIfStatement)
             Me._elseIfStatement = elseIfStatement
@@ -13221,7 +13221,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _elseIfStatement = DirectCast(reader.ReadValue(), ElseIfStatementSyntax)
             If _elseIfStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseIfStatement)
@@ -13311,7 +13311,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseIfKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(elseIfKeyword)
             Me._elseIfKeyword = elseIfKeyword
@@ -13326,7 +13326,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseIfKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseIfKeyword)
@@ -13342,7 +13342,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elseIfKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(elseIfKeyword)
             Me._elseIfKeyword = elseIfKeyword
@@ -13357,7 +13357,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _elseIfKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _elseIfKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseIfKeyword)
@@ -13462,7 +13462,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseStatement As ElseStatementSyntax, statements As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseStatement)
             Me._elseStatement = elseStatement
@@ -13475,7 +13475,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseStatement As ElseStatementSyntax, statements As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseStatement)
@@ -13489,7 +13489,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elseStatement As ElseStatementSyntax, statements As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseStatement)
             Me._elseStatement = elseStatement
@@ -13502,7 +13502,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _elseStatement = DirectCast(reader.ReadValue(), ElseStatementSyntax)
             If _elseStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseStatement)
@@ -13589,7 +13589,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -13598,7 +13598,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseKeyword)
@@ -13608,7 +13608,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elseKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -13617,7 +13617,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _elseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseKeyword)
@@ -13687,7 +13687,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, tryStatement As TryStatementSyntax, statements As GreenNode, catchBlocks As GreenNode, finallyBlock As FinallyBlockSyntax, endTryStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(tryStatement)
             Me._tryStatement = tryStatement
@@ -13710,7 +13710,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, tryStatement As TryStatementSyntax, statements As GreenNode, catchBlocks As GreenNode, finallyBlock As FinallyBlockSyntax, endTryStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(tryStatement)
@@ -13734,7 +13734,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), tryStatement As TryStatementSyntax, statements As GreenNode, catchBlocks As GreenNode, finallyBlock As FinallyBlockSyntax, endTryStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(tryStatement)
             Me._tryStatement = tryStatement
@@ -13757,7 +13757,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _tryStatement = DirectCast(reader.ReadValue(), TryStatementSyntax)
             If _tryStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_tryStatement)
@@ -13902,7 +13902,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, tryKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(tryKeyword)
             Me._tryKeyword = tryKeyword
@@ -13911,7 +13911,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, tryKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(tryKeyword)
@@ -13921,7 +13921,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), tryKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(tryKeyword)
             Me._tryKeyword = tryKeyword
@@ -13930,7 +13930,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _tryKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _tryKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_tryKeyword)
@@ -13997,7 +13997,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, catchStatement As CatchStatementSyntax, statements As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(catchStatement)
             Me._catchStatement = catchStatement
@@ -14010,7 +14010,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, catchStatement As CatchStatementSyntax, statements As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(catchStatement)
@@ -14024,7 +14024,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), catchStatement As CatchStatementSyntax, statements As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(catchStatement)
             Me._catchStatement = catchStatement
@@ -14037,7 +14037,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _catchStatement = DirectCast(reader.ReadValue(), CatchStatementSyntax)
             If _catchStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_catchStatement)
@@ -14128,7 +14128,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, catchKeyword As InternalSyntax.KeywordSyntax, identifierName As IdentifierNameSyntax, asClause As SimpleAsClauseSyntax, whenClause As CatchFilterClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(catchKeyword)
             Me._catchKeyword = catchKeyword
@@ -14149,7 +14149,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, catchKeyword As InternalSyntax.KeywordSyntax, identifierName As IdentifierNameSyntax, asClause As SimpleAsClauseSyntax, whenClause As CatchFilterClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(catchKeyword)
@@ -14171,7 +14171,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), catchKeyword As InternalSyntax.KeywordSyntax, identifierName As IdentifierNameSyntax, asClause As SimpleAsClauseSyntax, whenClause As CatchFilterClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(catchKeyword)
             Me._catchKeyword = catchKeyword
@@ -14192,7 +14192,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _catchKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _catchKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_catchKeyword)
@@ -14321,7 +14321,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whenKeyword As InternalSyntax.KeywordSyntax, filter As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whenKeyword)
             Me._whenKeyword = whenKeyword
@@ -14332,7 +14332,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whenKeyword As InternalSyntax.KeywordSyntax, filter As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(whenKeyword)
@@ -14344,7 +14344,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), whenKeyword As InternalSyntax.KeywordSyntax, filter As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whenKeyword)
             Me._whenKeyword = whenKeyword
@@ -14355,7 +14355,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _whenKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _whenKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_whenKeyword)
@@ -14440,7 +14440,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, finallyStatement As FinallyStatementSyntax, statements As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(finallyStatement)
             Me._finallyStatement = finallyStatement
@@ -14453,7 +14453,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, finallyStatement As FinallyStatementSyntax, statements As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(finallyStatement)
@@ -14467,7 +14467,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), finallyStatement As FinallyStatementSyntax, statements As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(finallyStatement)
             Me._finallyStatement = finallyStatement
@@ -14480,7 +14480,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _finallyStatement = DirectCast(reader.ReadValue(), FinallyStatementSyntax)
             If _finallyStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_finallyStatement)
@@ -14567,7 +14567,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, finallyKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(finallyKeyword)
             Me._finallyKeyword = finallyKeyword
@@ -14576,7 +14576,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, finallyKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(finallyKeyword)
@@ -14586,7 +14586,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), finallyKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(finallyKeyword)
             Me._finallyKeyword = finallyKeyword
@@ -14595,7 +14595,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _finallyKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _finallyKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_finallyKeyword)
@@ -14662,7 +14662,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, errorKeyword As InternalSyntax.KeywordSyntax, errorNumber As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(errorKeyword)
             Me._errorKeyword = errorKeyword
@@ -14673,7 +14673,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, errorKeyword As InternalSyntax.KeywordSyntax, errorNumber As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(errorKeyword)
@@ -14685,7 +14685,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), errorKeyword As InternalSyntax.KeywordSyntax, errorNumber As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(errorKeyword)
             Me._errorKeyword = errorKeyword
@@ -14696,7 +14696,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _errorKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _errorKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_errorKeyword)
@@ -14784,7 +14784,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, onKeyword As InternalSyntax.KeywordSyntax, errorKeyword As InternalSyntax.KeywordSyntax, goToKeyword As InternalSyntax.KeywordSyntax, minus As InternalSyntax.PunctuationSyntax, label As LabelSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(onKeyword)
             Me._onKeyword = onKeyword
@@ -14803,7 +14803,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, onKeyword As InternalSyntax.KeywordSyntax, errorKeyword As InternalSyntax.KeywordSyntax, goToKeyword As InternalSyntax.KeywordSyntax, minus As InternalSyntax.PunctuationSyntax, label As LabelSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(onKeyword)
@@ -14823,7 +14823,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), onKeyword As InternalSyntax.KeywordSyntax, errorKeyword As InternalSyntax.KeywordSyntax, goToKeyword As InternalSyntax.KeywordSyntax, minus As InternalSyntax.PunctuationSyntax, label As LabelSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(onKeyword)
             Me._onKeyword = onKeyword
@@ -14842,7 +14842,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _onKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _onKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_onKeyword)
@@ -14984,7 +14984,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, onKeyword As InternalSyntax.KeywordSyntax, errorKeyword As InternalSyntax.KeywordSyntax, resumeKeyword As InternalSyntax.KeywordSyntax, nextKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(onKeyword)
             Me._onKeyword = onKeyword
@@ -14999,7 +14999,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, onKeyword As InternalSyntax.KeywordSyntax, errorKeyword As InternalSyntax.KeywordSyntax, resumeKeyword As InternalSyntax.KeywordSyntax, nextKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(onKeyword)
@@ -15015,7 +15015,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), onKeyword As InternalSyntax.KeywordSyntax, errorKeyword As InternalSyntax.KeywordSyntax, resumeKeyword As InternalSyntax.KeywordSyntax, nextKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(onKeyword)
             Me._onKeyword = onKeyword
@@ -15030,7 +15030,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _onKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _onKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_onKeyword)
@@ -15150,7 +15150,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, resumeKeyword As InternalSyntax.KeywordSyntax, label As LabelSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(resumeKeyword)
             Me._resumeKeyword = resumeKeyword
@@ -15163,7 +15163,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, resumeKeyword As InternalSyntax.KeywordSyntax, label As LabelSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(resumeKeyword)
@@ -15177,7 +15177,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), resumeKeyword As InternalSyntax.KeywordSyntax, label As LabelSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(resumeKeyword)
             Me._resumeKeyword = resumeKeyword
@@ -15190,7 +15190,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _resumeKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _resumeKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_resumeKeyword)
@@ -15282,7 +15282,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, selectStatement As SelectStatementSyntax, caseBlocks As GreenNode, endSelectStatement As EndBlockStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(selectStatement)
             Me._selectStatement = selectStatement
@@ -15297,7 +15297,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, selectStatement As SelectStatementSyntax, caseBlocks As GreenNode, endSelectStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(selectStatement)
@@ -15313,7 +15313,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), selectStatement As SelectStatementSyntax, caseBlocks As GreenNode, endSelectStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(selectStatement)
             Me._selectStatement = selectStatement
@@ -15328,7 +15328,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _selectStatement = DirectCast(reader.ReadValue(), SelectStatementSyntax)
             If _selectStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_selectStatement)
@@ -15435,7 +15435,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, selectKeyword As InternalSyntax.KeywordSyntax, caseKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(selectKeyword)
             Me._selectKeyword = selectKeyword
@@ -15450,7 +15450,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, selectKeyword As InternalSyntax.KeywordSyntax, caseKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(selectKeyword)
@@ -15466,7 +15466,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), selectKeyword As InternalSyntax.KeywordSyntax, caseKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(selectKeyword)
             Me._selectKeyword = selectKeyword
@@ -15481,7 +15481,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _selectKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _selectKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_selectKeyword)
@@ -15586,7 +15586,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, caseStatement As CaseStatementSyntax, statements As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(caseStatement)
             Me._caseStatement = caseStatement
@@ -15599,7 +15599,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, caseStatement As CaseStatementSyntax, statements As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(caseStatement)
@@ -15613,7 +15613,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), caseStatement As CaseStatementSyntax, statements As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(caseStatement)
             Me._caseStatement = caseStatement
@@ -15626,7 +15626,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _caseStatement = DirectCast(reader.ReadValue(), CaseStatementSyntax)
             If _caseStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_caseStatement)
@@ -15716,7 +15716,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, caseKeyword As InternalSyntax.KeywordSyntax, cases As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(caseKeyword)
             Me._caseKeyword = caseKeyword
@@ -15729,7 +15729,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, caseKeyword As InternalSyntax.KeywordSyntax, cases As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(caseKeyword)
@@ -15743,7 +15743,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), caseKeyword As InternalSyntax.KeywordSyntax, cases As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(caseKeyword)
             Me._caseKeyword = caseKeyword
@@ -15756,7 +15756,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _caseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _caseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_caseKeyword)
@@ -15868,7 +15868,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -15877,7 +15877,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elseKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseKeyword)
@@ -15887,7 +15887,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elseKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -15896,7 +15896,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _elseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseKeyword)
@@ -15962,7 +15962,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, value As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(value)
             Me._value = value
@@ -15971,7 +15971,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, value As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(value)
@@ -15981,7 +15981,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), value As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(value)
             Me._value = value
@@ -15990,7 +15990,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _value = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _value IsNot Nothing Then
                 AdjustFlagsAndWidth(_value)
@@ -16058,7 +16058,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lowerBound As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, upperBound As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lowerBound)
             Me._lowerBound = lowerBound
@@ -16071,7 +16071,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lowerBound As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, upperBound As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lowerBound)
@@ -16085,7 +16085,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lowerBound As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, upperBound As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lowerBound)
             Me._lowerBound = lowerBound
@@ -16098,7 +16098,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lowerBound = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _lowerBound IsNot Nothing Then
                 AdjustFlagsAndWidth(_lowerBound)
@@ -16201,7 +16201,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, isKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If isKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(isKeyword)
@@ -16216,7 +16216,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, isKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If isKeyword IsNot Nothing Then
@@ -16232,7 +16232,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), isKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If isKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(isKeyword)
@@ -16247,7 +16247,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _isKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _isKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_isKeyword)
@@ -16354,7 +16354,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, syncLockKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(syncLockKeyword)
             Me._syncLockKeyword = syncLockKeyword
@@ -16365,7 +16365,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, syncLockKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(syncLockKeyword)
@@ -16377,7 +16377,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), syncLockKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(syncLockKeyword)
             Me._syncLockKeyword = syncLockKeyword
@@ -16388,7 +16388,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _syncLockKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _syncLockKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_syncLockKeyword)
@@ -16475,7 +16475,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, doStatement As DoStatementSyntax, statements As GreenNode, loopStatement As LoopStatementSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(doStatement)
             Me._doStatement = doStatement
@@ -16490,7 +16490,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, doStatement As DoStatementSyntax, statements As GreenNode, loopStatement As LoopStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(doStatement)
@@ -16506,7 +16506,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), doStatement As DoStatementSyntax, statements As GreenNode, loopStatement As LoopStatementSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(doStatement)
             Me._doStatement = doStatement
@@ -16521,7 +16521,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _doStatement = DirectCast(reader.ReadValue(), DoStatementSyntax)
             If _doStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_doStatement)
@@ -16626,7 +16626,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, doKeyword As InternalSyntax.KeywordSyntax, whileOrUntilClause As WhileOrUntilClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(doKeyword)
             Me._doKeyword = doKeyword
@@ -16639,7 +16639,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, doKeyword As InternalSyntax.KeywordSyntax, whileOrUntilClause As WhileOrUntilClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(doKeyword)
@@ -16653,7 +16653,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), doKeyword As InternalSyntax.KeywordSyntax, whileOrUntilClause As WhileOrUntilClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(doKeyword)
             Me._doKeyword = doKeyword
@@ -16666,7 +16666,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _doKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _doKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_doKeyword)
@@ -16755,7 +16755,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, loopKeyword As InternalSyntax.KeywordSyntax, whileOrUntilClause As WhileOrUntilClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(loopKeyword)
             Me._loopKeyword = loopKeyword
@@ -16768,7 +16768,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, loopKeyword As InternalSyntax.KeywordSyntax, whileOrUntilClause As WhileOrUntilClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(loopKeyword)
@@ -16782,7 +16782,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), loopKeyword As InternalSyntax.KeywordSyntax, whileOrUntilClause As WhileOrUntilClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(loopKeyword)
             Me._loopKeyword = loopKeyword
@@ -16795,7 +16795,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _loopKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _loopKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_loopKeyword)
@@ -16886,7 +16886,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whileOrUntilKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whileOrUntilKeyword)
             Me._whileOrUntilKeyword = whileOrUntilKeyword
@@ -16897,7 +16897,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whileOrUntilKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(whileOrUntilKeyword)
@@ -16909,7 +16909,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), whileOrUntilKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whileOrUntilKeyword)
             Me._whileOrUntilKeyword = whileOrUntilKeyword
@@ -16920,7 +16920,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _whileOrUntilKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _whileOrUntilKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_whileOrUntilKeyword)
@@ -17006,7 +17006,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whileKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whileKeyword)
             Me._whileKeyword = whileKeyword
@@ -17017,7 +17017,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whileKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(whileKeyword)
@@ -17029,7 +17029,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), whileKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whileKeyword)
             Me._whileKeyword = whileKeyword
@@ -17040,7 +17040,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _whileKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _whileKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_whileKeyword)
@@ -17226,7 +17226,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forStatement As ForStatementSyntax, statements As GreenNode, nextStatement As NextStatementSyntax)
             MyBase.New(kind, statements, nextStatement)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(forStatement)
             Me._forStatement = forStatement
@@ -17235,7 +17235,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forStatement As ForStatementSyntax, statements As GreenNode, nextStatement As NextStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, statements, nextStatement)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(forStatement)
@@ -17245,7 +17245,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), forStatement As ForStatementSyntax, statements As GreenNode, nextStatement As NextStatementSyntax)
             MyBase.New(kind, errors, annotations, statements, nextStatement)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(forStatement)
             Me._forStatement = forStatement
@@ -17254,7 +17254,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _forStatement = DirectCast(reader.ReadValue(), ForStatementSyntax)
             If _forStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_forStatement)
@@ -17327,7 +17327,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forEachStatement As ForEachStatementSyntax, statements As GreenNode, nextStatement As NextStatementSyntax)
             MyBase.New(kind, statements, nextStatement)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(forEachStatement)
             Me._forEachStatement = forEachStatement
@@ -17336,7 +17336,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forEachStatement As ForEachStatementSyntax, statements As GreenNode, nextStatement As NextStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, statements, nextStatement)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(forEachStatement)
@@ -17346,7 +17346,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), forEachStatement As ForEachStatementSyntax, statements As GreenNode, nextStatement As NextStatementSyntax)
             MyBase.New(kind, errors, annotations, statements, nextStatement)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(forEachStatement)
             Me._forEachStatement = forEachStatement
@@ -17355,7 +17355,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _forEachStatement = DirectCast(reader.ReadValue(), ForEachStatementSyntax)
             If _forEachStatement IsNot Nothing Then
                 AdjustFlagsAndWidth(_forEachStatement)
@@ -17518,7 +17518,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forKeyword As InternalSyntax.KeywordSyntax, controlVariable As VisualBasicSyntaxNode, equalsToken As InternalSyntax.PunctuationSyntax, fromValue As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, toValue As ExpressionSyntax, stepClause As ForStepClauseSyntax)
             MyBase.New(kind, forKeyword, controlVariable)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
 
             AdjustFlagsAndWidth(equalsToken)
             Me._equalsToken = equalsToken
@@ -17537,7 +17537,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forKeyword As InternalSyntax.KeywordSyntax, controlVariable As VisualBasicSyntaxNode, equalsToken As InternalSyntax.PunctuationSyntax, fromValue As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, toValue As ExpressionSyntax, stepClause As ForStepClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, forKeyword, controlVariable)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(equalsToken)
@@ -17557,7 +17557,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), forKeyword As InternalSyntax.KeywordSyntax, controlVariable As VisualBasicSyntaxNode, equalsToken As InternalSyntax.PunctuationSyntax, fromValue As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, toValue As ExpressionSyntax, stepClause As ForStepClauseSyntax)
             MyBase.New(kind, errors, annotations, forKeyword, controlVariable)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
 
             AdjustFlagsAndWidth(equalsToken)
             Me._equalsToken = equalsToken
@@ -17576,7 +17576,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
             Dim _equalsToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _equalsToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_equalsToken)
@@ -17719,7 +17719,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, stepKeyword As InternalSyntax.KeywordSyntax, stepValue As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(stepKeyword)
             Me._stepKeyword = stepKeyword
@@ -17730,7 +17730,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, stepKeyword As InternalSyntax.KeywordSyntax, stepValue As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(stepKeyword)
@@ -17742,7 +17742,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), stepKeyword As InternalSyntax.KeywordSyntax, stepValue As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(stepKeyword)
             Me._stepKeyword = stepKeyword
@@ -17753,7 +17753,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _stepKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _stepKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_stepKeyword)
@@ -17845,7 +17845,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forKeyword As InternalSyntax.KeywordSyntax, eachKeyword As InternalSyntax.KeywordSyntax, controlVariable As VisualBasicSyntaxNode, inKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, forKeyword, controlVariable)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(eachKeyword)
             Me._eachKeyword = eachKeyword
@@ -17858,7 +17858,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, forKeyword As InternalSyntax.KeywordSyntax, eachKeyword As InternalSyntax.KeywordSyntax, controlVariable As VisualBasicSyntaxNode, inKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, forKeyword, controlVariable)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(eachKeyword)
@@ -17872,7 +17872,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), forKeyword As InternalSyntax.KeywordSyntax, eachKeyword As InternalSyntax.KeywordSyntax, controlVariable As VisualBasicSyntaxNode, inKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations, forKeyword, controlVariable)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(eachKeyword)
             Me._eachKeyword = eachKeyword
@@ -17885,7 +17885,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _eachKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _eachKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_eachKeyword)
@@ -17994,7 +17994,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nextKeyword As InternalSyntax.KeywordSyntax, controlVariables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(nextKeyword)
             Me._nextKeyword = nextKeyword
@@ -18007,7 +18007,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nextKeyword As InternalSyntax.KeywordSyntax, controlVariables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(nextKeyword)
@@ -18021,7 +18021,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), nextKeyword As InternalSyntax.KeywordSyntax, controlVariables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(nextKeyword)
             Me._nextKeyword = nextKeyword
@@ -18034,7 +18034,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _nextKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _nextKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_nextKeyword)
@@ -18125,7 +18125,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, usingKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, variables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(usingKeyword)
             Me._usingKeyword = usingKeyword
@@ -18142,7 +18142,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, usingKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, variables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(usingKeyword)
@@ -18160,7 +18160,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), usingKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, variables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(usingKeyword)
             Me._usingKeyword = usingKeyword
@@ -18177,7 +18177,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _usingKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _usingKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_usingKeyword)
@@ -18287,7 +18287,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, throwKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(throwKeyword)
             Me._throwKeyword = throwKeyword
@@ -18300,7 +18300,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, throwKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(throwKeyword)
@@ -18314,7 +18314,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), throwKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(throwKeyword)
             Me._throwKeyword = throwKeyword
@@ -18327,7 +18327,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _throwKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _throwKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_throwKeyword)
@@ -18417,7 +18417,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As ExpressionSyntax, operatorToken As InternalSyntax.PunctuationSyntax, right As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -18430,7 +18430,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As ExpressionSyntax, operatorToken As InternalSyntax.PunctuationSyntax, right As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(left)
@@ -18444,7 +18444,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), left As ExpressionSyntax, operatorToken As InternalSyntax.PunctuationSyntax, right As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -18457,7 +18457,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _left = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _left IsNot Nothing Then
                 AdjustFlagsAndWidth(_left)
@@ -18560,7 +18560,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, mid As InternalSyntax.IdentifierTokenSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(mid)
             Me._mid = mid
@@ -18571,7 +18571,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, mid As InternalSyntax.IdentifierTokenSyntax, argumentList As ArgumentListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(mid)
@@ -18583,7 +18583,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), mid As InternalSyntax.IdentifierTokenSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(mid)
             Me._mid = mid
@@ -18594,7 +18594,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _mid = DirectCast(reader.ReadValue(), IdentifierTokenSyntax)
             If _mid IsNot Nothing Then
                 AdjustFlagsAndWidth(_mid)
@@ -18679,7 +18679,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, callKeyword As InternalSyntax.KeywordSyntax, invocation As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(callKeyword)
             Me._callKeyword = callKeyword
@@ -18690,7 +18690,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, callKeyword As InternalSyntax.KeywordSyntax, invocation As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(callKeyword)
@@ -18702,7 +18702,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), callKeyword As InternalSyntax.KeywordSyntax, invocation As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(callKeyword)
             Me._callKeyword = callKeyword
@@ -18713,7 +18713,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _callKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _callKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_callKeyword)
@@ -18802,7 +18802,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, addHandlerOrRemoveHandlerKeyword As InternalSyntax.KeywordSyntax, eventExpression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, delegateExpression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(addHandlerOrRemoveHandlerKeyword)
             Me._addHandlerOrRemoveHandlerKeyword = addHandlerOrRemoveHandlerKeyword
@@ -18817,7 +18817,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, addHandlerOrRemoveHandlerKeyword As InternalSyntax.KeywordSyntax, eventExpression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, delegateExpression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(addHandlerOrRemoveHandlerKeyword)
@@ -18833,7 +18833,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), addHandlerOrRemoveHandlerKeyword As InternalSyntax.KeywordSyntax, eventExpression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, delegateExpression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(addHandlerOrRemoveHandlerKeyword)
             Me._addHandlerOrRemoveHandlerKeyword = addHandlerOrRemoveHandlerKeyword
@@ -18848,7 +18848,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _addHandlerOrRemoveHandlerKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _addHandlerOrRemoveHandlerKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_addHandlerOrRemoveHandlerKeyword)
@@ -18968,7 +18968,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, raiseEventKeyword As InternalSyntax.KeywordSyntax, name As IdentifierNameSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(raiseEventKeyword)
             Me._raiseEventKeyword = raiseEventKeyword
@@ -18983,7 +18983,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, raiseEventKeyword As InternalSyntax.KeywordSyntax, name As IdentifierNameSyntax, argumentList As ArgumentListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(raiseEventKeyword)
@@ -18999,7 +18999,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), raiseEventKeyword As InternalSyntax.KeywordSyntax, name As IdentifierNameSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(raiseEventKeyword)
             Me._raiseEventKeyword = raiseEventKeyword
@@ -19014,7 +19014,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _raiseEventKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _raiseEventKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_raiseEventKeyword)
@@ -19121,7 +19121,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(withKeyword)
             Me._withKeyword = withKeyword
@@ -19132,7 +19132,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, withKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(withKeyword)
@@ -19144,7 +19144,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), withKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(withKeyword)
             Me._withKeyword = withKeyword
@@ -19155,7 +19155,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _withKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _withKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_withKeyword)
@@ -19241,7 +19241,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, reDimKeyword As InternalSyntax.KeywordSyntax, preserveKeyword As InternalSyntax.KeywordSyntax, clauses As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(reDimKeyword)
             Me._reDimKeyword = reDimKeyword
@@ -19258,7 +19258,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, reDimKeyword As InternalSyntax.KeywordSyntax, preserveKeyword As InternalSyntax.KeywordSyntax, clauses As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(reDimKeyword)
@@ -19276,7 +19276,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), reDimKeyword As InternalSyntax.KeywordSyntax, preserveKeyword As InternalSyntax.KeywordSyntax, clauses As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(reDimKeyword)
             Me._reDimKeyword = reDimKeyword
@@ -19293,7 +19293,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _reDimKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _reDimKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_reDimKeyword)
@@ -19399,7 +19399,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, arrayBounds As ArgumentListSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -19410,7 +19410,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, arrayBounds As ArgumentListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(expression)
@@ -19422,7 +19422,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), expression As ExpressionSyntax, arrayBounds As ArgumentListSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -19433,7 +19433,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -19518,7 +19518,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, eraseKeyword As InternalSyntax.KeywordSyntax, expressions As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(eraseKeyword)
             Me._eraseKeyword = eraseKeyword
@@ -19531,7 +19531,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, eraseKeyword As InternalSyntax.KeywordSyntax, expressions As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(eraseKeyword)
@@ -19545,7 +19545,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), eraseKeyword As InternalSyntax.KeywordSyntax, expressions As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(eraseKeyword)
             Me._eraseKeyword = eraseKeyword
@@ -19558,7 +19558,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _eraseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _eraseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_eraseKeyword)
@@ -19672,7 +19672,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, token As InternalSyntax.SyntaxToken)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(token)
             Me._token = token
@@ -19681,7 +19681,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, token As InternalSyntax.SyntaxToken, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(token)
@@ -19691,7 +19691,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), token As InternalSyntax.SyntaxToken)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(token)
             Me._token = token
@@ -19700,7 +19700,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _token = DirectCast(reader.ReadValue(), SyntaxToken)
             If _token IsNot Nothing Then
                 AdjustFlagsAndWidth(_token)
@@ -19776,7 +19776,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -19789,7 +19789,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -19803,7 +19803,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -19816,7 +19816,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -19919,7 +19919,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -19934,7 +19934,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -19950,7 +19950,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -19965,7 +19965,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -20068,7 +20068,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, elements As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -20083,7 +20083,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, elements As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -20099,7 +20099,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, elements As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -20114,7 +20114,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -20241,7 +20241,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, type As TypeSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -20250,7 +20250,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, type As TypeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(type)
@@ -20260,7 +20260,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), type As TypeSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -20269,7 +20269,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _type = DirectCast(reader.ReadValue(), TypeSyntax)
             If _type IsNot Nothing Then
                 AdjustFlagsAndWidth(_type)
@@ -20337,7 +20337,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -20350,7 +20350,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, asClause As SimpleAsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(identifier)
@@ -20364,7 +20364,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As InternalSyntax.IdentifierTokenSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -20377,7 +20377,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _identifier = DirectCast(reader.ReadValue(), IdentifierTokenSyntax)
             If _identifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_identifier)
@@ -20522,23 +20522,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New MeExpressionSyntax(o)
 
@@ -20584,23 +20584,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New MyBaseExpressionSyntax(o)
 
@@ -20646,23 +20646,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, keyword)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New MyClassExpressionSyntax(o)
 
@@ -20712,7 +20712,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, getTypeKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(getTypeKeyword)
             Me._getTypeKeyword = getTypeKeyword
@@ -20727,7 +20727,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, getTypeKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(getTypeKeyword)
@@ -20743,7 +20743,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), getTypeKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(getTypeKeyword)
             Me._getTypeKeyword = getTypeKeyword
@@ -20758,7 +20758,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _getTypeKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _getTypeKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_getTypeKeyword)
@@ -20879,7 +20879,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, typeOfKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, operatorToken As InternalSyntax.KeywordSyntax, type As TypeSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(typeOfKeyword)
             Me._typeOfKeyword = typeOfKeyword
@@ -20894,7 +20894,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, typeOfKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, operatorToken As InternalSyntax.KeywordSyntax, type As TypeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(typeOfKeyword)
@@ -20910,7 +20910,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), typeOfKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, operatorToken As InternalSyntax.KeywordSyntax, type As TypeSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(typeOfKeyword)
             Me._typeOfKeyword = typeOfKeyword
@@ -20925,7 +20925,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _typeOfKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _typeOfKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_typeOfKeyword)
@@ -21046,7 +21046,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, getXmlNamespaceKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, name As XmlPrefixNameSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(getXmlNamespaceKeyword)
             Me._getXmlNamespaceKeyword = getXmlNamespaceKeyword
@@ -21063,7 +21063,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, getXmlNamespaceKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, name As XmlPrefixNameSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(getXmlNamespaceKeyword)
@@ -21081,7 +21081,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), getXmlNamespaceKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, name As XmlPrefixNameSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(getXmlNamespaceKeyword)
             Me._getXmlNamespaceKeyword = getXmlNamespaceKeyword
@@ -21098,7 +21098,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _getXmlNamespaceKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _getXmlNamespaceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_getXmlNamespaceKeyword)
@@ -21222,7 +21222,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, operatorToken As InternalSyntax.PunctuationSyntax, name As SimpleNameSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If expression IsNot Nothing Then
                 AdjustFlagsAndWidth(expression)
@@ -21237,7 +21237,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, operatorToken As InternalSyntax.PunctuationSyntax, name As SimpleNameSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If expression IsNot Nothing Then
@@ -21253,7 +21253,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), expression As ExpressionSyntax, operatorToken As InternalSyntax.PunctuationSyntax, name As SimpleNameSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If expression IsNot Nothing Then
                 AdjustFlagsAndWidth(expression)
@@ -21268,7 +21268,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -21378,7 +21378,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, base As ExpressionSyntax, token1 As InternalSyntax.PunctuationSyntax, token2 As InternalSyntax.PunctuationSyntax, token3 As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If base IsNot Nothing Then
                 AdjustFlagsAndWidth(base)
@@ -21401,7 +21401,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, base As ExpressionSyntax, token1 As InternalSyntax.PunctuationSyntax, token2 As InternalSyntax.PunctuationSyntax, token3 As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             If base IsNot Nothing Then
@@ -21425,7 +21425,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), base As ExpressionSyntax, token1 As InternalSyntax.PunctuationSyntax, token2 As InternalSyntax.PunctuationSyntax, token3 As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If base IsNot Nothing Then
                 AdjustFlagsAndWidth(base)
@@ -21448,7 +21448,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _base = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _base IsNot Nothing Then
                 AdjustFlagsAndWidth(_base)
@@ -21595,7 +21595,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If expression IsNot Nothing Then
                 AdjustFlagsAndWidth(expression)
@@ -21610,7 +21610,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, argumentList As ArgumentListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If expression IsNot Nothing Then
@@ -21626,7 +21626,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), expression As ExpressionSyntax, argumentList As ArgumentListSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If expression IsNot Nothing Then
                 AdjustFlagsAndWidth(expression)
@@ -21641,7 +21641,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -21824,7 +21824,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, argumentList As ArgumentListSyntax, initializer As ObjectCreationInitializerSyntax)
             MyBase.New(kind, newKeyword, attributeLists)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -21841,7 +21841,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, argumentList As ArgumentListSyntax, initializer As ObjectCreationInitializerSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, newKeyword, attributeLists)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(type)
@@ -21859,7 +21859,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, argumentList As ArgumentListSyntax, initializer As ObjectCreationInitializerSyntax)
             MyBase.New(kind, errors, annotations, newKeyword, attributeLists)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -21876,7 +21876,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _type = DirectCast(reader.ReadValue(), TypeSyntax)
             If _type IsNot Nothing Then
                 AdjustFlagsAndWidth(_type)
@@ -21988,7 +21988,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, initializer As ObjectMemberInitializerSyntax)
             MyBase.New(kind, newKeyword, attributeLists)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(initializer)
             Me._initializer = initializer
@@ -21997,7 +21997,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, initializer As ObjectMemberInitializerSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, newKeyword, attributeLists)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(initializer)
@@ -22007,7 +22007,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, initializer As ObjectMemberInitializerSyntax)
             MyBase.New(kind, errors, annotations, newKeyword, attributeLists)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(initializer)
             Me._initializer = initializer
@@ -22016,7 +22016,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _initializer = DirectCast(reader.ReadValue(), ObjectMemberInitializerSyntax)
             If _initializer IsNot Nothing Then
                 AdjustFlagsAndWidth(_initializer)
@@ -22090,7 +22090,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, arrayBounds As ArgumentListSyntax, rankSpecifiers As GreenNode, initializer As CollectionInitializerSyntax)
             MyBase.New(kind, newKeyword, attributeLists)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -22109,7 +22109,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, arrayBounds As ArgumentListSyntax, rankSpecifiers As GreenNode, initializer As CollectionInitializerSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, newKeyword, attributeLists)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(type)
@@ -22129,7 +22129,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), newKeyword As InternalSyntax.KeywordSyntax, attributeLists As GreenNode, type As TypeSyntax, arrayBounds As ArgumentListSyntax, rankSpecifiers As GreenNode, initializer As CollectionInitializerSyntax)
             MyBase.New(kind, errors, annotations, newKeyword, attributeLists)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(type)
             Me._type = type
@@ -22148,7 +22148,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Dim _type = DirectCast(reader.ReadValue(), TypeSyntax)
             If _type IsNot Nothing Then
                 AdjustFlagsAndWidth(_type)
@@ -22280,7 +22280,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openBraceToken As InternalSyntax.PunctuationSyntax, initializers As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openBraceToken)
             Me._openBraceToken = openBraceToken
@@ -22295,7 +22295,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openBraceToken As InternalSyntax.PunctuationSyntax, initializers As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openBraceToken)
@@ -22311,7 +22311,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openBraceToken As InternalSyntax.PunctuationSyntax, initializers As GreenNode, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openBraceToken)
             Me._openBraceToken = openBraceToken
@@ -22326,7 +22326,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openBraceToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openBraceToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openBraceToken)
@@ -22595,23 +22595,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New CTypeExpressionSyntax(o)
 
@@ -22665,23 +22665,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New DirectCastExpressionSyntax(o)
 
@@ -22735,23 +22735,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, type As TypeSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations, keyword, openParenToken, expression, commaToken, type, closeParenToken)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New TryCastExpressionSyntax(o)
 
@@ -22813,7 +22813,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(keyword)
             Me._keyword = keyword
@@ -22828,7 +22828,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(keyword)
@@ -22844,7 +22844,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(keyword)
             Me._keyword = keyword
@@ -22859,7 +22859,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _keyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _keyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_keyword)
@@ -22981,7 +22981,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As ExpressionSyntax, operatorToken As InternalSyntax.SyntaxToken, right As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -22994,7 +22994,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As ExpressionSyntax, operatorToken As InternalSyntax.SyntaxToken, right As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(left)
@@ -23008,7 +23008,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), left As ExpressionSyntax, operatorToken As InternalSyntax.SyntaxToken, right As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -23021,7 +23021,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _left = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _left IsNot Nothing Then
                 AdjustFlagsAndWidth(_left)
@@ -23120,7 +23120,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, operatorToken As InternalSyntax.SyntaxToken, operand As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(operatorToken)
             Me._operatorToken = operatorToken
@@ -23131,7 +23131,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, operatorToken As InternalSyntax.SyntaxToken, operand As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(operatorToken)
@@ -23143,7 +23143,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), operatorToken As InternalSyntax.SyntaxToken, operand As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(operatorToken)
             Me._operatorToken = operatorToken
@@ -23154,7 +23154,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _operatorToken = DirectCast(reader.ReadValue(), SyntaxToken)
             If _operatorToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_operatorToken)
@@ -23244,7 +23244,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, firstExpression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, secondExpression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -23263,7 +23263,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, firstExpression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, secondExpression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(ifKeyword)
@@ -23283,7 +23283,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), ifKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, firstExpression As ExpressionSyntax, commaToken As InternalSyntax.PunctuationSyntax, secondExpression As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -23302,7 +23302,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Dim _ifKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _ifKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_ifKeyword)
@@ -23462,7 +23462,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, condition As ExpressionSyntax, firstCommaToken As InternalSyntax.PunctuationSyntax, whenTrue As ExpressionSyntax, secondCommaToken As InternalSyntax.PunctuationSyntax, whenFalse As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -23485,7 +23485,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ifKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, condition As ExpressionSyntax, firstCommaToken As InternalSyntax.PunctuationSyntax, whenTrue As ExpressionSyntax, secondCommaToken As InternalSyntax.PunctuationSyntax, whenFalse As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(ifKeyword)
@@ -23509,7 +23509,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), ifKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, condition As ExpressionSyntax, firstCommaToken As InternalSyntax.PunctuationSyntax, whenTrue As ExpressionSyntax, secondCommaToken As InternalSyntax.PunctuationSyntax, whenFalse As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(ifKeyword)
             Me._ifKeyword = ifKeyword
@@ -23532,7 +23532,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Dim _ifKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _ifKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_ifKeyword)
@@ -23777,7 +23777,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subOrFunctionHeader As LambdaHeaderSyntax, body As VisualBasicSyntaxNode)
             MyBase.New(kind, subOrFunctionHeader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(body)
             Me._body = body
@@ -23786,7 +23786,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subOrFunctionHeader As LambdaHeaderSyntax, body As VisualBasicSyntaxNode, context As ISyntaxFactoryContext)
             MyBase.New(kind, subOrFunctionHeader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(body)
@@ -23796,7 +23796,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), subOrFunctionHeader As LambdaHeaderSyntax, body As VisualBasicSyntaxNode)
             MyBase.New(kind, errors, annotations, subOrFunctionHeader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(body)
             Me._body = body
@@ -23805,7 +23805,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _body = DirectCast(reader.ReadValue(), VisualBasicSyntaxNode)
             If _body IsNot Nothing Then
                 AdjustFlagsAndWidth(_body)
@@ -23876,7 +23876,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subOrFunctionHeader As LambdaHeaderSyntax, statements As GreenNode, endSubOrFunctionStatement As EndBlockStatementSyntax)
             MyBase.New(kind, subOrFunctionHeader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If statements IsNot Nothing Then
                 AdjustFlagsAndWidth(statements)
@@ -23889,7 +23889,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, subOrFunctionHeader As LambdaHeaderSyntax, statements As GreenNode, endSubOrFunctionStatement As EndBlockStatementSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, subOrFunctionHeader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If statements IsNot Nothing Then
@@ -23903,7 +23903,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), subOrFunctionHeader As LambdaHeaderSyntax, statements As GreenNode, endSubOrFunctionStatement As EndBlockStatementSyntax)
             MyBase.New(kind, errors, annotations, subOrFunctionHeader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If statements IsNot Nothing Then
                 AdjustFlagsAndWidth(statements)
@@ -23916,7 +23916,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _statements = DirectCast(reader.ReadValue(), GreenNode)
             If _statements IsNot Nothing Then
                 AdjustFlagsAndWidth(_statements)
@@ -24009,7 +24009,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(subOrFunctionKeyword)
             Me._subOrFunctionKeyword = subOrFunctionKeyword
@@ -24022,7 +24022,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, attributeLists As GreenNode, modifiers As GreenNode, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(subOrFunctionKeyword)
@@ -24036,7 +24036,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), attributeLists As GreenNode, modifiers As GreenNode, subOrFunctionKeyword As InternalSyntax.KeywordSyntax, parameterList As ParameterListSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, errors, annotations, attributeLists, modifiers, parameterList)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(subOrFunctionKeyword)
             Me._subOrFunctionKeyword = subOrFunctionKeyword
@@ -24049,7 +24049,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _subOrFunctionKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _subOrFunctionKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_subOrFunctionKeyword)
@@ -24145,7 +24145,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -24160,7 +24160,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -24176,7 +24176,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -24191,7 +24191,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -24324,7 +24324,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, empty As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(empty)
             Me._empty = empty
@@ -24333,7 +24333,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, empty As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(empty)
@@ -24343,7 +24343,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), empty As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(empty)
             Me._empty = empty
@@ -24352,7 +24352,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _empty = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _empty IsNot Nothing Then
                 AdjustFlagsAndWidth(_empty)
@@ -24420,7 +24420,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameColonEquals As NameColonEqualsSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If nameColonEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(nameColonEquals)
@@ -24433,7 +24433,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameColonEquals As NameColonEqualsSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If nameColonEquals IsNot Nothing Then
@@ -24447,7 +24447,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), nameColonEquals As NameColonEqualsSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If nameColonEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(nameColonEquals)
@@ -24460,7 +24460,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _nameColonEquals = DirectCast(reader.ReadValue(), NameColonEqualsSyntax)
             If _nameColonEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(_nameColonEquals)
@@ -24548,7 +24548,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As IdentifierNameSyntax, colonEqualsToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -24559,7 +24559,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As IdentifierNameSyntax, colonEqualsToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -24571,7 +24571,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As IdentifierNameSyntax, colonEqualsToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -24582,7 +24582,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _name = DirectCast(reader.ReadValue(), IdentifierNameSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -24669,7 +24669,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lowerBound As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, upperBound As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lowerBound)
             Me._lowerBound = lowerBound
@@ -24682,7 +24682,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lowerBound As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, upperBound As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lowerBound)
@@ -24696,7 +24696,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lowerBound As ExpressionSyntax, toKeyword As InternalSyntax.KeywordSyntax, upperBound As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lowerBound)
             Me._lowerBound = lowerBound
@@ -24709,7 +24709,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lowerBound = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _lowerBound IsNot Nothing Then
                 AdjustFlagsAndWidth(_lowerBound)
@@ -24812,7 +24812,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, clauses As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If clauses IsNot Nothing Then
                 AdjustFlagsAndWidth(clauses)
@@ -24823,7 +24823,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, clauses As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             If clauses IsNot Nothing Then
@@ -24835,7 +24835,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), clauses As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If clauses IsNot Nothing Then
                 AdjustFlagsAndWidth(clauses)
@@ -24846,7 +24846,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _clauses = DirectCast(reader.ReadValue(), GreenNode)
             If _clauses IsNot Nothing Then
                 AdjustFlagsAndWidth(_clauses)
@@ -24943,7 +24943,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, inKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -24960,7 +24960,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, inKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(identifier)
@@ -24978,7 +24978,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, inKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -24995,7 +24995,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _identifier = DirectCast(reader.ReadValue(), ModifiedIdentifierSyntax)
             If _identifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_identifier)
@@ -25118,7 +25118,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameEquals As VariableNameEqualsSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If nameEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(nameEquals)
@@ -25131,7 +25131,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameEquals As VariableNameEqualsSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If nameEquals IsNot Nothing Then
@@ -25145,7 +25145,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), nameEquals As VariableNameEqualsSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If nameEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(nameEquals)
@@ -25158,7 +25158,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _nameEquals = DirectCast(reader.ReadValue(), VariableNameEqualsSyntax)
             If _nameEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(_nameEquals)
@@ -25249,7 +25249,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameEquals As VariableNameEqualsSyntax, aggregation As AggregationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If nameEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(nameEquals)
@@ -25262,7 +25262,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameEquals As VariableNameEqualsSyntax, aggregation As AggregationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If nameEquals IsNot Nothing Then
@@ -25276,7 +25276,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), nameEquals As VariableNameEqualsSyntax, aggregation As AggregationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If nameEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(nameEquals)
@@ -25289,7 +25289,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _nameEquals = DirectCast(reader.ReadValue(), VariableNameEqualsSyntax)
             If _nameEquals IsNot Nothing Then
                 AdjustFlagsAndWidth(_nameEquals)
@@ -25381,7 +25381,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, equalsToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -25396,7 +25396,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, equalsToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(identifier)
@@ -25412,7 +25412,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As ModifiedIdentifierSyntax, asClause As SimpleAsClauseSyntax, equalsToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(identifier)
             Me._identifier = identifier
@@ -25427,7 +25427,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _identifier = DirectCast(reader.ReadValue(), ModifiedIdentifierSyntax)
             If _identifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_identifier)
@@ -25562,7 +25562,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, functionName As InternalSyntax.IdentifierTokenSyntax, openParenToken As InternalSyntax.PunctuationSyntax, argument As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(functionName)
             Me._functionName = functionName
@@ -25583,7 +25583,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, functionName As InternalSyntax.IdentifierTokenSyntax, openParenToken As InternalSyntax.PunctuationSyntax, argument As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(functionName)
@@ -25605,7 +25605,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), functionName As InternalSyntax.IdentifierTokenSyntax, openParenToken As InternalSyntax.PunctuationSyntax, argument As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(functionName)
             Me._functionName = functionName
@@ -25626,7 +25626,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _functionName = DirectCast(reader.ReadValue(), IdentifierTokenSyntax)
             If _functionName IsNot Nothing Then
                 AdjustFlagsAndWidth(_functionName)
@@ -25755,7 +25755,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, groupKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(groupKeyword)
             Me._groupKeyword = groupKeyword
@@ -25764,7 +25764,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, groupKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(groupKeyword)
@@ -25774,7 +25774,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), groupKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(groupKeyword)
             Me._groupKeyword = groupKeyword
@@ -25783,7 +25783,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _groupKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _groupKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_groupKeyword)
@@ -25852,7 +25852,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, fromKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(fromKeyword)
             Me._fromKeyword = fromKeyword
@@ -25865,7 +25865,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, fromKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(fromKeyword)
@@ -25879,7 +25879,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), fromKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(fromKeyword)
             Me._fromKeyword = fromKeyword
@@ -25892,7 +25892,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _fromKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _fromKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_fromKeyword)
@@ -25977,7 +25977,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, letKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(letKeyword)
             Me._letKeyword = letKeyword
@@ -25990,7 +25990,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, letKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(letKeyword)
@@ -26004,7 +26004,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), letKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(letKeyword)
             Me._letKeyword = letKeyword
@@ -26017,7 +26017,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _letKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _letKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_letKeyword)
@@ -26105,7 +26105,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, aggregateKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode, additionalQueryOperators As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(aggregateKeyword)
             Me._aggregateKeyword = aggregateKeyword
@@ -26128,7 +26128,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, aggregateKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode, additionalQueryOperators As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(aggregateKeyword)
@@ -26152,7 +26152,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), aggregateKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode, additionalQueryOperators As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(aggregateKeyword)
             Me._aggregateKeyword = aggregateKeyword
@@ -26175,7 +26175,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _aggregateKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _aggregateKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_aggregateKeyword)
@@ -26313,7 +26313,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, distinctKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(distinctKeyword)
             Me._distinctKeyword = distinctKeyword
@@ -26322,7 +26322,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, distinctKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(distinctKeyword)
@@ -26332,7 +26332,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), distinctKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(distinctKeyword)
             Me._distinctKeyword = distinctKeyword
@@ -26341,7 +26341,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _distinctKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _distinctKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_distinctKeyword)
@@ -26408,7 +26408,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whereKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whereKeyword)
             Me._whereKeyword = whereKeyword
@@ -26419,7 +26419,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, whereKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(whereKeyword)
@@ -26431,7 +26431,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), whereKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(whereKeyword)
             Me._whereKeyword = whereKeyword
@@ -26442,7 +26442,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _whereKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _whereKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_whereKeyword)
@@ -26529,7 +26529,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, skipOrTakeKeyword As InternalSyntax.KeywordSyntax, whileKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(skipOrTakeKeyword)
             Me._skipOrTakeKeyword = skipOrTakeKeyword
@@ -26542,7 +26542,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, skipOrTakeKeyword As InternalSyntax.KeywordSyntax, whileKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(skipOrTakeKeyword)
@@ -26556,7 +26556,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), skipOrTakeKeyword As InternalSyntax.KeywordSyntax, whileKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(skipOrTakeKeyword)
             Me._skipOrTakeKeyword = skipOrTakeKeyword
@@ -26569,7 +26569,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _skipOrTakeKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _skipOrTakeKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_skipOrTakeKeyword)
@@ -26671,7 +26671,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, skipOrTakeKeyword As InternalSyntax.KeywordSyntax, count As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(skipOrTakeKeyword)
             Me._skipOrTakeKeyword = skipOrTakeKeyword
@@ -26682,7 +26682,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, skipOrTakeKeyword As InternalSyntax.KeywordSyntax, count As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(skipOrTakeKeyword)
@@ -26694,7 +26694,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), skipOrTakeKeyword As InternalSyntax.KeywordSyntax, count As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(skipOrTakeKeyword)
             Me._skipOrTakeKeyword = skipOrTakeKeyword
@@ -26705,7 +26705,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _skipOrTakeKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _skipOrTakeKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_skipOrTakeKeyword)
@@ -26794,7 +26794,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, groupKeyword As InternalSyntax.KeywordSyntax, items As GreenNode, byKeyword As InternalSyntax.KeywordSyntax, keys As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(groupKeyword)
             Me._groupKeyword = groupKeyword
@@ -26819,7 +26819,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, groupKeyword As InternalSyntax.KeywordSyntax, items As GreenNode, byKeyword As InternalSyntax.KeywordSyntax, keys As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(groupKeyword)
@@ -26845,7 +26845,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), groupKeyword As InternalSyntax.KeywordSyntax, items As GreenNode, byKeyword As InternalSyntax.KeywordSyntax, keys As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(groupKeyword)
             Me._groupKeyword = groupKeyword
@@ -26870,7 +26870,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Dim _groupKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _groupKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_groupKeyword)
@@ -27193,7 +27193,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As ExpressionSyntax, equalsKeyword As InternalSyntax.KeywordSyntax, right As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -27206,7 +27206,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As ExpressionSyntax, equalsKeyword As InternalSyntax.KeywordSyntax, right As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(left)
@@ -27220,7 +27220,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), left As ExpressionSyntax, equalsKeyword As InternalSyntax.KeywordSyntax, right As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -27233,7 +27233,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _left = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _left IsNot Nothing Then
                 AdjustFlagsAndWidth(_left)
@@ -27333,23 +27333,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, joinKeyword As InternalSyntax.KeywordSyntax, joinedVariables As GreenNode, additionalJoins As GreenNode, onKeyword As InternalSyntax.KeywordSyntax, joinConditions As GreenNode)
             MyBase.New(kind, joinKeyword, joinedVariables, additionalJoins, onKeyword, joinConditions)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, joinKeyword As InternalSyntax.KeywordSyntax, joinedVariables As GreenNode, additionalJoins As GreenNode, onKeyword As InternalSyntax.KeywordSyntax, joinConditions As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind, joinKeyword, joinedVariables, additionalJoins, onKeyword, joinConditions)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), joinKeyword As InternalSyntax.KeywordSyntax, joinedVariables As GreenNode, additionalJoins As GreenNode, onKeyword As InternalSyntax.KeywordSyntax, joinConditions As GreenNode)
             MyBase.New(kind, errors, annotations, joinKeyword, joinedVariables, additionalJoins, onKeyword, joinConditions)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New SimpleJoinClauseSyntax(o)
 
@@ -27407,7 +27407,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, groupKeyword As InternalSyntax.KeywordSyntax, joinKeyword As InternalSyntax.KeywordSyntax, joinedVariables As GreenNode, additionalJoins As GreenNode, onKeyword As InternalSyntax.KeywordSyntax, joinConditions As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode)
             MyBase.New(kind, joinKeyword, joinedVariables, additionalJoins, onKeyword, joinConditions)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(groupKeyword)
             Me._groupKeyword = groupKeyword
@@ -27422,7 +27422,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, groupKeyword As InternalSyntax.KeywordSyntax, joinKeyword As InternalSyntax.KeywordSyntax, joinedVariables As GreenNode, additionalJoins As GreenNode, onKeyword As InternalSyntax.KeywordSyntax, joinConditions As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind, joinKeyword, joinedVariables, additionalJoins, onKeyword, joinConditions)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(groupKeyword)
@@ -27438,7 +27438,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), groupKeyword As InternalSyntax.KeywordSyntax, joinKeyword As InternalSyntax.KeywordSyntax, joinedVariables As GreenNode, additionalJoins As GreenNode, onKeyword As InternalSyntax.KeywordSyntax, joinConditions As GreenNode, intoKeyword As InternalSyntax.KeywordSyntax, aggregationVariables As GreenNode)
             MyBase.New(kind, errors, annotations, joinKeyword, joinedVariables, additionalJoins, onKeyword, joinConditions)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
 
             AdjustFlagsAndWidth(groupKeyword)
             Me._groupKeyword = groupKeyword
@@ -27453,7 +27453,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 8
+            MyBase.SlotCount = 8
             Dim _groupKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _groupKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_groupKeyword)
@@ -27566,7 +27566,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, orderKeyword As InternalSyntax.KeywordSyntax, byKeyword As InternalSyntax.KeywordSyntax, orderings As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(orderKeyword)
             Me._orderKeyword = orderKeyword
@@ -27581,7 +27581,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, orderKeyword As InternalSyntax.KeywordSyntax, byKeyword As InternalSyntax.KeywordSyntax, orderings As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(orderKeyword)
@@ -27597,7 +27597,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), orderKeyword As InternalSyntax.KeywordSyntax, byKeyword As InternalSyntax.KeywordSyntax, orderings As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(orderKeyword)
             Me._orderKeyword = orderKeyword
@@ -27612,7 +27612,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _orderKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _orderKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_orderKeyword)
@@ -27715,7 +27715,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, ascendingOrDescendingKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -27728,7 +27728,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, ascendingOrDescendingKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(expression)
@@ -27742,7 +27742,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), expression As ExpressionSyntax, ascendingOrDescendingKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(expression)
             Me._expression = expression
@@ -27755,7 +27755,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -27844,7 +27844,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, selectKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(selectKeyword)
             Me._selectKeyword = selectKeyword
@@ -27857,7 +27857,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, selectKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(selectKeyword)
@@ -27871,7 +27871,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), selectKeyword As InternalSyntax.KeywordSyntax, variables As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(selectKeyword)
             Me._selectKeyword = selectKeyword
@@ -27884,7 +27884,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _selectKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _selectKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_selectKeyword)
@@ -27999,7 +27999,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, declaration As XmlDeclarationSyntax, precedingMisc As GreenNode, root As XmlNodeSyntax, followingMisc As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(declaration)
             Me._declaration = declaration
@@ -28018,7 +28018,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, declaration As XmlDeclarationSyntax, precedingMisc As GreenNode, root As XmlNodeSyntax, followingMisc As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(declaration)
@@ -28038,7 +28038,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), declaration As XmlDeclarationSyntax, precedingMisc As GreenNode, root As XmlNodeSyntax, followingMisc As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(declaration)
             Me._declaration = declaration
@@ -28057,7 +28057,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _declaration = DirectCast(reader.ReadValue(), XmlDeclarationSyntax)
             If _declaration IsNot Nothing Then
                 AdjustFlagsAndWidth(_declaration)
@@ -28174,7 +28174,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanQuestionToken As InternalSyntax.PunctuationSyntax, xmlKeyword As InternalSyntax.KeywordSyntax, version As XmlDeclarationOptionSyntax, encoding As XmlDeclarationOptionSyntax, standalone As XmlDeclarationOptionSyntax, questionGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(lessThanQuestionToken)
             Me._lessThanQuestionToken = lessThanQuestionToken
@@ -28197,7 +28197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanQuestionToken As InternalSyntax.PunctuationSyntax, xmlKeyword As InternalSyntax.KeywordSyntax, version As XmlDeclarationOptionSyntax, encoding As XmlDeclarationOptionSyntax, standalone As XmlDeclarationOptionSyntax, questionGreaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanQuestionToken)
@@ -28221,7 +28221,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanQuestionToken As InternalSyntax.PunctuationSyntax, xmlKeyword As InternalSyntax.KeywordSyntax, version As XmlDeclarationOptionSyntax, encoding As XmlDeclarationOptionSyntax, standalone As XmlDeclarationOptionSyntax, questionGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
 
             AdjustFlagsAndWidth(lessThanQuestionToken)
             Me._lessThanQuestionToken = lessThanQuestionToken
@@ -28244,7 +28244,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 6
+            MyBase.SlotCount = 6
             Dim _lessThanQuestionToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanQuestionToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanQuestionToken)
@@ -28387,7 +28387,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As InternalSyntax.XmlNameTokenSyntax, equals As InternalSyntax.PunctuationSyntax, value As XmlStringSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -28400,7 +28400,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As InternalSyntax.XmlNameTokenSyntax, equals As InternalSyntax.PunctuationSyntax, value As XmlStringSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -28414,7 +28414,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As InternalSyntax.XmlNameTokenSyntax, equals As InternalSyntax.PunctuationSyntax, value As XmlStringSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -28427,7 +28427,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _name = DirectCast(reader.ReadValue(), XmlNameTokenSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -28521,7 +28521,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, startTag As XmlElementStartTagSyntax, content As GreenNode, endTag As XmlElementEndTagSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(startTag)
             Me._startTag = startTag
@@ -28536,7 +28536,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, startTag As XmlElementStartTagSyntax, content As GreenNode, endTag As XmlElementEndTagSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(startTag)
@@ -28552,7 +28552,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), startTag As XmlElementStartTagSyntax, content As GreenNode, endTag As XmlElementEndTagSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(startTag)
             Me._startTag = startTag
@@ -28567,7 +28567,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _startTag = DirectCast(reader.ReadValue(), XmlElementStartTagSyntax)
             If _startTag IsNot Nothing Then
                 AdjustFlagsAndWidth(_startTag)
@@ -28662,7 +28662,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, textTokens As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If textTokens IsNot Nothing Then
                 AdjustFlagsAndWidth(textTokens)
@@ -28673,7 +28673,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, textTokens As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             If textTokens IsNot Nothing Then
@@ -28685,7 +28685,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), textTokens As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If textTokens IsNot Nothing Then
                 AdjustFlagsAndWidth(textTokens)
@@ -28696,7 +28696,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _textTokens = DirectCast(reader.ReadValue(), GreenNode)
             If _textTokens IsNot Nothing Then
                 AdjustFlagsAndWidth(_textTokens)
@@ -28766,7 +28766,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, attributes As GreenNode, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -28783,7 +28783,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, attributes As GreenNode, greaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanToken)
@@ -28801,7 +28801,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, attributes As GreenNode, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -28818,7 +28818,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _lessThanToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanToken)
@@ -28929,7 +28929,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanSlashToken As InternalSyntax.PunctuationSyntax, name As XmlNameSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanSlashToken)
             Me._lessThanSlashToken = lessThanSlashToken
@@ -28944,7 +28944,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanSlashToken As InternalSyntax.PunctuationSyntax, name As XmlNameSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanSlashToken)
@@ -28960,7 +28960,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanSlashToken As InternalSyntax.PunctuationSyntax, name As XmlNameSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanSlashToken)
             Me._lessThanSlashToken = lessThanSlashToken
@@ -28975,7 +28975,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lessThanSlashToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanSlashToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanSlashToken)
@@ -29073,7 +29073,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, attributes As GreenNode, slashGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -29090,7 +29090,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, attributes As GreenNode, slashGreaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanToken)
@@ -29108,7 +29108,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNodeSyntax, attributes As GreenNode, slashGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -29125,7 +29125,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _lessThanToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanToken)
@@ -29236,7 +29236,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As XmlNodeSyntax, equalsToken As InternalSyntax.PunctuationSyntax, value As XmlNodeSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -29249,7 +29249,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As XmlNodeSyntax, equalsToken As InternalSyntax.PunctuationSyntax, value As XmlNodeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -29263,7 +29263,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As XmlNodeSyntax, equalsToken As InternalSyntax.PunctuationSyntax, value As XmlNodeSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -29276,7 +29276,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _name = DirectCast(reader.ReadValue(), XmlNodeSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -29397,7 +29397,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, startQuoteToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, endQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(startQuoteToken)
             Me._startQuoteToken = startQuoteToken
@@ -29412,7 +29412,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, startQuoteToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, endQuoteToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(startQuoteToken)
@@ -29428,7 +29428,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), startQuoteToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, endQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(startQuoteToken)
             Me._startQuoteToken = startQuoteToken
@@ -29443,7 +29443,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _startQuoteToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _startQuoteToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_startQuoteToken)
@@ -29538,7 +29538,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As InternalSyntax.XmlNameTokenSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -29547,7 +29547,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As InternalSyntax.XmlNameTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -29557,7 +29557,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As InternalSyntax.XmlNameTokenSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -29566,7 +29566,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _name = DirectCast(reader.ReadValue(), XmlNameTokenSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -29632,7 +29632,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, prefix As XmlPrefixSyntax, localName As InternalSyntax.XmlNameTokenSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If prefix IsNot Nothing Then
                 AdjustFlagsAndWidth(prefix)
@@ -29645,7 +29645,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, prefix As XmlPrefixSyntax, localName As InternalSyntax.XmlNameTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If prefix IsNot Nothing Then
@@ -29659,7 +29659,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), prefix As XmlPrefixSyntax, localName As InternalSyntax.XmlNameTokenSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If prefix IsNot Nothing Then
                 AdjustFlagsAndWidth(prefix)
@@ -29672,7 +29672,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _prefix = DirectCast(reader.ReadValue(), XmlPrefixSyntax)
             If _prefix IsNot Nothing Then
                 AdjustFlagsAndWidth(_prefix)
@@ -29757,7 +29757,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNameSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -29770,7 +29770,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNameSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanToken)
@@ -29784,7 +29784,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanToken As InternalSyntax.PunctuationSyntax, name As XmlNameSyntax, greaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanToken)
             Me._lessThanToken = lessThanToken
@@ -29797,7 +29797,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lessThanToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanToken)
@@ -29890,7 +29890,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As InternalSyntax.XmlNameTokenSyntax, colonToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -29901,7 +29901,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As InternalSyntax.XmlNameTokenSyntax, colonToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -29913,7 +29913,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As InternalSyntax.XmlNameTokenSyntax, colonToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -29924,7 +29924,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _name = DirectCast(reader.ReadValue(), XmlNameTokenSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -30005,7 +30005,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanExclamationMinusMinusToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, minusMinusGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanExclamationMinusMinusToken)
             Me._lessThanExclamationMinusMinusToken = lessThanExclamationMinusMinusToken
@@ -30020,7 +30020,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanExclamationMinusMinusToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, minusMinusGreaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanExclamationMinusMinusToken)
@@ -30036,7 +30036,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanExclamationMinusMinusToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, minusMinusGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanExclamationMinusMinusToken)
             Me._lessThanExclamationMinusMinusToken = lessThanExclamationMinusMinusToken
@@ -30051,7 +30051,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lessThanExclamationMinusMinusToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanExclamationMinusMinusToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanExclamationMinusMinusToken)
@@ -30147,7 +30147,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanQuestionToken As InternalSyntax.PunctuationSyntax, name As InternalSyntax.XmlNameTokenSyntax, textTokens As GreenNode, questionGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(lessThanQuestionToken)
             Me._lessThanQuestionToken = lessThanQuestionToken
@@ -30164,7 +30164,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanQuestionToken As InternalSyntax.PunctuationSyntax, name As InternalSyntax.XmlNameTokenSyntax, textTokens As GreenNode, questionGreaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanQuestionToken)
@@ -30182,7 +30182,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanQuestionToken As InternalSyntax.PunctuationSyntax, name As InternalSyntax.XmlNameTokenSyntax, textTokens As GreenNode, questionGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(lessThanQuestionToken)
             Me._lessThanQuestionToken = lessThanQuestionToken
@@ -30199,7 +30199,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _lessThanQuestionToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanQuestionToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanQuestionToken)
@@ -30307,7 +30307,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, beginCDataToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, endCDataToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(beginCDataToken)
             Me._beginCDataToken = beginCDataToken
@@ -30322,7 +30322,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, beginCDataToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, endCDataToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(beginCDataToken)
@@ -30338,7 +30338,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), beginCDataToken As InternalSyntax.PunctuationSyntax, textTokens As GreenNode, endCDataToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(beginCDataToken)
             Me._beginCDataToken = beginCDataToken
@@ -30353,7 +30353,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _beginCDataToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _beginCDataToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_beginCDataToken)
@@ -30448,7 +30448,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanPercentEqualsToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, percentGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanPercentEqualsToken)
             Me._lessThanPercentEqualsToken = lessThanPercentEqualsToken
@@ -30461,7 +30461,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, lessThanPercentEqualsToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, percentGreaterThanToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(lessThanPercentEqualsToken)
@@ -30475,7 +30475,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), lessThanPercentEqualsToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, percentGreaterThanToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(lessThanPercentEqualsToken)
             Me._lessThanPercentEqualsToken = lessThanPercentEqualsToken
@@ -30488,7 +30488,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _lessThanPercentEqualsToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _lessThanPercentEqualsToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_lessThanPercentEqualsToken)
@@ -30610,7 +30610,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elementType As TypeSyntax, rankSpecifiers As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elementType)
             Me._elementType = elementType
@@ -30623,7 +30623,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elementType As TypeSyntax, rankSpecifiers As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elementType)
@@ -30637,7 +30637,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elementType As TypeSyntax, rankSpecifiers As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elementType)
             Me._elementType = elementType
@@ -30650,7 +30650,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _elementType = DirectCast(reader.ReadValue(), TypeSyntax)
             If _elementType IsNot Nothing Then
                 AdjustFlagsAndWidth(_elementType)
@@ -30735,7 +30735,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elementType As TypeSyntax, questionMarkToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elementType)
             Me._elementType = elementType
@@ -30746,7 +30746,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, elementType As TypeSyntax, questionMarkToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elementType)
@@ -30758,7 +30758,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), elementType As TypeSyntax, questionMarkToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elementType)
             Me._elementType = elementType
@@ -30769,7 +30769,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _elementType = DirectCast(reader.ReadValue(), TypeSyntax)
             If _elementType IsNot Nothing Then
                 AdjustFlagsAndWidth(_elementType)
@@ -30855,7 +30855,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(keyword)
             Me._keyword = keyword
@@ -30864,7 +30864,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, keyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(keyword)
@@ -30874,7 +30874,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), keyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(keyword)
             Me._keyword = keyword
@@ -30883,7 +30883,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _keyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _keyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_keyword)
@@ -31034,23 +31034,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax)
             MyBase.New(kind, identifier)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, identifier)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As InternalSyntax.IdentifierTokenSyntax)
             MyBase.New(kind, errors, annotations, identifier)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New IdentifierNameSyntax(o)
 
@@ -31098,7 +31098,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, typeArgumentList As TypeArgumentListSyntax)
             MyBase.New(kind, identifier)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(typeArgumentList)
             Me._typeArgumentList = typeArgumentList
@@ -31107,7 +31107,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, identifier As InternalSyntax.IdentifierTokenSyntax, typeArgumentList As TypeArgumentListSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, identifier)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(typeArgumentList)
@@ -31117,7 +31117,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), identifier As InternalSyntax.IdentifierTokenSyntax, typeArgumentList As TypeArgumentListSyntax)
             MyBase.New(kind, errors, annotations, identifier)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(typeArgumentList)
             Me._typeArgumentList = typeArgumentList
@@ -31126,7 +31126,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _typeArgumentList = DirectCast(reader.ReadValue(), TypeArgumentListSyntax)
             If _typeArgumentList IsNot Nothing Then
                 AdjustFlagsAndWidth(_typeArgumentList)
@@ -31197,7 +31197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As NameSyntax, dotToken As InternalSyntax.PunctuationSyntax, right As SimpleNameSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -31210,7 +31210,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As NameSyntax, dotToken As InternalSyntax.PunctuationSyntax, right As SimpleNameSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(left)
@@ -31224,7 +31224,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), left As NameSyntax, dotToken As InternalSyntax.PunctuationSyntax, right As SimpleNameSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -31237,7 +31237,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _left = DirectCast(reader.ReadValue(), NameSyntax)
             If _left IsNot Nothing Then
                 AdjustFlagsAndWidth(_left)
@@ -31340,7 +31340,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, globalKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(globalKeyword)
             Me._globalKeyword = globalKeyword
@@ -31349,7 +31349,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, globalKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(globalKeyword)
@@ -31359,7 +31359,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), globalKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(globalKeyword)
             Me._globalKeyword = globalKeyword
@@ -31368,7 +31368,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _globalKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _globalKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_globalKeyword)
@@ -31437,7 +31437,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, ofKeyword As InternalSyntax.KeywordSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -31454,7 +31454,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, ofKeyword As InternalSyntax.KeywordSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -31472,7 +31472,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, ofKeyword As InternalSyntax.KeywordSyntax, arguments As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -31489,7 +31489,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -31610,7 +31610,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As TypeSyntax, signature As CrefSignatureSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -31627,7 +31627,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As TypeSyntax, signature As CrefSignatureSyntax, asClause As SimpleAsClauseSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -31645,7 +31645,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As TypeSyntax, signature As CrefSignatureSyntax, asClause As SimpleAsClauseSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -31662,7 +31662,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _name = DirectCast(reader.ReadValue(), TypeSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -31763,7 +31763,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, argumentTypes As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -31778,7 +31778,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openParenToken As InternalSyntax.PunctuationSyntax, argumentTypes As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openParenToken)
@@ -31794,7 +31794,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openParenToken As InternalSyntax.PunctuationSyntax, argumentTypes As GreenNode, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(openParenToken)
             Me._openParenToken = openParenToken
@@ -31809,7 +31809,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _openParenToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openParenToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openParenToken)
@@ -31899,7 +31899,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, modifier As InternalSyntax.KeywordSyntax, type As TypeSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If modifier IsNot Nothing Then
                 AdjustFlagsAndWidth(modifier)
@@ -31914,7 +31914,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, modifier As InternalSyntax.KeywordSyntax, type As TypeSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             If modifier IsNot Nothing Then
@@ -31930,7 +31930,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), modifier As InternalSyntax.KeywordSyntax, type As TypeSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             If modifier IsNot Nothing Then
                 AdjustFlagsAndWidth(modifier)
@@ -31945,7 +31945,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _modifier = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _modifier IsNot Nothing Then
                 AdjustFlagsAndWidth(_modifier)
@@ -32027,7 +32027,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, operatorKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.SyntaxToken)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(operatorKeyword)
             Me._operatorKeyword = operatorKeyword
@@ -32038,7 +32038,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, operatorKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.SyntaxToken, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(operatorKeyword)
@@ -32050,7 +32050,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), operatorKeyword As InternalSyntax.KeywordSyntax, operatorToken As InternalSyntax.SyntaxToken)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(operatorKeyword)
             Me._operatorKeyword = operatorKeyword
@@ -32061,7 +32061,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _operatorKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _operatorKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_operatorKeyword)
@@ -32138,7 +32138,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As NameSyntax, dotToken As InternalSyntax.PunctuationSyntax, right As CrefOperatorReferenceSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -32151,7 +32151,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, left As NameSyntax, dotToken As InternalSyntax.PunctuationSyntax, right As CrefOperatorReferenceSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(left)
@@ -32165,7 +32165,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), left As NameSyntax, dotToken As InternalSyntax.PunctuationSyntax, right As CrefOperatorReferenceSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(left)
             Me._left = left
@@ -32178,7 +32178,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _left = DirectCast(reader.ReadValue(), NameSyntax)
             If _left IsNot Nothing Then
                 AdjustFlagsAndWidth(_left)
@@ -32271,7 +32271,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, yieldKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(yieldKeyword)
             Me._yieldKeyword = yieldKeyword
@@ -32282,7 +32282,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, yieldKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(yieldKeyword)
@@ -32294,7 +32294,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), yieldKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(yieldKeyword)
             Me._yieldKeyword = yieldKeyword
@@ -32305,7 +32305,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _yieldKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _yieldKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_yieldKeyword)
@@ -32390,7 +32390,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, awaitKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(awaitKeyword)
             Me._awaitKeyword = awaitKeyword
@@ -32401,7 +32401,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, awaitKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(awaitKeyword)
@@ -32413,7 +32413,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), awaitKeyword As InternalSyntax.KeywordSyntax, expression As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(awaitKeyword)
             Me._awaitKeyword = awaitKeyword
@@ -32424,7 +32424,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _awaitKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _awaitKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_awaitKeyword)
@@ -33112,7 +33112,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, tokens As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If tokens IsNot Nothing Then
                 AdjustFlagsAndWidth(tokens)
@@ -33123,7 +33123,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, tokens As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             If tokens IsNot Nothing Then
@@ -33135,7 +33135,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), tokens As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If tokens IsNot Nothing Then
                 AdjustFlagsAndWidth(tokens)
@@ -33146,7 +33146,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _tokens = DirectCast(reader.ReadValue(), GreenNode)
             If _tokens IsNot Nothing Then
                 AdjustFlagsAndWidth(_tokens)
@@ -33216,7 +33216,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, content As GreenNode)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If content IsNot Nothing Then
                 AdjustFlagsAndWidth(content)
@@ -33227,7 +33227,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, content As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             If content IsNot Nothing Then
@@ -33239,7 +33239,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), content As GreenNode)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             If content IsNot Nothing Then
                 AdjustFlagsAndWidth(content)
@@ -33250,7 +33250,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _content = DirectCast(reader.ReadValue(), GreenNode)
             If _content IsNot Nothing Then
                 AdjustFlagsAndWidth(_content)
@@ -33322,7 +33322,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As XmlNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, startQuoteToken As InternalSyntax.PunctuationSyntax, reference As CrefReferenceSyntax, endQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -33339,7 +33339,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As XmlNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, startQuoteToken As InternalSyntax.PunctuationSyntax, reference As CrefReferenceSyntax, endQuoteToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -33357,7 +33357,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As XmlNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, startQuoteToken As InternalSyntax.PunctuationSyntax, reference As CrefReferenceSyntax, endQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -33374,7 +33374,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _name = DirectCast(reader.ReadValue(), XmlNameSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -33500,7 +33500,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As XmlNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, startQuoteToken As InternalSyntax.PunctuationSyntax, reference As IdentifierNameSyntax, endQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -33517,7 +33517,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, name As XmlNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, startQuoteToken As InternalSyntax.PunctuationSyntax, reference As IdentifierNameSyntax, endQuoteToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(name)
@@ -33535,7 +33535,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), name As XmlNameSyntax, equalsToken As InternalSyntax.PunctuationSyntax, startQuoteToken As InternalSyntax.PunctuationSyntax, reference As IdentifierNameSyntax, endQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(name)
             Me._name = name
@@ -33552,7 +33552,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _name = DirectCast(reader.ReadValue(), XmlNameSyntax)
             If _name IsNot Nothing Then
                 AdjustFlagsAndWidth(_name)
@@ -33674,7 +33674,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, questionMarkToken As InternalSyntax.PunctuationSyntax, whenNotNull As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If expression IsNot Nothing Then
                 AdjustFlagsAndWidth(expression)
@@ -33689,7 +33689,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, expression As ExpressionSyntax, questionMarkToken As InternalSyntax.PunctuationSyntax, whenNotNull As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             If expression IsNot Nothing Then
@@ -33705,7 +33705,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), expression As ExpressionSyntax, questionMarkToken As InternalSyntax.PunctuationSyntax, whenNotNull As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             If expression IsNot Nothing Then
                 AdjustFlagsAndWidth(expression)
@@ -33720,7 +33720,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _expression = DirectCast(reader.ReadValue(), ExpressionSyntax)
             If _expression IsNot Nothing Then
                 AdjustFlagsAndWidth(_expression)
@@ -33828,7 +33828,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameOfKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, argument As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(nameOfKeyword)
             Me._nameOfKeyword = nameOfKeyword
@@ -33843,7 +33843,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, nameOfKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, argument As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(nameOfKeyword)
@@ -33859,7 +33859,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), nameOfKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, argument As ExpressionSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(nameOfKeyword)
             Me._nameOfKeyword = nameOfKeyword
@@ -33874,7 +33874,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _nameOfKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _nameOfKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_nameOfKeyword)
@@ -33994,7 +33994,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, dollarSignDoubleQuoteToken As InternalSyntax.PunctuationSyntax, contents As GreenNode, doubleQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(dollarSignDoubleQuoteToken)
             Me._dollarSignDoubleQuoteToken = dollarSignDoubleQuoteToken
@@ -34009,7 +34009,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, dollarSignDoubleQuoteToken As InternalSyntax.PunctuationSyntax, contents As GreenNode, doubleQuoteToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(dollarSignDoubleQuoteToken)
@@ -34025,7 +34025,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), dollarSignDoubleQuoteToken As InternalSyntax.PunctuationSyntax, contents As GreenNode, doubleQuoteToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(dollarSignDoubleQuoteToken)
             Me._dollarSignDoubleQuoteToken = dollarSignDoubleQuoteToken
@@ -34040,7 +34040,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _dollarSignDoubleQuoteToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _dollarSignDoubleQuoteToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_dollarSignDoubleQuoteToken)
@@ -34167,7 +34167,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, textToken As InternalSyntax.InterpolatedStringTextTokenSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(textToken)
             Me._textToken = textToken
@@ -34176,7 +34176,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, textToken As InternalSyntax.InterpolatedStringTextTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(textToken)
@@ -34186,7 +34186,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), textToken As InternalSyntax.InterpolatedStringTextTokenSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
 
             AdjustFlagsAndWidth(textToken)
             Me._textToken = textToken
@@ -34195,7 +34195,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Dim _textToken = DirectCast(reader.ReadValue(), InterpolatedStringTextTokenSyntax)
             If _textToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_textToken)
@@ -34266,7 +34266,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openBraceToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, alignmentClause As InterpolationAlignmentClauseSyntax, formatClause As InterpolationFormatClauseSyntax, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(openBraceToken)
             Me._openBraceToken = openBraceToken
@@ -34287,7 +34287,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, openBraceToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, alignmentClause As InterpolationAlignmentClauseSyntax, formatClause As InterpolationFormatClauseSyntax, closeBraceToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(openBraceToken)
@@ -34309,7 +34309,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), openBraceToken As InternalSyntax.PunctuationSyntax, expression As ExpressionSyntax, alignmentClause As InterpolationAlignmentClauseSyntax, formatClause As InterpolationFormatClauseSyntax, closeBraceToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(openBraceToken)
             Me._openBraceToken = openBraceToken
@@ -34330,7 +34330,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _openBraceToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _openBraceToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_openBraceToken)
@@ -34474,7 +34474,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, commaToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(commaToken)
             Me._commaToken = commaToken
@@ -34485,7 +34485,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, commaToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(commaToken)
@@ -34497,7 +34497,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), commaToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(commaToken)
             Me._commaToken = commaToken
@@ -34508,7 +34508,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _commaToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _commaToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_commaToken)
@@ -34594,7 +34594,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, colonToken As InternalSyntax.PunctuationSyntax, formatStringToken As InternalSyntax.InterpolatedStringTextTokenSyntax)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(colonToken)
             Me._colonToken = colonToken
@@ -34605,7 +34605,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, colonToken As InternalSyntax.PunctuationSyntax, formatStringToken As InternalSyntax.InterpolatedStringTextTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(colonToken)
@@ -34617,7 +34617,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), colonToken As InternalSyntax.PunctuationSyntax, formatStringToken As InternalSyntax.InterpolatedStringTextTokenSyntax)
             MyBase.New(kind, errors, annotations)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(colonToken)
             Me._colonToken = colonToken
@@ -34628,7 +34628,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _colonToken = DirectCast(reader.ReadValue(), PunctuationSyntax)
             If _colonToken IsNot Nothing Then
                 AdjustFlagsAndWidth(_colonToken)
@@ -34797,7 +34797,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, constKeyword As InternalSyntax.KeywordSyntax, name As InternalSyntax.IdentifierTokenSyntax, equalsToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(constKeyword)
             Me._constKeyword = constKeyword
@@ -34812,7 +34812,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, constKeyword As InternalSyntax.KeywordSyntax, name As InternalSyntax.IdentifierTokenSyntax, equalsToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(constKeyword)
@@ -34828,7 +34828,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, constKeyword As InternalSyntax.KeywordSyntax, name As InternalSyntax.IdentifierTokenSyntax, equalsToken As InternalSyntax.PunctuationSyntax, value As ExpressionSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             AdjustFlagsAndWidth(constKeyword)
             Me._constKeyword = constKeyword
@@ -34843,7 +34843,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _constKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _constKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_constKeyword)
@@ -34968,7 +34968,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, elseKeyword As InternalSyntax.KeywordSyntax, ifOrElseIfKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(elseKeyword)
@@ -34987,7 +34987,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, elseKeyword As InternalSyntax.KeywordSyntax, ifOrElseIfKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Me.SetFactoryContext(context)
 
             If elseKeyword IsNot Nothing Then
@@ -35007,7 +35007,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, elseKeyword As InternalSyntax.KeywordSyntax, ifOrElseIfKeyword As InternalSyntax.KeywordSyntax, condition As ExpressionSyntax, thenKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
 
             If elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(elseKeyword)
@@ -35026,7 +35026,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 5
+            MyBase.SlotCount = 5
             Dim _elseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseKeyword)
@@ -35140,7 +35140,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, elseKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -35149,7 +35149,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, elseKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(elseKeyword)
@@ -35159,7 +35159,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, elseKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
 
             AdjustFlagsAndWidth(elseKeyword)
             Me._elseKeyword = elseKeyword
@@ -35168,7 +35168,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 2
+            MyBase.SlotCount = 2
             Dim _elseKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _elseKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_elseKeyword)
@@ -35235,7 +35235,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, ifKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -35246,7 +35246,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, ifKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(endKeyword)
@@ -35258,7 +35258,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, ifKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -35269,7 +35269,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _endKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _endKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_endKeyword)
@@ -35350,7 +35350,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, regionKeyword As InternalSyntax.KeywordSyntax, name As InternalSyntax.StringLiteralTokenSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(regionKeyword)
             Me._regionKeyword = regionKeyword
@@ -35361,7 +35361,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, regionKeyword As InternalSyntax.KeywordSyntax, name As InternalSyntax.StringLiteralTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(regionKeyword)
@@ -35373,7 +35373,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, regionKeyword As InternalSyntax.KeywordSyntax, name As InternalSyntax.StringLiteralTokenSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(regionKeyword)
             Me._regionKeyword = regionKeyword
@@ -35384,7 +35384,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _regionKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _regionKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_regionKeyword)
@@ -35471,7 +35471,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, regionKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -35482,7 +35482,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, regionKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(endKeyword)
@@ -35494,7 +35494,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, regionKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -35505,7 +35505,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _endKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _endKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_endKeyword)
@@ -35597,7 +35597,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, externalSourceKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, externalSource As InternalSyntax.StringLiteralTokenSyntax, commaToken As InternalSyntax.PunctuationSyntax, lineStart As InternalSyntax.IntegerLiteralTokenSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
 
             AdjustFlagsAndWidth(externalSourceKeyword)
             Me._externalSourceKeyword = externalSourceKeyword
@@ -35616,7 +35616,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, externalSourceKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, externalSource As InternalSyntax.StringLiteralTokenSyntax, commaToken As InternalSyntax.PunctuationSyntax, lineStart As InternalSyntax.IntegerLiteralTokenSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(externalSourceKeyword)
@@ -35636,7 +35636,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, externalSourceKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, externalSource As InternalSyntax.StringLiteralTokenSyntax, commaToken As InternalSyntax.PunctuationSyntax, lineStart As InternalSyntax.IntegerLiteralTokenSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
 
             AdjustFlagsAndWidth(externalSourceKeyword)
             Me._externalSourceKeyword = externalSourceKeyword
@@ -35655,7 +35655,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 7
+            MyBase.SlotCount = 7
             Dim _externalSourceKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _externalSourceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_externalSourceKeyword)
@@ -35792,7 +35792,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, externalSourceKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -35803,7 +35803,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, externalSourceKeyword As InternalSyntax.KeywordSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(endKeyword)
@@ -35815,7 +35815,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, endKeyword As InternalSyntax.KeywordSyntax, externalSourceKeyword As InternalSyntax.KeywordSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(endKeyword)
             Me._endKeyword = endKeyword
@@ -35826,7 +35826,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _endKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _endKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_endKeyword)
@@ -35913,7 +35913,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, externalChecksumKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, externalSource As InternalSyntax.StringLiteralTokenSyntax, firstCommaToken As InternalSyntax.PunctuationSyntax, guid As InternalSyntax.StringLiteralTokenSyntax, secondCommaToken As InternalSyntax.PunctuationSyntax, checksum As InternalSyntax.StringLiteralTokenSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
 
             AdjustFlagsAndWidth(externalChecksumKeyword)
             Me._externalChecksumKeyword = externalChecksumKeyword
@@ -35936,7 +35936,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, externalChecksumKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, externalSource As InternalSyntax.StringLiteralTokenSyntax, firstCommaToken As InternalSyntax.PunctuationSyntax, guid As InternalSyntax.StringLiteralTokenSyntax, secondCommaToken As InternalSyntax.PunctuationSyntax, checksum As InternalSyntax.StringLiteralTokenSyntax, closeParenToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(externalChecksumKeyword)
@@ -35960,7 +35960,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, externalChecksumKeyword As InternalSyntax.KeywordSyntax, openParenToken As InternalSyntax.PunctuationSyntax, externalSource As InternalSyntax.StringLiteralTokenSyntax, firstCommaToken As InternalSyntax.PunctuationSyntax, guid As InternalSyntax.StringLiteralTokenSyntax, secondCommaToken As InternalSyntax.PunctuationSyntax, checksum As InternalSyntax.StringLiteralTokenSyntax, closeParenToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
 
             AdjustFlagsAndWidth(externalChecksumKeyword)
             Me._externalChecksumKeyword = externalChecksumKeyword
@@ -35983,7 +35983,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 9
+            MyBase.SlotCount = 9
             Dim _externalChecksumKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _externalChecksumKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_externalChecksumKeyword)
@@ -36149,7 +36149,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, enableKeyword As InternalSyntax.KeywordSyntax, warningKeyword As InternalSyntax.KeywordSyntax, errorCodes As GreenNode)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(enableKeyword)
             Me._enableKeyword = enableKeyword
@@ -36164,7 +36164,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, enableKeyword As InternalSyntax.KeywordSyntax, warningKeyword As InternalSyntax.KeywordSyntax, errorCodes As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(enableKeyword)
@@ -36180,7 +36180,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, enableKeyword As InternalSyntax.KeywordSyntax, warningKeyword As InternalSyntax.KeywordSyntax, errorCodes As GreenNode)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(enableKeyword)
             Me._enableKeyword = enableKeyword
@@ -36195,7 +36195,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _enableKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _enableKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_enableKeyword)
@@ -36291,7 +36291,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, disableKeyword As InternalSyntax.KeywordSyntax, warningKeyword As InternalSyntax.KeywordSyntax, errorCodes As GreenNode)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(disableKeyword)
             Me._disableKeyword = disableKeyword
@@ -36306,7 +36306,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, disableKeyword As InternalSyntax.KeywordSyntax, warningKeyword As InternalSyntax.KeywordSyntax, errorCodes As GreenNode, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(disableKeyword)
@@ -36322,7 +36322,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, disableKeyword As InternalSyntax.KeywordSyntax, warningKeyword As InternalSyntax.KeywordSyntax, errorCodes As GreenNode)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
 
             AdjustFlagsAndWidth(disableKeyword)
             Me._disableKeyword = disableKeyword
@@ -36337,7 +36337,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 4
+            MyBase.SlotCount = 4
             Dim _disableKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _disableKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_disableKeyword)
@@ -36432,7 +36432,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, referenceKeyword As InternalSyntax.KeywordSyntax, file As InternalSyntax.StringLiteralTokenSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(referenceKeyword)
             Me._referenceKeyword = referenceKeyword
@@ -36443,7 +36443,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, referenceKeyword As InternalSyntax.KeywordSyntax, file As InternalSyntax.StringLiteralTokenSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Me.SetFactoryContext(context)
 
             AdjustFlagsAndWidth(referenceKeyword)
@@ -36455,7 +36455,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax, referenceKeyword As InternalSyntax.KeywordSyntax, file As InternalSyntax.StringLiteralTokenSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
 
             AdjustFlagsAndWidth(referenceKeyword)
             Me._referenceKeyword = referenceKeyword
@@ -36466,7 +36466,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 3
+            MyBase.SlotCount = 3
             Dim _referenceKeyword = DirectCast(reader.ReadValue(), KeywordSyntax)
             If _referenceKeyword IsNot Nothing Then
                 AdjustFlagsAndWidth(_referenceKeyword)
@@ -36548,23 +36548,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, hashToken As InternalSyntax.PunctuationSyntax, context As ISyntaxFactoryContext)
             MyBase.New(kind, hashToken)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
             Me.SetFactoryContext(context)
         End Sub
 
         Friend Sub New(ByVal kind As SyntaxKind, ByVal errors As DiagnosticInfo(), ByVal annotations As SyntaxAnnotation(), hashToken As InternalSyntax.PunctuationSyntax)
             MyBase.New(kind, errors, annotations, hashToken)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
 
         Friend Sub New(reader As ObjectReader)
             MyBase.New(reader)
-            MyBase._slotCount = 1
+            MyBase.SlotCount = 1
         End Sub
         Friend Shared CreateInstance As Func(Of ObjectReader, Object) = Function(o) New BadDirectiveTriviaSyntax(o)
 

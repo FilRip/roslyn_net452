@@ -106,7 +106,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 #Else
         Friend Structure LocalState
 #End If
-            Implements AbstractLocalState
+            Implements IAbstractLocalState
 
             Friend Assigned As BitVector
 
@@ -119,7 +119,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' Produce a duplicate of this flow analysis state.
             ''' </summary>
             ''' <returns></returns>
-            Public Function Clone() As LocalState Implements AbstractFlowPass(Of LocalState).AbstractLocalState.Clone
+            Public Function Clone() As LocalState Implements AbstractFlowPass(Of LocalState).IAbstractLocalState.Clone
                 Return New LocalState(Me.Assigned.Clone())
             End Function
 

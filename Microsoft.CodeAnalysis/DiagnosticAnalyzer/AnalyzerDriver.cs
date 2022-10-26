@@ -487,7 +487,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
 
             // Wrap onAnalyzerException to pass in filtered diagnostic.
-            Action<Exception, DiagnosticAnalyzer, Diagnostic> newOnAnalyzerException = (ex, analyzer, diagnostic) =>
+            void newOnAnalyzerException(Exception ex, DiagnosticAnalyzer analyzer, Diagnostic diagnostic)
             {
                 var filteredDiagnostic = GetFilteredDiagnostic(diagnostic, compilation, analysisOptions.Options, _severityFilter, cancellationToken);
                 if (filteredDiagnostic != null)
@@ -505,7 +505,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         addNotCategorizedDiagnostic!(filteredDiagnostic);
                     }
                 }
-            };
+            }
 
             var analyzerExecutor = AnalyzerExecutor.Create(
                 compilation, analysisOptions.Options ?? AnalyzerOptions.Empty, addNotCategorizedDiagnostic, newOnAnalyzerException, analysisOptions.AnalyzerExceptionFilter,
@@ -852,8 +852,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             out Compilation newCompilation,
             CancellationToken cancellationToken)
         {
-            Action<Exception, DiagnosticAnalyzer, Diagnostic> onAnalyzerException =
-                (ex, analyzer, diagnostic) => addExceptionDiagnostic?.Invoke(diagnostic);
+            void onAnalyzerException(Exception ex, DiagnosticAnalyzer analyzer, Diagnostic diagnostic) => addExceptionDiagnostic?.Invoke(diagnostic);
 
             Func<Exception, bool>? nullFilter = null;
             return CreateAndAttachToCompilation(compilation, analyzers, options, analyzerManager, onAnalyzerException, nullFilter, reportAnalyzer, severityFilter, out newCompilation, cancellationToken: cancellationToken);
@@ -1645,7 +1644,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 EmptyGroupedActions;
 
             if (!skipSymbolAnalysis &&
-                !TryExecuteSymbolActions(symbolEvent, analysisScope, analysisState, isGeneratedCodeSymbol, cancellationToken))
+                !TryExecuteSymbolActions(symbolEvent, analysisScope, analysisState, isGeneratedCodeSymbol))
             {
                 processedState = EventProcessedState.NotProcessed;
             }
@@ -1674,7 +1673,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// True, if successfully executed the actions for the given analysis scope OR no actions were required to be executed for the given analysis scope.
         /// False, otherwise.
         /// </returns>
-        private bool TryExecuteSymbolActions(SymbolDeclaredCompilationEvent symbolEvent, AnalysisScope analysisScope, AnalysisState? analysisState, bool isGeneratedCodeSymbol, CancellationToken cancellationToken)
+        private bool TryExecuteSymbolActions(SymbolDeclaredCompilationEvent symbolEvent, AnalysisScope analysisScope, AnalysisState? analysisState, bool isGeneratedCodeSymbol)
         {
             var symbol = symbolEvent.Symbol;
             if (!analysisScope.ShouldAnalyze(symbol))
@@ -2115,7 +2114,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             // PERF: For containing symbols, we want to cache the computed actions.
             // For member symbols, we do not want to cache as we will not reach this path again.
-            if (!(symbol is INamespaceOrTypeSymbol namespaceOrType))
+            if (symbol is not INamespaceOrTypeSymbol namespaceOrType)
             {
                 return await getAllActionsAsync(this, symbol, analyzer, analysisState, cancellationToken).ConfigureAwait(false);
             }

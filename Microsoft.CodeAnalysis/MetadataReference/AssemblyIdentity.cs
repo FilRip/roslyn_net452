@@ -58,10 +58,12 @@ namespace Microsoft.CodeAnalysis
 
         internal const int PublicKeyTokenSize = 8;
 
+#nullable restore
+
         private AssemblyIdentity(AssemblyIdentity other, Version version)
         {
-            Debug.Assert((object)other != null);
-            Debug.Assert((object)version != null);
+            Debug.Assert(other is object);
+            Debug.Assert(version is object);
 
             _contentType = other.ContentType;
             _name = other._name;
@@ -76,6 +78,8 @@ namespace Microsoft.CodeAnalysis
         }
 
         internal AssemblyIdentity WithVersion(Version version) => (version == _version) ? this : new AssemblyIdentity(this, version);
+
+#nullable enable
 
         /// <summary>
         /// Constructs an <see cref="AssemblyIdentity"/> from its constituent parts.
@@ -157,9 +161,11 @@ namespace Microsoft.CodeAnalysis
         }
 
         // asserting constructor used by SourceAssemblySymbol:
+#nullable restore
         public AssemblyIdentity(
             string name,
             Version version,
+#nullable enable
             string? cultureName,
             ImmutableArray<byte> publicKeyOrToken,
             bool hasPublicKey)
@@ -168,6 +174,8 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(IsValid(version));
             Debug.Assert(IsValidCultureName(cultureName));
             Debug.Assert((hasPublicKey && MetadataHelpers.IsValidPublicKey(publicKeyOrToken)) || (!hasPublicKey && (publicKeyOrToken.IsDefaultOrEmpty || publicKeyOrToken.Length == PublicKeyTokenSize)));
+
+#nullable restore
 
             _name = name;
             _version = version ?? NullVersion;
@@ -181,6 +189,7 @@ namespace Microsoft.CodeAnalysis
         public AssemblyIdentity(
             bool noThrow,
             string name,
+#nullable enable
             Version? version = null,
             string? cultureName = null,
             ImmutableArray<byte> publicKeyOrToken = default,
@@ -192,6 +201,8 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert((hasPublicKey && MetadataHelpers.IsValidPublicKey(publicKeyOrToken)) || (!hasPublicKey && (publicKeyOrToken.IsDefaultOrEmpty || publicKeyOrToken.Length == PublicKeyTokenSize)));
             Debug.Assert(noThrow);
 
+#nullable restore
+
             _name = name;
             _version = version ?? NullVersion;
             _cultureName = NormalizeCultureName(cultureName);
@@ -199,6 +210,8 @@ namespace Microsoft.CodeAnalysis
             _isRetargetable = isRetargetable && _contentType != AssemblyContentType.WindowsRuntime;
             InitializeKey(publicKeyOrToken, hasPublicKey, out _publicKey, out _lazyPublicKeyToken);
         }
+
+#nullable enable
 
         private static string NormalizeCultureName(string? cultureName)
         {
@@ -244,10 +257,13 @@ namespace Microsoft.CodeAnalysis
 
         private static bool IsValidName([NotNullWhen(true)] string? name)
         {
+#nullable restore
             return !string.IsNullOrEmpty(name) && name.IndexOf('\0') < 0;
         }
 
-        internal static readonly Version NullVersion = new Version(0, 0, 0, 0);
+#nullable enable
+
+        internal static readonly Version NullVersion = new(0, 0, 0, 0);
 
         private static bool IsValid(Version? value)
         {
@@ -372,8 +388,11 @@ namespace Microsoft.CodeAnalysis
         /// <param name="right">The operand appearing on the right side of the operator.</param>
         public static bool operator ==(AssemblyIdentity? left, AssemblyIdentity? right)
         {
+#nullable restore
             return EqualityComparer<AssemblyIdentity>.Default.Equals(left, right);
         }
+
+#nullable enable
 
         /// <summary>
         /// Determines whether two <see cref="AssemblyIdentity"/> instances are not equal.
@@ -391,7 +410,7 @@ namespace Microsoft.CodeAnalysis
         /// <param name="obj">The object to be compared with the current instance.</param>
         public bool Equals(AssemblyIdentity? obj)
         {
-            return !ReferenceEquals(obj, null)
+            return obj is not null
                 && (_lazyHashCode == 0 || obj._lazyHashCode == 0 || _lazyHashCode == obj._lazyHashCode)
                 && MemberwiseEqual(this, obj) == true;
         }

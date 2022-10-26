@@ -252,6 +252,8 @@ namespace Microsoft.CodeAnalysis
                             continue;
                         }
 
+#nullable restore
+
                         Debug.Assert(binding.ReferenceIdentity is object);
                         if (!TryResolveMissingReference(
                             requestingReference,
@@ -259,6 +261,7 @@ namespace Microsoft.CodeAnalysis
                             ref implicitReferenceResolutions,
                             resolver,
                             resolutionDiagnostics,
+#nullable enable
                             out AssemblyIdentity? resolvedAssemblyIdentity,
                             out AssemblyMetadata? resolvedAssemblyMetadata,
                             out PortableExecutableReference? resolvedReference))
@@ -534,6 +537,7 @@ namespace Microsoft.CodeAnalysis
 
             // Allow reference and definition identities to differ in version, but not other properties.
             // Don't need to compare if we are reusing a previously resolved reference.
+#nullable restore
             if (isNewlyResolvedReference &&
                 IdentityComparer.Compare(referenceIdentity, resolvedAssembly.Identity) == AssemblyIdentityComparer.ComparisonResult.NotEquivalent)
             {
@@ -694,15 +698,17 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+#nullable enable
+
         private void ReuseAssemblySymbols(BoundInputAssembly[] boundInputs, TAssemblySymbol[] candidateInputAssemblySymbols, ImmutableArray<AssemblyData> assemblies, int corLibraryIndex)
         {
             // Queue of references we need to examine for consistency
-            Queue<AssemblyReferenceCandidate> candidatesToExamine = new Queue<AssemblyReferenceCandidate>();
+            Queue<AssemblyReferenceCandidate> candidatesToExamine = new();
             int totalAssemblies = assemblies.Length;
 
             // A reusable buffer to contain the AssemblySymbols a candidate symbol refers to
             // ⚠ PERF: https://github.com/dotnet/roslyn/issues/47471
-            List<TAssemblySymbol?> candidateReferencedSymbols = new List<TAssemblySymbol?>(1024);
+            List<TAssemblySymbol?> candidateReferencedSymbols = new(1024);
 
             for (int i = 1; i < totalAssemblies; i++)
             {
@@ -769,6 +775,7 @@ namespace Microsoft.CodeAnalysis
                         // which originated the symbols. We need this restriction in order to prevent 
                         // non-interface generic types closed over NoPia local types from crossing 
                         // assembly boundaries.
+#nullable restore
                         if (IsLinked(candidate.AssemblySymbol) != assemblies[candidateIndex].IsLinked)
                         {
                             match = false;
@@ -864,6 +871,7 @@ namespace Microsoft.CodeAnalysis
                         // Check that the COR library used by the candidate assembly symbol is the same as the one use by this compilation.
                         if (match)
                         {
+#nullable enable
                             TAssemblySymbol? candidateCorLibrary = GetCorLibrary(candidate.AssemblySymbol);
 
                             if (candidateCorLibrary == null)
@@ -946,8 +954,11 @@ namespace Microsoft.CodeAnalysis
         {
             var value = assemblyReferencesBySimpleName[identity.Name][0];
             Debug.Assert(value.Identity is object);
+#nullable restore
             return value.Identity.Version != identity.Version;
         }
+
+#nullable enable
 
         private static int IndexOfCorLibrary(ImmutableArray<AssemblyData> assemblies, IReadOnlyDictionary<string, List<ReferencedAssemblyIdentity>> assemblyReferencesBySimpleName, bool supersedeLowerVersions)
         {

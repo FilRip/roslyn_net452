@@ -20,7 +20,7 @@ namespace Microsoft.DiaSymReader
     {
         // SymWriter doesn't use any methods from this interface except for GetTokenFromSig, which is only called when 
         // DefineLocalVariable(2) and DefineConstant(2) don't specify signature token, or the token is nil.
-
+#pragma warning disable IDE1006
         void __SetModuleProps();
         void __Save();
         void __SaveToStream();
@@ -74,5 +74,6 @@ namespace Microsoft.DiaSymReader
         void __SetFieldRVA();
         void __Merge();
         void __MergeEnd();
+#pragma warning restore IDE1006
     }
 }

@@ -20,6 +20,8 @@ using Roslyn.Utilities;
 
 using SystemExtensions;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>
@@ -82,7 +84,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal virtual bool IsTargetAttribute(string namespaceName, string typeName)
         {
-
+#nullable restore
             if (!this.AttributeClass.Name.Equals(typeName))
             {
                 return false;
@@ -144,6 +146,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
 
         // for testing and debugging only
+
+#nullable enable
 
         /// <summary>
         /// Returns the <see cref="System.String"/> that represents the current AttributeData.
@@ -258,7 +262,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             arguments.GetOrCreateData<T>().HasSkipLocalsInitAttribute = true;
             if (!compilation.Options.AllowUnsafe)
             {
+#nullable restore
                 ((BindingDiagnosticBag)arguments.Diagnostics).Add(ErrorCode.ERR_IllegalUnsafe, arguments.AttributeSyntaxOpt.Location);
+#nullable enable
             }
         }
 
@@ -308,7 +314,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
+#nullable restore
             ((BindingDiagnosticBag)arguments.Diagnostics).Add(ErrorCode.WRN_MemberNotNullBadMember, arguments.AttributeSyntaxOpt.Location, memberName);
+#nullable enable
         }
 
         internal static void DecodeMemberNotNullWhenAttribute<T>(TypeSymbol type, ref DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation> arguments)
@@ -390,8 +398,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private DeclarativeSecurityAction DecodeSecurityAction(TypedConstant typedValue, Symbol targetSymbol, AttributeSyntax? nodeOpt, BindingDiagnosticBag diagnostics, out bool hasErrors)
         {
-
+#nullable restore
             int securityAction = (int)typedValue.ValueInternal;
+#nullable enable
             bool isPermissionRequestAction;
 
             switch (securityAction)
@@ -515,6 +524,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (namedArgs.Length == 1)
             {
+#nullable restore
                 var namedArg = namedArgs[0];
                 NamedTypeSymbol attrType = this.AttributeClass;
                 string filePropName = PermissionSetAttributeWithFileReference.FilePropertyName;
@@ -524,6 +534,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     PermissionSetAttributeTypeHasRequiredProperty(attrType, filePropName))
                 {
                     // resolve file prop path
+#nullable enable
                     var fileName = (string?)namedArg.Value.ValueInternal;
                     var resolver = compilation.Options.XmlReferenceResolver;
 
@@ -560,7 +571,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var property = (PropertySymbol)members[0];
                 if (property.TypeWithAnnotations.HasType && property.Type.SpecialType == SpecialType.System_String &&
                     property.DeclaredAccessibility == Accessibility.Public && property.GetMemberArity() == 0 &&
-                    (object)property.SetMethod != null && property.SetMethod.DeclaredAccessibility == Accessibility.Public)
+                    property.SetMethod is object && property.SetMethod.DeclaredAccessibility == Accessibility.Public)
                 {
                     return true;
                 }

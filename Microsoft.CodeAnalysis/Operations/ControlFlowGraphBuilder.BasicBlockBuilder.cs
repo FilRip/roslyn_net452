@@ -59,6 +59,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     _statements = ArrayBuilder<IOperation>.GetInstance();
                 }
 
+#nullable restore
                 _statements.Add(operation);
             }
 
@@ -122,6 +123,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 }
             }
 
+#nullable enable
+
             public BasicBlockBuilder? GetSingletonPredecessorOrDefault()
             {
                 if (_predecessors != null)
@@ -143,6 +146,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     return null;
                 }
             }
+
+#nullable restore
 
             public void AddPredecessor(BasicBlockBuilder predecessor)
             {
@@ -316,6 +321,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 _predecessor1 = null;
                 _predecessor2 = null;
             }
+
+#nullable enable
 
             internal struct Branch
             {

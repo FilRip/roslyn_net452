@@ -87,7 +87,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     alternate.Add(visited)
                 End If
 
-                i = i + 1
+                i += 1
             End While
 
             If alternate IsNot Nothing Then
@@ -105,7 +105,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim alternate As SyntaxTokenListBuilder = Nothing
             Dim i = -1, n = list.Count
             For Each item In list
-                i = i + 1
+                i += 1
 
                 Dim visited = Me.VisitListElement(item)
                 If item <> visited AndAlso alternate Is Nothing Then

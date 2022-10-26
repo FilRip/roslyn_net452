@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            return obj is LocalSlotDebugInfo && Equals((LocalSlotDebugInfo)obj);
+            return obj is LocalSlotDebugInfo info && Equals(info);
         }
 
         public override int GetHashCode()

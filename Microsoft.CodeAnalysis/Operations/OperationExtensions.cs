@@ -328,6 +328,8 @@ namespace Microsoft.CodeAnalysis.Operations
         {
             Debug.Assert(operation != null);
 
+#nullable restore
+
             while (operation.Parent != null)
             {
                 operation = operation.Parent;
@@ -335,6 +337,8 @@ namespace Microsoft.CodeAnalysis.Operations
 
             return operation;
         }
+
+#nullable enable
 
         /// <summary>
         /// Gets either a loop or a switch operation that corresponds to the given branch operation.

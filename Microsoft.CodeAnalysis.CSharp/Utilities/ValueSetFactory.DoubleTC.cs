@@ -12,13 +12,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
     internal static partial class ValueSetFactory
     {
-        private struct DoubleTC : FloatingTC<double>, INumericTC<double>
+        private struct DoubleTC : IFloatingTC<double>, INumericTC<double>
         {
             double INumericTC<double>.MinValue => double.NegativeInfinity;
 
             double INumericTC<double>.MaxValue => double.PositiveInfinity;
 
-            double FloatingTC<double>.NaN => double.NaN;
+            double IFloatingTC<double>.NaN => double.NaN;
 
             double INumericTC<double>.Zero => 0.0;
 

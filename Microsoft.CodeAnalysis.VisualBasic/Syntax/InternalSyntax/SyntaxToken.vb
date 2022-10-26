@@ -231,7 +231,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Return Nothing
         End Function
 
-        Private ReadOnly Property _leadingTriviaWidth() As Integer
+        Private ReadOnly Property LeadingTriviaWidth() As Integer
             Get
                 Dim t = TryCast(_trailingTriviaOrTriviaInfo, TriviaInfo)
                 If t IsNot Nothing Then
@@ -243,7 +243,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         ' Get the width of the leading trivia
         Public NotOverridable Overrides Function GetLeadingTriviaWidth() As Integer
-            Return _leadingTriviaWidth()
+            Return LeadingTriviaWidth()
         End Function
 
         ' Get the following trivia as GreenNode array.
@@ -261,7 +261,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         ' Get the width of the following trivia
         Public NotOverridable Overrides Function GetTrailingTriviaWidth() As Integer
-            Return FullWidth - _text.Length - _leadingTriviaWidth()
+            Return FullWidth - _text.Length - LeadingTriviaWidth()
         End Function
 
         Friend NotOverridable Overrides Sub AddSyntaxErrors(accumulatedErrors As List(Of DiagnosticInfo))

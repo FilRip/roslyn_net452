@@ -201,21 +201,13 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             }
 
             var tc = ts.PrimitiveTypeCode;
-            switch (tc)
+            return tc switch
             {
-                case Microsoft.Cci.PrimitiveTypeCode.Float32:
-                case Microsoft.Cci.PrimitiveTypeCode.Float64:
-                    return false;
-
-                case Microsoft.Cci.PrimitiveTypeCode.NotPrimitive:
-                    // if this is a generic type param, verifier will want us to box
-                    // EmitCondBranch knows that
-                    return ts.IsReferenceType;
-
-                default:
-
-                    return true;
-            }
+                Cci.PrimitiveTypeCode.Float32 or Cci.PrimitiveTypeCode.Float64 => false,
+                Cci.PrimitiveTypeCode.NotPrimitive => ts.IsReferenceType,// if this is a generic type param, verifier will want us to box
+                                                                         // EmitCondBranch knows that
+                _ => true,
+            };
         }
 
         private static BoundExpression TryReduce(BoundBinaryOperator condition, ref bool sense)
@@ -390,7 +382,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
                 if (taken)
                 {
-                    dest = dest ?? new object();
+                    dest ??= new object();
                     _builder.EmitBranch(ILOpCode.Br, dest);
                 }
                 else
@@ -461,7 +453,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                             EmitExpression(binOp.Right, true);
                             ILOpCode revOpCode;
                             ilcode = CodeForJump(binOp, sense, out revOpCode);
-                            dest = dest ?? new object();
+                            dest ??= new object();
                             _builder.EmitBranch(ilcode, dest, revOpCode);
                             return;
                     }
@@ -541,7 +533,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     _builder.EmitOpCode(ILOpCode.Isinst);
                     EmitSymbolToken(isOp.TargetType.Type, isOp.TargetType.Syntax);
                     ilcode = sense ? ILOpCode.Brtrue : ILOpCode.Brfalse;
-                    dest = dest ?? new object();
+                    dest ??= new object();
                     _builder.EmitBranch(ilcode, dest);
                     return;
 
@@ -560,7 +552,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     }
 
                     ilcode = sense ? ILOpCode.Brtrue : ILOpCode.Brfalse;
-                    dest = dest ?? new object();
+                    dest ??= new object();
                     _builder.EmitBranch(ilcode, dest);
                     return;
             }
@@ -600,8 +592,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
             //sometimes top level node is a statement list containing 
             //epilogue and then a block. If we are having that block, it will do.
-            var list = _boundBody as BoundStatementList;
-            if (list != null && list.Statements.LastOrDefault() == block)
+            if (_boundBody is BoundStatementList list && list.Statements.LastOrDefault() == block)
             {
                 return true;
             }
@@ -725,7 +716,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             {
                 // NOTE: passing "ReadOnlyStrict" here. 
                 //       we should never return an address of a copy
-                var unexpectedTemp = this.EmitAddress(expressionOpt, this._method.RefKind == RefKind.RefReadOnly ? AddressKind.ReadOnlyStrict : AddressKind.Writeable);
+                this.EmitAddress(expressionOpt, this._method.RefKind == RefKind.RefReadOnly ? AddressKind.ReadOnlyStrict : AddressKind.Writeable);
             }
 
             if (ShouldUseIndirectReturn())
@@ -899,7 +890,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // converts to what we want.
             if (catchBlock.ExceptionFilterOpt == null)
             {
-                var exceptionType = ((object)catchBlock.ExceptionTypeOpt != null) ?
+                var exceptionType = (catchBlock.ExceptionTypeOpt is object) ?
                     _module.Translate(catchBlock.ExceptionTypeOpt, catchBlock.Syntax, _diagnostics) :
                     _module.GetSpecialType(SpecialType.System_Object, catchBlock.Syntax, _diagnostics);
 
@@ -915,8 +906,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 // the exception variable is not visible. 
                 if (_emitPdbSequencePoints)
                 {
-                    var syntax = catchBlock.Syntax as CatchClauseSyntax;
-                    if (syntax != null)
+                    if (catchBlock.Syntax is CatchClauseSyntax syntax)
                     {
                         TextSpan spSpan;
                         var declaration = syntax.Declaration;
@@ -945,7 +935,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 var typeCheckPassedLabel = new object();
                 typeCheckFailedLabel = new object();
 
-                if ((object)catchBlock.ExceptionTypeOpt != null)
+                if (catchBlock.ExceptionTypeOpt is object)
                 {
                     var exceptionType = _module.Translate(catchBlock.ExceptionTypeOpt, catchBlock.Syntax, _diagnostics);
 
@@ -1006,8 +996,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     case BoundKind.FieldAccess:
                         var left = (BoundFieldAccess)exceptionSource;
 
-                        var stateMachineField = left.FieldSymbol as StateMachineFieldSymbol;
-                        if (((object)stateMachineField != null) && (stateMachineField.SlotIndex >= 0))
+                        if ((left.FieldSymbol is StateMachineFieldSymbol stateMachineField) && (stateMachineField.SlotIndex >= 0))
                         {
                             _builder.DefineUserDefinedStateMachineHoistedLocal(stateMachineField.SlotIndex);
                         }
@@ -1017,7 +1006,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                         var temp = AllocateTemp(exceptionSource.Type, exceptionSource.Syntax);
                         _builder.EmitLocalStore(temp);
 
-                        var receiverTemp = EmitReceiverRef(left.ReceiverOpt, AddressKind.Writeable);
+                        EmitReceiverRef(left.ReceiverOpt, AddressKind.Writeable);
 
                         _builder.EmitLocalLoad(temp);
                         FreeTemp(temp);
@@ -1208,40 +1197,39 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 stringLengthRef = _module.Translate(stringLengthMethod, syntaxNode, _diagnostics);
             }
 
-            SwitchStringJumpTableEmitter.EmitStringCompareAndBranch emitStringCondBranchDelegate =
-                (keyArg, stringConstant, targetLabel) =>
+            void emitStringCondBranchDelegate(LocalOrParameter keyArg, ConstantValue stringConstant, object targetLabel)
+            {
+                if (stringConstant == ConstantValue.Null)
                 {
-                    if (stringConstant == ConstantValue.Null)
-                    {
-                        // if (key == null)
-                        //      goto targetLabel
-                        _builder.EmitLoad(keyArg);
-                        _builder.EmitBranch(ILOpCode.Brfalse, targetLabel, ILOpCode.Brtrue);
-                    }
-                    else if (stringConstant.StringValue.Length == 0 && stringLengthRef != null)
-                    {
-                        // if (key != null && key.Length == 0)
-                        //      goto targetLabel
+                    // if (key == null)
+                    //      goto targetLabel
+                    _builder.EmitLoad(keyArg);
+                    _builder.EmitBranch(ILOpCode.Brfalse, targetLabel, ILOpCode.Brtrue);
+                }
+                else if (stringConstant.StringValue.Length == 0 && stringLengthRef != null)
+                {
+                    // if (key != null && key.Length == 0)
+                    //      goto targetLabel
 
-                        object skipToNext = new object();
-                        _builder.EmitLoad(keyArg);
-                        _builder.EmitBranch(ILOpCode.Brfalse, skipToNext, ILOpCode.Brtrue);
+                    object skipToNext = new();
+                    _builder.EmitLoad(keyArg);
+                    _builder.EmitBranch(ILOpCode.Brfalse, skipToNext, ILOpCode.Brtrue);
 
-                        _builder.EmitLoad(keyArg);
-                        // Stack: key --> length
-                        _builder.EmitOpCode(ILOpCode.Call, 0);
-                        var diag = DiagnosticBag.GetInstance();
-                        _builder.EmitToken(stringLengthRef, null, diag);
-                        diag.Free();
+                    _builder.EmitLoad(keyArg);
+                    // Stack: key --> length
+                    _builder.EmitOpCode(ILOpCode.Call, 0);
+                    var diag = DiagnosticBag.GetInstance();
+                    _builder.EmitToken(stringLengthRef, null, diag);
+                    diag.Free();
 
-                        _builder.EmitBranch(ILOpCode.Brfalse, targetLabel, ILOpCode.Brtrue);
-                        _builder.MarkLabel(skipToNext);
-                    }
-                    else
-                    {
-                        this.EmitStringCompareAndBranch(key, syntaxNode, stringConstant, targetLabel, stringEqualityMethodRef);
-                    }
-                };
+                    _builder.EmitBranch(ILOpCode.Brfalse, targetLabel, ILOpCode.Brtrue);
+                    _builder.MarkLabel(skipToNext);
+                }
+                else
+                {
+                    this.EmitStringCompareAndBranch(key, syntaxNode, stringConstant, targetLabel, stringEqualityMethodRef);
+                }
+            }
 
             _builder.EmitStringSwitchJumpTable(
                 caseLabels: switchCaseLabels,

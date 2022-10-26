@@ -9,6 +9,8 @@ using System.Reflection.Metadata;
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>
@@ -103,6 +105,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // We have no named ctor arguments AND no default arguments.
 
+#nullable restore
                 return attributeSyntax.ArgumentList.Arguments[parameterIndex];
             }
             else
@@ -120,6 +123,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
         }
+
+#nullable enable
 
         public override bool IsConditionallyOmitted
         {

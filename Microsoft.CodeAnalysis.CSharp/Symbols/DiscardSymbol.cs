@@ -4,6 +4,8 @@
 
 using System.Collections.Immutable;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     public sealed class DiscardSymbol : Symbol

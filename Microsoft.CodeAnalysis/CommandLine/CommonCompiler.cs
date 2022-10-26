@@ -1454,8 +1454,8 @@ namespace Microsoft.CodeAnalysis
             getFormattedTime = d => d < 0.001 ?
                 string.Format(culture, "{0,8:<0.000}", 0.001) :
                 string.Format(culture, "{0,8:##0.000}", d);
-            Func<int, string> getFormattedPercentage = i => string.Format("{0,5}", i < 1 ? "<1" : i.ToString());
-            Func<string?, string> getFormattedAnalyzerName = s => "   " + s;
+            string getFormattedPercentage(int i) => string.Format("{0,5}", i < 1 ? "<1" : i.ToString());
+            string getFormattedAnalyzerName(string? s) => "   " + s;
 
             // Table header
             var analyzerTimeColumn = string.Format("{0,8}", Properties.Resources.AnalyzerExecutionTimeColumnHeader);

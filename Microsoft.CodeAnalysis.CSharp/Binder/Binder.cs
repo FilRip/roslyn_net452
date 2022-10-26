@@ -84,7 +84,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
+#nullable restore
                 return Next;
+#nullable enable
             }
         }
 
@@ -153,6 +155,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal virtual Binder? GetBinder(SyntaxNode node)
         {
+#nullable restore
             return this.Next.GetBinder(node);
         }
 
@@ -186,6 +189,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// If this binder owns a scope for locals, return syntax node that is used
         /// as the scope designator. Otherwise, null.
         /// </summary>
+#nullable enable
         internal virtual SyntaxNode? ScopeDesignator
         {
             get
@@ -224,7 +228,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
+#nullable restore
                 return Next.ContainingMemberOrLambda;
+#nullable enable
             }
         }
 
@@ -250,6 +256,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal bool AreNullableAnnotationsEnabled(SyntaxToken token)
         {
+#nullable restore
             return AreNullableAnnotationsEnabled(token.SyntaxTree, token.SpanStart);
         }
 
@@ -266,19 +273,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected bool GetGlobalAnnotationState()
         {
-            switch (Compilation.Options.NullableContextOptions)
+            return Compilation.Options.NullableContextOptions switch
             {
-                case NullableContextOptions.Enable:
-                case NullableContextOptions.Annotations:
-                    return true;
-
-                case NullableContextOptions.Disable:
-                case NullableContextOptions.Warnings:
-                    return false;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(Compilation.Options.NullableContextOptions);
-            }
+                NullableContextOptions.Enable or NullableContextOptions.Annotations => true,
+                NullableContextOptions.Disable or NullableContextOptions.Warnings => false,
+                _ => throw ExceptionUtilities.UnexpectedValue(Compilation.Options.NullableContextOptions),
+            };
         }
 
         /// <summary>
@@ -325,6 +325,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
         /// <summary>
         /// If we are inside a context where a break statement is legal,
         /// returns the <see cref="GeneratedLabelSymbol"/> that a break statement would branch to.
@@ -334,6 +335,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
+#nullable restore
                 return Next.BreakLabel;
             }
         }
@@ -343,10 +345,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// returns the <see cref="GeneratedLabelSymbol"/> that a continue statement would branch to.
         /// Returns null otherwise.
         /// </summary>
+#nullable enable
         internal virtual GeneratedLabelSymbol? ContinueLabel
         {
             get
             {
+#nullable restore
                 return Next.ContinueLabel;
             }
         }
@@ -364,10 +368,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// The imports for all containing namespace declarations (innermost-to-outermost, including global),
         /// or null if there are none.
         /// </summary>
+#nullable enable
         internal virtual ImportChain? ImportChain
         {
             get
             {
+#nullable restore
                 return Next.ImportChain;
             }
         }
@@ -395,6 +401,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// The type containing the binding context
         /// </summary>
+#nullable enable
         internal NamedTypeSymbol? ContainingType
         {
             get
@@ -418,19 +425,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             get
             {
                 var containingMember = this.ContainingMemberOrLambda;
-                switch (containingMember?.Kind)
+                return (containingMember?.Kind) switch
                 {
-                    case SymbolKind.Method:
-                        // global statements
-                        return ((MethodSymbol)containingMember).IsScriptInitializer;
-
-                    case SymbolKind.NamedType:
-                        // script variable initializers
-                        return ((NamedTypeSymbol)containingMember).IsScriptClass;
-
-                    default:
-                        return false;
-                }
+                    SymbolKind.Method => ((MethodSymbol)containingMember).IsScriptInitializer,// global statements
+                    SymbolKind.NamedType => ((NamedTypeSymbol)containingMember).IsScriptClass,// script variable initializers
+                    _ => false,
+                };
             }
         }
 
@@ -438,6 +438,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
+#nullable restore
                 return this.Next.ConstantFieldsInProgress;
             }
         }
@@ -450,22 +451,27 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
         internal virtual LocalSymbol? LocalInProgress
         {
             get
             {
+#nullable restore
                 return this.Next.LocalInProgress;
             }
         }
 
+#nullable enable
         internal virtual BoundExpression? ConditionalReceiverExpression
         {
             get
             {
+#nullable restore
                 return this.Next.ConditionalReceiverExpression;
             }
         }
 
+#nullable enable
         private Conversions? _lazyConversions;
         internal Conversions Conversions
         {
@@ -527,6 +533,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal static void Error(BindingDiagnosticBag diagnostics, ErrorCode code, SyntaxNodeOrToken syntax)
         {
             var location = syntax.GetLocation();
+#nullable restore
             Error(diagnostics, code, location);
         }
 
@@ -534,6 +541,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var location = syntax.GetLocation();
             Error(diagnostics, code, location, args);
+#nullable enable
         }
 
         internal static void Error(BindingDiagnosticBag diagnostics, ErrorCode code, Location location)
@@ -795,7 +803,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol getType()
             {
+#nullable restore
                 return expression.Type;
+#nullable enable
             }
         }
 
@@ -860,7 +870,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     current = new TreeDumperNode(description, null, sub);
                 }
 
+#nullable restore
                 return current;
+#nullable enable
             }
 
             static (string description, string? snippet, string locals) print(Binder scope)

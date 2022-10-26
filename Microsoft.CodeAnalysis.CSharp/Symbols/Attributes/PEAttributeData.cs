@@ -8,6 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection.Metadata;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 {
     /// <summary>
@@ -75,16 +77,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 #pragma warning disable 0252
             if ((object?)_lazyAttributeClass == ErrorTypeSymbol.UnknownResultType)
             {
-
+#nullable restore
                 if (!_decoder.GetCustomAttribute(_handle, out TypeSymbol attributeClass, out MethodSymbol attributeConstructor))
                 {
                     // TODO: should we create CSErrorTypeSymbol for attribute class??
                     _lazyHasErrors = ThreeState.True;
                 }
-                else if ((object)attributeClass == null || attributeClass.IsErrorType() || (object)attributeConstructor == null)
+                else if (attributeClass is null || attributeClass.IsErrorType() || attributeConstructor is null)
                 {
                     _lazyHasErrors = ThreeState.True;
                 }
+#nullable enable
 
                 Interlocked.CompareExchange(ref _lazyAttributeConstructor, attributeConstructor, null);
                 Interlocked.CompareExchange(ref _lazyAttributeClass, (NamedTypeSymbol?)attributeClass, ErrorTypeSymbol.UnknownResultType); // Serves as a flag, so do it last.

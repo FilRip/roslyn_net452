@@ -261,7 +261,7 @@ namespace Roslyn.Utilities
                         oldChange = new TextChangeRange(oldChange.Span, oldChange.NewLength - newChange.SpanLength);
 
                         // the new change deletion is equal to the subset of the old change insertion that we are consuming this iteration
-                        oldDelta = oldDelta + newChange.SpanLength;
+                        oldDelta += newChange.SpanLength;
 
                         // since the new change insertion occurs before the old change, consume it now
                         newChange = new UnadjustedNewChange(newChange.SpanEnd, spanLength: 0, newChange.NewLength);

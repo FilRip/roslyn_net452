@@ -9,7 +9,7 @@ Imports Microsoft.CodeAnalysis.Text
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
-    Partial Friend MustInherit Class AbstractFlowPass(Of LocalState As AbstractLocalState)
+    Partial Friend MustInherit Class AbstractFlowPass(Of LocalState As IAbstractLocalState)
         Inherits BoundTreeVisitor
 
         ''' <summary> Start of the region being analyzed, or Nothing if it is not a region based analysis </summary>

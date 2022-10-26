@@ -24,22 +24,19 @@ namespace Microsoft.CodeAnalysis.CodeGen
     {
         public static void VisitReference(Cci.IReference reference, EmitContext context)
         {
-            var typeReference = reference as Cci.ITypeReference;
-            if (typeReference != null)
+            if (reference is Cci.ITypeReference typeReference)
             {
                 VisitTypeReference(typeReference, context);
                 return;
             }
 
-            var methodReference = reference as Cci.IMethodReference;
-            if (methodReference != null)
+            if (reference is Cci.IMethodReference methodReference)
             {
                 VisitMethodReference(methodReference, context);
                 return;
             }
 
-            var fieldReference = reference as Cci.IFieldReference;
-            if (fieldReference != null)
+            if (reference is Cci.IFieldReference fieldReference)
             {
                 VisitFieldReference(fieldReference, context);
                 return;
@@ -50,15 +47,13 @@ namespace Microsoft.CodeAnalysis.CodeGen
         {
             RoslynDebug.Assert(typeReference != null);
 
-            Cci.IArrayTypeReference? arrayType = typeReference as Cci.IArrayTypeReference;
-            if (arrayType != null)
+            if (typeReference is Cci.IArrayTypeReference arrayType)
             {
                 VisitTypeReference(arrayType.GetElementType(context), context);
                 return;
             }
 
-            Cci.IPointerTypeReference? pointerType = typeReference as Cci.IPointerTypeReference;
-            if (pointerType != null)
+            if (typeReference is Cci.IPointerTypeReference pointerType)
             {
                 VisitTypeReference(pointerType.GetTargetType(context), context);
                 return;
@@ -71,8 +66,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             //    return;
             //}
 
-            Cci.IModifiedTypeReference? modifiedType = typeReference as Cci.IModifiedTypeReference;
-            if (modifiedType != null)
+            if (typeReference is Cci.IModifiedTypeReference modifiedType)
             {
                 foreach (var custModifier in modifiedType.CustomModifiers)
                 {

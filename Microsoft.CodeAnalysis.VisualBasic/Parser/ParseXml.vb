@@ -1676,7 +1676,7 @@ lFailed:
             Dim text = tk.ValueText
 
             If Not String.IsNullOrEmpty(text) Then
-                If Not isStartNameChar(text(0)) Then
+                If Not IsStartNameChar(text(0)) Then
                     Dim ch = text(0)
                     Return ReportSyntaxError(tk,
                         ERRID.ERR_IllegalXmlStartNameChar,
@@ -1685,7 +1685,7 @@ lFailed:
                 End If
 
                 For Each ch In text
-                    If Not isNameChar(ch) Then
+                    If Not IsNameChar(ch) Then
                         Return ReportSyntaxError(tk,
                             ERRID.ERR_IllegalXmlNameChar,
                             ch,

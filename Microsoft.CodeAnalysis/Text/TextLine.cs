@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis.Text
                     return 0;
                 }
 
-                TextUtilities.GetStartAndLengthOfLineBreakEndingAt(_text, _endIncludingBreaks - 1, out int startLineBreak, out int lineBreakLength);
+                TextUtilities.GetStartAndLengthOfLineBreakEndingAt(_text, _endIncludingBreaks - 1, out _, out int lineBreakLength);
                 return lineBreakLength;
             }
         }
@@ -188,9 +188,9 @@ namespace Microsoft.CodeAnalysis.Text
 
         public override bool Equals(object? obj)
         {
-            if (obj is TextLine)
+            if (obj is TextLine line)
             {
-                return Equals((TextLine)obj);
+                return Equals(line);
             }
 
             return false;

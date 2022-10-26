@@ -17,8 +17,6 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public class CSharpCommandLineParser : CommandLineParser
@@ -36,6 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected override string RegularFileExtension { get { return ".cs"; } }
         protected override string ScriptFileExtension { get { return ".csx"; } }
 
+#nullable enable
         protected sealed override CommandLineArguments CommonParse(IEnumerable<string> args, string baseDirectory, string? sdkDirectory, string? additionalReferenceDirectories)
         {
             return Parse(args, baseDirectory, sdkDirectory, additionalReferenceDirectories);
@@ -52,10 +51,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         public new CSharpCommandLineArguments Parse(IEnumerable<string> args, string? baseDirectory, string? sdkDirectory, string? additionalReferenceDirectories = null)
         {
 
-            List<Diagnostic> diagnostics = new List<Diagnostic>();
-            List<string> flattenedArgs = new List<string>();
-            List<string>? scriptArgs = IsScriptCommandLineParser ? new List<string>() : null;
-            List<string>? responsePaths = IsScriptCommandLineParser ? new List<string>() : null;
+            List<Diagnostic> diagnostics = new();
+            List<string> flattenedArgs = new();
+            List<string>? scriptArgs = IsScriptCommandLineParser ? new() : null;
+            List<string>? responsePaths = IsScriptCommandLineParser ? new() : null;
             FlattenArgs(args, diagnostics, flattenedArgs, scriptArgs, baseDirectory, responsePaths);
 
             string? appConfigPath = null;
@@ -98,23 +97,23 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool? delaySignSetting = null;
             string? keyFileSetting = null;
             string? keyContainerSetting = null;
-            List<ResourceDescription> managedResources = new List<ResourceDescription>();
-            List<CommandLineSourceFile> sourceFiles = new List<CommandLineSourceFile>();
-            List<CommandLineSourceFile> additionalFiles = new List<CommandLineSourceFile>();
+            List<ResourceDescription> managedResources = new();
+            List<CommandLineSourceFile> sourceFiles = new();
+            List<CommandLineSourceFile> additionalFiles = new();
             var analyzerConfigPaths = ArrayBuilder<string>.GetInstance();
-            List<CommandLineSourceFile> embeddedFiles = new List<CommandLineSourceFile>();
+            List<CommandLineSourceFile> embeddedFiles = new();
             bool sourceFilesSpecified = false;
             bool embedAllSourceFiles = false;
             bool resourcesOrModulesSpecified = false;
             Encoding? codepage = null;
             var checksumAlgorithm = SourceHashAlgorithmUtils.DefaultContentHashAlgorithm;
             var defines = ArrayBuilder<string>.GetInstance();
-            List<CommandLineReference> metadataReferences = new List<CommandLineReference>();
-            List<CommandLineAnalyzerReference> analyzers = new List<CommandLineAnalyzerReference>();
-            List<string> libPaths = new List<string>();
-            List<string> sourcePaths = new List<string>();
-            List<string> keyFileSearchPaths = new List<string>();
-            List<string> usings = new List<string>();
+            List<CommandLineReference> metadataReferences = new();
+            List<CommandLineAnalyzerReference> analyzers = new();
+            List<string> libPaths = new();
+            List<string> sourcePaths = new();
+            List<string> keyFileSearchPaths = new();
+            List<string> usings = new();
             var generalDiagnosticOption = ReportDiagnostic.Default;
             var diagnosticOptions = new Dictionary<string, ReportDiagnostic>();
             var noWarns = new Dictionary<string, ReportDiagnostic>();
@@ -124,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool printFullPaths = false;
             string? moduleAssemblyName = null;
             string? moduleName = null;
-            List<string> features = new List<string>();
+            List<string> features = new();
             string? runtimeMetadataVersion = null;
             bool errorEndLocation = false;
             bool reportAnalyzer = false;
@@ -144,6 +143,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 foreach (string arg in flattenedArgs)
                 {
+#nullable restore
                     if (TryParseOption(arg, out string name, out string value) && (name == "ruleset"))
                     {
                         var unquoted = RemoveQuotesAndSlashes(value);
@@ -542,7 +542,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             continue;
 
                         case "moduleassemblyname":
-                            value = value != null ? value.Unquote() : null;
+                            value = value?.Unquote();
 
                             if (RoslynString.IsNullOrEmpty(value))
                             {
@@ -627,7 +627,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 AddDiagnostic(diagnostics, ErrorCode.ERR_SwitchNeedsString, MessageID.IDS_Text.Localize(), arg);
                                 continue;
                             }
+#nullable enable
                             string? unquoted = RemoveQuotesAndSlashes(value);
+#nullable restore
                             if (RoslynString.IsNullOrEmpty(unquoted))
                             {
                                 // CONSIDER: This diagnostic exactly matches dev11, but it would be simpler (and more consistent with /out)
@@ -1530,13 +1532,16 @@ namespace Microsoft.CodeAnalysis.CSharp
             };
         }
 
+#nullable enable
         private static void ParseAndResolveReferencePaths(string? switchName, string? switchValue, string? baseDirectory, List<string> builder, MessageID origin, List<Diagnostic> diagnostics)
         {
             if (string.IsNullOrEmpty(switchValue))
             {
+#nullable restore
                 AddDiagnostic(diagnostics, ErrorCode.ERR_SwitchNeedsString, MessageID.IDS_PathList.Localize(), switchName);
                 return;
             }
+#nullable enable
 
             foreach (string path in ParseSeparatedPaths(switchValue))
             {
@@ -1912,6 +1917,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool embedded)
         {
 
+#nullable restore
             ParseResourceDescription(
                 resourceDescriptor,
                 baseDirectory,
@@ -1955,12 +1961,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return null;
             }
 
-            Func<Stream> dataProvider = () =>
-                                            {
-                                                // Use FileShare.ReadWrite because the file could be opened by the current process.
-                                                // For example, it is an XML doc file produced by the build.
-                                                return new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                                            };
+            Stream dataProvider()
+            {
+                // Use FileShare.ReadWrite because the file could be opened by the current process.
+                // For example, it is an XML doc file produced by the build.
+                return new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            }
             return new ResourceDescription(resourceName, fileName, dataProvider, isPublic, embedded, checkArgs: false);
         }
 

@@ -36,69 +36,69 @@ namespace Microsoft.CodeAnalysis
         {
             _descriptors = new DiagnosticDescriptorSet();
 
-            _writer.WriteObjectStart(); // root
-            _writer.Write("$schema", "http://json.schemastore.org/sarif-1.0.0");
-            _writer.Write("version", "1.0.0");
-            _writer.WriteArrayStart("runs");
-            _writer.WriteObjectStart(); // run
+            My_writer.WriteObjectStart(); // root
+            My_writer.Write("$schema", "http://json.schemastore.org/sarif-1.0.0");
+            My_writer.Write("version", "1.0.0");
+            My_writer.WriteArrayStart("runs");
+            My_writer.WriteObjectStart(); // run
 
-            _writer.WriteObjectStart("tool");
-            _writer.Write("name", toolName);
-            _writer.Write("version", toolAssemblyVersion.ToString());
-            _writer.Write("fileVersion", toolFileVersion);
-            _writer.Write("semanticVersion", toolAssemblyVersion.ToString(fieldCount: 3));
-            _writer.Write("language", culture.Name);
-            _writer.WriteObjectEnd(); // tool
+            My_writer.WriteObjectStart("tool");
+            My_writer.Write("name", toolName);
+            My_writer.Write("version", toolAssemblyVersion.ToString());
+            My_writer.Write("fileVersion", toolFileVersion);
+            My_writer.Write("semanticVersion", toolAssemblyVersion.ToString(fieldCount: 3));
+            My_writer.Write("language", culture.Name);
+            My_writer.WriteObjectEnd(); // tool
 
-            _writer.WriteArrayStart("results");
+            My_writer.WriteArrayStart("results");
         }
 
         protected override string PrimaryLocationPropertyName => "resultFile";
 
         public override void LogDiagnostic(Diagnostic diagnostic, SuppressionInfo? suppressionInfo)
         {
-            _writer.WriteObjectStart(); // result
-            _writer.Write("ruleId", diagnostic.Id);
+            My_writer.WriteObjectStart(); // result
+            My_writer.Write("ruleId", diagnostic.Id);
 
             string ruleKey = _descriptors.Add(diagnostic.Descriptor);
             if (ruleKey != diagnostic.Id)
             {
-                _writer.Write("ruleKey", ruleKey);
+                My_writer.Write("ruleKey", ruleKey);
             }
 
-            _writer.Write("level", GetLevel(diagnostic.Severity));
+            My_writer.Write("level", GetLevel(diagnostic.Severity));
 
-            string? message = diagnostic.GetMessage(_culture);
+            string? message = diagnostic.GetMessage(My_culture);
             if (!RoslynString.IsNullOrEmpty(message))
             {
-                _writer.Write("message", message);
+                My_writer.Write("message", message);
             }
 
             if (diagnostic.IsSuppressed)
             {
-                _writer.WriteArrayStart("suppressionStates");
-                _writer.Write("suppressedInSource");
-                _writer.WriteArrayEnd();
+                My_writer.WriteArrayStart("suppressionStates");
+                My_writer.Write("suppressedInSource");
+                My_writer.WriteArrayEnd();
             }
 
             WriteLocations(diagnostic.Location, diagnostic.AdditionalLocations);
             WriteResultProperties(diagnostic);
 
-            _writer.WriteObjectEnd(); // result
+            My_writer.WriteObjectEnd(); // result
         }
 
         private void WriteLocations(Location location, IReadOnlyList<Location> additionalLocations)
         {
             if (HasPath(location))
             {
-                _writer.WriteArrayStart("locations");
-                _writer.WriteObjectStart(); // location
-                _writer.WriteKey(PrimaryLocationPropertyName);
+                My_writer.WriteArrayStart("locations");
+                My_writer.WriteObjectStart(); // location
+                My_writer.WriteKey(PrimaryLocationPropertyName);
 
                 WritePhysicalLocation(location);
 
-                _writer.WriteObjectEnd(); // location
-                _writer.WriteArrayEnd(); // locations
+                My_writer.WriteObjectEnd(); // location
+                My_writer.WriteArrayEnd(); // locations
             }
 
             // See https://github.com/dotnet/roslyn/issues/11228 for discussion around
@@ -108,22 +108,22 @@ namespace Microsoft.CodeAnalysis
                 additionalLocations.Count > 0 &&
                 additionalLocations.Any(l => HasPath(l)))
             {
-                _writer.WriteArrayStart("relatedLocations");
+                My_writer.WriteArrayStart("relatedLocations");
 
                 foreach (var additionalLocation in additionalLocations)
                 {
                     if (HasPath(additionalLocation))
                     {
-                        _writer.WriteObjectStart(); // annotatedCodeLocation
-                        _writer.WriteKey("physicalLocation");
+                        My_writer.WriteObjectStart(); // annotatedCodeLocation
+                        My_writer.WriteKey("physicalLocation");
 
                         WritePhysicalLocation(additionalLocation);
 
-                        _writer.WriteObjectEnd(); // annotatedCodeLocation
+                        My_writer.WriteObjectEnd(); // annotatedCodeLocation
                     }
                 }
 
-                _writer.WriteArrayEnd(); // relatedLocations
+                My_writer.WriteArrayEnd(); // relatedLocations
             }
         }
 
@@ -133,84 +133,84 @@ namespace Microsoft.CodeAnalysis
 
             FileLinePositionSpan span = location.GetLineSpan();
 
-            _writer.WriteObjectStart();
-            _writer.Write("uri", GetUri(span.Path));
+            My_writer.WriteObjectStart();
+            My_writer.Write("uri", GetUri(span.Path));
 
             WriteRegion(span);
 
-            _writer.WriteObjectEnd();
+            My_writer.WriteObjectEnd();
         }
 
         private void WriteRules()
         {
             if (_descriptors.Count > 0)
             {
-                _writer.WriteObjectStart("rules");
+                My_writer.WriteObjectStart("rules");
 
                 foreach (var pair in _descriptors.ToSortedList())
                 {
                     DiagnosticDescriptor descriptor = pair.Value;
 
-                    _writer.WriteObjectStart(pair.Key); // rule
-                    _writer.Write("id", descriptor.Id);
+                    My_writer.WriteObjectStart(pair.Key); // rule
+                    My_writer.Write("id", descriptor.Id);
 
-                    string? shortDescription = descriptor.Title.ToString(_culture);
+                    string? shortDescription = descriptor.Title.ToString(My_culture);
                     if (!RoslynString.IsNullOrEmpty(shortDescription))
                     {
-                        _writer.Write("shortDescription", shortDescription);
+                        My_writer.Write("shortDescription", shortDescription);
                     }
 
-                    string? fullDescription = descriptor.Description.ToString(_culture);
+                    string? fullDescription = descriptor.Description.ToString(My_culture);
                     if (!RoslynString.IsNullOrEmpty(fullDescription))
                     {
-                        _writer.Write("fullDescription", fullDescription);
+                        My_writer.Write("fullDescription", fullDescription);
                     }
 
-                    _writer.Write("defaultLevel", GetLevel(descriptor.DefaultSeverity));
+                    My_writer.Write("defaultLevel", GetLevel(descriptor.DefaultSeverity));
 
                     if (!string.IsNullOrEmpty(descriptor.HelpLinkUri))
                     {
-                        _writer.Write("helpUri", descriptor.HelpLinkUri);
+                        My_writer.Write("helpUri", descriptor.HelpLinkUri);
                     }
 
-                    _writer.WriteObjectStart("properties");
+                    My_writer.WriteObjectStart("properties");
 
                     if (!string.IsNullOrEmpty(descriptor.Category))
                     {
-                        _writer.Write("category", descriptor.Category);
+                        My_writer.Write("category", descriptor.Category);
                     }
 
-                    _writer.Write("isEnabledByDefault", descriptor.IsEnabledByDefault);
+                    My_writer.Write("isEnabledByDefault", descriptor.IsEnabledByDefault);
 
                     if (descriptor.CustomTags.Any())
                     {
-                        _writer.WriteArrayStart("tags");
+                        My_writer.WriteArrayStart("tags");
 
                         foreach (string tag in descriptor.CustomTags)
                         {
-                            _writer.Write(tag);
+                            My_writer.Write(tag);
                         }
 
-                        _writer.WriteArrayEnd(); // tags
+                        My_writer.WriteArrayEnd(); // tags
                     }
 
-                    _writer.WriteObjectEnd(); // properties
-                    _writer.WriteObjectEnd(); // rule
+                    My_writer.WriteObjectEnd(); // properties
+                    My_writer.WriteObjectEnd(); // rule
                 }
 
-                _writer.WriteObjectEnd(); // rules
+                My_writer.WriteObjectEnd(); // rules
             }
         }
 
         public override void Dispose()
         {
-            _writer.WriteArrayEnd();  // results
+            My_writer.WriteArrayEnd();  // results
 
             WriteRules();
 
-            _writer.WriteObjectEnd(); // run
-            _writer.WriteArrayEnd();  // runs
-            _writer.WriteObjectEnd(); // root
+            My_writer.WriteObjectEnd(); // run
+            My_writer.WriteArrayEnd();  // runs
+            My_writer.WriteObjectEnd(); // root
 
             base.Dispose();
         }

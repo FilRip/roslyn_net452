@@ -8,7 +8,7 @@
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
-    Partial Friend MustInherit Class AbstractFlowPass(Of LocalState As AbstractLocalState)
+    Partial Friend MustInherit Class AbstractFlowPass(Of LocalState As IAbstractLocalState)
         Inherits BoundTreeVisitor
 
         ''' <summary>
@@ -25,7 +25,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' </summary>
         Protected MustOverride Sub UnionWith(ByRef self As LocalState, ByRef other As LocalState)
 
-        Friend Interface AbstractLocalState
+        Friend Interface IAbstractLocalState
 
             ''' <summary>
             ''' Produce a duplicate of this flow analysis state.

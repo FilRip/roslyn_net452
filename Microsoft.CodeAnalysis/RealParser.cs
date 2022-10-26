@@ -57,8 +57,8 @@ namespace Microsoft.CodeAnalysis
 
         private static readonly BigInteger s_bigZero = BigInteger.Zero;
         private static readonly BigInteger s_bigOne = BigInteger.One;
-        private static readonly BigInteger s_bigTwo = new BigInteger(2);
-        private static readonly BigInteger s_bigTen = new BigInteger(10);
+        private static readonly BigInteger s_bigTwo = new(2);
+        private static readonly BigInteger s_bigTen = new(10);
 
         /// <summary>
         /// Properties of an IEEE floating-point representation.
@@ -239,7 +239,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private sealed class FloatFloatingPointType : FloatingPointType
         {
-            public static FloatFloatingPointType Instance = new FloatFloatingPointType();
+            public static FloatFloatingPointType Instance = new();
             private FloatFloatingPointType() { }
             public override ushort DenormalMantissaBits => 23;
             public override ushort ExponentBits => 8;
@@ -254,7 +254,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private sealed class DoubleFloatingPointType : FloatingPointType
         {
-            public static DoubleFloatingPointType Instance = new DoubleFloatingPointType();
+            public static DoubleFloatingPointType Instance = new();
             private DoubleFloatingPointType() { }
             public override ushort DenormalMantissaBits => 52;
             public override ushort ExponentBits => 11;
@@ -744,7 +744,7 @@ namespace Microsoft.CodeAnalysis
         private static void ShiftLeft(ref BigInteger number, uint shift)
         {
             var powerOfTwo = BigInteger.Pow(s_bigTwo, (int)shift);
-            number = number * powerOfTwo;
+            number *= powerOfTwo;
         }
 
         /// <summary>
@@ -755,7 +755,7 @@ namespace Microsoft.CodeAnalysis
         private static void MultiplyByPowerOfTen(ref BigInteger number, uint power)
         {
             var powerOfTen = BigInteger.Pow(s_bigTen, (int)power);
-            number = number * powerOfTen;
+            number *= powerOfTen;
         }
 
         /// <summary>

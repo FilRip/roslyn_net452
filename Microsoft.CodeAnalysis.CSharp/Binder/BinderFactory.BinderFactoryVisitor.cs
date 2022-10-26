@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _memberOpt = memberOpt;
             }
 
-            private CSharpCompilation compilation
+            private CSharpCompilation Compilation
             {
                 get
                 {
@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            private SyntaxTree syntaxTree
+            private SyntaxTree SyntaxTree
             {
                 get
                 {
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            private BuckStopsHereBinder buckStopsHereBinder
+            private BuckStopsHereBinder BuckStopsHereBinder
             {
                 get
                 {
@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            private ConcurrentCache<BinderCacheKey, Binder> binderCache
+            private ConcurrentCache<BinderCacheKey, Binder> BinderCache
             {
                 get
                 {
@@ -102,20 +102,20 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     var compilationUnit = (CompilationUnitSyntax)node.Parent;
 
-                    if (compilationUnit != syntaxTree.GetRoot())
+                    if (compilationUnit != SyntaxTree.GetRoot())
                     {
                         throw new ArgumentOutOfRangeException(nameof(node), "node not part of tree");
                     }
 
                     var key = CreateBinderCacheKey(compilationUnit, NodeUsage.MethodBody);
 
-                    if (!binderCache.TryGetValue(key, out Binder result))
+                    if (!BinderCache.TryGetValue(key, out Binder result))
                     {
-                        SynthesizedSimpleProgramEntryPointSymbol simpleProgram = SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(compilation, (CompilationUnitSyntax)node.Parent, fallbackToMainEntryPoint: false);
+                        SynthesizedSimpleProgramEntryPointSymbol simpleProgram = SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(Compilation, (CompilationUnitSyntax)node.Parent, fallbackToMainEntryPoint: false);
                         ExecutableCodeBinder bodyBinder = simpleProgram.GetBodyBinder(_factory._ignoreAccessibility);
                         result = bodyBinder.GetBinder(compilationUnit);
 
-                        binderCache.TryAdd(key, result);
+                        BinderCache.TryAdd(key, result);
                     }
 
                     return result;
@@ -152,7 +152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(methodDecl, usage);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     var parentType = methodDecl.Parent as TypeDeclarationSyntax;
                     if (parentType != null)
@@ -174,12 +174,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (usage == NodeUsage.MethodBody)
                     {
-                        method = method ?? GetMethodSymbol(methodDecl, resultBinder);
+                        method ??= GetMethodSymbol(methodDecl, resultBinder);
                         resultBinder = new InMethodBinder(method, resultBinder);
                     }
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(methodDecl.Modifiers);
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inBodyOrInitializer ? NodeUsage.ConstructorBodyOrInitializer : NodeUsage.Normal;  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent);
 
@@ -216,7 +216,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     // Destructors have neither parameters nor type parameters, so there's nothing special to do here.
                     resultBinder = VisitCore(parent.Parent);
@@ -242,7 +242,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -260,7 +260,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inBody ? NodeUsage.AccessorBody : NodeUsage.Normal;  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent);
 
@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                     }
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -322,7 +322,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inBody ? NodeUsage.OperatorBody : NodeUsage.Normal;  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent);
 
@@ -334,7 +334,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -389,7 +389,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var key = CreateBinderCacheKey(parent, NodeUsage.AccessorBody);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     resultBinder = VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
 
@@ -400,7 +400,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         resultBinder = new InMethodBinder(accessor, resultBinder);
                     }
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -412,9 +412,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var container = containingSymbol as NamedTypeSymbol;
                 if ((object)container == null)
                 {
-                    if (node.Parent.Kind() == SyntaxKind.CompilationUnit && syntaxTree.Options.Kind != SourceCodeKind.Regular)
+                    if (node.Parent.Kind() == SyntaxKind.CompilationUnit && SyntaxTree.Options.Kind != SourceCodeKind.Regular)
                     {
-                        container = compilation.ScriptClass;
+                        container = Compilation.ScriptClass;
                     }
                     else
                     {
@@ -542,7 +542,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (sym.Kind == SymbolKind.Method)
                     {
-                        if (InSpan(sym.Locations[0], this.syntaxTree, memberSpan))
+                        if (InSpan(sym.Locations[0], this.SyntaxTree, memberSpan))
                         {
                             return sym;
                         }
@@ -553,13 +553,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var implementation = ((MethodSymbol)sym).PartialImplementationPart;
                         if ((object)implementation != null)
                         {
-                            if (InSpan(implementation.Locations[0], this.syntaxTree, memberSpan))
+                            if (InSpan(implementation.Locations[0], this.SyntaxTree, memberSpan))
                             {
                                 return implementation;
                             }
                         }
                     }
-                    else if (InSpan(sym.Locations, this.syntaxTree, memberSpan))
+                    else if (InSpan(sym.Locations, this.SyntaxTree, memberSpan))
                     {
                         return sym;
                     }
@@ -600,7 +600,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     Binder outer = VisitCore(parent.Parent); // a binder for the body of the enclosing type or namespace
                     var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent);
@@ -616,7 +616,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -634,7 +634,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     Binder outer = VisitCore(parent.Parent); // a binder for the body of the type enclosing this type
                     var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent.Identifier.ValueText, 0, SyntaxKind.EnumDeclaration, parent);
@@ -643,7 +643,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -686,7 +686,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder resultBinder))
+                if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     // if node is in the optional type parameter list, then members and type parameters are in scope 
                     //     (needed when binding attributes applied to type parameters).
@@ -719,7 +719,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
 
-                    binderCache.TryAdd(key, resultBinder);
+                    BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
@@ -765,7 +765,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var extraInfo = inUsing ? NodeUsage.NamespaceUsings : (inBody ? NodeUsage.NamespaceBody : NodeUsage.Normal);  // extra info for the cache.
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder result))
+                if (!BinderCache.TryGetValue(key, out Binder result))
                 {
                     Binder outer;
                     var container = parent.Parent;
@@ -793,7 +793,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         result = MakeNamespaceBinder(parent, parent.Name, outer, inUsing);
                     }
 
-                    binderCache.TryAdd(key, result);
+                    BinderCache.TryAdd(key, result);
                 }
 
                 return result;
@@ -842,7 +842,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             internal Binder VisitCompilationUnit(CompilationUnitSyntax compilationUnit, bool inUsing, bool inScript)
             {
-                if (compilationUnit != syntaxTree.GetRoot())
+                if (compilationUnit != SyntaxTree.GetRoot())
                 {
                     throw new ArgumentOutOfRangeException(nameof(compilationUnit), "node not part of tree");
                 }
@@ -852,9 +852,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     : (inScript ? NodeUsage.CompilationUnitScript : NodeUsage.Normal);  // extra info for the cache.
                 var key = CreateBinderCacheKey(compilationUnit, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder result))
+                if (!BinderCache.TryGetValue(key, out Binder result))
                 {
-                    result = this.buckStopsHereBinder;
+                    result = this.BuckStopsHereBinder;
 
                     if (inScript)
                     {
@@ -870,28 +870,28 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //           + script class members and using aliases
                         //
 
-                        bool isSubmissionTree = compilation.IsSubmissionSyntaxTree(compilationUnit.SyntaxTree);
-                        var scriptClass = compilation.ScriptClass;
+                        bool isSubmissionTree = Compilation.IsSubmissionSyntaxTree(compilationUnit.SyntaxTree);
+                        var scriptClass = Compilation.ScriptClass;
                         bool isSubmissionClass = scriptClass.IsSubmissionClass;
 
                         if (!inUsing)
                         {
-                            result = WithUsingNamespacesAndTypesBinder.Create(compilation.GlobalImports, result, withImportChainEntry: true);
+                            result = WithUsingNamespacesAndTypesBinder.Create(Compilation.GlobalImports, result, withImportChainEntry: true);
 
                             if (isSubmissionClass)
                             {
                                 // NB: Only the non-alias imports are
                                 // ever consumed.  Aliases are actually checked in InSubmissionClassBinder (below).
                                 // Note: #loaded trees don't consume previous submission imports.
-                                result = WithUsingNamespacesAndTypesBinder.Create((SourceNamespaceSymbol)compilation.SourceModule.GlobalNamespace, compilationUnit, result,
-                                                                                  withPreviousSubmissionImports: compilation.PreviousSubmission != null && isSubmissionTree,
+                                result = WithUsingNamespacesAndTypesBinder.Create((SourceNamespaceSymbol)Compilation.SourceModule.GlobalNamespace, compilationUnit, result,
+                                                                                  withPreviousSubmissionImports: Compilation.PreviousSubmission != null && isSubmissionTree,
                                                                                   withImportChainEntry: true);
                             }
                         }
 
-                        result = new InContainerBinder(compilation.GlobalNamespace, result);
+                        result = new InContainerBinder(Compilation.GlobalNamespace, result);
 
-                        if (compilation.HostObjectType != null)
+                        if (Compilation.HostObjectType != null)
                         {
                             result = new HostObjectModelBinder(result);
                         }
@@ -902,7 +902,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                         else
                         {
-                            result = AddInImportsBinders((SourceNamespaceSymbol)compilation.SourceModule.GlobalNamespace, compilationUnit, result, inUsing);
+                            result = AddInImportsBinders((SourceNamespaceSymbol)Compilation.SourceModule.GlobalNamespace, compilationUnit, result, inUsing);
                             result = new InContainerBinder(scriptClass, result);
                         }
                     }
@@ -915,19 +915,19 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //   + compilation unit extern and using aliases
                         //     + global namespace
                         // 
-                        var globalNamespace = compilation.GlobalNamespace;
-                        result = AddInImportsBinders((SourceNamespaceSymbol)compilation.SourceModule.GlobalNamespace, compilationUnit, result, inUsing);
+                        var globalNamespace = Compilation.GlobalNamespace;
+                        result = AddInImportsBinders((SourceNamespaceSymbol)Compilation.SourceModule.GlobalNamespace, compilationUnit, result, inUsing);
                         result = new InContainerBinder(globalNamespace, result);
 
                         if (!inUsing &&
-                            SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(compilation, compilationUnit, fallbackToMainEntryPoint: true) is SynthesizedSimpleProgramEntryPointSymbol simpleProgram)
+                            SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(Compilation, compilationUnit, fallbackToMainEntryPoint: true) is SynthesizedSimpleProgramEntryPointSymbol simpleProgram)
                         {
                             ExecutableCodeBinder bodyBinder = simpleProgram.GetBodyBinder(_factory._ignoreAccessibility);
                             result = new SimpleProgramUnitBinder(result, (SimpleProgramBinder)bodyBinder.GetBinder(simpleProgram.SyntaxNode));
                         }
                     }
 
-                    binderCache.TryAdd(key, result);
+                    BinderCache.TryAdd(key, result);
                 }
 
                 return result;
@@ -1041,7 +1041,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var key = CreateBinderCacheKey(parent, extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder result))
+                if (!BinderCache.TryGetValue(key, out Binder result))
                 {
                     CrefSyntax crefSyntax = parent.Cref;
                     MemberDeclarationSyntax memberSyntax = GetAssociatedMemberForXmlSyntax(parent);
@@ -1052,7 +1052,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         ? MakeCrefBinderInternal(crefSyntax, VisitCore(parent.Parent), inParameterOrReturnType)
                         : MakeCrefBinder(crefSyntax, memberSyntax, _factory, inParameterOrReturnType);
 
-                    binderCache.TryAdd(key, result);
+                    BinderCache.TryAdd(key, result);
                 }
 
                 return result;
@@ -1090,9 +1090,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // kind, in the same doc comment can share the same binder.
                 var key = CreateBinderCacheKey(GetEnclosingDocumentationComment(parent), extraInfo);
 
-                if (!binderCache.TryGetValue(key, out Binder result))
+                if (!BinderCache.TryGetValue(key, out Binder result))
                 {
-                    result = this.buckStopsHereBinder;
+                    result = this.BuckStopsHereBinder;
 
                     Binder outerBinder = VisitCore(GetEnclosingDocumentationComment(parent));
                     if (outerBinder != null)
@@ -1120,7 +1120,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                     }
 
-                    binderCache.TryAdd(key, result);
+                    BinderCache.TryAdd(key, result);
                 }
 
                 return result;

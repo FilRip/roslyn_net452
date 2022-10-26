@@ -26,6 +26,8 @@ namespace Microsoft.CodeAnalysis
             private readonly ImmutableArray<MetadataReference> _availableReferences;
             private readonly Lazy<HashSet<AssemblyIdentity>> _lazyAvailableReferences;
 
+#nullable restore
+
             public ExistingReferencesResolver(MetadataReferenceResolver resolver, ImmutableArray<MetadataReference> availableReferences)
             {
                 Debug.Assert(resolver != null);
@@ -41,6 +43,8 @@ namespace Microsoft.CodeAnalysis
                     where identity != null
                     select identity!));
             }
+
+#nullable enable
 
             public override ImmutableArray<PortableExecutableReference> ResolveReference(string reference, string? baseFilePath, MetadataReferenceProperties properties)
             {

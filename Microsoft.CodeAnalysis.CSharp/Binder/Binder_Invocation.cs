@@ -23,19 +23,13 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private BoundExpression BindMethodGroup(ExpressionSyntax node, bool invoked, bool indexed, BindingDiagnosticBag diagnostics)
         {
-            switch (node.Kind())
+            return node.Kind() switch
             {
-                case SyntaxKind.IdentifierName:
-                case SyntaxKind.GenericName:
-                    return BindIdentifier((SimpleNameSyntax)node, invoked, indexed, diagnostics);
-                case SyntaxKind.SimpleMemberAccessExpression:
-                case SyntaxKind.PointerMemberAccessExpression:
-                    return BindMemberAccess((MemberAccessExpressionSyntax)node, invoked, indexed, diagnostics);
-                case SyntaxKind.ParenthesizedExpression:
-                    return BindMethodGroup(((ParenthesizedExpressionSyntax)node).Expression, invoked: false, indexed: false, diagnostics: diagnostics);
-                default:
-                    return BindExpression(node, diagnostics, invoked, indexed);
-            }
+                SyntaxKind.IdentifierName or SyntaxKind.GenericName => BindIdentifier((SimpleNameSyntax)node, invoked, indexed, diagnostics),
+                SyntaxKind.SimpleMemberAccessExpression or SyntaxKind.PointerMemberAccessExpression => BindMemberAccess((MemberAccessExpressionSyntax)node, invoked, indexed, diagnostics),
+                SyntaxKind.ParenthesizedExpression => BindMethodGroup(((ParenthesizedExpressionSyntax)node).Expression, invoked: false, indexed: false, diagnostics: diagnostics),
+                _ => BindExpression(node, diagnostics, invoked, indexed),
+            };
         }
 
         private static ImmutableArray<MethodSymbol> GetOriginalMethods(OverloadResolutionResult<MethodSymbol> overloadResolutionResult)
@@ -1492,8 +1486,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (expr != null && expr.Kind != BoundKind.TypeExpression)
             {
-                var type = expr.Type as NamedTypeSymbol;
-                if (((object)type != null) && type.IsDelegateType())
+                if ((expr.Type is NamedTypeSymbol type) && type.IsDelegateType())
                 {
                     return type;
                 }
@@ -1924,6 +1917,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #nullable enable
         private BoundFunctionPointerInvocation BindFunctionPointerInvocation(SyntaxNode node, BoundExpression boundExpression, AnalyzedArguments analyzedArguments, BindingDiagnosticBag diagnostics)
         {
+#nullable restore
             var funcPtr = (FunctionPointerTypeSymbol)boundExpression.Type;
 
             var overloadResolutionResult = OverloadResolutionResult<FunctionPointerMethodSymbol>.GetInstance();

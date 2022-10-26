@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            return obj is DebugId && Equals((DebugId)obj);
+            return obj is DebugId id && Equals(id);
         }
 
         public override int GetHashCode()

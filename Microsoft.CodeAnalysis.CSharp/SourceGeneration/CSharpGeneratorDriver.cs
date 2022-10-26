@@ -8,6 +8,8 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     /// <summary>

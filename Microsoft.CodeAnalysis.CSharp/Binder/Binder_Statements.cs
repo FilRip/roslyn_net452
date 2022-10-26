@@ -55,96 +55,37 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            BoundStatement result;
-            switch (node.Kind())
+            BoundStatement result = node.Kind() switch
             {
-                case SyntaxKind.Block:
-                    result = BindBlock((BlockSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.LocalDeclarationStatement:
-                    result = BindLocalDeclarationStatement((LocalDeclarationStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.LocalFunctionStatement:
-                    result = BindLocalFunctionStatement((LocalFunctionStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.ExpressionStatement:
-                    result = BindExpressionStatement((ExpressionStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.IfStatement:
-                    result = BindIfStatement((IfStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.SwitchStatement:
-                    result = BindSwitchStatement((SwitchStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.DoStatement:
-                    result = BindDo((DoStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.WhileStatement:
-                    result = BindWhile((WhileStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.ForStatement:
-                    result = BindFor((ForStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.ForEachStatement:
-                case SyntaxKind.ForEachVariableStatement:
-                    result = BindForEach((CommonForEachStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.BreakStatement:
-                    result = BindBreak((BreakStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.ContinueStatement:
-                    result = BindContinue((ContinueStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.ReturnStatement:
-                    result = BindReturn((ReturnStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.FixedStatement:
-                    result = BindFixedStatement((FixedStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.LabeledStatement:
-                    result = BindLabeled((LabeledStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.GotoStatement:
-                case SyntaxKind.GotoCaseStatement:
-                case SyntaxKind.GotoDefaultStatement:
-                    result = BindGoto((GotoStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.TryStatement:
-                    result = BindTryStatement((TryStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.EmptyStatement:
-                    result = BindEmpty((EmptyStatementSyntax)node);
-                    break;
-                case SyntaxKind.ThrowStatement:
-                    result = BindThrow((ThrowStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.UnsafeStatement:
-                    result = BindUnsafeStatement((UnsafeStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.UncheckedStatement:
-                case SyntaxKind.CheckedStatement:
-                    result = BindCheckedStatement((CheckedStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.UsingStatement:
-                    result = BindUsingStatement((UsingStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.YieldBreakStatement:
-                    result = BindYieldBreakStatement((YieldStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.YieldReturnStatement:
-                    result = BindYieldReturnStatement((YieldStatementSyntax)node, diagnostics);
-                    break;
-                case SyntaxKind.LockStatement:
-                    result = BindLockStatement((LockStatementSyntax)node, diagnostics);
-                    break;
-                default:
-                    // NOTE: We could probably throw an exception here, but it's conceivable
-                    // that a non-parser syntax tree could reach this point with an unexpected
-                    // SyntaxKind and we don't want to throw if that occurs.
-                    result = new BoundBadStatement(node, ImmutableArray<BoundNode>.Empty, hasErrors: true);
-                    break;
-            }
-
+                SyntaxKind.Block => BindBlock((BlockSyntax)node, diagnostics),
+                SyntaxKind.LocalDeclarationStatement => BindLocalDeclarationStatement((LocalDeclarationStatementSyntax)node, diagnostics),
+                SyntaxKind.LocalFunctionStatement => BindLocalFunctionStatement((LocalFunctionStatementSyntax)node, diagnostics),
+                SyntaxKind.ExpressionStatement => BindExpressionStatement((ExpressionStatementSyntax)node, diagnostics),
+                SyntaxKind.IfStatement => BindIfStatement((IfStatementSyntax)node, diagnostics),
+                SyntaxKind.SwitchStatement => BindSwitchStatement((SwitchStatementSyntax)node, diagnostics),
+                SyntaxKind.DoStatement => BindDo((DoStatementSyntax)node, diagnostics),
+                SyntaxKind.WhileStatement => BindWhile((WhileStatementSyntax)node, diagnostics),
+                SyntaxKind.ForStatement => BindFor((ForStatementSyntax)node, diagnostics),
+                SyntaxKind.ForEachStatement or SyntaxKind.ForEachVariableStatement => BindForEach((CommonForEachStatementSyntax)node, diagnostics),
+                SyntaxKind.BreakStatement => BindBreak((BreakStatementSyntax)node, diagnostics),
+                SyntaxKind.ContinueStatement => BindContinue((ContinueStatementSyntax)node, diagnostics),
+                SyntaxKind.ReturnStatement => BindReturn((ReturnStatementSyntax)node, diagnostics),
+                SyntaxKind.FixedStatement => BindFixedStatement((FixedStatementSyntax)node, diagnostics),
+                SyntaxKind.LabeledStatement => BindLabeled((LabeledStatementSyntax)node, diagnostics),
+                SyntaxKind.GotoStatement or SyntaxKind.GotoCaseStatement or SyntaxKind.GotoDefaultStatement => BindGoto((GotoStatementSyntax)node, diagnostics),
+                SyntaxKind.TryStatement => BindTryStatement((TryStatementSyntax)node, diagnostics),
+                SyntaxKind.EmptyStatement => BindEmpty((EmptyStatementSyntax)node),
+                SyntaxKind.ThrowStatement => BindThrow((ThrowStatementSyntax)node, diagnostics),
+                SyntaxKind.UnsafeStatement => BindUnsafeStatement((UnsafeStatementSyntax)node, diagnostics),
+                SyntaxKind.UncheckedStatement or SyntaxKind.CheckedStatement => BindCheckedStatement((CheckedStatementSyntax)node, diagnostics),
+                SyntaxKind.UsingStatement => BindUsingStatement((UsingStatementSyntax)node, diagnostics),
+                SyntaxKind.YieldBreakStatement => BindYieldBreakStatement((YieldStatementSyntax)node, diagnostics),
+                SyntaxKind.YieldReturnStatement => BindYieldReturnStatement((YieldStatementSyntax)node, diagnostics),
+                SyntaxKind.LockStatement => BindLockStatement((LockStatementSyntax)node, diagnostics),
+                _ => new BoundBadStatement(node, ImmutableArray<BoundNode>.Empty, hasErrors: true),// NOTE: We could probably throw an exception here, but it's conceivable
+                                                                                                   // that a non-parser syntax tree could reach this point with an unexpected
+                                                                                                   // SyntaxKind and we don't want to throw if that occurs.
+            };
             return result;
         }
 
@@ -187,7 +128,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BindForOrUsingOrFixedDeclarations(declarationSyntax, LocalDeclarationKind.FixedVariable, diagnostics, out ImmutableArray<BoundLocalDeclaration> declarations);
 
 
-            BoundMultipleLocalDeclarations boundMultipleDeclarations = new BoundMultipleLocalDeclarations(declarationSyntax, declarations);
+            BoundMultipleLocalDeclarations boundMultipleDeclarations = new(declarationSyntax, declarations);
 
             BoundStatement boundBody = BindPossibleEmbeddedStatement(node.Statement, diagnostics);
 
@@ -386,7 +327,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // have no compile-time type; give the same error as if the type was wrong.
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
 
-                    if ((object)type == null || !type.IsErrorType() && !Compilation.IsExceptionType(type.EffectiveType(ref useSiteInfo), ref useSiteInfo))
+                    if (type is null || !type.IsErrorType() && !Compilation.IsExceptionType(type.EffectiveType(ref useSiteInfo), ref useSiteInfo))
                     {
                         diagnostics.Add(ErrorCode.ERR_BadExceptionType, exprSyntax.Location);
                         hasErrors = true;
@@ -489,8 +430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 case SyntaxKind.GotoStatement:
                     var expression = BindLabel(node.Expression, diagnostics);
-                    var boundLabel = expression as BoundLabel;
-                    if (boundLabel == null)
+                    if (expression is not BoundLabel boundLabel)
                     {
                         // diagnostics already reported
                         return new BoundBadStatement(node, ImmutableArray.Create<BoundNode>(expression), true);
@@ -922,7 +862,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var localDiagnostics = BindingDiagnosticBag.GetInstance(withDiagnostics: true, diagnostics.AccumulatesDependencies);
             // if we are not given desired syntax, we use declarator
-            associatedSyntaxNode = associatedSyntaxNode ?? declarator;
+            associatedSyntaxNode ??= declarator;
 
             // Check for variable declaration errors.
             // Use the binder that owns the scope for the local because this (the current) binder
@@ -951,7 +891,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If we got a good result then swap the inferred type for the "var"
                 TypeSymbol initializerType = initializerOpt?.Type;
-                if ((object)initializerType != null)
+                if (initializerType is object)
                 {
                     declTypeOpt = TypeWithAnnotations.Create(initializerType);
 
@@ -979,7 +919,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                if (ReferenceEquals(equalsClauseSyntax, null))
+                if (equalsClauseSyntax is null)
                 {
                     initializerOpt = null;
                 }
@@ -1086,7 +1026,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             args.invalidDimensions.Add(size);
                         }
                     }
-                }, (binder: this, invalidDimensions: invalidDimensions, diagnostics: diagnostics));
+                }, (binder: this, invalidDimensions, diagnostics));
 
                 boundDeclType = new BoundTypeExpression(typeSyntax, aliasOpt, dimensionsOpt: invalidDimensions.ToImmutableAndFree(), typeWithAnnotations: declTypeOpt);
             }
@@ -1151,7 +1091,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // In error scenarios with misplaced code, it is possible we can't bind the local declaration.
             // This occurs through the semantic model.  In that case concoct a plausible result.
-            if ((object)localSymbol == null)
+            if (localSymbol is null)
             {
                 localSymbol = SourceLocalSymbol.MakeLocal(
                     ContainingMemberOrLambda,
@@ -1177,7 +1117,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol initializerType = initializerOpt.Type;
             SyntaxNode initializerSyntax = initializerOpt.Syntax;
 
-            if ((object)initializerType == null)
+            if (initializerType is null)
             {
                 Error(diagnostics, ErrorCode.ERR_ExprCannotBeFixed, initializerSyntax);
                 return false;
@@ -1221,7 +1161,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // check for String
                     // NOTE: We will allow the pattern method to take precedence, but only if it is an instance member of System.String
                     if (initializerType.SpecialType == SpecialType.System_String &&
-                        ((object)fixedPatternMethod == null || fixedPatternMethod.ContainingType.SpecialType != SpecialType.System_String))
+                        (fixedPatternMethod is null || fixedPatternMethod.ContainingType.SpecialType != SpecialType.System_String))
                     {
                         fixedPatternMethod = null;
                         elementType = this.GetSpecialType(SpecialType.System_Char, diagnostics, initializerSyntax);
@@ -1239,7 +1179,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     additionalDiagnostics.Free();
 
-                    if ((object)fixedPatternMethod != null)
+                    if (fixedPatternMethod is object)
                     {
                         elementType = fixedPatternMethod.ReturnType;
                         CheckFeatureAvailability(initializerOpt.Syntax, MessageID.IDS_FeatureExtensibleFixedStatement, diagnostics);
@@ -1386,7 +1326,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundExpression InferTypeForDiscardAssignment(BoundDiscardExpression op1, BoundExpression op2, BindingDiagnosticBag diagnostics)
         {
             var inferredType = op2.Type;
-            if ((object)inferredType == null)
+            if (inferredType is null)
             {
                 return op1.FailInference(this, diagnostics);
             }
@@ -1500,46 +1440,28 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var syntax = expr.Syntax;
-            switch (syntax.Kind())
+            propertySyntax = syntax.Kind() switch
             {
-                case SyntaxKind.SimpleMemberAccessExpression:
-                case SyntaxKind.PointerMemberAccessExpression:
-                    propertySyntax = ((MemberAccessExpressionSyntax)syntax).Name;
-                    break;
-                case SyntaxKind.IdentifierName:
-                    propertySyntax = syntax;
-                    break;
-                case SyntaxKind.ElementAccessExpression:
-                    propertySyntax = ((ElementAccessExpressionSyntax)syntax).ArgumentList;
-                    break;
-                default:
-                    // Other syntax types, such as QualifiedName,
-                    // might occur in invalid code.
-                    propertySyntax = syntax;
-                    break;
-            }
-
+                SyntaxKind.SimpleMemberAccessExpression or SyntaxKind.PointerMemberAccessExpression => ((MemberAccessExpressionSyntax)syntax).Name,
+                SyntaxKind.IdentifierName => syntax,
+                SyntaxKind.ElementAccessExpression => ((ElementAccessExpressionSyntax)syntax).ArgumentList,
+                _ => syntax,// Other syntax types, such as QualifiedName,
+                            // might occur in invalid code.
+            };
             return propertySymbol;
         }
 
         private static SyntaxNode GetEventName(BoundEventAccess expr)
         {
             SyntaxNode syntax = expr.Syntax;
-            switch (syntax.Kind())
+            return syntax.Kind() switch
             {
-                case SyntaxKind.SimpleMemberAccessExpression:
-                case SyntaxKind.PointerMemberAccessExpression:
-                    return ((MemberAccessExpressionSyntax)syntax).Name;
-                case SyntaxKind.QualifiedName:
-                    // This case is reachable only through SemanticModel
-                    return ((QualifiedNameSyntax)syntax).Right;
-                case SyntaxKind.IdentifierName:
-                    return syntax;
-                case SyntaxKind.MemberBindingExpression:
-                    return ((MemberBindingExpressionSyntax)syntax).Name;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(syntax.Kind());
-            }
+                SyntaxKind.SimpleMemberAccessExpression or SyntaxKind.PointerMemberAccessExpression => ((MemberAccessExpressionSyntax)syntax).Name,
+                SyntaxKind.QualifiedName => ((QualifiedNameSyntax)syntax).Right,// This case is reachable only through SemanticModel
+                SyntaxKind.IdentifierName => syntax,
+                SyntaxKind.MemberBindingExpression => ((MemberBindingExpressionSyntax)syntax).Name,
+                _ => throw ExceptionUtilities.UnexpectedValue(syntax.Kind()),
+            };
         }
 
         /// <summary>
@@ -1566,10 +1488,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 propertySymbol = propertySymbol.OriginalDefinition;
             }
 
-            var sourceProperty = propertySymbol as SourcePropertySymbolBase;
             var propertyIsStatic = propertySymbol.IsStatic;
 
-            return (object)sourceProperty != null &&
+            return propertySymbol is SourcePropertySymbolBase sourceProperty &&
                     sourceProperty.IsAutoPropertyWithGetAccessor &&
                     TypeSymbol.Equals(sourceProperty.ContainingType, fromMember.ContainingType, TypeCompareKind.ConsiderEverything2) &&
                     IsConstructorOrField(fromMember, isStatic: propertyIsStatic) &&
@@ -1685,13 +1606,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (IsDirectlyInIterator)
             {
-                var method = ContainingMemberOrLambda as MethodSymbol;
-                if ((object)method != null)
+                if (ContainingMemberOrLambda is MethodSymbol method)
                 {
                     method.IteratorElementTypeWithAnnotations = GetIteratorElementType();
-                }
-                else
-                {
                 }
             }
 
@@ -1914,7 +1831,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (!lambdaParameterType.Equals(delegateParameterType, TypeCompareKind.AllIgnoreOptions))
                     {
-                        SymbolDistinguisher distinguisher = new SymbolDistinguisher(this.Compilation, lambdaParameterType, delegateParameterType);
+                        SymbolDistinguisher distinguisher = new(this.Compilation, lambdaParameterType, delegateParameterType);
 
                         // Parameter {0} is declared as type '{1}{2}' but should be '{3}{4}'
                         Error(diagnostics, ErrorCode.ERR_BadParamType, lambdaParameterLocation,
@@ -1979,7 +1896,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        SymbolDistinguisher distinguisher = new SymbolDistinguisher(compilation, sourceType, targetType);
+                        SymbolDistinguisher distinguisher = new(compilation, sourceType, targetType);
                         Error(diagnostics, ErrorCode.ERR_NoImplicitConvCast, syntax, distinguisher.First, distinguisher.Second);
                     }
                 }
@@ -1993,7 +1910,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        SymbolDistinguisher distinguisher = new SymbolDistinguisher(compilation, sourceType, targetType);
+                        SymbolDistinguisher distinguisher = new(compilation, sourceType, targetType);
                         Error(diagnostics, ErrorCode.ERR_NoImplicitConv, syntax, distinguisher.First, distinguisher.Second);
                     }
                 }
@@ -2007,7 +1924,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    SymbolDistinguisher distinguisher = new SymbolDistinguisher(compilation, sourceType, targetType);
+                    SymbolDistinguisher distinguisher = new(compilation, sourceType, targetType);
                     Error(diagnostics, ErrorCode.ERR_NoImplicitConv, syntax, distinguisher.First, distinguisher.Second);
                 }
             }
@@ -2057,7 +1974,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
 
                         // target is not compatible with source and source does not have a type
-                        if ((object)tuple.Type == null)
+                        if (tuple.Type is null)
                         {
                             Error(diagnostics, ErrorCode.ERR_ConversionNotTupleCompatible, syntax, tuple.Arguments.Length, targetType);
                             return;
@@ -2139,7 +2056,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var sourceType = operand.Type;
-            if ((object)sourceType != null)
+            if (sourceType is object)
             {
                 GenerateImplicitConversionError(diagnostics, this.Compilation, syntax, conversion, sourceType, targetType, operand.ConstantValue);
                 return;
@@ -2519,7 +2436,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundStatement BindBreak(BreakStatementSyntax node, BindingDiagnosticBag diagnostics)
         {
             var target = this.BreakLabel;
-            if ((object)target == null)
+            if (target is null)
             {
                 Error(diagnostics, ErrorCode.ERR_NoBreakOrCont, node);
                 return new BoundBadStatement(node, ImmutableArray<BoundNode>.Empty, hasErrors: true);
@@ -2530,7 +2447,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundStatement BindContinue(ContinueStatementSyntax node, BindingDiagnosticBag diagnostics)
         {
             var target = this.ContinueLabel;
-            if ((object)target == null)
+            if (target is null)
             {
                 Error(diagnostics, ErrorCode.ERR_NoBreakOrCont, node);
                 return new BoundBadStatement(node, ImmutableArray<BoundNode>.Empty, hasErrors: true);
@@ -2551,7 +2468,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected static bool IsInAsyncMethod(MethodSymbol method)
         {
-            return (object)method != null && method.IsAsync;
+            return method is object && method.IsAsync;
         }
 
         protected bool IsInAsyncMethod()
@@ -2585,8 +2502,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected virtual TypeSymbol GetCurrentReturnType(out RefKind refKind)
         {
-            var symbol = this.ContainingMemberOrLambda as MethodSymbol;
-            if ((object)symbol != null)
+            if (this.ContainingMemberOrLambda is MethodSymbol symbol)
             {
                 refKind = symbol.RefKind;
 
@@ -2646,7 +2562,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     hasErrors = true;
                 }
             }
-            else if ((object)retType != null && (refKind != RefKind.None) != (sigRefKind != RefKind.None))
+            else if (retType is object && (refKind != RefKind.None) != (sigRefKind != RefKind.None))
             {
                 var errorCode = refKind != RefKind.None
                     ? ErrorCode.ERR_MustNotHaveRefReturn
@@ -2657,7 +2573,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (arg != null)
             {
-                hasErrors |= arg.HasErrors || ((object)arg.Type != null && arg.Type.IsErrorType());
+                hasErrors |= arg.HasErrors || (arg.Type is object && arg.Type.IsErrorType());
             }
 
             if (hasErrors)
@@ -2668,15 +2584,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The return type could be null; we might be attempting to infer the return type either
             // because of method type inference, or because we are attempting to do error analysis
             // on a lambda expression of unknown return type.
-            if ((object)retType != null)
+            if (retType is object)
             {
                 if (retType.IsVoidType() || IsTaskReturningAsyncMethod())
                 {
                     if (arg != null)
                     {
                         var container = this.ContainingMemberOrLambda;
-                        var lambda = container as LambdaSymbol;
-                        if ((object)lambda != null)
+                        if (container is LambdaSymbol lambda)
                         {
                             // Error case: void-returning or async task-returning method or lambda with "return x;"
                             var errorCode = retType.IsVoidType()
@@ -2727,7 +2642,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 // Check that the returned expression is not void.
-                if ((object)arg?.Type != null && arg.Type.IsVoidType())
+                if (arg?.Type is object && arg.Type.IsVoidType())
                 {
                     Error(diagnostics, ErrorCode.ERR_CantReturnVoid, expressionSyntax);
                     hasErrors = true;
@@ -2901,9 +2816,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // So if the current type is a class-type (or an effective base type of a generic parameter)
                     // that derives from the previous type the current catch is unreachable.
 
-                    if (previousBlock.ExceptionFilterOpt == null && (object)previousType != null && !previousType.IsErrorType())
+                    if (previousBlock.ExceptionFilterOpt == null && previousType is object && !previousType.IsErrorType())
                     {
-                        if ((object)type != null)
+                        if (type is object)
                         {
                             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
 
@@ -2979,8 +2894,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (syntax.Parent is QueryClauseSyntax || syntax.Parent is SelectOrGroupClauseSyntax)
                 return;
 
-            var lambda = this.ContainingMemberOrLambda as LambdaSymbol;
-            if ((object)lambda != null)
+            if (this.ContainingMemberOrLambda is LambdaSymbol lambda)
             {
                 Location location = GetLocationForDiagnostics(syntax);
                 if (IsInAsyncMethod())
@@ -3002,19 +2916,15 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static Location GetLocationForDiagnostics(SyntaxNode node)
         {
-            switch (node)
+            return node switch
             {
-                case LambdaExpressionSyntax lambdaSyntax:
-                    return Location.Create(lambdaSyntax.SyntaxTree,
-                        Text.TextSpan.FromBounds(lambdaSyntax.SpanStart, lambdaSyntax.ArrowToken.Span.End));
-
-                case AnonymousMethodExpressionSyntax anonymousMethodSyntax:
-                    return Location.Create(anonymousMethodSyntax.SyntaxTree,
-                        Text.TextSpan.FromBounds(anonymousMethodSyntax.SpanStart,
-                            anonymousMethodSyntax.ParameterList?.Span.End ?? anonymousMethodSyntax.DelegateKeyword.Span.End));
-            }
-
-            return node.Location;
+                LambdaExpressionSyntax lambdaSyntax => Location.Create(lambdaSyntax.SyntaxTree,
+                                       Text.TextSpan.FromBounds(lambdaSyntax.SpanStart, lambdaSyntax.ArrowToken.Span.End)),
+                AnonymousMethodExpressionSyntax anonymousMethodSyntax => Location.Create(anonymousMethodSyntax.SyntaxTree,
+                                       Text.TextSpan.FromBounds(anonymousMethodSyntax.SpanStart,
+                                       anonymousMethodSyntax.ParameterList?.Span.End ?? anonymousMethodSyntax.DelegateKeyword.Span.End)),
+                _ => node.Location,
+            };
         }
 
         private static bool IsValidStatementExpression(SyntaxNode syntax, BoundExpression expression)
@@ -3060,7 +2970,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 expression = BindToTypeForErrorRecovery(expression);
                 statement = new BoundReturnStatement(syntax, refKind, expression) { WasCompilerGenerated = true };
             }
-            else if ((object)returnType != null)
+            else if (returnType is object)
             {
                 if ((refKind != RefKind.None) != (returnRefKind != RefKind.None) && expression.Kind != BoundKind.ThrowExpression)
                 {

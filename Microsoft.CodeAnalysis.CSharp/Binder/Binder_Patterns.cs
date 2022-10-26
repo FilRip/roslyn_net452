@@ -35,6 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             uint inputValEscape = GetValEscape(expression, LocalScopeDepth);
+#nullable restore
             BoundPattern pattern = BindPattern(node.Pattern, expression.Type, inputValEscape, permitDesignations: true, hasErrors, diagnostics, underIsPattern: true);
             hasErrors |= pattern.HasErrors;
             return MakeIsPatternExpression(
@@ -137,9 +138,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
         private BoundExpression BindSwitchExpression(SwitchExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
             Binder? switchBinder = this.GetBinder(node);
+#nullable restore
             return switchBinder.BindSwitchExpressionCore(node, switchBinder, diagnostics);
         }
 
@@ -243,6 +246,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Binds the expression for a pattern.  Sets <paramref name="wasExpression"/> if it was a type rather than an expression,
         /// and in that case it returns a <see cref="BoundTypeExpression"/>.
         /// </summary>
+#nullable enable
         private BoundExpression BindExpressionOrTypeForPattern(
             TypeSymbol inputType,
             ExpressionSyntax patternExpression,
@@ -260,7 +264,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
+#nullable restore
                 hasErrors |= CheckValidPatternType(patternExpression, inputType, expression.Type, diagnostics: diagnostics);
+#nullable enable
                 return expression;
             }
         }
@@ -351,6 +357,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
+#nullable restore
                         if (ExpressionOfTypeMatchesPatternType(Conversions, inputType, expression.Type, ref useSiteInfo, out _, operandConstantValue: null) == false)
                         {
                             diagnostics.Add(ErrorCode.ERR_PatternWrongType, expression.Syntax.Location, inputType, expression.Display);
@@ -484,6 +491,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return false;
         }
 
+#nullable enable
         /// <summary>
         /// Does an expression of type <paramref name="expressionType"/> "match" a pattern that looks for
         /// type <paramref name="patternType"/>?
@@ -573,8 +581,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (localSymbol is { })
                     {
+#nullable restore
                         if ((InConstructorInitializer || InFieldInitializer) && ContainingMemberOrLambda.ContainingSymbol.Kind == SymbolKind.NamedType)
                             CheckFeatureAvailability(designation, MessageID.IDS_FeatureExpressionVariablesInQueriesAndInitializers, diagnostics);
+#nullable enable
 
                         localSymbol.SetTypeWithAnnotations(declType);
                         localSymbol.SetValEscape(GetValEscape(declType.Type, inputValEscape));
@@ -1044,7 +1054,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var boundOperandType = new BoundTypeExpression(syntax: node, aliasOpt: null, typeWithAnnotations: declType); // fake a type expression for the variable's type
                         // We continue to use a BoundDeclarationPattern for the var pattern, as they have more in common.
                         return new BoundDeclarationPattern(
+#nullable restore
                             node.Parent.Kind() == SyntaxKind.VarPattern ? node.Parent : node, // for `var x` use whole pattern, otherwise use designation for the syntax
+#nullable enable
                             variableSymbol, variableAccess, boundOperandType, isVar: true,
                             inputType: inputType, narrowedType: inputType, hasErrors: hasErrors);
                     }
@@ -1302,6 +1314,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BinaryOperatorKind.Error:
                     if (!hasErrors)
                     {
+#nullable restore
                         diagnostics.Add(ErrorCode.ERR_UnsupportedTypeForRelationalPattern, node.Location, value.Type.ToDisplayString());
                         hasErrors = true;
                     }
@@ -1332,6 +1345,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// the compiler actually uses the operator on the type `int` as there is no corresponding operator for
         /// the type `byte`.
         /// </summary>
+#nullable enable
         internal static BinaryOperatorKind RelationalOperatorType(TypeSymbol type) => type.SpecialType switch
         {
             SpecialType.System_Single => BinaryOperatorKind.Float,

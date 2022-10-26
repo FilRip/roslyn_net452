@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 {
     /// <summary>
@@ -93,6 +95,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 return new UnsupportedMetadataTypeSymbol();
             }
 
+#nullable restore
             return DecodeTupleTypesInternal(metadataType, elementNames, hasTupleElementNamesAttribute);
         }
 
@@ -118,6 +121,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 metadataType :
                 TypeWithAnnotations.Create(decoded, metadataType.NullableAnnotation, metadataType.CustomModifiers);
         }
+
+#nullable enable
 
         public static TypeSymbol DecodeTupleTypesIfApplicable(
             TypeSymbol metadataType,

@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var containingType = memberOpt?.ContainingType;
-            bool inTopLevelScriptMember = (object)containingType != null && containingType.IsScriptClass;
+            bool inTopLevelScriptMember = containingType is object && containingType.IsScriptClass;
 
             // "this" is not allowed in field initializers (that are not script variable initializers):
             if (InFieldInitializer && !inTopLevelScriptMember)
@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol resultType = expr.Type;
             BoundKind exprKind = expr.Kind;
 
-            if (expr.HasAnyErrors && ((object)resultType != null || exprKind == BoundKind.UnboundLambda || exprKind == BoundKind.DefaultLiteral))
+            if (expr.HasAnyErrors && (resultType is object || exprKind == BoundKind.UnboundLambda || exprKind == BoundKind.DefaultLiteral))
             {
                 return expr;
             }
@@ -308,7 +308,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             {
                                 // ERR_InvalidQM is an error that there is no conversion between the two types. They might be the same
                                 // type name from different assemblies, so we disambiguate the display.
-                                SymbolDistinguisher distinguisher = new SymbolDistinguisher(this.Compilation, trueSymbol, falseSymbol);
+                                SymbolDistinguisher distinguisher = new(this.Compilation, trueSymbol, falseSymbol);
                                 trueArg = distinguisher.First;
                                 falseArg = distinguisher.Second;
                             }
@@ -510,7 +510,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!expr.HasAnyErrors && !IsInsideNameof)
             {
                 TypeSymbol exprType = expr.Type;
-                if ((object)exprType != null && exprType.IsUnsafe())
+                if (exprType is object && exprType.IsUnsafe())
                 {
                     ReportUnsafeIfNotAllowed(node, diagnostics);
                     //CONSIDER: Return a bad expression so that HasErrors is true?
@@ -1149,7 +1149,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol typedReferenceType = GetSpecialType(SpecialType.System_TypedReference, diagnostics, node);
 
-            if ((object)argument.Type != null && argument.Type.IsRestrictedType())
+            if (argument.Type is object && argument.Type.IsRestrictedType())
             {
                 // CS1601: Cannot make reference to variable of type '{0}'
                 Error(diagnostics, ErrorCode.ERR_MethodArgCantBeRefAny, node, argument.Type);
@@ -1215,11 +1215,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol runtimeArgumentHandleType = GetSpecialType(SpecialType.System_RuntimeArgumentHandle, diagnostics, node);
 
-            MethodSymbol method = this.ContainingMember() as MethodSymbol;
-
             bool hasError = false;
 
-            if ((object)method == null || !method.IsVararg)
+            if (this.ContainingMember() is not MethodSymbol method || !method.IsVararg)
             {
                 // CS0190: The __arglist construct is valid only within a variable argument method
                 Error(diagnostics, ErrorCode.ERR_ArgsInvalid, node);
@@ -1274,7 +1272,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             ExpressionSyntax typeSyntax = node.Type;
 
-            TypeofBinder typeofBinder = new TypeofBinder(typeSyntax, this); //has special handling for unbound types
+            TypeofBinder typeofBinder = new(typeSyntax, this); //has special handling for unbound types
             TypeWithAnnotations typeWithAnnotations = typeofBinder.BindType(typeSyntax, diagnostics, out AliasSymbol alias);
             TypeSymbol type = typeWithAnnotations.Type;
 
@@ -1302,7 +1300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 hasError = true;
             }
 
-            BoundTypeExpression boundType = new BoundTypeExpression(typeSyntax, alias, typeWithAnnotations, type.IsErrorType());
+            BoundTypeExpression boundType = new(typeSyntax, alias, typeWithAnnotations, type.IsErrorType());
             return new BoundTypeOfOperator(node, boundType, null, this.GetWellKnownType(WellKnownType.System_Type, diagnostics, node), hasError);
         }
 
@@ -1314,7 +1312,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             bool typeHasErrors = type.IsErrorType() || CheckManagedAddr(Compilation, type, node.Location, diagnostics);
 
-            BoundTypeExpression boundType = new BoundTypeExpression(typeSyntax, alias, typeWithAnnotations, typeHasErrors);
+            BoundTypeExpression boundType = new(typeSyntax, alias, typeWithAnnotations, typeHasErrors);
             ConstantValue constantValue = GetConstantSizeOf(type);
             bool hasErrors = constantValue is null && ReportUnsafeIfNotAllowed(node, diagnostics, type);
             return new BoundSizeOfOperator(node, boundType, constantValue,
@@ -1434,7 +1432,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var members = ArrayBuilder<Symbol>.GetInstance();
                 Symbol symbol = GetSymbolOrMethodOrPropertyGroup(lookupResult, node, name, node.Arity, members, diagnostics, out bool isError, qualifierOpt: null);  // reports diagnostics in result.
 
-                if ((object)symbol == null)
+                if (symbol is null)
                 {
 
                     var receiver = SynthesizeMethodGroupReceiver(node, members);
@@ -1619,7 +1617,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // method group. Otherwise, it should be null.
 
             var currentType = this.ContainingType;
-            if ((object)currentType == null)
+            if (currentType is null)
             {
                 // This may happen if there is no containing type, 
                 // e.g. we are binding an expression in an assembly-level attribute
@@ -1644,8 +1642,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (refKind != RefKind.None || type.IsRefLikeType)
             {
-                var containingMethod = this.ContainingMemberOrLambda as MethodSymbol;
-                if ((object)containingMethod != null && symbol.ContainingSymbol != (object)containingMethod)
+                if (this.ContainingMemberOrLambda is MethodSymbol containingMethod && symbol.ContainingSymbol != (object)containingMethod)
                 {
                     // Not expecting symbol from constructed method.
 
@@ -1728,7 +1725,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             diagnostics.Add(node, useSiteInfo);
                             possibleField = lookupResult.SingleSymbolOrDefault as FieldSymbol;
                             lookupResult.Free();
-                            if ((object)possibleField != null)
+                            if (possibleField is object)
                             {
                                 Error(diagnostics, ErrorCode.ERR_VariableUsedBeforeDeclarationAndHidesField, node, node, possibleField);
                             }
@@ -1816,16 +1813,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var alias = (AliasSymbol)symbol;
                         symbol = alias.Target;
-                        switch (symbol.Kind)
+                        return symbol.Kind switch
                         {
-                            case SymbolKind.NamedType:
-                            case SymbolKind.ErrorType:
-                                return new BoundTypeExpression(node, alias, (NamedTypeSymbol)symbol, hasErrors: isError);
-                            case SymbolKind.Namespace:
-                                return new BoundNamespaceExpression(node, (NamespaceSymbol)symbol, alias, hasErrors: isError);
-                            default:
-                                throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
-                        }
+                            SymbolKind.NamedType or SymbolKind.ErrorType => new BoundTypeExpression(node, alias, (NamedTypeSymbol)symbol, hasErrors: isError),
+                            SymbolKind.Namespace => new BoundNamespaceExpression(node, (NamespaceSymbol)symbol, alias, hasErrors: isError),
+                            _ => throw ExceptionUtilities.UnexpectedValue(symbol.Kind),
+                        };
                     }
 
                 case SymbolKind.RangeVariable:
@@ -1835,7 +1828,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
             }
 
-            bool isUsedBeforeDeclaration(SimpleNameSyntax node, LocalSymbol localSymbol)
+            static bool isUsedBeforeDeclaration(SimpleNameSyntax node, LocalSymbol localSymbol)
             {
                 Location localSymbolLocation = localSymbol.Locations[0];
 
@@ -1946,7 +1939,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     TypeSymbol hostObjectType = Compilation.GetHostObjectTypeSymbol();
                     var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                    if ((object)hostObjectType != null && hostObjectType.IsEqualToOrDerivedFrom(memberDeclaringType, TypeCompareKind.ConsiderEverything, useSiteInfo: ref discardedUseSiteInfo))
+                    if (hostObjectType is object && hostObjectType.IsEqualToOrDerivedFrom(memberDeclaringType, TypeCompareKind.ConsiderEverything, useSiteInfo: ref discardedUseSiteInfo))
                     {
                         return new BoundHostObjectMemberReference(syntax, hostObjectType) { WasCompilerGenerated = true };
                     }
@@ -1969,7 +1962,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         break;
                     }
                     containingMember = containingMember.ContainingSymbol;
-                } while ((object)containingMember != null);
+                } while (containingMember is object);
                 return true;
             }
         }
@@ -2002,8 +1995,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression BindLabel(ExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
-            var name = node as IdentifierNameSyntax;
-            if (name == null)
+            if (node is not IdentifierNameSyntax name)
             {
                 return BadExpression(node, LookupResultKind.NotLabel);
             }
@@ -2042,19 +2034,17 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var alias = symbol as AliasSymbol;
 
-            if ((object)alias != null)
+            if (alias is object)
             {
                 symbol = alias.Target;
             }
 
-            var type = symbol as TypeSymbol;
-            if ((object)type != null)
+            if (symbol is TypeSymbol type)
             {
                 return new BoundTypeExpression(node, alias, type);
             }
 
-            var namespaceSymbol = symbol as NamespaceSymbol;
-            if ((object)namespaceSymbol != null)
+            if (symbol is NamespaceSymbol namespaceSymbol)
             {
                 return new BoundNamespaceExpression(node, namespaceSymbol, alias);
             }
@@ -2089,7 +2079,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ParameterSymbol thisSymbol = this.ContainingMemberOrLambda.EnclosingThisSymbol();
             // If there is no this parameter, then it is definitely not captured and 
             // any diagnostic would be cascading.
-            if ((object)thisSymbol != null && thisSymbol.ContainingSymbol != ContainingMemberOrLambda && thisSymbol.RefKind != RefKind.None)
+            if (thisSymbol is object && thisSymbol.ContainingSymbol != ContainingMemberOrLambda && thisSymbol.RefKind != RefKind.None)
             {
                 Error(diagnostics, ErrorCode.ERR_ThisStructNotInAnonMeth, thisOrBaseToken);
                 return true;
@@ -2101,7 +2091,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundBaseReference BindBase(BaseExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
             bool hasErrors = false;
-            TypeSymbol baseType = this.ContainingType is null ? null : this.ContainingType.BaseTypeNoUseSiteDiagnostics;
+            TypeSymbol baseType = this.ContainingType?.BaseTypeNoUseSiteDiagnostics;
 
             if (!HasThis(isExplicit: true, inStaticContext: out bool inStaticContext))
             {
@@ -2109,7 +2099,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Error(diagnostics, inStaticContext ? ErrorCode.ERR_BaseInStaticMeth : ErrorCode.ERR_BaseInBadContext, node.Token);
                 hasErrors = true;
             }
-            else if ((object)baseType == null) // e.g. in System.Object
+            else if (baseType is null) // e.g. in System.Object
             {
                 Error(diagnostics, ErrorCode.ERR_NoBaseClass, node);
                 hasErrors = true;
@@ -2136,7 +2126,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (targetType.IsNullableType() &&
                 !operand.HasAnyErrors &&
-                (object)operand.Type != null &&
+                operand.Type is object &&
                 !operand.Type.IsNullableType() &&
                 !TypeSymbol.Equals(targetType.GetNullableUnderlyingType(), operand.Type, TypeCompareKind.ConsiderEverything2))
             {
@@ -2158,7 +2148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol intType = GetSpecialType(SpecialType.System_Int32, diagnostics, node);
             TypeSymbol indexType = GetWellKnownType(WellKnownType.System_Index, diagnostics, node);
 
-            if ((object)boundOperand.Type != null && boundOperand.Type.IsNullableType())
+            if (boundOperand.Type is object && boundOperand.Type.IsNullableType())
             {
                 // Used in lowering to construct the nullable
                 GetSpecialTypeMember(SpecialMember.System_Nullable_T__ctor, diagnostics, node);
@@ -2354,7 +2344,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    SymbolDistinguisher distinguisher1 = new SymbolDistinguisher(this.Compilation, operand.Type, targetType);
+                    SymbolDistinguisher distinguisher1 = new(this.Compilation, operand.Type, targetType);
                     diagnostics.Add(ErrorCode.ERR_NoExplicitConv, syntax.Location, distinguisher1.First, distinguisher1.Second);
                 }
 
@@ -2387,7 +2377,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
 
                         // target is not compatible with source and source does not have a type
-                        if ((object)tuple.Type == null)
+                        if (tuple.Type is null)
                         {
                             Error(diagnostics, ErrorCode.ERR_ConversionNotTupleCompatible, syntax, tuple.Arguments.Length, targetType);
                             return;
@@ -2422,7 +2412,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
             }
 
-            SymbolDistinguisher distinguisher = new SymbolDistinguisher(this.Compilation, operand.Type, targetType);
+            SymbolDistinguisher distinguisher = new(this.Compilation, operand.Type, targetType);
             diagnostics.Add(ErrorCode.ERR_NoExplicitConv, syntax.Location, distinguisher.First, distinguisher.Second);
         }
 
@@ -2614,25 +2604,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
-            switch (argumentSyntax.Expression.Kind())
+            return argumentSyntax.Expression.Kind() switch
             {
                 // The next 3 cases should never be allowed as they cannot be ref/out. Assuming a bug in legacy compiler.
-                case SyntaxKind.ParenthesizedLambdaExpression:
-                case SyntaxKind.SimpleLambdaExpression:
-                case SyntaxKind.AnonymousMethodExpression:
-                case SyntaxKind.InvocationExpression:
-                case SyntaxKind.ObjectCreationExpression:
-                case SyntaxKind.ImplicitObjectCreationExpression:
-                case SyntaxKind.ParenthesizedExpression: // this is never allowed in legacy compiler
-                case SyntaxKind.DeclarationExpression:
-                    // A property/indexer is also invalid as it cannot be ref/out, but cannot be checked here. Assuming a bug in legacy compiler.
-                    return true;
-                default:
-                    // The only ones that concern us here for compat is: locals, params, fields
-                    // BindArgumentAndName correctly rejects all other cases, except for properties and indexers.
-                    // They are handled after BindArgumentAndName returns and the binding can be checked.
-                    return false;
-            }
+                SyntaxKind.ParenthesizedLambdaExpression or SyntaxKind.SimpleLambdaExpression or SyntaxKind.AnonymousMethodExpression or SyntaxKind.InvocationExpression or SyntaxKind.ObjectCreationExpression or SyntaxKind.ImplicitObjectCreationExpression or SyntaxKind.ParenthesizedExpression or SyntaxKind.DeclarationExpression => true,// A property/indexer is also invalid as it cannot be ref/out, but cannot be checked here. Assuming a bug in legacy compiler.
+                _ => false,// The only ones that concern us here for compat is: locals, params, fields
+                           // BindArgumentAndName correctly rejects all other cases, except for properties and indexers.
+                           // They are handled after BindArgumentAndName returns and the binding can be checked.
+            };
         }
 
         private void BindArgumentAndName(
@@ -2731,7 +2710,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Is this a local?
             SourceLocalSymbol localSymbol = this.LookupLocal(designation.Identifier);
-            if ((object)localSymbol != null)
+            if (localSymbol is object)
             {
                 if ((InConstructorInitializer || InFieldInitializer) && ContainingMemberOrLambda.ContainingSymbol.Kind == SymbolKind.NamedType)
                 {
@@ -2756,7 +2735,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Is this a field?
             GlobalExpressionVariable expressionVariableField = LookupDeclaredField(designation);
 
-            if ((object)expressionVariableField == null)
+            if (expressionVariableField is null)
             {
                 // We should have the right binder in the chain, cannot continue otherwise.
                 throw ExceptionUtilities.Unreachable;
@@ -3153,7 +3132,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol bestType = BestTypeInferrer.InferBestType(boundInitializerExpressions, this.Conversions, ref useSiteInfo);
             diagnostics.Add(node, useSiteInfo);
 
-            if ((object)bestType == null || bestType.IsVoidType()) // Dev10 also reports ERR_ImplicitlyTypedArrayNoBestType for void.
+            if (bestType is null || bestType.IsVoidType()) // Dev10 also reports ERR_ImplicitlyTypedArrayNoBestType for void.
             {
                 Error(diagnostics, ErrorCode.ERR_ImplicitlyTypedArrayNoBestType, node);
                 bestType = CreateErrorType();
@@ -3180,7 +3159,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol bestType = BestTypeInferrer.InferBestType(boundInitializerExpressions, this.Conversions, ref useSiteInfo);
             diagnostics.Add(node, useSiteInfo);
 
-            if ((object)bestType == null || bestType.IsVoidType())
+            if (bestType is null || bestType.IsVoidType())
             {
                 Error(diagnostics, ErrorCode.ERR_ImplicitlyTypedArrayNoBestType, node);
                 bestType = CreateErrorType();
@@ -3249,7 +3228,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // We have non-array initializer expression, but we expected an array initializer expression.
 
                         var boundExpression = BindValue(expression, diagnostics, BindValueKind.RValue);
-                        if ((object)boundExpression.Type == null || !boundExpression.Type.IsErrorType())
+                        if (boundExpression.Type is null || !boundExpression.Type.IsErrorType())
                         {
                             if (!boundExpression.HasAnyErrors)
                             {
@@ -3851,7 +3830,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // Soft assert: we think this is the case, and we're asserting to catch scenarios that violate our expectations
 
-                    if ((object)initializerType == null || containingType.SpecialType == SpecialType.System_Object) //e.g. when defining System.Object in source
+                    if (initializerType is null || containingType.SpecialType == SpecialType.System_Object) //e.g. when defining System.Object in source
                     {
                         // If the constructor initializer is implicit and there is no base type, we're done.
                         // Otherwise, if the constructor initializer is explicit, we're in an error state.
@@ -4217,7 +4196,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return new BoundDelegateCreationExpression(node, methodGroup, conversion.Method, conversion.IsExtensionMethod, type, hasErrors);
             }
 
-            else if ((object)argument.Type == null)
+            else if (argument.Type is null)
             {
                 diagnostics.Add(ErrorCode.ERR_MethodNameExpected, argument.Syntax.Location);
             }
@@ -4356,23 +4335,15 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var implicitReceiver = new BoundObjectOrCollectionValuePlaceholder(typeSyntax, isForNewInstance, type) { WasCompilerGenerated = true };
 
-            switch (syntax.Kind())
+            return syntax.Kind() switch
             {
-                case SyntaxKind.ObjectInitializerExpression:
-                    // Uses a special binder to produce customized diagnostics for the object initializer
-                    return BindObjectInitializerExpression(
-                        syntax, type, diagnostics, implicitReceiver, useObjectInitDiagnostics: true);
-
-                case SyntaxKind.WithInitializerExpression:
-                    return BindObjectInitializerExpression(
-                        syntax, type, diagnostics, implicitReceiver, useObjectInitDiagnostics: false);
-
-                case SyntaxKind.CollectionInitializerExpression:
-                    return BindCollectionInitializerExpression(syntax, type, diagnostics, implicitReceiver);
-
-                default:
-                    throw ExceptionUtilities.Unreachable;
-            }
+                SyntaxKind.ObjectInitializerExpression => BindObjectInitializerExpression(
+                                       syntax, type, diagnostics, implicitReceiver, useObjectInitDiagnostics: true),// Uses a special binder to produce customized diagnostics for the object initializer
+                SyntaxKind.WithInitializerExpression => BindObjectInitializerExpression(
+                                        syntax, type, diagnostics, implicitReceiver, useObjectInitDiagnostics: false),
+                SyntaxKind.CollectionInitializerExpression => BindCollectionInitializerExpression(syntax, type, diagnostics, implicitReceiver),
+                _ => throw ExceptionUtilities.Unreachable,
+            };
         }
 
         private BoundExpression BindInitializerExpressionOrValue(
@@ -4382,14 +4353,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             BindingDiagnosticBag diagnostics)
         {
 
-            switch (syntax.Kind())
+            return syntax.Kind() switch
             {
-                case SyntaxKind.ObjectInitializerExpression:
-                case SyntaxKind.CollectionInitializerExpression:
-                    return BindInitializerExpression((InitializerExpressionSyntax)syntax, type, typeSyntax, isForNewInstance: false, diagnostics);
-                default:
-                    return BindValue(syntax, diagnostics, BindValueKind.RValue);
-            }
+                SyntaxKind.ObjectInitializerExpression or SyntaxKind.CollectionInitializerExpression => BindInitializerExpression((InitializerExpressionSyntax)syntax, type, typeSyntax, isForNewInstance: false, diagnostics),
+                _ => BindValue(syntax, diagnostics, BindValueKind.RValue),
+            };
         }
 
         private BoundObjectInitializerExpression BindObjectInitializerExpression(
@@ -4696,8 +4664,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!suppressErrors)
             {
                 string member;
-                var identName = memberNameSyntax as IdentifierNameSyntax;
-                if (identName != null)
+                if (memberNameSyntax is IdentifierNameSyntax identName)
                 {
                     member = identName.Identifier.ValueText;
                 }
@@ -4738,8 +4705,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var namedAssignment = (AssignmentExpressionSyntax)memberInitializerSyntax;
 
-                var memberNameSyntax = namedAssignment.Left as IdentifierNameSyntax;
-                if (memberNameSyntax != null)
+                if (namedAssignment.Left is IdentifierNameSyntax memberNameSyntax)
                 {
                     var memberName = memberNameSyntax.Identifier.ValueText;
 
@@ -5032,9 +4998,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool IsConstructorAccessible(MethodSymbol constructor, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, bool allowProtectedConstructorsOfBaseType = false)
         {
-
             NamedTypeSymbol containingType = this.ContainingType;
-            if ((object)containingType != null)
+            if (containingType is object)
             {
                 // SPEC VIOLATION: The specification implies that when considering 
                 // SPEC VIOLATION: instance methods or instance constructors, we first 
@@ -5273,7 +5238,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!this.InAttributeArgument && type.IsComImport)
             {
                 NamedTypeSymbol coClassType = type.ComImportCoClass;
-                if ((object)coClassType != null)
+                if (coClassType is object)
                 {
                     return BindComImportCoClassCreationExpression(node, type, coClassType, diagnostics, typeNode, analyzedArguments, initializerOpt, wasTargetTyped);
                 }
@@ -5332,7 +5297,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 diagnostics.Add(node, useSiteInfo);
                 if (!conversion.IsValid)
                 {
-                    SymbolDistinguisher distinguisher = new SymbolDistinguisher(this.Compilation, coClassType, interfaceType);
+                    SymbolDistinguisher distinguisher = new(this.Compilation, coClassType, interfaceType);
                     Error(diagnostics, ErrorCode.ERR_NoExplicitConv, node, distinguisher.First, distinguisher.Second);
                 }
 
@@ -5601,25 +5566,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 specialType = type.EnumUnderlyingType.SpecialType;
             }
 
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_Byte:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                case SpecialType.System_Decimal:
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                    return ConstantValue.Default(specialType);
-            }
-
-            return null;
+                SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_Int32 or SpecialType.System_Int64 or SpecialType.System_Byte or SpecialType.System_UInt16 or SpecialType.System_UInt32 or SpecialType.System_UInt64 or SpecialType.System_Single or SpecialType.System_Double or SpecialType.System_Decimal or SpecialType.System_Boolean or SpecialType.System_Char => ConstantValue.Default(specialType),
+                _ => null,
+            };
         }
 
         private BoundLiteral BindLiteralConstant(LiteralExpressionSyntax node, BindingDiagnosticBag diagnostics)
@@ -5686,7 +5637,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 BindPointerIndirectionExpressionInternal(node, boundLeft, diagnostics, out TypeSymbol pointedAtType, out bool hasErrors);
 
                 // If there is no pointed-at type, fall back on the actual type (i.e. assume the user meant "." instead of "->").
-                if (ReferenceEquals(pointedAtType, null))
+                if (pointedAtType is null)
                 {
                     boundLeft = ToBadExpression(boundLeft);
                 }
@@ -5745,7 +5696,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 leftSymbol = boundValue.ExpressionSymbol;
             }
 
-            if ((object)leftSymbol != null)
+            if (leftSymbol is object)
             {
                 switch (leftSymbol.Kind)
                 {
@@ -5870,7 +5821,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol leftType = boundLeft.Type;
 
-            if ((object)leftType != null && leftType.IsDynamic())
+            if (leftType is object && leftType.IsDynamic())
             {
                 // There are some sources of a `dynamic` typed value that can be known before runtime
                 // to be invalid. For example, accessing a set-only property whose type is dynamic:
@@ -5882,7 +5833,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // No member accesses on void
-            if ((object)leftType != null && leftType.IsVoidType())
+            if (leftType is object && leftType.IsVoidType())
             {
                 diagnostics.Add(ErrorCode.ERR_BadUnaryOp, operatorToken.GetLocation(), SyntaxFacts.GetText(operatorToken.Kind()), leftType);
                 return BadExpression(node, boundLeft);
@@ -6038,7 +5989,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                                 return BadExpression(node, boundLeft);
                             }
-                            else if ((object)leftType != null)
+                            else if (leftType is object)
                             {
                                 // NB: We don't know if we really only need RValue access, or if we are actually
                                 // passing the receiver implicitly by ref (e.g. in a struct instance method invocation).
@@ -6225,7 +6176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
 
-                if ((object)boundLeft.Type == null)
+                if (boundLeft.Type is null)
                 {
                     Error(diagnostics, ErrorCode.ERR_NoSuchMember, name, boundLeft.Display, plainName);
                 }
@@ -6301,8 +6252,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var builder = ArrayBuilder<MethodSymbol>.GetInstance();
                 foreach (var s in symbols)
                 {
-                    var m = s as MethodSymbol;
-                    if ((object)m != null) builder.Add(m);
+                    if (s is MethodSymbol m) builder.Add(m);
                 }
                 var methods = builder.ToImmutableAndFree();
 
@@ -6328,7 +6278,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new BoundBadExpression(
                 node,
                 lookupKind,
-                (object)symbolOpt == null ? ImmutableArray<Symbol>.Empty : ImmutableArray.Create(symbolOpt),
+                symbolOpt is null ? ImmutableArray<Symbol>.Empty : ImmutableArray.Create(symbolOpt),
                 boundLeft == null ? ImmutableArray<BoundExpression>.Empty : ImmutableArray.Create(BindToTypeForErrorRecovery(boundLeft)),
                 GetNonMethodMemberType(symbolOpt));
         }
@@ -6336,7 +6286,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeSymbol GetNonMethodMemberType(Symbol symbolOpt)
         {
             TypeSymbol resultType = null;
-            if ((object)symbolOpt != null)
+            if (symbolOpt is object)
             {
                 switch (symbolOpt.Kind)
                 {
@@ -6401,7 +6351,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Symbol symbol = GetSymbolOrMethodOrPropertyGroup(lookupResult, right, plainName, arity, members, diagnostics, out bool wasError,
                                                              qualifierOpt: left is BoundTypeExpression typeExpr ? typeExpr.Type : null);
 
-            if ((object)symbol == null)
+            if (symbol is null)
             {
 
                 // If I identifies one or more methods, then the result is a method group with
@@ -6523,7 +6473,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         for (int i = methodGroup.Methods.Count - 1; i >= 0; i--)
                         {
-                            if ((object)methodGroup.Methods[i].ReduceExtensionMethod(left.Type, this.Compilation) == null)
+                            if (methodGroup.Methods[i].ReduceExtensionMethod(left.Type, this.Compilation) is null)
                                 methodGroup.Methods.RemoveAt(i);
                         }
                     }
@@ -6674,7 +6624,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 TypeSymbol receiverType = receiver.Type;
 
                 // Reflect errors that have been reported elsewhere...
-                hasError = (object)receiverType == null || !receiverType.IsValueType;
+                hasError = receiverType is null || !receiverType.IsValueType;
 
                 if (!hasError)
                 {
@@ -6755,7 +6705,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     enumType = (NamedTypeSymbol)fieldType;
                 }
 
-                if ((object)enumType != null)
+                if (enumType is object)
                 {
                     NamedTypeSymbol underlyingType = enumType.EnumUnderlyingType;
                     expr = new BoundConversion(
@@ -6776,7 +6726,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private bool InEnumMemberInitializer()
         {
             var containingType = this.ContainingType;
-            return this.InFieldInitializer && (object)containingType != null && containingType.IsEnumType();
+            return this.InFieldInitializer && containingType is object && containingType.IsEnumType();
         }
 
         private BoundExpression BindPropertyAccess(
@@ -6830,7 +6780,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool hasErrors)
         {
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
-            bool isUsableAsField = eventSymbol.HasAssociatedField && this.IsAccessible(eventSymbol.AssociatedField, ref useSiteInfo, (receiver != null) ? receiver.Type : null);
+            bool isUsableAsField = eventSymbol.HasAssociatedField && this.IsAccessible(eventSymbol.AssociatedField, ref useSiteInfo, receiver?.Type);
             diagnostics.Add(node, useSiteInfo);
 
             bool hasError = this.CheckInstanceOrStatic(node, receiver, eventSymbol, ref lookupResult, diagnostics);
@@ -6852,18 +6802,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                switch (receiver.Kind)
+                return receiver.Kind switch
                 {
-                    case BoundKind.PreviousSubmissionReference:
-                        // Could be either instance or static reference.
-                        return null;
-                    case BoundKind.TypeExpression:
-                        return false;
-                    case BoundKind.QueryClause:
-                        return IsInstanceReceiver(((BoundQueryClause)receiver).Value);
-                    default:
-                        return true;
-                }
+                    BoundKind.PreviousSubmissionReference => null,// Could be either instance or static reference.
+                    BoundKind.TypeExpression => false,
+                    BoundKind.QueryClause => IsInstanceReceiver(((BoundQueryClause)receiver).Value),
+                    _ => true,
+                };
             }
         }
 
@@ -6969,7 +6914,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Ambiguities between methods and non-methods are reported here,
                 // but all other ambiguities, including those between properties and
                 // non-methods, are reported in ResultSymbol.
-                if ((methodOrPropertyGroup[0].Kind == SymbolKind.Method) || ((object)other == null))
+                if ((methodOrPropertyGroup[0].Kind == SymbolKind.Method) || (other is null))
                 {
                     // Result will be treated as a method or property group. Any additional
                     // checks, such as use-site errors, must be handled by the caller when
@@ -7055,7 +7000,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression BindElementOrIndexerAccess(ExpressionSyntax node, BoundExpression expr, AnalyzedArguments analyzedArguments, BindingDiagnosticBag diagnostics)
         {
-            if ((object)expr.Type == null)
+            if (expr.Type is null)
             {
                 return BadIndexerExpression(node, expr, analyzedArguments, null, diagnostics);
             }
@@ -7093,29 +7038,16 @@ namespace Microsoft.CodeAnalysis.CSharp
              AnalyzedArguments arguments,
              BindingDiagnosticBag diagnostics)
         {
-
             var exprType = expr.Type;
-            switch (exprType.TypeKind)
+            return exprType.TypeKind switch
             {
-                case TypeKind.Array:
-                    return BindArrayAccess(node, expr, arguments, diagnostics);
-
-                case TypeKind.Dynamic:
-                    return BindDynamicIndexer(node, expr, arguments, ImmutableArray<PropertySymbol>.Empty, diagnostics);
-
-                case TypeKind.Pointer:
-                    return BindPointerElementAccess(node, expr, arguments, diagnostics);
-
-                case TypeKind.Class:
-                case TypeKind.Struct:
-                case TypeKind.Interface:
-                case TypeKind.TypeParameter:
-                    return BindIndexerAccess(node, expr, arguments, diagnostics);
-
-                case TypeKind.Submission: // script class is synthesized and should not be used as a type of an indexer expression:
-                default:
-                    return BadIndexerExpression(node, expr, arguments, null, diagnostics);
-            }
+                TypeKind.Array => BindArrayAccess(node, expr, arguments, diagnostics),
+                TypeKind.Dynamic => BindDynamicIndexer(node, expr, arguments, ImmutableArray<PropertySymbol>.Empty, diagnostics),
+                TypeKind.Pointer => BindPointerElementAccess(node, expr, arguments, diagnostics),
+                TypeKind.Class or TypeKind.Struct or TypeKind.Interface or TypeKind.TypeParameter => BindIndexerAccess(node, expr, arguments, diagnostics),
+                // script class is synthesized and should not be used as a type of an indexer expression:
+                _ => BadIndexerExpression(node, expr, arguments, null, diagnostics),
+            };
         }
 
         private BoundExpression BindArrayAccess(ExpressionSyntax node, BoundExpression expr, AnalyzedArguments arguments, BindingDiagnosticBag diagnostics)
@@ -7416,7 +7348,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             };
 
         private static readonly SymbolDisplayFormat s_propertyGroupFormat =
-            new SymbolDisplayFormat(
+            new(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Omitted,
                 memberOptions:
                     SymbolDisplayMemberOptions.IncludeContainingType,
@@ -7672,7 +7604,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 TypeCompareKind.ConsiderEverything);
 
             if ((!argIsIndex && !argIsRange) ||
-                !(receiverOpt?.Type is TypeSymbol receiverType))
+                receiverOpt?.Type is not TypeSymbol receiverType)
             {
                 return false;
             }
@@ -8043,8 +7975,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var methods = node.Methods;
             if (methods.Length == 0)
             {
-                var method = node.LookupSymbolOpt as MethodSymbol;
-                if ((object)method != null)
+                if (node.LookupSymbolOpt is MethodSymbol method)
                 {
                     methods = ImmutableArray.Create(method);
                 }
@@ -8258,7 +8189,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             MethodSymbol invoke = possibleDelegateType.DelegateInvokeMethod();
-            if ((object)invoke == null)
+            if (invoke is null)
             {
                 diagnostics.Add(new CSDiagnosticInfo(ErrorCode.ERR_InvalidDelegateType, possibleDelegateType), location ?? node.Location);
                 return true;
@@ -8310,7 +8241,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var accessType = access.Type;
 
             // access cannot have no type
-            if ((object)accessType == null)
+            if (accessType is null)
             {
                 return GenerateBadConditionalAccessNodeError(node, receiver, access, diagnostics);
             }
@@ -8378,9 +8309,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool ContainingMethodOrLambdaRequiresValue()
         {
-            var containingMethod = ContainingMemberOrLambda as MethodSymbol;
             return
-                (object)containingMethod == null ||
+                ContainingMemberOrLambda is not MethodSymbol containingMethod ||
                     !containingMethod.ReturnsVoid &&
                     !containingMethod.IsAsyncReturningTask(this.Compilation);
         }
@@ -8473,7 +8403,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var receiverType = receiver.Type;
 
             // Can't dot into the null literal or anything that has no type
-            if ((object)receiverType == null)
+            if (receiverType is null)
             {
                 Error(diagnostics, ErrorCode.ERR_BadUnaryOp, operatorToken.GetLocation(), operatorToken.Text, receiver.Display);
                 return BadExpression(receiverSyntax, receiver);

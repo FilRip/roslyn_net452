@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            return obj is ClosureDebugInfo && Equals((ClosureDebugInfo)obj);
+            return obj is ClosureDebugInfo info && Equals(info);
         }
 
         public override int GetHashCode()

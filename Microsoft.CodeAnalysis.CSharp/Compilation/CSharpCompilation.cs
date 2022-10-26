@@ -1385,7 +1385,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (referenceManager.AliasesOfReferencedAssemblies[i].Contains(aliasName))
                 {
-                    builder = builder ?? ArrayBuilder<NamespaceSymbol>.GetInstance();
+                    builder ??= ArrayBuilder<NamespaceSymbol>.GetInstance();
                     builder.Add(referenceManager.ReferencedAssemblies[i].GlobalNamespace);
                 }
             }
@@ -1964,7 +1964,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            if (!(method.ReturnType is NamedTypeSymbol namedType))
+            if (method.ReturnType is not NamedTypeSymbol namedType)
             {
                 return false;
             }
@@ -2497,7 +2497,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override bool Equals(object? obj)
             {
-                return (obj is ImportInfo) && Equals((ImportInfo)obj);
+                return (obj is ImportInfo info) && Equals(info);
             }
 
             public bool Equals(ImportInfo other)
@@ -3359,9 +3359,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private string? GetRuntimeMetadataVersion(EmitOptions emitOptions)
         {
-            var corAssembly = Assembly.CorLibrary as Symbols.Metadata.PE.PEAssemblySymbol;
-
-            if (corAssembly is object)
+            if (Assembly.CorLibrary is Symbols.Metadata.PE.PEAssemblySymbol corAssembly)
             {
                 return corAssembly.Assembly.ManifestModule.MetadataVersion;
             }
@@ -3998,8 +3996,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override AnalyzerDriver CreateAnalyzerDriver(ImmutableArray<DiagnosticAnalyzer> analyzers, AnalyzerManager analyzerManager, SeverityFilter severityFilter)
         {
-            Func<SyntaxNode, SyntaxKind> getKind = node => node.Kind();
-            Func<SyntaxTrivia, bool> isComment = trivia => trivia.Kind() == SyntaxKind.SingleLineCommentTrivia || trivia.Kind() == SyntaxKind.MultiLineCommentTrivia;
+            static SyntaxKind getKind(SyntaxNode node) => node.Kind();
+            static bool isComment(SyntaxTrivia trivia) => trivia.Kind() == SyntaxKind.SingleLineCommentTrivia || trivia.Kind() == SyntaxKind.MultiLineCommentTrivia;
             return new AnalyzerDriver<SyntaxKind>(analyzers, getKind, analyzerManager, severityFilter, isComment);
         }
 
@@ -4253,8 +4251,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         continue;
                     }
 
-                    var sourceType = symbol as SourceMemberContainerTypeSymbol;
-                    if (sourceType is object)
+                    if (symbol is SourceMemberContainerTypeSymbol sourceType)
                     {
                         _cache[sourceType.MergedDeclaration] = sourceType;
                     }

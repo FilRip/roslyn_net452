@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <typeparam name="TFloating">A floating-point type.</typeparam>
         /// <typeparam name="TFloatingTC">A typeclass supporting that floating-point type.</typeparam>
-        private sealed class FloatingValueSet<TFloating, TFloatingTC> : IValueSet<TFloating> where TFloatingTC : struct, FloatingTC<TFloating>
+        private sealed class FloatingValueSet<TFloating, TFloatingTC> : IValueSet<TFloating> where TFloatingTC : struct, IFloatingTC<TFloating>
         {
             private readonly IValueSet<TFloating> _numbers;
             private readonly bool _hasNaN;

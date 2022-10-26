@@ -43,14 +43,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // SPEC: Find the most specific source type SX of the operators in U...
             TypeSymbol sx = MostSpecificSourceTypeForExplicitUserDefinedConversion(u, sourceExpression, source, ref useSiteInfo);
-            if ((object)sx == null)
+            if (sx is null)
             {
                 return UserDefinedConversionResult.NoBestSourceType(u);
             }
 
             // SPEC: Find the most specific target type TX of the operators in U...
             TypeSymbol tx = MostSpecificTargetTypeForExplicitUserDefinedConversion(u, target, ref useSiteInfo);
-            if ((object)tx == null)
+            if (tx is null)
             {
                 return UserDefinedConversionResult.NoBestTargetType(u);
             }
@@ -156,7 +156,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // DELIBERATE SPEC VIOLATION: See the comment regarding bug 17021 in 
             // UserDefinedImplicitConversions.cs.
 
-            if ((object)source != null && source.IsInterfaceType() || target.IsInterfaceType())
+            if (source is object && source.IsInterfaceType() || target.IsInterfaceType())
             {
                 return;
             }
@@ -176,7 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // We accept candidates for which the parameter type encompasses the *underlying* source type.
                 if (!fromConversion.Exists &&
-                    (object)source != null &&
+                    source is object &&
                     source.IsNullableType() &&
                     EncompassingExplicitConversion(null, source.GetNullableUnderlyingType(), convertsFrom, ref useSiteInfo).Exists)
                 {
@@ -185,7 +185,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // As in dev11 (and the revised spec), we also accept candidates for which the return type is encompassed by the *stripped* target type.
                 if (!toConversion.Exists &&
-                    (object)target != null &&
+                    target is object &&
                     target.IsNullableType() &&
                     EncompassingExplicitConversion(null, convertsTo, target.GetNullableUnderlyingType(), ref useSiteInfo).Exists)
                 {
@@ -219,7 +219,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (fromConversion.Exists && toConversion.Exists)
                 {
-                    if ((object)source != null && source.IsNullableType() && convertsFrom.IsNonNullableValueType() && target.CanBeAssignedNull())
+                    if (source is object && source.IsNullableType() && convertsFrom.IsNonNullableValueType() && target.CanBeAssignedNull())
                     {
                         TypeSymbol nullableFrom = MakeNullableType(convertsFrom);
                         TypeSymbol nullableTo = convertsTo.IsNonNullableValueType() ? MakeNullableType(convertsTo) : convertsTo;
@@ -250,7 +250,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             toConversion = EncompassingExplicitConversion(null, convertsTo, target, ref useSiteInfo);
                         }
 
-                        if ((object)source != null && source.IsNullableType() && convertsFrom.IsNonNullableValueType())
+                        if (source is object && source.IsNullableType() && convertsFrom.IsNonNullableValueType())
                         {
                             convertsFrom = MakeNullableType(convertsFrom);
                             fromConversion = EncompassingExplicitConversion(null, convertsFrom, source, ref useSiteInfo);
@@ -298,7 +298,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // We have already written the "FromType" into the conversion analysis to
             // perpetuate this fiction.
 
-            if ((object)source != null)
+            if (source is object)
             {
                 if (u.Any(conv => TypeSymbol.Equals(conv.FromType, source, TypeCompareKind.ConsiderEverything2)))
                 {
@@ -306,7 +306,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 CompoundUseSiteInfo<AssemblySymbol> inLambdaUseSiteInfo = useSiteInfo;
-                System.Func<UserDefinedConversionAnalysis, bool> isValid = conv => IsEncompassedBy(sourceExpression, source, conv.FromType, ref inLambdaUseSiteInfo);
+                bool isValid(UserDefinedConversionAnalysis conv) => IsEncompassedBy(sourceExpression, source, conv.FromType, ref inLambdaUseSiteInfo);
                 if (u.Any(isValid))
                 {
                     var result = MostEncompassedType(u, isValid, conv => conv.FromType, ref inLambdaUseSiteInfo);
@@ -361,7 +361,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             CompoundUseSiteInfo<AssemblySymbol> inLambdaUseSiteInfo = useSiteInfo;
-            System.Func<UserDefinedConversionAnalysis, bool> isValid = conv => IsEncompassedBy(null, conv.ToType, target, ref inLambdaUseSiteInfo);
+            bool isValid(UserDefinedConversionAnalysis conv) => IsEncompassedBy(null, conv.ToType, target, ref inLambdaUseSiteInfo);
             if (u.Any(isValid))
             {
                 var result = MostEncompassingType(u, isValid, conv => conv.ToType, ref inLambdaUseSiteInfo);

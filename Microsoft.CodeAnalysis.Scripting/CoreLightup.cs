@@ -18,7 +18,7 @@ namespace Roslyn.Utilities
     {
         internal static class Desktop
         {
-            private static class _Assembly
+            private static class UAssembly
             {
                 internal static readonly Type Type = typeof(Assembly);
 
@@ -28,7 +28,7 @@ namespace Roslyn.Utilities
                     .CreateDelegate<Func<Assembly, bool>>();
             }
 
-            private static class _ResolveEventArgs
+            private static class UResolveEventArgs
             {
                 internal static readonly Type Type = ReflectionUtilities.TryGetType("System.ResolveEventArgs");
 
@@ -41,7 +41,7 @@ namespace Roslyn.Utilities
                     .GetDeclaredMethod("get_RequestingAssembly");
             }
 
-            private static class _AppDomain
+            private static class UAppDomain
             {
                 internal static readonly Type Type = ReflectionUtilities.TryGetType("System.AppDomain");
                 internal static readonly Type ResolveEventHandlerType = ReflectionUtilities.TryGetType("System.ResolveEventHandler");
@@ -61,12 +61,12 @@ namespace Roslyn.Utilities
 
             internal static bool IsAssemblyFromGlobalAssemblyCache(Assembly assembly)
             {
-                if (_Assembly.get_GlobalAssemblyCache == null)
+                if (UAssembly.get_GlobalAssemblyCache == null)
                 {
                     throw new PlatformNotSupportedException();
                 }
 
-                return _Assembly.get_GlobalAssemblyCache(assembly);
+                return UAssembly.get_GlobalAssemblyCache(assembly);
             }
 
             private sealed class AssemblyResolveWrapper
@@ -79,23 +79,23 @@ namespace Roslyn.Utilities
                     _handler = handler;
                 }
 
-                private Assembly Stub(object sender, object resolveEventArgs)
+                /*private Assembly Stub(object sender, object resolveEventArgs)
                 {
-                    var name = (string)_ResolveEventArgs.get_Name.Invoke(resolveEventArgs, new object[0] { });
-                    var requestingAssembly = (Assembly)_ResolveEventArgs.get_RequestingAssembly.Invoke(resolveEventArgs, new object[0] { });
+                    var name = (string)UResolveEventArgs.get_Name.Invoke(resolveEventArgs, new object[0] { });
+                    var requestingAssembly = (Assembly)UResolveEventArgs.get_RequestingAssembly.Invoke(resolveEventArgs, new object[0] { });
 
                     return _handler(name, requestingAssembly);
-                }
+                }*/
 
                 public object GetHandler()
                 {
-                    return s_stubInfo.CreateDelegate(_AppDomain.ResolveEventHandlerType, this);
+                    return s_stubInfo.CreateDelegate(UAppDomain.ResolveEventHandlerType, this);
                 }
             }
 
             internal static void GetOrRemoveAssemblyResolveHandler(Func<string, Assembly, Assembly> handler, MethodInfo handlerOperation)
             {
-                if (_AppDomain.add_AssemblyResolve == null)
+                if (UAppDomain.add_AssemblyResolve == null)
                 {
                     throw new PlatformNotSupportedException();
                 }
@@ -108,12 +108,12 @@ namespace Roslyn.Utilities
 
             internal static void AddAssemblyResolveHandler(Func<string, Assembly, Assembly> handler)
             {
-                GetOrRemoveAssemblyResolveHandler(handler, _AppDomain.add_AssemblyResolve);
+                GetOrRemoveAssemblyResolveHandler(handler, UAppDomain.add_AssemblyResolve);
             }
 
             internal static void RemoveAssemblyResolveHandler(Func<string, Assembly, Assembly> handler)
             {
-                GetOrRemoveAssemblyResolveHandler(handler, _AppDomain.remove_AssemblyResolve);
+                GetOrRemoveAssemblyResolveHandler(handler, UAppDomain.remove_AssemblyResolve);
             }
         }
     }

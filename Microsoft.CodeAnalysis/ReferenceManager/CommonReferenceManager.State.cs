@@ -196,10 +196,17 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private ImmutableArray<UnifiedAssembly<TAssemblySymbol>> _lazyUnifiedAssemblies;
 
-        public CommonReferenceManager(string simpleAssemblyName, AssemblyIdentityComparer identityComparer, Dictionary<MetadataReference, MetadataOrDiagnostic>? observedMetadata)
+#nullable restore
+
+        public CommonReferenceManager(string simpleAssemblyName,
+            AssemblyIdentityComparer identityComparer,
+#nullable enable
+            Dictionary<MetadataReference, MetadataOrDiagnostic>? observedMetadata)
         {
             Debug.Assert(simpleAssemblyName != null);
             Debug.Assert(identityComparer != null);
+
+#nullable restore
 
             this.SimpleAssemblyName = simpleAssemblyName;
             this.IdentityComparer = identityComparer;
@@ -259,6 +266,8 @@ namespace Microsoft.CodeAnalysis
                 return _lazyDirectiveReferences;
             }
         }
+
+#nullable enable
 
         public override ImmutableDictionary<AssemblyIdentity, PortableExecutableReference?> ImplicitReferenceResolutions
         {
@@ -331,7 +340,9 @@ namespace Microsoft.CodeAnalysis
             {
                 AssertBound();
                 Debug.Assert(_lazyMergedAssemblyReferencesMap != null);
+#nullable restore
                 return _lazyMergedAssemblyReferencesMap;
+#nullable enable
             }
         }
 
@@ -558,7 +569,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     Debug.Assert(versionPattern.Build == ushort.MaxValue || versionPattern.Revision == ushort.MaxValue);
 
-                    lazyBuilder = lazyBuilder ?? ImmutableDictionary.CreateBuilder<AssemblyIdentity, AssemblyIdentity>();
+                    lazyBuilder ??= ImmutableDictionary.CreateBuilder<AssemblyIdentity, AssemblyIdentity>();
 
                     var sourceIdentity = symbolIdentity.WithVersion(versionPattern);
 
@@ -649,6 +660,7 @@ namespace Microsoft.CodeAnalysis
                         // +1 for the assembly being built:
                         var referenceBinding = bindingResult[assemblyIndex + 1].ReferenceBinding;
                         Debug.Assert(referenceBinding is object);
+#nullable restore
                         foreach (var binding in referenceBinding)
                         {
                             if (binding.IsBound)
@@ -661,6 +673,7 @@ namespace Microsoft.CodeAnalysis
                                 }
                             }
                         }
+#nullable enable
                     }
                 }
             }

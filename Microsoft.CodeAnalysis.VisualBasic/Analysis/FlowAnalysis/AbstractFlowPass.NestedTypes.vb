@@ -12,7 +12,7 @@ Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 Namespace Microsoft.CodeAnalysis.VisualBasic
 
-    Partial Friend MustInherit Class AbstractFlowPass(Of LocalState As AbstractLocalState)
+    Partial Friend MustInherit Class AbstractFlowPass(Of LocalState As IAbstractLocalState)
         Inherits BoundTreeVisitor
 
         ''' <summary>

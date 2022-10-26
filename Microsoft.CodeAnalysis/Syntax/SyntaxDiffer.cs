@@ -819,7 +819,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             // don't double count the chars we matched at the start of the strings
-            maxChars = maxChars - commonLeadingCount;
+            maxChars -= commonLeadingCount;
 
             commonTrailingCount = 0;
             for (; commonTrailingCount < maxChars; commonTrailingCount++)

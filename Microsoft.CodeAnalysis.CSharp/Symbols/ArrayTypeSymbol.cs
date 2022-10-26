@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>
@@ -347,7 +349,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if ((object?)other == null || !other.HasSameShapeAs(this) ||
+            if (other is null || !other.HasSameShapeAs(this) ||
                 !other.ElementTypeWithAnnotations.Equals(ElementTypeWithAnnotations, comparison))
             {
                 return false;
@@ -458,7 +460,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override bool GetUnificationUseSiteDiagnosticRecursive(ref DiagnosticInfo result, Symbol owner, ref HashSet<TypeSymbol> checkedTypes)
         {
             return _elementTypeWithAnnotations.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes) ||
-                   ((object)_baseType != null && _baseType.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes)) ||
+                   (_baseType is object && _baseType.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes)) ||
                    GetUnificationUseSiteDiagnosticRecursive(ref result, this.InterfacesNoUseSiteDiagnostics(), owner, ref checkedTypes);
         }
 

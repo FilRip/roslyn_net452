@@ -15,6 +15,8 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public partial class CSharpCompilation
@@ -375,9 +377,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<KeyValuePair<WellKnownMember, TypedConstant>> namedArguments = default,
             bool isOptionalUse = false)
         {
-            var ctorSymbol = (MethodSymbol)Binder.GetWellKnownTypeMember(this, constructor, out UseSiteInfo<AssemblySymbol> info, isOptional: true);
+            var ctorSymbol = (MethodSymbol)Binder.GetWellKnownTypeMember(this, constructor, out _, isOptional: true);
 
-            if ((object)ctorSymbol == null)
+            if (ctorSymbol is null)
             {
                 // if this assert fails, UseSiteErrors for "member" have not been checked before emitting ...
                 return null;
@@ -398,7 +400,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var builder = new ArrayBuilder<KeyValuePair<string, TypedConstant>>(namedArguments.Length);
                 foreach (var arg in namedArguments)
                 {
-                    var wellKnownMember = Binder.GetWellKnownTypeMember(this, arg.Key, out info, isOptional: true);
+                    var wellKnownMember = Binder.GetWellKnownTypeMember(this, arg.Key, out _, isOptional: true);
                     if (wellKnownMember == null || wellKnownMember is ErrorTypeSymbol)
                     {
                         // if this assert fails, UseSiteErrors for "member" have not been checked before emitting ...
@@ -422,7 +424,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var ctorSymbol = (MethodSymbol)this.GetSpecialTypeMember(constructor);
 
-            if ((object)ctorSymbol == null)
+            if (ctorSymbol is null)
             {
                 return null;
             }
@@ -522,64 +524,47 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal bool CheckIfAttributeShouldBeEmbedded(EmbeddableAttributes attribute, BindingDiagnosticBag? diagnosticsOpt, Location locationOpt)
         {
-            switch (attribute)
+            return attribute switch
             {
-                case EmbeddableAttributes.IsReadOnlyAttribute:
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_IsReadOnlyAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_IsReadOnlyAttribute__ctor);
-
-                case EmbeddableAttributes.IsByRefLikeAttribute:
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_IsByRefLikeAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_IsByRefLikeAttribute__ctor);
-
-                case EmbeddableAttributes.IsUnmanagedAttribute:
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_IsUnmanagedAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_IsUnmanagedAttribute__ctor);
-
-                case EmbeddableAttributes.NullableAttribute:
-                    // If the type exists, we'll check both constructors, regardless of which one(s) we'll eventually need.
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_NullableAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_NullableAttribute__ctorByte,
-                        WellKnownMember.System_Runtime_CompilerServices_NullableAttribute__ctorTransformFlags);
-
-                case EmbeddableAttributes.NullableContextAttribute:
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_NullableContextAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_NullableContextAttribute__ctor);
-
-                case EmbeddableAttributes.NullablePublicOnlyAttribute:
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_NullablePublicOnlyAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_NullablePublicOnlyAttribute__ctor);
-
-                case EmbeddableAttributes.NativeIntegerAttribute:
-                    // If the type exists, we'll check both constructors, regardless of which one(s) we'll eventually need.
-                    return CheckIfAttributeShouldBeEmbedded(
-                        diagnosticsOpt,
-                        locationOpt,
-                        WellKnownType.System_Runtime_CompilerServices_NativeIntegerAttribute,
-                        WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctor,
-                        WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctorTransformFlags);
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(attribute);
-            }
+                EmbeddableAttributes.IsReadOnlyAttribute => CheckIfAttributeShouldBeEmbedded(
+                                       diagnosticsOpt,
+                                       locationOpt,
+                                       WellKnownType.System_Runtime_CompilerServices_IsReadOnlyAttribute,
+                                       WellKnownMember.System_Runtime_CompilerServices_IsReadOnlyAttribute__ctor),
+                EmbeddableAttributes.IsByRefLikeAttribute => CheckIfAttributeShouldBeEmbedded(
+diagnosticsOpt,
+locationOpt,
+WellKnownType.System_Runtime_CompilerServices_IsByRefLikeAttribute,
+WellKnownMember.System_Runtime_CompilerServices_IsByRefLikeAttribute__ctor),
+                EmbeddableAttributes.IsUnmanagedAttribute => CheckIfAttributeShouldBeEmbedded(
+diagnosticsOpt,
+locationOpt,
+WellKnownType.System_Runtime_CompilerServices_IsUnmanagedAttribute,
+WellKnownMember.System_Runtime_CompilerServices_IsUnmanagedAttribute__ctor),
+                EmbeddableAttributes.NullableAttribute => CheckIfAttributeShouldBeEmbedded(
+diagnosticsOpt,
+locationOpt,
+WellKnownType.System_Runtime_CompilerServices_NullableAttribute,
+WellKnownMember.System_Runtime_CompilerServices_NullableAttribute__ctorByte,
+WellKnownMember.System_Runtime_CompilerServices_NullableAttribute__ctorTransformFlags),// If the type exists, we'll check both constructors, regardless of which one(s) we'll eventually need.
+                EmbeddableAttributes.NullableContextAttribute => CheckIfAttributeShouldBeEmbedded(
+                                        diagnosticsOpt,
+                                        locationOpt,
+                                        WellKnownType.System_Runtime_CompilerServices_NullableContextAttribute,
+                                        WellKnownMember.System_Runtime_CompilerServices_NullableContextAttribute__ctor),
+                EmbeddableAttributes.NullablePublicOnlyAttribute => CheckIfAttributeShouldBeEmbedded(
+diagnosticsOpt,
+locationOpt,
+WellKnownType.System_Runtime_CompilerServices_NullablePublicOnlyAttribute,
+WellKnownMember.System_Runtime_CompilerServices_NullablePublicOnlyAttribute__ctor),
+                EmbeddableAttributes.NativeIntegerAttribute => CheckIfAttributeShouldBeEmbedded(
+diagnosticsOpt,
+locationOpt,
+WellKnownType.System_Runtime_CompilerServices_NativeIntegerAttribute,
+WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctor,
+WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctorTransformFlags),// If the type exists, we'll check both constructors, regardless of which one(s) we'll eventually need.
+                _ => throw ExceptionUtilities.UnexpectedValue(attribute),
+            };
         }
 
         private bool CheckIfAttributeShouldBeEmbedded(BindingDiagnosticBag? diagnosticsOpt, Location? locationOpt, WellKnownType attributeType, WellKnownMember attributeCtor, WellKnownMember? secondAttributeCtor = null)
@@ -592,7 +577,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (diagnosticsOpt != null)
                     {
-                        var errorReported = Binder.ReportUseSite(userDefinedAttribute, diagnosticsOpt, locationOpt);
+                        Binder.ReportUseSite(userDefinedAttribute, diagnosticsOpt, locationOpt);
                     }
                 }
                 else
@@ -899,8 +884,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 static void handleFunctionPointerType(FunctionPointerTypeSymbol funcPtr, ArrayBuilder<bool> transformFlagsBuilder, bool addCustomModifierFlags)
                 {
-                    Func<TypeSymbol, (ArrayBuilder<bool>, bool), bool, bool> visitor =
-                        (TypeSymbol type, (ArrayBuilder<bool> builder, bool addCustomModifierFlags) param, bool isNestedNamedType) => AddFlags(type, param.builder, isNestedNamedType, param.addCustomModifierFlags);
+                    bool visitor(TypeSymbol type, (ArrayBuilder<bool> builder, bool addCustomModifierFlags) param, bool isNestedNamedType) => AddFlags(type, param.builder, isNestedNamedType, param.addCustomModifierFlags);
 
                     // The function pointer type itself gets a false
                     transformFlagsBuilder.Add(false);
@@ -930,7 +914,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             HandleCustomModifiers(twa.CustomModifiers.Length, transformFlagsBuilder);
                         }
 
-                        twa.Type.VisitType(visitor, (transformFlagsBuilder, addCustomModifierFlags));
+                        twa.Type.VisitType((Func<TypeSymbol, (ArrayBuilder<bool>, bool), bool, bool>)visitor, (transformFlagsBuilder, addCustomModifierFlags));
                     }
                 }
             }
@@ -966,7 +950,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal class SpecialMembersSignatureComparer : SignatureComparer<MethodSymbol, FieldSymbol, PropertySymbol, TypeSymbol, ParameterSymbol>
         {
             // Fields
-            public static readonly SpecialMembersSignatureComparer Instance = new SpecialMembersSignatureComparer();
+            public static readonly SpecialMembersSignatureComparer Instance = new();
 
             // Methods
             protected SpecialMembersSignatureComparer()
@@ -1008,7 +992,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     return null;
                 }
-                if ((object)named.ContainingType != null)
+                if (named.ContainingType is object)
                 {
                     return null;
                 }
@@ -1022,7 +1006,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return null;
                 }
                 NamedTypeSymbol named = (NamedTypeSymbol)type;
-                if ((object)named.ContainingType != null)
+                if (named.ContainingType is object)
                 {
                     return null;
                 }

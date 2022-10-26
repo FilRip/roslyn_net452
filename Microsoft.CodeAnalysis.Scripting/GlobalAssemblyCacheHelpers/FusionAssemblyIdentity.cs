@@ -85,11 +85,14 @@ namespace Microsoft.CodeAnalysis
             [PreserveSig]
             int GetDisplayName(byte* buffer, ref uint characterCount, ASM_DISPLAYF dwDisplayFlags);
 
+            // Le nom provient d'un objet COM de Microsoft, on ne peut pas changer son nom
+#pragma warning disable IDE1006
             [PreserveSig]
             int __BindToObject(/*...*/);
 
             [PreserveSig]
             int __GetName(/*...*/);
+#pragma warning restore IDE1006
 
             [PreserveSig]
             int GetVersion(out uint versionHi, out uint versionLow);

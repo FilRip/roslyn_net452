@@ -115,8 +115,8 @@ namespace Microsoft.CodeAnalysis
         private HashSet<TAssemblySymbol>? _dependencies;
         private readonly TAssemblySymbol? _assemblyBeingBuilt;
 
-        public static CompoundUseSiteInfo<TAssemblySymbol> Discarded => new CompoundUseSiteInfo<TAssemblySymbol>(DiscardLevel.DiagnosticsAndDependencies);
-        public static CompoundUseSiteInfo<TAssemblySymbol> DiscardedDependencies => new CompoundUseSiteInfo<TAssemblySymbol>(DiscardLevel.Dependencies);
+        public static CompoundUseSiteInfo<TAssemblySymbol> Discarded => new(DiscardLevel.DiagnosticsAndDependencies);
+        public static CompoundUseSiteInfo<TAssemblySymbol> DiscardedDependencies => new(DiscardLevel.Dependencies);
 
         private enum DiscardLevel : byte
         {
@@ -451,7 +451,7 @@ namespace Microsoft.CodeAnalysis
 
         private static readonly object Sentinel = new object(); // Indicates unknown state.
 
-        public static readonly CachedUseSiteInfo<TAssemblySymbol> Uninitialized = new CachedUseSiteInfo<TAssemblySymbol>(Sentinel); // Indicates unknown state.
+        public static readonly CachedUseSiteInfo<TAssemblySymbol> Uninitialized = new(Sentinel); // Indicates unknown state.
 
         private CachedUseSiteInfo(object info)
         {

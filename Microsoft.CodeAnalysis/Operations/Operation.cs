@@ -40,7 +40,9 @@ namespace Microsoft.CodeAnalysis
                 else
                 {
                     Debug.Assert(semanticModel.ContainingModelOrSelf != semanticModel);
+#nullable restore
                     Debug.Assert(semanticModel.ContainingModelOrSelf.ContainingModelOrSelf == semanticModel.ContainingModelOrSelf);
+#nullable enable
                 }
             }
 #endif

@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
                 _operation = operation;
             }
 
-            public Enumerator GetEnumerator() => new Enumerator(_operation);
+            public Enumerator GetEnumerator() => new(_operation);
 
             public ImmutableArray<IOperation> ToImmutableArray()
             {
@@ -87,6 +87,7 @@ namespace Microsoft.CodeAnalysis
                 get
                 {
                     Debug.Assert(_operation != null && _currentSlot >= 0 && _currentIndex >= 0);
+#nullable restore
                     return _operation.GetCurrent(_currentSlot, _currentIndex);
                 }
             }
@@ -103,6 +104,8 @@ namespace Microsoft.CodeAnalysis
                 _currentSlot = -1;
                 _currentIndex = -1;
             }
+
+#nullable enable
 
             object? IEnumerator.Current => this.Current;
             void IDisposable.Dispose() { }

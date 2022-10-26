@@ -32,7 +32,9 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         private readonly ImmutableDictionary<IFlowAnonymousFunctionOperation, (ControlFlowRegion region, int ordinal)> _anonymousFunctionsMap;
         private ControlFlowGraph?[]? _lazyAnonymousFunctionsGraphs;
 
+#nullable restore
         internal ControlFlowGraph(IOperation originalOperation,
+#nullable enable
                                   ControlFlowGraph? parent,
                                   ControlFlowGraphBuilder.CaptureIdDispenser captureIdDispenser,
                                   ImmutableArray<BasicBlock> blocks, ControlFlowRegion root,
@@ -46,6 +48,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             Debug.Assert(blocks.First().Kind == BasicBlockKind.Entry);
             Debug.Assert(blocks.Last().Kind == BasicBlockKind.Exit);
             Debug.Assert(root != null);
+#nullable restore
             Debug.Assert(root.Kind == ControlFlowRegionKind.Root);
             Debug.Assert(root.FirstBlockOrdinal == 0);
             Debug.Assert(root.LastBlockOrdinal == blocks.Length - 1);
@@ -83,6 +86,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         /// Returns null if <see cref="SemanticModel.GetOperation(SyntaxNode, CancellationToken)"/> returns null for the given <paramref name="node"/> and <paramref name="semanticModel"/>.
         /// Otherwise, returns a <see cref="ControlFlowGraph"/> for the executable code block.
         /// </returns>
+#nullable enable
         public static ControlFlowGraph? Create(SyntaxNode node, SemanticModel semanticModel, CancellationToken cancellationToken = default)
         {
             if (node == null)
@@ -193,8 +197,11 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 Debug.Assert(false, "\n" + e.ToString());
             }
 
+#nullable restore
             return null;
         }
+
+#nullable enable
 
         /// <summary>
         /// Original operation, representing an executable code block, from which this control flow graph was generated.
@@ -237,7 +244,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 throw new ArgumentNullException(nameof(localFunction));
             }
 
-            if (!TryGetLocalFunctionControlFlowGraph(localFunction, cancellationToken, out var controlFlowGraph))
+            if (!TryGetLocalFunctionControlFlowGraph(localFunction, out var controlFlowGraph))
             {
                 throw new ArgumentOutOfRangeException(nameof(localFunction));
             }
@@ -245,7 +252,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             return controlFlowGraph;
         }
 
-        internal bool TryGetLocalFunctionControlFlowGraph(IMethodSymbol localFunction, CancellationToken cancellationToken, [NotNullWhen(true)] out ControlFlowGraph? controlFlowGraph)
+        internal bool TryGetLocalFunctionControlFlowGraph(IMethodSymbol localFunction, [NotNullWhen(true)] out ControlFlowGraph? controlFlowGraph)
         {
             if (!_localFunctionsMap.TryGetValue(localFunction, out (ControlFlowRegion enclosing, ILocalFunctionOperation operation, int ordinal) info))
             {

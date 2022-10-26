@@ -190,7 +190,7 @@ namespace Microsoft.CodeAnalysis.Text
 
             ValidateChecksumAlgorithm(checksumAlgorithm);
 
-            encoding = encoding ?? s_utf8EncodingWithNoBOM;
+            encoding ??= s_utf8EncodingWithNoBOM;
 
             if (stream.CanSeek)
             {

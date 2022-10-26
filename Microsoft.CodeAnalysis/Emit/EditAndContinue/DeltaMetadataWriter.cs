@@ -68,10 +68,12 @@ namespace Microsoft.CodeAnalysis.Emit
                    emitTestCoverageData: false,
                    cancellationToken: cancellationToken)
         {
+#nullable restore
             Debug.Assert(previousGeneration != null);
             Debug.Assert(encId != default);
             Debug.Assert(encId != previousGeneration.EncId);
             Debug.Assert(context.Module.DebugInformationFormat != DebugInformationFormat.Embedded);
+#nullable enable
 
             _previousGeneration = previousGeneration;
             _encId = encId;

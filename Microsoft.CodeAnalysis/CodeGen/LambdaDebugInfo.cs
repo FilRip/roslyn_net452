@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            return obj is LambdaDebugInfo && Equals((LambdaDebugInfo)obj);
+            return obj is LambdaDebugInfo info && Equals(info);
         }
 
         public override int GetHashCode()

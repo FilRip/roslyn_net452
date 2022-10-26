@@ -349,7 +349,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ' Gets the type info from a specific bound node
         Friend Function GetTypeInfoForNode(boundNodes As BoundNodeSummary) As VisualBasicTypeInfo
             ' Determine the type, converted type, and expression
-            Dim type As TypeSymbol = Nothing
+            Dim type As TypeSymbol
             Dim convertedType As TypeSymbol = Nothing
             Dim conversion As Conversion = Nothing
             type = GetSemanticType(boundNodes, convertedType, conversion)
@@ -1832,7 +1832,7 @@ _Default:
             If useBaseReferenceAccessibility Then
                 Debug.Assert(container Is Nothing)
                 Dim containingType = binder.ContainingType
-                Dim baseType = If(containingType Is Nothing, Nothing, containingType.BaseTypeNoUseSiteDiagnostics)
+                Dim baseType = containingType?.BaseTypeNoUseSiteDiagnostics
                 If baseType Is Nothing Then
                     Throw New ArgumentException(NameOf(position),
                             "Not a valid position for a call to LookupBaseMembers (must be in a type with a base type)")
@@ -1870,7 +1870,7 @@ _Default:
                         builder.AddRange(sealedResults, pos)
                     End If
 
-                    pos = pos + 1
+                    pos += 1
                 Next
 
                 Return If(builder Is Nothing, sealedResults, builder.ToImmutableAndFree())
@@ -2957,7 +2957,7 @@ _Default:
         Public Shadows Function GetEnclosingSymbol(position As Integer, Optional cancellationToken As CancellationToken = Nothing) As ISymbol
             CheckPosition(position)
             Dim binder = Me.GetEnclosingBinder(position)
-            Return If(binder Is Nothing, Nothing, binder.ContainingMember)
+            Return binder?.ContainingMember
         End Function
 
         ''' <summary>
@@ -2965,7 +2965,7 @@ _Default:
         ''' This takes into effect both file-level "Option Strict" statements and the project-level
         ''' defaults.
         ''' </summary>
-        Public ReadOnly Property OptionStrict As VisualBasic.OptionStrict
+        Public ReadOnly Property OptionStrict As OptionStrict
             Get
                 ' Since options never change within a file, we can just use the start location.
                 Dim binder = Me.GetEnclosingBinder(Root.SpanStart) ' should never return null.

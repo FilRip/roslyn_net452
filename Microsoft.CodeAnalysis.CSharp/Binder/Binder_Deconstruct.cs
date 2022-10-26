@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             uint rightEscape = GetValEscape(boundRHS, this.LocalScopeDepth);
 
-            if ((object?)boundRHS.Type == null || boundRHS.Type.IsErrorType())
+            if (boundRHS.Type is null || boundRHS.Type.IsErrorType())
             {
                 // we could still not infer a type for the RHS
                 FailRemainingInferencesAndSetValEscape(checkedVariables, diagnostics, rightEscape);
@@ -217,12 +217,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // If we already have diagnostics at this point, it is not worth collecting likely duplicate diagnostics from making the merged type
                 bool hadErrors = diagnostics.HasAnyErrors();
                 TypeSymbol? mergedTupleType = MakeMergedTupleType(checkedVariables, (BoundTupleLiteral)boundRHS, syntax, hadErrors ? null : diagnostics);
-                if ((object?)mergedTupleType != null)
+                if (mergedTupleType is object)
                 {
                     boundRHS = GenerateConversionForAssignment(mergedTupleType, boundRHS, diagnostics);
                 }
             }
-            else if ((object?)boundRHS.Type == null)
+            else if (boundRHS.Type is null)
             {
                 Error(diagnostics, ErrorCode.ERR_DeconstructRequiresExpression, boundRHS.Syntax);
             }
@@ -307,7 +307,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     var single = variable.Single;
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
+#nullable restore
                     nestedConversion = this.Conversions.ClassifyConversionFromType(tupleOrDeconstructedTypes[i], single.Type, ref useSiteInfo);
+#nullable enable
                     diagnostics.Add(single.Syntax, useSiteInfo);
 
                     if (!nestedConversion.IsImplicit)
@@ -335,7 +337,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var variable = variables[i];
                 if (variable.Single is { } pending)
                 {
-                    if ((object?)pending.Type != null)
+                    if (pending.Type is object)
                     {
                         continue;
                     }
@@ -381,7 +383,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
+#nullable restore
                     switch (variable.Single.Kind)
+#nullable enable
                     {
                         case BoundKind.Local:
                             var local = (BoundLocal)variable.Single;
@@ -396,7 +400,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             break;
                         case BoundKind.DiscardExpression:
                             var pending = (BoundDiscardExpression)variable.Single;
-                            if ((object?)pending.Type == null)
+                            if (pending.Type is null)
                             {
                                 Error(diagnostics, ErrorCode.ERR_TypeInferenceFailedForImplicitlyTypedDeconstructionVariable, pending.Syntax, "_");
                                 variables[i] = new DeconstructionVariable(pending.FailInference(this, diagnostics), pending.Syntax);
@@ -444,7 +448,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     return Single.GetDebuggerDisplay();
                 }
+#nullable restore
                 return $"Nested variables ({NestedVariables.Count})";
+#nullable enable
             }
         }
 
@@ -475,7 +481,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             // (variables) on the left and (elements) on the right
                             mergedType = MakeMergedTupleType(variable.NestedVariables, (BoundTupleLiteral)element, syntax, diagnostics);
                         }
-                        else if ((object?)mergedType == null && diagnostics is object)
+                        else if (mergedType is null && diagnostics is object)
                         {
                             // (variables) on the left and null on the right
                             Error(diagnostics, ErrorCode.ERR_DeconstructRequiresExpression, element.Syntax);
@@ -483,7 +489,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        if ((object?)variable.Single.Type != null)
+                        if (variable?.Single?.Type is object)
                         {
                             // typed-variable on the left
                             mergedType = variable.Single.Type;
@@ -492,7 +498,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    if ((object?)mergedType == null && diagnostics is object)
+                    if (mergedType is null && diagnostics is object)
                     {
                         // a typeless element on the right, matching no variable on the left
                         Error(diagnostics, ErrorCode.ERR_DeconstructRequiresExpression, element.Syntax);
@@ -545,8 +551,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
+#nullable restore
                     value = variable.Single;
                     namesBuilder.Add(ExtractDeconstructResultElementName(value));
+#nullable enable
                 }
                 valuesBuilder.Add(value);
                 typesWithAnnotationsBuilder.Add(TypeWithAnnotations.Create(value.Type));
@@ -721,7 +729,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
 
                         bool isConst = false;
-                        var declType = BindVariableTypeWithAnnotations(component.Designation, diagnostics, component.Type, ref isConst, out bool isVar, out AliasSymbol alias);
+                        var declType = BindVariableTypeWithAnnotations(component.Designation, diagnostics, component.Type, ref isConst, out bool isVar, out _);
                         if (component.Designation.Kind() == SyntaxKind.ParenthesizedVariableDesignation && !isVar)
                         {
                             // An explicit is not allowed with a parenthesized designation
@@ -773,7 +781,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 case SyntaxKind.DiscardDesignation:
                     {
-                        var discarded = (DiscardDesignationSyntax)node;
                         return new DeconstructionVariable(BindDiscardExpression(syntax, declTypeWithAnnotations), syntax);
                     }
                 case SyntaxKind.ParenthesizedVariableDesignation:
@@ -812,7 +819,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             SourceLocalSymbol localSymbol = LookupLocal(designation.Identifier);
 
             // is this a local?
-            if ((object)localSymbol != null)
+            if (localSymbol is object)
             {
                 // Check for variable declaration errors.
                 // Use the binder that owns the scope for the local because this (the current) binder
@@ -830,7 +837,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Is this a field?
             GlobalExpressionVariable field = LookupDeclaredField(designation);
 
-            if ((object)field == null)
+            if (field is null)
             {
                 // We should have the right binder in the chain, cannot continue otherwise.
                 throw ExceptionUtilities.Unreachable;

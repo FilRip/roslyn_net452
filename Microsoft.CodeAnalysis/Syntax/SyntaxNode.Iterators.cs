@@ -71,6 +71,7 @@ namespace Microsoft.CodeAnalysis
             public bool TryGetNextInSpan(in TextSpan span, out SyntaxNodeOrToken value)
             {
                 Debug.Assert(_stack is object);
+#nullable restore
                 while (_stack[_stackPtr].TryMoveNextAndGetCurrent(out value))
                 {
                     if (IsInSpan(in span, value.FullSpan))
@@ -83,10 +84,12 @@ namespace Microsoft.CodeAnalysis
                 return false;
             }
 
+#nullable enable
             public SyntaxNode? TryGetNextAsNodeInSpan(in TextSpan span)
             {
                 Debug.Assert(_stack is object);
                 SyntaxNode? nodeValue;
+#nullable restore
                 while ((nodeValue = _stack[_stackPtr].TryMoveNextAndGetCurrentAsNode()) != null)
                 {
                     if (IsInSpan(in span, nodeValue.FullSpan))
@@ -110,6 +113,8 @@ namespace Microsoft.CodeAnalysis
 
                 _stack[_stackPtr].InitializeFrom(node);
             }
+
+#nullable enable
 
             public void PushChildren(SyntaxNode node, Func<SyntaxNode, bool>? descendIntoChildren)
             {
@@ -218,6 +223,7 @@ namespace Microsoft.CodeAnalysis
             public Which PeekNext()
             {
                 Debug.Assert(_discriminatorStack is object);
+#nullable restore
                 return _discriminatorStack.Peek();
             }
 
@@ -245,8 +251,10 @@ namespace Microsoft.CodeAnalysis
                 return false;
             }
 
+#nullable enable
             public void PushChildren(SyntaxNode node, Func<SyntaxNode, bool>? descendIntoChildren)
             {
+#nullable restore
                 if (descendIntoChildren == null || descendIntoChildren(node))
                 {
                     Debug.Assert(_discriminatorStack is object);
@@ -286,6 +294,7 @@ namespace Microsoft.CodeAnalysis
                 Token
             }
 
+#nullable enable
             private ChildSyntaxListEnumeratorStack _nodeStack;
             private TriviaListEnumeratorStack _triviaStack;
             private readonly ArrayBuilder<SyntaxNodeOrToken>? _tokenStack;
@@ -313,6 +322,7 @@ namespace Microsoft.CodeAnalysis
             public Which PeekNext()
             {
                 Debug.Assert(_discriminatorStack is object);
+#nullable restore
                 return _discriminatorStack.Peek();
             }
 
@@ -348,12 +358,14 @@ namespace Microsoft.CodeAnalysis
                 return _tokenStack.Pop();
             }
 
+#nullable enable
             public void PushChildren(SyntaxNode node, Func<SyntaxNode, bool>? descendIntoChildren)
             {
                 if (descendIntoChildren == null || descendIntoChildren(node))
                 {
                     Debug.Assert(_discriminatorStack is object);
                     _nodeStack.PushChildren(node);
+#nullable restore
                     _discriminatorStack.Push(Which.Node);
                 }
             }
@@ -389,6 +401,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+#nullable enable
         private IEnumerable<SyntaxNode> DescendantNodesOnly(TextSpan span, Func<SyntaxNode, bool>? descendIntoChildren, bool includeSelf)
         {
             if (includeSelf && IsInSpan(in span, this.FullSpan))

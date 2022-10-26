@@ -259,7 +259,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
 
                 If lineBreaksAfter > 0 Then
                     If currentTriviaList.Count > 0 AndAlso EndsInLineBreak(currentTriviaList.Last()) Then
-                        lineBreaksAfter = lineBreaksAfter - 1
+                        lineBreaksAfter -= 1
                     End If
 
                     For i = 0 To lineBreaksAfter - 1

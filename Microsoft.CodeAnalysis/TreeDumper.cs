@@ -182,8 +182,7 @@ namespace Microsoft.CodeAnalysis
                 return "(null)";
             }
 
-            var str = o as string;
-            if (str != null)
+            if (o is string str)
             {
                 return str;
             }
@@ -193,14 +192,12 @@ namespace Microsoft.CodeAnalysis
                 return "(null)";
             }
 
-            var seq = o as IEnumerable;
-            if (seq != null)
+            if (o is IEnumerable seq)
             {
                 return string.Format("{{{0}}}", string.Join(", ", seq.Cast<object>().Select(DumperString).ToArray()));
             }
 
-            var symbol = o as ISymbol;
-            if (symbol != null)
+            if (o is ISymbol symbol)
             {
                 return symbol.ToDisplayString(SymbolDisplayFormat.TestFormat);
             }

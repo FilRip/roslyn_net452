@@ -188,6 +188,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 Debug.Assert(region.Enclosing == this);
                 Debug.Assert(Regions != null);
 
+#nullable restore
+
                 if (Regions.Count == 1)
                 {
                     Debug.Assert(Regions[0] == region);
@@ -296,6 +298,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 CaptureIds = null;
             }
 
+#nullable enable
+
             public ControlFlowRegion ToImmutableRegionAndFree(ArrayBuilder<BasicBlockBuilder> blocks,
                                                               ArrayBuilder<IMethodSymbol> localFunctions,
                                                               ImmutableDictionary<IMethodSymbol, (ControlFlowRegion region, ILocalFunctionOperation operation, int ordinal)>.Builder localFunctionsMap,
@@ -336,6 +340,8 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 }
 
                 CaptureIds?.Sort((x, y) => x.Value.CompareTo(y.Value));
+
+#nullable restore
 
                 var result = new ControlFlowRegion(Kind, FirstBlock.Ordinal, LastBlock.Ordinal, subRegions,
                                                    Locals,
@@ -398,10 +404,12 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 }
             }
 
+#nullable enable
+
             private sealed class AnonymousFunctionsMapBuilder :
                 OperationVisitor<(ImmutableDictionary<IFlowAnonymousFunctionOperation, (ControlFlowRegion region, int ordinal)>.Builder map, ControlFlowRegion region), IOperation>
             {
-                public static readonly AnonymousFunctionsMapBuilder Instance = new AnonymousFunctionsMapBuilder();
+                public static readonly AnonymousFunctionsMapBuilder Instance = new();
 
                 public override IOperation? VisitFlowAnonymousFunction(
                     IFlowAnonymousFunctionOperation operation,

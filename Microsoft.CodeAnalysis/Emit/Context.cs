@@ -26,11 +26,14 @@ namespace Microsoft.CodeAnalysis.Emit
         {
         }
 
+#nullable restore
+
         public EmitContext(
             CommonPEModuleBuilder module,
             DiagnosticBag diagnostics,
             bool metadataOnly,
             bool includePrivateMembers,
+#nullable enable
             SyntaxNode? syntaxNode = null,
             RebuildData? rebuildData = null)
         {
@@ -39,6 +42,8 @@ namespace Microsoft.CodeAnalysis.Emit
             Debug.Assert(module != null);
             Debug.Assert(diagnostics != null);
             Debug.Assert(includePrivateMembers || metadataOnly);
+
+#nullable restore
 
             Module = module;
             SyntaxNode = syntaxNode;

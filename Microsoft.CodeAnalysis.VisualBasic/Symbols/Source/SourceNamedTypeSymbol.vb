@@ -734,7 +734,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     otherSymbol = symbol
                     otherSymbolOffset = 1
                 Else
-                    otherSymbolOffset = otherSymbolOffset + 1
+                    otherSymbolOffset += 1
                 End If
 
                 AddMember(symbol, bodyBinder, members, omitDiagnostics:=False)

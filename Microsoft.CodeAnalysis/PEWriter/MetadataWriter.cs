@@ -2180,7 +2180,7 @@ namespace Microsoft.Cci
 
             foreach (SecurityAttribute securityAttribute in attributes)
             {
-                groupedSecurityAttributes = groupedSecurityAttributes ?? OrderPreservingMultiDictionary<DeclarativeSecurityAction, ICustomAttribute>.GetInstance();
+                groupedSecurityAttributes ??= OrderPreservingMultiDictionary<DeclarativeSecurityAction, ICustomAttribute>.GetInstance();
                 groupedSecurityAttributes.Add(securityAttribute.Action, securityAttribute.Attribute);
             }
 

@@ -359,7 +359,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             var diagnostics = ImmutableArray<Diagnostic>.Empty;
             var hasAllAnalyzers = analyzers.Length == Analyzers.Length;
             var analysisScope = new AnalysisScope(_compilation, _analysisOptions.Options, analyzers, hasAllAnalyzers, _analysisOptions.ConcurrentAnalysis, categorizeDiagnostics: true);
-            Func<ImmutableArray<CompilationEvent>> getPendingEvents = () =>
+            ImmutableArray<CompilationEvent> getPendingEvents() =>
                 _analysisState.GetPendingEvents(analyzers, includeSourceEvents: true, includeNonSourceEvents: true, cancellationToken);
 
             // Compute the analyzer diagnostics for the given analysis scope.
@@ -436,7 +436,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     var actionCounts = await driver.GetAnalyzerActionCountsAsync(analyzer, compilation.Options, cancellationToken).ConfigureAwait(false);
                     analyzerActionCounts.Add(analyzer, actionCounts);
                 }
-                Func<DiagnosticAnalyzer, AnalyzerActionCounts> getAnalyzerActionCounts = analyzer => analyzerActionCounts[analyzer];
+                AnalyzerActionCounts getAnalyzerActionCounts(DiagnosticAnalyzer analyzer) => analyzerActionCounts[analyzer];
 
                 _analysisResultBuilder.ApplySuppressionsAndStoreAnalysisResult(analysisScope, driver, compilation, getAnalyzerActionCounts, fullAnalysisResultForAnalyzersInScope: true);
             }
@@ -689,7 +689,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     var pendingAnalysisScope = pendingAnalyzers.Length < analysisScope.Analyzers.Length ? analysisScope.WithAnalyzers(pendingAnalyzers, hasAllAnalyzers: false) : analysisScope;
 
-                    Func<ImmutableArray<CompilationEvent>> getPendingEvents = () => _analysisState.GetPendingEvents(analysisScope.Analyzers, model.SyntaxTree, cancellationToken);
+                    ImmutableArray<CompilationEvent> getPendingEvents() => _analysisState.GetPendingEvents(analysisScope.Analyzers, model.SyntaxTree, cancellationToken);
 
                     cancellationToken.ThrowIfCancellationRequested();
 
@@ -733,7 +733,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         {
                             if (location.SourceTree != null && location.SourceTree != model.SyntaxTree)
                             {
-                                partialTrees = partialTrees ?? new HashSet<SyntaxTree>();
+                                partialTrees ??= new HashSet<SyntaxTree>();
                                 partialTrees.Add(location.SourceTree);
                             }
                         }
@@ -809,7 +809,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                                 var linkedCancellationToken = linkedCancellationSource.Token;
 
                                 // Core task to compute analyzer diagnostics.
-                                Func<Tuple<Task, CancellationTokenSource>> getComputeTask = () => Tuple.Create(
+                                Tuple<Task, CancellationTokenSource> getComputeTask() => Tuple.Create(
                                     Task.Run(async () =>
                                     {
                                         try
@@ -904,8 +904,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     driver = await GetAnalyzerDriverAsync(cancellationToken).ConfigureAwait(false);
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    Func<AsyncQueue<CompilationEvent>, ImmutableArray<AdditionalText>, ImmutableArray<CompilationEvent>> getCompilationEvents =
-                        (eventQueue, additionalFiles) => dequeueGeneratedCompilationEvents(eventQueue, additionalFiles);
+                    static ImmutableArray<CompilationEvent> getCompilationEvents(AsyncQueue<CompilationEvent> eventQueue, ImmutableArray<AdditionalText> additionalFiles) => dequeueGeneratedCompilationEvents(eventQueue, additionalFiles);
                     var additionalFiles = _analysisOptions.Options?.AdditionalFiles ?? ImmutableArray<AdditionalText>.Empty;
                     await _analysisState.OnCompilationEventsGeneratedAsync(getCompilationEvents, _compilation.EventQueue, additionalFiles, driver, cancellationToken).ConfigureAwait(false);
                 }
@@ -1117,6 +1116,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         Debug.Assert(_executingConcurrentTreeTasksOpt != null);
                         Debug.Assert(_concurrentTreeTaskTokensOpt != null);
 
+#nullable restore
                         if (!_executingConcurrentTreeTasksOpt.TryGetValue(tree, out executingTreeTask) ||
                             _concurrentTreeTaskTokensOpt[executingTreeTask.Item1] < newTaskToken)
                         {
@@ -1181,6 +1181,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
         }
 
+#nullable enable
         private void ClearExecutingTask(Task? computeTask, SourceOrAdditionalFile? fileOpt)
         {
             if (computeTask != null)
@@ -1192,6 +1193,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         Debug.Assert(_executingConcurrentTreeTasksOpt != null);
                         Debug.Assert(_concurrentTreeTaskTokensOpt != null);
 
+#nullable restore
                         if (_executingConcurrentTreeTasksOpt.TryGetValue(fileOpt.Value, out Tuple<Task, CancellationTokenSource> executingTask) &&
                             executingTask.Item1 == computeTask)
                         {
@@ -1319,6 +1321,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// Delegate can do custom tasks such as report the given analyzer exception diagnostic, report a non-fatal watson for the exception, etc.
         /// </param>
         /// </summary>
+#nullable enable
         public static bool IsDiagnosticAnalyzerSuppressed(
             DiagnosticAnalyzer analyzer,
             CompilationOptions options,

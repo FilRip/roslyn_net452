@@ -58,7 +58,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             get
             {
                 Debug.Assert(_lazyAnalyzerActionCountsMap != null);
+#nullable restore
                 return _lazyAnalyzerActionCountsMap;
+#nullable enable
             }
         }
 
@@ -520,6 +522,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// </summary>
         public bool HasPendingSymbolAnalysis(AnalysisScope analysisScope, CancellationToken cancellationToken)
         {
+#nullable restore
             Debug.Assert(analysisScope.FilterFileOpt.HasValue);
             Debug.Assert(analysisScope.FilterFileOpt.Value.SourceTree != null);
 
@@ -541,6 +544,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             return false;
         }
+
+#nullable enable
 
         private ImmutableArray<SymbolDeclaredCompilationEvent> GetPendingSymbolDeclaredEvents(SyntaxTree tree, CancellationToken cancellationToken)
         {

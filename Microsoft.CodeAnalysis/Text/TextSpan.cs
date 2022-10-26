@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis.Text
         /// </summary>
         public override bool Equals(object? obj)
         {
-            return obj is TextSpan && Equals((TextSpan)obj);
+            return obj is TextSpan span && Equals(span);
         }
 
         /// <summary>

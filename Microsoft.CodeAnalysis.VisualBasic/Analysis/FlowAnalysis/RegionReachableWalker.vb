@@ -19,8 +19,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim walker = New RegionReachableWalker(info, region)
             Try
                 If walker.Analyze() Then
-                    startPointIsReachable = If(walker._regionStartPointIsReachable.HasValue, walker._regionStartPointIsReachable.Value, True)
-                    endPointIsReachable = If(walker._regionEndPointIsReachable.HasValue, walker._regionEndPointIsReachable.Value, walker.State.Alive)
+                    startPointIsReachable = If(walker._regionStartPointIsReachable, True)
+                    endPointIsReachable = If(walker._regionEndPointIsReachable, walker.State.Alive)
                 Else
                     startPointIsReachable = True
                     startPointIsReachable = False

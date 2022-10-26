@@ -32,6 +32,8 @@ namespace Microsoft.CodeAnalysis
             private readonly string _suppressionId;
             private readonly LocalizableString _suppressionJustification;
 
+#nullable restore
+
             public SuppressionDiagnostic(
                 Diagnostic originalDiagnostic,
                 string suppressionId,
@@ -50,6 +52,8 @@ namespace Microsoft.CodeAnalysis
             public override DiagnosticDescriptor Descriptor => s_suppressionDiagnosticDescriptor;
 
             public override string Id => Descriptor.Id;
+
+#nullable enable
 
             public override string GetMessage(IFormatProvider? formatProvider = null)
             {

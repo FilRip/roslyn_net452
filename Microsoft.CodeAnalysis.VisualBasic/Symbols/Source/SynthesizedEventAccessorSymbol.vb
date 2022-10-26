@@ -378,7 +378,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             While i < tmps.Length
                 tmps(i) = New SynthesizedLocal(accessor, delegateType, SynthesizedLocalKind.LoweringTemp)
                 boundTmps(i) = New BoundLocal(syntax, tmps(i), delegateType)
-                i = i + 1
+                i += 1
             End While
 
             ' tmp0 = _event;

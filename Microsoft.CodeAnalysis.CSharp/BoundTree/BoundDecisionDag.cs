@@ -21,19 +21,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static ImmutableArray<BoundDecisionDagNode> Successors(BoundDecisionDagNode node)
         {
-            switch (node)
+            return node switch
             {
-                case BoundEvaluationDecisionDagNode p:
-                    return ImmutableArray.Create(p.Next);
-                case BoundTestDecisionDagNode p:
-                    return ImmutableArray.Create(p.WhenFalse, p.WhenTrue);
-                case BoundLeafDecisionDagNode d:
-                    return ImmutableArray<BoundDecisionDagNode>.Empty;
-                case BoundWhenDecisionDagNode w:
-                    return (w.WhenFalse != null) ? ImmutableArray.Create(w.WhenTrue, w.WhenFalse) : ImmutableArray.Create(w.WhenTrue);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(node.Kind);
-            }
+                BoundEvaluationDecisionDagNode p => ImmutableArray.Create(p.Next),
+                BoundTestDecisionDagNode p => ImmutableArray.Create(p.WhenFalse, p.WhenTrue),
+                BoundLeafDecisionDagNode _ => ImmutableArray<BoundDecisionDagNode>.Empty,
+                BoundWhenDecisionDagNode w => (w.WhenFalse != null) ? ImmutableArray.Create(w.WhenTrue, w.WhenFalse) : ImmutableArray.Create(w.WhenTrue),
+                _ => throw ExceptionUtilities.UnexpectedValue(node.Kind),
+            };
         }
 
         public ImmutableHashSet<LabelSymbol> ReachableLabels
@@ -93,7 +88,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // a node's successors before the node, the replacement should always be in the cache when we need it.
             var replacement = PooledDictionary<BoundDecisionDagNode, BoundDecisionDagNode>.GetInstance();
 
-            Func<BoundDecisionDagNode, BoundDecisionDagNode> getReplacementForChild = n => replacement[n];
+            BoundDecisionDagNode getReplacementForChild(BoundDecisionDagNode n) => replacement[n];
 
             // Loop backwards through the topologically sorted nodes to translate them, so that we always visit a node after its successors
             for (int i = sortedNodes.Length - 1; i >= 0; i--)
@@ -114,19 +109,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static BoundDecisionDagNode TrivialReplacement(BoundDecisionDagNode dag, Func<BoundDecisionDagNode, BoundDecisionDagNode> replacement)
         {
-            switch (dag)
+            return dag switch
             {
-                case BoundEvaluationDecisionDagNode p:
-                    return p.Update(p.Evaluation, replacement(p.Next));
-                case BoundTestDecisionDagNode p:
-                    return p.Update(p.Test, replacement(p.WhenTrue), replacement(p.WhenFalse));
-                case BoundWhenDecisionDagNode p:
-                    return p.Update(p.Bindings, p.WhenExpression, replacement(p.WhenTrue), (p.WhenFalse != null) ? replacement(p.WhenFalse) : null);
-                case BoundLeafDecisionDagNode p:
-                    return p;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(dag);
-            }
+                BoundEvaluationDecisionDagNode p => p.Update(p.Evaluation, replacement(p.Next)),
+                BoundTestDecisionDagNode p => p.Update(p.Test, replacement(p.WhenTrue), replacement(p.WhenFalse)),
+                BoundWhenDecisionDagNode p => p.Update(p.Bindings, p.WhenExpression, replacement(p.WhenTrue), (p.WhenFalse != null) ? replacement(p.WhenFalse) : null),
+                BoundLeafDecisionDagNode p => p,
+                _ => throw ExceptionUtilities.UnexpectedValue(dag),
+            };
         }
 
         /// <summary>
@@ -218,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             string tempName(BoundDagTemp t)
             {
-                return $"t{tempIdentifier(t.Source)}{(t.Index != 0 ? $".{t.Index.ToString()}" : "")}";
+                return $"t{tempIdentifier(t.Source)}{(t.Index != 0 ? $".{t.Index}" : "")}";
             }
 
             var resultBuilder = PooledStringBuilder.GetInstance();

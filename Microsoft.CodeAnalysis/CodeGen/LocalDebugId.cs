@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// </summary>
         public readonly int Ordinal;
 
-        public static readonly LocalDebugId None = new LocalDebugId(isNone: true);
+        public static readonly LocalDebugId None = new(isNone: true);
 
         private LocalDebugId(bool isNone)
         {
@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public override bool Equals(object? obj)
         {
-            return obj is LocalDebugId && Equals((LocalDebugId)obj);
+            return obj is LocalDebugId id && Equals(id);
         }
 
         public override string ToString()

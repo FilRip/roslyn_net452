@@ -36,7 +36,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim i As Integer = 0
             Do
                 Dim child = list(i)
-                i = i + 1
+                i += 1
 
                 Dim asNode = child.AsNode()
                 If asNode IsNot Nothing Then

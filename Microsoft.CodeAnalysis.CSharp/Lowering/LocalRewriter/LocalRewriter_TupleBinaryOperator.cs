@@ -105,9 +105,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // We push an implicit tuple converion down to its elements
                 var syntax = boundConversion.Syntax;
+#nullable restore
                 var destElementTypes = expr.Type.TupleElementTypesWithAnnotations;
                 var numElements = destElementTypes.Length;
                 var srcElementFields = boundConversion.Operand.Type.TupleElements;
+#nullable enable
                 var fieldAccessorsBuilder = ArrayBuilder<BoundExpression>.GetInstance(numElements);
                 var savedTuple = DeferSideEffectingArgumentToTempForTupleEquality(LowerConversions(boundConversion.Operand), initEffects, temps);
                 var elementConversions = conversion.UnderlyingConversions;
@@ -221,20 +223,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // These are conversions from-expression that
                 // must be performed on the original expression, not on a copy of it.
-                switch (kind)
+                return kind switch
                 {
-                    case ConversionKind.AnonymousFunction:       // a lambda cannot be saved without a target type
-                    case ConversionKind.MethodGroup:             // similarly for a method group
-                    case ConversionKind.InterpolatedString:      // an interpolated string must be saved in interpolated form
-                    case ConversionKind.SwitchExpression:        // a switch expression must have its arms converted
-                    case ConversionKind.StackAllocToPointerType: // a stack alloc is not well-defined without an enclosing conversion
-                    case ConversionKind.ConditionalExpression:   // a conditional expression must have its alternatives converted
-                    case ConversionKind.StackAllocToSpanType:
-                    case ConversionKind.ObjectCreation:
-                        return true;
-                    default:
-                        return false;
-                }
+                    // a lambda cannot be saved without a target type
+                    ConversionKind.AnonymousFunction or ConversionKind.MethodGroup or ConversionKind.InterpolatedString or ConversionKind.SwitchExpression or ConversionKind.StackAllocToPointerType or ConversionKind.ConditionalExpression or ConversionKind.StackAllocToSpanType or ConversionKind.ObjectCreation => true,
+                    _ => false,
+                };
             }
         }
 
@@ -386,19 +380,15 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression makeNullableHasValue(BoundExpression expr)
             {
                 // Optimize conversions where we can use the HasValue of the underlying
-                switch (expr)
+                return expr switch
                 {
-                    case BoundConversion { Conversion: { IsIdentity: true }, Operand: var o }:
-                        return makeNullableHasValue(o);
-                    case BoundConversion { Conversion: { IsNullable: true, UnderlyingConversions: var underlying }, Operand: var o }
-                            when expr.Type.IsNullableType() && o.Type is { } && o.Type.IsNullableType() && !underlying[0].IsUserDefined:
-                        // Note that a user-defined conversion from K to Nullable<R> which may translate
-                        // a non-null K to a null value gives rise to a lifted conversion from Nullable<K> to Nullable<R> with the same property.
-                        // We therefore do not attempt to optimize nullable conversions with an underlying user-defined conversion.
-                        return makeNullableHasValue(o);
-                    default:
-                        return MakeNullableHasValue(expr.Syntax, expr);
-                }
+                    BoundConversion { Conversion: { IsIdentity: true }, Operand: var o } => makeNullableHasValue(o),
+                    BoundConversion { Conversion: { IsNullable: true, UnderlyingConversions: var underlying }, Operand: var o }
+when expr.Type.IsNullableType() && o.Type is { } && o.Type.IsNullableType() && !underlying[0].IsUserDefined => makeNullableHasValue(o),// Note that a user-defined conversion from K to Nullable<R> which may translate
+                                                                                                                                       // a non-null K to a null value gives rise to a lifted conversion from Nullable<K> to Nullable<R> with the same property.
+                                                                                                                                       // We therefore do not attempt to optimize nullable conversions with an underlying user-defined conversion.
+                    _ => MakeNullableHasValue(expr.Syntax, expr),
+                };
             }
         }
 
@@ -428,7 +418,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var operand = MakeValueOrDefaultTemp(o, temps, effects);
                         var types = expr.Type.GetNullableUnderlyingType().TupleElementTypesWithAnnotations;
+#nullable restore
                         int tupleCardinality = operand.Type.TupleElementTypesWithAnnotations.Length;
+#nullable enable
                         var underlyingConversions = tupleConversion.UnderlyingConversions;
                         var argumentBuilder = ArrayBuilder<BoundExpression>.GetInstance(tupleCardinality);
                         for (int i = 0; i < tupleCardinality; i++)
@@ -489,6 +481,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
+#nullable restore
             return currentResult;
         }
 

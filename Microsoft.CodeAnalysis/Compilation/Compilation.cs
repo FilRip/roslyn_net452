@@ -2612,7 +2612,7 @@ namespace Microsoft.CodeAnalysis
             CompilationTestData? testData,
             CancellationToken cancellationToken)
         {
-            options = options ?? EmitOptions.Default.WithIncludePrivateMembers(metadataPEStream == null);
+            options ??= EmitOptions.Default.WithIncludePrivateMembers(metadataPEStream == null);
 
             bool embedPdb = options.DebugInformationFormat == DebugInformationFormat.Embedded;
             Debug.Assert(!embedPdb || pdbStream == null);
@@ -2874,7 +2874,7 @@ namespace Microsoft.CodeAnalysis
 
             if (moduleBeingBuilt.DebugInformationFormat == DebugInformationFormat.Embedded || pdbStreamProvider != null)
             {
-                pePdbFilePath = pePdbFilePath ?? FileNameUtilities.ChangeExtension(SourceModule.Name, "pdb");
+                pePdbFilePath ??= FileNameUtilities.ChangeExtension(SourceModule.Name, "pdb");
             }
             else
             {

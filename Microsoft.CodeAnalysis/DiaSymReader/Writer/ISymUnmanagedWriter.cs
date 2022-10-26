@@ -15,12 +15,14 @@ namespace Microsoft.DiaSymReader
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("98ECEE1E-752D-11d3-8D56-00C04F680B2B"), SuppressUnmanagedCodeSecurity]
     internal interface IPdbWriter
     {
+#pragma warning disable IDE1006
         int __SetPath(/*[in] const WCHAR* szFullPathName, [in] IStream* pIStream, [in] BOOL fFullBuild*/);
         int __OpenMod(/*[in] const WCHAR* szModuleName, [in] const WCHAR* szFileName*/);
         int __CloseMod();
         int __GetPath(/*[in] DWORD ccData,[out] DWORD* pccData,[out, size_is(ccData),length_is(*pccData)] WCHAR szPath[]*/);
 
         void GetSignatureAge(out uint sig, out int age);
+#pragma warning restore IDE1006
     }
 
     /// <summary>
@@ -121,6 +123,7 @@ namespace Microsoft.DiaSymReader
     internal interface ISymUnmanagedWriter8 : ISymUnmanagedWriter5
     {
         //  ISymUnmanagedWriter, ISymUnmanagedWriter2, ISymUnmanagedWriter3, ISymUnmanagedWriter4, ISymUnmanagedWriter5
+#pragma warning disable IDE1006
         void _VtblGap1_33();
 
         // ISymUnmanagedWriter6
@@ -133,6 +136,7 @@ namespace Microsoft.DiaSymReader
         void UpdateSignature(Guid pdbId, uint stamp, int age);
         unsafe void SetSourceServerData([In] byte* data, int size);
         unsafe void SetSourceLinkData([In] byte* data, int size);
+#pragma warning restore IDE1006
     }
 
     /// <summary>

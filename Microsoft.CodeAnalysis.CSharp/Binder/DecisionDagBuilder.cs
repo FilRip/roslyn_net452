@@ -642,8 +642,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             ComputeBoundDecisionDagNodes(decisionDag, defaultDecision);
 
             var rootDecisionDagNode = decisionDag.RootNode.Dag;
+#nullable restore
             return new BoundDecisionDag(rootDecisionDagNode.Syntax, rootDecisionDagNode);
         }
+#nullable enable
 
         /// <summary>
         /// Make a <see cref="DecisionDag"/> (state machine) starting with the given set of cases in the root node,
@@ -833,8 +835,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         // The final state here does not need bindings, as they will be performed before evaluating the when clause (see below)
                         BoundDecisionDagNode whenTrue = finalState(first.Syntax, first.CaseLabel, default);
-                        BoundDecisionDagNode? whenFalse = state.FalseBranch.Dag;
+                        BoundDecisionDagNode? whenFalse = state?.FalseBranch?.Dag;
+#nullable restore
                         state.Dag = uniqifyDagNode(new BoundWhenDecisionDagNode(first.Syntax, first.Bindings, first.WhenClause, whenTrue, whenFalse));
+#nullable enable
                     }
 
                     BoundDecisionDagNode finalState(SyntaxNode syntax, LabelSymbol label, ImmutableArray<BoundPatternBinding> bindings)
@@ -850,13 +854,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                         case BoundDagEvaluation e:
                             {
                                 BoundDecisionDagNode? next = state.TrueBranch!.Dag;
+#nullable restore
                                 state.Dag = uniqifyDagNode(new BoundEvaluationDecisionDagNode(e.Syntax, e, next));
                             }
                             break;
                         case BoundDagTest d:
                             {
+#nullable enable
                                 BoundDecisionDagNode? whenTrue = state.TrueBranch!.Dag;
                                 BoundDecisionDagNode? whenFalse = state.FalseBranch!.Dag;
+#nullable restore
                                 state.Dag = uniqifyDagNode(new BoundTestDecisionDagNode(d.Syntax, d, whenTrue, whenFalse));
                             }
                             break;
@@ -868,6 +875,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             uniqueNodes.Free();
         }
+
+#nullable enable
 
         private void SplitCase(
             StateForCase stateForCase,
@@ -942,21 +951,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableDictionary<BoundDagTemp, IValueSet> values,
             BoundDagTest test)
         {
-            switch (test)
+            return test switch
             {
-                case BoundDagEvaluation _:
-                case BoundDagExplicitNullTest _:
-                case BoundDagNonNullTest _:
-                case BoundDagTypeTest _:
-                    return (values, values, true, true);
-                case BoundDagValueTest t:
-                    return resultForRelation(BinaryOperatorKind.Equal, t.Value);
-                case BoundDagRelationalTest t:
-                    return resultForRelation(t.Relation, t.Value);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(test);
-            }
-
+                BoundDagEvaluation _ or BoundDagExplicitNullTest _ or BoundDagNonNullTest _ or BoundDagTypeTest _ => (values, values, true, true),
+                BoundDagValueTest t => resultForRelation(BinaryOperatorKind.Equal, t.Value),
+                BoundDagRelationalTest t => resultForRelation(t.Relation, t.Value),
+                _ => throw ExceptionUtilities.UnexpectedValue(test),
+            };
             (
             ImmutableDictionary<BoundDagTemp, IValueSet> whenTrueValues,
             ImmutableDictionary<BoundDagTemp, IValueSet> whenFalseValues,
@@ -1513,6 +1514,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// After dag construction is complete we treat a DagState as using object equality as equivalent
         /// states have been merged.
         /// </summary>
+#nullable enable
         private sealed class DagStateEquivalence : IEqualityComparer<DagState>
         {
             public static readonly DagStateEquivalence Instance = new DagStateEquivalence();
@@ -1521,7 +1523,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public bool Equals(DagState? x, DagState? y)
             {
+#nullable restore
                 return x == y || x.Cases.SequenceEqual(y.Cases, (a, b) => a.Equals(b));
+#nullable enable
             }
 
             public int GetHashCode(DagState x)

@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         /// Gets or creates a control flow graph for the given <paramref name="localFunction"/> defined in
         /// the given <paramref name="controlFlowGraph"/> or any of it's parent control flow graphs.
         /// </summary>
-        public static ControlFlowGraph GetLocalFunctionControlFlowGraphInScope(this ControlFlowGraph controlFlowGraph, IMethodSymbol localFunction, CancellationToken cancellationToken = default)
+        public static ControlFlowGraph GetLocalFunctionControlFlowGraphInScope(this ControlFlowGraph controlFlowGraph, IMethodSymbol localFunction)
         {
             if (controlFlowGraph == null)
             {
@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             ControlFlowGraph? currentGraph = controlFlowGraph;
             do
             {
-                if (currentGraph.TryGetLocalFunctionControlFlowGraph(localFunction, cancellationToken, out ControlFlowGraph? localFunctionControlFlowGraph))
+                if (currentGraph.TryGetLocalFunctionControlFlowGraph(localFunction, out ControlFlowGraph? localFunctionControlFlowGraph))
                 {
                     return localFunctionControlFlowGraph;
                 }

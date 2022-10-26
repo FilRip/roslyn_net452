@@ -18,15 +18,25 @@ namespace Microsoft.CodeAnalysis
             private readonly RelativePathResolver _pathResolver;
             private readonly Func<string, MetadataReferenceProperties, PortableExecutableReference> _provider;
 
-            public LoggingMetadataFileReferenceResolver(RelativePathResolver pathResolver, Func<string, MetadataReferenceProperties, PortableExecutableReference> provider, TouchedFileLogger? logger)
+#nullable restore
+
+            public LoggingMetadataFileReferenceResolver(RelativePathResolver pathResolver,
+                Func<string, MetadataReferenceProperties,
+                PortableExecutableReference> provider,
+#nullable enable
+                TouchedFileLogger? logger)
             {
                 Debug.Assert(pathResolver != null);
                 Debug.Assert(provider != null);
+
+#nullable restore
 
                 _pathResolver = pathResolver;
                 _provider = provider;
                 _logger = logger;
             }
+
+#nullable enable
 
             public override ImmutableArray<PortableExecutableReference> ResolveReference(string reference, string? baseFilePath, MetadataReferenceProperties properties)
             {

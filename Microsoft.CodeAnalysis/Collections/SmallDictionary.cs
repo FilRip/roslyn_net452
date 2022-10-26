@@ -476,8 +476,7 @@ namespace Microsoft.CodeAnalysis
 
         private void AddNode(AvlNode node, AvlNode? parent, K key, V value)
         {
-            AvlNodeHead? head = node as AvlNodeHead;
-            if (head != null)
+            if (node is AvlNodeHead head)
             {
                 var newNext = new NodeLinked(key, value, head.next);
                 head.next = newNext;
@@ -853,7 +852,7 @@ namespace Microsoft.CodeAnalysis
                 cur = cur.Left;
             }
 
-            h = h + h / 2;
+            h += h / 2;
             return h;
         }
     }

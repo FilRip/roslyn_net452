@@ -1660,52 +1660,50 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
                 else
                 {
-                    ReportMismatchInReturnType<(TypeSymbol implementingType, bool isExplicit)> reportMismatchInReturnType =
-                        (diagnostics, implementedMethod, implementingMethod, topLevel, arg) =>
+                    static void reportMismatchInReturnType(BindingDiagnosticBag diagnostics, MethodSymbol implementedMethod, MethodSymbol implementingMethod, bool topLevel, (TypeSymbol implementingType, bool isExplicit) arg)
+                    {
+                        if (arg.isExplicit)
                         {
-                            if (arg.isExplicit)
-                            {
-                                // We use ConstructedFrom symbols here and below to not leak methods with Ignored annotations in type arguments
-                                // into diagnostics
-                                diagnostics.Add(topLevel ?
-                                                    ErrorCode.WRN_TopLevelNullabilityMismatchInReturnTypeOnExplicitImplementation :
-                                                    ErrorCode.WRN_NullabilityMismatchInReturnTypeOnExplicitImplementation,
-                                                implementingMethod.Locations[0], new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
-                            }
-                            else
-                            {
-                                diagnostics.Add(topLevel ?
-                                                    ErrorCode.WRN_TopLevelNullabilityMismatchInReturnTypeOnImplicitImplementation :
-                                                    ErrorCode.WRN_NullabilityMismatchInReturnTypeOnImplicitImplementation,
-                                                GetImplicitImplementationDiagnosticLocation(implementedMethod, arg.implementingType, implementingMethod),
-                                                new FormattedSymbol(implementingMethod, SymbolDisplayFormat.MinimallyQualifiedFormat),
-                                                new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
-                            }
-                        };
+                            // We use ConstructedFrom symbols here and below to not leak methods with Ignored annotations in type arguments
+                            // into diagnostics
+                            diagnostics.Add(topLevel ?
+                                                ErrorCode.WRN_TopLevelNullabilityMismatchInReturnTypeOnExplicitImplementation :
+                                                ErrorCode.WRN_NullabilityMismatchInReturnTypeOnExplicitImplementation,
+                                            implementingMethod.Locations[0], new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
+                        }
+                        else
+                        {
+                            diagnostics.Add(topLevel ?
+                                                ErrorCode.WRN_TopLevelNullabilityMismatchInReturnTypeOnImplicitImplementation :
+                                                ErrorCode.WRN_NullabilityMismatchInReturnTypeOnImplicitImplementation,
+                                            GetImplicitImplementationDiagnosticLocation(implementedMethod, arg.implementingType, implementingMethod),
+                                            new FormattedSymbol(implementingMethod, SymbolDisplayFormat.MinimallyQualifiedFormat),
+                                            new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
+                        }
+                    }
 
-                    ReportMismatchInParameterType<(TypeSymbol implementingType, bool isExplicit)> reportMismatchInParameterType =
-                        (diagnostics, implementedMethod, implementingMethod, implementingParameter, topLevel, arg) =>
+                    static void reportMismatchInParameterType(BindingDiagnosticBag diagnostics, MethodSymbol implementedMethod, MethodSymbol implementingMethod, ParameterSymbol implementingParameter, bool topLevel, (TypeSymbol implementingType, bool isExplicit) arg)
+                    {
+                        if (arg.isExplicit)
                         {
-                            if (arg.isExplicit)
-                            {
-                                diagnostics.Add(topLevel ?
-                                                    ErrorCode.WRN_TopLevelNullabilityMismatchInParameterTypeOnExplicitImplementation :
-                                                    ErrorCode.WRN_NullabilityMismatchInParameterTypeOnExplicitImplementation,
-                                                implementingMethod.Locations[0],
-                                                new FormattedSymbol(implementingParameter, SymbolDisplayFormat.ShortFormat),
-                                                new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
-                            }
-                            else
-                            {
-                                diagnostics.Add(topLevel ?
-                                                    ErrorCode.WRN_TopLevelNullabilityMismatchInParameterTypeOnImplicitImplementation :
-                                                    ErrorCode.WRN_NullabilityMismatchInParameterTypeOnImplicitImplementation,
-                                                GetImplicitImplementationDiagnosticLocation(implementedMethod, arg.implementingType, implementingMethod),
-                                                new FormattedSymbol(implementingParameter, SymbolDisplayFormat.ShortFormat),
-                                                new FormattedSymbol(implementingMethod, SymbolDisplayFormat.MinimallyQualifiedFormat),
-                                                new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
-                            }
-                        };
+                            diagnostics.Add(topLevel ?
+                                                ErrorCode.WRN_TopLevelNullabilityMismatchInParameterTypeOnExplicitImplementation :
+                                                ErrorCode.WRN_NullabilityMismatchInParameterTypeOnExplicitImplementation,
+                                            implementingMethod.Locations[0],
+                                            new FormattedSymbol(implementingParameter, SymbolDisplayFormat.ShortFormat),
+                                            new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
+                        }
+                        else
+                        {
+                            diagnostics.Add(topLevel ?
+                                                ErrorCode.WRN_TopLevelNullabilityMismatchInParameterTypeOnImplicitImplementation :
+                                                ErrorCode.WRN_NullabilityMismatchInParameterTypeOnImplicitImplementation,
+                                            GetImplicitImplementationDiagnosticLocation(implementedMethod, arg.implementingType, implementingMethod),
+                                            new FormattedSymbol(implementingParameter, SymbolDisplayFormat.ShortFormat),
+                                            new FormattedSymbol(implementingMethod, SymbolDisplayFormat.MinimallyQualifiedFormat),
+                                            new FormattedSymbol(implementedMethod.ConstructedFrom, SymbolDisplayFormat.MinimallyQualifiedFormat));
+                        }
+                    }
 
                     switch (interfaceMember.Kind)
                     {

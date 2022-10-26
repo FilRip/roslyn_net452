@@ -810,7 +810,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     Select Case type.TypeKind
                         Case TypeKind.TypeParameter
                             ' Add constraints from type parameter.
-                            DirectCast(type, TypeParameterSymbol).GetAllConstraints(constraintsBuilder, If(fromConstraintOpt.HasValue, fromConstraintOpt.Value, constraint))
+                            DirectCast(type, TypeParameterSymbol).GetAllConstraints(constraintsBuilder, If(fromConstraintOpt, constraint))
                             Continue For
 
                         Case TypeKind.Error
@@ -851,7 +851,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Public Overrides Function ToString() As String
                 Dim result = String.Format("{0} : {1}", TypeParameter, Constraint)
                 If IsBad Then
-                    result = result & " (bad)"
+                    result &= " (bad)"
                 End If
                 Return result
             End Function

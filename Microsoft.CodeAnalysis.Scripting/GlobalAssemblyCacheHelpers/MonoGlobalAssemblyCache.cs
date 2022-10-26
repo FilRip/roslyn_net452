@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis
 
         public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(AssemblyName partialName, ImmutableArray<ProcessorArchitecture> architectureFilter = default)
         {
-            return GetAssemblyIdentitiesAndPaths(partialName, architectureFilter).Select(identityAndPath => identityAndPath.Item1);
+            return GetAssemblyIdentitiesAndPaths(partialName, architectureFilter).Select(identityAndPath => identityAndPath.Identity);
         }
 
         public override IEnumerable<AssemblyIdentity> GetAssemblyIdentities(string partialName = null, ImmutableArray<ProcessorArchitecture> architectureFilter = default)
@@ -176,7 +176,7 @@ namespace Microsoft.CodeAnalysis
             AssemblyIdentity assemblyIdentity = null;
 
             location = null;
-            bool isBestMatch = false;
+            bool isBestMatch;
 
             foreach (var identityAndPath in GetAssemblyIdentitiesAndPaths(assemblyName, architectureFilter))
             {

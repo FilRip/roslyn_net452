@@ -35,8 +35,8 @@ namespace Roslyn.Utilities
         {
             RoslynDebug.Assert(PathUtilities.IsAbsolute(filePath));
 
-            Queue<string> workList = new Queue<string>();
-            HashSet<string> assemblySet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            Queue<string> workList = new();
+            HashSet<string> assemblySet = new(StringComparer.OrdinalIgnoreCase);
 
             workList.Enqueue(filePath);
 
@@ -143,7 +143,7 @@ namespace Roslyn.Utilities
             RoslynDebug.Assert(PathUtilities.IsAbsolute(assemblyPath));
             RoslynDebug.Assert(dependencyFilePaths != null);
 
-            HashSet<AssemblyIdentity> assemblyDefinitions = new HashSet<AssemblyIdentity>();
+            HashSet<AssemblyIdentity> assemblyDefinitions = new();
             foreach (var potentialDependency in dependencyFilePaths)
             {
                 using (var reader = new PEReader(FileUtilities.OpenRead(potentialDependency)))
@@ -155,7 +155,7 @@ namespace Roslyn.Utilities
                 }
             }
 
-            HashSet<AssemblyIdentity> assemblyReferences = new HashSet<AssemblyIdentity>();
+            HashSet<AssemblyIdentity> assemblyReferences = new();
             using (var reader = new PEReader(FileUtilities.OpenRead(assemblyPath)))
             {
                 var metadataReader = reader.GetMetadataReader();

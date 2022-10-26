@@ -1434,7 +1434,7 @@ lVbRuntimePlus:
 
             If documentationPath Is GenerateFileNameForDocComment Then
                 documentationPath = PathUtilities.CombineAbsoluteAndRelativePaths(outputDirectory, PathUtilities.RemoveExtension(outputFileName))
-                documentationPath = documentationPath + ".xml"
+                documentationPath += ".xml"
             End If
 
             ' Enable interactive mode if either `\i` option is passed in or no arguments are specified (`vbi`, `vbi script.vbx \i`).
@@ -1824,7 +1824,7 @@ lVbRuntimePlus:
             If trimmedSymbolList.Length > 0 AndAlso IsConnectorPunctuation(trimmedSymbolList(trimmedSymbolList.Length - 1)) Then
                 ' In case the symbol list ends with '_' we add ',' to the end of the list which in some 
                 ' cases will produce an error 30999 to match Dev11 behavior
-                symbolList = symbolList + ","
+                symbolList += ","
             End If
 
             ' In order to determine our conditional compilation symbols, we must parse the string we get from the
@@ -2290,7 +2290,7 @@ lVbRuntimePlus:
 
                 If kind.IsNetModule() Then
                     If ext.Length = 0 Then
-                        outputFileName = outputFileName & ".netmodule"
+                        outputFileName &= ".netmodule"
                     End If
                 Else
                     If Not ext.Equals(".exe", StringComparison.OrdinalIgnoreCase) And
@@ -2298,7 +2298,7 @@ lVbRuntimePlus:
                         Not ext.Equals(".netmodule", StringComparison.OrdinalIgnoreCase) And
                         Not ext.Equals(".winmdobj", StringComparison.OrdinalIgnoreCase) Then
                         simpleName = outputFileName
-                        outputFileName = outputFileName & kind.GetDefaultExtension()
+                        outputFileName &= kind.GetDefaultExtension()
                     End If
 
                     If simpleName Is Nothing Then

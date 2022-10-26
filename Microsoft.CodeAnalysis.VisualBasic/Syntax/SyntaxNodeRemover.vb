@@ -54,7 +54,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
                     Dim span = nodes(i).FullSpan
                     start = Math.Min(start, span.Start)
                     [end] = Math.Max([end], span.End)
-                    i = i + 1
+                    i += 1
                 End While
 
                 Return New TextSpan(start, [end] - start)

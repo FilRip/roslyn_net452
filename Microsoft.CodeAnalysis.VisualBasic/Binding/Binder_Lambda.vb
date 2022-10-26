@@ -343,8 +343,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 <Out()> ByRef seenReturnWithAValue As Boolean,
                 <[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol)
             ) As ConversionKind
-                Dim visitor As New LambdaRelaxationVisitor(lambdaSymbol, isIterator)
-                visitor._useSiteDiagnostics = useSiteInfo
+                Dim visitor As New LambdaRelaxationVisitor(lambdaSymbol, isIterator) With {
+                    ._useSiteDiagnostics = useSiteInfo
+                }
                 visitor.VisitBlock(lambdaBlock)
                 seenReturnWithAValue = visitor._seenReturnWithAValue
                 useSiteInfo = visitor._useSiteDiagnostics

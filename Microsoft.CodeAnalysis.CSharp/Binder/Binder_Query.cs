@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 boundFromExpression = BindToNaturalType(boundFromExpression, diagnostics);
             }
 
-            QueryTranslationState state = new QueryTranslationState();
+            QueryTranslationState state = new();
             state.fromExpression = MakeMemberAccessValue(boundFromExpression, diagnostics);
 
             var x = state.rangeVariable = state.AddRangeVariable(this, fromClause.Identifier, diagnostics);
@@ -103,10 +103,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!state.clauses.IsEmpty()) return false;
 
             // A degenerate query is of the form "from x in e select x".
-            var select = state.selectOrGroup as SelectClauseSyntax;
-            if (select == null) return false;
-            var name = select.Expression as IdentifierNameSyntax;
-            return name != null && state.rangeVariable.Name == name.Identifier.ValueText;
+            if (state.selectOrGroup is not SelectClauseSyntax select) return false;
+            return select.Expression is IdentifierNameSyntax name && state.rangeVariable.Name == name.Identifier.ValueText;
         }
 
         private BoundExpression BindQueryInternal2(QueryTranslationState state, BindingDiagnosticBag diagnostics)
@@ -173,7 +171,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var e = state.fromExpression;
                         var v = groupClause.GroupExpression;
                         var k = groupClause.ByExpression;
-                        var vId = v as IdentifierNameSyntax;
                         BoundCall result;
                         var lambdaLeft = MakeQueryUnboundLambda(state.RangeVariableMap(), x, k, diagnostics.AccumulatesDependencies);
 
@@ -185,7 +182,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         result = ReverseLastTwoParameterOrder(result);
 
                         BoundExpression? unoptimizedForm = null;
-                        if (vId != null && vId.Identifier.ValueText == x.Name)
+                        if (v is IdentifierNameSyntax vId && vId.Identifier.ValueText == x.Name)
                         {
                             // The optimized form.  We store the unoptimized form for analysis
                             unoptimizedForm = result;
@@ -205,7 +202,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // there should have been a syntax error if we get here.
                         return new BoundBadExpression(
                             state.selectOrGroup, LookupResultKind.OverloadResolutionFailure, ImmutableArray<Symbol?>.Empty,
+#nullable restore
                             ImmutableArray.Create(state.fromExpression), state.fromExpression.Type);
+#nullable enable
                     }
             }
         }
@@ -521,8 +520,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static BoundExpression? ExtractCastInvocation(BoundCall invocation)
         {
             int index = invocation.InvokedAsExtensionMethod ? 1 : 0;
-            var c1 = invocation.Arguments[index] as BoundConversion;
-            var l1 = c1 != null ? c1.Operand as BoundLambda : null;
+            var l1 = invocation.Arguments[index] is BoundConversion c1 ? c1.Operand as BoundLambda : null;
             var r1 = l1 != null ? l1.Body.Statements[0] as BoundReturnStatement : null;
             var i1 = r1 != null ? r1.ExpressionOpt as BoundCall : null;
             return i1;
@@ -531,13 +529,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         private UnboundLambda MakePairLambda(CSharpSyntaxNode node, QueryTranslationState state, RangeVariableSymbol x1, RangeVariableSymbol x2, bool withDependencies)
         {
 
-            LambdaBodyFactory bodyFactory = (LambdaSymbol lambdaSymbol, Binder lambdaBodyBinder, BindingDiagnosticBag d) =>
+            BoundBlock bodyFactory(LambdaSymbol lambdaSymbol, Binder lambdaBodyBinder, BindingDiagnosticBag d)
             {
                 var x1Expression = new BoundParameter(node, lambdaSymbol.Parameters[0]) { WasCompilerGenerated = true };
                 var x2Expression = new BoundParameter(node, lambdaSymbol.Parameters[1]) { WasCompilerGenerated = true };
                 var construction = MakePair(node, x1.Name, x1Expression, x2.Name, x2Expression, state, d);
                 return lambdaBodyBinder.CreateBlockFromExpression(node, ImmutableArray<LocalSymbol>.Empty, RefKind.None, construction, null, d);
-            };
+            }
 
             var result = MakeQueryUnboundLambda(state.RangeVariableMap(), ImmutableArray.Create(x1, x2), node, bodyFactory, withDependencies);
             state.rangeVariable = state.TransparentRangeVariable(this);
@@ -565,14 +563,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             // are accessed as TRID.Item1 (or members of that), and y is accessed
             // as TRID.Item2, where TRID is the compiler-generated identifier used
             // to represent the transparent identifier in the result.
-            LambdaBodyFactory bodyFactory = (LambdaSymbol lambdaSymbol, Binder lambdaBodyBinder, BindingDiagnosticBag d) =>
+            BoundBlock bodyFactory(LambdaSymbol lambdaSymbol, Binder lambdaBodyBinder, BindingDiagnosticBag d)
             {
                 var xExpression = new BoundParameter(let, lambdaSymbol.Parameters[0]) { WasCompilerGenerated = true };
 
                 lambdaBodyBinder = lambdaBodyBinder.GetRequiredBinder(let.Expression);
 
                 var yExpression = lambdaBodyBinder.BindRValueWithoutTargetType(let.Expression, d);
-                SourceLocation errorLocation = new SourceLocation(let.SyntaxTree, new TextSpan(let.Identifier.SpanStart, let.Expression.Span.End - let.Identifier.SpanStart));
+                SourceLocation errorLocation = new(let.SyntaxTree, new TextSpan(let.Identifier.SpanStart, let.Expression.Span.End - let.Identifier.SpanStart));
                 if (!yExpression.HasAnyErrors && !yExpression.HasExpressionType())
                 {
                     Error(d, ErrorCode.ERR_QueryRangeVariableAssignedBadValue, errorLocation, yExpression.Display);
@@ -581,7 +579,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 else if (!yExpression.HasAnyErrors && yExpression.Type!.IsVoidType())
                 {
                     Error(d, ErrorCode.ERR_QueryRangeVariableAssignedBadValue, errorLocation, yExpression.Type!);
-                    yExpression = new BoundBadExpression(yExpression.Syntax, LookupResultKind.Empty, ImmutableArray<Symbol?>.Empty, ImmutableArray.Create(yExpression), yExpression.Type);
+                    yExpression = new BoundBadExpression(yExpression.Syntax,
+                                                         LookupResultKind.Empty,
+                                                         ImmutableArray<Symbol?>.Empty,
+                                                         ImmutableArray.Create(yExpression),
+#nullable restore
+                                                         yExpression.Type);
+#nullable enable
                 }
 
                 var construction = MakePair(let, x.Name, xExpression, let.Identifier.ValueText, yExpression, state, d);
@@ -589,7 +593,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // The bound block represents a closure scope for transparent identifiers captured in the let clause.
                 // Such closures shall be associated with the lambda body expression.
                 return lambdaBodyBinder.CreateLambdaBlockForQueryClause(let.Expression, construction, d);
-            };
+            }
 
             var lambda = MakeQueryUnboundLambda(state.RangeVariableMap(), ImmutableArray.Create(x), let.Expression, bodyFactory, diagnostics.AccumulatesDependencies);
             state.rangeVariable = state.TransparentRangeVariable(this);
@@ -638,7 +642,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 field2Value = new BoundBadExpression(field2Value.Syntax, LookupResultKind.Empty, ImmutableArray<Symbol?>.Empty, ImmutableArray.Create(field2Value), field2Value.Type, true);
             }
 
-            AnonymousTypeDescriptor typeDescriptor = new AnonymousTypeDescriptor(
+            AnonymousTypeDescriptor typeDescriptor = new(
                                                             ImmutableArray.Create<AnonymousTypeField>(
                                                                 new AnonymousTypeField(field1Name, field1Value.Syntax.Location,
                                                                                        TypeWithAnnotations.Create(TypeOrError(field1Value))),
@@ -722,7 +726,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 ultimateReceiver = ((BoundQueryClause)ultimateReceiver).Value;
             }
-            if ((object?)ultimateReceiver.Type == null)
+            if (ultimateReceiver.Type is null)
             {
                 if (ultimateReceiver.HasAnyErrors || node.HasErrors)
                 {

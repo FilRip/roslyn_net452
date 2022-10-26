@@ -177,9 +177,12 @@ namespace Microsoft.CodeAnalysis
                     }
 
                     Debug.Assert(constantValue != null);
+#nullable restore
                     return constantValue;
                 }
             }
+
+#nullable enable
 
             public override Rope RopeValue
             {

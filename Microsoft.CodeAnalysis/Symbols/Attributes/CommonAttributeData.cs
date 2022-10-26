@@ -390,7 +390,7 @@ namespace Microsoft.CodeAnalysis
                 if (((int)options & 3) != 0)
                 {
                     messageProvider.ReportInvalidAttributeArgument(arguments.Diagnostics, arguments.AttributeSyntaxOpt, 0, attribute);
-                    options = options & ~(MethodImplOptions)3;
+                    options &= ~(MethodImplOptions)3;
                 }
             }
             else

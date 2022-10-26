@@ -478,7 +478,7 @@ namespace Microsoft.CodeAnalysis
             var analyzerBuilder = ImmutableArray.CreateBuilder<DiagnosticAnalyzer>();
             var generatorBuilder = ImmutableArray.CreateBuilder<ISourceGenerator>();
 
-            EventHandler<AnalyzerLoadFailureEventArgs> errorHandler = (o, e) =>
+            void errorHandler(object o, AnalyzerLoadFailureEventArgs e)
             {
                 var analyzerReference = o as AnalyzerFileReference;
                 RoslynDebug.Assert(analyzerReference is object);
@@ -509,7 +509,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     diagnostics.Add(diagnostic);
                 }
-            };
+            }
 
             var resolvedReferences = ArrayBuilder<AnalyzerFileReference>.GetInstance();
             foreach (var reference in AnalyzerReferences)

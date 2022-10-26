@@ -509,7 +509,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 '  Create a slot
                 slot = nextVariableSlot
-                nextVariableSlot = nextVariableSlot + 1
+                nextVariableSlot += 1
                 _variableSlot.Add(varIdentifier, slot)
                 If slot >= variableBySlot.Length Then
                     Array.Resize(Me.variableBySlot, slot * 2)

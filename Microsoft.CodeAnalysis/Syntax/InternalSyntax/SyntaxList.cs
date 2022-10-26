@@ -81,7 +81,9 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             {
                 var node = nodes[i];
                 Debug.Assert(node is object);
+#nullable restore
                 array[i].Value = node;
+#nullable enable
             }
 
             return List(array);

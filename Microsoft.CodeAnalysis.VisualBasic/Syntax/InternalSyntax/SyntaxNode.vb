@@ -94,7 +94,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Throw ExceptionUtilities.Unreachable
         End Function
 
-        Protected Property _slotCount As Integer
+        Protected Property SyntaxNode_SlotCount As Integer
             Get
                 Return Me.SlotCount
             End Get

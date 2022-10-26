@@ -1040,7 +1040,7 @@ CleanUp:
 
             Dim c = Peek(Here)
 
-            If Not isValidUtf16(c) Then
+            If Not IsValidUtf16(c) Then
                 Return Nothing
             End If
 
@@ -1094,10 +1094,10 @@ CleanUp:
                                 If xmlCh.Length = 1 Then
                                     ' Non surrogate check
                                     If isFirst Then
-                                        err = If(Not isStartNameChar(xmlCh.Char1), ERRID.ERR_IllegalXmlStartNameChar, ERRID.ERR_None)
+                                        err = If(Not IsStartNameChar(xmlCh.Char1), ERRID.ERR_IllegalXmlStartNameChar, ERRID.ERR_None)
                                         isFirst = False
                                     Else
-                                        err = If(Not isNameChar(xmlCh.Char1), ERRID.ERR_IllegalXmlNameChar, ERRID.ERR_None)
+                                        err = If(Not IsNameChar(xmlCh.Char1), ERRID.ERR_IllegalXmlNameChar, ERRID.ERR_None)
                                     End If
                                     If err <> ERRID.ERR_None Then
                                         errChar = Convert.ToString(xmlCh.Char1)

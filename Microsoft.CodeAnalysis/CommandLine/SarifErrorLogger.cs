@@ -22,16 +22,16 @@ namespace Microsoft.CodeAnalysis
     /// </summary>
     public abstract class SarifErrorLogger : ErrorLogger, IDisposable
     {
-        protected JsonWriter _writer { get; }
-        protected CultureInfo _culture { get; }
+        protected JsonWriter My_writer { get; }
+        protected CultureInfo My_culture { get; }
 
         protected SarifErrorLogger(Stream stream, CultureInfo culture)
         {
             Debug.Assert(stream != null);
             Debug.Assert(stream!.Position == 0);
 
-            _writer = new JsonWriter(new StreamWriter(stream));
-            _culture = culture;
+            My_writer = new JsonWriter(new StreamWriter(stream));
+            My_culture = culture;
         }
 
         //
@@ -41,18 +41,18 @@ namespace Microsoft.CodeAnalysis
 
         public virtual void Dispose()
         {
-            _writer.Dispose();
+            My_writer.Dispose();
         }
 
         protected void WriteRegion(FileLinePositionSpan span)
         {
             // Note that SARIF lines and columns are 1-based, but FileLinePositionSpan is 0-based
-            _writer.WriteObjectStart("region");
-            _writer.Write("startLine", span.StartLinePosition.Line + 1);
-            _writer.Write("startColumn", span.StartLinePosition.Character + 1);
-            _writer.Write("endLine", span.EndLinePosition.Line + 1);
-            _writer.Write("endColumn", span.EndLinePosition.Character + 1);
-            _writer.WriteObjectEnd(); // region
+            My_writer.WriteObjectStart("region");
+            My_writer.Write("startLine", span.StartLinePosition.Line + 1);
+            My_writer.Write("startColumn", span.StartLinePosition.Character + 1);
+            My_writer.Write("endLine", span.EndLinePosition.Line + 1);
+            My_writer.Write("endColumn", span.EndLinePosition.Character + 1);
+            My_writer.WriteObjectEnd(); // region
         }
 
         protected static string GetLevel(DiagnosticSeverity severity)
@@ -89,26 +89,26 @@ namespace Microsoft.CodeAnalysis
 
             if (diagnostic.WarningLevel > 0 || diagnostic.Properties.Count > 0)
             {
-                _writer.WriteObjectStart("properties");
+                My_writer.WriteObjectStart("properties");
 
                 if (diagnostic.WarningLevel > 0)
                 {
-                    _writer.Write("warningLevel", diagnostic.WarningLevel);
+                    My_writer.Write("warningLevel", diagnostic.WarningLevel);
                 }
 
                 if (diagnostic.Properties.Count > 0)
                 {
-                    _writer.WriteObjectStart("customProperties");
+                    My_writer.WriteObjectStart("customProperties");
 
                     foreach (var pair in diagnostic.Properties.OrderBy(x => x.Key, StringComparer.Ordinal))
                     {
-                        _writer.Write(pair.Key, pair.Value);
+                        My_writer.Write(pair.Key, pair.Value);
                     }
 
-                    _writer.WriteObjectEnd();
+                    My_writer.WriteObjectEnd();
                 }
 
-                _writer.WriteObjectEnd(); // properties
+                My_writer.WriteObjectEnd(); // properties
             }
         }
 

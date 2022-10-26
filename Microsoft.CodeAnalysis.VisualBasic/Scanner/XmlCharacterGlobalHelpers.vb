@@ -10,18 +10,18 @@ Imports System.Text
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
     Friend Module XmlCharacterGlobalHelpers
-        Friend Function isNameChar(ch As Char) As Boolean
+        Friend Function IsNameChar(ch As Char) As Boolean
             ' TODO: which of the following is correct?
             Return XmlCharType.IsNameCharXml4e(ch)
             'Return XmlCharType.IsNameSingleChar(ch)
         End Function
 
-        Friend Function isStartNameChar(ch As Char) As Boolean
+        Friend Function IsStartNameChar(ch As Char) As Boolean
             ' TODO: which of the following is correct?
             Return XmlCharType.IsStartNameCharXml4e(ch)
             'Return XmlCharType.IsStartNameSingleChar(ch)
         End Function
-        Friend Function isValidUtf16(wh As Char) As Boolean
+        Friend Function IsValidUtf16(wh As Char) As Boolean
             Return XmlCharType.InRange(wh, ChrW(&H20S), ChrW(&HFFFDS)) OrElse XmlCharType.IsCharData(wh)
         End Function
         Friend Function HexToUTF16(pwcText As StringBuilder) As Scanner.XmlCharResult

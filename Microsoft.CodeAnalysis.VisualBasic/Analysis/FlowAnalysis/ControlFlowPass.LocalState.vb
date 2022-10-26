@@ -22,7 +22,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Sub
 
         Friend Structure LocalState
-            Implements AbstractLocalState
+            Implements IAbstractLocalState
 
             Friend Alive As Boolean
             Friend Reported As Boolean ' reported unreachable statement
@@ -33,7 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Sub
 
             ''' <summary> Produce a duplicate of this flow analysis state. </summary>
-            Public Function Clone() As LocalState Implements AbstractFlowPass(Of LocalState).AbstractLocalState.Clone
+            Public Function Clone() As LocalState Implements AbstractFlowPass(Of LocalState).IAbstractLocalState.Clone
                 Return Me
             End Function
 

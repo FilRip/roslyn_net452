@@ -398,10 +398,10 @@ namespace Microsoft.CodeAnalysis
         }
 
         // for debugging
-        private SyntaxNodeOrToken[] Nodes
+        /*private SyntaxNodeOrToken[] Nodes
         {
             get { return this.ToArray(); }
-        }
+        }*/
 
         /// <summary>
         /// Gets the enumerator.
@@ -485,7 +485,7 @@ namespace Microsoft.CodeAnalysis
         /// </returns>
         public override bool Equals(object? obj)
         {
-            return obj is SyntaxNodeOrTokenList && Equals((SyntaxNodeOrTokenList)obj);
+            return obj is SyntaxNodeOrTokenList list && Equals(list);
         }
 
         /// <summary>

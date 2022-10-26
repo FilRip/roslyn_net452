@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>
@@ -346,7 +348,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 GetAliasTarget(null);
+#nullable restore
                 return _aliasTargetDiagnostics;
+#nullable enable
             }
         }
 

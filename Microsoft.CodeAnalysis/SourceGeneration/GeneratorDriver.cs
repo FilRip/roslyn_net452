@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis
 
             // build the final state, and return 
             diagnostics = diagnosticsBag.ToReadOnlyAndFree();
-            return BuildFinalCompilation(compilation, out outputCompilation, state, cancellationToken);
+            return BuildFinalCompilation(compilation, out outputCompilation, state);
         }
 
         internal GeneratorDriver TryApplyEdits(Compilation compilation, out Compilation outputCompilation, out bool success, CancellationToken cancellationToken = default)
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis
             compilation = RemoveGeneratedSyntaxTrees(_state, compilation);
 
             success = true;
-            return BuildFinalCompilation(compilation, out outputCompilation, state, cancellationToken);
+            return BuildFinalCompilation(compilation, out outputCompilation, state);
         }
 
         public GeneratorDriver AddGenerators(ImmutableArray<ISourceGenerator> generators)
@@ -400,7 +400,7 @@ namespace Microsoft.CodeAnalysis
             return trees.ToImmutableAndFree();
         }
 
-        private GeneratorDriver BuildFinalCompilation(Compilation compilation, out Compilation outputCompilation, GeneratorDriverState state, CancellationToken cancellationToken)
+        private GeneratorDriver BuildFinalCompilation(Compilation compilation, out Compilation outputCompilation, GeneratorDriverState state)
         {
             ArrayBuilder<SyntaxTree> trees = ArrayBuilder<SyntaxTree>.GetInstance();
             foreach (var generatorState in state.GeneratorStates)
