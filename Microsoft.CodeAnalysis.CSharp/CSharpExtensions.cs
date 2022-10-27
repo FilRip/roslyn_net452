@@ -1466,29 +1466,29 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Given a type parameter declaration (field or method), get the corresponding symbol
         /// </summary>
-        public static ITypeParameterSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, TypeParameterSyntax typeParameter, CancellationToken cancellationToken = default)
+        /*public static ITypeParameterSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, TypeParameterSyntax typeParameter, CancellationToken cancellationToken = default)
         {
             var csmodel = semanticModel as CSharpSemanticModel;
             return csmodel?.GetDeclaredSymbol(typeParameter, cancellationToken);
-        }
+        }*/
 
         /// <summary>
         /// Given a foreach statement, get the symbol for the iteration variable
         /// </summary>
-        public static ILocalSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, ForEachStatementSyntax forEachStatement, CancellationToken cancellationToken = default)
+        /*public static ILocalSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, ForEachStatementSyntax forEachStatement, CancellationToken cancellationToken = default)
         {
             var csmodel = semanticModel as CSharpSemanticModel;
-            return csmodel?.GetDeclaredSymbol(forEachStatement, cancellationToken);
-        }
+            return csmodel?.GetDeclaredSymbol(forEachStatement);
+        }*/
 
         /// <summary>
         /// Given a catch declaration, get the symbol for the exception variable
         /// </summary>
-        public static ILocalSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, CatchDeclarationSyntax catchDeclaration, CancellationToken cancellationToken = default)
+        /*public static ILocalSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, CatchDeclarationSyntax catchDeclaration, CancellationToken cancellationToken = default)
         {
             var csmodel = semanticModel as CSharpSemanticModel;
-            return csmodel?.GetDeclaredSymbol(catchDeclaration, cancellationToken);
-        }
+            return csmodel?.GetDeclaredSymbol(catchDeclaration);
+        }*/
 
         public static IRangeVariableSymbol? GetDeclaredSymbol(this SemanticModel? semanticModel, QueryClauseSyntax queryClause, CancellationToken cancellationToken = default)
         {

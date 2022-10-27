@@ -356,7 +356,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             info.ContextualKind = SyntaxKind.None;
             info.Text = null;
             char character;
-            char surrogateCharacter = SlidingTextWindow.InvalidCharacter;
+            //char surrogateCharacter = SlidingTextWindow.InvalidCharacter;
             bool isEscaped = false;
             int startingPosition = TextWindow.Position;
 
@@ -596,7 +596,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 case '&':
                     TextWindow.AdvanceChar();
-                    if ((character = TextWindow.PeekChar()) == '=')
+                    if (TextWindow.PeekChar() == '=')
                     {
                         TextWindow.AdvanceChar();
                         info.Kind = SyntaxKind.AmpersandEqualsToken;
@@ -802,7 +802,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 case '\\':
                     {
                         // Could be unicode escape. Try that.
-                        character = TextWindow.PeekCharOrUnicodeEscape(out surrogateCharacter);
+                        character = TextWindow.PeekCharOrUnicodeEscape(out _);
 
                         isEscaped = true;
                         if (SyntaxFacts.IsIdentifierStartCharacter(character))
@@ -840,7 +840,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                     if (isEscaped)
                     {
-                        TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out SyntaxDiagnosticInfo error);
+                        TextWindow.NextCharOrUnicodeEscape(out _, out SyntaxDiagnosticInfo error);
                         AddError(error);
                     }
                     else
@@ -2705,7 +2705,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private bool ScanDirectiveToken(ref TokenInfo info)
         {
             char character;
-            char surrogateCharacter;
+            //char surrogateCharacter;
             bool isEscaped = false;
 
             switch (character = TextWindow.PeekChar())
@@ -2817,7 +2817,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 case '\\':
                     {
                         // Could be unicode escape. Try that.
-                        character = TextWindow.PeekCharOrUnicodeEscape(out surrogateCharacter);
+                        character = TextWindow.PeekCharOrUnicodeEscape(out _);
                         isEscaped = true;
                         if (SyntaxFacts.IsIdentifierStartCharacter(character))
                         {
@@ -2843,7 +2843,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         // unknown single character
                         if (isEscaped)
                         {
-                            TextWindow.NextCharOrUnicodeEscape(out surrogateCharacter, out SyntaxDiagnosticInfo error);
+                            TextWindow.NextCharOrUnicodeEscape(out _, out SyntaxDiagnosticInfo error);
                             AddError(error);
                         }
                         else
@@ -3748,7 +3748,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
             int beforeConsumed = TextWindow.Position;
             char consumedChar = TextWindow.NextChar();
-            char consumedSurrogate = SlidingTextWindow.InvalidCharacter;
+            //char consumedSurrogate = SlidingTextWindow.InvalidCharacter;
 
             // This first switch is for special characters.  If we see the corresponding
             // XML entities, we DO NOT want to take these actions.
@@ -3794,7 +3794,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 case '&':
                     TextWindow.Reset(beforeConsumed);
-                    if (!TextWindow.TryScanXmlEntity(out consumedChar, out consumedSurrogate))
+                    if (!TextWindow.TryScanXmlEntity(out consumedChar, out _))
                     {
                         TextWindow.Reset(beforeConsumed);
                         this.ScanXmlEntity(ref info);

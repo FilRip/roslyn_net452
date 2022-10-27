@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         public override bool Equals(object obj)
         {
-            return obj is AnonymousTypeDescriptor && this.Equals((AnonymousTypeDescriptor)obj, TypeCompareKind.ConsiderEverything);
+            return obj is AnonymousTypeDescriptor descriptor && this.Equals(descriptor, TypeCompareKind.ConsiderEverything);
         }
 
         public override int GetHashCode()

@@ -340,11 +340,11 @@ namespace Microsoft.Cci
                 {
                     return;
                 }
-                else if (current is IArrayTypeReference)
+                else if (current is IArrayTypeReference reference)
                 {
                     // The element type is itself an array type, and we must visit *its* element type.
                     // Iterate rather than recursing.
-                    current = ((IArrayTypeReference)current).GetElementType(Context);
+                    current = reference.GetElementType(Context);
                     continue;
                 }
                 else
@@ -371,11 +371,11 @@ namespace Microsoft.Cci
                 {
                     return;
                 }
-                else if (current is IPointerTypeReference)
+                else if (current is IPointerTypeReference reference)
                 {
                     // The target type is itself a pointer type, and we must visit *its* target type.
                     // Iterate rather than recursing.
-                    current = ((IPointerTypeReference)current).GetTargetType(Context);
+                    current = reference.GetTargetType(Context);
                     continue;
                 }
                 else

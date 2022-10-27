@@ -118,7 +118,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             return false;
 
-            bool isImplementableAndNotPublic(MethodSymbol accessor)
+            static bool isImplementableAndNotPublic(MethodSymbol accessor)
             {
                 return accessor.IsImplementable() && accessor.DeclaredAccessibility != Accessibility.Public;
             }

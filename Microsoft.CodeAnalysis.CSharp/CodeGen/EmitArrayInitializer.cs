@@ -366,7 +366,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         {
             ImmutableArray<byte> data = default;
             int elementCount = -1;
-            TypeSymbol elementType = null;
+            TypeSymbol elementType;
 
             if (!_module.SupportsPrivateImplClass)
             {

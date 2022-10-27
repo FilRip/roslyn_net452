@@ -2705,7 +2705,7 @@ ProduceBoundNode:
                 Dim param As ParameterSymbol = candidate.Candidate.Parameters(paramIndex)
                 Dim targetType As TypeSymbol = param.Type
 
-                Dim argument As BoundExpression = Nothing
+                Dim argument As BoundExpression
                 Dim conversion As KeyValuePair(Of ConversionKind, MethodSymbol) = Conversions.Identity
                 Dim conversionBack As KeyValuePair(Of ConversionKind, MethodSymbol) = Conversions.Identity
 

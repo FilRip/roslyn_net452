@@ -1119,9 +1119,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return _guardedIOperationNodeMap.TryGetValue(node, out var operation) ? operation : null;
             }
         }
-#nullable disable
 
-        private CSharpSyntaxNode GetBindingRootOrInitializer(CSharpSyntaxNode node)
+#nullable disable
+        /*private CSharpSyntaxNode GetBindingRootOrInitializer(CSharpSyntaxNode node)
         {
             CSharpSyntaxNode bindingRoot = GetBindingRoot(node);
 
@@ -1158,7 +1158,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return bindingRoot;
-        }
+        }*/
 
 #nullable enable
         private IOperation GetRootOperation()
@@ -1185,28 +1185,28 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             ValidateSymbolInfoOptions(options);
 
-            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode _, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return base.GetSymbolInfoForNode(options, lowestBoundNode, highestBoundNode, boundParent, binderOpt: null);
         }
 
         internal override CSharpTypeInfo GetTypeInfoWorker(CSharpSyntaxNode node, CancellationToken cancellationToken = default)
         {
-            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode _, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return GetTypeInfoForNode(lowestBoundNode, highestBoundNode, boundParent);
         }
 
         internal override ImmutableArray<Symbol> GetMemberGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode _, out BoundNode lowestBoundNode, out BoundNode _, out BoundNode boundParent);
 
             return base.GetMemberGroupForNode(options, lowestBoundNode, boundParent, binderOpt: null);
         }
 
         internal override ImmutableArray<IPropertySymbol> GetIndexerGroupWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            GetBoundNodes(node, out CSharpSyntaxNode bindableNode, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
+            GetBoundNodes(node, out CSharpSyntaxNode _, out BoundNode lowestBoundNode, out BoundNode _, out BoundNode _);
 
             return base.GetIndexerGroupForNode(lowestBoundNode, binderOpt: null);
         }

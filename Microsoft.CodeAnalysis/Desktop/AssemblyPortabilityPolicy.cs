@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object obj)
         {
-            return obj is AssemblyPortabilityPolicy && Equals((AssemblyPortabilityPolicy)obj);
+            return obj is AssemblyPortabilityPolicy policy && Equals(policy);
         }
 
         public bool Equals(AssemblyPortabilityPolicy other)

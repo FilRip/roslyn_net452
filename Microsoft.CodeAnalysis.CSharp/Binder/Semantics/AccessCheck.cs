@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             AssemblySymbol within,
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            return IsSymbolAccessibleCore(symbol, within, null, out bool failedThroughTypeCheck, within.DeclaringCompilation, ref useSiteInfo);
+            return IsSymbolAccessibleCore(symbol, within, null, out bool _, within.DeclaringCompilation, ref useSiteInfo);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
             TypeSymbol throughTypeOpt = null)
         {
-            return IsSymbolAccessibleCore(symbol, within, throughTypeOpt, out bool failedThroughTypeCheck, within.DeclaringCompilation, ref useSiteInfo);
+            return IsSymbolAccessibleCore(symbol, within, throughTypeOpt, out bool _, within.DeclaringCompilation, ref useSiteInfo);
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var compilation = within.DeclaringCompilation;
 
-            bool unused;
+            //bool unused;
             if (!type.IsDefinition)
             {
                 // All type argument must be accessible.
@@ -227,7 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     // type parameters are always accessible, so don't check those (so common it's
                     // worth optimizing this).
-                    if (typeArg.Type.Kind != SymbolKind.TypeParameter && !IsSymbolAccessibleCore(typeArg.Type, within, null, out unused, compilation, ref useSiteInfo, basesBeingResolved))
+                    if (typeArg.Type.Kind != SymbolKind.TypeParameter && !IsSymbolAccessibleCore(typeArg.Type, within, null, out bool _, compilation, ref useSiteInfo, basesBeingResolved))
                     {
                         return false;
                     }
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var containingType = type.ContainingType;
             return containingType is null
                 ? IsNonNestedTypeAccessible(type.ContainingAssembly, type.DeclaredAccessibility, within)
-                : IsMemberAccessible(containingType, type.DeclaredAccessibility, within, null, out unused, compilation, ref useSiteInfo, basesBeingResolved);
+                : IsMemberAccessible(containingType, type.DeclaredAccessibility, within, null, out bool _, compilation, ref useSiteInfo, basesBeingResolved);
         }
 
         /// <summary>

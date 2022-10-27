@@ -1005,7 +1005,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// </summary>
         public void DefineSequencePoint(SyntaxTree syntaxTree, TextSpan span)
         {
-            var curBlock = GetCurrentBlock();
+            //var curBlock = GetCurrentBlock();
             _lastSeqPointTree = syntaxTree;
 
             if (this.SeqPointsOpt == null)
@@ -1108,7 +1108,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             }
 
             EndBlock();  //blocks should not cross scope boundaries.
-            var scope = _scopeManager.OpenScope(scopeType, exceptionType);
+            _scopeManager.OpenScope(scopeType, exceptionType);
 
             // Exception handler scopes must have a leader block, even
             // if the exception handler is empty, and created before any

@@ -169,10 +169,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             foreach (var originalSymbol in symbols)
             {
                 T updatedSymbol = null!;
-                if (originalSymbol is object)
+                if (originalSymbol is object @object)
                 {
                     updatedSymbol = GetUpdatedSymbol(expr, originalSymbol);
-                    if ((object)originalSymbol != updatedSymbol)
+                    if (@object != updatedSymbol)
                     {
                         foundUpdate = true;
                     }

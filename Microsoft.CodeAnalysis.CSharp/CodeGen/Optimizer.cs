@@ -539,10 +539,10 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             return _evalStack.Count;
         }
 
-        private bool EvalStackIsEmpty()
+        /*private bool EvalStackIsEmpty()
         {
             return StackDepth() == 0;
-        }
+        }*/
 
         private void SetStackDepth(int depth)
         {
@@ -554,10 +554,10 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             SetStackDepth(_evalStack.Count - 1);
         }
 
-        private void ClearEvalStack()
+        /*private void ClearEvalStack()
         {
             _evalStack.Clear();
-        }
+        }*/
 
         public BoundNode VisitStatement(BoundNode node)
         {
@@ -969,7 +969,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 }
 
                 RecordVarWrite(localSymbol);
-                assignmentLocal = null;
+                //assignmentLocal = null;
             }
 
             return node.Update(left, right, node.IsRef, node.Type);
@@ -1494,7 +1494,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // checked(-x) is emitted as "0 - x"
             if (node.OperatorKind.IsChecked() && node.OperatorKind.Operator() == UnaryOperatorKind.UnaryMinus)
             {
-                var origStack = StackDepth();
+                StackDepth();
                 PushEvalStack(new BoundDefaultExpression(node.Syntax, node.Operand.Type), ExprContext.Value);
                 BoundExpression operand = (BoundExpression)this.Visit(node.Operand);
                 return node.Update(node.OperatorKind, operand, node.ConstantValueOpt, node.MethodOpt, node.ResultKind, node.Type);

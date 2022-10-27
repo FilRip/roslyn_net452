@@ -219,7 +219,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return EvaluateSideEffectingArgumentToTemp(expr, effects, temps);
             }
 
-            bool conversionMustBePerformedOnOriginalExpression(BoundConversion expr, ConversionKind kind)
+            static bool conversionMustBePerformedOnOriginalExpression(BoundConversion expr, ConversionKind kind)
             {
                 // These are conversions from-expression that
                 // must be performed on the original expression, not on a copy of it.
@@ -446,8 +446,7 @@ when expr.Type.IsNullableType() && o.Type is { } && o.Type.IsNullableType() && !
                     }
             }
 
-
-            BoundExpression MakeBoundConversion(BoundExpression expr, Conversion conversion, TypeWithAnnotations type, BoundConversion enclosing)
+            static BoundExpression MakeBoundConversion(BoundExpression expr, Conversion conversion, TypeWithAnnotations type, BoundConversion enclosing)
             {
                 return new BoundConversion(
                     expr.Syntax, expr, conversion, enclosing.Checked, enclosing.ExplicitCastInCode,

@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     continue;
                 }
                 var metadataName = reader.GetString(def.Name);
-                var name = MetadataHelpers.InferTypeArityAndUnmangleMetadataName(metadataName, out short arity);
+                var name = MetadataHelpers.InferTypeArityAndUnmangleMetadataName(metadataName, out short _);
                 if (GeneratedNames.TryParseAnonymousTypeTemplateName(name, out int index))
                 {
                     var builder = ArrayBuilder<AnonymousTypeKeyField>.GetInstance();

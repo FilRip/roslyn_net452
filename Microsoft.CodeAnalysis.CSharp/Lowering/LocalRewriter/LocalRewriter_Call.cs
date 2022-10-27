@@ -723,7 +723,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return;
 
-            bool isLambdaConversion(BoundExpression expr)
+            static bool isLambdaConversion(BoundExpression expr)
                 => expr is BoundConversion conv && conv.ConversionKind == ConversionKind.AnonymousFunction;
         }
 

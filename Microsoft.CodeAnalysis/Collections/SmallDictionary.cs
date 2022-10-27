@@ -108,8 +108,7 @@ namespace Microsoft.CodeAnalysis
 
         public bool ContainsKey(K key)
         {
-            V value;
-            return TryGetValue(key, out value!);
+            return TryGetValue(key, out  V _);
         }
 
         [Conditional("DEBUG")]

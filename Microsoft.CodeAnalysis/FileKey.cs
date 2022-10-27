@@ -51,7 +51,7 @@ namespace Roslyn.Utilities
 
         public override bool Equals(object? obj)
         {
-            return obj is FileKey && Equals((FileKey)obj);
+            return obj is FileKey key && Equals(key);
         }
 
         public override string ToString()

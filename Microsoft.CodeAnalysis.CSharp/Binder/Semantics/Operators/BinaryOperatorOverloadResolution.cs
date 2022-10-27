@@ -420,7 +420,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             AddDelegateOperation(kind, delegateType, operators);
         }
 
-        private void GetEnumOperation(BinaryOperatorKind kind, TypeSymbol enumType, BoundExpression left, BoundExpression right, ArrayBuilder<BinaryOperatorSignature> operators)
+        private void GetEnumOperation(BinaryOperatorKind kind, TypeSymbol enumType, BoundExpression right, ArrayBuilder<BinaryOperatorSignature> operators)
         {
             AssertNotChecked(kind);
 
@@ -591,12 +591,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 };
             if (leftType is object)
             {
-                GetEnumOperation(kind, leftType, left, right, results);
+                GetEnumOperation(kind, leftType, right, results);
             }
 
             if (rightType is object && (leftType is null || !(useIdentityConversion ? Conversions.HasIdentityConversion(rightType, leftType) : rightType.Equals(leftType))))
             {
-                GetEnumOperation(kind, rightType, left, right, results);
+                GetEnumOperation(kind, rightType, right, results);
             }
         }
 

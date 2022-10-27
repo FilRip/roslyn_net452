@@ -912,7 +912,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns>true if the specified <see cref="Conversion"/> object is equal to the current <see cref="Conversion"/> object; otherwise, false.</returns>
         public override bool Equals(object? obj)
         {
-            return obj is Conversion && this.Equals((Conversion)obj);
+            return obj is Conversion conversion && this.Equals(conversion);
         }
 
         /// <summary>
@@ -961,7 +961,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return TreeDumper.DumpCompact(Dump(this));
 
-            TreeDumperNode Dump(Conversion self)
+            static TreeDumperNode Dump(Conversion self)
             {
                 var sub = new System.Collections.Generic.List<TreeDumperNode>();
 

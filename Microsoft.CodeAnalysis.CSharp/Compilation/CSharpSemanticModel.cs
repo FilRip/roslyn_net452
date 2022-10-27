@@ -318,7 +318,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static ImmutableArray<Symbol> BindCref(CrefSyntax crefSyntax, Binder binder)
         {
-            var symbols = binder.BindCref(crefSyntax, out Symbol unusedAmbiguityWinner, BindingDiagnosticBag.Discarded);
+            var symbols = binder.BindCref(crefSyntax, out Symbol _, BindingDiagnosticBag.Discarded);
             return symbols;
         }
 
@@ -1223,7 +1223,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected int CheckAndAdjustPosition(int position)
         {
-            return CheckAndAdjustPosition(position, out SyntaxToken unused);
+            return CheckAndAdjustPosition(position, out SyntaxToken _);
         }
 
         protected int CheckAndAdjustPosition(int position, out SyntaxToken token)
@@ -1538,14 +1538,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (useBaseReferenceAccessibility)
             {
                 TypeSymbol containingType = binder.ContainingType;
-                TypeSymbol baseType = null;
+                TypeSymbol baseType;
 
                 // For a script class or a submission class base should have no members.
                 if (containingType is object && containingType.Kind == SymbolKind.NamedType && ((NamedTypeSymbol)containingType).IsScriptClass)
                 {
                     return ImmutableArray<ISymbol>.Empty;
                 }
-
+                // TODO : Strange test, why test is baseType is equal to something, baseType is always null because we have just declare it 5 lines up, not set
                 if (containingType is null || (baseType = containingType.BaseTypeNoUseSiteDiagnostics) is null)
                 {
                     throw new ArgumentException(
@@ -1855,12 +1855,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Get symbols and result kind from the lowest and highest nodes associated with the
             // syntax node.
             ImmutableArray<Symbol> symbols = GetSemanticSymbols(
-                boundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool isDynamic, out LookupResultKind resultKind, out ImmutableArray<Symbol> unusedMemberGroup);
+                boundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool isDynamic, out LookupResultKind resultKind, out ImmutableArray<Symbol> _);
 
             if (highestBoundNode is BoundExpression highestBoundExpr)
             {
                 ImmutableArray<Symbol> highestSymbols = GetSemanticSymbols(
-                    highestBoundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool highestIsDynamic, out LookupResultKind highestResultKind, out ImmutableArray<Symbol> unusedHighestMemberGroup);
+                    highestBoundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool highestIsDynamic, out LookupResultKind highestResultKind, out ImmutableArray<Symbol> _);
 
                 if ((symbols.Length != 1 || resultKind == LookupResultKind.OverloadResolutionFailure) && highestSymbols.Length > 0)
                 {
@@ -2161,7 +2161,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             break;
                     }
                 }
-                else if (boundExpr is BoundConversion { ConversionKind: ConversionKind.MethodGroup, Conversion: var exprConversion, Type: { TypeKind: TypeKind.FunctionPointer }, SymbolOpt: var symbol })
+                else if (boundExpr is BoundConversion { ConversionKind: ConversionKind.MethodGroup, Conversion: var exprConversion, Type: { TypeKind: TypeKind.FunctionPointer }, SymbolOpt: null })
                 {
                     // Because the method group is a separate syntax node from the &, the lowest bound node here is the BoundConversion. However,
                     // the conversion represents an implicit method group conversion from a typeless method group to a function pointer type, so
@@ -2199,7 +2199,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (lowestBoundNode is BoundExpression boundExpr)
             {
-                GetSemanticSymbols(boundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool isDynamic, out LookupResultKind resultKind, out ImmutableArray<Symbol> memberGroup);
+                GetSemanticSymbols(boundExpr, boundNodeForSyntacticParent, binderOpt, options, out bool _, out LookupResultKind _, out ImmutableArray<Symbol> memberGroup);
 
                 return memberGroup;
             }
@@ -3119,7 +3119,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="forEachStatement"></param>
-        public ILocalSymbol GetDeclaredSymbol(ForEachStatementSyntax forEachStatement, CancellationToken cancellationToken = default)
+        public ILocalSymbol GetDeclaredSymbol(ForEachStatementSyntax forEachStatement)
         {
             Binder enclosingBinder = this.GetEnclosingBinder(GetAdjustedNodePosition(forEachStatement));
 
@@ -3154,9 +3154,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Given a catch declaration, get the symbol for the exception variable
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="catchDeclaration"></param>
-        public ILocalSymbol GetDeclaredSymbol(CatchDeclarationSyntax catchDeclaration, CancellationToken cancellationToken = default)
+        public ILocalSymbol GetDeclaredSymbol(CatchDeclarationSyntax catchDeclaration)
         {
             CSharpSyntaxNode catchClause = catchDeclaration.Parent; //Syntax->Binder map is keyed on clause, not decl
             Binder enclosingBinder = this.GetEnclosingBinder(GetAdjustedNodePosition(catchClause));
@@ -3217,7 +3216,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
 
                 case BoundKind.PropertyGroup:
-                    symbols = GetPropertyGroupSemanticSymbols((BoundPropertyGroup)boundNode, boundNodeForSyntacticParent, binderOpt, out resultKind, out memberGroup);
+                    symbols = GetPropertyGroupSemanticSymbols((BoundPropertyGroup)boundNode, boundNodeForSyntacticParent, /*binderOpt,*/ out resultKind, out memberGroup);
                     break;
 
                 case BoundKind.BadExpression:
@@ -3456,9 +3455,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                             // If error type has a single named type candidate symbol, we want to 
                             // use that type for symbol info. 
-                            if (candidateSymbols.Length == 1 && candidateSymbols[0] is NamedTypeSymbol)
+                            if (candidateSymbols.Length == 1 && candidateSymbols[0] is NamedTypeSymbol symbol)
                             {
-                                namedType = (NamedTypeSymbol)candidateSymbols[0];
+                                namedType = symbol;
                             }
                             else
                             {
@@ -4208,7 +4207,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private ImmutableArray<Symbol> GetPropertyGroupSemanticSymbols(
             BoundPropertyGroup boundNode,
             BoundNode boundNodeForSyntacticParent,
-            Binder binderOpt,
+            //Binder binderOpt,
             out LookupResultKind resultKind,
             out ImmutableArray<Symbol> propertyGroup)
         {
@@ -4697,6 +4696,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static void ValidateSymbolInfoOptions(SymbolInfoOptions options)
         {
+            // TODO : What to do with this method ??? And what SymbolInfoOptions serve ?
         }
 
         /// <summary>
@@ -4704,8 +4704,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// NamedType that the position is considered inside of.
         /// </summary>
         public new ISymbol GetEnclosingSymbol(
-            int position,
-            CancellationToken cancellationToken = default)
+            int position, CancellationToken cancellationToken)
         {
             position = CheckAndAdjustPosition(position);
             var binder = GetEnclosingBinder(position);
@@ -4900,9 +4899,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     return this.GetDeclaredSymbol(usingDirective, cancellationToken);
                 case SyntaxKind.ForEachStatement:
-                    return this.GetDeclaredSymbol((ForEachStatementSyntax)node, cancellationToken);
+                    return this.GetDeclaredSymbol((ForEachStatementSyntax)node);
                 case SyntaxKind.CatchDeclaration:
-                    return this.GetDeclaredSymbol((CatchDeclarationSyntax)node, cancellationToken);
+                    return this.GetDeclaredSymbol((CatchDeclarationSyntax)node);
                 case SyntaxKind.JoinIntoClause:
                     return this.GetDeclaredSymbol((JoinIntoClauseSyntax)node, cancellationToken);
                 case SyntaxKind.QueryContinuation:

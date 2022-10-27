@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return this.GetRequiredBinder(node).BindAttributeCore(node, attributeType, diagnostics);
         }
 
-        private Binder SkipSemanticModelBinder()
+        /*private Binder SkipSemanticModelBinder()
         {
             Binder result = this;
 
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return result;
-        }
+        }*/
 
         private BoundAttribute BindAttributeCore(AttributeSyntax node, NamedTypeSymbol attributeType, BindingDiagnosticBag diagnostics)
         {
@@ -125,9 +125,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var errorType = (ErrorTypeSymbol)attributeTypeForBinding;
                 resultKind = errorType.ResultKind;
-                if (errorType.CandidateSymbols.Length == 1 && errorType.CandidateSymbols[0] is NamedTypeSymbol)
+                if (errorType.CandidateSymbols.Length == 1 && errorType.CandidateSymbols[0] is NamedTypeSymbol symbol)
                 {
-                    attributeTypeForBinding = (NamedTypeSymbol)errorType.CandidateSymbols[0];
+                    attributeTypeForBinding = symbol;
                 }
             }
 
@@ -1071,7 +1071,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (typeOfArgument is object) // skip this if the argument was an alias symbol
                 {
-                    var isValidArgument = true;
+                    bool isValidArgument;
                     isValidArgument = typeOfArgument.Kind switch
                     {
                         SymbolKind.TypeParameter => false,// type parameter represents an open type

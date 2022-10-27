@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // end:
             //   GotoIfTrue condition start;
             statementBuilder.Add(new BoundLabelStatement(syntax, endLabel));
-            BoundStatement? branchBack = null;
+            BoundStatement? branchBack;
             if (rewrittenCondition != null)
             {
                 branchBack = new BoundConditionalGoto(rewrittenCondition.Syntax, rewrittenCondition, true, startLabel);

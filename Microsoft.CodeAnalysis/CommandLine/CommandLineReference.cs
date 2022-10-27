@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is CommandLineReference && base.Equals((CommandLineReference)obj);
+            return obj is CommandLineReference reference && base.Equals(reference);
         }
 
         public bool Equals(CommandLineReference other)

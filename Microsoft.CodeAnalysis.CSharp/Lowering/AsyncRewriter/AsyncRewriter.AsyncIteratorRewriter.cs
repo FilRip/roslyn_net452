@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 bodyBuilder.Add(F.Return());
                 F.CloseMethod(F.Block(bodyBuilder.ToImmutableAndFree()));
-                bodyBuilder = null;
+                //bodyBuilder = null;
             }
 
             private BoundExpressionStatement GenerateCreateAndAssignBuilder()
@@ -267,7 +267,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// <summary>
             /// Generates the `ValueTask&lt;bool> MoveNextAsync()` method.
             /// </summary>
-            [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Standard naming convention for generating 'IAsyncEnumerator.MoveNextAsync'")]
             private void GenerateIAsyncEnumeratorImplementation_MoveNextAsync()
             {
                 // Produce:
@@ -395,7 +394,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// Generates the `ValueTask IAsyncDisposable.DisposeAsync()` method.
             /// The DisposeAsync method should not be called from states -1 (running) or 0-and-up (awaits).
             /// </summary>
-            [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Standard naming convention for generating 'IAsyncDisposable.DisposeAsync'")]
             private void GenerateIAsyncDisposable_DisposeAsync()
             {
                 // Produce:

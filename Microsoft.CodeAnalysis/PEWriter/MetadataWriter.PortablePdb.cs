@@ -173,19 +173,19 @@ namespace Microsoft.Cci
             object value = localConstant.CompileTimeValue.Value;
 
             // PrimitiveConstant or EnumConstant
-            if (value is decimal)
+            if (value is decimal @decimal)
             {
                 builder.WriteByte((byte)SignatureTypeKind.ValueType);
                 builder.WriteCompressedInteger(CodedIndex.TypeDefOrRefOrSpec(GetTypeHandle(type)));
 
-                builder.WriteDecimal((decimal)value);
+                builder.WriteDecimal(@decimal);
             }
-            else if (value is DateTime)
+            else if (value is DateTime time)
             {
                 builder.WriteByte((byte)SignatureTypeKind.ValueType);
                 builder.WriteCompressedInteger(CodedIndex.TypeDefOrRefOrSpec(GetTypeHandle(type)));
 
-                builder.WriteDateTime((DateTime)value);
+                builder.WriteDateTime(time);
             }
             else if (typeCode == PrimitiveTypeCode.String)
             {

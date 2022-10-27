@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 {
     internal partial class CodeGenerator
     {
-        private static bool IsNumeric(TypeSymbol type)
+        /*private static bool IsNumeric(TypeSymbol type)
         {
             return type.PrimitiveTypeCode switch
             {
@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 Cci.PrimitiveTypeCode.IntPtr or Cci.PrimitiveTypeCode.UIntPtr => type.IsNativeIntegerType,
                 _ => false,
             };
-        }
+        }*/
 
         private void EmitConversionExpression(BoundConversion conversion, bool used)
         {

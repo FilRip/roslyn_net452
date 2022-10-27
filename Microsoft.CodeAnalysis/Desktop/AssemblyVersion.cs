@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object obj)
         {
-            return obj is AssemblyVersion && Equals((AssemblyVersion)obj);
+            return obj is AssemblyVersion version && Equals(version);
         }
 
         public override int GetHashCode()

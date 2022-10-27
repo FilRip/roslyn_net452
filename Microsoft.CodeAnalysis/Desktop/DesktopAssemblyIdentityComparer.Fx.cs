@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis
                     Add(key, values = new List<Value>());
                 }
 
-                values.Add(new Value(versionLow, versionHigh: default, newName, newPublicKeyToken, newVersion, isPortable: false));
+                values.Add(new Value(versionLow, versionHigh: (versionHighNull is AssemblyVersion versionHigh ? versionHigh : default), newName, newPublicKeyToken, newVersion, isPortable: false));
             }
 
             public void Add(
@@ -263,7 +263,7 @@ namespace Microsoft.CodeAnalysis
             {"System.Data.SqlClient", s_NETCF_PUBLIC_KEY_TOKEN_3, new AssemblyVersion(2, 0, 0, 0), new AssemblyVersion(2, 0, 10, 0), "System.Data", s_ECMA_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},
             {"System.Data.Common", s_NETCF_PUBLIC_KEY_TOKEN_3, new AssemblyVersion(2, 0, 0, 0), new AssemblyVersion(2, 0, 10, 0), "System.Data", s_ECMA_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},
             {"System.Windows.Forms.DataGrid", s_NETCF_PUBLIC_KEY_TOKEN_3, new AssemblyVersion(2, 0, 0, 0), new AssemblyVersion(2, 0, 10, 0), "System.Windows.Forms", s_ECMA_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},
-            {"Microsoft.VisualBasic", s_NETCF_PUBLIC_KEY_TOKEN_3, new AssemblyVersion(8, 0, 0, 0), new AssemblyVersion(8, 0, 10, 0), NULL, s_MICROSOFT_PUBLICKEY_STR_L, s_VER_VS_ASSEMBLYVERSION_STR_L},
+            {"Microsoft.VisualBasic", s_NETCF_PUBLIC_KEY_TOKEN_3, s_VER_VS_COMPATIBILITY_ASSEMBLYVERSION_STR_L, new AssemblyVersion(8, 0, 10, 0), NULL, s_MICROSOFT_PUBLICKEY_STR_L, s_VER_VS_ASSEMBLYVERSION_STR_L},
 
             // v3.5 Compact framework redirect
             {"System", s_NETCF_PUBLIC_KEY_TOKEN_3, new AssemblyVersion(3, 5, 0, 0), new AssemblyVersion(3, 9, 0, 0), NULL, s_ECMA_PUBLICKEY_STR_L, s_VER_ASSEMBLYVERSION_STR_L},

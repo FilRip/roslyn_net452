@@ -35,6 +35,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false; // Same behavior as NullableWalker
             }
 
+            public ImmutableDictionary<BoundExpression, (NullabilityInfo Info, TypeSymbol? Type)> AnalyzedNullabilityMap
+            {
+                get { return _analyzedNullabilityMap; }
+            }
+
+            public SnapshotManager? SnapshotManager
+            {
+                get { return _snapshotManager; }
+            }
+
             public static void Verify(ImmutableDictionary<BoundExpression, (NullabilityInfo Info, TypeSymbol? Type)> analyzedNullabilityMap, SnapshotManager? snapshotManagerOpt, BoundNode node)
             {
                 var verifier = new DebugVerifier(analyzedNullabilityMap, snapshotManagerOpt);

@@ -226,14 +226,14 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
             var receiverType = expression.Type;
 
-            var whenValueTypeLabel = new Object();
-            var doneLabel = new Object();
+            var whenValueTypeLabel = new object();
+            var doneLabel = new object();
 
             EmitInitObj(receiverType, true, expression.Syntax);
             EmitBox(receiverType, expression.Syntax);
             _builder.EmitBranch(ILOpCode.Brtrue, whenValueTypeLabel);
 
-            var receiverTemp = EmitAddress(expression.ReferenceTypeReceiver, AddressKind.ReadOnly);
+            EmitAddress(expression.ReferenceTypeReceiver, AddressKind.ReadOnly);
             _builder.EmitBranch(ILOpCode.Br, doneLabel);
             _builder.AdjustStack(-1);
 

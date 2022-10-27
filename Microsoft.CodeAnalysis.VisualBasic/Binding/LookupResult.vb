@@ -871,7 +871,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             FromCorLibrary
         End Enum
 
-        Private Shared Function GetSymbolLocation(sym As Symbol, sourceModule As ModuleSymbol, options As LookupOptions) As SymbolLocation
+        Private Shared Function GetSymbolLocation(sym As Symbol, sourceModule As ModuleSymbol) As SymbolLocation
             ' Dev10 pays attention to the fact that the [sym] refers to a namespace
             ' and the namespace has a declaration in source. This needs some special handling for merged namespaces.
             If sym.Kind = SymbolKind.Namespace Then
@@ -907,8 +907,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If other.StopFurtherLookup AndAlso
                Me.StopFurtherLookup AndAlso Me.Symbols.Count > 0 Then
 
-                Dim currentLocation = GetSymbolLocation(other.Symbol, sourceModule, options)
-                Dim contenderLocation = GetSymbolLocation(Me.Symbols(0), sourceModule, options)
+                Dim currentLocation = GetSymbolLocation(other.Symbol, sourceModule)
+                Dim contenderLocation = GetSymbolLocation(Me.Symbols(0), sourceModule)
                 Dim diff = currentLocation - contenderLocation
                 If diff <> 0 Then
                     Return diff

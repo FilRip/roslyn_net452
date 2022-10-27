@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.Emit
 
         public override bool Equals(object? obj)
         {
-            return obj is SemanticEdit && Equals((SemanticEdit)obj);
+            return obj is SemanticEdit edit && Equals(edit);
         }
 
         public bool Equals(SemanticEdit other)

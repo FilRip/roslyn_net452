@@ -95,9 +95,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             var start = TextWindow.Position;
             surrogateCharacter = SlidingTextWindow.InvalidCharacter;
-            char ch = TextWindow.NextChar();
+            TextWindow.NextChar();
 
-            ch = TextWindow.NextChar();
+            char ch = TextWindow.NextChar();
             switch (ch)
             {
                 // escaped characters that translate to themselves
@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // [] brackets, and "" strings, including interpolated holes in the latter.
 
             SyntaxDiagnosticInfo error = null;
-            ScanInterpolatedStringLiteralTop(null, isVerbatim, ref info, ref error, out bool closeQuoteMissing);
+            ScanInterpolatedStringLiteralTop(null, isVerbatim, ref info, ref error, out bool _);
             this.AddError(error);
         }
 
@@ -421,8 +421,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                             }
 
                             var escapeStart = lexer.TextWindow.Position;
-                            char c2;
-                            char ch = lexer.ScanEscapeSequence(out c2);
+                            char ch = lexer.ScanEscapeSequence(out _);
                             if ((ch == '{' || ch == '}') && error == null)
                             {
                                 error = lexer.MakeError(escapeStart, lexer.TextWindow.Position - escapeStart, ErrorCode.ERR_EscapedCurly, ch);
@@ -447,7 +446,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     {
                         // normal string & char constants can have escapes
                         var pos = lexer.TextWindow.Position;
-                        ch = lexer.ScanEscapeSequence(out char c2);
+                        ch = lexer.ScanEscapeSequence(out char _);
                         if ((ch == '{' || ch == '}') && error == null)
                         {
                             error = lexer.MakeError(pos, 1, ErrorCode.ERR_EscapedCurly, ch);
@@ -649,15 +648,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                             }
                         case '{':
                             // TODO: after the colon this has no special meaning.
-                            ScanInterpolatedStringLiteralHoleBracketed('{', '}');
+                            ScanInterpolatedStringLiteralHoleBracketed('}');
                             continue;
                         case '(':
                             // TODO: after the colon this has no special meaning.
-                            ScanInterpolatedStringLiteralHoleBracketed('(', ')');
+                            ScanInterpolatedStringLiteralHoleBracketed(')');
                             continue;
                         case '[':
                             // TODO: after the colon this has no special meaning.
-                            ScanInterpolatedStringLiteralHoleBracketed('[', ']');
+                            ScanInterpolatedStringLiteralHoleBracketed(']');
                             continue;
                         default:
                             // part of code in the expression hole
@@ -706,7 +705,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 lexer.ScanVerbatimStringLiteral(ref discarded, allowNewlines: allowNewlines);
             }
 
-            private void ScanInterpolatedStringLiteralHoleBracketed(char start, char end)
+            private void ScanInterpolatedStringLiteralHoleBracketed(char end)
             {
                 lexer.TextWindow.AdvanceChar();
                 int colon = 0;

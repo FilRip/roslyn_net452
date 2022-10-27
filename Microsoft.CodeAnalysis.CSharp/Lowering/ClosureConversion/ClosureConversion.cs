@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private readonly Analysis _analysis;
         private readonly MethodSymbol _topLevelMethod;
         private readonly MethodSymbol _substitutedSourceMethod;
-        private readonly int _topLevelMethodOrdinal;
+        //private readonly int _topLevelMethodOrdinal;
 
         // lambda frame for static lambdas. 
         // initialized lazily and could be null if there are no static lambdas
@@ -168,7 +168,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             _topLevelMethod = method;
             _substitutedSourceMethod = substitutedSourceMethod;
-            _topLevelMethodOrdinal = methodOrdinal;
+            //_topLevelMethodOrdinal = methodOrdinal;
             _lambdaDebugInfoBuilder = lambdaDebugInfoBuilder;
             _currentMethod = method;
             _analysis = analysis;
@@ -870,7 +870,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                        loweredSymbol.ClosureKind,
                                        ref method,
                                        out receiver,
-                                       out NamedTypeSymbol constructedFrame);
+                                       out NamedTypeSymbol _);
         }
 
         /// <summary>
@@ -1284,7 +1284,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 RemapLocalFunction(
                     node.Syntax,
                     node.TargetMethod,
-                    out BoundExpression receiver,
+                    out BoundExpression _,
                     out MethodSymbol remappedMethod,
                     ref arguments,
                     ref argRefKinds);
@@ -1327,12 +1327,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             RewriteLambdaOrLocalFunction(
                 node,
-                out ClosureKind closureKind,
-                out NamedTypeSymbol translatedLambdaContainer,
-                out SynthesizedClosureEnvironment containerAsFrame,
-                out BoundNode lambdaScope,
-                out DebugId topLevelMethodId,
-                out DebugId lambdaId);
+                out ClosureKind _,
+                out NamedTypeSymbol _,
+                out SynthesizedClosureEnvironment _,
+                out BoundNode _,
+                out DebugId _,
+                out DebugId _);
 
             return new BoundNoOpStatement(node.Syntax, NoOpStatementFlavor.Default);
         }

@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
 
             var metadataDecoder = new MetadataDecoder(moduleSymbol, containingType);
-            var propertyParams = metadataDecoder.GetSignatureForProperty(handle, out SignatureHeader callingConvention, out BadImageFormatException propEx);
+            var propertyParams = metadataDecoder.GetSignatureForProperty(handle, out SignatureHeader _, out BadImageFormatException propEx);
 
             var returnInfo = propertyParams[0];
 

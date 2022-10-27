@@ -706,7 +706,7 @@ namespace Microsoft.CodeAnalysis
 
                 ushort cbBlock = SizeofVerString(keyValuePair.Key, keyValuePair.Value);
                 int cbKey = (keyValuePair.Key.Length + 1) * 2;     // includes terminating NUL
-                int cbVal = (keyValuePair.Value.Length + 1) * 2;     // includes terminating NUL
+                //int cbVal = (keyValuePair.Value.Length + 1) * 2;     // includes terminating NUL
 
                 var startPos = writer.BaseStream.Position;
                 Debug.Assert((startPos & 3) == 0);
@@ -722,7 +722,7 @@ namespace Microsoft.CodeAnalysis
                 writer.Write((WORD)'\0');
                 //writer.Write(new byte[PadToDword(cbVal) - cbVal]);
 
-                System.Diagnostics.Debug.Assert(cbBlock == writer.BaseStream.Position - startPos);
+                Debug.Assert(cbBlock == writer.BaseStream.Position - startPos);
             }
 
             /// <summary>

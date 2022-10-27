@@ -42,7 +42,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim sym As Symbol = GetNodeSymbol(boundFieldAccess)
 
                 ' Ambiguous implicit receiver with should not even considered to be unassigned
-                Debug.Assert(Not TypeOf sym Is AmbiguousLocalsPseudoSymbol)
+                Debug.Assert(TypeOf sym IsNot AmbiguousLocalsPseudoSymbol)
 
                 If sym IsNot Nothing Then
                     _result.Add(sym)

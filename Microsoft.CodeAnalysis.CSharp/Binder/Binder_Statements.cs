@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundStatement BindUnsafeStatement(UnsafeStatementSyntax node, BindingDiagnosticBag diagnostics)
         {
-            var unsafeBinder = this.GetBinder(node);
+            this.GetBinder(node);
 
             if (!this.Compilation.Options.AllowUnsafe)
             {
@@ -960,7 +960,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         hasErrors = true;
                     }
                 }
-                else if (!IsValidFixedVariableInitializer(declTypeOpt.Type, localSymbol, ref initializerOpt, localDiagnostics))
+                else if (!IsValidFixedVariableInitializer(declTypeOpt.Type, ref initializerOpt, localDiagnostics))
                 {
                     hasErrors = true;
                 }
@@ -1106,7 +1106,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return localSymbol;
         }
 
-        private bool IsValidFixedVariableInitializer(TypeSymbol declType, SourceLocalSymbol localSymbol, ref BoundExpression initializerOpt, BindingDiagnosticBag diagnostics)
+        private bool IsValidFixedVariableInitializer(TypeSymbol declType, ref BoundExpression initializerOpt, BindingDiagnosticBag diagnostics)
         {
 
             if (initializerOpt?.HasAnyErrors != false)
@@ -1211,7 +1211,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             const string methodName = "GetPinnableReference";
 
-            var result = PerformPatternMethodLookup(initializer, methodName, initializer.Syntax, additionalDiagnostics, out var patternMethodSymbol);
+            PerformPatternMethodLookup(initializer, methodName, initializer.Syntax, additionalDiagnostics, out var patternMethodSymbol);
 
             if (patternMethodSymbol is null)
             {
@@ -1299,13 +1299,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             var op1 = BindValue(node.Left, diagnostics, lhsKind);
             ReportSuppressionIfNeeded(op1, diagnostics);
 
-            var lhsRefKind = RefKind.None;
             // If the LHS is a ref (not ref-readonly), the rhs
             // must also be value-assignable
             if (lhsKind == BindValueKind.RefAssignable && !op1.HasErrors)
             {
                 // We should now know that op1 is a valid lvalue
-                lhsRefKind = op1.GetRefKind();
+                RefKind lhsRefKind = op1.GetRefKind();
                 if (lhsRefKind == RefKind.Ref || lhsRefKind == RefKind.Out)
                 {
                     rhsKind |= BindValueKind.Assignable;
@@ -1434,7 +1433,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
                 default:
                     receiver = null;
-                    propertySymbol = null;
+                    //propertySymbol = null;
                     propertySyntax = null;
                     return null;
             }
@@ -2129,7 +2128,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<BoundExpression> tupleArguments,
             ImmutableArray<TypeWithAnnotations> targetElementTypes)
         {
-            var argLength = tupleArguments.Length;
+            var _ = tupleArguments.Length;
 
             // report all leaf elements of the tuple literal that failed to convert
             // NOTE: we are not responsible for reporting use site errors here, just the failed leaf conversions.
@@ -2591,7 +2590,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (arg != null)
                     {
                         var container = this.ContainingMemberOrLambda;
-                        if (container is LambdaSymbol lambda)
+                        if (container is LambdaSymbol)
                         {
                             // Error case: void-returning or async task-returning method or lambda with "return x;"
                             var errorCode = retType.IsVoidType()
@@ -2703,7 +2702,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (!badAsyncReturnAlreadyReported)
                     {
-                        if (IsGenericTaskReturningAsyncMethod() && TypeSymbol.Equals(argument.Type, this.GetCurrentReturnType(out RefKind unusedRefKind), TypeCompareKind.ConsiderEverything2))
+                        if (IsGenericTaskReturningAsyncMethod() && TypeSymbol.Equals(argument.Type, this.GetCurrentReturnType(out RefKind _), TypeCompareKind.ConsiderEverything2))
                         {
                             // Since this is an async method, the return expression must be of type '{0}' rather than 'Task<{0}>'
                             Error(diagnostics, ErrorCode.ERR_BadAsyncReturnExpression, argument.Syntax, returnType);

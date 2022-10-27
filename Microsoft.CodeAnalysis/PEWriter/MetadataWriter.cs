@@ -71,7 +71,7 @@ namespace Microsoft.Cci
         /// </remarks>
         internal const int PdbLengthLimit = 2046; // Empirical, based on when ISymUnmanagedWriter2 methods start throwing.
 
-        private readonly int _numTypeDefsEstimate;
+        //private readonly int _numTypeDefsEstimate;
         private readonly bool _deterministic;
 
         internal readonly bool MetadataOnly;
@@ -110,7 +110,7 @@ namespace Microsoft.Cci
             // much of the reallocation that would occur when growing these from empty.
             _signatureIndex = new Dictionary<ISignature, KeyValuePair<BlobHandle, ImmutableArray<byte>>>(module.HintNumberOfMethodDefinitions, ReferenceEqualityComparer.Instance); //ignores field signatures
 
-            _numTypeDefsEstimate = module.HintNumberOfMethodDefinitions / 6;
+            //_numTypeDefsEstimate = module.HintNumberOfMethodDefinitions / 6;
 
             this.Context = context;
             this.messageProvider = messageProvider;
@@ -122,7 +122,7 @@ namespace Microsoft.Cci
             _smallMethodBodies = new Dictionary<(ImmutableArray<byte>, bool), int>(ByteSequenceBoolTupleComparer.Instance);
         }
 
-        private int NumberOfTypeDefsEstimate { get { return _numTypeDefsEstimate; } }
+        //private int NumberOfTypeDefsEstimate { get { return _numTypeDefsEstimate; } }
 
         /// <summary>
         /// Returns true if writing full metadata, false if writing delta.
@@ -1115,7 +1115,7 @@ namespace Microsoft.Cci
 
         internal BlobHandle GetMethodSignatureHandle(IMethodReference methodReference)
         {
-            return GetMethodSignatureHandleAndBlob(methodReference, out ImmutableArray<byte> signatureBlob);
+            return GetMethodSignatureHandleAndBlob(methodReference, out ImmutableArray<byte> _);
         }
 
         public byte[] GetMethodSignature(IMethodReference methodReference)
@@ -2121,7 +2121,7 @@ namespace Microsoft.Cci
             }
         }
 
-        private void AddCustomAttributesToTable(IEnumerable<TypeReferenceWithAttributes> typeRefsWithAttributes)
+        /*private void AddCustomAttributesToTable(IEnumerable<TypeReferenceWithAttributes> typeRefsWithAttributes)
         {
             foreach (var typeRefWithAttributes in typeRefsWithAttributes)
             {
@@ -2131,7 +2131,7 @@ namespace Microsoft.Cci
                     AddCustomAttributeToTable(ifaceHandle, customAttribute);
                 }
             }
-        }
+        }*/
 
         private void AddCustomAttributeToTable(EntityHandle parentHandle, ICustomAttribute customAttribute)
         {

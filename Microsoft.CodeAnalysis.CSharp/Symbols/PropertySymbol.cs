@@ -422,9 +422,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override bool Equals(Symbol symbol, TypeCompareKind compareKind)
         {
-            PropertySymbol other = symbol as PropertySymbol;
-
-            if (other is null)
+            if (symbol is not PropertySymbol other)
             {
                 return false;
             }

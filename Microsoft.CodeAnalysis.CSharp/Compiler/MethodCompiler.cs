@@ -326,8 +326,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return null;
             }
-
+#pragma warning disable IDE0059 // Strange commentary : how we can use compilation state outer type by setting arg to null, arg is not 'out' of 'ref' parameter, so no change
             arg = null; // do not use compilation state of outer type.
+#pragma warning disable IDE0059
             _cancellationToken.ThrowIfCancellationRequested();
 
             if (_compilation.Options.ConcurrentBuild)

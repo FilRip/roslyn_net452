@@ -921,7 +921,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var delegateReturnType = invoke.ReturnType as NamedTypeSymbol;
                         if (delegateReturnType?.IsVoidType() == false)
                         {
-                            if (delegateReturnType.IsCustomTaskType(out var builderType))
+                            if (delegateReturnType.IsCustomTaskType(out var _))
                             {
                                 taskLikeReturnTypeOpt = delegateReturnType.ConstructedFrom;
                             }
@@ -1022,7 +1022,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            (var lambdaSymbol, var block, var lambdaBodyBinder, var diagnostics) = BindWithParameterAndReturnType(parameterTypes, parameterRefKinds, returnType, refKind);
+            (var _, var block, var lambdaBodyBinder, var diagnostics) = BindWithParameterAndReturnType(parameterTypes, parameterRefKinds, returnType, refKind);
             return new BoundLambda(
                 _unboundLambda.Syntax,
                 _unboundLambda,

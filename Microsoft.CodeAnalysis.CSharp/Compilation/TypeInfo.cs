@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override bool Equals(object obj)
         {
-            return obj is CSharpTypeInfo && Equals((CSharpTypeInfo)obj);
+            return obj is CSharpTypeInfo info && Equals(info);
         }
 
         public bool Equals(CSharpTypeInfo other)

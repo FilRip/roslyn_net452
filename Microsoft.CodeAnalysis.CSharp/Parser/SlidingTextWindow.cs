@@ -366,7 +366,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             int position = this.Position;
 
             // if we're peeking, then we don't want to change the position
-            var ch = this.ScanUnicodeEscape(peek: true, surrogateCharacter: out surrogateCharacter, info: out SyntaxDiagnosticInfo info);
+            var ch = this.ScanUnicodeEscape(peek: true, surrogateCharacter: out surrogateCharacter, info: out SyntaxDiagnosticInfo _);
             this.Reset(position);
             return ch;
         }
@@ -400,10 +400,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             info = null;
 
             int start = this.Position;
-            char character = this.PeekChar();
+            this.PeekChar();
             this.AdvanceChar();
 
-            character = this.PeekChar();
+            char character = this.PeekChar();
             if (character == 'U')
             {
                 uint uintChar = 0;

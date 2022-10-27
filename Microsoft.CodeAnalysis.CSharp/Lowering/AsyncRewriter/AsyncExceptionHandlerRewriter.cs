@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private AsyncExceptionHandlerRewriter(
             MethodSymbol containingMethod,
-            NamedTypeSymbol containingType,
+            //NamedTypeSymbol containingType,
             SyntheticBoundNodeFactory factory,
             AwaitInFinallyAnalysis analysis)
         {
@@ -118,7 +118,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var factory = new SyntheticBoundNodeFactory(containingSymbol, statement.Syntax, compilationState, diagnostics);
-            var rewriter = new AsyncExceptionHandlerRewriter(containingSymbol, containingType, factory, analysis);
+            var rewriter = new AsyncExceptionHandlerRewriter(containingSymbol, /*containingType,*/ factory, analysis);
             var loweredStatement = (BoundStatement)rewriter.Visit(statement);
 
             return loweredStatement;
@@ -804,7 +804,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var awaitContainingCatches = _awaitContainingCatches;
                     if (awaitContainingCatches == null)
                     {
-                        _awaitContainingCatches = awaitContainingCatches = new HashSet<BoundCatchBlock>();
+                        _awaitContainingCatches = /*awaitContainingCatches =*/ new HashSet<BoundCatchBlock>();
                     }
 
                     _awaitContainingCatches.Add(node);

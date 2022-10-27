@@ -105,7 +105,7 @@ namespace System.Text
         {
         }
 
-        /*internal BaseCodePageEncoding(int codepage, int dataCodePage)
+        internal BaseCodePageEncoding(int codepage, int dataCodePage)
 			: base(codepage, new InternalEncoderBestFitFallback(null), new InternalDecoderBestFitFallback(null))
 		{
 			SetFallbackEncoding();
@@ -118,7 +118,7 @@ namespace System.Text
 		{
 			dataTableCodePage = dataCodePage;
 			LoadCodePageTables();
-		}*/
+		}
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {

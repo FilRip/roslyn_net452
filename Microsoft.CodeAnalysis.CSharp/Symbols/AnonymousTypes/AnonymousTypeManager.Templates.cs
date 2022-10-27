@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             public override bool Equals(object obj)
             {
-                return obj is SynthesizedDelegateKey && Equals((SynthesizedDelegateKey)obj);
+                return obj is SynthesizedDelegateKey key && Equals(key);
             }
 
             public bool Equals(SynthesizedDelegateKey other)

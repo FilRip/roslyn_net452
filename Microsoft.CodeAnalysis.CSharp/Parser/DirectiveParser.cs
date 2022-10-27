@@ -762,9 +762,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private bool EvaluateBool(ExpressionSyntax expr)
         {
             var result = Evaluate(expr);
-            if (result is bool)
+            if (result is bool boolean)
             {
-                return (bool)result;
+                return boolean;
             }
 
             return false;

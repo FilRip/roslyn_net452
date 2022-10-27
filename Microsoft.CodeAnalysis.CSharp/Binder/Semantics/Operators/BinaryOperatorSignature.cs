@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override bool Equals(object obj)
         {
-            return obj is BinaryOperatorSignature && Equals((BinaryOperatorSignature)obj);
+            return obj is BinaryOperatorSignature signature && Equals(signature);
         }
 
         public override int GetHashCode()

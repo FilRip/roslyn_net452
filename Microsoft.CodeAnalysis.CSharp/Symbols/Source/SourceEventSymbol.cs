@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _syntaxRef = syntax.GetReference();
 
             var isExplicitInterfaceImplementation = interfaceSpecifierSyntaxOpt != null;
-            _modifiers = MakeModifiers(modifiers, isExplicitInterfaceImplementation, isFieldLike, _location, diagnostics, out bool modifierErrors);
+            _modifiers = MakeModifiers(modifiers, isExplicitInterfaceImplementation, isFieldLike, _location, diagnostics, out bool _);
             this.CheckAccessibility(_location, diagnostics, isExplicitInterfaceImplementation);
         }
 
@@ -131,7 +131,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     var syntax = this.CSharpSyntaxNode;
                     if (syntax != null)
                     {
+#pragma warning disable IDE0066 // Not work here
                         switch (syntax.Kind())
+#pragma warning restore IDE0066
                         {
                             case SyntaxKind.EventDeclaration:
                                 return ((EventDeclarationSyntax)syntax).AttributeLists;
@@ -184,7 +186,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 LoadAndValidateAttributes(OneOrMany.Create(this.AttributeDeclarationSyntaxList), ref _lazyCustomAttributesBag))
             {
                 DeclaringCompilation.SymbolDeclaredEvent(this);
-                var wasCompletedThisThread = _state.NotePartComplete(CompletionPart.Attributes);
+                _state.NotePartComplete(CompletionPart.Attributes);
             }
 
             return _lazyCustomAttributesBag;
@@ -281,7 +283,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal sealed override void DecodeWellKnownAttribute(ref DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation> arguments)
         {
             var attribute = arguments.Attribute;
-            var diagnostics = (BindingDiagnosticBag)arguments.Diagnostics;
+            var _ = (BindingDiagnosticBag)arguments.Diagnostics;
 
             if (attribute.IsTargetAttribute(this, AttributeDescription.SpecialNameAttribute))
             {

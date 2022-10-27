@@ -62,10 +62,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                         if (!lineToken.ContainsDiagnostics)
                         {
                             object? value = lineToken.Value;
-                            if (value is int)
+                            if (value is int @int)
                             {
                                 // convert one-based line number into zero-based line number
-                                mappedLine = ((int)value) - 1;
+                                mappedLine = @int - 1;
                             }
 
                             if (directive.File.Kind() == SyntaxKind.StringLiteralToken)

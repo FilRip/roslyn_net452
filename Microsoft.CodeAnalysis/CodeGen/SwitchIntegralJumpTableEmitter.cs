@@ -471,7 +471,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             }
             else
             {
-                int Int32Value(ConstantValue value)
+                static int Int32Value(ConstantValue value)
                 {
                     // ConstantValue does not correctly convert byte and ushort values to int.
                     // It sign extends them rather than padding them. We compensate for that here.

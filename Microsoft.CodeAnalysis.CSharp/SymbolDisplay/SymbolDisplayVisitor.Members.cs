@@ -792,7 +792,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 (containingType == null ||
                  (containingType.TypeKind != TypeKind.Interface && !IsEnumMember(symbol) && !IsLocalFunction(symbol))))
             {
-                var isConst = symbol is IFieldSymbol && ((IFieldSymbol)symbol).IsConst;
+                var isConst = symbol is IFieldSymbol symbol1 && symbol1.IsConst;
                 if (symbol.IsStatic && !isConst)
                 {
                     AddKeyword(SyntaxKind.StaticKeyword);

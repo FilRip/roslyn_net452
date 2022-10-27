@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             if (diagnostic.AdditionalLocations != null)
             {
-                foreach (var location in diagnostic.AdditionalLocations)
+                foreach (var _ in diagnostic.AdditionalLocations)
                 {
                     VerifyDiagnosticLocationInCompilation(diagnostic.Id, diagnostic.Location, compilation);
                 }

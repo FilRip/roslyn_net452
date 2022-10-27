@@ -379,9 +379,9 @@ namespace Microsoft.CodeAnalysis
                 ConstantValueTypeDiscriminator.NUInt => CreateNativeUInt((uint)value),
                 ConstantValueTypeDiscriminator.Char => Create((char)value),
                 ConstantValueTypeDiscriminator.Boolean => Create((bool)value),
-                ConstantValueTypeDiscriminator.Single => value is double ?
-CreateSingle((double)value) :
-Create((float)value),// values for singles may actually have double precision
+                ConstantValueTypeDiscriminator.Single => value is double @double ?
+                    CreateSingle(@double) :
+                    Create((float)value),// values for singles may actually have double precision
                 ConstantValueTypeDiscriminator.Double => Create((double)value),
                 ConstantValueTypeDiscriminator.Decimal => Create((decimal)value),
                 ConstantValueTypeDiscriminator.DateTime => Create((DateTime)value),

@@ -21,12 +21,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (this == other)
                 return true;
 
-            return (this, other)
-switch
+            return (this, other) switch
             {
                 (BoundDagTypeTest x, BoundDagTypeTest y) => x.Type.Equals(y.Type, TypeCompareKind.AllIgnoreOptions),
                 (BoundDagNonNullTest x, BoundDagNonNullTest y) => x.IsExplicitTest == y.IsExplicitTest,
-                (BoundDagExplicitNullTest x, BoundDagExplicitNullTest y) => true,
+                (BoundDagExplicitNullTest _, BoundDagExplicitNullTest _) => true,
                 (BoundDagValueTest x, BoundDagValueTest y) => x.Value.Equals(y.Value),
                 (BoundDagRelationalTest x, BoundDagRelationalTest y) => x.Relation == y.Relation && x.Value.Equals(y.Value),
                 _ => throw ExceptionUtilities.UnexpectedValue(this),

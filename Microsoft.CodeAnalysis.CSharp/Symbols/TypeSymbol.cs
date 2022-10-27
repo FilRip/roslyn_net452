@@ -17,7 +17,7 @@ using Microsoft.CodeAnalysis.Symbols;
 
 using Roslyn.Utilities;
 
-#pragma warning disable CS0660
+#pragma warning disable CS0660, IDE0079
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
@@ -819,7 +819,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             CSharpCompilation compilation = implementingType.DeclaringCompilation;
             var useSiteInfo = compilation is object ? new CompoundUseSiteInfo<AssemblySymbol>(diagnostics, compilation.Assembly) : CompoundUseSiteInfo<AssemblySymbol>.DiscardedDependencies;
 
+#pragma warning disable IDE0038 // TODO : Strange cast
             for (TypeSymbol currType = implementingType; currType is object; currType = currType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+#pragma warning restore IDE0038
             {
                 // NOTE: In the case of PE symbols, it is possible to see an explicit implementation
                 // on a type that does not declare the corresponding interface (or one of its

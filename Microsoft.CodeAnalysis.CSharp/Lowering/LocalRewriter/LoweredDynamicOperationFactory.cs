@@ -548,7 +548,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 #nullable enable
 
+#pragma warning disable IDE0066 // Not work here
             switch (loweredReceiver.Kind)
+#pragma warning restore IDE0066
             {
                 case BoundKind.Local:
                 case BoundKind.Parameter:

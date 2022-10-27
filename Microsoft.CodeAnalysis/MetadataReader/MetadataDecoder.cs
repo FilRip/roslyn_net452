@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis
 
         public TypeSymbol GetTypeOfToken(EntityHandle token)
         {
-            return GetTypeOfToken(token, out bool isNoPiaLocalType);
+            return GetTypeOfToken(token, out bool _);
         }
 
         public TypeSymbol GetTypeOfToken(EntityHandle token, out bool isNoPiaLocalType)
@@ -571,7 +571,7 @@ namespace Microsoft.CodeAnalysis
 
         private TypeSymbol GetTypeOfTypeDef(TypeDefinitionHandle typeDef)
         {
-            return GetTypeOfTypeDef(typeDef, out bool isNoPiaLocalType, isContainingType: false);
+            return GetTypeOfTypeDef(typeDef, out bool _, isContainingType: false);
         }
 
         private TypeSymbol GetTypeOfTypeDef(TypeDefinitionHandle typeDef, out bool isNoPiaLocalType, bool isContainingType)
@@ -736,7 +736,7 @@ namespace Microsoft.CodeAnalysis
         {
             EntityHandle token = signatureReader.ReadTypeHandle();
             TypeSymbol type;
-            bool isNoPiaLocalType;
+            //bool isNoPiaLocalType;
 
         // According to ECMA spec:
         //  The CMOD_OPT or CMOD_REQD is followed by a metadata token that
@@ -745,13 +745,13 @@ namespace Microsoft.CodeAnalysis
             switch (token.Kind)
             {
                 case HandleKind.TypeDefinition:
-                    type = GetTypeOfTypeDef((TypeDefinitionHandle)token, out isNoPiaLocalType, isContainingType: false);
+                    type = GetTypeOfTypeDef((TypeDefinitionHandle)token, out bool _, isContainingType: false);
                     // it is valid for a modifier to refer to an unconstructed type, we need to preserve this fact
                     type = SubstituteWithUnboundIfGeneric(type);
                     break;
 
                 case HandleKind.TypeReference:
-                    type = GetTypeOfTypeRef((TypeReferenceHandle)token, out isNoPiaLocalType);
+                    type = GetTypeOfTypeRef((TypeReferenceHandle)token, out bool _);
                     // it is valid for a modifier to refer to an unconstructed type, we need to preserve this fact
                     type = SubstituteWithUnboundIfGeneric(type);
                     break;
@@ -765,7 +765,7 @@ namespace Microsoft.CodeAnalysis
                     BlobReader memoryReader = this.Module.GetTypeSpecificationSignatureReaderOrThrow((TypeSpecificationHandle)token);
 
                     SignatureTypeCode typeCode = memoryReader.ReadSignatureTypeCode();
-                    bool refersToNoPiaLocalType;
+                    //bool refersToNoPiaLocalType;
 
                     switch (typeCode)
                     {
@@ -796,7 +796,7 @@ namespace Microsoft.CodeAnalysis
                             goto tryAgain;
 
                         case SignatureTypeCode.GenericTypeInstance:
-                            type = DecodeGenericTypeInstanceOrThrow(ref memoryReader, out refersToNoPiaLocalType);
+                            type = DecodeGenericTypeInstanceOrThrow(ref memoryReader, out bool _);
                             break;
 
                         default:
@@ -965,7 +965,7 @@ namespace Microsoft.CodeAnalysis
                 // and is encoded as specified.
                 // If the GeneralValue is not present the value of the constant is the default value of the type. If the type 
                 // is a reference type the value is a null reference, if the type is a pointer type the value is a null pointer, etc.
-                type = GetSymbolForTypeHandleOrThrow(sigReader.ReadTypeHandle(), out bool refersToNoPiaLocalType, allowTypeSpec: true, requireShortForm: true);
+                type = GetSymbolForTypeHandleOrThrow(sigReader.ReadTypeHandle(), out bool _, allowTypeSpec: true, requireShortForm: true);
 
                 if (type.SpecialType == SpecialType.System_Decimal)
                 {
@@ -993,7 +993,7 @@ namespace Microsoft.CodeAnalysis
 
                 if (isEnumTypeCode && sigReader.RemainingBytes > 0)
                 {
-                    type = GetSymbolForTypeHandleOrThrow(sigReader.ReadTypeHandle(), out bool refersToNoPiaLocalType, allowTypeSpec: true, requireShortForm: true);
+                    type = GetSymbolForTypeHandleOrThrow(sigReader.ReadTypeHandle(), out bool _, allowTypeSpec: true, requireShortForm: true);
 
                     if (GetEnumUnderlyingType(type)?.SpecialType != specialType)
                     {
@@ -1280,7 +1280,7 @@ namespace Microsoft.CodeAnalysis
                     throw new UnsupportedSignatureContent();
                 }
 
-                DecodeCustomAttributeParameterTypeOrThrow(ref sigReader, out elementTypeCode, out elementType, out SerializationTypeCode unusedElementTypeCode, out TypeSymbol unusedElementType, isElementType: true);
+                DecodeCustomAttributeParameterTypeOrThrow(ref sigReader, out elementTypeCode, out elementType, out SerializationTypeCode _, out TypeSymbol _, isElementType: true);
                 type = GetSZArrayTypeSymbol(elementType, customModifiers: default(ImmutableArray<ModifierInfo<TypeSymbol>>));
                 typeCode = SerializationTypeCode.SZArray;
                 return;
@@ -1372,7 +1372,7 @@ namespace Microsoft.CodeAnalysis
                     throw new UnsupportedSignatureContent();
                 }
 
-                DecodeCustomAttributeFieldOrPropTypeOrThrow(ref argReader, out elementTypeCode, out elementType, out SerializationTypeCode unusedElementTypeCode, out TypeSymbol unusedElementType, isElementType: true);
+                DecodeCustomAttributeFieldOrPropTypeOrThrow(ref argReader, out elementTypeCode, out elementType, out SerializationTypeCode _, out TypeSymbol _, isElementType: true);
                 type = GetSZArrayTypeSymbol(elementType, customModifiers: default(ImmutableArray<ModifierInfo<TypeSymbol>>));
                 return;
             }
@@ -1773,7 +1773,7 @@ namespace Microsoft.CodeAnalysis
             var result = new TypeSymbol[argumentCount];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = DecodeTypeOrThrow(ref signatureReader, out bool refersToNoPiaLocalType);
+                result[i] = DecodeTypeOrThrow(ref signatureReader, out bool _);
             }
 
             return result;

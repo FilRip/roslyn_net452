@@ -396,15 +396,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
             public override SeparatedSyntaxList<TNode> VisitList<TNode>(SeparatedSyntaxList<TNode> list)
             {
-                if (_originalNode is TNode)
+                if (_originalNode is TNode node)
                 {
-                    var index = list.IndexOf((TNode)_originalNode);
+                    var index = list.IndexOf(node);
                     if (index >= 0 && index < list.Count)
                     {
                         switch (this.editKind)
                         {
                             case ListEditKind.Replace:
-                                return list.ReplaceRange((TNode)_originalNode, _newNodes.Cast<TNode>());
+                                return list.ReplaceRange(node, _newNodes.Cast<TNode>());
 
                             case ListEditKind.InsertAfter:
                                 return list.InsertRange(index + 1, _newNodes.Cast<TNode>());
@@ -420,15 +420,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
             public override SyntaxList<TNode> VisitList<TNode>(SyntaxList<TNode> list)
             {
-                if (_originalNode is TNode)
+                if (_originalNode is TNode node)
                 {
-                    var index = list.IndexOf((TNode)_originalNode);
+                    var index = list.IndexOf(node);
                     if (index >= 0 && index < list.Count)
                     {
                         switch (this.editKind)
                         {
                             case ListEditKind.Replace:
-                                return list.ReplaceRange((TNode)_originalNode, _newNodes.Cast<TNode>());
+                                return list.ReplaceRange(node, _newNodes.Cast<TNode>());
 
                             case ListEditKind.InsertAfter:
                                 return list.InsertRange(index + 1, _newNodes.Cast<TNode>());

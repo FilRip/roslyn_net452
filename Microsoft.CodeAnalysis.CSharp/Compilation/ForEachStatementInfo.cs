@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override bool Equals(object? obj)
         {
-            return obj is ForEachStatementInfo && Equals((ForEachStatementInfo)obj);
+            return obj is ForEachStatementInfo info && Equals(info);
         }
 
         public bool Equals(ForEachStatementInfo other)

@@ -363,7 +363,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             var receiver = expression.Receiver;
 
             var receiverType = receiver.Type;
-            LocalDefinition receiverTemp = null;
+            LocalDefinition receiverTemp;
 
             var receiverConstant = receiver.ConstantValue;
             if (receiverConstant?.IsNull == false)
@@ -565,7 +565,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // push address of variable
             // mkrefany [Type] -- takes address off stack, puts TypedReference on stack
 
-            var temp = EmitAddress(expression.Operand, AddressKind.Writeable);
+            EmitAddress(expression.Operand, AddressKind.Writeable);
 
             _builder.EmitOpCode(ILOpCode.Mkrefany);
             EmitSymbolToken(expression.Operand.Type, expression.Operand.Syntax);
@@ -633,7 +633,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         {
             // NOTE: passing "ReadOnlyStrict" here. 
             //       we should not get an address of a copy if at all possible
-            var temp = EmitAddress(expression.Operand, AddressKind.ReadOnlyStrict);
+            EmitAddress(expression.Operand, AddressKind.ReadOnlyStrict);
 
             if (used && !expression.IsManaged)
             {
@@ -2051,7 +2051,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         private void InPlaceInit(BoundExpression target, bool used)
         {
-            var temp = EmitAddress(target, AddressKind.Writeable);
+            EmitAddress(target, AddressKind.Writeable);
 
             _builder.EmitOpCode(ILOpCode.Initobj);    //  initobj  <MyStruct>
             EmitSymbolToken(target.Type, target.Syntax);
@@ -2065,7 +2065,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         private void InPlaceCtorCall(BoundExpression target, BoundObjectCreationExpression objCreation, bool used)
         {
 
-            var temp = EmitAddress(target, AddressKind.Writeable);
+            EmitAddress(target, AddressKind.Writeable);
 
             // ReadOnlySpan may just refer to the blob, if possible.
             if (this._module.Compilation.IsReadOnlySpanType(objCreation.Type) && objCreation.Arguments.Length == 1)
@@ -2151,7 +2151,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                         var left = (BoundFieldAccess)assignmentTarget;
                         if (!left.FieldSymbol.IsStatic)
                         {
-                            var temp = EmitReceiverRef(left.ReceiverOpt, AddressKind.Writeable);
+                            EmitReceiverRef(left.ReceiverOpt, AddressKind.Writeable);
                             lhsUsesStack = true;
                         }
                     }
@@ -2234,7 +2234,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     {
                         var left = (BoundThisReference)assignmentTarget;
 
-                        var temp = EmitAddress(left, AddressKind.Writeable);
+                        EmitAddress(left, AddressKind.Writeable);
 
                         lhsUsesStack = true;
                     }
@@ -2244,7 +2244,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     {
                         var left = (BoundDup)assignmentTarget;
 
-                        var temp = EmitAddress(left, AddressKind.Writeable);
+                        EmitAddress(left, AddressKind.Writeable);
 
                         lhsUsesStack = true;
                     }
@@ -2254,7 +2254,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     {
                         var left = (BoundConditionalOperator)assignmentTarget;
 
-                        var temp = EmitAddress(left, AddressKind.Writeable);
+                        EmitAddress(left, AddressKind.Writeable);
 
                         lhsUsesStack = true;
                     }
@@ -3021,7 +3021,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 if (IsVarianceCast(expr.Type, mergeTypeOfAlternative))
                 {
                     EmitStaticCast(expr.Type, expr.Syntax);
-                    mergeTypeOfAlternative = expr.Type;
+                    //mergeTypeOfAlternative = expr.Type;
                 }
                 else if (expr.Type.IsInterfaceType() && !TypeSymbol.Equals(expr.Type, mergeTypeOfAlternative, TypeCompareKind.ConsiderEverything2))
                 {
@@ -3045,7 +3045,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 if (IsVarianceCast(expr.Type, mergeTypeOfConsequence))
                 {
                     EmitStaticCast(expr.Type, expr.Syntax);
-                    mergeTypeOfConsequence = expr.Type;
+                    //mergeTypeOfConsequence = expr.Type;
                 }
                 else if (expr.Type.IsInterfaceType() && !TypeSymbol.Equals(expr.Type, mergeTypeOfConsequence, TypeCompareKind.ConsiderEverything2))
                 {
@@ -3080,7 +3080,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 if (IsVarianceCast(expr.Type, mergeTypeOfLeftValue))
                 {
                     EmitStaticCast(expr.Type, expr.Syntax);
-                    mergeTypeOfLeftValue = expr.Type;
+                    //mergeTypeOfLeftValue = expr.Type;
                 }
                 else if (expr.Type.IsInterfaceType() && !TypeSymbol.Equals(expr.Type, mergeTypeOfLeftValue, TypeCompareKind.ConsiderEverything2))
                 {
@@ -3110,7 +3110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 if (IsVarianceCast(expr.Type, mergeTypeOfRightValue))
                 {
                     EmitStaticCast(expr.Type, expr.Syntax);
-                    mergeTypeOfRightValue = expr.Type;
+                    //mergeTypeOfRightValue = expr.Type;
                 }
             }
 

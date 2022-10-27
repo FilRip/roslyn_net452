@@ -260,10 +260,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Else
                         If lookupResult.HasDiagnostic Then
                             Dim diagName = GetBaseNamesForDiagnostic(typeSyntax)
-                            diagInfo = lookupResult.Diagnostic
+                            'diagInfo = lookupResult.Diagnostic
 
                             If Not reportedAnError Then
-                                Binder.ReportDiagnostic(diagBag, typeSyntax, lookupResult.Diagnostic)
+                                ReportDiagnostic(diagBag, typeSyntax, lookupResult.Diagnostic)
                             End If
 
                             Return ErrorTypeFromLookupResult(diagName, lookupResult, binder)
@@ -271,7 +271,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                         ' LookupTypeOrNamespaceSyntax can't return more than one symbol.
                         Dim sym = lookupResult.SingleSymbol
-                        Dim typeSymbol As TypeSymbol = Nothing
+                        Dim typeSymbol As TypeSymbol
 
                         If sym.Kind = SymbolKind.Alias Then
                             typeSymbol = TryCast(DirectCast(sym, AliasSymbol).Target, TypeSymbol)
@@ -494,7 +494,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     ' Report appropriate errors from the result.
                     If Not lookupResult.HasSymbol Then
-                        Dim diagInfo As DiagnosticInfo = Nothing
+                        Dim diagInfo As DiagnosticInfo
 
                         Dim diagName = GetBaseNamesForDiagnostic(typeSyntax)
                         ' In Imports clauses, a missing namespace or type is just a warning.
@@ -743,22 +743,22 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Return Binder.GetErrorSymbol(name, result.Diagnostic, result.Symbols.ToImmutable(), result.Kind)
             End Function
 
-            ''' <summary>
-            ''' Check that the given symbol is a type. If it is a namespace, report an error into the diagnostic bag
-            ''' and return an error symbol.
-            ''' </summary>
-            Private Shared Function CheckSymbolIsType(sym As NamespaceOrTypeSymbol,
-                                                      syntax As VisualBasicSyntaxNode,
-                                                      binder As Binder,
-                                                      diagBag As BindingDiagnosticBag) As TypeSymbol
-                If sym.IsNamespace Then
-                    Dim diagInfo = New BadSymbolDiagnostic(sym, ERRID.ERR_UnrecognizedType)
-                    Binder.ReportDiagnostic(diagBag, syntax, diagInfo)
-                    Return Binder.GetErrorSymbol(sym.Name, diagInfo, ImmutableArray.Create(Of Symbol)(sym), LookupResultKind.NotATypeOrNamespace)
-                Else
-                    Return DirectCast(sym, TypeSymbol)
-                End If
-            End Function
+            '''' <summary>
+            '''' Check that the given symbol is a type. If it is a namespace, report an error into the diagnostic bag
+            '''' and return an error symbol.
+            '''' </summary>
+            'Private Shared Function CheckSymbolIsType(sym As NamespaceOrTypeSymbol,
+            '                                          syntax As VisualBasicSyntaxNode,
+            '                                          binder As Binder,
+            '                                          diagBag As BindingDiagnosticBag) As TypeSymbol
+            '    If sym.IsNamespace Then
+            '        Dim diagInfo = New BadSymbolDiagnostic(sym, ERRID.ERR_UnrecognizedType)
+            '        Binder.ReportDiagnostic(diagBag, syntax, diagInfo)
+            '        Return Binder.GetErrorSymbol(sym.Name, diagInfo, ImmutableArray.Create(Of Symbol)(sym), LookupResultKind.NotATypeOrNamespace)
+            '    Else
+            '        Return DirectCast(sym, TypeSymbol)
+            '    End If
+            'End Function
 
             ''' <summary>
             ''' Bind a built in type name to the correct type symbol.

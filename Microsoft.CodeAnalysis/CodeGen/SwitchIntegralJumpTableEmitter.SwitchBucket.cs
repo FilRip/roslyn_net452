@@ -11,6 +11,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 {
     internal partial struct SwitchIntegralJumpTableEmitter
     {
+#pragma warning disable IDE0064
         private struct SwitchBucket
         {
             // sorted case labels

@@ -949,7 +949,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                Not Compilation.Assembly.RuntimeSupportsDefaultInterfaceImplementation Then
 
                 If Not symbol.IsShared AndAlso
-                   Not TypeOf symbol Is TypeSymbol AndAlso
+                   TypeOf symbol IsNot TypeSymbol AndAlso
                    Not symbol.RequiresImplementation() Then
                     ReportDiagnostic(diagnostics, node, ERRID.ERR_RuntimeDoesNotSupportDefaultInterfaceImplementation)
                 Else

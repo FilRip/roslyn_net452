@@ -326,16 +326,16 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return Not constantValue.BooleanValue
         End Function
 
-        Private Function IsConstantNull(node As BoundExpression) As Boolean
-            If Me._suppressConstantExpressions Then
-                Return False
-            End If
+        'Private Function IsConstantNull(node As BoundExpression) As Boolean
+        '    If Me._suppressConstantExpressions Then
+        '        Return False
+        '    End If
 
-            If Not node.IsConstant Then
-                Return False
-            End If
-            Return node.ConstantValueOpt.IsNull
-        End Function
+        '    If Not node.IsConstant Then
+        '        Return False
+        '    End If
+        '    Return node.ConstantValueOpt.IsNull
+        'End Function
 
         Protected Shared Function IsNonPrimitiveValueType(type As TypeSymbol) As Boolean
             Debug.Assert(type IsNot Nothing)

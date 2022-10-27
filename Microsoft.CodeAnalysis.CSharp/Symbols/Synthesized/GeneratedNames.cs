@@ -256,7 +256,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // The type of generated name. See TryParseGeneratedName.
         internal static GeneratedNameKind GetKind(string name)
         {
-            return TryParseGeneratedName(name, out GeneratedNameKind kind, out int openBracketOffset, out int closeBracketOffset) ? kind : GeneratedNameKind.None;
+            return TryParseGeneratedName(name, out GeneratedNameKind kind, out int _, out int _) ? kind : GeneratedNameKind.None;
         }
 
         // Parse the generated name. Returns true for names of the form

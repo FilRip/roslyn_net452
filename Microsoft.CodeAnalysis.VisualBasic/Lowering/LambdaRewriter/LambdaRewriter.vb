@@ -104,10 +104,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private _reported_ERR_CannotUseOnErrorGotoWithClosure As Boolean
 
-#Disable Warning IDE0044 ' Add readonly modifier - The field is assigned in "#If DEBUG"
+#Disable Warning IDE0044, IDE0079 ' Add readonly modifier - The field is assigned in "#If DEBUG"
         ''' <summary> WARNING: used ONLY in DEBUG </summary>
         Private _rewrittenNodes As HashSet(Of BoundNode) = Nothing
-#Enable Warning IDE0044 ' Add readonly modifier
+#Enable Warning IDE0044, IDE0079 ' Add readonly modifier
 
         Private Sub New(analysis As Analysis,
                         method As MethodSymbol,
@@ -976,7 +976,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return closureId
         End Function
 
-        Private Function GetLambdaId(syntax As SyntaxNode, closureKind As ClosureKind, closureOrdinal As Integer) As DebugId
+        Private Function GetLambdaId(syntax As SyntaxNode, closureOrdinal As Integer) As DebugId
             Debug.Assert(syntax IsNot Nothing)
 
             Dim lambdaOrLambdaBodySyntax As SyntaxNode
@@ -991,7 +991,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' EnC is not supported in this case.
                 lambdaOrLambdaBodySyntax = syntax
                 isLambdaBody = False
-            ElseIf LambdaUtilities.IsNonUserCodeQueryLambda(syntax)
+            ElseIf LambdaUtilities.IsNonUserCodeQueryLambda(syntax) Then
                 lambdaOrLambdaBodySyntax = syntax
                 isLambdaBody = False
             Else
@@ -1063,7 +1063,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 lambdaId = New DebugId(_delegateRelaxationIdDispenser, generation)
                 topLevelMethodId = New DebugId(_topLevelMethodOrdinal, generation)
             Else
-                lambdaId = GetLambdaId(node.Syntax, closureKind, closureOrdinal)
+                lambdaId = GetLambdaId(node.Syntax, closureOrdinal)
                 topLevelMethodId = GetTopLevelMethodId()
             End If
 

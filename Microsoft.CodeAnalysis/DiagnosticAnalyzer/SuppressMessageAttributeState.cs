@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return diagnostic;
             }
 
-            if (IsDiagnosticSuppressed(diagnostic, out SuppressMessageInfo info))
+            if (IsDiagnosticSuppressed(diagnostic, out SuppressMessageInfo _))
             {
                 // Attach the suppression info to the diagnostic.
                 diagnostic = diagnostic.WithIsSuppressed(true);
@@ -297,7 +297,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         {
             // TODO: How should we deal with multiple SuppressMessage attributes, with different suppression info/states?
             // For now, we just pick the last attribute, if not suppressed.
-            if (!builder.TryGetValue(info.Id, out SuppressMessageInfo currentInfo))
+            if (!builder.TryGetValue(info.Id, out SuppressMessageInfo _))
             {
                 builder[info.Id] = info;
             }

@@ -1561,7 +1561,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     lookupResult.Free()
 
                 Else
-                    mainType = Nothing
+                    'mainType = Nothing
 
                     errorTarget = Me.AssemblyName
                     For Each candidate In Me.GetSymbolsWithName(WellKnownMemberNames.EntryPointMethodName, SymbolFilter.Member, cancellationToken)
@@ -2942,7 +2942,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return New PredicateSymbolSearcher(Me, filter, predicate, cancellationToken).GetSymbolsWithName()
         End Function
 
-#Disable Warning RS0026 ' Do not add multiple public overloads with optional parameters
         ''' <summary>
         ''' Return true if there is a source declaration symbol name that matches the provided name.
         ''' This may be faster than <see cref="ContainsSymbolsWithName(Func(Of String, Boolean),

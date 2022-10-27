@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is SymbolInfo && Equals((SymbolInfo)obj);
+            return obj is SymbolInfo info && Equals(info);
         }
 
         public bool Equals(SymbolInfo other)

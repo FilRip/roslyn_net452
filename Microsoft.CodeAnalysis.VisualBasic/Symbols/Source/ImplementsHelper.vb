@@ -348,7 +348,7 @@ DoneWithErrorReporting:
 
                         If Not errorReported Then
                             ' Further verification of found method.
-                            foundMember = ValidateImplementedMember(implementingSym, foundMember, implementedMemberSyntax, binder, diagBag, interfaceType, implementedMethodName, errorReported)
+                            foundMember = ValidateImplementedMember(implementingSym, foundMember, implementedMemberSyntax, diagBag, interfaceType, implementedMethodName, errorReported)
                         End If
 
                         If foundMember IsNot Nothing Then
@@ -452,7 +452,6 @@ DoneWithErrorReporting:
         Private Function ValidateImplementedMember(Of TSymbol As Symbol)(implementingSym As TSymbol,
                                                                         implementedSym As TSymbol,
                                                                         implementedMemberSyntax As QualifiedNameSyntax,
-                                                                        binder As Binder,
                                                                         diagBag As BindingDiagnosticBag,
                                                                         interfaceType As TypeSymbol,
                                                                         implementedMethodName As String,

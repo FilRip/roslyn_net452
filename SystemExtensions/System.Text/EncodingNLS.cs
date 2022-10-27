@@ -6,6 +6,9 @@ namespace System.Text
 
         private string _webName;
 
+        private readonly EncoderFallback _encoder;
+        private readonly DecoderFallback _decoder;
+
         public override string EncodingName
         {
             get
@@ -51,10 +54,22 @@ namespace System.Text
         {
         }
 
-        /*protected EncodingNLS(int codePage, EncoderFallback enc, DecoderFallback dec)
-			: base(codePage, enc, dec)
+        protected EncodingNLS(int codePage, EncoderFallback enc, DecoderFallback dec)
+			: base(codePage)
 		{
-		}*/
+            _encoder = enc;
+            _decoder = dec;
+		}
+
+        public EncoderFallback Encoder
+        {
+            get { return _encoder; }
+        }
+
+        public DecoderFallback Decoder
+        {
+            get { return _decoder; }
+        }
 
         public unsafe abstract int GetByteCount(char* chars, int count, EncoderNLS encoder);
 

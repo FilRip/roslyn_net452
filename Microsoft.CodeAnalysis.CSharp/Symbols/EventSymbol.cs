@@ -332,9 +332,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override bool Equals(Symbol? obj, TypeCompareKind compareKind)
         {
-            EventSymbol? other = obj as EventSymbol;
-
-            if (other is null)
+            if (obj is not EventSymbol other)
             {
                 return false;
             }

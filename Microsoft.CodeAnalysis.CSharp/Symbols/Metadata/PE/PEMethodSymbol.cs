@@ -141,10 +141,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
 #endif
 
-            private static bool BitsAreUnsetOrSame(int bits, int mask)
+            /*private static bool BitsAreUnsetOrSame(int bits, int mask)
             {
                 return (bits & mask) == 0 || (bits & mask) == mask;
-            }
+            }*/
 
             public void InitializeIsExtensionMethod(bool isExtensionMethod)
             {
@@ -516,7 +516,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if (!_packedFlags.IsExplicitOverrideIsPopulated)
                 {
-                    var unused = this.ExplicitInterfaceImplementations;
+                    var _ = this.ExplicitInterfaceImplementations;
                 }
                 return _packedFlags.IsExplicitFinalizerOverride;
             }
@@ -528,7 +528,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if (!_packedFlags.IsExplicitOverrideIsPopulated)
                 {
-                    var unused = this.ExplicitInterfaceImplementations;
+                    var _ = this.ExplicitInterfaceImplementations;
                 }
                 return _packedFlags.IsExplicitClassOverride;
             }
@@ -1246,7 +1246,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 var diagnosticInfo = result.DiagnosticInfo;
                 EnsureTypeParametersAreLoaded(ref diagnosticInfo);
-                if (diagnosticInfo == null && GetUnmanagedCallersOnlyAttributeData(forceComplete: true) is UnmanagedCallersOnlyAttributeData data)
+                if (diagnosticInfo == null && GetUnmanagedCallersOnlyAttributeData(forceComplete: true) is UnmanagedCallersOnlyAttributeData)
                 {
                     if (CheckAndReportValidUnmanagedCallersOnlyTarget(location: null, diagnostics: null))
                     {

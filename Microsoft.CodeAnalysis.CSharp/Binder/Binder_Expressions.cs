@@ -837,7 +837,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // bind it and then give one nice message.
 
             bool isConst = false;
-            var declType = BindVariableTypeWithAnnotations(node.Designation, diagnostics, node.Type, ref isConst, out bool isVar, out AliasSymbol alias);
+            var declType = BindVariableTypeWithAnnotations(node.Designation, diagnostics, node.Type, ref isConst, out bool _, out AliasSymbol _);
             Error(diagnostics, ErrorCode.ERR_DeclarationExpressionNotPermitted, node);
             return BindDeclarationVariablesForErrorRecovery(declType, node.Designation, node, diagnostics);
         }
@@ -1709,7 +1709,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             // bind to "this.x" in the "Print". (In C++ the local does not come
                             // into scope until its declaration.)
                             //
-                            FieldSymbol possibleField = null;
+                            FieldSymbol possibleField;
                             var lookupResult = LookupResult.GetInstance();
                             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
                             this.LookupMembersInType(
@@ -2502,7 +2502,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static NameSyntax GetNameSyntax(SyntaxNode syntax)
         {
-            return GetNameSyntax(syntax, out string nameString);
+            return GetNameSyntax(syntax, out string _);
         }
 
         /// <summary>
@@ -2689,7 +2689,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.DiscardDesignation:
                     {
                         bool isConst = false;
-                        var declType = BindVariableTypeWithAnnotations(designation, diagnostics, typeSyntax, ref isConst, out bool isVar, out AliasSymbol alias);
+                        var declType = BindVariableTypeWithAnnotations(designation, diagnostics, typeSyntax, ref isConst, out bool _, out AliasSymbol _);
 
                         return new BoundDiscardExpression(declarationExpression, declType.Type);
                     }
@@ -2718,7 +2718,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 bool isConst = false;
-                var declType = BindVariableTypeWithAnnotations(declarationExpression, diagnostics, typeSyntax, ref isConst, out isVar, out AliasSymbol alias);
+                var declType = BindVariableTypeWithAnnotations(declarationExpression, diagnostics, typeSyntax, ref isConst, out isVar, out AliasSymbol _);
 
                 localSymbol.ScopeBinder.ValidateDeclarationNameConflictsInScope(localSymbol, diagnostics);
 
@@ -2839,7 +2839,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // The common case is no named arguments. So we defer all work until the first named argument is seen.
                 if (!hasNames)
                 {
-                    hasNames = true;
+                    //hasNames = true;
 
                     int argCount = result.Arguments.Count;
                     for (int i = 0; i < argCount; ++i)
@@ -2941,7 +2941,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else if (argument.NeedsToBeConverted())
                 {
-                    if (argument is BoundTupleLiteral sourceTuple)
+                    if (argument is BoundTupleLiteral)
                     {
                         TypeWithAnnotations parameterTypeWithAnnotations = GetCorrespondingParameterTypeWithAnnotations(ref result, parameters, arg);
                         // CreateConversion reports tuple literal name mismatches, and constructs the expected pattern of bound nodes.
@@ -3279,9 +3279,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // We are processing the nth dimension of a rank-n array. We expect that these will
                 // only be values, not array initializers.
                 TypeSymbol elemType = type.ElementType;
-                foreach (var expressionSyntax in node.Expressions)
+                foreach (var _ in node.Expressions)
                 {
-
                     BoundExpression boundExpression = boundInitExpr[boundInitExprIndex];
                     boundInitExprIndex++;
 
@@ -3294,7 +3293,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Inductive case; we'd better have another array initializer
                 foreach (var expr in node.Expressions)
                 {
-                    BoundExpression init = null;
+                    BoundExpression init;
                     if (expr.Kind() == SyntaxKind.ArrayInitializerExpression)
                     {
                         init = ConvertAndBindArrayInitialization(diagnostics, (InitializerExpressionSyntax)expr,
@@ -4418,7 +4417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var initializer = (AssignmentExpressionSyntax)memberInitializer;
 
                 // Bind member initializer identifier, i.e. left part of assignment
-                BoundExpression boundLeft = null;
+                BoundExpression boundLeft;
                 var leftSyntax = initializer.Left;
 
                 if (initializerType.IsDynamic() && leftSyntax.Kind() == SyntaxKind.IdentifierName)
@@ -5531,7 +5530,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ImmutableArray<MethodSymbol> GetAccessibleConstructorsForOverloadResolution(NamedTypeSymbol type, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            return GetAccessibleConstructorsForOverloadResolution(type, false, out ImmutableArray<MethodSymbol> allInstanceConstructors, ref useSiteInfo);
+            return GetAccessibleConstructorsForOverloadResolution(type, false, out ImmutableArray<MethodSymbol> _, ref useSiteInfo);
         }
 
         private ImmutableArray<MethodSymbol> GetAccessibleConstructorsForOverloadResolution(NamedTypeSymbol type, bool allowProtectedConstructorsOfBaseType, out ImmutableArray<MethodSymbol> allInstanceConstructors, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -6393,7 +6392,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             // CS0572: 'B': cannot reference a type through an expression; try 'A.B' instead
                             Error(diagnostics, ErrorCode.ERR_BadTypeReference, right, plainName, symbol);
-                            wasError = true;
+                            //wasError = true;
                         }
 
                         // If I identifies a type, then the result is that type constructed with
@@ -6577,7 +6576,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (lookupResult.IsMultiViable)
             {
                 var members = ArrayBuilder<Symbol>.GetInstance();
-                Symbol symbol = GetSymbolOrMethodOrPropertyGroup(lookupResult, node, rightName, arity, members, diagnostics, out bool wasError, qualifierOpt: null);
+                GetSymbolOrMethodOrPropertyGroup(lookupResult, node, rightName, arity, members, diagnostics, out bool _, qualifierOpt: null);
                 methodGroup.PopulateWithExtensionMethods(left, members, typeArgumentsWithAnnotations, lookupResult.Kind);
                 members.Free();
             }
@@ -6630,7 +6629,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     var isFixedStatementExpression = SyntaxFacts.IsFixedStatementExpression(node);
 
-                    if (IsMoveableVariable(receiver, out Symbol accessedLocalOrParameterOpt) != isFixedStatementExpression)
+                    if (IsMoveableVariable(receiver, out Symbol _) != isFixedStatementExpression)
                     {
                         if (indexed)
                         {
@@ -7417,7 +7416,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Unfortunately, the runtime binder doesn't have APIs that would allow us to pass both "type or value".
                 // Ideally the runtime binder would choose between type and value based on the result of the overload resolution.
                 // We need to pick one or the other here. Dev11 compiler passes the type only if the value can't be accessed.
-                bool useType = IsInstance(typeOrValue.Data.ValueSymbol) && !HasThis(isExplicit: false, inStaticContext: out bool inStaticContext);
+                bool useType = IsInstance(typeOrValue.Data.ValueSymbol) && !HasThis(isExplicit: false, inStaticContext: out bool _);
 
                 receiver = ReplaceTypeOrValueReceiver(typeOrValue, useType, diagnostics);
             }
@@ -8230,7 +8229,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return new BoundConditionalAccess(node, receiver, access, CreateErrorType(), hasErrors: true);
             }
 
-            var receiverType = receiver.Type;
+            var _ = receiver.Type;
 
             // access cannot be a method group
             if (access.Kind == BoundKind.MethodGroup)

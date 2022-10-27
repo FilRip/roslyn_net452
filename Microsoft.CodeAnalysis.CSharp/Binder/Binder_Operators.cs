@@ -1458,7 +1458,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BinaryOperatorKind newKind = kind.Operator().WithType(newLeftOperand.Type!.SpecialType);
 
-            SpecialType operatorType = SpecialType.None;
+            SpecialType operatorType;
 
             operatorType = newKind.Operator() switch
             {
@@ -1525,7 +1525,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return ConstantValue.Bad;
             }
 
-            object? newValue = null;
+            object? newValue;
 
             // Certain binary operations never fail; bool & bool, for example. If we are in one of those
             // cases, simply fold the operation and return.
@@ -2133,7 +2133,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!hasErrors)
                 {
-                    if (IsMoveableVariable(operand, out Symbol accessedLocalOrParameterOpt) != isFixedStatementAddressOfExpression)
+                    if (IsMoveableVariable(operand, out Symbol _) != isFixedStatementAddressOfExpression)
                     {
                         Error(diagnostics, isFixedStatementAddressOfExpression ? ErrorCode.ERR_FixedNotNeeded : ErrorCode.ERR_FixedNeeded, node);
                         hasErrors = true;
@@ -2383,7 +2383,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 underlyingType :
                 GetSpecialType(upconvertSpecialType, diagnostics, syntax);
 
-            newOperand = CreateConversion(newOperand, upconvertType, diagnostics);
+            CreateConversion(newOperand, upconvertType, diagnostics);
 
             UnaryOperatorKind newKind = kind.Operator().WithType(upconvertSpecialType);
 
@@ -2618,9 +2618,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var literal = (LiteralExpressionSyntax)operand.Syntax;
             var token = literal.Token;
-            if (token.Value is uint)
+            if (token.Value is uint value)
             {
-                uint value = (uint)token.Value;
                 if (value != 2147483648U)
                 {
                     return null;
@@ -2633,10 +2632,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 return new BoundLiteral(node, ConstantValue.Create(-2147483648), GetSpecialType(SpecialType.System_Int32, diagnostics, node));
             }
-            else if (token.Value is ulong)
+            else if (token.Value is ulong valueLong)
             {
-                var value = (ulong)token.Value;
-                if (value != 9223372036854775808UL)
+                if (valueLong != 9223372036854775808UL)
                 {
                     return null;
                 }
@@ -3262,14 +3260,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // if operand has a dynamic type, we do the same thing as though it were an object
                 operandType = GetSpecialType(SpecialType.System_Object, diagnostics, node);
-                operandTypeKind = operandType.TypeKind;
+                //operandTypeKind = operandType.TypeKind;
             }
 
             if (targetTypeKind == TypeKind.Dynamic)
             {
                 // for "as dynamic", we do the same thing as though it were an "as object"
                 targetType = GetSpecialType(SpecialType.System_Object, diagnostics, node);
-                targetTypeKind = targetType.TypeKind;
+                //targetTypeKind = targetType.TypeKind;
             }
 
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);

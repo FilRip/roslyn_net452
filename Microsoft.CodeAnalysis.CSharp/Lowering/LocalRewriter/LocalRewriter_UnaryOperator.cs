@@ -962,7 +962,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
 #nullable restore
 
+#pragma warning disable IDE0066 // Not work here
                         switch (underlyingType.SpecialType)
+#pragma warning restore IDE0066
                         {
                             case SpecialType.System_SByte:
                             case SpecialType.System_Int16:

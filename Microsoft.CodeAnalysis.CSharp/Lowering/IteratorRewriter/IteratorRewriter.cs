@@ -238,7 +238,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var getEnumeratorGeneric = GenerateIteratorGetEnumerator(IEnumerableOfElementType_GetEnumerator, ref managedThreadId, StateMachineStates.FirstUnusedState);
 
             // Generate IEnumerable.GetEnumerator
-            var getEnumerator = OpenMethodImplementation(IEnumerable_GetEnumerator);
+            OpenMethodImplementation(IEnumerable_GetEnumerator);
             F.CloseMethod(F.Return(F.Call(F.This(), getEnumeratorGeneric)));
         }
 
@@ -264,7 +264,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             bodyBuilder.Add(F.Return());
             F.CloseMethod(F.Block(bodyBuilder.ToImmutableAndFree()));
-            bodyBuilder = null;
+            //bodyBuilder = null;
         }
 
         protected override void InitializeStateMachine(ArrayBuilder<BoundStatement> bodyBuilder, NamedTypeSymbol frameType, LocalSymbol stateMachineLocal)

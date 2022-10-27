@@ -409,7 +409,7 @@ namespace Microsoft.CodeAnalysis
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string GetResourceString(string resourceKey, string defaultValue = null)
         {
-            return Properties.Resources.ResourceManager.GetString(resourceKey, Culture);
+            return Properties.Resources.ResourceManager.GetString(resourceKey, Culture) ?? defaultValue;
         }
     }
 }

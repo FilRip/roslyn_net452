@@ -111,8 +111,8 @@ namespace Microsoft.CodeAnalysis.CodeGen
             DebugDocumentProvider documentProvider,
             ArrayBuilder<Cci.SequencePoint> builder)
         {
-            bool lastPathIsMapped = false;
-            string lastPath = null;
+            bool lastPathIsMapped;
+            string lastPath;
             Cci.DebugSourceDocument lastDebugDocument = null;
 
             FileLinePositionSpan? firstReal = FindFirstRealSequencePoint();

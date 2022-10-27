@@ -111,13 +111,13 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            private int Offset
+            /*private int Offset
             {
                 get
                 {
                     return _offset;
                 }
-            }
+            }*/
 
             private char Current
             {
@@ -486,7 +486,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static int InferTypeArityFromMetadataName(string emittedTypeName)
         {
-            return InferTypeArityFromMetadataName(emittedTypeName, out int suffixStartsAt);
+            return InferTypeArityFromMetadataName(emittedTypeName, out int _);
         }
 
         private static short InferTypeArityFromMetadataName(string emittedTypeName, out int suffixStartsAt)

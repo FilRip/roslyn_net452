@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<Symbol> symbols,
             BindingDiagnosticBag diagnostics)
         {
-            FromClauseSyntax fromClause = null;
+            FromClauseSyntax fromClause;
             for (SyntaxNode node = queryClause; ; node = node.Parent)
             {
                 if (node is QueryExpressionSyntax e)
@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static void ReportQueryInferenceFailed(CSharpSyntaxNode queryClause, string methodName, BoundExpression receiver, AnalyzedArguments arguments, ImmutableArray<Symbol> symbols, BindingDiagnosticBag diagnostics)
         {
-            string clauseKind = null;
+            string clauseKind;
             bool multiple = false;
             switch (queryClause.Kind())
             {

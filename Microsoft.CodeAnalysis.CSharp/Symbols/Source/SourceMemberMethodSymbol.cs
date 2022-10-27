@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             private const int NullableContextSize = 3;
 
             private const int IsNullableAnalysisEnabledOffset = NullableContextOffset + NullableContextSize;
-            private const int IsNullableAnalysisEnabledSize = 1;
+            //private const int IsNullableAnalysisEnabledSize = 1;
 
             private const int MethodKindMask = (1 << MethodKindSize) - 1;
 
@@ -741,7 +741,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
 
                     case CompletionPart.Type:
-                        var unusedType = this.ReturnTypeWithAnnotations;
+                        var _ = this.ReturnTypeWithAnnotations;
                         state.NotePartComplete(CompletionPart.Type);
                         break;
 
@@ -970,26 +970,22 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override int CalculateLocalSyntaxOffset(int localPosition, SyntaxTree localTree)
         {
-
             (BlockSyntax blockBody, ArrowExpressionClauseSyntax expressionBody) = Bodies;
-            CSharpSyntaxNode bodySyntax = null;
 
             // All locals are declared within the body of the method.
             if (blockBody?.Span.Contains(localPosition) == true)
             {
-                bodySyntax = blockBody;
+                return localPosition - blockBody.SpanStart;
             }
             else if (expressionBody?.Span.Contains(localPosition) == true)
             {
-                bodySyntax = expressionBody;
+                return localPosition - expressionBody.SpanStart;
             }
             else
             {
                 // Method without body doesn't declare locals.
                 return -1;
             }
-
-            return localPosition - bodySyntax.SpanStart;
         }
     }
 }

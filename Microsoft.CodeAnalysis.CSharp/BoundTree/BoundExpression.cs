@@ -619,7 +619,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override bool Equals(object? obj)
         {
-            return obj is BoundTypeOrValueData && (BoundTypeOrValueData)obj == this;
+            return obj is BoundTypeOrValueData data && data == this;
         }
 
         public override int GetHashCode()

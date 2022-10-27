@@ -8,18 +8,13 @@ namespace Microsoft.CodeAnalysis
     {
         public static SourceCodeKind MapSpecifiedToEffectiveKind(this SourceCodeKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case SourceCodeKind.Script:
 #pragma warning disable CS0618 // SourceCodeKind.Interactive is obsolete
-                case SourceCodeKind.Interactive:
+                SourceCodeKind.Script or SourceCodeKind.Interactive => SourceCodeKind.Script,
 #pragma warning restore CS0618 // SourceCodeKind.Interactive is obsolete
-                    return SourceCodeKind.Script;
-
-                case SourceCodeKind.Regular:
-                default:
-                    return SourceCodeKind.Regular;
-            }
+                _ => SourceCodeKind.Regular,
+            };
         }
 
         public static bool IsValid(this SourceCodeKind value)

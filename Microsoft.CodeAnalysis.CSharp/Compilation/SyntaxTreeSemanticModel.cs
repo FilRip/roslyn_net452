@@ -206,7 +206,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If we didn't get anything and were in Type/Namespace only context, let's bind normally and see
                 // if any symbol comes out.
-                if (result.Symbol == null && result.CandidateReason == CandidateReason.None && node is ExpressionSyntax && SyntaxFacts.IsInNamespaceOrTypeContext((ExpressionSyntax)node))
+                if (result.Symbol == null && result.CandidateReason == CandidateReason.None && node is ExpressionSyntax syntax && SyntaxFacts.IsInNamespaceOrTypeContext(syntax))
                 {
                     var binder = this.GetEnclosingBinder(GetAdjustedNodePosition(node));
 
@@ -216,7 +216,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // will be one in the binder chain and one isn't necessarily required for the batch case.
                         binder = new LocalScopeBinder(binder);
 
-                        BoundExpression bound = binder.BindExpression((ExpressionSyntax)node, BindingDiagnosticBag.Discarded);
+                        BoundExpression bound = binder.BindExpression(syntax, BindingDiagnosticBag.Discarded);
 
                         SymbolInfo info = GetSymbolInfoForNode(options, bound, bound, boundNodeForSyntacticParent: null, binderOpt: null);
                         if (info.Symbol != null)
@@ -2089,7 +2089,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (typeParameter.Parent is TypeParameterListSyntax typeParamList)
             {
-                ISymbol parameterizedSymbol = null;
+                ISymbol parameterizedSymbol;
                 parameterizedSymbol = typeParamList.Parent switch
                 {
                     MemberDeclarationSyntax memberDecl => GetDeclaredSymbol(memberDecl, cancellationToken),

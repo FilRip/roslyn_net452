@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return false;
 
-            ImmutableArray<BoundDecisionDagNode> nonNullSuccessors(BoundDecisionDagNode n)
+            static ImmutableArray<BoundDecisionDagNode> nonNullSuccessors(BoundDecisionDagNode n)
             {
                 return n switch
                 {
