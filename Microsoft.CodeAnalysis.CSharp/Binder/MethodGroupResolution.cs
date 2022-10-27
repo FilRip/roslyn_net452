@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public bool IsEmpty
         {
-            get { return (this.MethodGroup == null) && ((object)this.OtherSymbol == null); }
+            get { return (this.MethodGroup == null) && (this.OtherSymbol is null); }
         }
 
         public bool HasAnyErrors

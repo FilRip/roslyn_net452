@@ -57,7 +57,7 @@ namespace Microsoft.DiaSymReader
                 throw new DllNotFoundException(loadException.Message, loadException);
             }
 
-            if (!(symWriter is ISymUnmanagedWriter5 symWriter5))
+            if (symWriter is not ISymUnmanagedWriter5 symWriter5)
             {
                 throw new SymUnmanagedWriterException(new NotSupportedException(), implModuleName);
             }

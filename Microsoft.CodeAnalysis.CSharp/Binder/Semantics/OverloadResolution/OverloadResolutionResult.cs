@@ -823,7 +823,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             Location location = new SourceLocation(badName);
 
-            ErrorCode code = (object)delegateTypeBeingInvoked != null ?
+            ErrorCode code = delegateTypeBeingInvoked is object ?
                 ErrorCode.ERR_BadNamedArgumentForDelegateInvoke :
                 ErrorCode.ERR_BadNamedArgument;
 
@@ -1278,8 +1278,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // We only try to unwrap parameters if they are a parameter array and are on the last position
             if (parameter.IsParams && isLastParameter)
             {
-                ArrayTypeSymbol arrayType = parameter.Type as ArrayTypeSymbol;
-                if ((object)arrayType != null && arrayType.IsSZArray)
+                if (parameter.Type is ArrayTypeSymbol arrayType && arrayType.IsSZArray)
                 {
                     return arrayType.ElementType;
                 }

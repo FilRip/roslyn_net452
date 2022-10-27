@@ -502,8 +502,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     ++_index;
                     var methodTypeParameterIndex = ReadNextInteger();
 
-                    var methodContext = bindingContext as IMethodSymbol;
-                    if (methodContext != null)
+                    if (bindingContext is IMethodSymbol methodContext)
                     {
                         var count = methodContext.TypeParameters.Length;
                         if (count > 0 && methodTypeParameterIndex < count)
@@ -544,8 +543,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                 var typeParameterName = ParseNextNameSegment();
 
-                var methodContext = bindingContext as IMethodSymbol;
-                if (methodContext != null)
+                if (bindingContext is IMethodSymbol methodContext)
                 {
                     // Check this method's type parameters for a name that matches
                     for (int i = 0; i < methodContext.TypeParameters.Length; ++i)
@@ -726,8 +724,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 foreach (var symbol in candidateMembers)
                 {
-                    var propertySymbol = symbol as IPropertySymbol;
-                    if (propertySymbol != null && AllParametersMatch(propertySymbol.Parameters, parameters))
+                    if (symbol is IPropertySymbol propertySymbol && AllParametersMatch(propertySymbol.Parameters, parameters))
                     {
                         return propertySymbol;
                     }
@@ -742,8 +739,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                 foreach (var symbol in candidateMembers)
                 {
-                    var methodSymbol = symbol as IMethodSymbol;
-                    if (methodSymbol == null ||
+                    if (symbol is not IMethodSymbol methodSymbol ||
                         (arity != null && methodSymbol.Arity != arity))
                     {
                         continue;

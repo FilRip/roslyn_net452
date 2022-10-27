@@ -577,23 +577,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                switch (SyntaxNode)
+                return SyntaxNode switch
                 {
-                    case BaseMethodDeclarationSyntax method:
-                        return (method.Body, method.ExpressionBody);
-
-                    case AccessorDeclarationSyntax accessor:
-                        return (accessor.Body, accessor.ExpressionBody);
-
-                    case ArrowExpressionClauseSyntax arrowExpression:
-                        return (null, arrowExpression);
-
-                    case BlockSyntax block:
-                        return (block, null);
-
-                    default:
-                        return (null, null);
-                }
+                    BaseMethodDeclarationSyntax method => (method.Body, method.ExpressionBody),
+                    AccessorDeclarationSyntax accessor => (accessor.Body, accessor.ExpressionBody),
+                    ArrowExpressionClauseSyntax arrowExpression => (null, arrowExpression),
+                    BlockSyntax block => (block, null),
+                    _ => (null, null),
+                };
             }
         }
 
@@ -676,7 +667,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal sealed override bool TryGetThisParameter(out ParameterSymbol thisParameter)
         {
             thisParameter = _lazyThisParameter;
-            if ((object)thisParameter != null || IsStatic)
+            if (thisParameter is object || IsStatic)
             {
                 return true;
             }

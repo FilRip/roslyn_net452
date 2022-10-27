@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class NamedPipeClientConnection : IClientConnection, IDisposable
@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         public async Task<BuildRequest> ReadBuildRequestAsync(
-          CancellationToken cancellationToken)
+            CancellationToken cancellationToken)
         {
             BuildRequest request = await BuildRequest.ReadAsync(Stream, cancellationToken).ConfigureAwait(false);
             if (!NamedPipeUtil.CheckClientElevationMatches(this.Stream))
@@ -73,8 +73,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         public Task WriteBuildResponseAsync(
-          BuildResponse response,
-          CancellationToken cancellationToken)
+            BuildResponse response,
+            CancellationToken cancellationToken)
         {
             return response.WriteAsync(Stream, cancellationToken);
         }

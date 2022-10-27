@@ -68,7 +68,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 diagnostics);
 
             // Do not instrument any methods if CreatePayload is not present.
-            if ((object)createPayloadForMethodsSpanningSingleFile == null || (object)createPayloadForMethodsSpanningMultipleFiles == null)
+            if (createPayloadForMethodsSpanningSingleFile is null || createPayloadForMethodsSpanningMultipleFiles is null)
             {
                 return null;
             }
@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             var containingType = method.ContainingType;
-            while ((object)containingType != null)
+            while (containingType is object)
             {
                 if (containingType.IsDirectlyExcludedFromCodeCoverage)
                 {

@@ -25,7 +25,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             ''' <summary>
             ''' value definitions for this variable
             ''' </summary>
-            Public ReadOnly localDefs As List(Of LocalDefUseSpan) = New List(Of LocalDefUseSpan)(8)
+            Public ReadOnly localDefs As New List(Of LocalDefUseSpan)(8)
 
             Private _cannotSchedule As Boolean = False
 

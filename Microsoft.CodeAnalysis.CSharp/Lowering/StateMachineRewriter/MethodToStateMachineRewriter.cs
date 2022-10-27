@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // create cache local for reference type "this" in Release
             var thisParameter = originalMethod.ThisParameter;
-            if ((object)thisParameter != null &&
+            if (thisParameter is object &&
                 thisParameter.Type.IsReferenceType &&
                 proxies.TryGetValue(thisParameter, out CapturedSymbolReplacement thisProxy) &&
                 F.Compilation.Options.OptimizationLevel == OptimizationLevel.Release)
@@ -212,8 +212,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             resumeLabel = F.GenerateLabel("stateMachine");
-            var states = new List<int>();
-            states.Add(stateNumber);
+            var states = new List<int>
+            {
+                stateNumber
+            };
             _dispatches.Add(resumeLabel, states);
         }
 
@@ -299,8 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
 
-                var simpleProxy = proxy as CapturedToStateMachineFieldReplacement;
-                if (simpleProxy != null)
+                if (proxy is CapturedToStateMachineFieldReplacement simpleProxy)
                 {
                     AddVariableCleanup(variableCleanup, simpleProxy.HoistedField);
 
@@ -823,7 +824,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundStatement result = node.Update(tryBlock, catchBlocks, finallyBlockOpt, node.FinallyLabelOpt, node.PreferFaultHandler);
 
-            if ((object)dispatchLabel != null)
+            if (dispatchLabel is object)
             {
                 result = F.Block(
                     F.HiddenSequencePoint(),
@@ -856,7 +857,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected BoundStatement CacheThisIfNeeded()
         {
             // restore "this" cache, if there is a cache
-            if ((object)this.cachedThis != null)
+            if (this.cachedThis is object)
             {
                 CapturedSymbolReplacement proxy = proxies[this.OriginalMethod.ThisParameter];
                 var fetchThis = proxy.Replacement(F.Syntax, frameType => F.This());
@@ -870,13 +871,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         public sealed override BoundNode VisitThisReference(BoundThisReference node)
         {
             // if "this" is cached, return it.
-            if ((object)this.cachedThis != null)
+            if (this.cachedThis is object)
             {
                 return F.Local(this.cachedThis);
             }
 
             var thisParameter = this.OriginalMethod.ThisParameter;
-            if ((object)thisParameter == null || !proxies.TryGetValue(thisParameter, out CapturedSymbolReplacement proxy))
+            if (thisParameter is null || !proxies.TryGetValue(thisParameter, out CapturedSymbolReplacement proxy))
             {
                 // This can occur in a delegate creation expression because the method group
                 // in the argument can have a "this" receiver even when "this"
@@ -902,7 +903,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // TODO: fix up the type of the resulting node to be the base type
 
             // if "this" is cached, return it.
-            if ((object)this.cachedThis != null)
+            if (this.cachedThis is object)
             {
                 return F.Local(this.cachedThis);
             }

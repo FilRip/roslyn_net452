@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 returnTypeLocationProvider: m =>
                     {
                         var syntax = m.GetDeclaringSyntax<DelegateDeclarationSyntax>();
-                        return (syntax == null) ? null : syntax.ReturnType.Location;
+                        return syntax?.ReturnType.Location;
                     },
                 diagnostics: diagnostics);
         }
@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 returnTypeLocationProvider: m =>
                     {
                         var syntax = m.GetDeclaringSyntax<MethodDeclarationSyntax>();
-                        return (syntax == null) ? null : syntax.ReturnType.Location;
+                        return syntax?.ReturnType.Location;
                     },
                 diagnostics: diagnostics);
         }
@@ -184,8 +184,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            bool hasGetter = (object)property.GetMethod != null;
-            bool hasSetter = (object)property.SetMethod != null;
+            bool hasGetter = property.GetMethod is object;
+            bool hasSetter = property.SetMethod is object;
             if (hasGetter || hasSetter)
             {
                 IsVarianceUnsafe(
@@ -196,7 +196,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     locationProvider: p =>
                         {
                             var syntax = p.GetDeclaringSyntax<BasePropertyDeclarationSyntax>();
-                            return (syntax == null) ? null : syntax.Type.Location;
+                            return syntax?.Type.Location;
                         },
                     locationArg: property,
                     diagnostics: diagnostics);
@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     locationProvider: p =>
                         {
                             var syntax = p.GetDeclaringSyntax<ParameterSyntax>();
-                            return (syntax == null) ? null : syntax.Type.Location;
+                            return syntax?.Type.Location;
                         },
                     locationArg: param,
                     diagnostics: diagnostics);
@@ -371,7 +371,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return false;
             }
 
-            while ((object)namedType != null)
+            while (namedType is object)
             {
                 for (int i = 0; i < namedType.Arity; i++)
                 {
@@ -438,18 +438,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             MessageID expectedVariance)
             where T : Symbol
         {
-            MessageID actualVariance;
-            switch (unsafeTypeParameter.Variance)
+            var actualVariance = unsafeTypeParameter.Variance switch
             {
-                case VarianceKind.In:
-                    actualVariance = MessageID.IDS_Contravariant;
-                    break;
-                case VarianceKind.Out:
-                    actualVariance = MessageID.IDS_Covariant;
-                    break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(unsafeTypeParameter.Variance);
-            }
+                VarianceKind.In => MessageID.IDS_Contravariant,
+                VarianceKind.Out => MessageID.IDS_Covariant,
+                _ => throw ExceptionUtilities.UnexpectedValue(unsafeTypeParameter.Variance),
+            };
 
             // Get a location that roughly represents the unsafe type parameter use.
             // (Typically, the locationProvider will return the location of the entire type

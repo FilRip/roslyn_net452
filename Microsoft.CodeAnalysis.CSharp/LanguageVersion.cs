@@ -161,58 +161,31 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         internal static bool IsValid(this LanguageVersion value)
         {
-            switch (value)
+            return value switch
             {
-                case LanguageVersion.CSharp1:
-                case LanguageVersion.CSharp2:
-                case LanguageVersion.CSharp3:
-                case LanguageVersion.CSharp4:
-                case LanguageVersion.CSharp5:
-                case LanguageVersion.CSharp6:
-                case LanguageVersion.CSharp7:
-                case LanguageVersion.CSharp7_1:
-                case LanguageVersion.CSharp7_2:
-                case LanguageVersion.CSharp7_3:
-                case LanguageVersion.CSharp8:
-                case LanguageVersion.CSharp9:
-                case LanguageVersion.Preview:
-                    return true;
-            }
-
-            return false;
+                LanguageVersion.CSharp1 or LanguageVersion.CSharp2 or LanguageVersion.CSharp3 or LanguageVersion.CSharp4 or LanguageVersion.CSharp5 or LanguageVersion.CSharp6 or LanguageVersion.CSharp7 or LanguageVersion.CSharp7_1 or LanguageVersion.CSharp7_2 or LanguageVersion.CSharp7_3 or LanguageVersion.CSharp8 or LanguageVersion.CSharp9 or LanguageVersion.Preview => true,
+                _ => false,
+            };
         }
 
         internal static ErrorCode GetErrorCode(this LanguageVersion version)
         {
-            switch (version)
+            return version switch
             {
-                case LanguageVersion.CSharp1:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion1;
-                case LanguageVersion.CSharp2:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion2;
-                case LanguageVersion.CSharp3:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion3;
-                case LanguageVersion.CSharp4:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion4;
-                case LanguageVersion.CSharp5:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion5;
-                case LanguageVersion.CSharp6:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion6;
-                case LanguageVersion.CSharp7:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion7;
-                case LanguageVersion.CSharp7_1:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion7_1;
-                case LanguageVersion.CSharp7_2:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion7_2;
-                case LanguageVersion.CSharp7_3:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion7_3;
-                case LanguageVersion.CSharp8:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion8;
-                case LanguageVersion.CSharp9:
-                    return ErrorCode.ERR_FeatureNotAvailableInVersion9;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(version);
-            }
+                LanguageVersion.CSharp1 => ErrorCode.ERR_FeatureNotAvailableInVersion1,
+                LanguageVersion.CSharp2 => ErrorCode.ERR_FeatureNotAvailableInVersion2,
+                LanguageVersion.CSharp3 => ErrorCode.ERR_FeatureNotAvailableInVersion3,
+                LanguageVersion.CSharp4 => ErrorCode.ERR_FeatureNotAvailableInVersion4,
+                LanguageVersion.CSharp5 => ErrorCode.ERR_FeatureNotAvailableInVersion5,
+                LanguageVersion.CSharp6 => ErrorCode.ERR_FeatureNotAvailableInVersion6,
+                LanguageVersion.CSharp7 => ErrorCode.ERR_FeatureNotAvailableInVersion7,
+                LanguageVersion.CSharp7_1 => ErrorCode.ERR_FeatureNotAvailableInVersion7_1,
+                LanguageVersion.CSharp7_2 => ErrorCode.ERR_FeatureNotAvailableInVersion7_2,
+                LanguageVersion.CSharp7_3 => ErrorCode.ERR_FeatureNotAvailableInVersion7_3,
+                LanguageVersion.CSharp8 => ErrorCode.ERR_FeatureNotAvailableInVersion8,
+                LanguageVersion.CSharp9 => ErrorCode.ERR_FeatureNotAvailableInVersion9,
+                _ => throw ExceptionUtilities.UnexpectedValue(version),
+            };
         }
     }
 
@@ -236,43 +209,26 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static string ToDisplayString(this LanguageVersion version)
         {
-            switch (version)
+            return version switch
             {
-                case LanguageVersion.CSharp1:
-                    return "1";
-                case LanguageVersion.CSharp2:
-                    return "2";
-                case LanguageVersion.CSharp3:
-                    return "3";
-                case LanguageVersion.CSharp4:
-                    return "4";
-                case LanguageVersion.CSharp5:
-                    return "5";
-                case LanguageVersion.CSharp6:
-                    return "6";
-                case LanguageVersion.CSharp7:
-                    return "7.0";
-                case LanguageVersion.CSharp7_1:
-                    return "7.1";
-                case LanguageVersion.CSharp7_2:
-                    return "7.2";
-                case LanguageVersion.CSharp7_3:
-                    return "7.3";
-                case LanguageVersion.CSharp8:
-                    return "8.0";
-                case LanguageVersion.CSharp9:
-                    return "9.0";
-                case LanguageVersion.Default:
-                    return "default";
-                case LanguageVersion.Latest:
-                    return "latest";
-                case LanguageVersion.LatestMajor:
-                    return "latestmajor";
-                case LanguageVersion.Preview:
-                    return "preview";
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(version);
-            }
+                LanguageVersion.CSharp1 => "1",
+                LanguageVersion.CSharp2 => "2",
+                LanguageVersion.CSharp3 => "3",
+                LanguageVersion.CSharp4 => "4",
+                LanguageVersion.CSharp5 => "5",
+                LanguageVersion.CSharp6 => "6",
+                LanguageVersion.CSharp7 => "7.0",
+                LanguageVersion.CSharp7_1 => "7.1",
+                LanguageVersion.CSharp7_2 => "7.2",
+                LanguageVersion.CSharp7_3 => "7.3",
+                LanguageVersion.CSharp8 => "8.0",
+                LanguageVersion.CSharp9 => "9.0",
+                LanguageVersion.Default => "default",
+                LanguageVersion.Latest => "latest",
+                LanguageVersion.LatestMajor => "latestmajor",
+                LanguageVersion.Preview => "preview",
+                _ => throw ExceptionUtilities.UnexpectedValue(version),
+            };
         }
 
         /// <summary>
@@ -374,15 +330,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static LanguageVersion MapSpecifiedToEffectiveVersion(this LanguageVersion version)
         {
-            switch (version)
+            return version switch
             {
-                case LanguageVersion.Latest:
-                case LanguageVersion.Default:
-                case LanguageVersion.LatestMajor:
-                    return LanguageVersion.CSharp9;
-                default:
-                    return version;
-            }
+                LanguageVersion.Latest or LanguageVersion.Default or LanguageVersion.LatestMajor => LanguageVersion.CSharp9,
+                _ => version,
+            };
         }
 
         internal static LanguageVersion CurrentVersion => LanguageVersion.CSharp9;

@@ -16,7 +16,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
 
         <Extension()>
         Friend Function ToGreen(node As VisualBasicSyntaxNode) As InternalSyntax.VisualBasicSyntaxNode
-            Return If(node Is Nothing, Nothing, node.VbGreen)
+            Return node?.VbGreen
         End Function
 
         <Extension()>

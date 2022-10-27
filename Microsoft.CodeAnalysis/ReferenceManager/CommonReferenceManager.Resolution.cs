@@ -281,8 +281,7 @@ namespace Microsoft.CodeAnalysis
 
                 // compilation reference
 
-                var compilationReference = boundReference as CompilationReference;
-                if (compilationReference != null)
+                if (boundReference is CompilationReference compilationReference)
                 {
                     switch (compilationReference.Properties.Kind)
                     {
@@ -585,11 +584,9 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                var cx = x as CompilationReference;
-                if (cx != null)
+                if (x is CompilationReference cx)
                 {
-                    var cy = y as CompilationReference;
-                    if (cy != null)
+                    if (y is CompilationReference cy)
                     {
                         return cx.Compilation == cy.Compilation;
                     }
@@ -600,8 +597,7 @@ namespace Microsoft.CodeAnalysis
 
             public int GetHashCode(MetadataReference reference)
             {
-                var compilationReference = reference as CompilationReference;
-                if (compilationReference != null)
+                if (reference is CompilationReference compilationReference)
                 {
                     return RuntimeHelpers.GetHashCode(compilationReference.Compilation);
                 }

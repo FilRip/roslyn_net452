@@ -50,15 +50,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         private static bool IsActiveConditionalDirective(DirectiveTriviaSyntax directive)
         {
-            switch (directive.Kind())
+            return directive.Kind() switch
             {
-                case SyntaxKind.DefineDirectiveTrivia:
-                    return ((DefineDirectiveTriviaSyntax)directive).IsActive;
-                case SyntaxKind.UndefDirectiveTrivia:
-                    return ((UndefDirectiveTriviaSyntax)directive).IsActive;
-                default:
-                    return false;
-            }
+                SyntaxKind.DefineDirectiveTrivia => ((DefineDirectiveTriviaSyntax)directive).IsActive,
+                SyntaxKind.UndefDirectiveTrivia => ((UndefDirectiveTriviaSyntax)directive).IsActive,
+                _ => false,
+            };
         }
     }
 }

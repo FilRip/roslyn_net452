@@ -337,8 +337,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 }
 
-                var other = t2 as AnonymousTypePublicSymbol;
-                return (object)other != null && this.TypeDescriptor.Equals(other.TypeDescriptor, comparison);
+                return t2 is AnonymousTypePublicSymbol other && this.TypeDescriptor.Equals(other.TypeDescriptor, comparison);
             }
 
             public override int GetHashCode()

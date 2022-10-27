@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private void CheckIfAssignedDuringLocalFunctionReplay(Symbol symbol, SyntaxNode node, int slot)
         {
-            if ((object)symbol != null)
+            if (symbol is object)
             {
                 NoteRead(symbol);
 

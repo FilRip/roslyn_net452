@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             get
             {
-                return s_xmlCarriageReturnLineFeed ?? (s_xmlCarriageReturnLineFeed = XmlTextNewLine(CrLf));
+                return s_xmlCarriageReturnLineFeed ??= XmlTextNewLine(CrLf);
             }
         }
 

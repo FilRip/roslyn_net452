@@ -51,12 +51,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static Symbol GetOverriddenMember(Symbol substitutedOverridingMember, Symbol overriddenByDefinitionMember)
         {
 
-            if ((object)overriddenByDefinitionMember != null)
+            if (overriddenByDefinitionMember is object)
             {
                 NamedTypeSymbol overriddenByDefinitionContaining = overriddenByDefinitionMember.ContainingType;
                 NamedTypeSymbol overriddenByDefinitionContainingTypeDefinition = overriddenByDefinitionContaining.OriginalDefinition;
                 for (NamedTypeSymbol baseType = substitutedOverridingMember.ContainingType.BaseTypeNoUseSiteDiagnostics;
-                    (object)baseType != null;
+                    baseType is object;
                     baseType = baseType.BaseTypeNoUseSiteDiagnostics)
                 {
                     if (TypeSymbol.Equals(baseType.OriginalDefinition, overriddenByDefinitionContainingTypeDefinition, TypeCompareKind.ConsiderEverything2))

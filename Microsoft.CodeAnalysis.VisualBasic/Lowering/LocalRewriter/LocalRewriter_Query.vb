@@ -197,7 +197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                             ImmutableArray(Of LocalSymbol).Empty,
                                             ImmutableArray.Create(rewrittenBody)).MakeCompilerGenerated()
 
-            Dim result As BoundLambda = New BoundLambda(originalNode.Syntax,
+            Dim result As New BoundLambda(originalNode.Syntax,
                                    originalNode.LambdaSymbol,
                                    lambdaBody,
                                    ImmutableBindingDiagnostic(Of AssemblySymbol).Empty,

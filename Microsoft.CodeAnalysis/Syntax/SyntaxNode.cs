@@ -716,8 +716,7 @@ namespace Microsoft.CodeAnalysis
             var parent = node.Parent;
             if (parent == null && ascendOutOfTrivia)
             {
-                var structuredTrivia = node as IStructuredTriviaSyntax;
-                if (structuredTrivia != null)
+                if (node is IStructuredTriviaSyntax structuredTrivia)
                 {
                     parent = structuredTrivia.ParentTrivia.Token.Parent;
                 }
@@ -734,8 +733,7 @@ namespace Microsoft.CodeAnalysis
         {
             for (SyntaxNode? node = this; node != null; node = GetParent(node, ascendOutOfTrivia))
             {
-                var tnode = node as TNode;
-                if (tnode != null && (predicate == null || predicate(tnode)))
+                if (node is TNode tnode && (predicate == null || predicate(tnode)))
                 {
                     return tnode;
                 }
@@ -1354,8 +1352,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (position == this.EndPosition)
             {
-                var compilationUnit = this as ICompilationUnitSyntax;
-                if (compilationUnit != null)
+                if (this is ICompilationUnitSyntax compilationUnit)
                 {
                     Eof = compilationUnit.EndOfFileToken;
                     Debug.Assert(Eof.EndPosition == position);

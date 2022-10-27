@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         public static bool NullableAlwaysHasValue(this BoundExpression expr)
         {
-            if ((object)expr.Type == null)
+            if (expr.Type is null)
             {
                 return false;
             }
@@ -73,12 +73,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static bool NullableNeverHasValue(this BoundExpression expr)
         {
 
-            if ((object)expr.Type == null && expr.ConstantValue == ConstantValue.Null)
+            if (expr.Type is null && expr.ConstantValue == ConstantValue.Null)
             {
                 return true;
             }
 
-            if ((object)expr.Type == null || !expr.Type.IsNullableType())
+            if (expr.Type is null || !expr.Type.IsNullableType())
             {
                 return false;
             }

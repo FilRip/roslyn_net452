@@ -37,8 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return _lazyName ??
-                    (_lazyName = MakeLabelName());
+                return _lazyName ??= MakeLabelName();
             }
         }
 
@@ -149,8 +148,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            var symbol = obj as SourceLabelSymbol;
-            return (object?)symbol != null
+            return obj is SourceLabelSymbol symbol
                 && symbol._identifierNodeOrToken.Kind() != SyntaxKind.None
                 && symbol._identifierNodeOrToken.Equals(_identifierNodeOrToken)
                 && symbol._containingMethod.Equals(_containingMethod, compareKind);

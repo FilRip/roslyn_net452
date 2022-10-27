@@ -264,7 +264,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var baseType = attributeType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
-                if ((object)baseType != null && baseType.IsConditional)
+                if (baseType is object && baseType.IsConditional)
                 {
                     return IsAttributeConditionallyOmitted(baseType, syntaxTree, ref useSiteInfo);
                 }
@@ -384,12 +384,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             namedArgumentValue = GenerateConversionForAssignment(namedArgumentType, namedArgumentValue, diagnostics);
 
             // TODO: should we create an entry even if there are binding errors?
-            var fieldSymbol = namedArgumentNameSymbol as FieldSymbol;
 #nullable restore
             IdentifierNameSyntax nameSyntax = namedArgument.NameEquals.Name;
 #nullable enable
             BoundExpression lvalue;
-            if (fieldSymbol is object)
+            if (namedArgumentNameSymbol is FieldSymbol fieldSymbol)
             {
                 var containingAssembly = fieldSymbol.ContainingAssembly as SourceAssemblySymbol;
 
@@ -400,8 +399,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                var propertySymbol = namedArgumentNameSymbol as PropertySymbol;
-                if (propertySymbol is object)
+                if (namedArgumentNameSymbol is PropertySymbol propertySymbol)
                 {
                     lvalue = new BoundPropertyAccess(nameSyntax, null, propertySymbol, resultKind, namedArgumentType);
                 }
@@ -464,7 +462,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         invalidNamedArgument |= propertySymbol.IsReadOnly;
                         var getMethod = propertySymbol.GetMethod;
                         var setMethod = propertySymbol.SetMethod;
-                        invalidNamedArgument = invalidNamedArgument || (object)getMethod == null || (object)setMethod == null;
+                        invalidNamedArgument = invalidNamedArgument || getMethod is null || setMethod is null;
                         if (!invalidNamedArgument)
                         {
                             invalidNamedArgument =
@@ -596,7 +594,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         argsConsumedCount, this.Conversions, out bool foundNamed);
                     if (!foundNamed)
                     {
-                        sourceIndices = sourceIndices ?? CreateSourceIndicesArray(i, parameterCount);
+                        sourceIndices ??= CreateSourceIndicesArray(i, parameterCount);
                     }
                 }
                 else if (argsConsumedCount < argumentsCount)
@@ -628,14 +626,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                         reorderedArgument = GetMatchingNamedOrOptionalConstructorArgument(out int matchingArgumentIndex, constructorArgsArray,
                             constructorArgumentNamesOpt, parameter, firstNamedArgIndex, argumentsCount, ref argsConsumedCount, syntax, diagnostics);
 
-                        sourceIndices = sourceIndices ?? CreateSourceIndicesArray(i, parameterCount);
+                        sourceIndices ??= CreateSourceIndicesArray(i, parameterCount);
                         sourceIndices[i] = matchingArgumentIndex;
                     }
                 }
                 else
                 {
                     reorderedArgument = GetDefaultValueArgument(parameter, syntax, diagnostics);
-                    sourceIndices = sourceIndices ?? CreateSourceIndicesArray(i, parameterCount);
+                    sourceIndices ??= CreateSourceIndicesArray(i, parameterCount);
                 }
 
                 if (!hasErrors)
@@ -770,7 +768,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 kind = TypedConstantKind.Primitive;
                 defaultValue = syntax.SyntaxTree.GetDisplayPath(syntax.Name.Span, Compilation.Options.SourceReferenceResolver);
             }
-            else if (!IsEarlyAttributeBinder && parameter.IsCallerMemberName && (object)((ContextualAttributeBinder)this).AttributedMember != null)
+            else if (!IsEarlyAttributeBinder && parameter.IsCallerMemberName && ((ContextualAttributeBinder)this).AttributedMember is object)
             {
                 parameterType = Compilation.GetSpecialType(SpecialType.System_String);
                 kind = TypedConstantKind.Primitive;
@@ -1024,17 +1022,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return CreateTypedConstant(node, typedConstantKind, diagnostics, ref attrHasErrors, curArgumentHasErrors, simpleValue: constantValue.Value);
                 }
 
-                switch (node.Kind)
+                return node.Kind switch
                 {
-                    case BoundKind.Conversion:
-                        return VisitConversion((BoundConversion)node, diagnostics, ref attrHasErrors, curArgumentHasErrors);
-                    case BoundKind.TypeOfOperator:
-                        return VisitTypeOfExpression((BoundTypeOfOperator)node, diagnostics, ref attrHasErrors, curArgumentHasErrors);
-                    case BoundKind.ArrayCreation:
-                        return VisitArrayCreation((BoundArrayCreation)node, diagnostics, ref attrHasErrors, curArgumentHasErrors);
-                    default:
-                        return CreateTypedConstant(node, TypedConstantKind.Error, diagnostics, ref attrHasErrors, curArgumentHasErrors);
-                }
+                    BoundKind.Conversion => VisitConversion((BoundConversion)node, diagnostics, ref attrHasErrors, curArgumentHasErrors),
+                    BoundKind.TypeOfOperator => VisitTypeOfExpression((BoundTypeOfOperator)node, diagnostics, ref attrHasErrors, curArgumentHasErrors),
+                    BoundKind.ArrayCreation => VisitArrayCreation((BoundArrayCreation)node, diagnostics, ref attrHasErrors, curArgumentHasErrors),
+                    _ => CreateTypedConstant(node, TypedConstantKind.Error, diagnostics, ref attrHasErrors, curArgumentHasErrors),
+                };
             }
 
             private TypedConstant VisitConversion(BoundConversion node, BindingDiagnosticBag diagnostics, ref bool attrHasErrors, bool curArgumentHasErrors)
@@ -1052,7 +1046,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var operand = node.Operand;
                 var operandType = operand.Type;
 
-                if ((object)type != null && operandType is object)
+                if (type is object && operandType is object)
                 {
                     if (type.SpecialType == SpecialType.System_Object ||
                         operandType.IsArray() && type.IsArray() &&
@@ -1078,18 +1072,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (typeOfArgument is object) // skip this if the argument was an alias symbol
                 {
                     var isValidArgument = true;
-                    switch (typeOfArgument.Kind)
+                    isValidArgument = typeOfArgument.Kind switch
                     {
-                        case SymbolKind.TypeParameter:
-                            // type parameter represents an open type
-                            isValidArgument = false;
-                            break;
-
-                        default:
-                            isValidArgument = typeOfArgument.IsUnboundGenericType() || !typeOfArgument.ContainsTypeParameter();
-                            break;
-                    }
-
+                        SymbolKind.TypeParameter => false,// type parameter represents an open type
+                        _ => typeOfArgument.IsUnboundGenericType() || !typeOfArgument.ContainsTypeParameter(),
+                    };
                     if (!isValidArgument && !curArgumentHasErrors)
                     {
                         // attribute argument type cannot be an open type

@@ -136,10 +136,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                for (var container = this.ContainingSymbol; (object)container != null; container = container.ContainingSymbol)
+                for (var container = this.ContainingSymbol; container is object; container = container.ContainingSymbol)
                 {
-                    var ns = container as NamespaceSymbol;
-                    if ((object)ns != null)
+                    if (container is NamespaceSymbol ns)
                     {
                         return ns;
                     }
@@ -160,7 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Default implementation gets the containers assembly.
 
                 var container = this.ContainingSymbol;
-                return (object)container != null ? container.ContainingAssembly : null;
+                return container is object ? container.ContainingAssembly : null;
             }
         }
 
@@ -181,18 +180,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                switch (this.Kind)
+                return this.Kind switch
                 {
-                    case SymbolKind.ErrorType:
-                        return null;
-                    case SymbolKind.Assembly:
-                        return null;
-                    case SymbolKind.NetModule:
-                        return null;
-                }
-
-                var sourceModuleSymbol = this.ContainingModule as SourceModuleSymbol;
-                return (object)sourceModuleSymbol == null ? null : sourceModuleSymbol.DeclaringCompilation;
+                    SymbolKind.ErrorType => null,
+                    SymbolKind.Assembly => null,
+                    SymbolKind.NetModule => null,
+                    _ => this.ContainingModule is not SourceModuleSymbol sourceModuleSymbol ? null : sourceModuleSymbol.DeclaringCompilation,
+                };
             }
         }
 
@@ -236,7 +230,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Default implementation gets the containers module.
 
                 var container = this.ContainingSymbol;
-                return (object)container != null ? container.ContainingModule : null;
+                return container is object ? container.ContainingModule : null;
             }
         }
 
@@ -569,19 +563,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (this.Kind == SymbolKind.Method)
                 {
                     var method = (MethodSymbol)this;
-                    switch (method.MethodKind)
+                    return method.MethodKind switch
                     {
-                        case MethodKind.Ordinary:
-                        case MethodKind.LocalFunction:
-                        case MethodKind.DelegateInvoke:
-                        case MethodKind.Destructor: // See comment in CanBeReferencedByName.
-                            return true;
-                        case MethodKind.PropertyGet:
-                        case MethodKind.PropertySet:
-                            return ((PropertySymbol)method.AssociatedSymbol).CanCallMethodsDirectly();
-                        default:
-                            return false;
-                    }
+                        MethodKind.Ordinary or MethodKind.LocalFunction or MethodKind.DelegateInvoke or MethodKind.Destructor => true,
+                        MethodKind.PropertyGet or MethodKind.PropertySet => ((PropertySymbol)method.AssociatedSymbol).CanCallMethodsDirectly(),
+                        _ => false,
+                    };
                 }
                 return true;
             }
@@ -1237,16 +1224,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                switch (ObsoleteKind)
+                return ObsoleteKind switch
                 {
-                    case ObsoleteAttributeKind.None:
-                    case ObsoleteAttributeKind.Experimental:
-                        return ThreeState.False;
-                    case ObsoleteAttributeKind.Uninitialized:
-                        return ThreeState.Unknown;
-                    default:
-                        return ThreeState.True;
-                }
+                    ObsoleteAttributeKind.None or ObsoleteAttributeKind.Experimental => ThreeState.False,
+                    ObsoleteAttributeKind.Uninitialized => ThreeState.Unknown,
+                    _ => ThreeState.True,
+                };
             }
         }
 
@@ -1551,7 +1534,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // case the variable is not captured by the target function, or null, in which
             // case it is.
             for (var currentFunction = variable.ContainingSymbol;
-                 (object)currentFunction != null;
+                 currentFunction is object;
                  currentFunction = currentFunction.ContainingSymbol)
             {
                 if (ReferenceEquals(currentFunction, containingSymbol))

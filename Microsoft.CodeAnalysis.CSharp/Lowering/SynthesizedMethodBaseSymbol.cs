@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // Synthesized methods created from a base method with [SkipLocalsInitAttribute] will also
         // skip locals init where applicable, even if the synthesized method does not inherit attributes.
         // Note that this doesn't affect BaseMethodWrapperSymbol for example because the implementation has no locals.
-        public sealed override bool AreLocalsZeroed => !(BaseMethod is SourceMethodSymbol sourceMethod) || sourceMethod.AreLocalsZeroed;
+        public sealed override bool AreLocalsZeroed => BaseMethod is not SourceMethodSymbol sourceMethod || sourceMethod.AreLocalsZeroed;
 
         internal sealed override bool RequiresSecurityObject => InheritsBaseMethodAttributes && BaseMethod.RequiresSecurityObject;
 

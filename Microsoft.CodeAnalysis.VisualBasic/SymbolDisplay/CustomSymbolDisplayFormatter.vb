@@ -11,7 +11,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
     ''' associated with that until the error message is actually requested.
     ''' </summary>
     Friend Class CustomSymbolDisplayFormatter
-        Friend Shared ReadOnly QualifiedNameFormat As SymbolDisplayFormat = New SymbolDisplayFormat(
+        Friend Shared ReadOnly QualifiedNameFormat As New SymbolDisplayFormat(
                                                                         globalNamespaceStyle:=SymbolDisplayGlobalNamespaceStyle.Omitted,
                                                                         typeQualificationStyle:=SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                                                                         genericsOptions:=SymbolDisplayGenericsOptions.IncludeTypeParameters,
@@ -24,7 +24,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                         miscellaneousOptions:=SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers Or
                                                                                                 SymbolDisplayMiscellaneousOptions.UseSpecialTypes)
 
-        Friend Shared ReadOnly WithContainingTypeFormat As SymbolDisplayFormat = New SymbolDisplayFormat(
+        Friend Shared ReadOnly WithContainingTypeFormat As New SymbolDisplayFormat(
                                                                         globalNamespaceStyle:=SymbolDisplayFormat.VisualBasicErrorMessageFormat.GlobalNamespaceStyle,
                                                                         typeQualificationStyle:=SymbolDisplayFormat.VisualBasicErrorMessageFormat.TypeQualificationStyle,
                                                                         genericsOptions:=SymbolDisplayFormat.VisualBasicErrorMessageFormat.GenericsOptions,

@@ -1116,12 +1116,11 @@ namespace Microsoft.CodeAnalysis
             if (info.HasValue)
             {
                 ObsoleteAttributeData obsoleteData = TryExtractObsoleteDataFromAttribute(info, decoder);
-                switch (obsoleteData?.Message)
+                return (obsoleteData?.Message) switch
                 {
-                    case ByRefLikeMarker when ignoreByRefLikeMarker:
-                        return null;
-                }
-                return obsoleteData;
+                    ByRefLikeMarker when ignoreByRefLikeMarker => null,
+                    _ => obsoleteData,
+                };
             }
 
             // [Experimental] is always a warning, not an
@@ -1491,33 +1490,26 @@ namespace Microsoft.CodeAnalysis
         {
             Debug.Assert(attributeInfo.HasValue);
 
-            switch (attributeInfo.SignatureIndex)
+            return attributeInfo.SignatureIndex switch
             {
-                case 0: // DeprecatedAttribute(String, DeprecationType, UInt32) 
-                case 1: // DeprecatedAttribute(String, DeprecationType, UInt32, Platform) 
-                case 2: // DeprecatedAttribute(String, DeprecationType, UInt32, Type) 
-                case 3: // DeprecatedAttribute(String, DeprecationType, UInt32, String) 
-                    return TryExtractValueFromAttribute(attributeInfo.Handle, out var obsoleteData, s_attributeDeprecatedDataExtractor) ?
-                        obsoleteData :
-                        null;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(attributeInfo.SignatureIndex);
-            }
+                // DeprecatedAttribute(String, DeprecationType, UInt32) 
+                0 or 1 or 2 or 3 => TryExtractValueFromAttribute(attributeInfo.Handle, out var obsoleteData, s_attributeDeprecatedDataExtractor) ?
+                                        obsoleteData :
+                                        null,
+                _ => throw ExceptionUtilities.UnexpectedValue(attributeInfo.SignatureIndex),
+            };
         }
 
         private ObsoleteAttributeData TryExtractExperimentalDataFromAttribute(AttributeInfo attributeInfo)
         {
             Debug.Assert(attributeInfo.HasValue);
 
-            switch (attributeInfo.SignatureIndex)
+            return attributeInfo.SignatureIndex switch
             {
-                case 0: // ExperimentalAttribute() 
-                    return ObsoleteAttributeData.Experimental;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(attributeInfo.SignatureIndex);
-            }
+                // ExperimentalAttribute() 
+                0 => ObsoleteAttributeData.Experimental,
+                _ => throw ExceptionUtilities.UnexpectedValue(attributeInfo.SignatureIndex),
+            };
         }
 
         private bool TryExtractInterfaceTypeFromAttribute(AttributeInfo attributeInfo, out ComInterfaceType interfaceType)
@@ -1558,17 +1550,11 @@ namespace Microsoft.CodeAnalysis
 
         private static bool IsValidComInterfaceType(int comInterfaceType)
         {
-            switch (comInterfaceType)
+            return comInterfaceType switch
             {
-                case (int)Cci.Constants.ComInterfaceType_InterfaceIsDual:
-                case (int)Cci.Constants.ComInterfaceType_InterfaceIsIDispatch:
-                case (int)ComInterfaceType.InterfaceIsIInspectable:
-                case (int)ComInterfaceType.InterfaceIsIUnknown:
-                    return true;
-
-                default:
-                    return false;
-            }
+                (int)Cci.Constants.ComInterfaceType_InterfaceIsDual or (int)Cci.Constants.ComInterfaceType_InterfaceIsIDispatch or (int)ComInterfaceType.InterfaceIsIInspectable or (int)ComInterfaceType.InterfaceIsIUnknown => true,
+                _ => false,
+            };
         }
 
         private bool TryExtractTypeLibTypeFromAttribute(AttributeInfo info, out Cci.TypeLibTypeFlags flags)
@@ -2841,17 +2827,12 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
         private static BlobHandle GetMethodSignatureOrThrow(MetadataReader metadataReader, EntityHandle methodDefOrRef)
         {
-            switch (methodDefOrRef.Kind)
+            return methodDefOrRef.Kind switch
             {
-                case HandleKind.MethodDefinition:
-                    return GetMethodSignatureOrThrow(metadataReader, (MethodDefinitionHandle)methodDefOrRef);
-
-                case HandleKind.MemberReference:
-                    return GetSignatureOrThrow(metadataReader, (MemberReferenceHandle)methodDefOrRef);
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(methodDefOrRef.Kind);
-            }
+                HandleKind.MethodDefinition => GetMethodSignatureOrThrow(metadataReader, (MethodDefinitionHandle)methodDefOrRef),
+                HandleKind.MemberReference => GetSignatureOrThrow(metadataReader, (MemberReferenceHandle)methodDefOrRef),
+                _ => throw ExceptionUtilities.UnexpectedValue(methodDefOrRef.Kind),
+            };
         }
 
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>

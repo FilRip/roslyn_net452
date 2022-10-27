@@ -93,8 +93,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                var other = obj as DiagnosticWithProgrammaticSuppression;
-                if (other == null)
+                if (obj is not DiagnosticWithProgrammaticSuppression other)
                 {
                     return false;
                 }

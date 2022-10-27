@@ -39,8 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return nps.Equals(this, compareKind);
             }
 
-            var symbol = obj as SourceParameterSymbolBase;
-            return (object)symbol != null
+            return obj is SourceParameterSymbolBase symbol
                 && symbol.Ordinal == this.Ordinal
                 && symbol._containingSymbol.Equals(_containingSymbol, compareKind);
         }

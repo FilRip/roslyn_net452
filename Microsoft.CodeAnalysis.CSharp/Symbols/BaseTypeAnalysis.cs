@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static void TypeDependsClosure(NamedTypeSymbol type, CSharpCompilation currentCompilation, HashSet<Symbol> partialClosure)
         {
-            if ((object)type == null)
+            if (type is null)
             {
                 return;
             }
@@ -156,21 +156,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 foreach (var member in type.GetInstanceFieldsAndEvents())
                 {
-                    // Only instance fields (including field-like events) affect the outcome.
-                    FieldSymbol field;
-                    switch (member.Kind)
+                    FieldSymbol field = member.Kind switch
                     {
-                        case SymbolKind.Field:
-                            field = (FieldSymbol)member;
-                            break;
-                        case SymbolKind.Event:
-                            field = ((EventSymbol)member).AssociatedField;
-                            break;
-                        default:
-                            throw ExceptionUtilities.UnexpectedValue(member.Kind);
-                    }
-
-                    if ((object)field == null)
+                        SymbolKind.Field => (FieldSymbol)member,
+                        SymbolKind.Event => ((EventSymbol)member).AssociatedField,
+                        _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+                    };
+                    if (field is null)
                     {
                         continue;
                     }
@@ -183,8 +175,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
 
                     fieldType.AddUseSiteInfo(ref useSiteInfo);
-                    NamedTypeSymbol fieldNamedType = fieldType as NamedTypeSymbol;
-                    if ((object)fieldNamedType == null)
+                    if (fieldType is not NamedTypeSymbol fieldNamedType)
                     {
                         if (fieldType.IsManagedType(ref useSiteInfo))
                         {
@@ -267,15 +258,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             bool hasGenerics = type.IsGenericType;
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Enum:
-                    return (ThreeState.False, hasGenerics);
-                case TypeKind.Struct:
-                    return (ThreeState.Unknown, hasGenerics);
-                default:
-                    return (ThreeState.True, hasGenerics);
-            }
+                TypeKind.Enum => (ThreeState.False, hasGenerics),
+                TypeKind.Struct => (ThreeState.Unknown, hasGenerics),
+                _ => (ThreeState.True, hasGenerics),
+            };
         }
     }
 }

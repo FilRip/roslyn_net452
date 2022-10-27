@@ -36,8 +36,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             {
                 if (!_foundOldToken)
                 {
-                    var token = node as SyntaxToken;
-                    if (token != null)
+                    if (node is SyntaxToken token)
                     {
                         _foundOldToken = true;
                         return _newToken; // NB: diagnostic offsets have already been updated (by SyntaxParser.AddSkippedSyntax)
@@ -63,8 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             for (int i = 0; i < numDiagnostics; i++)
             {
                 DiagnosticInfo oldDiagnostic = oldDiagnostics[i];
-                SyntaxDiagnosticInfo oldSyntaxDiagnostic = oldDiagnostic as SyntaxDiagnosticInfo;
-                newDiagnostics[i] = oldSyntaxDiagnostic == null ?
+                newDiagnostics[i] = oldDiagnostic is not SyntaxDiagnosticInfo oldSyntaxDiagnostic ?
                     oldDiagnostic :
                     new SyntaxDiagnosticInfo(
                         oldSyntaxDiagnostic.Offset + diagnosticOffsetDelta,

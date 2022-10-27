@@ -220,7 +220,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             TypeSymbol current = this;
             while (current.TypeKind == TypeKind.Pointer)
             {
-                indirections += 1;
+                indirections++;
                 current = ((PointerTypeSymbol)current).PointedAtType;
             }
 
@@ -239,7 +239,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if ((object)other == null || !other._pointedAtType.Equals(_pointedAtType, comparison))
+            if (other is null || !other._pointedAtType.Equals(_pointedAtType, comparison))
             {
                 return false;
             }

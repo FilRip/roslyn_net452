@@ -199,7 +199,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {   // more than one access modifier
                 if ((modifiers & DeclarationModifiers.Partial) != 0)
                     diagnostics.Add(ErrorCode.ERR_PartialModifierConflict, Locations[0], this);
-                access = access & ~(access - 1); // narrow down to one access modifier
+                access &= ~(access - 1); // narrow down to one access modifier
                 modifiers &= ~DeclarationModifiers.AccessibilityMask; // remove them all
                 modifiers |= (DeclarationModifiers)access; // except the one
             }
@@ -1353,7 +1353,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
                     case SymbolKind.Event:
                         FieldSymbol? associatedField = ((EventSymbol)m).AssociatedField;
-                        if ((object?)associatedField != null)
+                        if (associatedField is object)
                         {
                             yield return associatedField;
                         }
@@ -1593,7 +1593,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             bool hasBaseTypeOrInterface(Func<NamedTypeSymbol, bool> predicate)
             {
-                return ((object)baseType != null && predicate(baseType)) ||
+                return (baseType is object && predicate(baseType)) ||
                     interfaces.Any(predicate);
             }
 
@@ -1752,13 +1752,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         lastSym = symbol;
                     }
-
-                    // That takes care of the first category of conflict; we detect the
-                    // second and third categories as follows:
-
-                    var conversion = symbol as SourceUserDefinedConversionSymbol;
-                    var method = symbol as SourceMemberMethodSymbol;
-                    if (!(conversion is null))
+                    if (!(symbol is not SourceUserDefinedConversionSymbol conversion))
                     {
                         // Does this conversion collide *as a conversion* with any previously-seen
                         // conversion?
@@ -1788,7 +1782,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         // Do not add the conversion to the set of previously-seen methods; that set
                         // is only non-conversion methods.
                     }
-                    else if (!(method is null))
+                    else if (!(symbol is not SourceMemberMethodSymbol method))
                     {
                         // Does this method collide *as a method* with any previously-seen
                         // conversion?
@@ -2079,7 +2073,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         continue;
                     }
                     var type = field.NonPointerType();
-                    if (((object)type != null) &&
+                    if ((type is object) &&
                         (type.TypeKind == TypeKind.Struct) &&
                         BaseTypeAnalysis.StructDependsOn((NamedTypeSymbol)type, this) &&
                         !type.IsPrimitiveRecursiveStruct()) // allow System.Int32 to contain a field of its own type
@@ -2275,12 +2269,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private void CheckFiniteFlatteningGraph(BindingDiagnosticBag diagnostics)
         {
             if (AllTypeArgumentCount() == 0) return;
-            var instanceMap = new Dictionary<NamedTypeSymbol, NamedTypeSymbol>(ReferenceEqualityComparer.Instance);
-            instanceMap.Add(this, this);
+            var instanceMap = new Dictionary<NamedTypeSymbol, NamedTypeSymbol>(ReferenceEqualityComparer.Instance)
+            {
+                { this, this }
+            };
             foreach (var m in this.GetMembersUnordered())
             {
-                var f = m as FieldSymbol;
-                if (f is null || !f.IsStatic || f.Type.TypeKind != TypeKind.Struct) continue;
+                if (m is not FieldSymbol f || !f.IsStatic || f.Type.TypeKind != TypeKind.Struct) continue;
                 var type = (NamedTypeSymbol)f.Type;
                 if (InfiniteFlatteningGraph(this, type, instanceMap))
                 {
@@ -2308,8 +2303,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     foreach (var m in t.GetMembersUnordered())
                     {
-                        var f = m as FieldSymbol;
-                        if (f is null || !f.IsStatic || f.Type.TypeKind != TypeKind.Struct) continue;
+                        if (m is not FieldSymbol f || !f.IsStatic || f.Type.TypeKind != TypeKind.Struct) continue;
                         var type = (NamedTypeSymbol)f.Type;
                         if (InfiniteFlatteningGraph(top, type, instanceMap)) return true;
                     }
@@ -2337,8 +2331,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (var syntaxRef in this.SyntaxReferences)
             {
-                var syntax = syntaxRef.GetSyntax() as TypeDeclarationSyntax;
-                if (syntax == null)
+                if (syntaxRef.GetSyntax() is not TypeDeclarationSyntax syntax)
                 {
                     continue;
                 }
@@ -2963,8 +2956,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 methodsBySignature.Clear();
                 foreach (var symbol in membersByName[name])
                 {
-                    var method = symbol as SourceMemberMethodSymbol;
-                    if (method is null || !method.IsPartial)
+                    if (symbol is not SourceMemberMethodSymbol method || !method.IsPartial)
                     {
                         continue; // only partial methods need to be merged
                     }
@@ -3078,7 +3070,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             MethodSymbol accessor = getNotSet ? propertySymbol.GetMethod : propertySymbol.SetMethod;
             string accessorName;
-            if ((object)accessor != null)
+            if (accessor is object)
             {
                 accessorName = accessor.Name;
             }
@@ -3338,8 +3330,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             foreach (var s in members)
             {
-                var m = s as MethodSymbol;
-                if (!(m is null))
+                if (!(s is not MethodSymbol m))
                 {
                     if (m.MethodKind == MethodKind.Constructor && m.ParameterCount == 0)
                     {
@@ -4179,7 +4170,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             // From the 10/12/11 design notes:
                             //   In addition, we will change autoproperties to behavior in
                             //   a similar manner and make the autoproperty fields private.
-                            if ((object)backingField != null)
+                            if (backingField is object)
                             {
                                 builder.NonTypeMembers.Add(backingField);
                                 builder.UpdateIsNullableEnabledForConstructorsAndFields(useStatic: backingField.IsStatic, compilation, propertySyntax);
@@ -4235,7 +4226,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                                             associatedField);
                                 }
 
-                                if ((object?)associatedField != null)
+                                if (associatedField is object)
                                 {
                                     // NOTE: specifically don't add the associated field to the members list
                                     // (regard it as an implementation detail).

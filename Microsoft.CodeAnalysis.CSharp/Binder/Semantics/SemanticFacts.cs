@@ -23,12 +23,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             NamedTypeSymbol within,
             NamedTypeSymbol throughTypeOpt = null)
         {
-            if ((object)symbol == null)
+            if (symbol is null)
             {
                 throw new ArgumentNullException(nameof(symbol));
             }
 
-            if ((object)within == null)
+            if (within is null)
             {
                 throw new ArgumentNullException(nameof(within));
             }
@@ -48,12 +48,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             Symbol symbol,
             AssemblySymbol within)
         {
-            if ((object)symbol == null)
+            if (symbol is null)
             {
                 throw new ArgumentNullException(nameof(symbol));
             }
 
-            if ((object)within == null)
+            if (within is null)
             {
                 throw new ArgumentNullException(nameof(within));
             }

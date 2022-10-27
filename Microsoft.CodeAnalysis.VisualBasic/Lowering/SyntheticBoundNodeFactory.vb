@@ -54,7 +54,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private ReadOnly Property EmitModule As PEModuleBuilder
             Get
-                Return If(Me.CompilationState IsNot Nothing, Me.CompilationState.ModuleBuilderOpt, Nothing)
+                Return Me.CompilationState?.ModuleBuilderOpt
             End Get
         End Property
 
@@ -682,7 +682,7 @@ nextm:
                 Return Me.ExpressionStatement(ex)
             End If
 
-            Dim breakLabel As GeneratedLabelSymbol = New GeneratedLabelSymbol("break")
+            Dim breakLabel As New GeneratedLabelSymbol("break")
             CheckSwitchSections(sectionsArray)
 
             Dim boundNode = New BoundSelectStatement(_syntax, Me.ExpressionStatement(ex), Nothing, sectionsArray, True, breakLabel)

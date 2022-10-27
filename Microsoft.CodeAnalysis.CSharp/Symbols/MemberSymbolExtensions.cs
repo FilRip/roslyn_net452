@@ -31,17 +31,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static ImmutableArray<ParameterSymbol> GetParameters(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).Parameters;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).Parameters;
-                case SymbolKind.Event:
-                    return ImmutableArray<ParameterSymbol>.Empty;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).Parameters,
+                SymbolKind.Property => ((PropertySymbol)member).Parameters,
+                SymbolKind.Event => ImmutableArray<ParameterSymbol>.Empty,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         /// <summary>
@@ -49,31 +45,23 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static ImmutableArray<TypeWithAnnotations> GetParameterTypes(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).ParameterTypesWithAnnotations;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).ParameterTypesWithAnnotations;
-                case SymbolKind.Event:
-                    return ImmutableArray<TypeWithAnnotations>.Empty;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).ParameterTypesWithAnnotations,
+                SymbolKind.Property => ((PropertySymbol)member).ParameterTypesWithAnnotations,
+                SymbolKind.Event => ImmutableArray<TypeWithAnnotations>.Empty,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         internal static bool GetIsVararg(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).IsVararg;
-                case SymbolKind.Property:
-                case SymbolKind.Event:
-                    return false;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).IsVararg,
+                SymbolKind.Property or SymbolKind.Event => false,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         /// <summary>
@@ -81,33 +69,24 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static ImmutableArray<RefKind> GetParameterRefKinds(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).ParameterRefKinds;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).ParameterRefKinds;
-                case SymbolKind.Event:
-                    return default;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).ParameterRefKinds,
+                SymbolKind.Property => ((PropertySymbol)member).ParameterRefKinds,
+                SymbolKind.Event => default,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         internal static int GetParameterCount(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).ParameterCount;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).ParameterCount;
-                case SymbolKind.Event:
-                case SymbolKind.Field:
-                    return 0;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).ParameterCount,
+                SymbolKind.Property => ((PropertySymbol)member).ParameterCount,
+                SymbolKind.Event or SymbolKind.Field => 0,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         internal static bool HasUnsafeParameter(this Symbol member)
@@ -147,12 +126,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsImplementable(this MethodSymbol methodOpt)
         {
-            return (object)methodOpt != null && !methodOpt.IsSealed && (methodOpt.IsAbstract || methodOpt.IsVirtual);
+            return methodOpt is object && !methodOpt.IsSealed && (methodOpt.IsAbstract || methodOpt.IsVirtual);
         }
 
         public static bool IsAccessor(this MethodSymbol methodSymbol)
         {
-            return (object)methodSymbol.AssociatedSymbol != null;
+            return methodSymbol.AssociatedSymbol is object;
         }
 
         public static bool IsAccessor(this Symbol symbol)
@@ -163,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public static bool IsIndexedPropertyAccessor(this MethodSymbol methodSymbol)
         {
             var propertyOrEvent = methodSymbol.AssociatedSymbol;
-            return ((object)propertyOrEvent != null) && propertyOrEvent.IsIndexedProperty();
+            return (propertyOrEvent is object) && propertyOrEvent.IsIndexedProperty();
         }
 
         public static bool IsOperator(this MethodSymbol methodSymbol)
@@ -215,24 +194,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static int CustomModifierCount(this Symbol m)
         {
-            switch (m.Kind)
+            return m.Kind switch
             {
-                case SymbolKind.ArrayType:
-                case SymbolKind.ErrorType:
-                case SymbolKind.NamedType:
-                case SymbolKind.PointerType:
-                case SymbolKind.TypeParameter:
-                case SymbolKind.FunctionPointerType:
-                    return ((TypeSymbol)m).CustomModifierCount();
-                case SymbolKind.Event:
-                    return ((EventSymbol)m).CustomModifierCount();
-                case SymbolKind.Method:
-                    return ((MethodSymbol)m).CustomModifierCount();
-                case SymbolKind.Property:
-                    return ((PropertySymbol)m).CustomModifierCount();
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(m.Kind);
-            }
+                SymbolKind.ArrayType or SymbolKind.ErrorType or SymbolKind.NamedType or SymbolKind.PointerType or SymbolKind.TypeParameter or SymbolKind.FunctionPointerType => ((TypeSymbol)m).CustomModifierCount(),
+                SymbolKind.Event => ((EventSymbol)m).CustomModifierCount(),
+                SymbolKind.Method => ((MethodSymbol)m).CustomModifierCount(),
+                SymbolKind.Property => ((PropertySymbol)m).CustomModifierCount(),
+                _ => throw ExceptionUtilities.UnexpectedValue(m.Kind),
+            };
         }
 
         public static int CustomModifierCount(this EventSymbol e)
@@ -264,21 +233,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static Symbol SymbolAsMember(this Symbol s, NamedTypeSymbol newOwner)
         {
-            switch (s.Kind)
+            return s.Kind switch
             {
-                case SymbolKind.Field:
-                    return ((FieldSymbol)s).AsMember(newOwner);
-                case SymbolKind.Method:
-                    return ((MethodSymbol)s).AsMember(newOwner);
-                case SymbolKind.NamedType:
-                    return ((NamedTypeSymbol)s).AsMember(newOwner);
-                case SymbolKind.Property:
-                    return ((PropertySymbol)s).AsMember(newOwner);
-                case SymbolKind.Event:
-                    return ((EventSymbol)s).AsMember(newOwner);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(s.Kind);
-            }
+                SymbolKind.Field => ((FieldSymbol)s).AsMember(newOwner),
+                SymbolKind.Method => ((MethodSymbol)s).AsMember(newOwner),
+                SymbolKind.NamedType => ((NamedTypeSymbol)s).AsMember(newOwner),
+                SymbolKind.Property => ((PropertySymbol)s).AsMember(newOwner),
+                SymbolKind.Event => ((EventSymbol)s).AsMember(newOwner),
+                _ => throw ExceptionUtilities.UnexpectedValue(s.Kind),
+            };
         }
 
         /// <summary>
@@ -286,18 +249,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static int GetMemberArity(this Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)symbol).Arity;
-
-                case SymbolKind.NamedType:
-                case SymbolKind.ErrorType:
-                    return ((NamedTypeSymbol)symbol).Arity;
-
-                default:
-                    return 0;
-            }
+                SymbolKind.Method => ((MethodSymbol)symbol).Arity,
+                SymbolKind.NamedType or SymbolKind.ErrorType => ((NamedTypeSymbol)symbol).Arity,
+                _ => 0,
+            };
         }
 
         internal static NamespaceOrTypeSymbol OfMinimalArity(this IEnumerable<NamespaceOrTypeSymbol> symbols)
@@ -319,50 +276,33 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static ImmutableArray<TypeParameterSymbol> GetMemberTypeParameters(this Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)symbol).TypeParameters;
-                case SymbolKind.NamedType:
-                case SymbolKind.ErrorType:
-                    return ((NamedTypeSymbol)symbol).TypeParameters;
-                case SymbolKind.Field:
-                case SymbolKind.Property:
-                case SymbolKind.Event:
-                    return ImmutableArray<TypeParameterSymbol>.Empty;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)symbol).TypeParameters,
+                SymbolKind.NamedType or SymbolKind.ErrorType => ((NamedTypeSymbol)symbol).TypeParameters,
+                SymbolKind.Field or SymbolKind.Property or SymbolKind.Event => ImmutableArray<TypeParameterSymbol>.Empty,
+                _ => throw ExceptionUtilities.UnexpectedValue(symbol.Kind),
+            };
         }
 
         internal static ImmutableArray<TypeSymbol> GetMemberTypeArgumentsNoUseSiteDiagnostics(this Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)symbol).TypeArgumentsWithAnnotations.SelectAsArray(TypeMap.AsTypeSymbol);
-                case SymbolKind.NamedType:
-                case SymbolKind.ErrorType:
-                    return ((NamedTypeSymbol)symbol).TypeArgumentsWithAnnotationsNoUseSiteDiagnostics.SelectAsArray(TypeMap.AsTypeSymbol);
-                case SymbolKind.Field:
-                case SymbolKind.Property:
-                case SymbolKind.Event:
-                    return ImmutableArray<TypeSymbol>.Empty;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)symbol).TypeArgumentsWithAnnotations.SelectAsArray(TypeMap.AsTypeSymbol),
+                SymbolKind.NamedType or SymbolKind.ErrorType => ((NamedTypeSymbol)symbol).TypeArgumentsWithAnnotationsNoUseSiteDiagnostics.SelectAsArray(TypeMap.AsTypeSymbol),
+                SymbolKind.Field or SymbolKind.Property or SymbolKind.Event => ImmutableArray<TypeSymbol>.Empty,
+                _ => throw ExceptionUtilities.UnexpectedValue(symbol.Kind),
+            };
         }
 
         internal static bool IsConstructor(this MethodSymbol method)
         {
-            switch (method.MethodKind)
+            return method.MethodKind switch
             {
-                case MethodKind.Constructor:
-                case MethodKind.StaticConstructor:
-                    return true;
-                default:
-                    return false;
-            }
+                MethodKind.Constructor or MethodKind.StaticConstructor => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -370,13 +310,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static bool HasThisConstructorInitializer(this MethodSymbol method)
         {
-            if ((object)method != null && method.MethodKind == MethodKind.Constructor)
+            if (method is object && method.MethodKind == MethodKind.Constructor)
             {
-                SourceMemberMethodSymbol sourceMethod = method as SourceMemberMethodSymbol;
-                if ((object)sourceMethod != null)
+                if (method is SourceMemberMethodSymbol sourceMethod)
                 {
-                    ConstructorDeclarationSyntax constructorSyntax = sourceMethod.SyntaxNode as ConstructorDeclarationSyntax;
-                    if (constructorSyntax != null)
+                    if (sourceMethod.SyntaxNode is ConstructorDeclarationSyntax constructorSyntax)
                     {
                         ConstructorInitializerSyntax initializerSyntax = constructorSyntax.Initializer;
                         if (initializerSyntax != null)
@@ -453,10 +391,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </remarks>
         internal static MethodSymbol GetOwnOrInheritedAddMethod(this EventSymbol @event)
         {
-            while ((object)@event != null)
+            while (@event is object)
             {
                 MethodSymbol addMethod = @event.AddMethod;
-                if ((object)addMethod != null)
+                if (addMethod is object)
                 {
                     return addMethod;
                 }
@@ -477,10 +415,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </remarks>
         internal static MethodSymbol GetOwnOrInheritedRemoveMethod(this EventSymbol @event)
         {
-            while ((object)@event != null)
+            while (@event is object)
             {
                 MethodSymbol removeMethod = @event.RemoveMethod;
-                if ((object)removeMethod != null)
+                if (removeMethod is object)
                 {
                     return removeMethod;
                 }
@@ -493,17 +431,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static bool IsExplicitInterfaceImplementation(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).IsExplicitInterfaceImplementation;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).IsExplicitInterfaceImplementation;
-                case SymbolKind.Event:
-                    return ((EventSymbol)member).IsExplicitInterfaceImplementation;
-                default:
-                    return false;
-            }
+                SymbolKind.Method => ((MethodSymbol)member).IsExplicitInterfaceImplementation,
+                SymbolKind.Property => ((PropertySymbol)member).IsExplicitInterfaceImplementation,
+                SymbolKind.Event => ((EventSymbol)member).IsExplicitInterfaceImplementation,
+                _ => false,
+            };
         }
 
         internal static bool IsPartialMethod(this Symbol member)
@@ -543,32 +477,24 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static ImmutableArray<Symbol> GetExplicitInterfaceImplementations(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).ExplicitInterfaceImplementations.Cast<MethodSymbol, Symbol>();
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).ExplicitInterfaceImplementations.Cast<PropertySymbol, Symbol>();
-                case SymbolKind.Event:
-                    return ((EventSymbol)member).ExplicitInterfaceImplementations.Cast<EventSymbol, Symbol>();
-                default:
-                    return ImmutableArray<Symbol>.Empty;
-            }
+                SymbolKind.Method => ((MethodSymbol)member).ExplicitInterfaceImplementations.Cast<MethodSymbol, Symbol>(),
+                SymbolKind.Property => ((PropertySymbol)member).ExplicitInterfaceImplementations.Cast<PropertySymbol, Symbol>(),
+                SymbolKind.Event => ((EventSymbol)member).ExplicitInterfaceImplementations.Cast<EventSymbol, Symbol>(),
+                _ => ImmutableArray<Symbol>.Empty,
+            };
         }
 
         internal static Symbol GetOverriddenMember(this Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).OverriddenMethod;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).OverriddenProperty;
-                case SymbolKind.Event:
-                    return ((EventSymbol)member).OverriddenEvent;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).OverriddenMethod,
+                SymbolKind.Property => ((PropertySymbol)member).OverriddenProperty,
+                SymbolKind.Event => ((EventSymbol)member).OverriddenEvent,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         internal static Symbol GetLeastOverriddenMember(this Symbol member, NamedTypeSymbol accessingTypeOpt)
@@ -601,7 +527,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 case SymbolKind.Event:
                     field = ((EventSymbol)member).AssociatedField;
-                    return (object)field != null;
+                    return field is object;
                 default:
                     field = null;
                     return false;

@@ -46,13 +46,8 @@ namespace Microsoft.CodeAnalysis
                 throw new ArgumentOutOfRangeException(nameof(kind));
             }
 
-            if (text == null)
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
-
             _kind = kind;
-            _text = text;
+            _text = text ?? throw new ArgumentNullException(nameof(text));
             _symbol = symbol;
         }
 

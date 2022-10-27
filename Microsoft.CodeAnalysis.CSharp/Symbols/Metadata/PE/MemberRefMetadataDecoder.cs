@@ -56,15 +56,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         /// </summary>
         protected override TypeSymbol GetGenericTypeParamSymbol(int position)
         {
-            PENamedTypeSymbol peType = _containingType as PENamedTypeSymbol;
-            if ((object)peType != null)
+            if (_containingType is PENamedTypeSymbol peType)
             {
-                while ((object)peType != null && (peType.MetadataArity - peType.Arity) > position)
+                while (peType is object && (peType.MetadataArity - peType.Arity) > position)
                 {
                     peType = peType.ContainingSymbol as PENamedTypeSymbol;
                 }
 
-                if ((object)peType == null || peType.MetadataArity <= position)
+                if (peType is null || peType.MetadataArity <= position)
                 {
                     return new UnsupportedMetadataTypeSymbol(); // position of type parameter too large
                 }
@@ -74,11 +73,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 return peType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics[position].Type; //NB: args, not params
             }
 
-            NamedTypeSymbol namedType = _containingType as NamedTypeSymbol;
-            if ((object)namedType != null)
+            if (_containingType is NamedTypeSymbol namedType)
             {
                 GetGenericTypeArgumentSymbol(position, namedType, out int cumulativeArity, out TypeSymbol typeArgument);
-                if ((object)typeArgument != null)
+                if (typeArgument is object)
                 {
                     return typeArgument;
                 }
@@ -99,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             int arityOffset = 0;
 
             var containingType = namedType.ContainingType;
-            if ((object)containingType != null)
+            if (containingType is object)
             {
                 GetGenericTypeArgumentSymbol(position, containingType, out int containingTypeCumulativeArity, out typeArgument);
                 cumulativeArity += containingTypeCumulativeArity;
@@ -123,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         /// <returns>The matching method symbol, or null if the inputs do not correspond to a valid method.</returns>
         internal Symbol FindMember(TypeSymbol targetTypeSymbol, MemberReferenceHandle memberRef, bool methodsOnly)
         {
-            if ((object)targetTypeSymbol == null)
+            if (targetTypeSymbol is null)
             {
                 return null;
             }
@@ -169,10 +167,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             foreach (Symbol member in targetTypeSymbol.GetMembers(targetMemberName))
             {
-                var field = member as FieldSymbol;
                 TypeWithAnnotations fieldType;
 
-                if ((object)field != null &&
+                if (member is FieldSymbol field &&
                     TypeSymbol.Equals((fieldType = field.TypeWithAnnotations).Type, type, TypeCompareKind.CLRSignatureCompareOptions) &&
                     CustomModifiersMatch(fieldType.CustomModifiers, customModifiers))
                 {
@@ -189,8 +186,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             foreach (Symbol member in targetTypeSymbol.GetMembers(targetMemberName))
             {
-                var method = member as MethodSymbol;
-                if ((object)method != null &&
+                if (member is MethodSymbol method &&
                     ((byte)method.CallingConvention == targetMemberSignatureHeader.RawValue) &&
                     (targetMemberTypeParamCount == method.Arity) &&
                     MethodSymbolMatchesParamInfo(method, targetParamInfo))

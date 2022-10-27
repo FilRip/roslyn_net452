@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal interface ICompilerServerLogger

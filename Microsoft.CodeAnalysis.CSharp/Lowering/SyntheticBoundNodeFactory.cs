@@ -622,17 +622,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression MakeIsNotANumberTest(BoundExpression input)
         {
-            switch (input.Type)
+            return input.Type switch
             {
-                case { SpecialType: CodeAnalysis.SpecialType.System_Double }:
-                    // produce double.IsNaN(input)
-                    return StaticCall(CodeAnalysis.SpecialMember.System_Double__IsNaN, input);
-                case { SpecialType: CodeAnalysis.SpecialType.System_Single }:
-                    // produce float.IsNaN(input)
-                    return StaticCall(CodeAnalysis.SpecialMember.System_Single__IsNaN, input);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(input.Type);
-            }
+                { SpecialType: CodeAnalysis.SpecialType.System_Double } => StaticCall(CodeAnalysis.SpecialMember.System_Double__IsNaN, input),// produce double.IsNaN(input)
+                { SpecialType: CodeAnalysis.SpecialType.System_Single } => StaticCall(CodeAnalysis.SpecialMember.System_Single__IsNaN, input),// produce float.IsNaN(input)
+                _ => throw ExceptionUtilities.UnexpectedValue(input.Type),
+            };
         }
 
         public BoundExpression InstanceCall(BoundExpression receiver, string name, BoundExpression arg)
@@ -1449,7 +1444,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 arguments = arguments.SelectAsArray(
                     (arg, t) => arg.Kind == BoundKind.DiscardExpression ? t.factory.MakeTempForDiscard((BoundDiscardExpression)arg, t.builder) : arg,
-                    (factory: this, builder: builder));
+                    (factory: this, builder));
             }
 
             return arguments;

@@ -1073,8 +1073,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case NullableAnnotation.Oblivious:
                         return NullableFlowState.NotNull;
                 }
-                var typeParameter = type as TypeParameterSymbol;
-                if (typeParameter is null || typeParameter.IsNotNullable == true)
+                if (type is not TypeParameterSymbol typeParameter || typeParameter.IsNotNullable == true)
                 {
                     return NullableFlowState.NotNull;
                 }
@@ -1111,8 +1110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case NullableAnnotation.Annotated:
                         return true;
                 }
-                var typeParameter = type as TypeParameterSymbol;
-                if (typeParameter is null || typeParameter.IsNotNullable == true)
+                if (type is not TypeParameterSymbol typeParameter || typeParameter.IsNotNullable == true)
                 {
                     return false;
                 }
@@ -1318,17 +1316,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static bool IsValidEncompassedByArgument(TypeSymbol type)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Array:
-                case TypeKind.Class:
-                case TypeKind.Delegate:
-                case TypeKind.Enum:
-                case TypeKind.Struct:
-                    return true;
-                default:
-                    return false;
-            }
+                TypeKind.Array or TypeKind.Class or TypeKind.Delegate or TypeKind.Enum or TypeKind.Struct => true,
+                _ => false,
+            };
         }
 
         public static bool RequiresChecking(NamedTypeSymbol type)

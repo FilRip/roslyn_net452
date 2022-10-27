@@ -493,8 +493,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                var assembly = _assemblySymbol as PEAssemblySymbol;
-                if ((object)assembly != null)
+                if (_assemblySymbol is PEAssemblySymbol assembly)
                 {
                     return assembly.DocumentationProvider;
                 }
@@ -509,7 +508,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                if ((object)_lazyEventRegistrationTokenSymbol == null)
+                if (_lazyEventRegistrationTokenSymbol is null)
                 {
                     Interlocked.CompareExchange(ref _lazyEventRegistrationTokenSymbol,
                                                 GetTypeSymbolForWellKnownType(
@@ -525,7 +524,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                if ((object)_lazyEventRegistrationTokenTableSymbol == null)
+                if (_lazyEventRegistrationTokenTableSymbol is null)
                 {
                     Interlocked.CompareExchange(ref _lazyEventRegistrationTokenTableSymbol,
                                                 GetTypeSymbolForWellKnownType(
@@ -541,7 +540,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                if ((object)_lazySystemTypeSymbol == null)
+                if (_lazySystemTypeSymbol is null)
                 {
                     Interlocked.CompareExchange(ref _lazySystemTypeSymbol,
                                                 GetTypeSymbolForWellKnownType(WellKnownType.System_Type),
@@ -571,7 +570,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 NamedTypeSymbol currResult = assembly.LookupTopLevelMetadataType(ref emittedName, digThroughForwardedTypes: true);
                 if (IsAcceptableSystemTypeSymbol(currResult))
                 {
-                    if ((object)referencedAssemblyResult == null)
+                    if (referencedAssemblyResult is null)
                     {
                         referencedAssemblyResult = currResult;
                     }
@@ -590,7 +589,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 }
             }
 
-            if ((object)referencedAssemblyResult != null)
+            if (referencedAssemblyResult is object)
             {
                 return referencedAssemblyResult;
             }
@@ -640,7 +639,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             NamedTypeSymbol result;
             PENamespaceSymbol scope = (PENamespaceSymbol)this.GlobalNamespace.LookupNestedNamespace(emittedName.NamespaceSegments);
 
-            if ((object)scope == null)
+            if (scope is null)
             {
                 // We failed to locate the namespace
                 isNoPiaLocalType = false;
@@ -723,15 +722,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             if (AccessCheck.IsEffectivelyPublicOrInternal(symbol, out bool isInternal))
             {
-                switch (nullableMemberMetadata)
+                return nullableMemberMetadata switch
                 {
-                    case NullableMemberMetadata.Public:
-                        return !isInternal;
-                    case NullableMemberMetadata.Internal:
-                        return true;
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(nullableMemberMetadata);
-                }
+                    NullableMemberMetadata.Public => !isInternal,
+                    NullableMemberMetadata.Internal => true,
+                    _ => throw ExceptionUtilities.UnexpectedValue(nullableMemberMetadata),
+                };
             }
 
             return false;

@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class FileMutex : IDisposable

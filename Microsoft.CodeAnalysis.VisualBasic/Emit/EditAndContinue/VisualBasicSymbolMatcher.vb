@@ -139,7 +139,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
 
             Private Function GetTopLevelTypesByName() As IReadOnlyDictionary(Of String, Cci.INamespaceTypeDefinition)
                 If Me._lazyTopLevelTypes Is Nothing Then
-                    Dim typesByName As Dictionary(Of String, Cci.INamespaceTypeDefinition) = New Dictionary(Of String, Cci.INamespaceTypeDefinition)(s_nameComparer)
+                    Dim typesByName As New Dictionary(Of String, Cci.INamespaceTypeDefinition)(s_nameComparer)
                     For Each type As Cci.INamespaceTypeDefinition In Me.GetTopLevelTypes()
                         ' All generated top-level types are assumed to be in the global namespace.
                         If String.IsNullOrEmpty(type.NamespaceName) Then

@@ -464,19 +464,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsIndirectOrInstanceField(BoundExpression expression)
         {
-            switch (expression.Kind)
+            return expression.Kind switch
             {
-                case BoundKind.Local:
-                    return ((BoundLocal)expression).LocalSymbol.RefKind != RefKind.None;
-
-                case BoundKind.Parameter:
-                    return ((BoundParameter)expression).ParameterSymbol.RefKind != RefKind.None;
-
-                case BoundKind.FieldAccess:
-                    return !((BoundFieldAccess)expression).FieldSymbol.IsStatic;
-            }
-
-            return false;
+                BoundKind.Local => ((BoundLocal)expression).LocalSymbol.RefKind != RefKind.None,
+                BoundKind.Parameter => ((BoundParameter)expression).ParameterSymbol.RefKind != RefKind.None,
+                BoundKind.FieldAccess => !((BoundFieldAccess)expression).FieldSymbol.IsStatic,
+                _ => false,
+            };
         }
 
         private BoundNode RewriteWithNotRefOperand(
@@ -752,15 +746,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private MethodSymbol GetDecimalIncDecOperator(BinaryOperatorKind oper)
         {
-            SpecialMember member;
-            switch (oper.Operator())
+            var member = oper.Operator() switch
             {
-                case BinaryOperatorKind.Addition: member = SpecialMember.System_Decimal__op_Increment; break;
-                case BinaryOperatorKind.Subtraction: member = SpecialMember.System_Decimal__op_Decrement; break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(oper.Operator());
-            }
-
+                BinaryOperatorKind.Addition => SpecialMember.System_Decimal__op_Increment,
+                BinaryOperatorKind.Subtraction => SpecialMember.System_Decimal__op_Decrement,
+                _ => throw ExceptionUtilities.UnexpectedValue(oper.Operator()),
+            };
             var method = (MethodSymbol)_compilation.Assembly.GetSpecialTypeMember(member);
             return method;
         }

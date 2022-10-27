@@ -89,14 +89,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // SPEC: Find the most specific source type SX of the operators in U...
             TypeSymbol sx = MostSpecificSourceTypeForImplicitUserDefinedConversion(u, source, ref useSiteInfo);
-            if ((object)sx == null)
+            if (sx is null)
             {
                 return UserDefinedConversionResult.NoBestSourceType(u);
             }
 
             // SPEC: Find the most specific target type TX of the operators in U...
             TypeSymbol tx = MostSpecificTargetTypeForImplicitUserDefinedConversion(u, target, ref useSiteInfo);
-            if ((object)tx == null)
+            if (tx is null)
             {
                 return UserDefinedConversionResult.NoBestTargetType(u);
             }
@@ -233,7 +233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Unfortunately, we know of several real programs that rely upon this bug, so we are going
             // to reproduce it here.
 
-            if ((object)source != null && source.IsInterfaceType() || (object)target != null && target.IsInterfaceType())
+            if (source is object && source.IsInterfaceType() || target is object && target.IsInterfaceType())
             {
                 return;
             }
@@ -266,7 +266,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //
                         // We perpetuate this fiction here.
 
-                        if ((object)target != null && target.IsNullableType() && convertsTo.IsNonNullableValueType())
+                        if (target is object && target.IsNullableType() && convertsTo.IsNonNullableValueType())
                         {
                             convertsTo = MakeNullableType(convertsTo);
                             toConversion = allowAnyTarget ? Conversion.Identity :
@@ -275,7 +275,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         u.Add(UserDefinedConversionAnalysis.Normal(op, fromConversion, toConversion, convertsFrom, convertsTo));
                     }
-                    else if ((object)source != null && source.IsNullableType() && convertsFrom.IsNonNullableValueType() &&
+                    else if (source is object && source.IsNullableType() && convertsFrom.IsNonNullableValueType() &&
                         (allowAnyTarget || target.CanBeAssignedNull()))
                     {
                         // As mentioned above, here we diverge from the specification, in two ways.
@@ -311,7 +311,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeSymbol MostSpecificSourceTypeForImplicitUserDefinedConversion(ImmutableArray<UserDefinedConversionAnalysis> u, TypeSymbol source, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             // SPEC: If any of the operators in U convert from S then SX is S.
-            if ((object)source != null)
+            if (source is object)
             {
                 if (u.Any(conv => TypeSymbol.Equals(conv.FromType, source, TypeCompareKind.ConsiderEverything2)))
                 {
@@ -360,12 +360,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             int count = 0;
             if (!TypeSymbol.Equals(conv.FromType, conv.Operator.GetParameterType(0), TypeCompareKind.ConsiderEverything2))
             {
-                count += 1;
+                count++;
             }
 
             if (!TypeSymbol.Equals(conv.ToType, conv.Operator.ReturnType, TypeCompareKind.ConsiderEverything2))
             {
-                count += 1;
+                count++;
             }
 
             return count;
@@ -542,67 +542,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsEncompassingImplicitConversionKind(ConversionKind kind)
         {
-            switch (kind)
+            return kind switch
             {
                 // Doesn't even exist.
-                case ConversionKind.NoConversion:
-
-                // These are conversions from expression and do not apply.
-                // Specifically disallowed because there would be subtle consequences for the overload betterness rules.
-                case ConversionKind.ImplicitDynamic:
-                case ConversionKind.MethodGroup:
-                case ConversionKind.AnonymousFunction:
-                case ConversionKind.InterpolatedString:
-                case ConversionKind.SwitchExpression:
-                case ConversionKind.ConditionalExpression:
-                case ConversionKind.ImplicitEnumeration:
-                case ConversionKind.StackAllocToPointerType:
-                case ConversionKind.StackAllocToSpanType:
-
-                // Not "standard".
-                case ConversionKind.ImplicitUserDefined:
-                case ConversionKind.ExplicitUserDefined:
-
-                // Not implicit.
-                case ConversionKind.ExplicitNumeric:
-                case ConversionKind.ExplicitEnumeration:
-                case ConversionKind.ExplicitNullable:
-                case ConversionKind.ExplicitReference:
-                case ConversionKind.Unboxing:
-                case ConversionKind.ExplicitDynamic:
-                case ConversionKind.ExplicitPointerToPointer:
-                case ConversionKind.ExplicitPointerToInteger:
-                case ConversionKind.ExplicitIntegerToPointer:
-                case ConversionKind.IntPtr:
-                case ConversionKind.ExplicitTupleLiteral:
-                case ConversionKind.ExplicitTuple:
-                    return false;
-
+                ConversionKind.NoConversion or ConversionKind.ImplicitDynamic or ConversionKind.MethodGroup or ConversionKind.AnonymousFunction or ConversionKind.InterpolatedString or ConversionKind.SwitchExpression or ConversionKind.ConditionalExpression or ConversionKind.ImplicitEnumeration or ConversionKind.StackAllocToPointerType or ConversionKind.StackAllocToSpanType or ConversionKind.ImplicitUserDefined or ConversionKind.ExplicitUserDefined or ConversionKind.ExplicitNumeric or ConversionKind.ExplicitEnumeration or ConversionKind.ExplicitNullable or ConversionKind.ExplicitReference or ConversionKind.Unboxing or ConversionKind.ExplicitDynamic or ConversionKind.ExplicitPointerToPointer or ConversionKind.ExplicitPointerToInteger or ConversionKind.ExplicitIntegerToPointer or ConversionKind.IntPtr or ConversionKind.ExplicitTupleLiteral or ConversionKind.ExplicitTuple => false,
                 // Spec'd in C# 4.
-                case ConversionKind.Identity:
-                case ConversionKind.ImplicitNumeric:
-                case ConversionKind.ImplicitNullable:
-                case ConversionKind.ImplicitReference:
-                case ConversionKind.Boxing:
-                case ConversionKind.ImplicitConstant:
-                case ConversionKind.ImplicitPointerToVoid:
-
-                // Added to spec in Roslyn timeframe.
-                case ConversionKind.NullLiteral:
-                case ConversionKind.ImplicitNullToPointer:
-
-                // Added for C# 7.
-                case ConversionKind.ImplicitTupleLiteral:
-                case ConversionKind.ImplicitTuple:
-                case ConversionKind.ImplicitThrow:
-
-                // Added for C# 7.1
-                case ConversionKind.DefaultLiteral:
-                    return true;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(kind);
-            }
+                ConversionKind.Identity or ConversionKind.ImplicitNumeric or ConversionKind.ImplicitNullable or ConversionKind.ImplicitReference or ConversionKind.Boxing or ConversionKind.ImplicitConstant or ConversionKind.ImplicitPointerToVoid or ConversionKind.NullLiteral or ConversionKind.ImplicitNullToPointer or ConversionKind.ImplicitTupleLiteral or ConversionKind.ImplicitTuple or ConversionKind.ImplicitThrow or ConversionKind.DefaultLiteral => true,
+                _ => throw ExceptionUtilities.UnexpectedValue(kind),
+            };
         }
 
         private TypeSymbol MostEncompassedType<T>(

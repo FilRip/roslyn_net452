@@ -25,8 +25,7 @@ namespace Microsoft.Cci
         {
             var pooled = PooledStringBuilder.GetInstance();
             StringBuilder sb = pooled.Builder;
-            IArrayTypeReference arrType = typeReference as IArrayTypeReference;
-            if (arrType != null)
+            if (typeReference is IArrayTypeReference arrType)
             {
                 typeReference = arrType.GetElementType(context);
                 bool isAssemQual = false;
@@ -51,8 +50,7 @@ namespace Microsoft.Cci
                 goto done;
             }
 
-            IPointerTypeReference pointer = typeReference as IPointerTypeReference;
-            if (pointer != null)
+            if (typeReference is IPointerTypeReference pointer)
             {
                 typeReference = pointer.GetTargetType(context);
                 bool isAssemQual = false;
@@ -158,15 +156,13 @@ namespace Microsoft.Cci
                 return;
             }
 
-            IArrayTypeReference arrType = typeReference as IArrayTypeReference;
-            if (arrType != null)
+            if (typeReference is IArrayTypeReference arrType)
             {
                 AppendAssemblyQualifierIfNecessary(sb, arrType.GetElementType(context), out isAssemQualified, context);
                 return;
             }
 
-            IPointerTypeReference pointer = typeReference as IPointerTypeReference;
-            if (pointer != null)
+            if (typeReference is IPointerTypeReference pointer)
             {
                 AppendAssemblyQualifierIfNecessary(sb, pointer.GetTargetType(context), out isAssemQualified, context);
                 return;
@@ -224,15 +220,13 @@ namespace Microsoft.Cci
         {
             while (true)
             {
-                IArrayTypeReference arrType = typeReference as IArrayTypeReference;
-                if (arrType != null)
+                if (typeReference is IArrayTypeReference arrType)
                 {
                     typeReference = arrType.GetElementType(context);
                     continue;
                 }
 
-                IPointerTypeReference pointer = typeReference as IPointerTypeReference;
-                if (pointer != null)
+                if (typeReference is IPointerTypeReference pointer)
                 {
                     typeReference = pointer.GetTargetType(context);
                     continue;

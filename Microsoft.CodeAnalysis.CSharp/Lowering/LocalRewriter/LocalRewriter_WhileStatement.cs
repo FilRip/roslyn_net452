@@ -65,19 +65,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (this.Instrument && !loop.WasCompilerGenerated)
             {
-                switch (loop.Kind)
+                ifConditionGotoStart = loop.Kind switch
                 {
-                    case BoundKind.WhileStatement:
-                        ifConditionGotoStart = _instrumenter.InstrumentWhileStatementConditionalGotoStartOrBreak((BoundWhileStatement)loop, ifConditionGotoStart);
-                        break;
-
-                    case BoundKind.ForEachStatement:
-                        ifConditionGotoStart = _instrumenter.InstrumentForEachStatementConditionalGotoStart((BoundForEachStatement)loop, ifConditionGotoStart);
-                        break;
-
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(loop.Kind);
-                }
+                    BoundKind.WhileStatement => _instrumenter.InstrumentWhileStatementConditionalGotoStartOrBreak((BoundWhileStatement)loop, ifConditionGotoStart),
+                    BoundKind.ForEachStatement => _instrumenter.InstrumentForEachStatementConditionalGotoStart((BoundForEachStatement)loop, ifConditionGotoStart),
+                    _ => throw ExceptionUtilities.UnexpectedValue(loop.Kind),
+                };
 
                 // mark the initial jump as hidden. We do it to tell that this is not a part of previous statement. This
                 // jump may be a target of another jump (for example if loops are nested) and that would give the

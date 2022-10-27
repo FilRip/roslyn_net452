@@ -10,49 +10,27 @@ namespace Microsoft.CodeAnalysis
     {
         public static int ToSortOrder(this SymbolKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case SymbolKind.Field:
-                    return 0;
-                case SymbolKind.Method:
-                    return 1;
-                case SymbolKind.Property:
-                    return 2;
-                case SymbolKind.Event:
-                    return 3;
-                case SymbolKind.NamedType:
-                    return 4;
-                case SymbolKind.Namespace:
-                    return 5;
-                case SymbolKind.Alias:
-                    return 6;
-                case SymbolKind.ArrayType:
-                    return 7;
-                case SymbolKind.Assembly:
-                    return 8;
-#if false
-                case SymbolKind.ErrorType:
-                    return 9;
-#endif
-                case SymbolKind.Label:
-                    return 10;
-                case SymbolKind.Local:
-                    return 11;
-                case SymbolKind.NetModule:
-                    return 12;
-                case SymbolKind.Parameter:
-                    return 13;
-                case SymbolKind.RangeVariable:
-                    return 14;
-                case SymbolKind.TypeParameter:
-                    return 15;
-                case SymbolKind.DynamicType:
-                    return 16;
-                case SymbolKind.Preprocessing:
-                    return 17;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(kind);
-            }
+                SymbolKind.Field => 0,
+                SymbolKind.Method => 1,
+                SymbolKind.Property => 2,
+                SymbolKind.Event => 3,
+                SymbolKind.NamedType => 4,
+                SymbolKind.Namespace => 5,
+                SymbolKind.Alias => 6,
+                SymbolKind.ArrayType => 7,
+                SymbolKind.Assembly => 8,
+                SymbolKind.Label => 10,
+                SymbolKind.Local => 11,
+                SymbolKind.NetModule => 12,
+                SymbolKind.Parameter => 13,
+                SymbolKind.RangeVariable => 14,
+                SymbolKind.TypeParameter => 15,
+                SymbolKind.DynamicType => 16,
+                SymbolKind.Preprocessing => 17,
+                _ => throw ExceptionUtilities.UnexpectedValue(kind),
+            };
         }
     }
 }

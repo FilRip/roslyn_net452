@@ -26,13 +26,8 @@ namespace Microsoft.CodeAnalysis
 
         public AdditionalTextFile(CommandLineSourceFile sourceFile, CommonCompiler compiler)
         {
-            if (compiler == null)
-            {
-                throw new ArgumentNullException(nameof(compiler));
-            }
-
             _sourceFile = sourceFile;
-            _compiler = compiler;
+            _compiler = compiler ?? throw new ArgumentNullException(nameof(compiler));
             _diagnostics = SpecializedCollections.EmptyList<DiagnosticInfo>();
             _text = new Lazy<SourceText?>(ReadText);
         }

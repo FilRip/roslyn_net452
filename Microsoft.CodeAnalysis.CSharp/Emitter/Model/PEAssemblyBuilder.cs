@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNullableAttribute(WellKnownMember member, ImmutableArray<TypedConstant> arguments)
         {
-            if ((object)_lazyNullableAttribute != null)
+            if (_lazyNullableAttribute is object)
             {
                 var constructorIndex = (member == WellKnownMember.System_Runtime_CompilerServices_NullableAttribute__ctorTransformFlags) ? 1 : 0;
                 return new SynthesizedAttributeData(
@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNullableContextAttribute(ImmutableArray<TypedConstant> arguments)
         {
-            if ((object)_lazyNullableContextAttribute != null)
+            if (_lazyNullableContextAttribute is object)
             {
                 return new SynthesizedAttributeData(
                     _lazyNullableContextAttribute.Constructors[0],
@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNullablePublicOnlyAttribute(ImmutableArray<TypedConstant> arguments)
         {
-            if ((object)_lazyNullablePublicOnlyAttribute != null)
+            if (_lazyNullablePublicOnlyAttribute is object)
             {
                 return new SynthesizedAttributeData(
                     _lazyNullablePublicOnlyAttribute.Constructors[0],
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNativeIntegerAttribute(WellKnownMember member, ImmutableArray<TypedConstant> arguments)
         {
-            if ((object)_lazyNativeIntegerAttribute != null)
+            if (_lazyNativeIntegerAttribute is object)
             {
                 var constructorIndex = (member == WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctorTransformFlags) ? 1 : 0;
                 return new SynthesizedAttributeData(
@@ -251,7 +251,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override SynthesizedAttributeData TrySynthesizeIsReadOnlyAttribute()
         {
-            if ((object)_lazyIsReadOnlyAttribute != null)
+            if (_lazyIsReadOnlyAttribute is object)
             {
                 return new SynthesizedAttributeData(
                     _lazyIsReadOnlyAttribute.Constructors[0],
@@ -264,7 +264,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override SynthesizedAttributeData TrySynthesizeIsUnmanagedAttribute()
         {
-            if ((object)_lazyIsUnmanagedAttribute != null)
+            if (_lazyIsUnmanagedAttribute is object)
             {
                 return new SynthesizedAttributeData(
                     _lazyIsUnmanagedAttribute.Constructors[0],
@@ -277,7 +277,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override SynthesizedAttributeData TrySynthesizeIsByRefLikeAttribute()
         {
-            if ((object)_lazyIsByRefLikeAttribute != null)
+            if (_lazyIsByRefLikeAttribute is object)
             {
                 return new SynthesizedAttributeData(
                     _lazyIsByRefLikeAttribute.Constructors[0],

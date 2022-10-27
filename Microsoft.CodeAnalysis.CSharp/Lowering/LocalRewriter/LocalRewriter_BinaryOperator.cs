@@ -1820,7 +1820,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _compilation.Assembly.GetSpecialTypeMember(member);
                 if (loweredRight.IsLiteralNull() ||
                     loweredLeft.IsLiteralNull() ||
-                    (object)(method = (MethodSymbol)_compilation.Assembly.GetSpecialTypeMember(member)) == null)
+                    (method = (MethodSymbol)_compilation.Assembly.GetSpecialTypeMember(member)) is null)
                 {
                     // use reference equality in the absence of overloaded operators for System.Delegate.
                     operatorKind = (operatorKind & (~BinaryOperatorKind.Delegate)) | BinaryOperatorKind.Object;

@@ -163,8 +163,7 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                                 builder.AddOptional(TypeManager.CreateSynthesizedAttribute(WellKnownMember.System_Reflection_DefaultMemberAttribute__ctor, attrData, syntaxNodeOpt, diagnostics));
 
                                 // Embed members matching default member name.
-                                string defaultMember = attrData.CommonConstructorArguments[0].ValueInternal as string;
-                                if (defaultMember != null)
+                                if (attrData.CommonConstructorArguments[0].ValueInternal is string defaultMember)
                                 {
                                     EmbedDefaultMembers(defaultMember, syntaxNodeOpt, diagnostics);
                                 }

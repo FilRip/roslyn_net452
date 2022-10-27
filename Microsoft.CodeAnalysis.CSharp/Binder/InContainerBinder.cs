@@ -39,8 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                var merged = _container as MergedNamespaceSymbol;
-                return ((object)merged != null) ? merged.GetConstituentForCompilation(this.Compilation) : _container;
+                return (_container is MergedNamespaceSymbol merged) ? merged.GetConstituentForCompilation(this.Compilation) : _container;
             }
         }
 
@@ -51,8 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal override bool IsAccessibleHelper(Symbol symbol, TypeSymbol accessThroughType, out bool failedThroughTypeCheck, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConsList<TypeSymbol> basesBeingResolved)
         {
-            var type = _container as NamedTypeSymbol;
-            if ((object)type != null)
+            if (_container is NamedTypeSymbol type)
             {
                 return this.IsSymbolAccessibleConditional(symbol, type, accessThroughType, out failedThroughTypeCheck, ref useSiteInfo);
             }

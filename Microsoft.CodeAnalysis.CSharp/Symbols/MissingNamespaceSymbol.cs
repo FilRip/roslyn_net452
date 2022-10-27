@@ -82,9 +82,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            MissingNamespaceSymbol other = obj as MissingNamespaceSymbol;
 
-            return (object)other != null && _name.Equals(other._name) && _containingSymbol.Equals(other._containingSymbol, compareKind);
+            return obj is MissingNamespaceSymbol other && _name.Equals(other._name) && _containingSymbol.Equals(other._containingSymbol, compareKind);
         }
 
         public override ImmutableArray<Location> Locations

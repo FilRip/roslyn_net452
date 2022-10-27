@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     // force resolution of bases in containing type
                     // to make base resolution errors more deterministic
-                    if ((object)ContainingType != null)
+                    if (ContainingType is object)
                     {
                         var tmp = ContainingType.BaseTypeNoUseSiteDiagnostics;
                     }
@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var localBase = this.BaseTypeNoUseSiteDiagnostics;
 
-            if ((object)localBase == null)
+            if (localBase is null)
             {
                 // nothing to verify
                 return;
@@ -247,7 +247,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal Tuple<NamedTypeSymbol, ImmutableArray<NamedTypeSymbol>> GetDeclaredBases(ConsList<TypeSymbol> basesBeingResolved)
         {
-            if (ReferenceEquals(_lazyDeclaredBases, null))
+            if (_lazyDeclaredBases is null)
             {
                 var diagnostics = BindingDiagnosticBag.GetInstance();
                 if (Interlocked.CompareExchange(ref _lazyDeclaredBases, MakeDeclaredBases(basesBeingResolved, diagnostics), null) == null)
@@ -296,19 +296,19 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var partInterfaces = one.Item2;
                 if (!reportedPartialConflict)
                 {
-                    if ((object)baseType == null)
+                    if (baseType is null)
                     {
                         baseType = partBase;
                         baseTypeLocation = decl.NameLocation;
                     }
-                    else if (baseType.TypeKind == TypeKind.Error && (object)partBase != null)
+                    else if (baseType.TypeKind == TypeKind.Error && partBase is object)
                     {
                         // if the old base was an error symbol, copy it to the interfaces list so it doesn't get lost
                         partInterfaces = partInterfaces.Add(baseType);
                         baseType = partBase;
                         baseTypeLocation = decl.NameLocation;
                     }
-                    else if ((object)partBase != null && !TypeSymbol.Equals(partBase, baseType, TypeCompareKind.ConsiderEverything2) && partBase.TypeKind != TypeKind.Error)
+                    else if (partBase is object && !TypeSymbol.Equals(partBase, baseType, TypeCompareKind.ConsiderEverything2) && partBase.TypeKind != TypeKind.Error)
                     {
                         // the parts do not agree
                         var info = diagnostics.Add(ErrorCode.ERR_PartialMultipleBases, Locations[0], this);
@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            if ((object)baseType != null)
+            if (baseType is object)
             {
                 if (baseType.IsStatic)
                 {
@@ -473,7 +473,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                          baseType.TypeKind == TypeKind.Delegate ||
                          baseType.TypeKind == TypeKind.Struct ||
                          baseTypeIsErrorWithoutInterfaceGuess) &&
-                        ((object)localBase == null))
+                        (localBase is null))
                     {
                         localBase = (NamedTypeSymbol)baseType;
                         if (this.IsStatic && localBase.SpecialType != SpecialType.System_Object)
@@ -535,7 +535,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case TypeKind.Class:
                         if (TypeKind == TypeKind.Class)
                         {
-                            if ((object)localBase == null)
+                            if (localBase is null)
                             {
                                 localBase = (NamedTypeSymbol)baseType;
                                 diagnostics.Add(ErrorCode.ERR_BaseClassMustBeFirst, location, baseType);
@@ -571,7 +571,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            if (this.SpecialType == SpecialType.System_Object && ((object)localBase != null || localInterfaces.Count != 0))
+            if (this.SpecialType == SpecialType.System_Object && (localBase is object || localInterfaces.Count != 0))
             {
                 var name = GetName(bases.Parent);
                 diagnostics.Add(ErrorCode.ERR_ObjectCantHaveBases, new SourceLocation(name));
@@ -594,17 +594,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         private static bool IsRestrictedBaseType(SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Array:
-                case SpecialType.System_Enum:
-                case SpecialType.System_Delegate:
-                case SpecialType.System_MulticastDelegate:
-                case SpecialType.System_ValueType:
-                    return true;
-            }
-
-            return false;
+                SpecialType.System_Array or SpecialType.System_Enum or SpecialType.System_Delegate or SpecialType.System_MulticastDelegate or SpecialType.System_ValueType => true,
+                _ => false,
+            };
         }
 
         private ImmutableArray<NamedTypeSymbol> MakeAcyclicInterfaces(ConsList<TypeSymbol> basesBeingResolved, BindingDiagnosticBag diagnostics)
@@ -671,7 +665,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 declaredBase = GetDeclaredBaseType(basesBeingResolved: null);
             }
 
-            if ((object)declaredBase == null)
+            if (declaredBase is null)
             {
                 switch (typeKind)
                 {
@@ -722,7 +716,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 current.AddUseSiteInfo(ref useSiteInfo);
                 current = current.BaseTypeNoUseSiteDiagnostics;
             }
-            while ((object)current != null);
+            while (current is object);
 
             diagnostics.Add(useSiteInfo.Diagnostics.IsNullOrEmpty() ? Location.None : (FindBaseRefSyntax(declaredBase) ?? Locations[0]), useSiteInfo);
 

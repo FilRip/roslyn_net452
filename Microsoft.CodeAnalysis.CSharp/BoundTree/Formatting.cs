@@ -200,7 +200,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 for (int i = 1; i < arguments.Length; i++)
                 {
-                    builder.Append($", {{{i.ToString()}}}");
+                    builder.Append($", {{{i}}}");
                     argumentDisplays[i] = arguments[i].Display;
                 }
 

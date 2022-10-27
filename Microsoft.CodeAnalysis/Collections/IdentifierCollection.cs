@@ -61,8 +61,7 @@ namespace Microsoft.CodeAnalysis
         {
             // Had a mapping for it.  It will either map to a single 
             // spelling, or to a set of spellings.
-            var strValue = value as string;
-            if (strValue != null)
+            if (value is string strValue)
             {
                 if (!string.Equals(identifier, strValue, StringComparison.Ordinal))
                 {
@@ -114,8 +113,7 @@ namespace Microsoft.CodeAnalysis
         {
             if (_map.TryGetValue(identifier, out object spellings))
             {
-                var spelling = spellings as string;
-                if (spelling != null)
+                if (spellings is string spelling)
                 {
                     return string.Equals(identifier, spelling, StringComparison.Ordinal);
                 }

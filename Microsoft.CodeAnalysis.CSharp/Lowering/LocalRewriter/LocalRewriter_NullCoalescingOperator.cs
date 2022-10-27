@@ -88,8 +88,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (leftConversion.IsIdentity || leftConversion.Kind == ConversionKind.ExplicitNullable)
             {
-                var conditionalAccess = rewrittenLeft as BoundLoweredConditionalAccess;
-                if (conditionalAccess != null &&
+                if (rewrittenLeft is BoundLoweredConditionalAccess conditionalAccess &&
                     (conditionalAccess.WhenNullOpt == null || NullableNeverHasValue(conditionalAccess.WhenNullOpt)))
                 {
                     var notNullAccess = NullableAlwaysHasValue(conditionalAccess.WhenNotNull);

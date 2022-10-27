@@ -70,8 +70,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                var map = _mapOrType as TypeMap;
-                return map != null ? map.SubstituteCustomModifiers(this._underlyingParameter.RefCustomModifiers) : this._underlyingParameter.RefCustomModifiers;
+                return _mapOrType is TypeMap map ? map.SubstituteCustomModifiers(this._underlyingParameter.RefCustomModifiers) : this._underlyingParameter.RefCustomModifiers;
             }
         }
 
@@ -87,8 +86,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // define it on the base type because most can simply use
             // ReferenceEquals.
 
-            var other = obj as SubstitutedParameterSymbol;
-            return (object)other != null &&
+            return obj is SubstitutedParameterSymbol other &&
                 this.Ordinal == other.Ordinal &&
                 this.ContainingSymbol.Equals(other.ContainingSymbol, compareKind);
         }

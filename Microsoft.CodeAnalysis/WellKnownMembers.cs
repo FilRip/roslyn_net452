@@ -3961,24 +3961,11 @@ namespace Microsoft.CodeAnalysis
         /// <param name="attributeMember">The attribute member.</param>
         public static bool IsSynthesizedAttributeOptional(WellKnownMember attributeMember)
         {
-            switch (attributeMember)
+            return attributeMember switch
             {
-                case WellKnownMember.System_Runtime_CompilerServices_CompilerGeneratedAttribute__ctor:
-                case WellKnownMember.System_Diagnostics_DebuggableAttribute__ctorDebuggingModes:
-                case WellKnownMember.System_Diagnostics_DebuggerBrowsableAttribute__ctor:
-                case WellKnownMember.System_Diagnostics_DebuggerHiddenAttribute__ctor:
-                case WellKnownMember.System_Diagnostics_DebuggerDisplayAttribute__ctor:
-                case WellKnownMember.System_Diagnostics_DebuggerStepThroughAttribute__ctor:
-                case WellKnownMember.System_Diagnostics_DebuggerNonUserCodeAttribute__ctor:
-                case WellKnownMember.System_STAThreadAttribute__ctor:
-                case WellKnownMember.System_Runtime_CompilerServices_AsyncStateMachineAttribute__ctor:
-                case WellKnownMember.System_Runtime_CompilerServices_IteratorStateMachineAttribute__ctor:
-                case WellKnownMember.System_Runtime_CompilerServices_AsyncIteratorStateMachineAttribute__ctor:
-                    return true;
-
-                default:
-                    return false;
-            }
+                WellKnownMember.System_Runtime_CompilerServices_CompilerGeneratedAttribute__ctor or WellKnownMember.System_Diagnostics_DebuggableAttribute__ctorDebuggingModes or WellKnownMember.System_Diagnostics_DebuggerBrowsableAttribute__ctor or WellKnownMember.System_Diagnostics_DebuggerHiddenAttribute__ctor or WellKnownMember.System_Diagnostics_DebuggerDisplayAttribute__ctor or WellKnownMember.System_Diagnostics_DebuggerStepThroughAttribute__ctor or WellKnownMember.System_Diagnostics_DebuggerNonUserCodeAttribute__ctor or WellKnownMember.System_STAThreadAttribute__ctor or WellKnownMember.System_Runtime_CompilerServices_AsyncStateMachineAttribute__ctor or WellKnownMember.System_Runtime_CompilerServices_IteratorStateMachineAttribute__ctor or WellKnownMember.System_Runtime_CompilerServices_AsyncIteratorStateMachineAttribute__ctor => true,
+                _ => false,
+            };
         }
     }
 }

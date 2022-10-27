@@ -990,21 +990,17 @@ namespace Microsoft.Cci
                 return true;
             }
 
-            var method = member as IMethodDefinition;
-            if (method != null && method.IsVirtual)
+            if (member is IMethodDefinition method && method.IsVirtual)
             {
                 return true;
             }
 
-            switch (member.Visibility)
+            return member.Visibility switch
             {
-                case TypeMemberVisibility.Private:
-                    return context.IncludePrivateMembers;
-                case TypeMemberVisibility.Assembly:
-                case TypeMemberVisibility.FamilyAndAssembly:
-                    return context.IncludePrivateMembers || context.Module.SourceAssemblyOpt?.InternalsAreVisible == true;
-            }
-            return true;
+                TypeMemberVisibility.Private => context.IncludePrivateMembers,
+                TypeMemberVisibility.Assembly or TypeMemberVisibility.FamilyAndAssembly => context.IncludePrivateMembers || context.Module.SourceAssemblyOpt?.InternalsAreVisible == true,
+                _ => true,
+            };
         }
     }
 }

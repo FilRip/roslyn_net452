@@ -24,8 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static bool IsAliasQualifier(SyntaxNode node)
         {
-            var p = node.Parent as AliasQualifiedNameSyntax;
-            return p != null && p.Alias == node;
+            return node.Parent is AliasQualifiedNameSyntax p && p.Alias == node;
         }
 
         public static bool IsAttributeName(SyntaxNode node)
@@ -40,15 +39,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 case QualifiedName:
                     var qn = (QualifiedNameSyntax)parent;
-                    return qn.Right == node ? IsAttributeName(parent) : false;
+                    return qn.Right == node && IsAttributeName(parent);
 
                 case AliasQualifiedName:
                     var an = (AliasQualifiedNameSyntax)parent;
-                    return an.Name == node ? IsAttributeName(parent) : false;
+                    return an.Name == node && IsAttributeName(parent);
             }
 
-            var p = node.Parent as AttributeSyntax;
-            return p != null && p.Name == node;
+            return node.Parent is AttributeSyntax p && p.Name == node;
         }
 
         /// <summary>
@@ -57,8 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static bool IsInvoked(ExpressionSyntax node)
         {
             node = SyntaxFactory.GetStandaloneExpression(node);
-            var inv = node.Parent as InvocationExpressionSyntax;
-            return inv != null && inv.Expression == node;
+            return node.Parent is InvocationExpressionSyntax inv && inv.Expression == node;
         }
 
         /// <summary>
@@ -67,14 +64,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static bool IsIndexed(ExpressionSyntax node)
         {
             node = SyntaxFactory.GetStandaloneExpression(node);
-            var indexer = node.Parent as ElementAccessExpressionSyntax;
-            return indexer != null && indexer.Expression == node;
+            return node.Parent is ElementAccessExpressionSyntax indexer && indexer.Expression == node;
         }
 
         public static bool IsNamespaceAliasQualifier(ExpressionSyntax node)
         {
-            var parent = node.Parent as AliasQualifiedNameSyntax;
-            return parent != null && parent.Alias == node;
+            return node.Parent is AliasQualifiedNameSyntax parent && parent.Alias == node;
         }
 
         /// <summary>
@@ -239,21 +234,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var parent = node.Parent;
                 if (parent != null)
                 {
-                    switch (parent.Kind())
+                    return parent.Kind() switch
                     {
-                        case UsingDirective:
-                            return ((UsingDirectiveSyntax)parent).Name == node;
-
-                        case QualifiedName:
-                            // left of QN is namespace or type.  Note: when you have "a.b.c()", then
-                            // "a.b" is not a qualified name, it is a member access expression.
-                            // Qualified names are only parsed when the parser knows it's a type only
-                            // context.
-                            return ((QualifiedNameSyntax)parent).Left == node;
-
-                        default:
-                            return IsInTypeOnlyContext(node);
-                    }
+                        UsingDirective => ((UsingDirectiveSyntax)parent).Name == node,
+                        QualifiedName => ((QualifiedNameSyntax)parent).Left == node,// left of QN is namespace or type.  Note: when you have "a.b.c()", then
+                                                                                    // "a.b" is not a qualified name, it is a member access expression.
+                                                                                    // Qualified names are only parsed when the parser knows it's a type only
+                                                                                    // context.
+                        _ => IsInTypeOnlyContext(node),
+                    };
                 }
             }
 
@@ -313,22 +302,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            switch (parent4.Kind())
+            return parent4.Kind() switch
             {
-                case InvocationExpression:
-                case TupleExpression:
-                case ObjectCreationExpression:
-                case ImplicitObjectCreationExpression:
-                case ObjectInitializerExpression:
-                case ElementAccessExpression:
-                case Attribute:
-                case BaseConstructorInitializer:
-                case ThisConstructorInitializer:
-                case PrimaryConstructorBaseType:
-                    return true;
-                default:
-                    return false;
-            }
+                InvocationExpression or TupleExpression or ObjectCreationExpression or ImplicitObjectCreationExpression or ObjectInitializerExpression or ElementAccessExpression or Attribute or BaseConstructorInitializer or ThisConstructorInitializer or PrimaryConstructorBaseType => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -351,25 +329,17 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static string GetText(Accessibility accessibility)
         {
-            switch (accessibility)
+            return accessibility switch
             {
-                case Accessibility.NotApplicable:
-                    return string.Empty;
-                case Accessibility.Private:
-                    return SyntaxFacts.GetText(PrivateKeyword);
-                case Accessibility.ProtectedAndInternal:
-                    return SyntaxFacts.GetText(PrivateKeyword) + " " + SyntaxFacts.GetText(ProtectedKeyword);
-                case Accessibility.Internal:
-                    return SyntaxFacts.GetText(InternalKeyword);
-                case Accessibility.Protected:
-                    return SyntaxFacts.GetText(ProtectedKeyword);
-                case Accessibility.ProtectedOrInternal:
-                    return SyntaxFacts.GetText(ProtectedKeyword) + " " + SyntaxFacts.GetText(InternalKeyword);
-                case Accessibility.Public:
-                    return SyntaxFacts.GetText(PublicKeyword);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(accessibility);
-            }
+                Accessibility.NotApplicable => string.Empty,
+                Accessibility.Private => SyntaxFacts.GetText(PrivateKeyword),
+                Accessibility.ProtectedAndInternal => SyntaxFacts.GetText(PrivateKeyword) + " " + SyntaxFacts.GetText(ProtectedKeyword),
+                Accessibility.Internal => SyntaxFacts.GetText(InternalKeyword),
+                Accessibility.Protected => SyntaxFacts.GetText(ProtectedKeyword),
+                Accessibility.ProtectedOrInternal => SyntaxFacts.GetText(ProtectedKeyword) + " " + SyntaxFacts.GetText(InternalKeyword),
+                Accessibility.Public => SyntaxFacts.GetText(PublicKeyword),
+                _ => throw ExceptionUtilities.UnexpectedValue(accessibility),
+            };
         }
 
         internal static bool IsStatementExpression(SyntaxNode syntax)
@@ -539,16 +509,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static bool IsNestedFunction(SyntaxNode child)
         {
-            switch (child.Kind())
+            return child.Kind() switch
             {
-                case SyntaxKind.LocalFunctionStatement:
-                case SyntaxKind.AnonymousMethodExpression:
-                case SyntaxKind.SimpleLambdaExpression:
-                case SyntaxKind.ParenthesizedLambdaExpression:
-                    return true;
-                default:
-                    return false;
-            }
+                SyntaxKind.LocalFunctionStatement or SyntaxKind.AnonymousMethodExpression or SyntaxKind.SimpleLambdaExpression or SyntaxKind.ParenthesizedLambdaExpression => true,
+                _ => false,
+            };
         }
 
         internal static bool HasYieldOperations(SyntaxNode? node)

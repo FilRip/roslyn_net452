@@ -9,7 +9,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     Friend NotInheritable Class ErrorMethodSymbol
         Inherits MethodSymbol
 
-        Public Shared ReadOnly UnknownMethod As ErrorMethodSymbol = New ErrorMethodSymbol(ErrorTypeSymbol.UnknownResultType, ErrorTypeSymbol.UnknownResultType, String.Empty)
+        Public Shared ReadOnly UnknownMethod As New ErrorMethodSymbol(ErrorTypeSymbol.UnknownResultType, ErrorTypeSymbol.UnknownResultType, String.Empty)
 
         Private ReadOnly _containingType As TypeSymbol
         Private ReadOnly _returnType As TypeSymbol

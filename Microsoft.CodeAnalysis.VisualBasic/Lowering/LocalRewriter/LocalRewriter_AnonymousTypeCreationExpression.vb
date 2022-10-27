@@ -27,9 +27,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 newArguments(index) = node.Arguments(index)
 
                 ' if there a local symbol is being used, create assignment
-                Dim local As LocalSymbol = If(node.BinderOpt IsNot Nothing,
-                                              node.BinderOpt.GetAnonymousTypePropertyLocal(index),
-                                              Nothing)
+                Dim local As LocalSymbol = node.BinderOpt?.GetAnonymousTypePropertyLocal(index)
                 If local IsNot Nothing Then
 
                     If locals Is Nothing Then

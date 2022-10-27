@@ -594,7 +594,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         <Extension>
         Public Function AssociatedField(eventSymbol As IEventSymbol) As IFieldSymbol
             Dim vbevent = TryCast(eventSymbol, EventSymbol)
-            Return If(vbevent IsNot Nothing, vbevent.AssociatedField, Nothing)
+            Return vbevent?.AssociatedField
         End Function
 
         <Extension>

@@ -271,7 +271,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (lazyCustomAttributesBag != null && lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed)
                 {
                     var data = (CommonEventEarlyWellKnownAttributeData)lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData;
-                    return data != null ? data.ObsoleteAttributeData : null;
+                    return data?.ObsoleteAttributeData;
                 }
 
                 return ObsoleteAttributeData.Uninitialized;
@@ -656,7 +656,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // If you override an event, then you're a WinRT event if and only if it's a WinRT event.
             EventSymbol? overriddenEvent = this.OverriddenEvent;
-            if ((object?)overriddenEvent != null)
+            if (overriddenEvent is object)
             {
                 return overriddenEvent.IsWindowsRuntimeEvent;
             }

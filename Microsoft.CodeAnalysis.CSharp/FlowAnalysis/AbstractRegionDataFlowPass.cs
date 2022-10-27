@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected override ImmutableArray<PendingBranch> Scan(ref bool badRegion)
         {
             MakeSlots(MethodParameters);
-            if ((object)MethodThisParameter != null) GetOrCreateSlot(MethodThisParameter);
+            if (MethodThisParameter is object) GetOrCreateSlot(MethodThisParameter);
             var result = base.Scan(ref badRegion);
             return result;
         }

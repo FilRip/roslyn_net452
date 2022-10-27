@@ -203,7 +203,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (!parsingFunctionPointer)
             {
                 var methodOwner = owner as MethodSymbol;
-                var typeParameters = (object)methodOwner != null ?
+                var typeParameters = methodOwner is object ?
                     methodOwner.TypeParameters :
                     default;
 
@@ -554,7 +554,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else if (conversion.IsReference &&
                 (parameterType.SpecialType == SpecialType.System_Object || parameterType.Kind == SymbolKind.DynamicType) &&
-                (object)defaultExpression.Type != null &&
+                defaultExpression.Type is object &&
                 defaultExpression.Type.SpecialType == SpecialType.System_String ||
                 conversion.IsBoxing)
             {
@@ -639,16 +639,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             while (true)
             {
-                switch (expression.Kind)
+                return expression.Kind switch
                 {
-                    case BoundKind.DefaultLiteral:
-                    case BoundKind.DefaultExpression:
-                        return true;
-                    case BoundKind.ObjectCreationExpression:
-                        return IsValidDefaultValue((BoundObjectCreationExpression)expression);
-                    default:
-                        return false;
-                }
+                    BoundKind.DefaultLiteral or BoundKind.DefaultExpression => true,
+                    BoundKind.ObjectCreationExpression => IsValidDefaultValue((BoundObjectCreationExpression)expression),
+                    _ => false,
+                };
             }
         }
 
@@ -659,7 +655,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static MethodSymbol FindContainingGenericMethod(Symbol symbol)
         {
-            for (Symbol current = symbol; (object)current != null; current = current.ContainingSymbol)
+            for (Symbol current = symbol; current is object; current = current.ContainingSymbol)
             {
                 if (current.Kind == SymbolKind.Method)
                 {

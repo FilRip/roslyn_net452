@@ -302,7 +302,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Function
 
         Friend Function CreateCycleInTypeForwarderErrorTypeSymbol(ByRef emittedName As MetadataTypeName) As ErrorTypeSymbol
-            Dim diagInfo As DiagnosticInfo = New DiagnosticInfo(MessageProvider.Instance, ERRID.ERR_TypeFwdCycle2, emittedName.FullName, Me)
+            Dim diagInfo As New DiagnosticInfo(MessageProvider.Instance, ERRID.ERR_TypeFwdCycle2, emittedName.FullName, Me)
             Return New MissingMetadataTypeSymbol.TopLevelWithCustomErrorInfo(Me.Modules(0), emittedName, diagInfo)
         End Function
 

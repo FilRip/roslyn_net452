@@ -359,14 +359,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // The metadata parameter name should be the name used in the partial definition.
 
-                var sourceMethod = this.ContainingSymbol as SourceOrdinaryMethodSymbol;
-                if ((object)sourceMethod == null)
+                if (this.ContainingSymbol is not SourceOrdinaryMethodSymbol sourceMethod)
                 {
                     return base.MetadataName;
                 }
 
                 var definition = sourceMethod.SourcePartialDefinition;
-                if ((object)definition == null)
+                if (definition is null)
                 {
                     return base.MetadataName;
                 }
@@ -405,14 +404,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                var sourceMethod = this.ContainingSymbol as SourceOrdinaryMethodSymbol;
-                if ((object)sourceMethod == null)
+                if (this.ContainingSymbol is not SourceOrdinaryMethodSymbol sourceMethod)
                 {
                     return null;
                 }
 
                 var impl = sourceMethod.SourcePartialImplementation;
-                if ((object)impl == null)
+                if (impl is null)
                 {
                     return null;
                 }
@@ -443,8 +441,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             SyntaxList<AttributeListSyntax> attributes = AttributeDeclarationList;
 
-            var sourceMethod = this.ContainingSymbol as SourceOrdinaryMethodSymbol;
-            if ((object)sourceMethod == null)
+            if (this.ContainingSymbol is not SourceOrdinaryMethodSymbol sourceMethod)
             {
                 return OneOrMany.Create(attributes);
             }
@@ -453,7 +450,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // if this is a definition get the implementation and vice versa
             SourceOrdinaryMethodSymbol otherPart = sourceMethod.OtherPartOfPartial;
-            if ((object)otherPart != null)
+            if (otherPart is object)
             {
                 otherAttributes = ((SourceParameterSymbol)otherPart.Parameters[this.Ordinal]).AttributeDeclarationList;
             }
@@ -523,7 +520,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // prevent infinite recursion:
 
                 bool bagCreatedOnThisThread;
-                if ((object)copyFrom != null)
+                if (copyFrom is object)
                 {
                     var attributesBag = copyFrom.GetAttributesBag();
                     bagCreatedOnThisThread = Interlocked.CompareExchange(ref _lazyCustomAttributesBag, attributesBag, null) == null;
@@ -882,18 +879,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <returns></returns>
         private bool IsOnPartialImplementation(AttributeSyntax node)
         {
-            var method = ContainingSymbol as MethodSymbol;
-            if ((object)method == null) return false;
+            if (ContainingSymbol is not MethodSymbol method) return false;
             var impl = method.IsPartialImplementation() ? method : method.PartialImplementationPart;
-            if ((object)impl == null) return false;
-            var paramList =
-                node     // AttributeSyntax
+            if (impl is null) return false;
+            // ParameterListSyntax
+            if (node     // AttributeSyntax
                 .Parent  // AttributeListSyntax
                 .Parent  // ParameterSyntax
-                .Parent as ParameterListSyntax; // ParameterListSyntax
-            if (paramList == null) return false;
-            var methDecl = paramList.Parent as MethodDeclarationSyntax;
-            if (methDecl == null) return false;
+                .Parent is not ParameterListSyntax paramList) return false;
+            if (paramList.Parent is not MethodDeclarationSyntax methDecl) return false;
             foreach (var r in impl.DeclaringSyntaxReferences)
             {
                 if (r.GetSyntax() == methDecl) return true;
@@ -1084,7 +1078,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     // prevent infinite recursion:
 
-                    if ((object)copyFrom != null)
+                    if (copyFrom is object)
                     {
                         // Parameter of partial implementation.
                         // We bind the attributes only on the definition part and copy them over to the implementation.

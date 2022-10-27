@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             internal void InstructionAdded()
             {
-                _instructionsEmitted += 1;
+                _instructionsEmitted++;
             }
 
             /// <summary>

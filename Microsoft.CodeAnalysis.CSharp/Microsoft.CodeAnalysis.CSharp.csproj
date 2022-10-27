@@ -848,8 +848,8 @@
     <Compile Include="Symbols\SymbolExtensions.cs" />
     <Compile Include="Symbols\SymbolKindExtensions.cs" />
     <Compile Include="Symbols\SymbolVisitor.cs" />
-    <Compile Include="Symbols\SymbolVisitor`1.cs" />
-    <Compile Include="Symbols\SymbolVisitor`2.cs" />
+    <Compile Include="Symbols\SymbolVisitor_T1.cs" />
+    <Compile Include="Symbols\SymbolVisitor_T2.cs" />
     <Compile Include="Symbols\Symbol_Attributes.cs" />
     <Compile Include="Symbols\SynthesizedNamespaceSymbol.cs" />
     <Compile Include="Symbols\Synthesized\GeneratedLabelSymbol.cs" />

@@ -333,7 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 foreach (var symbol in result[name])
                 {
                     var nts = symbol as NamedTypeSymbol;
-                    var arity = ((object)nts != null) ? nts.Arity : 0;
+                    var arity = (nts is object) ? nts.Arity : 0;
                     if (arity >= memberOfArity.Length)
                     {
                         Array.Resize(ref memberOfArity, arity + 1);
@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     var other = memberOfArity[arity];
 
-                    if ((object)other == null && (object)mergedAssemblyNamespace != null)
+                    if (other is null && mergedAssemblyNamespace is object)
                     {
                         // Check for collision with declarations from added modules.
                         foreach (NamespaceSymbol constituent in mergedAssemblyNamespace.ConstituentNamespaces)
@@ -365,7 +365,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         }
                     }
 
-                    if ((object)other != null)
+                    if (other is object)
                     {
                         if ((nts as SourceNamedTypeSymbol)?.IsPartial == true && (other as SourceNamedTypeSymbol)?.IsPartial == true)
                         {
@@ -379,7 +379,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     memberOfArity[arity] = symbol;
 
-                    if ((object)nts != null)
+                    if (nts is object)
                     {
                         //types declared at the namespace level may only have declared accessibility of public or internal (Section 3.5.1)
                         Accessibility declaredAccessibility = nts.DeclaredAccessibility;
@@ -394,31 +394,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private NamespaceOrTypeSymbol BuildSymbol(MergedNamespaceOrTypeDeclaration declaration, BindingDiagnosticBag diagnostics)
         {
-            switch (declaration.Kind)
+            return declaration.Kind switch
             {
-                case DeclarationKind.Namespace:
-                    return new SourceNamespaceSymbol(_module, this, (MergedNamespaceDeclaration)declaration, diagnostics);
-
-                case DeclarationKind.Struct:
-                case DeclarationKind.Interface:
-                case DeclarationKind.Enum:
-                case DeclarationKind.Delegate:
-                case DeclarationKind.Class:
-                case DeclarationKind.Record:
-                case DeclarationKind.RecordStruct:
-                    return new SourceNamedTypeSymbol(this, (MergedTypeDeclaration)declaration, diagnostics);
-
-                case DeclarationKind.Script:
-                case DeclarationKind.Submission:
-                case DeclarationKind.ImplicitClass:
-                    return new ImplicitNamedTypeSymbol(this, (MergedTypeDeclaration)declaration, diagnostics);
-
-                case DeclarationKind.SimpleProgram:
-                    return new SimpleProgramNamedTypeSymbol(this, (MergedTypeDeclaration)declaration, diagnostics);
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(declaration.Kind);
-            }
+                DeclarationKind.Namespace => new SourceNamespaceSymbol(_module, this, (MergedNamespaceDeclaration)declaration, diagnostics),
+                DeclarationKind.Struct or DeclarationKind.Interface or DeclarationKind.Enum or DeclarationKind.Delegate or DeclarationKind.Class or DeclarationKind.Record or DeclarationKind.RecordStruct => new SourceNamedTypeSymbol(this, (MergedTypeDeclaration)declaration, diagnostics),
+                DeclarationKind.Script or DeclarationKind.Submission or DeclarationKind.ImplicitClass => new ImplicitNamedTypeSymbol(this, (MergedTypeDeclaration)declaration, diagnostics),
+                DeclarationKind.SimpleProgram => new SimpleProgramNamedTypeSymbol(this, (MergedTypeDeclaration)declaration, diagnostics),
+                _ => throw ExceptionUtilities.UnexpectedValue(declaration.Kind),
+            };
         }
 
         /// <summary>
@@ -435,9 +418,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     foreach (var member in array)
                     {
-                        var type = member as NamedTypeSymbol;
-
-                        if ((object)type != null && type.SpecialType != SpecialType.None)
+                        if (member is NamedTypeSymbol type && type.SpecialType != SpecialType.None)
                         {
                             containingAssembly.RegisterDeclaredSpecialType(type);
 
@@ -498,8 +479,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 string name = symbol.Name;
                 if (_dictionary.TryGetValue(name, out object item))
                 {
-                    var builder = item as ArrayBuilder<NamespaceOrTypeSymbol>;
-                    if (builder == null)
+                    if (item is not ArrayBuilder<NamespaceOrTypeSymbol> builder)
                     {
                         builder = ArrayBuilder<NamespaceOrTypeSymbol>.GetInstance();
                         builder.Add((NamespaceOrTypeSymbol)item);
@@ -522,8 +502,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     object value = kvp.Value;
                     ImmutableArray<NamespaceOrTypeSymbol> members;
 
-                    var builder = value as ArrayBuilder<NamespaceOrTypeSymbol>;
-                    if (builder != null)
+                    if (value is ArrayBuilder<NamespaceOrTypeSymbol> builder)
                     {
                         bool hasNamespaces = false;
                         for (int i = 0; (i < builder.Count) && !hasNamespaces; i++)

@@ -14,17 +14,17 @@ namespace Microsoft.CodeAnalysis
     {
         private const int PipeBufferSize = 65536;
         private const int s_currentUserOnlyValue = 536870912;
-        private static readonly PipeOptions CurrentUserOption = PlatformInformation.IsRunningOnMono ? (PipeOptions)536870912 : PipeOptions.None;
+        private static readonly PipeOptions CurrentUserOption = PlatformInformation.IsRunningOnMono ? (PipeOptions)s_currentUserOnlyValue : PipeOptions.None;
 
         private static string GetPipeNameOrPath(string pipeName) => PlatformInformation.IsUnix ? Path.Combine("/tmp", pipeName) : pipeName;
 
         internal static NamedPipeClientStream CreateClient(
-          string serverName,
-          string pipeName,
-          PipeDirection direction,
-          PipeOptions options)
+            string serverName,
+            string pipeName,
+            PipeDirection direction,
+            PipeOptions options)
         {
-            return new NamedPipeClientStream(serverName, NamedPipeUtil.GetPipeNameOrPath(pipeName), direction, options | NamedPipeUtil.CurrentUserOption);
+            return new NamedPipeClientStream(serverName, GetPipeNameOrPath(pipeName), direction, options | CurrentUserOption);
         }
 
         internal static bool CheckClientElevationMatches(NamedPipeServerStream pipeStream)
@@ -44,23 +44,23 @@ namespace Microsoft.CodeAnalysis
         }
 
         internal static NamedPipeServerStream CreateServer(
-          string pipeName,
-          PipeDirection? pipeDirection = null)
+            string pipeName,
+            PipeDirection? pipeDirection = null)
         {
             PipeOptions options = PipeOptions.WriteThrough | PipeOptions.Asynchronous;
-            return NamedPipeUtil.CreateServer(pipeName, pipeDirection ?? PipeDirection.InOut, -1, PipeTransmissionMode.Byte, options, 65536, 65536);
+            return CreateServer(pipeName, pipeDirection ?? PipeDirection.InOut, -1, PipeTransmissionMode.Byte, options, PipeBufferSize, PipeBufferSize);
         }
 
         private static NamedPipeServerStream CreateServer(
-          string pipeName,
-          PipeDirection direction,
-          int maxNumberOfServerInstances,
-          PipeTransmissionMode transmissionMode,
-          PipeOptions options,
-          int inBufferSize,
-          int outBufferSize)
+            string pipeName,
+            PipeDirection direction,
+            int maxNumberOfServerInstances,
+            PipeTransmissionMode transmissionMode,
+            PipeOptions options,
+            int inBufferSize,
+            int outBufferSize)
         {
-            return new NamedPipeServerStream(NamedPipeUtil.GetPipeNameOrPath(pipeName), direction, maxNumberOfServerInstances, transmissionMode, options | NamedPipeUtil.CurrentUserOption, inBufferSize, outBufferSize, NamedPipeUtil.CreatePipeSecurity(), HandleInheritability.None);
+            return new NamedPipeServerStream(GetPipeNameOrPath(pipeName), direction, maxNumberOfServerInstances, transmissionMode, options | CurrentUserOption, inBufferSize, outBufferSize, NamedPipeUtil.CreatePipeSecurity(), HandleInheritability.None);
         }
 
         internal static bool CheckPipeConnectionOwnership(NamedPipeClientStream pipeStream) => !PlatformInformation.IsWindows || WindowsIdentity.GetCurrent().Owner.Equals(pipeStream.GetAccessControl().GetOwner(typeof(SecurityIdentifier)));

@@ -415,7 +415,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var diagnosticsForFirstDeclarator = BindingDiagnosticBag.GetInstance();
 
             Symbol associatedPropertyOrEvent = this.AssociatedSymbol;
-            if ((object)associatedPropertyOrEvent != null && associatedPropertyOrEvent.Kind == SymbolKind.Event)
+            if (associatedPropertyOrEvent is object && associatedPropertyOrEvent.Kind == SymbolKind.Event)
             {
                 EventSymbol @event = (EventSymbol)associatedPropertyOrEvent;
                 if (@event.IsWindowsRuntimeEvent)
@@ -477,7 +477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             if (initializerOpt != null)
                             {
-                                if ((object)initializerOpt.Type != null && !initializerOpt.Type.IsErrorType())
+                                if (initializerOpt.Type is object && !initializerOpt.Type.IsErrorType())
                                 {
                                     type = TypeWithAnnotations.Create(initializerOpt.Type);
                                 }

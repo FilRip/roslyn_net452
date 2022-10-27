@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                                         //  event backing fields do not show up in GetMembers
                                         {
                                             FieldSymbol field = ((EventSymbol)member).AssociatedField;
-                                            if ((object)field != null)
+                                            if (field is object)
                                             {
                                                 AddSymbolLocation(result, field);
                                             }
@@ -458,8 +458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
             foreach (var member in symbol.GetMembers())
             {
-                var namespaceOrType = member as NamespaceOrTypeSymbol;
-                if ((object)namespaceOrType != null)
+                if (member is NamespaceOrTypeSymbol namespaceOrType)
                 {
                     GetExportedTypes(namespaceOrType, index, builder);
                 }
@@ -693,8 +692,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public sealed override bool IsPlatformType(Cci.ITypeReference typeRef, Cci.PlatformType platformType)
         {
-            var namedType = typeRef.GetInternalSymbol() as NamedTypeSymbol;
-            if ((object)namedType != null)
+            if (typeRef.GetInternalSymbol() is NamedTypeSymbol namedType)
             {
                 if (platformType == Cci.PlatformType.SystemType)
                 {
@@ -756,7 +754,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 return this;
             }
 
-            if ((object)module == null)
+            if (module is null)
             {
                 return null;
             }
@@ -777,7 +775,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         {
             AssemblySymbol container = module.ContainingAssembly;
 
-            if ((object)container != null && ReferenceEquals(container.Modules[0], module))
+            if (container is object && ReferenceEquals(container.Modules[0], module))
             {
                 Cci.IModuleReference moduleRef = new AssemblyReference(container);
                 Cci.IModuleReference cachedModuleRef = AssemblyOrModuleSymbolToModuleRefMap.GetOrAdd(container, moduleRef);
@@ -866,7 +864,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                         return (Cci.INamedTypeReference)reference;
                     }
 
-                    if ((object)container != null)
+                    if (container is object)
                     {
                         if (IsGenericType(container))
                         {
@@ -923,7 +921,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             // but if it does happen we should make it a failure.
             // NOTE: declaredBase could be null for interfaces
             var declaredBase = namedTypeSymbol.BaseTypeNoUseSiteDiagnostics;
-            if ((object)declaredBase != null && declaredBase.SpecialType == SpecialType.System_ValueType)
+            if (declaredBase is object && declaredBase.SpecialType == SpecialType.System_ValueType)
             {
                 return;
             }
@@ -935,7 +933,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             }
 
             var location = syntaxNodeOpt == null ? NoLocation.Singleton : syntaxNodeOpt.Location;
-            if ((object)declaredBase != null)
+            if (declaredBase is object)
             {
                 var diagnosticInfo = declaredBase.GetUseSiteInfo().DiagnosticInfo;
                 if (diagnosticInfo != null && diagnosticInfo.Severity == DiagnosticSeverity.Error)
@@ -953,7 +951,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public static bool IsGenericType(NamedTypeSymbol toCheck)
         {
-            while ((object)toCheck != null)
+            while (toCheck is object)
             {
                 if (toCheck.Arity > 0)
                 {
@@ -980,29 +978,16 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             DiagnosticBag diagnostics)
         {
 
-            switch (typeSymbol.Kind)
+            return typeSymbol.Kind switch
             {
-                case SymbolKind.DynamicType:
-                    return Translate((DynamicTypeSymbol)typeSymbol, syntaxNodeOpt, diagnostics);
-
-                case SymbolKind.ArrayType:
-                    return Translate((ArrayTypeSymbol)typeSymbol);
-
-                case SymbolKind.ErrorType:
-                case SymbolKind.NamedType:
-                    return Translate((NamedTypeSymbol)typeSymbol, syntaxNodeOpt, diagnostics);
-
-                case SymbolKind.PointerType:
-                    return Translate((PointerTypeSymbol)typeSymbol);
-
-                case SymbolKind.TypeParameter:
-                    return Translate((TypeParameterSymbol)typeSymbol);
-
-                case SymbolKind.FunctionPointerType:
-                    return Translate((FunctionPointerTypeSymbol)typeSymbol);
-            }
-
-            throw ExceptionUtilities.UnexpectedValue(typeSymbol.Kind);
+                SymbolKind.DynamicType => Translate((DynamicTypeSymbol)typeSymbol, syntaxNodeOpt, diagnostics),
+                SymbolKind.ArrayType => Translate((ArrayTypeSymbol)typeSymbol),
+                SymbolKind.ErrorType or SymbolKind.NamedType => Translate((NamedTypeSymbol)typeSymbol, syntaxNodeOpt, diagnostics),
+                SymbolKind.PointerType => Translate((PointerTypeSymbol)typeSymbol),
+                SymbolKind.TypeParameter => Translate((TypeParameterSymbol)typeSymbol),
+                SymbolKind.FunctionPointerType => Translate((FunctionPointerTypeSymbol)typeSymbol),
+                _ => throw ExceptionUtilities.UnexpectedValue(typeSymbol.Kind),
+            };
         }
 
         internal Cci.IFieldReference Translate(

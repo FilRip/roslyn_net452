@@ -83,16 +83,11 @@ namespace Microsoft.CodeAnalysis.RuntimeMembers
             get
             {
                 MemberFlags memberKind = Flags & MemberFlags.KindMask;
-                switch (memberKind)
+                return memberKind switch
                 {
-                    case MemberFlags.Constructor:
-                    case MemberFlags.Method:
-                    case MemberFlags.PropertyGet:
-                    case MemberFlags.Property:
-                        return Signature[0];
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(memberKind);
-                }
+                    MemberFlags.Constructor or MemberFlags.Method or MemberFlags.PropertyGet or MemberFlags.Property => Signature[0],
+                    _ => throw ExceptionUtilities.UnexpectedValue(memberKind),
+                };
             }
         }
 

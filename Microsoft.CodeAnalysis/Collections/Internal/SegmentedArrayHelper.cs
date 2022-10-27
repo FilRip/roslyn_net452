@@ -4,7 +4,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Microsoft.CodeAnalysis.Collections.Internal
@@ -20,7 +19,6 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
         /// A combination of <see cref="MethodImplOptions.AggressiveInlining"/> and
         /// <see cref="F:System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization"/>.
         /// </summary>
-        [SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "The field is not supported in all compilation targets.")]
         internal const MethodImplOptions FastPathMethodImplOptions = MethodImplOptions.AggressiveInlining | (MethodImplOptions)512;
 
         [MethodImpl(FastPathMethodImplOptions)]

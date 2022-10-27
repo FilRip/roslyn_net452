@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     if (_nameToAttributeMap.TryGetValue(target, out var foundAttributes))
                     {
                         // copy the QuickAttributes from alias target to alias name
-                        (newChecker ?? (newChecker = new QuickAttributeChecker(this))).AddName(name, foundAttributes);
+                        (newChecker ??= new QuickAttributeChecker(this)).AddName(name, foundAttributes);
                     }
                 }
             }

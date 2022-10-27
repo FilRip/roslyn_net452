@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             string name;
             ImmutableArray<MethodSymbol> explicitInterfaceImplementations;
-            if ((object)explicitlyImplementedEventOpt == null)
+            if (explicitlyImplementedEventOpt is null)
             {
                 name = SourceEventSymbol.GetAccessorName(@event.Name, isAdder);
                 explicitInterfaceImplementations = ImmutableArray<MethodSymbol>.Empty;
@@ -43,10 +43,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else
             {
                 MethodSymbol implementedAccessor = isAdder ? explicitlyImplementedEventOpt.AddMethod : explicitlyImplementedEventOpt.RemoveMethod;
-                string accessorName = (object)implementedAccessor != null ? implementedAccessor.Name : SourceEventSymbol.GetAccessorName(explicitlyImplementedEventOpt.Name, isAdder);
+                string accessorName = implementedAccessor is object ? implementedAccessor.Name : SourceEventSymbol.GetAccessorName(explicitlyImplementedEventOpt.Name, isAdder);
 
                 name = ExplicitInterfaceHelpers.GetMemberName(accessorName, explicitlyImplementedEventOpt.ContainingType, aliasQualifierOpt);
-                explicitInterfaceImplementations = (object)implementedAccessor == null ? ImmutableArray<MethodSymbol>.Empty : ImmutableArray.Create<MethodSymbol>(implementedAccessor);
+                explicitInterfaceImplementations = implementedAccessor is null ? ImmutableArray<MethodSymbol>.Empty : ImmutableArray.Create<MethodSymbol>(implementedAccessor);
             }
 
             _explicitInterfaceImplementations = explicitInterfaceImplementations;
@@ -226,13 +226,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // overridden event (which does not depend on WinRT-ness) and then grab the corresponding
                 // accessor.
                 EventSymbol overriddenEvent = @event.OverriddenEvent;
-                if ((object)overriddenEvent != null)
+                if (overriddenEvent is object)
                 {
                     // If this accessor is overriding an accessor from metadata, it is possible that
                     // the name of the overridden accessor doesn't follow the C# add_X/remove_X pattern.
                     // We should copy the name so that the runtime will recognize this as an override.
                     MethodSymbol overriddenAccessor = overriddenEvent.GetOwnOrInheritedAccessor(isAdder);
-                    return (object)overriddenAccessor == null ? null : overriddenAccessor.Name;
+                    return overriddenAccessor?.Name;
                 }
             }
 

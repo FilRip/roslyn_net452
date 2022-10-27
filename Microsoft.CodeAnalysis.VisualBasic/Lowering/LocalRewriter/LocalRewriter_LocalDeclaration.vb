@@ -310,7 +310,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 statementsInTry = ImmutableArray.Create(Of BoundStatement)(conditionalValueInit)
             End If
 
-            Dim tryBody As BoundBlock = New BoundBlock(syntax,
+            Dim tryBody As New BoundBlock(syntax,
                                                        Nothing,
                                                        ImmutableArray(Of LocalSymbol).Empty,
                                                        statementsInTry)
@@ -321,7 +321,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Dim monitorExit As BoundStatement = GenerateMonitorExit(syntax, flagAsObject, boundLockTakenLocal)
 
-            Dim finallyBody As BoundBlock = New BoundBlock(syntax,
+            Dim finallyBody As New BoundBlock(syntax,
                                                            Nothing,
                                                            ImmutableArray(Of LocalSymbol).Empty,
                                                            ImmutableArray.Create(flagStateAssignOne, monitorExit))

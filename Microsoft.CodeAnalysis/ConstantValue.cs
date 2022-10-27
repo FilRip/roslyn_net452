@@ -364,33 +364,30 @@ namespace Microsoft.CodeAnalysis
         {
             Debug.Assert(BitConverter.IsLittleEndian);
 
-            switch (discriminator)
+            return discriminator switch
             {
-                case ConstantValueTypeDiscriminator.Null: return Null;
-                case ConstantValueTypeDiscriminator.SByte: return Create((sbyte)value);
-                case ConstantValueTypeDiscriminator.Byte: return Create((byte)value);
-                case ConstantValueTypeDiscriminator.Int16: return Create((short)value);
-                case ConstantValueTypeDiscriminator.UInt16: return Create((ushort)value);
-                case ConstantValueTypeDiscriminator.Int32: return Create((int)value);
-                case ConstantValueTypeDiscriminator.UInt32: return Create((uint)value);
-                case ConstantValueTypeDiscriminator.Int64: return Create((long)value);
-                case ConstantValueTypeDiscriminator.UInt64: return Create((ulong)value);
-                case ConstantValueTypeDiscriminator.NInt: return CreateNativeInt((int)value);
-                case ConstantValueTypeDiscriminator.NUInt: return CreateNativeUInt((uint)value);
-                case ConstantValueTypeDiscriminator.Char: return Create((char)value);
-                case ConstantValueTypeDiscriminator.Boolean: return Create((bool)value);
-                case ConstantValueTypeDiscriminator.Single:
-                    // values for singles may actually have double precision
-                    return value is double ?
-                        CreateSingle((double)value) :
-                        Create((float)value);
-                case ConstantValueTypeDiscriminator.Double: return Create((double)value);
-                case ConstantValueTypeDiscriminator.Decimal: return Create((decimal)value);
-                case ConstantValueTypeDiscriminator.DateTime: return Create((DateTime)value);
-                case ConstantValueTypeDiscriminator.String: return Create((string)value);
-                default:
-                    throw new InvalidOperationException();  //Not using ExceptionUtilities.UnexpectedValue() because this failure path is tested.
-            }
+                ConstantValueTypeDiscriminator.Null => Null,
+                ConstantValueTypeDiscriminator.SByte => Create((sbyte)value),
+                ConstantValueTypeDiscriminator.Byte => Create((byte)value),
+                ConstantValueTypeDiscriminator.Int16 => Create((short)value),
+                ConstantValueTypeDiscriminator.UInt16 => Create((ushort)value),
+                ConstantValueTypeDiscriminator.Int32 => Create((int)value),
+                ConstantValueTypeDiscriminator.UInt32 => Create((uint)value),
+                ConstantValueTypeDiscriminator.Int64 => Create((long)value),
+                ConstantValueTypeDiscriminator.UInt64 => Create((ulong)value),
+                ConstantValueTypeDiscriminator.NInt => CreateNativeInt((int)value),
+                ConstantValueTypeDiscriminator.NUInt => CreateNativeUInt((uint)value),
+                ConstantValueTypeDiscriminator.Char => Create((char)value),
+                ConstantValueTypeDiscriminator.Boolean => Create((bool)value),
+                ConstantValueTypeDiscriminator.Single => value is double ?
+CreateSingle((double)value) :
+Create((float)value),// values for singles may actually have double precision
+                ConstantValueTypeDiscriminator.Double => Create((double)value),
+                ConstantValueTypeDiscriminator.Decimal => Create((decimal)value),
+                ConstantValueTypeDiscriminator.DateTime => Create((DateTime)value),
+                ConstantValueTypeDiscriminator.String => Create((string)value),
+                _ => throw new InvalidOperationException(),//Not using ExceptionUtilities.UnexpectedValue() because this failure path is tested.
+            };
         }
 
         public static ConstantValue Default(SpecialType st)
@@ -402,134 +399,117 @@ namespace Microsoft.CodeAnalysis
 
         public static ConstantValue Default(ConstantValueTypeDiscriminator discriminator)
         {
-            switch (discriminator)
+            return discriminator switch
             {
-                case ConstantValueTypeDiscriminator.Bad: return Bad;
-
-                case ConstantValueTypeDiscriminator.SByte: return ConstantValueDefault.SByte;
-                case ConstantValueTypeDiscriminator.Byte: return ConstantValueDefault.Byte;
-                case ConstantValueTypeDiscriminator.Int16: return ConstantValueDefault.Int16;
-                case ConstantValueTypeDiscriminator.UInt16: return ConstantValueDefault.UInt16;
-                case ConstantValueTypeDiscriminator.Int32: return ConstantValueDefault.Int32;
-                case ConstantValueTypeDiscriminator.UInt32: return ConstantValueDefault.UInt32;
-                case ConstantValueTypeDiscriminator.Int64: return ConstantValueDefault.Int64;
-                case ConstantValueTypeDiscriminator.UInt64: return ConstantValueDefault.UInt64;
-                case ConstantValueTypeDiscriminator.NInt: return ConstantValueDefault.NInt;
-                case ConstantValueTypeDiscriminator.NUInt: return ConstantValueDefault.NUInt;
-                case ConstantValueTypeDiscriminator.Char: return ConstantValueDefault.Char;
-                case ConstantValueTypeDiscriminator.Boolean: return ConstantValueDefault.Boolean;
-                case ConstantValueTypeDiscriminator.Single: return ConstantValueDefault.Single;
-                case ConstantValueTypeDiscriminator.Double: return ConstantValueDefault.Double;
-                case ConstantValueTypeDiscriminator.Decimal: return ConstantValueDefault.Decimal;
-                case ConstantValueTypeDiscriminator.DateTime: return ConstantValueDefault.DateTime;
-
-                case ConstantValueTypeDiscriminator.Null:
-                case ConstantValueTypeDiscriminator.String: return Null;
-            }
-
-            throw ExceptionUtilities.UnexpectedValue(discriminator);
+                ConstantValueTypeDiscriminator.Bad => Bad,
+                ConstantValueTypeDiscriminator.SByte => ConstantValueDefault.SByte,
+                ConstantValueTypeDiscriminator.Byte => ConstantValueDefault.Byte,
+                ConstantValueTypeDiscriminator.Int16 => ConstantValueDefault.Int16,
+                ConstantValueTypeDiscriminator.UInt16 => ConstantValueDefault.UInt16,
+                ConstantValueTypeDiscriminator.Int32 => ConstantValueDefault.Int32,
+                ConstantValueTypeDiscriminator.UInt32 => ConstantValueDefault.UInt32,
+                ConstantValueTypeDiscriminator.Int64 => ConstantValueDefault.Int64,
+                ConstantValueTypeDiscriminator.UInt64 => ConstantValueDefault.UInt64,
+                ConstantValueTypeDiscriminator.NInt => ConstantValueDefault.NInt,
+                ConstantValueTypeDiscriminator.NUInt => ConstantValueDefault.NUInt,
+                ConstantValueTypeDiscriminator.Char => ConstantValueDefault.Char,
+                ConstantValueTypeDiscriminator.Boolean => ConstantValueDefault.Boolean,
+                ConstantValueTypeDiscriminator.Single => ConstantValueDefault.Single,
+                ConstantValueTypeDiscriminator.Double => ConstantValueDefault.Double,
+                ConstantValueTypeDiscriminator.Decimal => ConstantValueDefault.Decimal,
+                ConstantValueTypeDiscriminator.DateTime => ConstantValueDefault.DateTime,
+                ConstantValueTypeDiscriminator.Null or ConstantValueTypeDiscriminator.String => Null,
+                _ => throw ExceptionUtilities.UnexpectedValue(discriminator),
+            };
         }
 
         public static ConstantValueTypeDiscriminator GetDiscriminator(SpecialType st)
         {
-            switch (st)
+            return st switch
             {
-                case SpecialType.System_SByte: return ConstantValueTypeDiscriminator.SByte;
-                case SpecialType.System_Byte: return ConstantValueTypeDiscriminator.Byte;
-                case SpecialType.System_Int16: return ConstantValueTypeDiscriminator.Int16;
-                case SpecialType.System_UInt16: return ConstantValueTypeDiscriminator.UInt16;
-                case SpecialType.System_Int32: return ConstantValueTypeDiscriminator.Int32;
-                case SpecialType.System_UInt32: return ConstantValueTypeDiscriminator.UInt32;
-                case SpecialType.System_Int64: return ConstantValueTypeDiscriminator.Int64;
-                case SpecialType.System_UInt64: return ConstantValueTypeDiscriminator.UInt64;
-                case SpecialType.System_IntPtr: return ConstantValueTypeDiscriminator.NInt;
-                case SpecialType.System_UIntPtr: return ConstantValueTypeDiscriminator.NUInt;
-                case SpecialType.System_Char: return ConstantValueTypeDiscriminator.Char;
-                case SpecialType.System_Boolean: return ConstantValueTypeDiscriminator.Boolean;
-                case SpecialType.System_Single: return ConstantValueTypeDiscriminator.Single;
-                case SpecialType.System_Double: return ConstantValueTypeDiscriminator.Double;
-                case SpecialType.System_Decimal: return ConstantValueTypeDiscriminator.Decimal;
-                case SpecialType.System_DateTime: return ConstantValueTypeDiscriminator.DateTime;
-                case SpecialType.System_String: return ConstantValueTypeDiscriminator.String;
-            }
-
-            return ConstantValueTypeDiscriminator.Bad;
+                SpecialType.System_SByte => ConstantValueTypeDiscriminator.SByte,
+                SpecialType.System_Byte => ConstantValueTypeDiscriminator.Byte,
+                SpecialType.System_Int16 => ConstantValueTypeDiscriminator.Int16,
+                SpecialType.System_UInt16 => ConstantValueTypeDiscriminator.UInt16,
+                SpecialType.System_Int32 => ConstantValueTypeDiscriminator.Int32,
+                SpecialType.System_UInt32 => ConstantValueTypeDiscriminator.UInt32,
+                SpecialType.System_Int64 => ConstantValueTypeDiscriminator.Int64,
+                SpecialType.System_UInt64 => ConstantValueTypeDiscriminator.UInt64,
+                SpecialType.System_IntPtr => ConstantValueTypeDiscriminator.NInt,
+                SpecialType.System_UIntPtr => ConstantValueTypeDiscriminator.NUInt,
+                SpecialType.System_Char => ConstantValueTypeDiscriminator.Char,
+                SpecialType.System_Boolean => ConstantValueTypeDiscriminator.Boolean,
+                SpecialType.System_Single => ConstantValueTypeDiscriminator.Single,
+                SpecialType.System_Double => ConstantValueTypeDiscriminator.Double,
+                SpecialType.System_Decimal => ConstantValueTypeDiscriminator.Decimal,
+                SpecialType.System_DateTime => ConstantValueTypeDiscriminator.DateTime,
+                SpecialType.System_String => ConstantValueTypeDiscriminator.String,
+                _ => ConstantValueTypeDiscriminator.Bad,
+            };
         }
 
         private static SpecialType GetSpecialType(ConstantValueTypeDiscriminator discriminator)
         {
-            switch (discriminator)
+            return discriminator switch
             {
-                case ConstantValueTypeDiscriminator.SByte: return SpecialType.System_SByte;
-                case ConstantValueTypeDiscriminator.Byte: return SpecialType.System_Byte;
-                case ConstantValueTypeDiscriminator.Int16: return SpecialType.System_Int16;
-                case ConstantValueTypeDiscriminator.UInt16: return SpecialType.System_UInt16;
-                case ConstantValueTypeDiscriminator.Int32: return SpecialType.System_Int32;
-                case ConstantValueTypeDiscriminator.UInt32: return SpecialType.System_UInt32;
-                case ConstantValueTypeDiscriminator.Int64: return SpecialType.System_Int64;
-                case ConstantValueTypeDiscriminator.UInt64: return SpecialType.System_UInt64;
-                case ConstantValueTypeDiscriminator.NInt: return SpecialType.System_IntPtr;
-                case ConstantValueTypeDiscriminator.NUInt: return SpecialType.System_UIntPtr;
-                case ConstantValueTypeDiscriminator.Char: return SpecialType.System_Char;
-                case ConstantValueTypeDiscriminator.Boolean: return SpecialType.System_Boolean;
-                case ConstantValueTypeDiscriminator.Single: return SpecialType.System_Single;
-                case ConstantValueTypeDiscriminator.Double: return SpecialType.System_Double;
-                case ConstantValueTypeDiscriminator.Decimal: return SpecialType.System_Decimal;
-                case ConstantValueTypeDiscriminator.DateTime: return SpecialType.System_DateTime;
-                case ConstantValueTypeDiscriminator.String: return SpecialType.System_String;
-                default: return SpecialType.None;
-            }
+                ConstantValueTypeDiscriminator.SByte => SpecialType.System_SByte,
+                ConstantValueTypeDiscriminator.Byte => SpecialType.System_Byte,
+                ConstantValueTypeDiscriminator.Int16 => SpecialType.System_Int16,
+                ConstantValueTypeDiscriminator.UInt16 => SpecialType.System_UInt16,
+                ConstantValueTypeDiscriminator.Int32 => SpecialType.System_Int32,
+                ConstantValueTypeDiscriminator.UInt32 => SpecialType.System_UInt32,
+                ConstantValueTypeDiscriminator.Int64 => SpecialType.System_Int64,
+                ConstantValueTypeDiscriminator.UInt64 => SpecialType.System_UInt64,
+                ConstantValueTypeDiscriminator.NInt => SpecialType.System_IntPtr,
+                ConstantValueTypeDiscriminator.NUInt => SpecialType.System_UIntPtr,
+                ConstantValueTypeDiscriminator.Char => SpecialType.System_Char,
+                ConstantValueTypeDiscriminator.Boolean => SpecialType.System_Boolean,
+                ConstantValueTypeDiscriminator.Single => SpecialType.System_Single,
+                ConstantValueTypeDiscriminator.Double => SpecialType.System_Double,
+                ConstantValueTypeDiscriminator.Decimal => SpecialType.System_Decimal,
+                ConstantValueTypeDiscriminator.DateTime => SpecialType.System_DateTime,
+                ConstantValueTypeDiscriminator.String => SpecialType.System_String,
+                _ => SpecialType.None,
+            };
         }
 
         public object? Value
         {
             get
             {
-                switch (this.Discriminator)
+                return this.Discriminator switch
                 {
-                    case ConstantValueTypeDiscriminator.Bad: return null;
-                    case ConstantValueTypeDiscriminator.Null: return null;
-                    case ConstantValueTypeDiscriminator.SByte: return Boxes.Box(SByteValue);
-                    case ConstantValueTypeDiscriminator.Byte: return Boxes.Box(ByteValue);
-                    case ConstantValueTypeDiscriminator.Int16: return Boxes.Box(Int16Value);
-                    case ConstantValueTypeDiscriminator.UInt16: return Boxes.Box(UInt16Value);
-                    case ConstantValueTypeDiscriminator.Int32: return Boxes.Box(Int32Value);
-                    case ConstantValueTypeDiscriminator.UInt32: return Boxes.Box(UInt32Value);
-                    case ConstantValueTypeDiscriminator.Int64: return Boxes.Box(Int64Value);
-                    case ConstantValueTypeDiscriminator.UInt64: return Boxes.Box(UInt64Value);
-                    case ConstantValueTypeDiscriminator.NInt: return Boxes.Box(Int32Value);
-                    case ConstantValueTypeDiscriminator.NUInt: return Boxes.Box(UInt32Value);
-                    case ConstantValueTypeDiscriminator.Char: return Boxes.Box(CharValue);
-                    case ConstantValueTypeDiscriminator.Boolean: return Boxes.Box(BooleanValue);
-                    case ConstantValueTypeDiscriminator.Single: return Boxes.Box(SingleValue);
-                    case ConstantValueTypeDiscriminator.Double: return Boxes.Box(DoubleValue);
-                    case ConstantValueTypeDiscriminator.Decimal: return Boxes.Box(DecimalValue);
-                    case ConstantValueTypeDiscriminator.DateTime: return DateTimeValue;
-                    case ConstantValueTypeDiscriminator.String: return StringValue;
-                    default: throw ExceptionUtilities.UnexpectedValue(this.Discriminator);
-                }
+                    ConstantValueTypeDiscriminator.Bad => null,
+                    ConstantValueTypeDiscriminator.Null => null,
+                    ConstantValueTypeDiscriminator.SByte => Boxes.Box(SByteValue),
+                    ConstantValueTypeDiscriminator.Byte => Boxes.Box(ByteValue),
+                    ConstantValueTypeDiscriminator.Int16 => Boxes.Box(Int16Value),
+                    ConstantValueTypeDiscriminator.UInt16 => Boxes.Box(UInt16Value),
+                    ConstantValueTypeDiscriminator.Int32 => Boxes.Box(Int32Value),
+                    ConstantValueTypeDiscriminator.UInt32 => Boxes.Box(UInt32Value),
+                    ConstantValueTypeDiscriminator.Int64 => Boxes.Box(Int64Value),
+                    ConstantValueTypeDiscriminator.UInt64 => Boxes.Box(UInt64Value),
+                    ConstantValueTypeDiscriminator.NInt => Boxes.Box(Int32Value),
+                    ConstantValueTypeDiscriminator.NUInt => Boxes.Box(UInt32Value),
+                    ConstantValueTypeDiscriminator.Char => Boxes.Box(CharValue),
+                    ConstantValueTypeDiscriminator.Boolean => Boxes.Box(BooleanValue),
+                    ConstantValueTypeDiscriminator.Single => Boxes.Box(SingleValue),
+                    ConstantValueTypeDiscriminator.Double => Boxes.Box(DoubleValue),
+                    ConstantValueTypeDiscriminator.Decimal => Boxes.Box(DecimalValue),
+                    ConstantValueTypeDiscriminator.DateTime => DateTimeValue,
+                    ConstantValueTypeDiscriminator.String => StringValue,
+                    _ => throw ExceptionUtilities.UnexpectedValue(this.Discriminator),
+                };
             }
         }
 
         public static bool IsIntegralType(ConstantValueTypeDiscriminator discriminator)
         {
-            switch (discriminator)
+            return discriminator switch
             {
-                case ConstantValueTypeDiscriminator.SByte:
-                case ConstantValueTypeDiscriminator.Byte:
-                case ConstantValueTypeDiscriminator.Int16:
-                case ConstantValueTypeDiscriminator.UInt16:
-                case ConstantValueTypeDiscriminator.Int32:
-                case ConstantValueTypeDiscriminator.UInt32:
-                case ConstantValueTypeDiscriminator.Int64:
-                case ConstantValueTypeDiscriminator.UInt64:
-                case ConstantValueTypeDiscriminator.NInt:
-                case ConstantValueTypeDiscriminator.NUInt:
-                    return true;
-
-                default:
-                    return false;
-            }
+                ConstantValueTypeDiscriminator.SByte or ConstantValueTypeDiscriminator.Byte or ConstantValueTypeDiscriminator.Int16 or ConstantValueTypeDiscriminator.UInt16 or ConstantValueTypeDiscriminator.Int32 or ConstantValueTypeDiscriminator.UInt32 or ConstantValueTypeDiscriminator.Int64 or ConstantValueTypeDiscriminator.UInt64 or ConstantValueTypeDiscriminator.NInt or ConstantValueTypeDiscriminator.NUInt => true,
+                _ => false,
+            };
         }
 
         public bool IsIntegral
@@ -544,27 +524,17 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                switch (this.Discriminator)
+                return this.Discriminator switch
                 {
-                    case ConstantValueTypeDiscriminator.SByte:
-                        return SByteValue < 0;
-                    case ConstantValueTypeDiscriminator.Int16:
-                        return Int16Value < 0;
-                    case ConstantValueTypeDiscriminator.Int32:
-                    case ConstantValueTypeDiscriminator.NInt:
-                        return Int32Value < 0;
-                    case ConstantValueTypeDiscriminator.Int64:
-                        return Int64Value < 0;
-                    case ConstantValueTypeDiscriminator.Single:
-                        return SingleValue < 0;
-                    case ConstantValueTypeDiscriminator.Double:
-                        return DoubleValue < 0;
-                    case ConstantValueTypeDiscriminator.Decimal:
-                        return DecimalValue < 0;
-
-                    default:
-                        return false;
-                }
+                    ConstantValueTypeDiscriminator.SByte => SByteValue < 0,
+                    ConstantValueTypeDiscriminator.Int16 => Int16Value < 0,
+                    ConstantValueTypeDiscriminator.Int32 or ConstantValueTypeDiscriminator.NInt => Int32Value < 0,
+                    ConstantValueTypeDiscriminator.Int64 => Int64Value < 0,
+                    ConstantValueTypeDiscriminator.Single => SingleValue < 0,
+                    ConstantValueTypeDiscriminator.Double => DoubleValue < 0,
+                    ConstantValueTypeDiscriminator.Decimal => DecimalValue < 0,
+                    _ => false,
+                };
             }
         }
 
@@ -572,43 +542,21 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                switch (this.Discriminator)
+                return this.Discriminator switch
                 {
-                    case ConstantValueTypeDiscriminator.SByte:
-                    case ConstantValueTypeDiscriminator.Int16:
-                    case ConstantValueTypeDiscriminator.Int32:
-                    case ConstantValueTypeDiscriminator.Int64:
-                    case ConstantValueTypeDiscriminator.Single:
-                    case ConstantValueTypeDiscriminator.Double:
-                    case ConstantValueTypeDiscriminator.Decimal:
-                    case ConstantValueTypeDiscriminator.Byte:
-                    case ConstantValueTypeDiscriminator.UInt16:
-                    case ConstantValueTypeDiscriminator.UInt32:
-                    case ConstantValueTypeDiscriminator.UInt64:
-                    case ConstantValueTypeDiscriminator.NInt:
-                    case ConstantValueTypeDiscriminator.NUInt:
-                        return true;
-
-                    default:
-                        return false;
-                }
+                    ConstantValueTypeDiscriminator.SByte or ConstantValueTypeDiscriminator.Int16 or ConstantValueTypeDiscriminator.Int32 or ConstantValueTypeDiscriminator.Int64 or ConstantValueTypeDiscriminator.Single or ConstantValueTypeDiscriminator.Double or ConstantValueTypeDiscriminator.Decimal or ConstantValueTypeDiscriminator.Byte or ConstantValueTypeDiscriminator.UInt16 or ConstantValueTypeDiscriminator.UInt32 or ConstantValueTypeDiscriminator.UInt64 or ConstantValueTypeDiscriminator.NInt or ConstantValueTypeDiscriminator.NUInt => true,
+                    _ => false,
+                };
             }
         }
 
         public static bool IsUnsignedIntegralType(ConstantValueTypeDiscriminator discriminator)
         {
-            switch (discriminator)
+            return discriminator switch
             {
-                case ConstantValueTypeDiscriminator.Byte:
-                case ConstantValueTypeDiscriminator.UInt16:
-                case ConstantValueTypeDiscriminator.UInt32:
-                case ConstantValueTypeDiscriminator.UInt64:
-                case ConstantValueTypeDiscriminator.NUInt:
-                    return true;
-
-                default:
-                    return false;
-            }
+                ConstantValueTypeDiscriminator.Byte or ConstantValueTypeDiscriminator.UInt16 or ConstantValueTypeDiscriminator.UInt32 or ConstantValueTypeDiscriminator.UInt64 or ConstantValueTypeDiscriminator.NUInt => true,
+                _ => false,
+            };
         }
 
         public bool IsUnsigned
@@ -798,7 +746,7 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            if (ReferenceEquals(other, null))
+            if (other is null)
             {
                 return false;
             }
@@ -813,7 +761,7 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            if (ReferenceEquals(left, null))
+            if (left is null)
             {
                 return false;
             }

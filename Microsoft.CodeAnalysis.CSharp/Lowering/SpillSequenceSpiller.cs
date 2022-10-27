@@ -23,8 +23,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private SpillSequenceSpiller(MethodSymbol method, SyntaxNode syntaxNode, TypeCompilationState compilationState, PooledDictionary<LocalSymbol, LocalSymbol> tempSubstitution, BindingDiagnosticBag diagnostics)
         {
-            _F = new SyntheticBoundNodeFactory(method, syntaxNode, compilationState, diagnostics);
-            _F.CurrentFunction = method;
+            _F = new SyntheticBoundNodeFactory(method, syntaxNode, compilationState, diagnostics)
+            {
+                CurrentFunction = method
+            };
             _tempSubstitution = tempSubstitution;
         }
 
@@ -74,9 +76,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             internal BoundSpillSequenceBuilder Update(BoundExpression value)
             {
-                var result = new BoundSpillSequenceBuilder(this.Syntax, value);
-                result._locals = _locals;
-                result._statements = _statements;
+                var result = new BoundSpillSequenceBuilder(this.Syntax, value)
+                {
+                    _locals = _locals,
+                    _statements = _statements
+                };
                 return result;
             }
 
@@ -1054,7 +1058,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var whenNotNullStatement = UpdateStatement(whenNotNullBuilder, _F.Assignment(_F.Local(tmp), whenNotNull));
                 whenNotNullStatement = ConditionalReceiverReplacer.Replace(whenNotNullStatement, receiver, node.Id, RecursionDepth);
 
-                whenNullOpt = whenNullOpt ?? _F.Default(node.Type);
+                whenNullOpt ??= _F.Default(node.Type);
 
                 receiverBuilder.AddLocal(tmp);
                 receiverBuilder.AddStatement(

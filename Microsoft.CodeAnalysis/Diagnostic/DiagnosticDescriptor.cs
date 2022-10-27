@@ -148,25 +148,10 @@ namespace Microsoft.CodeAnalysis
                 throw new ArgumentException(Properties.Resources.DiagnosticIdCantBeNullOrWhitespace, nameof(id));
             }
 
-            if (messageFormat == null)
-            {
-                throw new ArgumentNullException(nameof(messageFormat));
-            }
-
-            if (category == null)
-            {
-                throw new ArgumentNullException(nameof(category));
-            }
-
-            if (title == null)
-            {
-                throw new ArgumentNullException(nameof(title));
-            }
-
             this.Id = id;
-            this.Title = title;
-            this.Category = category;
-            this.MessageFormat = messageFormat;
+            this.Title = title ?? throw new ArgumentNullException(nameof(title));
+            this.Category = category ?? throw new ArgumentNullException(nameof(category));
+            this.MessageFormat = messageFormat ?? throw new ArgumentNullException(nameof(messageFormat));
             this.DefaultSeverity = defaultSeverity;
             this.IsEnabledByDefault = isEnabledByDefault;
             this.Description = description ?? string.Empty;
@@ -230,19 +215,14 @@ namespace Microsoft.CodeAnalysis
         // internal for testing purposes.
         internal static ReportDiagnostic MapSeverityToReport(DiagnosticSeverity severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case DiagnosticSeverity.Hidden:
-                    return ReportDiagnostic.Hidden;
-                case DiagnosticSeverity.Info:
-                    return ReportDiagnostic.Info;
-                case DiagnosticSeverity.Warning:
-                    return ReportDiagnostic.Warn;
-                case DiagnosticSeverity.Error:
-                    return ReportDiagnostic.Error;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(severity);
-            }
+                DiagnosticSeverity.Hidden => ReportDiagnostic.Hidden,
+                DiagnosticSeverity.Info => ReportDiagnostic.Info,
+                DiagnosticSeverity.Warning => ReportDiagnostic.Warn,
+                DiagnosticSeverity.Error => ReportDiagnostic.Error,
+                _ => throw ExceptionUtilities.UnexpectedValue(severity),
+            };
         }
 
         /// <summary>

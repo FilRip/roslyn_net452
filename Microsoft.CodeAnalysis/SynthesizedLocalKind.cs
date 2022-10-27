@@ -273,17 +273,12 @@ namespace Microsoft.CodeAnalysis
                 return !IsLongLived(kind);
             }
 
-            switch (kind)
+            return kind switch
             {
                 // The following variables should always be non-reusable, EE depends on their value.
-                case SynthesizedLocalKind.UserDefined:
-                case SynthesizedLocalKind.LambdaDisplayClass:
-                case SynthesizedLocalKind.With:
-                    return false;
-
-                default:
-                    return true;
-            }
+                SynthesizedLocalKind.UserDefined or SynthesizedLocalKind.LambdaDisplayClass or SynthesizedLocalKind.With => false,
+                _ => true,
+            };
         }
 
         public static LocalVariableAttributes PdbAttributes(this SynthesizedLocalKind kind)

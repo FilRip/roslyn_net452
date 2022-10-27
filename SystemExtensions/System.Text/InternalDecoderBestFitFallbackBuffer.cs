@@ -99,10 +99,10 @@ namespace System.Text
             iCount = -1;
         }
 
-        internal unsafe int InternalFallback(byte[] bytes, byte* pBytes)
+        /*internal unsafe int InternalFallback(byte[] bytes, byte* pBytes)
         {
             return 1;
-        }
+        }*/
 
         private char TryBestFit(byte[] bytesCheck)
         {

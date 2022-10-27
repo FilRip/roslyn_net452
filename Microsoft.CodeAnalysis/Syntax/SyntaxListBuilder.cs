@@ -31,17 +31,12 @@ namespace Microsoft.CodeAnalysis.Syntax
 
         internal void AddInternal(GreenNode item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             if (Count >= _nodes.Length)
             {
                 this.Grow(Count == 0 ? 8 : _nodes.Length * 2);
             }
 
-            _nodes[Count++].Value = item;
+            _nodes[Count++].Value = item ?? throw new ArgumentNullException();
         }
 
         public void AddRange(SyntaxNode[] items)
@@ -204,7 +199,7 @@ namespace Microsoft.CodeAnalysis.Syntax
 
         internal void RemoveLast()
         {
-            this.Count -= 1;
+            this.Count--;
             this._nodes[Count] = default;
         }
     }

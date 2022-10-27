@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool diagnose,
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if ((object)qualifierOpt == null)
+            if (qualifierOpt is null)
             {
                 this.LookupSymbolsInternal(result, name, arity, basesBeingResolved, options, diagnose, ref useSiteInfo);
             }
@@ -217,8 +217,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // TODO: generalize to other result kinds and/or candidate counts?
                 if (errorType.ResultKind == LookupResultKind.Inaccessible)
                 {
-                    TypeSymbol candidateType = errorType.CandidateSymbols.First() as TypeSymbol;
-                    if ((object)candidateType != null)
+                    if (errorType.CandidateSymbols.First() is TypeSymbol candidateType)
                     {
                         LookupMembersInType(result, candidateType, name, arity, basesBeingResolved, options, originalBinder, diagnose, ref useSiteInfo);
                         return; // Bypass call to Clear()
@@ -280,7 +279,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If a viable using alias and a matching member are both defined in the submission an error is reported elsewhere.
                 // Ignore the member in such case.
-                if ((options & LookupOptions.NamespaceAliasesOnly) == 0 && (object)submission.ScriptClass != null)
+                if ((options & LookupOptions.NamespaceAliasesOnly) == 0 && submission.ScriptClass is object)
                 {
                     LookupMembersWithoutInheritance(submissionSymbols, submission.ScriptClass, name, arity, options, originalBinder, submissionClass, diagnose, ref useSiteInfo, basesBeingResolved);
 
@@ -331,7 +330,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     // we are now looking for any kind of member regardless of the original binding restrictions:
-                    options = options & ~(LookupOptions.MustBeInvocableIfMember | LookupOptions.NamespacesOrTypesOnly);
+                    options &= ~(LookupOptions.MustBeInvocableIfMember | LookupOptions.NamespacesOrTypesOnly);
                     lookingForOverloadsOfKind = firstSymbol.Kind;
                 }
                 else
@@ -548,7 +547,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!result.IsClear)
                 {
-                    if ((object)symbolWithoutSuffix != null) // was not ambiguous, but not viable
+                    if (symbolWithoutSuffix is object) // was not ambiguous, but not viable
                     {
                         result.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithoutSuffix, result.Error, diagnose));
                     }
@@ -558,7 +557,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (!resultWithSuffix.IsClear)
                     {
-                        if ((object)symbolWithSuffix != null)
+                        if (symbolWithSuffix is object)
                         {
                             resultWithSuffix.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithSuffix, resultWithSuffix.Error, diagnose));
                         }
@@ -593,7 +592,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // CONSIDER: We may want to also generate CS0436 for this case.
 
                     resultSymbol = ResolveMultipleSymbolsInAttributeTypeLookup(symbols);
-                    return (object)resultSymbol == null;
+                    return resultSymbol is null;
             }
         }
 
@@ -655,7 +654,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            if (result == null || result.Kind != LookupResultKind.Viable || (object)symbol == null)
+            if (result == null || result.Kind != LookupResultKind.Viable || symbol is null)
             {
                 return false;
             }
@@ -793,7 +792,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var tmp = LookupResult.GetInstance();
             PooledHashSet<NamedTypeSymbol> visited = null;
-            while ((object)currentType != null)
+            while (currentType is object)
             {
                 tmp.Clear();
                 LookupMembersWithoutInheritance(tmp, currentType, name, arity, options, originalBinder, accessThroughType, diagnose, ref useSiteInfo, basesBeingResolved);
@@ -834,7 +833,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 currentType = currentType.GetNextBaseTypeNoUseSiteDiagnostics(basesBeingResolved, this.Compilation, ref visited);
-                if ((object)currentType != null)
+                if (currentType is object)
                 {
                     currentType.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
                 }
@@ -1163,7 +1162,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsDerivedType(NamedTypeSymbol baseType, NamedTypeSymbol derivedType, ConsList<TypeSymbol> basesBeingResolved, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            for (NamedTypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); (object)b != null; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (NamedTypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); b is object; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 if (TypeSymbol.Equals(b, baseType, TypeCompareKind.ConsiderEverything2)) return true;
             }
@@ -1443,7 +1442,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
             }
 
-            return (((object)method1 != null) && ((object)method2 != null)) ?
+            return ((method1 is object) && (method2 is object)) ?
                 new CSDiagnosticInfo(ErrorCode.ERR_BindToBogusProp2, symbol, method1, method2) :
                 new CSDiagnosticInfo(ErrorCode.ERR_BindToBogusProp1, symbol, method1 ?? method2);
         }
@@ -1530,7 +1529,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsEffectivelyPrivate(Symbol symbol)
         {
-            for (Symbol s = symbol; (object)s != null; s = s.ContainingSymbol)
+            for (Symbol s = symbol; s is object; s = s.ContainingSymbol)
             {
                 if (s.DeclaredAccessibility == Accessibility.Private)
                 {
@@ -1578,18 +1577,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal bool IsNonInvocableMember(Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Method:
-                case SymbolKind.Field:
-                case SymbolKind.Property:
-                case SymbolKind.NamedType:
-                case SymbolKind.Event:
-                    return !IsInvocableMember(symbol);
-
-                default:
-                    return false;
-            }
+                SymbolKind.Method or SymbolKind.Field or SymbolKind.Property or SymbolKind.NamedType or SymbolKind.Event => !IsInvocableMember(symbol),
+                _ => false,
+            };
         }
 
         private bool IsInvocableMember(Symbol symbol)
@@ -1614,21 +1606,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
             }
 
-            return (object)type != null && (type.IsDelegateType() || type.IsDynamic() || type.IsFunctionPointer());
+            return type is object && (type.IsDelegateType() || type.IsDynamic() || type.IsFunctionPointer());
         }
 
         private static bool IsInstance(Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Field:
-                case SymbolKind.Property:
-                case SymbolKind.Method:
-                case SymbolKind.Event:
-                    return symbol.RequiresInstanceReceiver();
-                default:
-                    return false;
-            }
+                SymbolKind.Field or SymbolKind.Property or SymbolKind.Method or SymbolKind.Event => symbol.RequiresInstanceReceiver(),
+                _ => false,
+            };
         }
 
         // Check if the given symbol can be accessed with the given arity. If OK, return false.
@@ -1761,7 +1748,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // TODO: optimize lookup (there might be many interactions in the chain)
             for (CSharpCompilation submission = Compilation; submission != null; submission = submission.PreviousSubmission)
             {
-                if ((object)submission.ScriptClass != null)
+                if (submission.ScriptClass is object)
                 {
                     AddMemberLookupSymbolsInfoWithoutInheritance(result, submission.ScriptClass, options, originalBinder, scriptClass);
                 }
@@ -1859,14 +1846,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             PooledHashSet<NamedTypeSymbol> visited = null;
             // We need a check for SpecialType.System_Void as its base type is
             // ValueType but we don't wish to return any members for void type
-            while ((object)type != null && !type.IsVoidType())
+            while (type is object && !type.IsVoidType())
             {
                 AddMemberLookupSymbolsInfoWithoutInheritance(result, type, options, originalBinder, accessThroughType);
 
                 // If the type is from a winmd and implements any of the special WinRT collection
                 // projections then we may need to add underlying interface members. 
-                NamedTypeSymbol namedType = type as NamedTypeSymbol;
-                if ((object)namedType != null && namedType.ShouldAddWinRTMembers)
+                if (type is NamedTypeSymbol namedType && namedType.ShouldAddWinRTMembers)
                 {
                     AddWinRTMembersLookupSymbolsInfo(result, namedType, options, originalBinder, accessThroughType);
                 }

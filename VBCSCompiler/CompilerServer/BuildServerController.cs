@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class BuildServerController
@@ -70,14 +70,14 @@ namespace Microsoft.CodeAnalysis.CompilerServer
 #pragma warning restore IDE0090
 
         internal static IClientConnectionHost CreateClientConnectionHost(
-          string pipeName,
-          ICompilerServerLogger logger)
+            string pipeName,
+            ICompilerServerLogger logger)
         {
             return new NamedPipeClientConnectionHost(pipeName, logger);
         }
 
         internal static ICompilerServerHost CreateCompilerServerHost(
-          ICompilerServerLogger logger)
+            ICompilerServerLogger logger)
         {
             return new CompilerServerHost(AppDomain.CurrentDomain.BaseDirectory, BuildClient.GetSystemSdkDirectory(), logger);
         }
@@ -116,14 +116,14 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         internal static int CreateAndRunServer(
-          string pipeName,
-          ICompilerServerHost? compilerServerHost = null,
-          IClientConnectionHost? clientConnectionHost = null,
-          IDiagnosticListener? listener = null,
-          TimeSpan? keepAlive = null,
-          NameValueCollection? appSettings = null,
-          ICompilerServerLogger? logger = null,
-          CancellationToken cancellationToken = default)
+            string pipeName,
+            ICompilerServerHost? compilerServerHost = null,
+            IClientConnectionHost? clientConnectionHost = null,
+            IDiagnosticListener? listener = null,
+            TimeSpan? keepAlive = null,
+            NameValueCollection? appSettings = null,
+            ICompilerServerLogger? logger = null,
+            CancellationToken cancellationToken = default)
         {
             if (appSettings == null)
                 appSettings = new NameValueCollection();
@@ -133,19 +133,19 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         internal int RunShutdown(
-          string pipeName,
-          bool waitForProcess = true,
-          TimeSpan? timeout = null,
-          CancellationToken cancellationToken = default)
+            string pipeName,
+            bool waitForProcess = true,
+            TimeSpan? timeout = null,
+            CancellationToken cancellationToken = default)
         {
             return this.RunShutdownAsync(pipeName, waitForProcess, timeout, cancellationToken).GetAwaiter().GetResult();
         }
 
         internal async Task<int> RunShutdownAsync(
-          string pipeName,
-          bool waitForProcess = true,
-          TimeSpan? timeout = null,
-          CancellationToken cancellationToken = default)
+            string pipeName,
+            bool waitForProcess = true,
+            TimeSpan? timeout = null,
+            CancellationToken cancellationToken = default)
         {
             bool? nullable1 = WasServerRunning(pipeName);
             bool flag1 = false;

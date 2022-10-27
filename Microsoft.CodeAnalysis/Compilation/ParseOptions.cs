@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis
 
         protected bool EqualsHelper([NotNullWhen(true)] ParseOptions? other)
         {
-            if (object.ReferenceEquals(other, null))
+            if (other is null)
             {
                 return false;
             }

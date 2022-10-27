@@ -234,17 +234,11 @@ namespace Microsoft.CodeAnalysis.CodeGen
             {
                 get
                 {
-                    switch (this.Type)
+                    return this.Type switch
                     {
-                        case ScopeType.Try:
-                        case ScopeType.Catch:
-                        case ScopeType.Filter:
-                        case ScopeType.Finally:
-                        case ScopeType.Fault:
-                            return true;
-                        default:
-                            return false;
-                    }
+                        ScopeType.Try or ScopeType.Catch or ScopeType.Filter or ScopeType.Finally or ScopeType.Fault => true,
+                        _ => false,
+                    };
                 }
             }
 
@@ -645,19 +639,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             private BlockType GetLeaderBlockType()
             {
-                switch (_type)
+                return _type switch
                 {
-                    case ScopeType.Try:
-                        return BlockType.Try;
-                    case ScopeType.Catch:
-                        return BlockType.Catch;
-                    case ScopeType.Filter:
-                        return BlockType.Filter;
-                    case ScopeType.Finally:
-                        return BlockType.Finally;
-                    default:
-                        return BlockType.Fault;
-                }
+                    ScopeType.Try => BlockType.Try,
+                    ScopeType.Catch => BlockType.Catch,
+                    ScopeType.Filter => BlockType.Filter,
+                    ScopeType.Finally => BlockType.Finally,
+                    _ => BlockType.Fault,
+                };
             }
 
             public override void FreeBasicBlocks()
@@ -782,29 +771,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     else
                     {
-                        Cci.ExceptionHandlerRegion region;
-                        switch (handlerScope.Type)
+                        Cci.ExceptionHandlerRegion region = handlerScope.Type switch
                         {
-                            case ScopeType.Finally:
-                                region = new Cci.ExceptionHandlerRegionFinally(tryBounds.Begin, tryBounds.End, handlerBounds.Begin, handlerBounds.End);
-                                break;
-
-                            case ScopeType.Fault:
-                                region = new Cci.ExceptionHandlerRegionFault(tryBounds.Begin, tryBounds.End, handlerBounds.Begin, handlerBounds.End);
-                                break;
-
-                            case ScopeType.Catch:
-                                region = new Cci.ExceptionHandlerRegionCatch(tryBounds.Begin, tryBounds.End, handlerBounds.Begin, handlerBounds.End, handlerScope.ExceptionType);
-                                break;
-
-                            case ScopeType.Filter:
-                                region = new Cci.ExceptionHandlerRegionFilter(tryBounds.Begin, tryBounds.End, handlerScope.FilterHandlerStart, handlerBounds.End, handlerBounds.Begin);
-                                break;
-
-                            default:
-                                throw ExceptionUtilities.UnexpectedValue(handlerScope.Type);
-                        }
-
+                            ScopeType.Finally => new Cci.ExceptionHandlerRegionFinally(tryBounds.Begin, tryBounds.End, handlerBounds.Begin, handlerBounds.End),
+                            ScopeType.Fault => new Cci.ExceptionHandlerRegionFault(tryBounds.Begin, tryBounds.End, handlerBounds.Begin, handlerBounds.End),
+                            ScopeType.Catch => new Cci.ExceptionHandlerRegionCatch(tryBounds.Begin, tryBounds.End, handlerBounds.Begin, handlerBounds.End, handlerScope.ExceptionType),
+                            ScopeType.Filter => new Cci.ExceptionHandlerRegionFilter(tryBounds.Begin, tryBounds.End, handlerScope.FilterHandlerStart, handlerBounds.End, handlerBounds.Begin),
+                            _ => throw ExceptionUtilities.UnexpectedValue(handlerScope.Type),
+                        };
                         regions.Add(region);
                     }
                 }

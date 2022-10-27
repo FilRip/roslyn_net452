@@ -28,10 +28,10 @@ namespace Microsoft.CodeAnalysis.CompilerServer
 #nullable enable
 
         internal static string[] GetCommandLineArguments(
-          BuildRequest req,
-          out string? currentDirectory,
-          out string? tempDirectory,
-          out string? libDirectory)
+            BuildRequest req,
+            out string? currentDirectory,
+            out string? tempDirectory,
+            out string? libDirectory)
         {
             currentDirectory = null;
             libDirectory = null;

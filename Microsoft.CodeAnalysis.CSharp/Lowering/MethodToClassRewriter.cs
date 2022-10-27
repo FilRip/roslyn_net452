@@ -196,16 +196,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private Conversion RewriteConversion(Conversion conversion)
         {
-            switch (conversion.Kind)
+            return conversion.Kind switch
             {
-                case ConversionKind.ExplicitUserDefined:
-                case ConversionKind.ImplicitUserDefined:
-                    return new Conversion(conversion.Kind, VisitMethodSymbol(conversion.Method), conversion.IsExtensionMethod);
-                case ConversionKind.MethodGroup:
-                    throw ExceptionUtilities.UnexpectedValue(conversion.Kind);
-                default:
-                    return conversion;
-            }
+                ConversionKind.ExplicitUserDefined or ConversionKind.ImplicitUserDefined => new Conversion(conversion.Kind, VisitMethodSymbol(conversion.Method), conversion.IsExtensionMethod),
+                ConversionKind.MethodGroup => throw ExceptionUtilities.UnexpectedValue(conversion.Kind),
+                _ => conversion,
+            };
         }
 
         public sealed override TypeSymbol VisitType(TypeSymbol type)
@@ -282,7 +278,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             methodBeingWrapped = methodBeingWrapped.ConstructedFrom;
 
             MethodSymbol wrapper = this.CompilationState.GetMethodWrapper(methodBeingWrapped);
-            if ((object)wrapper != null)
+            if (wrapper is object)
             {
                 return wrapper;
             }
@@ -457,7 +453,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override BoundNode VisitObjectCreationExpression(BoundObjectCreationExpression node)
         {
             var rewritten = (BoundObjectCreationExpression)base.VisitObjectCreationExpression(node);
-            if (!TypeSymbol.Equals(rewritten.Type, node.Type, TypeCompareKind.ConsiderEverything2) && (object)node.Constructor != null)
+            if (!TypeSymbol.Equals(rewritten.Type, node.Type, TypeCompareKind.ConsiderEverything2) && node.Constructor is object)
             {
                 MethodSymbol ctor = VisitMethodSymbol(node.Constructor);
                 rewritten = rewritten.Update(
@@ -509,7 +505,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         protected MethodSymbol VisitMethodSymbol(MethodSymbol method)
         {
-            if ((object)method == null)
+            if (method is null)
             {
                 return null;
             }
@@ -546,7 +542,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private PropertySymbol VisitPropertySymbol(PropertySymbol property)
         {
-            if ((object)property == null)
+            if (property is null)
             {
                 return null;
             }
@@ -629,12 +625,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             internal BaseMethodWrapperSymbol(NamedTypeSymbol containingType, MethodSymbol methodBeingWrapped, SyntaxNode syntax, string name)
                 : base(containingType, methodBeingWrapped, syntax.SyntaxTree.GetReference(syntax), syntax.GetLocation(), name, DeclarationModifiers.Private)
             {
-
                 TypeMap typeMap = null;
                 ImmutableArray<TypeParameterSymbol> typeParameters;
 
-                var substitutedType = methodBeingWrapped.ContainingType as SubstitutedNamedTypeSymbol;
-                typeMap = ((object)substitutedType == null ? TypeMap.Empty : substitutedType.TypeSubstitution);
+                typeMap = (methodBeingWrapped.ContainingType is not SubstitutedNamedTypeSymbol substitutedType ? TypeMap.Empty : substitutedType.TypeSubstitution);
 
                 if (!methodBeingWrapped.IsGenericMethod)
                 {

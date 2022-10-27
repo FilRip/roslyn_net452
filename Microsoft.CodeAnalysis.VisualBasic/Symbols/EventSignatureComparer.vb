@@ -20,14 +20,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' The event signatures are compared without regard to name (including the interface part, if any)
         ''' and the return type must match. (NOTE: that return type of implementing event is always Void)
         ''' </summary>
-        Public Shared ReadOnly ExplicitEventImplementationComparer As EventSignatureComparer =
-            New EventSignatureComparer(considerName:=False,
+        Public Shared ReadOnly ExplicitEventImplementationComparer As             New EventSignatureComparer(considerName:=False,
                                         considerType:=False,
                                         considerCustomModifiers:=False,
                                         considerTupleNames:=False)
 
-        Public Shared ReadOnly ExplicitEventImplementationWithTupleNamesComparer As EventSignatureComparer =
-            New EventSignatureComparer(considerName:=False,
+        Public Shared ReadOnly ExplicitEventImplementationWithTupleNamesComparer As             New EventSignatureComparer(considerName:=False,
                                         considerType:=False,
                                         considerCustomModifiers:=False,
                                         considerTupleNames:=True)
@@ -35,8 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' <summary>
         ''' This instance is used to check whether one event overrides another, according to the VB definition.
         ''' </summary>
-        Public Shared ReadOnly OverrideSignatureComparer As EventSignatureComparer =
-            New EventSignatureComparer(considerName:=True,
+        Public Shared ReadOnly OverrideSignatureComparer As             New EventSignatureComparer(considerName:=True,
                                         considerType:=False,
                                         considerCustomModifiers:=False,
                                         considerTupleNames:=False)
@@ -45,8 +42,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' This instance is intended to reflect the definition of signature equality used by the runtime (ECMA 335 Section 8.6.1.6).
         ''' It considers type, name, parameters, and custom modifiers.
         ''' </summary>
-        Public Shared ReadOnly RuntimeEventSignatureComparer As EventSignatureComparer =
-            New EventSignatureComparer(considerName:=True,
+        Public Shared ReadOnly RuntimeEventSignatureComparer As             New EventSignatureComparer(considerName:=True,
                                         considerType:=True,
                                         considerCustomModifiers:=True,
                                         considerTupleNames:=False)
@@ -61,8 +57,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' The real fix here is to establish a spec for how WinRT conflict comparison should be
         ''' performed. Once this is done we should remove these comments.
         ''' </summary>
-        Public Shared ReadOnly WinRTConflictComparer As EventSignatureComparer =
-            New EventSignatureComparer(considerName:=True,
+        Public Shared ReadOnly WinRTConflictComparer As             New EventSignatureComparer(considerName:=True,
                                        considerType:=False,
                                        considerCustomModifiers:=False,
                                        considerTupleNames:=False)

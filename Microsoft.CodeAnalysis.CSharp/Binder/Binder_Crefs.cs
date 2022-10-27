@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ImmutableArray<Symbol> BindMemberCref(MemberCrefSyntax syntax, NamespaceOrTypeSymbol? containerOpt, out Symbol? ambiguityWinner, BindingDiagnosticBag diagnostics)
         {
-            if ((object?)containerOpt != null && containerOpt.Kind == SymbolKind.TypeParameter)
+            if (containerOpt is object && containerOpt.Kind == SymbolKind.TypeParameter)
             {
                 // As in normal lookup (see CreateErrorIfLookupOnTypeParameter), you can't dot into a type parameter
                 // (though you can dot into an expression of type parameter type).
@@ -101,25 +101,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return ImmutableArray<Symbol>.Empty;
             }
 
-            ImmutableArray<Symbol> result;
-            switch (syntax.Kind())
+            var result = syntax.Kind() switch
             {
-                case SyntaxKind.NameMemberCref:
-                    result = BindNameMemberCref((NameMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics);
-                    break;
-                case SyntaxKind.IndexerMemberCref:
-                    result = BindIndexerMemberCref((IndexerMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics);
-                    break;
-                case SyntaxKind.OperatorMemberCref:
-                    result = BindOperatorMemberCref((OperatorMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics);
-                    break;
-                case SyntaxKind.ConversionOperatorMemberCref:
-                    result = BindConversionOperatorMemberCref((ConversionOperatorMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics);
-                    break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(syntax.Kind());
-            }
-
+                SyntaxKind.NameMemberCref => BindNameMemberCref((NameMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics),
+                SyntaxKind.IndexerMemberCref => BindIndexerMemberCref((IndexerMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics),
+                SyntaxKind.OperatorMemberCref => BindOperatorMemberCref((OperatorMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics),
+                SyntaxKind.ConversionOperatorMemberCref => BindConversionOperatorMemberCref((ConversionOperatorMemberCrefSyntax)syntax, containerOpt, out ambiguityWinner, diagnostics),
+                _ => throw ExceptionUtilities.UnexpectedValue(syntax.Kind()),
+            };
             if (!result.Any())
             {
                 CrefSyntax crefSyntax = GetRootCrefSyntax(syntax);
@@ -382,14 +371,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                             // as long as there were parens after the member name.
 
                             NamedTypeSymbol? binderContainingType = this.ContainingType;
-                            if ((object?)binderContainingType != null && memberName == binderContainingType.Name)
+                            if (binderContainingType is object && memberName == binderContainingType.Name)
                             {
                                 constructorType = binderContainingType;
                             }
                         }
                     }
 
-                    if ((object?)constructorType != null)
+                    if (constructorType is object)
                     {
                         ImmutableArray<MethodSymbol> instanceConstructors = constructorType.InstanceConstructors;
                         int numInstanceConstructors = instanceConstructors.Length;
@@ -555,7 +544,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static bool IsNestedTypeOfUnconstructedGenericType(NamedTypeSymbol type)
         {
             NamedTypeSymbol containing = type.ContainingType;
-            while ((object)containing != null)
+            while (containing is object)
             {
                 if (containing.Arity > 0 && containing.IsDefinition)
                 {

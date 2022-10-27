@@ -183,7 +183,7 @@ namespace Microsoft.Cci
                 return;
             }
 
-            byte[] GetDynamicFlags(ILocalDefinition local)
+            static byte[] GetDynamicFlags(ILocalDefinition local)
             {
                 var dynamicTransformFlags = local.DynamicTransformFlags;
                 var flags = new byte[CustomDebugInfoEncoder.DynamicAttributeSize];

@@ -79,8 +79,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? Visit(BoundNode? node)
         {
-            var expression = node as BoundExpression;
-            if (expression != null)
+            if (node is BoundExpression expression)
             {
                 return VisitExpressionWithStackGuard(ref _recursionDepth, expression);
             }

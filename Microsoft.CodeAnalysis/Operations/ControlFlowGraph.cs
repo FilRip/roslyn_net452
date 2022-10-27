@@ -75,7 +75,6 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             _captureIdDispenser = captureIdDispenser;
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         /// <summary>
         /// Creates a <see cref="ControlFlowGraph"/> for the given executable code block root <paramref name="node"/>.
         /// </summary>
@@ -164,7 +163,6 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         {
             return CreateCore(methodBody, nameof(methodBody), cancellationToken);
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         internal static ControlFlowGraph CreateCore(IOperation operation, string argumentNameForException, CancellationToken cancellationToken)
         {
@@ -293,7 +291,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 throw new ArgumentNullException(nameof(anonymousFunction));
             }
 
-            if (!TryGetAnonymousFunctionControlFlowGraph(anonymousFunction, cancellationToken, out ControlFlowGraph? controlFlowGraph))
+            if (!TryGetAnonymousFunctionControlFlowGraph(anonymousFunction, out ControlFlowGraph? controlFlowGraph))
             {
                 throw new ArgumentOutOfRangeException(nameof(anonymousFunction));
             }
@@ -301,7 +299,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             return controlFlowGraph;
         }
 
-        internal bool TryGetAnonymousFunctionControlFlowGraph(IFlowAnonymousFunctionOperation anonymousFunction, CancellationToken cancellationToken, [NotNullWhen(true)] out ControlFlowGraph? controlFlowGraph)
+        internal bool TryGetAnonymousFunctionControlFlowGraph(IFlowAnonymousFunctionOperation anonymousFunction, [NotNullWhen(true)] out ControlFlowGraph? controlFlowGraph)
         {
             if (!_anonymousFunctionsMap.TryGetValue(anonymousFunction, out (ControlFlowRegion enclosing, int ordinal) info))
             {

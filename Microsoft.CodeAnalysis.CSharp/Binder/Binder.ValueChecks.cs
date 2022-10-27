@@ -300,7 +300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (!resolvedToMethodGroup)
                 {
                     var receiver = methodGroup.ReceiverOpt;
-                    if ((object)otherSymbol != null && receiver?.Kind == BoundKind.TypeOrValueExpression)
+                    if (otherSymbol is object && receiver?.Kind == BoundKind.TypeOrValueExpression)
                     {
                         // Since we're not accessing a method, this can't be a Color Color case, so TypeOrValueExpression should not have been used.
                         // CAVEAT: otherSymbol could be invalid in some way (e.g. inaccessible), in which case we would have fallen back on a
@@ -315,7 +315,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return new BoundBadExpression(
                         expr.Syntax,
                         methodGroup.ResultKind,
-                        (object)otherSymbol == null ? ImmutableArray<Symbol>.Empty : ImmutableArray.Create(otherSymbol),
+                        otherSymbol is null ? ImmutableArray<Symbol>.Empty : ImmutableArray.Create(otherSymbol),
                         receiver == null ? ImmutableArray<BoundExpression>.Empty : ImmutableArray.Create(receiver),
                         GetNonMethodMemberType(otherSymbol));
                 }
@@ -772,7 +772,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var canModifyReadonly = false;
 
                     Symbol containing = this.ContainingMemberOrLambda;
-                    if ((object)containing != null &&
+                    if (containing is object &&
                         fieldIsStatic == containing.IsStatic &&
                         (fieldIsStatic || fieldAccess.ReceiverOpt.Kind == BoundKind.ThisReference) &&
                         (Compilation.FeatureStrictEnabled
@@ -831,7 +831,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return false;
                 }
 
-                if (!(ContainingMemberOrLambda is MethodSymbol method))
+                if (ContainingMemberOrLambda is not MethodSymbol method)
                 {
                     return false;
                 }
@@ -1123,7 +1123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var getMethod = propertySymbol.GetOwnOrInheritedGetMethod();
 
-                if ((object)getMethod == null)
+                if (getMethod is null)
                 {
                     Error(diagnostics, ErrorCode.ERR_PropertyLacksGet, node, propertySymbol);
                     return false;
@@ -1200,7 +1200,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var containingMember = ContainingMemberOrLambda;
-                if (!(containingMember is MethodSymbol method))
+                if (containingMember is not MethodSymbol method)
                 {
                     return false;
                 }
@@ -1625,7 +1625,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (parameters[paramIndex].RefKind == RefKind.In)
                 {
                     effectiveRefKind = RefKind.In;
-                    inParametersMatchedWithArgs = inParametersMatchedWithArgs ?? ArrayBuilder<bool>.GetInstance(parameters.Length, fillWithValue: false);
+                    inParametersMatchedWithArgs ??= ArrayBuilder<bool>.GetInstance(parameters.Length, fillWithValue: false);
                     inParametersMatchedWithArgs[paramIndex] = true;
                 }
             }

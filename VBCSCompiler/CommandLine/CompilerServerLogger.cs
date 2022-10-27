@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class CompilerServerLogger : ICompilerServerLogger, IDisposable

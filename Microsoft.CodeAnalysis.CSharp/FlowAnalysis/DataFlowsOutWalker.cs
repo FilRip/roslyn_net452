@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
 #if DEBUG
-                if ((object)param != null)
+                if (param is object)
                 {
                     _assignedInside.Add(param);
                 }
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             var eventAccess = (BoundEventAccess)node;
                             FieldSymbol associatedField = eventAccess.EventSymbol.AssociatedField;
-                            if ((object)associatedField != null)
+                            if (associatedField is object)
                             {
                                 if (MayRequireTracking(eventAccess.ReceiverOpt, associatedField))
                                 {
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #if DEBUG
                 {
                     Symbol variable = GetNodeSymbol(node);
-                    if ((object)variable != null)
+                    if (variable is object)
                     {
                         _assignedInside.Add(variable);
                     }
@@ -232,17 +232,17 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool FlowsOut(ParameterSymbol param)
         {
-            return (object)param != null && param.RefKind != RefKind.None && !param.IsImplicitlyDeclared && !RegionContains(param.Locations[0].SourceSpan);
+            return param is object && param.RefKind != RefKind.None && !param.IsImplicitlyDeclared && !RegionContains(param.Locations[0].SourceSpan);
         }
 
         private ParameterSymbol Param(BoundNode node)
         {
-            switch (node.Kind)
+            return node.Kind switch
             {
-                case BoundKind.Parameter: return ((BoundParameter)node).ParameterSymbol;
-                case BoundKind.ThisReference: return this.MethodThisParameter;
-                default: return null;
-            }
+                BoundKind.Parameter => ((BoundParameter)node).ParameterSymbol,
+                BoundKind.ThisReference => this.MethodThisParameter,
+                _ => null,
+            };
         }
 
         public override BoundNode VisitQueryClause(BoundQueryClause node)

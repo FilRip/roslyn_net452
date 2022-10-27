@@ -401,21 +401,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 if (_lazyExternAliases is null)
                 {
-                    SyntaxList<ExternAliasDirectiveSyntax> externAliasDirectives;
-                    switch (declarationSyntax)
+                    var externAliasDirectives = declarationSyntax switch
                     {
-                        case CompilationUnitSyntax compilationUnit:
-                            externAliasDirectives = compilationUnit.Externs;
-                            break;
-
-                        case NamespaceDeclarationSyntax namespaceDecl:
-                            externAliasDirectives = namespaceDecl.Externs;
-                            break;
-
-                        default:
-                            throw ExceptionUtilities.UnexpectedValue(declarationSyntax);
-                    }
-
+                        CompilationUnitSyntax compilationUnit => compilationUnit.Externs,
+                        NamespaceDeclarationSyntax namespaceDecl => namespaceDecl.Externs,
+                        _ => throw ExceptionUtilities.UnexpectedValue(declarationSyntax),
+                    };
                     if (!externAliasDirectives.Any())
                     {
 #if DEBUG

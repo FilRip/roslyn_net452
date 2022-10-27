@@ -33,7 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     ''' re-used provided that the pattern of adds and removes is as we expect.
     ''' </summary>
     Partial Friend Class DeclarationTable
-        Public Shared ReadOnly Empty As DeclarationTable = New DeclarationTable(
+        Public Shared ReadOnly Empty As New DeclarationTable(
                                                            ImmutableSetWithInsertionOrder(Of DeclarationTableEntry).Empty,
                                                            latestLazyRootDeclaration:=Nothing,
                                                            cache:=Nothing)

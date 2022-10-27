@@ -959,7 +959,7 @@ OtherExpressions:
             Dim cur As Integer = 0
 
             For Each caseBlock In caseBlocks
-                cur = cur + 1
+                cur += 1
                 caseBlockLabels.Add(New GeneratedLabelSymbol("Case Block " + cur.ToString()))
             Next
 
@@ -1035,7 +1035,7 @@ OtherExpressions:
                     fallThroughLabel = caseBlockLabel
                 End If
 
-                cur = cur + 1
+                cur += 1
             Next
 
             Return labelsBuilder.ToArrayAndFree()
@@ -1194,7 +1194,7 @@ OtherExpressions:
             For Each caseBlock In caseBlocks
                 ' Emit case block label
                 _builder.MarkLabel(caseBlockLabels(cur))
-                cur = cur + 1
+                cur += 1
 
                 ' Emit case statement sequence point
 

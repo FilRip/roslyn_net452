@@ -65,8 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0; i <= n; i++)
             {
                 var part = node.Parts[i];
-                var fillin = part as BoundStringInsert;
-                if (fillin == null)
+                if (part is not BoundStringInsert fillin)
                 {
                     // this is one of the literal parts
 #nullable restore

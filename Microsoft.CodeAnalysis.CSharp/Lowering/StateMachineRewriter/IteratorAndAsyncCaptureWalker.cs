@@ -54,9 +54,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static OrderedSet<Symbol> Analyze(CSharpCompilation compilation, MethodSymbol method, BoundNode node, DiagnosticBag diagnostics)
         {
             var initiallyAssignedVariables = UnassignedVariablesWalker.Analyze(compilation, method, node, convertInsufficientExecutionStackExceptionToCancelledByStackGuardException: true);
-            var walker = new IteratorAndAsyncCaptureWalker(compilation, method, node, initiallyAssignedVariables);
-
-            walker._convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = true;
+            var walker = new IteratorAndAsyncCaptureWalker(compilation, method, node, initiallyAssignedVariables)
+            {
+                _convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = true
+            };
 
             bool badRegion = false;
             walker.Analyze(ref badRegion);
@@ -100,7 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var v in allVariables)
                 {
                     var symbol = v.Symbol;
-                    if ((object)symbol != null && HoistInDebugBuild(symbol))
+                    if (symbol is object && HoistInDebugBuild(symbol))
                     {
                         variablesToHoist.Add(symbol);
                     }
@@ -136,7 +137,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var symbol = variableBySlot[i].Symbol;
 
-                if ((object)symbol != null)
+                if (symbol is object)
                 {
                     switch (symbol.Kind)
                     {
@@ -358,7 +359,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private void AddVariable(Symbol local)
             {
-                if ((object)local != null) _localsInScope.Add(local);
+                if (local is object) _localsInScope.Add(local);
             }
 
             public override BoundNode VisitSequence(BoundSequence node)
@@ -393,7 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private void Capture(Symbol s, SyntaxNode syntax)
             {
-                if ((object)s != null && !_localsInScope.Contains(s))
+                if (s is object && !_localsInScope.Contains(s))
                 {
                     _analyzer.CaptureVariable(s, syntax);
                 }

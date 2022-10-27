@@ -149,8 +149,10 @@ namespace Microsoft.CodeAnalysis.Collections
             if (self.Contains(new KeyValuePair<TKey, TValue>(key, value)))
                 return self;
 
-            var dictionary = new SegmentedDictionary<TKey, TValue>(self._dictionary, self._dictionary.Comparer);
-            dictionary.Add(key, value);
+            var dictionary = new SegmentedDictionary<TKey, TValue>(self._dictionary, self._dictionary.Comparer)
+            {
+                { key, value }
+            };
             return new ImmutableSegmentedDictionary<TKey, TValue>(dictionary);
         }
 
@@ -236,8 +238,10 @@ namespace Microsoft.CodeAnalysis.Collections
                 return self;
             }
 
-            var dictionary = new SegmentedDictionary<TKey, TValue>(self._dictionary, self._dictionary.Comparer);
-            dictionary[key] = value;
+            var dictionary = new SegmentedDictionary<TKey, TValue>(self._dictionary, self._dictionary.Comparer)
+            {
+                [key] = value
+            };
             return new ImmutableSegmentedDictionary<TKey, TValue>(dictionary);
         }
 

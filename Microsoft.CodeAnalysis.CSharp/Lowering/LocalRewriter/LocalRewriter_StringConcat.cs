@@ -163,8 +163,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         if (method == (object)_compilation.GetSpecialTypeMember(SpecialMember.System_String__ConcatStringArray))
                         {
-                            var args = boundCall.Arguments[0] as BoundArrayCreation;
-                            if (args != null)
+                            if (boundCall.Arguments[0] is BoundArrayCreation args)
                             {
                                 var initializer = args.InitializerOpt;
                                 if (initializer != null)

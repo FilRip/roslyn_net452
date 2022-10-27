@@ -27,7 +27,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private _memberBindingType As NamedTypeSymbol
         Private _elementInitType As NamedTypeSymbol
 
-        Private ReadOnly _parameterMap As Dictionary(Of ParameterSymbol, BoundExpression) = New Dictionary(Of ParameterSymbol, BoundExpression)()
+        Private ReadOnly _parameterMap As New Dictionary(Of ParameterSymbol, BoundExpression)()
 
         Private _recursionDepth As Integer
 

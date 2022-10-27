@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 var nodeToBind = _nodeToBind.GetSyntax();
 
-                if ((object)_containingFieldOpt != null && nodeToBind.Kind() != SyntaxKind.VariableDeclarator)
+                if (_containingFieldOpt is object && nodeToBind.Kind() != SyntaxKind.VariableDeclarator)
                 {
                     binder = binder.WithContainingMemberOrLambda(_containingFieldOpt).WithAdditionalFlags(BinderFlags.FieldInitializer);
                 }

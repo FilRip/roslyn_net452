@@ -11,7 +11,7 @@ namespace System.Text
 
         private readonly ReaderWriterLockSlim _cacheLock = new();
 
-        private const int ISCIIAssemese = 57006;
+        /*private const int ISCIIAssemese = 57006;
 
         private const int ISCIIBengali = 57003;
 
@@ -63,7 +63,7 @@ namespace System.Text
 
         private const int ISO_8859_8I = 38598;
 
-        private const int ISO_8859_8_Visual = 28598;
+        private const int ISO_8859_8_Visual = 28598;*/
 
         public static EncodingProvider Instance => s_singleton;
 
@@ -98,11 +98,10 @@ namespace System.Text
                 }
                 return GetEncoding(systemDefaultCodePage);
             }
-            Encoding value = null;
             _cacheLock.EnterUpgradeableReadLock();
             try
             {
-                if (_encodings.TryGetValue(codepage, out value))
+                if (_encodings.TryGetValue(codepage, out Encoding value))
                 {
                     return value;
                 }

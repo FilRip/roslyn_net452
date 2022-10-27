@@ -94,9 +94,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 }
 
-                OptionalCustomModifier other = obj as OptionalCustomModifier;
 
-                return other != null && other.modifier.Equals(this.modifier);
+                return obj is OptionalCustomModifier other && other.modifier.Equals(this.modifier);
             }
         }
 
@@ -126,9 +125,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 }
 
-                RequiredCustomModifier other = obj as RequiredCustomModifier;
 
-                return other != null && other.modifier.Equals(this.modifier);
+                return obj is RequiredCustomModifier other && other.modifier.Equals(this.modifier);
             }
         }
     }

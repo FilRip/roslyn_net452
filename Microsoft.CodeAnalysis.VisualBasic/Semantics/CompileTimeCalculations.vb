@@ -185,7 +185,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Case ConstantValueTypeDiscriminator.Int64 : result = ConstantValue.Create(value)
                 Case ConstantValueTypeDiscriminator.UInt64 : result = ConstantValue.Create(UncheckedCULng(value))
                 Case ConstantValueTypeDiscriminator.Char : result = ConstantValue.Create(ChrW(UncheckedCInt(value)))
-                Case ConstantValueTypeDiscriminator.Boolean : result = ConstantValue.Create(If(value = 0, False, True))
+                Case ConstantValueTypeDiscriminator.Boolean : result = ConstantValue.Create(value <> 0)
                 Case ConstantValueTypeDiscriminator.DateTime : result = ConstantValue.Create(New DateTime(value))
                 Case Else : Throw ExceptionUtilities.UnexpectedValue(type)
             End Select

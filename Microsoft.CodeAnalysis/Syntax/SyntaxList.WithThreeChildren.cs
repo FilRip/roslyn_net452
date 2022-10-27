@@ -21,32 +21,24 @@ namespace Microsoft.CodeAnalysis.Syntax
 
             public override SyntaxNode? GetNodeSlot(int index)
             {
-                switch (index)
+                return index switch
                 {
-                    case 0:
-                        return this.GetRedElement(ref _child0, 0);
-                    case 1:
-                        return this.GetRedElementIfNotToken(ref _child1);
-                    case 2:
-                        return this.GetRedElement(ref _child2, 2);
-                    default:
-                        return null;
-                }
+                    0 => this.GetRedElement(ref _child0, 0),
+                    1 => this.GetRedElementIfNotToken(ref _child1),
+                    2 => this.GetRedElement(ref _child2, 2),
+                    _ => null,
+                };
             }
 
             public override SyntaxNode? GetCachedSlot(int index)
             {
-                switch (index)
+                return index switch
                 {
-                    case 0:
-                        return _child0;
-                    case 1:
-                        return _child1;
-                    case 2:
-                        return _child2;
-                    default:
-                        return null;
-                }
+                    0 => _child0,
+                    1 => _child1,
+                    2 => _child2,
+                    _ => null,
+                };
             }
         }
     }

@@ -155,7 +155,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     builderType,
                     customBuilder,
                     out MethodSymbol createBuilderMethod);
-                if ((object)createBuilderMethod == null)
+                if (createBuilderMethod is null)
                 {
                     collection = default;
                     return false;
@@ -187,7 +187,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (customBuilder)
                 {
                     builderType = ValidateBuilderType(F, builderArgument, returnType.DeclaredAccessibility, isGeneric: false);
-                    if ((object)builderType != null)
+                    if (builderType is object)
                     {
                         taskProperty = GetCustomTaskProperty(F, builderType, returnType);
                         createBuilderMethod = GetCustomCreateMethod(F, builderType);
@@ -209,9 +209,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         customBuilder,
                         out taskProperty);
                 }
-                if ((object)builderType == null ||
-                    (object)createBuilderMethod == null ||
-                    (object)taskProperty == null)
+                if (builderType is null ||
+                    createBuilderMethod is null ||
+                    taskProperty is null)
                 {
                     collection = default;
                     return false;
@@ -253,7 +253,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (customBuilder)
                 {
                     builderType = ValidateBuilderType(F, builderArgument, returnType.DeclaredAccessibility, isGeneric: true);
-                    if ((object)builderType != null)
+                    if (builderType is object)
                     {
                         builderType = builderType.ConstructedFrom.Construct(resultType);
                         taskProperty = GetCustomTaskProperty(F, builderType, returnType);
@@ -277,9 +277,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         customBuilder,
                         out taskProperty);
                 }
-                if ((object)builderType == null ||
-                    (object)taskProperty == null ||
-                    (object)createBuilderMethod == null)
+                if (builderType is null ||
+                    taskProperty is null ||
+                    createBuilderMethod is null)
                 {
                     collection = default;
                     return false;
@@ -305,9 +305,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static NamedTypeSymbol ValidateBuilderType(SyntheticBoundNodeFactory F, object builderAttributeArgument, Accessibility desiredAccessibility, bool isGeneric)
         {
-            var builderType = builderAttributeArgument as NamedTypeSymbol;
-
-            if ((object)builderType != null &&
+            if (builderAttributeArgument is NamedTypeSymbol builderType &&
                  !builderType.IsErrorType() &&
                  !builderType.IsVoidType() &&
                  builderType.DeclaredAccessibility == desiredAccessibility)
@@ -391,7 +389,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     descriptor,
                     F.Compilation.WellKnownMemberSignatureComparer,
                     accessWithinOpt: null);
-                if ((object)sym != null)
+                if (sym is object)
                 {
                     sym = sym.SymbolAsMember(builderType);
                 }

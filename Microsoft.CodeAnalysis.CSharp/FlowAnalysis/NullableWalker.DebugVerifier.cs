@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     Visit(node.Right);
 
-                    if (!(node.Left is BoundBinaryOperatorBase child))
+                    if (node.Left is not BoundBinaryOperatorBase child)
                     {
                         Visit(node.Left);
                         return;

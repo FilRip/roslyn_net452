@@ -101,7 +101,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim slotIndex As Integer = -1
                     If Me.SlotAllocatorOpt Is Nothing OrElse Not Me.SlotAllocatorOpt.TryGetPreviousAwaiterSlotIndex(F.CompilationState.ModuleBuilderOpt.Translate(awaiterType, F.Syntax, F.Diagnostics.DiagnosticBag), F.Diagnostics.DiagnosticBag, slotIndex) Then
                         slotIndex = _nextAwaiterId
-                        _nextAwaiterId = _nextAwaiterId + 1
+                        _nextAwaiterId += 1
                     End If
 
                     Dim fieldName As String = GeneratedNames.MakeStateMachineAwaiterFieldName(slotIndex)

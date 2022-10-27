@@ -145,7 +145,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (lazyCustomAttributesBag != null && lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed)
                 {
                     var data = (CommonFieldEarlyWellKnownAttributeData)lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData;
-                    return data != null ? data.ObsoleteAttributeData : null;
+                    return data?.ObsoleteAttributeData;
                 }
 
                 return ObsoleteAttributeData.Uninitialized;
@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         constValue = this.GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false);
 
-                        if ((object)constValue != null && !constValue.IsBad && constValue != attrValue)
+                        if (constValue is object && !constValue.IsBad && constValue != attrValue)
                         {
                             diagnostics.Add(ErrorCode.ERR_FieldHasMultipleDistinctConstantValues, arguments.AttributeSyntaxOpt.Location);
                         }
@@ -296,7 +296,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
 
             var data = (FieldWellKnownAttributeData)decodedData;
-            int? fieldOffset = data != null ? data.Offset : null;
+            int? fieldOffset = data?.Offset;
 
             if (fieldOffset.HasValue)
             {
@@ -348,7 +348,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var data = GetDecodedWellKnownAttributeData();
-                return data != null ? data.MarshallingInformation : null;
+                return data?.MarshallingInformation;
             }
         }
 
@@ -357,7 +357,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var data = GetDecodedWellKnownAttributeData();
-                return data != null ? data.Offset : null;
+                return data?.Offset;
             }
         }
 

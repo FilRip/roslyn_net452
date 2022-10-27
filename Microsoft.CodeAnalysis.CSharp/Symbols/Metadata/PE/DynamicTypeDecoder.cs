@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 TypeSymbol transformedType = decoder.TransformType(metadataType);
 
-                if ((object)transformedType != null && (!checkLength || decoder._index == dynamicTransformFlags.Length))
+                if (transformedType is object && (!checkLength || decoder._index == dynamicTransformFlags.Length))
                 {
                     // Even when we're not checking the length, there shouldn't be any unconsumed "true"s.
                     return transformedType;
@@ -208,10 +208,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             NamedTypeSymbol containingType = namedType.ContainingType;
             NamedTypeSymbol newContainingType;
-            if ((object)containingType != null && containingType.IsGenericType)
+            if (containingType is object && containingType.IsGenericType)
             {
                 newContainingType = TransformNamedType(namedType.ContainingType, isContaining: true);
-                if ((object)newContainingType == null)
+                if (newContainingType is null)
                 {
                     return null;
                 }
@@ -263,7 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             foreach (var typeArg in typeArguments)
             {
                 TypeSymbol transformedTypeArg = TransformType(typeArg.Type);
-                if ((object)transformedTypeArg == null)
+                if (transformedTypeArg is null)
                 {
                     transformedTypeArgsBuilder.Free();
                     return default;
@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
 
             TypeSymbol transformedElementType = TransformType(arrayType.ElementType);
-            if ((object)transformedElementType == null)
+            if (transformedElementType is null)
             {
                 return null;
             }
@@ -315,7 +315,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
 
             TypeSymbol transformedPointedAtType = TransformType(pointerType.PointedAtType);
-            if ((object)transformedPointedAtType == null)
+            if (transformedPointedAtType is null)
             {
                 return null;
             }

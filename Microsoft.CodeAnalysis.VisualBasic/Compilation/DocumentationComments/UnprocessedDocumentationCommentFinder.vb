@@ -111,7 +111,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim i As Integer = start
                     While i < childCnt
                         Dim child = list(i)
-                        i = i + 1
+                        i += 1
 
                         Dim asNode = child.AsNode()
                         If asNode IsNot Nothing Then

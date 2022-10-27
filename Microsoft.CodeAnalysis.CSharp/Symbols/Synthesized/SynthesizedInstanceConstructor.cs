@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // Synthesized constructors of ComImport type are extern
                 NamedTypeSymbol containingType = this.ContainingType;
-                return (object)containingType != null && containingType.IsComImport;
+                return containingType is object && containingType.IsComImport;
             }
         }
 
@@ -283,8 +283,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         protected void GenerateMethodBodyCore(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
-            var factory = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            factory.CurrentFunction = this;
+            var factory = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics)
+            {
+                CurrentFunction = this
+            };
             if (ContainingType.BaseTypeNoUseSiteDiagnostics is MissingMetadataTypeSymbol)
             {
                 // System_Attribute was not found or was inaccessible

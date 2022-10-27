@@ -313,8 +313,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             // Just return ourselves if we're not being asked to add anything.
-            var triviaCollection = trivia as ICollection<SyntaxTrivia>;
-            if (triviaCollection != null && triviaCollection.Count == 0)
+            if (trivia is ICollection<SyntaxTrivia> triviaCollection && triviaCollection.Count == 0)
             {
                 return this;
             }

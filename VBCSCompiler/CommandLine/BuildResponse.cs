@@ -4,8 +4,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal abstract class BuildResponse
@@ -29,8 +29,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
         protected abstract void AddResponseBody(BinaryWriter writer);
 
         public static async Task<BuildResponse> ReadAsync(
-          Stream stream,
-          CancellationToken cancellationToken = default)
+            Stream stream,
+            CancellationToken cancellationToken = default)
         {
             byte[] lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(stream, lengthBuffer, 4, cancellationToken).ConfigureAwait(false);

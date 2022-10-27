@@ -65,10 +65,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Property
 
         ' A location not in source.
-        Public Shared ReadOnly NotInSource As LexicalSortKey = New LexicalSortKey(SyntaxTreeKind.None, -1, 0)
+        Public Shared ReadOnly NotInSource As New LexicalSortKey(SyntaxTreeKind.None, -1, 0)
 
         ' A lexical sort key is not initialized yet
-        Public Shared ReadOnly NotInitialized As LexicalSortKey = New LexicalSortKey() With {._embeddedKind = SyntaxTreeKind.None, ._treeOrdinal = -1, ._position = -1}
+        Public Shared ReadOnly NotInitialized As New LexicalSortKey() With {._embeddedKind = SyntaxTreeKind.None, ._treeOrdinal = -1, ._position = -1}
 
         Private Sub New(embeddedKind As SyntaxTreeKind, treeOrdinal As Integer, location As Integer)
             Debug.Assert(location >= 0)

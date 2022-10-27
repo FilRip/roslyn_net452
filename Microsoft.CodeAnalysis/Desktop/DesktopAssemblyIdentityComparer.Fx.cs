@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis
 
                 public override bool Equals(object? obj)
                 {
-                    return obj is Key && Equals((Key)obj);
+                    return obj is Key key && Equals(key);
                 }
 
                 public override int GetHashCode()

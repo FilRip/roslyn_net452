@@ -95,8 +95,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            var other = obj as SignatureOnlyParameterSymbol;
-            return (object)other != null &&
+            return obj is SignatureOnlyParameterSymbol other &&
                 TypeSymbol.Equals(_type.Type, other._type.Type, compareKind) &&
                 _type.CustomModifiers.Equals(other._type.CustomModifiers) &&
                 _refCustomModifiers.SequenceEqual(other._refCustomModifiers) &&

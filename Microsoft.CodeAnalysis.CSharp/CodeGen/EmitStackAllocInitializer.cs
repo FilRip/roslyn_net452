@@ -101,10 +101,10 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             foreach (var init in inits)
             {
 
-                initCount += 1;
+                initCount++;
                 if (init.ConstantValue != null)
                 {
-                    constInits += 1;
+                    constInits++;
                 }
             }
         }

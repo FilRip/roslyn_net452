@@ -954,7 +954,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 Return ReportSemanticError(ERRID.ERR_BadCCExpression, expr)
             End If
 
-            Dim OperandType As SpecialType = SpecialType.None
+            Dim OperandType As SpecialType
 
             If IsNothing(Left) OrElse IsNothing(Right) Then
                 If IsNothing(Left) AndAlso IsNothing(Right) Then
@@ -1305,7 +1305,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                             Throw ExceptionUtilities.UnexpectedValue(opcode)
                     End Select
 
-                    Return CConst.Create(If(ComparisonSucceeds, True, False))
+                    Return CConst.Create(ComparisonSucceeds)
                 Else
                     Dim resultValue As Double = 0
                     Dim overflow As Boolean = False

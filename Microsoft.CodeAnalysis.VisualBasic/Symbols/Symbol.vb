@@ -191,7 +191,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End Select
 
                 Dim sourceModuleSymbol = TryCast(Me.ContainingModule, SourceModuleSymbol)
-                Return If(sourceModuleSymbol Is Nothing, Nothing, sourceModuleSymbol.DeclaringCompilation)
+                Return sourceModuleSymbol?.DeclaringCompilation
             End Get
         End Property
 

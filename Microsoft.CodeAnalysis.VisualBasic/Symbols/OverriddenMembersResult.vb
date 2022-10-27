@@ -18,8 +18,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     ''' <typeparam name="TSymbol">Expected to be a member symbol type (e.g. method, property).</typeparam>
     Friend NotInheritable Class OverriddenMembersResult(Of TSymbol As Symbol)
 
-        Public Shared ReadOnly Empty As OverriddenMembersResult(Of TSymbol) =
-            New OverriddenMembersResult(Of TSymbol)(ImmutableArray(Of TSymbol).Empty,
+        Public Shared ReadOnly Empty As             New OverriddenMembersResult(Of TSymbol)(ImmutableArray(Of TSymbol).Empty,
                                                     ImmutableArray(Of TSymbol).Empty,
                                                     ImmutableArray(Of TSymbol).Empty)
 

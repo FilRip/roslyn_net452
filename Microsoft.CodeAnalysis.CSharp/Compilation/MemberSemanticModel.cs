@@ -222,11 +222,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             for (var current = node; binder == null; current = current.ParentOrStructuredTriviaParent)
             {
-                StatementSyntax stmt = current as StatementSyntax;
                 TypeOfExpressionSyntax typeOfExpression;
                 SyntaxKind kind = current.Kind();
 
-                if (stmt != null)
+                if (current is StatementSyntax stmt)
                 {
                     if (LookupPosition.IsInStatementScope(position, stmt))
                     {
@@ -337,12 +336,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            binder = binder ?? rootBinder.GetBinder(root) ?? rootBinder;
+            binder ??= rootBinder.GetBinder(root) ?? rootBinder;
 
             if (ownerOfTypeParametersInScope != null)
             {
                 LocalFunctionSymbol function = GetDeclaredLocalFunction(binder, ownerOfTypeParametersInScope.Identifier);
-                if ((object)function != null)
+                if (function is object)
                 {
                     binder = function.SignatureBinder;
                 }
@@ -442,8 +441,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var binder = this.GetEnclosingBinderInternal(expression, GetAdjustedNodePosition(expression));
             CSharpSyntaxNode bindableNode = this.GetBindableSyntaxNode(expression);
-            var boundExpression = this.GetLowerBoundNode(bindableNode) as BoundExpression;
-            if (binder == null || boundExpression == null)
+            if (binder == null || this.GetLowerBoundNode(bindableNode) is not BoundExpression boundExpression)
             {
                 return Conversion.NoConversion;
             }
@@ -458,15 +456,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             CheckSyntaxNode(expression);
 
-            if ((object)destination == null)
+            if (destination is null)
             {
                 throw new ArgumentNullException(nameof(destination));
             }
 
             var binder = this.GetEnclosingBinderInternal(expression, GetAdjustedNodePosition(expression));
             CSharpSyntaxNode bindableNode = this.GetBindableSyntaxNode(expression);
-            var boundExpression = this.GetLowerBoundNode(bindableNode) as BoundExpression;
-            if (binder == null || boundExpression == null)
+            if (binder == null || this.GetLowerBoundNode(bindableNode) is not BoundExpression boundExpression)
             {
                 return Conversion.NoConversion;
             }
@@ -788,15 +785,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             ParameterSyntax parameter,
             CancellationToken cancellationToken)
         {
-
-            var simpleLambda = parameter.Parent as SimpleLambdaExpressionSyntax;
-            if (simpleLambda != null)
+            if (parameter.Parent is SimpleLambdaExpressionSyntax simpleLambda)
             {
                 return GetLambdaParameterSymbol(parameter, simpleLambda, cancellationToken);
             }
 
-            var paramList = parameter.Parent as ParameterListSyntax;
-            if (paramList == null || paramList.Parent == null)
+            if (parameter.Parent is not ParameterListSyntax paramList || paramList.Parent == null)
             {
                 return null;
             }
@@ -808,7 +802,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else if (paramList.Parent.Kind() == SyntaxKind.LocalFunctionStatement)
             {
                 var localFunction = GetDeclaredSymbol((LocalFunctionStatementSyntax)paramList.Parent, cancellationToken).GetSymbol<MethodSymbol>();
-                if ((object)localFunction != null)
+                if (localFunction is object)
                 {
                     return GetParameterSymbol(localFunction.Parameters, parameter, cancellationToken);
                 }
@@ -852,19 +846,19 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override IRangeVariableSymbol GetDeclaredSymbol(JoinIntoClauseSyntax node, CancellationToken cancellationToken = default)
         {
             var bound = GetBoundQueryClause(node);
-            return bound == null ? null : bound.DefinedSymbol.GetPublicSymbol();
+            return bound?.DefinedSymbol.GetPublicSymbol();
         }
 
         public override IRangeVariableSymbol GetDeclaredSymbol(QueryClauseSyntax queryClause, CancellationToken cancellationToken = default)
         {
             var bound = GetBoundQueryClause(queryClause);
-            return bound == null ? null : bound.DefinedSymbol.GetPublicSymbol();
+            return bound?.DefinedSymbol.GetPublicSymbol();
         }
 
         public override IRangeVariableSymbol GetDeclaredSymbol(QueryContinuationSyntax node, CancellationToken cancellationToken = default)
         {
             var bound = GetBoundQueryClause(node);
-            return bound == null ? null : bound.DefinedSymbol.GetPublicSymbol();
+            return bound?.DefinedSymbol.GetPublicSymbol();
         }
 
         public override AwaitExpressionInfo GetAwaitExpressionInfo(AwaitExpressionSyntax node)
@@ -950,8 +944,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override DeconstructionInfo GetDeconstructionInfo(AssignmentExpressionSyntax node)
         {
-            var boundDeconstruction = GetUpperBoundNode(node) as BoundDeconstructionAssignmentOperator;
-            if (boundDeconstruction is null)
+            if (GetUpperBoundNode(node) is not BoundDeconstructionAssignmentOperator boundDeconstruction)
             {
                 return default;
             }
@@ -998,8 +991,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private SymbolInfo GetSymbolInfoForQuery(BoundQueryClause bound)
         {
-            var call = bound?.Operation as BoundCall;
-            if (call == null)
+            if (bound?.Operation is not BoundCall call)
             {
                 return SymbolInfo.None;
             }
@@ -1030,14 +1022,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return null;
             }
 
-            var bound = this.GetLowerBoundNode(anonymousObjectCreation) as BoundAnonymousObjectCreationExpression;
-            if (bound == null)
+            if (this.GetLowerBoundNode(anonymousObjectCreation) is not BoundAnonymousObjectCreationExpression bound)
             {
                 return null;
             }
 
-            var anonymousType = bound.Type as NamedTypeSymbol;
-            if ((object)anonymousType == null)
+            if (bound.Type is not NamedTypeSymbol anonymousType)
             {
                 return null;
             }
@@ -1049,8 +1039,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override INamedTypeSymbol GetDeclaredSymbol(AnonymousObjectCreationExpressionSyntax declaratorSyntax, CancellationToken cancellationToken = default)
         {
             CheckSyntaxNode(declaratorSyntax);
-            var bound = this.GetLowerBoundNode(declaratorSyntax) as BoundAnonymousObjectCreationExpression;
-            return (bound == null) ? null : (bound.Type as NamedTypeSymbol).GetPublicSymbol();
+            return (this.GetLowerBoundNode(declaratorSyntax) is not BoundAnonymousObjectCreationExpression bound) ? null : (bound.Type as NamedTypeSymbol).GetPublicSymbol();
         }
 
         public override INamedTypeSymbol GetDeclaredSymbol(TupleExpressionSyntax declaratorSyntax, CancellationToken cancellationToken = default)
@@ -1063,17 +1052,16 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             CheckSyntaxNode(declaratorSyntax);
 
-            var tupleLiteral = declaratorSyntax?.Parent as TupleExpressionSyntax;
 
             // for now only arguments of a tuple literal may declare symbols
-            if (tupleLiteral == null)
+            if (declaratorSyntax?.Parent is not TupleExpressionSyntax tupleLiteral)
             {
                 return null;
             }
 
             var tupleLiteralType = GetTypeOfTupleLiteral(tupleLiteral);
 
-            if ((object)tupleLiteralType != null)
+            if (tupleLiteralType is object)
             {
                 var elements = tupleLiteralType.TupleElements;
 
@@ -1226,9 +1214,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal override Optional<object> GetConstantValueWorker(CSharpSyntaxNode node, CancellationToken cancellationToken)
         {
             CSharpSyntaxNode bindableNode = this.GetBindableSyntaxNode(node);
-            BoundExpression boundExpr = this.GetLowerBoundNode(bindableNode) as BoundExpression;
 
-            if (boundExpr == null) return default;
+            if (this.GetLowerBoundNode(bindableNode) is not BoundExpression boundExpr) return default;
 
             ConstantValue constantValue = boundExpr.ConstantValue;
             return constantValue == null || constantValue.IsBad
@@ -1238,9 +1225,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal override SymbolInfo GetCollectionInitializerSymbolInfoWorker(InitializerExpressionSyntax collectionInitializer, ExpressionSyntax node, CancellationToken cancellationToken = default)
         {
-            var boundCollectionInitializer = GetLowerBoundNode(collectionInitializer) as BoundCollectionInitializerExpression;
-
-            if (boundCollectionInitializer != null)
+            if (GetLowerBoundNode(collectionInitializer) is BoundCollectionInitializerExpression boundCollectionInitializer)
             {
                 var boundAdd = boundCollectionInitializer.Initializers[collectionInitializer.Expressions.IndexOf(node)];
 

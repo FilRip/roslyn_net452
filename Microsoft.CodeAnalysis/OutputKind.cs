@@ -54,44 +54,24 @@ namespace Microsoft.CodeAnalysis
 
         public static string GetDefaultExtension(this OutputKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case OutputKind.ConsoleApplication:
-                case OutputKind.WindowsApplication:
-                case OutputKind.WindowsRuntimeApplication:
-                    return ".exe";
-
-                case OutputKind.DynamicallyLinkedLibrary:
-                    return ".dll";
-
-                case OutputKind.NetModule:
-                    return ".netmodule";
-
-                case OutputKind.WindowsRuntimeMetadata:
-                    return ".winmdobj";
-
-                default:
-                    return ".dll";
-            }
+                OutputKind.ConsoleApplication or OutputKind.WindowsApplication or OutputKind.WindowsRuntimeApplication => ".exe",
+                OutputKind.DynamicallyLinkedLibrary => ".dll",
+                OutputKind.NetModule => ".netmodule",
+                OutputKind.WindowsRuntimeMetadata => ".winmdobj",
+                _ => ".dll",
+            };
         }
 
         public static bool IsApplication(this OutputKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case OutputKind.ConsoleApplication:
-                case OutputKind.WindowsApplication:
-                case OutputKind.WindowsRuntimeApplication:
-                    return true;
-
-                case OutputKind.DynamicallyLinkedLibrary:
-                case OutputKind.NetModule:
-                case OutputKind.WindowsRuntimeMetadata:
-                    return false;
-
-                default:
-                    return false;
-            }
+                OutputKind.ConsoleApplication or OutputKind.WindowsApplication or OutputKind.WindowsRuntimeApplication => true,
+                OutputKind.DynamicallyLinkedLibrary or OutputKind.NetModule or OutputKind.WindowsRuntimeMetadata => false,
+                _ => false,
+            };
         }
 
         public static bool IsNetModule(this OutputKind kind)

@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // Add implicit "return default(T)" if this is a submission that does not have a trailing expression.
                 var submissionResultType = (method as SynthesizedInteractiveInitializerMethod)?.ResultType;
-                if (!hasTrailingExpression && ((object)submissionResultType != null))
+                if (!hasTrailingExpression && (submissionResultType is object))
                 {
 
                     var trailingExpression = new BoundDefaultExpression(method.GetNonNullSyntaxNode(), submissionResultType);

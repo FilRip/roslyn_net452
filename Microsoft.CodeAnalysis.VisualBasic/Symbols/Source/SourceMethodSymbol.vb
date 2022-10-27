@@ -1703,7 +1703,7 @@ lReportErrorOnTwoTokens:
 
                     End Select
 
-                    position = position + 1
+                    position += 1
                 Next
 
                 Dim data = arguments.GetOrCreateData(Of MethodWellKnownAttributeData)()
@@ -1898,13 +1898,13 @@ lReportErrorOnTwoTokens:
 
         Public Overrides Function GetDllImportData() As DllImportData
             Dim attributeData = GetDecodedWellKnownAttributeData()
-            Return If(attributeData IsNot Nothing, attributeData.DllImportPlatformInvokeData, Nothing)
+            Return attributeData?.DllImportPlatformInvokeData
         End Function
 
         Friend NotOverridable Overrides ReadOnly Property ReturnTypeMarshallingInformation As MarshalPseudoCustomAttributeData
             Get
                 Dim attributeData = GetDecodedReturnTypeWellKnownAttributeData()
-                Return If(attributeData IsNot Nothing, attributeData.MarshallingInformation, Nothing)
+                Return attributeData?.MarshallingInformation
             End Get
         End Property
 
@@ -2004,7 +2004,7 @@ lReportErrorOnTwoTokens:
                 Dim lazyCustomAttributesBag = Me.m_lazyCustomAttributesBag
                 If (lazyCustomAttributesBag IsNot Nothing AndAlso lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed) Then
                     Dim data = DirectCast(m_lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData, MethodEarlyWellKnownAttributeData)
-                    Return If(data IsNot Nothing, data.ObsoleteAttributeData, Nothing)
+                    Return data?.ObsoleteAttributeData
                 End If
 
                 Dim reference = Me.DeclaringSyntaxReferences

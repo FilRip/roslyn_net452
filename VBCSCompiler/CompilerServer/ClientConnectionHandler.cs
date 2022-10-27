@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class ClientConnectionHandler
@@ -18,9 +18,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         internal ClientConnectionHandler(ICompilerServerHost compilerServerHost) => this.CompilerServerHost = compilerServerHost;
 
         internal async Task<CompletionData> ProcessAsync(
-          Task<IClientConnection> clientConnectionTask,
-          bool allowCompilationRequests = true,
-          CancellationToken cancellationToken = default)
+            Task<IClientConnection> clientConnectionTask,
+            bool allowCompilationRequests = true,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -48,11 +48,11 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         private async Task<CompletionData> WriteBuildResponseAsync(
-          IClientConnection clientConnection,
-          Guid requestId,
-          BuildResponse response,
-          CompletionData completionData,
-          CancellationToken cancellationToken)
+            IClientConnection clientConnection,
+            Guid requestId,
+            BuildResponse response,
+            CompletionData completionData,
+            CancellationToken cancellationToken)
         {
             this.Logger.Log(response is not RejectedBuildResponse rejectedBuildResponse ? string.Format("Writing {0} response for {1}", response.Type, requestId) : string.Format("Writing {0} response '{1}' for {2}", rejectedBuildResponse.Type, rejectedBuildResponse.Reason, requestId));
             await clientConnection.WriteBuildResponseAsync(response, cancellationToken).ConfigureAwait(false);
@@ -60,9 +60,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         private async Task<CompletionData> ProcessCompilationRequestAsync(
-          IClientConnection clientConnection,
-          BuildRequest request,
-          CancellationToken cancellationToken)
+            IClientConnection clientConnection,
+            BuildRequest request,
+            CancellationToken cancellationToken)
         {
             CancellationTokenSource buildCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             Task<BuildResponse> compilationTask = ProcessCompilationRequestCore(this.CompilerServerHost, request, buildCancellationTokenSource.Token);
@@ -92,9 +92,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             }
 
             static Task<BuildResponse> ProcessCompilationRequestCore(
-              ICompilerServerHost compilerServerHost,
-              BuildRequest buildRequest,
-              CancellationToken cancellationToken)
+                ICompilerServerHost compilerServerHost,
+                BuildRequest buildRequest,
+                CancellationToken cancellationToken)
             {
                 Task<BuildResponse> task = new(() =>
                {

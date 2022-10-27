@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class BuildServerConnection
@@ -24,15 +24,15 @@ namespace Microsoft.CodeAnalysis.CommandLine
         internal static bool IsCompilerServerSupported => BuildServerConnection.GetPipeNameForPath("") != null;
 
         public static Task<BuildResponse> RunServerCompilationAsync(
-          Guid requestId,
-          RequestLanguage language,
-          string? sharedCompilationId,
-          List<string> arguments,
-          BuildPathsAlt buildPaths,
-          string? keepAlive,
-          string? libEnvVariable,
-          ICompilerServerLogger logger,
-          CancellationToken cancellationToken)
+            Guid requestId,
+            RequestLanguage language,
+            string? sharedCompilationId,
+            List<string> arguments,
+            BuildPathsAlt buildPaths,
+            string? keepAlive,
+            string? libEnvVariable,
+            ICompilerServerLogger logger,
+            CancellationToken cancellationToken)
         {
 #nullable restore
             string pipeName = sharedCompilationId ?? BuildServerConnection.GetPipeNameForPath(buildPaths.ClientDirectory);
@@ -41,17 +41,17 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static async Task<BuildResponse> RunServerCompilationCoreAsync(
-          Guid requestId,
-          RequestLanguage language,
-          List<string> arguments,
-          BuildPathsAlt buildPaths,
-          string? pipeName,
-          string? keepAlive,
-          string? libDirectory,
-          int? timeoutOverride,
-          CreateServerFunc createServerFunc,
-          ICompilerServerLogger logger,
-          CancellationToken cancellationToken)
+            Guid requestId,
+            RequestLanguage language,
+            List<string> arguments,
+            BuildPathsAlt buildPaths,
+            string? pipeName,
+            string? keepAlive,
+            string? libDirectory,
+            int? timeoutOverride,
+            CreateServerFunc createServerFunc,
+            ICompilerServerLogger logger,
+            CancellationToken cancellationToken)
         {
             if (pipeName == null)
                 throw new ArgumentException(nameof(pipeName));
@@ -68,12 +68,12 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 return pipe == null ? new RejectedBuildResponse("Failed to connect to server") : await BuildServerConnection.TryCompileAsync(pipe, BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", new Guid?(requestId), keepAlive, libDirectory), logger, cancellationToken).ConfigureAwait(false);
 
             static Task<NamedPipeClientStream?>? tryConnectToServer(
-              string pipeName,
-              BuildPathsAlt buildPaths,
-              int? timeoutOverride,
-              CreateServerFunc createServerFunc,
-              ICompilerServerLogger logger,
-              CancellationToken cancellationToken)
+                string pipeName,
+                BuildPathsAlt buildPaths,
+                int? timeoutOverride,
+                CreateServerFunc createServerFunc,
+                ICompilerServerLogger logger,
+                CancellationToken cancellationToken)
             {
                 int currentManagedThreadId1 = Environment.CurrentManagedThreadId;
                 string clientDirectory = buildPaths.ClientDirectory;
@@ -126,10 +126,10 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         private static async Task<BuildResponse> TryCompileAsync(
-          NamedPipeClientStream pipeStream,
-          BuildRequest request,
-          ICompilerServerLogger logger,
-          CancellationToken cancellationToken)
+            NamedPipeClientStream pipeStream,
+            BuildRequest request,
+            ICompilerServerLogger logger,
+            CancellationToken cancellationToken)
         {
             using (pipeStream)
             {
@@ -148,7 +148,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 logger.Log(string.Format("Begin reading response for {0}", request.RequestId));
                 Task<BuildResponse> responseTask = BuildResponse.ReadAsync(pipeStream, serverCts.Token);
                 Task task1 = BuildServerConnection.MonitorDisconnectAsync(pipeStream, request.RequestId, logger, serverCts.Token);
-                Task task2 = await Task.WhenAny(responseTask, task1).ConfigureAwait(false);
+                await Task.WhenAny(responseTask, task1).ConfigureAwait(false);
                 logger.Log(string.Format("End reading response for {0}", request.RequestId));
                 BuildResponse buildResponse;
                 if (responseTask.IsCompleted)
@@ -174,10 +174,10 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static async Task MonitorDisconnectAsync(
-          PipeStream pipeStream,
-          Guid requestId,
-          ICompilerServerLogger logger,
-          CancellationToken cancellationToken = default)
+            PipeStream pipeStream,
+            Guid requestId,
+            ICompilerServerLogger logger,
+            CancellationToken cancellationToken = default)
         {
             byte[] buffer = new byte[0] { };
             while (!cancellationToken.IsCancellationRequested)
@@ -199,20 +199,18 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 }
                 else
                 {
-                    buffer = null;
                     return;
                 }
             }
-            buffer = null;
         }
 
 #nullable enable
 
         internal static async Task<NamedPipeClientStream?> TryConnectToServerAsync(
-          string pipeName,
-          int timeoutMs,
-          ICompilerServerLogger logger,
-          CancellationToken cancellationToken)
+            string pipeName,
+            int timeoutMs,
+            ICompilerServerLogger logger,
+            CancellationToken cancellationToken)
         {
 #nullable restore
             NamedPipeClientStream pipeStream = null;
@@ -249,16 +247,16 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static (string processFilePath, string commandLineArguments, string toolFilePath) GetServerProcessInfo(
-          string clientDir,
-          string pipeName)
+            string clientDir,
+            string pipeName)
         {
             return RuntimeHostInfo.GetProcessInfo(Path.Combine(clientDir, "VBCSCompiler"), "\"-pipename:" + pipeName + "\"");
         }
 
         internal static bool TryCreateServerCore(
-          string clientDir,
-          string pipeName,
-          ICompilerServerLogger logger)
+            string clientDir,
+            string pipeName,
+            ICompilerServerLogger logger)
         {
             (string processFilePath, string commandLineArguments, string toolFilePath) = GetServerProcessInfo(clientDir, pipeName);
             if (!File.Exists(toolFilePath))

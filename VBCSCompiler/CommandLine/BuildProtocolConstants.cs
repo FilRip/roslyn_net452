@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal static class BuildProtocolConstants
@@ -35,10 +35,10 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static async Task ReadAllAsync(
-          Stream stream,
-          byte[] buffer,
-          int count,
-          CancellationToken cancellationToken)
+            Stream stream,
+            byte[] buffer,
+            int count,
+            CancellationToken cancellationToken)
         {
             int totalBytesRead = 0;
             do

@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol leftType = left.Type;
             TypeSymbol rightType = right.Type;
 
-            if ((object)leftType != null && leftType.IsDynamic() || (object)rightType != null && rightType.IsDynamic())
+            if (leftType is object && leftType.IsDynamic() || rightType is object && rightType.IsDynamic())
             {
                 return BindTupleDynamicBinaryOperatorSingleInfo(node, kind, left, right, diagnostics);
             }
@@ -133,21 +133,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return;
             }
 
-            // It was not. Does it implement operator true (or false)?
-
-            UnaryOperatorKind boolOpKind;
-            switch (binaryOperator)
+            var boolOpKind = binaryOperator switch
             {
-                case BinaryOperatorKind.Equal:
-                    boolOpKind = UnaryOperatorKind.False;
-                    break;
-                case BinaryOperatorKind.NotEqual:
-                    boolOpKind = UnaryOperatorKind.True;
-                    break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(binaryOperator);
-            }
-
+                BinaryOperatorKind.Equal => UnaryOperatorKind.False,
+                BinaryOperatorKind.NotEqual => UnaryOperatorKind.True,
+                _ => throw ExceptionUtilities.UnexpectedValue(binaryOperator),
+            };
             BoundExpression comparisonResult = new BoundTupleOperandPlaceholder(node, type);
             UnaryOperatorAnalysisResult best = this.UnaryOperatorOverloadResolution(boolOpKind, comparisonResult, node, diagnostics, out LookupResultKind resultKind, out ImmutableArray<MethodSymbol> originalUserDefinedOperators);
             if (best.HasValue)
@@ -285,8 +276,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
 
-                bool leftWasInferred = leftNoInferredNames ? false : leftInferred[i];
-                bool rightWasInferred = rightNoInferredNames ? false : rightInferred[i];
+                bool leftWasInferred = !leftNoInferredNames && leftInferred[i];
+                bool rightWasInferred = !rightNoInferredNames && rightInferred[i];
 
                 bool leftComplaint = leftIsTupleLiteral && leftName != null && !leftWasInferred;
                 bool rightComplaint = rightIsTupleLiteral && rightName != null && !rightWasInferred;

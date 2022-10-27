@@ -430,7 +430,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 SourceMemberContainerTypeSymbol.ReportTypeNamedRecord(identifier.Text, this.DeclaringCompilation, diagnostics.DiagnosticBag, location);
 
                 var tpEnclosing = ContainingSymbol.FindEnclosingTypeParameter(name);
-                if ((object?)tpEnclosing != null)
+                if (tpEnclosing is object)
                 {
                     ErrorCode typeError;
                     if (tpEnclosing.ContainingSymbol.Kind == SymbolKind.Method)

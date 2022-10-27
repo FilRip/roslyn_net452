@@ -104,8 +104,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal override SymbolInfo GetSymbolInfoWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            var cref = node as CrefSyntax;
-            if (cref != null)
+            if (node is CrefSyntax cref)
             {
                 return _parentSemanticModel.GetSpeculativeSymbolInfo(_position, cref, options);
             }

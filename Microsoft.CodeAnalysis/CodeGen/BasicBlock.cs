@@ -539,7 +539,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                         if (curBranchCode.IsRelationalBranch())
                         {
                             this.Writer.WriteByte((byte)ILOpCode.Pop);
-                            delta += 1;
+                            delta++;
                         }
 
                         return true;

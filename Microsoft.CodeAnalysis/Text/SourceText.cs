@@ -307,12 +307,10 @@ namespace Microsoft.CodeAnalysis.Text
             // buffer allocations for small files, we may intentionally be using a FileStream
             // with a very small (1 byte) buffer. Using 4KB here matches the default buffer
             // size for FileStream and means we'll still be doing file I/O in 4KB chunks.
-            using (var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: bufferSize, leaveOpen: true))
-            {
-                string text = reader.ReadToEnd();
-                actualEncoding = reader.CurrentEncoding;
-                return text;
-            }
+            using var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: bufferSize, leaveOpen: true);
+            string text = reader.ReadToEnd();
+            actualEncoding = reader.CurrentEncoding;
+            return text;
         }
 
         /// <summary>
@@ -352,7 +350,7 @@ namespace Microsoft.CodeAnalysis.Text
                         return true;
                     }
 
-                    i += 1;
+                    i++;
                 }
                 else
                 {
@@ -560,10 +558,8 @@ namespace Microsoft.CodeAnalysis.Text
         {
             if (_lazyChecksum.IsDefault)
             {
-                using (var stream = new SourceTextStream(this, useDefaultEncodingIfNull: true))
-                {
-                    ImmutableInterlocked.InterlockedInitialize(ref _lazyChecksum, CalculateChecksum(stream, _checksumAlgorithm));
-                }
+                using var stream = new SourceTextStream(this, useDefaultEncodingIfNull: true);
+                ImmutableInterlocked.InterlockedInitialize(ref _lazyChecksum, CalculateChecksum(stream, _checksumAlgorithm));
             }
 
             return _lazyChecksum;
@@ -571,24 +567,20 @@ namespace Microsoft.CodeAnalysis.Text
 
         internal static ImmutableArray<byte> CalculateChecksum(byte[] buffer, int offset, int count, SourceHashAlgorithm algorithmId)
         {
-            using (var algorithm = CryptographicHashProvider.TryGetAlgorithm(algorithmId))
-            {
-                RoslynDebug.Assert(algorithm != null);
-                return ImmutableArray.Create(algorithm.ComputeHash(buffer, offset, count));
-            }
+            using var algorithm = CryptographicHashProvider.TryGetAlgorithm(algorithmId);
+            RoslynDebug.Assert(algorithm != null);
+            return ImmutableArray.Create(algorithm.ComputeHash(buffer, offset, count));
         }
 
         internal static ImmutableArray<byte> CalculateChecksum(Stream stream, SourceHashAlgorithm algorithmId)
         {
-            using (var algorithm = CryptographicHashProvider.TryGetAlgorithm(algorithmId))
+            using var algorithm = CryptographicHashProvider.TryGetAlgorithm(algorithmId);
+            RoslynDebug.Assert(algorithm != null);
+            if (stream.CanSeek)
             {
-                RoslynDebug.Assert(algorithm != null);
-                if (stream.CanSeek)
-                {
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
-                return ImmutableArray.Create(algorithm.ComputeHash(stream));
+                stream.Seek(0, SeekOrigin.Begin);
             }
+            return ImmutableArray.Create(algorithm.ComputeHash(stream));
         }
 
         /// <summary>

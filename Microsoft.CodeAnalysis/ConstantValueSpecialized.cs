@@ -435,7 +435,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                if (ReferenceEquals(other, null))
+                if (other is null)
                 {
                     return false;
                 }
@@ -458,7 +458,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                if (ReferenceEquals(other, null))
+                if (other is null)
                 {
                     return false;
                 }
@@ -481,7 +481,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                if (ReferenceEquals(other, null))
+                if (other is null)
                 {
                     return false;
                 }
@@ -586,7 +586,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                if (ReferenceEquals(other, null))
+                if (other is null)
                 {
                     return false;
                 }

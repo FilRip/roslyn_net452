@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     ContainingType.Name == ((ConstructorDeclarationSyntax)this.SyntaxNode).Identifier.ValueText)
                 {
                     diagnostics.Add(ErrorCode.ERR_StaticConstructorWithAccessModifiers, location, this);
-                    mods = mods & ~DeclarationModifiers.AccessibilityMask;
+                    mods &= ~DeclarationModifiers.AccessibilityMask;
                     modifierErrors = true;
                 }
 

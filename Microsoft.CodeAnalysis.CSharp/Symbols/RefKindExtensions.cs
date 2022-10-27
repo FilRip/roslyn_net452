@@ -18,34 +18,24 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static RefKind GetRefKind(this SyntaxKind syntaxKind)
         {
-            switch (syntaxKind)
+            return syntaxKind switch
             {
-                case SyntaxKind.RefKeyword:
-                    return RefKind.Ref;
-                case SyntaxKind.OutKeyword:
-                    return RefKind.Out;
-                case SyntaxKind.InKeyword:
-                    return RefKind.In;
-                case SyntaxKind.None:
-                    return RefKind.None;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(syntaxKind);
-            }
+                SyntaxKind.RefKeyword => RefKind.Ref,
+                SyntaxKind.OutKeyword => RefKind.Out,
+                SyntaxKind.InKeyword => RefKind.In,
+                SyntaxKind.None => RefKind.None,
+                _ => throw ExceptionUtilities.UnexpectedValue(syntaxKind),
+            };
         }
 
         public static bool IsWritableReference(this RefKind refKind)
         {
-            switch (refKind)
+            return refKind switch
             {
-                case RefKind.Ref:
-                case RefKind.Out:
-                    return true;
-                case RefKind.None:
-                case RefKind.In:
-                    return false;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(refKind);
-            }
+                RefKind.Ref or RefKind.Out => true,
+                RefKind.None or RefKind.In => false,
+                _ => throw ExceptionUtilities.UnexpectedValue(refKind),
+            };
         }
     }
 }

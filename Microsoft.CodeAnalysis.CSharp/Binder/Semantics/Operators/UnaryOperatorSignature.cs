@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if ((object)Method != null)
+                if (Method is object)
                 {
 
                     if (!Method.ParameterRefKinds.IsDefaultOrEmpty)

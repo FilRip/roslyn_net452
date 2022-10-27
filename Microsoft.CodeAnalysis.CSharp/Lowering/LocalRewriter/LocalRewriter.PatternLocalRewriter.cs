@@ -251,27 +251,15 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 _factory.Syntax = test.Syntax;
                 BoundExpression input = _tempAllocator.GetTemp(test.Input);
-                switch (test)
+                return test switch
                 {
-                    case BoundDagNonNullTest d:
-                        return MakeNullCheck(d.Syntax, input, input.Type.IsNullableType() ? BinaryOperatorKind.NullableNullNotEqual : BinaryOperatorKind.NotEqual);
-
-                    case BoundDagTypeTest d:
-                        // Note that this tests for non-null as a side-effect. We depend on that to sometimes avoid the null check.
-                        return _factory.Is(input, d.Type);
-
-                    case BoundDagExplicitNullTest d:
-                        return MakeNullCheck(d.Syntax, input, input.Type.IsNullableType() ? BinaryOperatorKind.NullableNullEqual : BinaryOperatorKind.Equal);
-
-                    case BoundDagValueTest d:
-                        return MakeValueTest(d.Syntax, input, d.Value);
-
-                    case BoundDagRelationalTest d:
-                        return MakeRelationalTest(d.Syntax, input, d.OperatorKind, d.Value);
-
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(test);
-                }
+                    BoundDagNonNullTest d => MakeNullCheck(d.Syntax, input, input.Type.IsNullableType() ? BinaryOperatorKind.NullableNullNotEqual : BinaryOperatorKind.NotEqual),
+                    BoundDagTypeTest d => _factory.Is(input, d.Type),// Note that this tests for non-null as a side-effect. We depend on that to sometimes avoid the null check.
+                    BoundDagExplicitNullTest d => MakeNullCheck(d.Syntax, input, input.Type.IsNullableType() ? BinaryOperatorKind.NullableNullEqual : BinaryOperatorKind.Equal),
+                    BoundDagValueTest d => MakeValueTest(d.Syntax, input, d.Value),
+                    BoundDagRelationalTest d => MakeRelationalTest(d.Syntax, input, d.OperatorKind, d.Value),
+                    _ => throw ExceptionUtilities.UnexpectedValue(test),
+                };
             }
 
             private BoundExpression MakeNullCheck(SyntaxNode syntax, BoundExpression rewrittenExpr, BinaryOperatorKind operatorKind)
@@ -449,23 +437,17 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 static bool usesOriginalInput(BoundDecisionDagNode node)
                 {
-                    switch (node)
+                    return node switch
                     {
-                        case BoundWhenDecisionDagNode n:
-                            return n.Bindings.Any(b => b.TempContainingValue.IsOriginalInput);
-                        case BoundTestDecisionDagNode t:
-                            return t.Test.Input.IsOriginalInput;
-                        case BoundEvaluationDecisionDagNode e:
-                            switch (e.Evaluation)
-                            {
-                                case BoundDagFieldEvaluation f:
-                                    return f.Input.IsOriginalInput && !f.Field.IsTupleElement();
-                                default:
-                                    return e.Evaluation.Input.IsOriginalInput;
-                            }
-                        default:
-                            return false;
-                    }
+                        BoundWhenDecisionDagNode n => n.Bindings.Any(b => b.TempContainingValue.IsOriginalInput),
+                        BoundTestDecisionDagNode t => t.Test.Input.IsOriginalInput,
+                        BoundEvaluationDecisionDagNode e => e.Evaluation switch
+                        {
+                            BoundDagFieldEvaluation f => f.Input.IsOriginalInput && !f.Field.IsTupleElement(),
+                            _ => e.Evaluation.Input.IsOriginalInput,
+                        },
+                        _ => false,
+                    };
                 }
             }
 

@@ -61,20 +61,12 @@ namespace Microsoft.CodeAnalysis.SymbolDisplay
             ISymbol singleSymbol = null;
             foreach (ISymbol candidate in candidates)
             {
-                int arity;
-                switch (candidate.Kind)
+                var arity = candidate.Kind switch
                 {
-                    case SymbolKind.NamedType:
-                        arity = ((INamedTypeSymbol)candidate).Arity;
-                        break;
-                    case SymbolKind.Method:
-                        arity = ((IMethodSymbol)candidate).Arity;
-                        break;
-                    default:
-                        arity = 0;
-                        break;
-                }
-
+                    SymbolKind.NamedType => ((INamedTypeSymbol)candidate).Arity,
+                    SymbolKind.Method => ((IMethodSymbol)candidate).Arity,
+                    _ => 0,
+                };
                 if (arity == desiredArity)
                 {
                     if (singleSymbol == null)
@@ -93,32 +85,27 @@ namespace Microsoft.CodeAnalysis.SymbolDisplay
 
         protected static ITypeSymbol GetSymbolType(ISymbol symbol)
         {
-            var localSymbol = symbol as ILocalSymbol;
-            if (localSymbol != null)
+            if (symbol is ILocalSymbol localSymbol)
             {
                 return localSymbol.Type;
             }
 
-            var fieldSymbol = symbol as IFieldSymbol;
-            if (fieldSymbol != null)
+            if (symbol is IFieldSymbol fieldSymbol)
             {
                 return fieldSymbol.Type;
             }
 
-            var propertySymbol = symbol as IPropertySymbol;
-            if (propertySymbol != null)
+            if (symbol is IPropertySymbol propertySymbol)
             {
                 return propertySymbol.Type;
             }
 
-            var parameterSymbol = symbol as IParameterSymbol;
-            if (parameterSymbol != null)
+            if (symbol is IParameterSymbol parameterSymbol)
             {
                 return parameterSymbol.Type;
             }
 
-            var aliasSymbol = symbol as IAliasSymbol;
-            if (aliasSymbol != null)
+            if (symbol is IAliasSymbol aliasSymbol)
             {
                 return aliasSymbol.Target as ITypeSymbol;
             }

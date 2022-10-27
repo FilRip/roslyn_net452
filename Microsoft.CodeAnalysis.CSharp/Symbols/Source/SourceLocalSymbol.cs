@@ -551,7 +551,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 MakeConstantTuple(inProgress, boundInitValue: null);
-                return _constantTuple == null ? null : _constantTuple.Value;
+                return _constantTuple?.Value;
             }
 
             internal override ImmutableBindingDiagnostic<AssemblySymbol> GetConstantValueDiagnostics(BoundExpression boundInitValue)
@@ -659,19 +659,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 get
                 {
-                    switch (_deconstruction.Kind())
+                    return _deconstruction.Kind() switch
                     {
-                        case SyntaxKind.SimpleAssignmentExpression:
-                            return _deconstruction;
-
-                        case SyntaxKind.ForEachVariableStatement:
-                            // There is no forbidden zone for a foreach statement, because the
-                            // variables are not in scope in the expression.
-                            return null;
-
-                        default:
-                            return null;
-                    }
+                        SyntaxKind.SimpleAssignmentExpression => _deconstruction,
+                        SyntaxKind.ForEachVariableStatement => null,// There is no forbidden zone for a foreach statement, because the
+                                                                    // variables are not in scope in the expression.
+                        _ => null,
+                    };
                 }
             }
         }

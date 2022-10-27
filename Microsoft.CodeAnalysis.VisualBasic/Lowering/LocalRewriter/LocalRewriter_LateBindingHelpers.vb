@@ -543,7 +543,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' arg0  "object Instance"
             Dim receiver As BoundExpression = LateMakeReceiverArgument(syntax,
-                                                                       If(memberAccess.ReceiverOpt IsNot Nothing, memberAccess.ReceiverOpt.MakeRValue, Nothing),
+                                                                       memberAccess.ReceiverOpt?.MakeRValue,
                                                                        lateSetMethod.Parameters(0).Type)
             ' arg1  "Type Type"
             Dim containerType As BoundExpression = LateMakeContainerArgument(syntax, memberAccess.ReceiverOpt, memberAccess.ContainerTypeOpt, lateSetMethod.Parameters(1).Type)
@@ -783,7 +783,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
             End If
 
-            Dim receiverValue As BoundExpression = If(receiverExpression Is Nothing, Nothing, receiverExpression.MakeRValue)
+            Dim receiverValue As BoundExpression = receiverExpression?.MakeRValue
 
             ' arg0  "object Instance"
             Dim receiver As BoundExpression = LateMakeReceiverArgument(syntax, receiverValue, lateCallOrGetMethod.Parameters(0).Type)

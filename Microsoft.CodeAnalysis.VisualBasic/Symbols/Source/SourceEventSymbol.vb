@@ -595,7 +595,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim lazyCustomAttributesBag = Me._lazyCustomAttributesBag
                 If (lazyCustomAttributesBag IsNot Nothing AndAlso lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed) Then
                     Dim data = DirectCast(_lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData, CommonEventEarlyWellKnownAttributeData)
-                    Return If(data IsNot Nothing, data.ObsoleteAttributeData, Nothing)
+                    Return data?.ObsoleteAttributeData
                 End If
 
                 Return ObsoleteAttributeData.Uninitialized

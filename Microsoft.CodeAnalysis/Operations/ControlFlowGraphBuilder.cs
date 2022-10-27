@@ -2117,14 +2117,11 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
         private static bool IsConditional(IBinaryOperation operation)
         {
-            switch (operation.OperatorKind)
+            return operation.OperatorKind switch
             {
-                case BinaryOperatorKind.ConditionalOr:
-                case BinaryOperatorKind.ConditionalAnd:
-                    return true;
-            }
-
-            return false;
+                BinaryOperatorKind.ConditionalOr or BinaryOperatorKind.ConditionalAnd => true,
+                _ => false,
+            };
         }
 
         public override IOperation VisitBinaryOperator(IBinaryOperation operation, int? captureIdForResult)
@@ -2152,7 +2149,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                              ITypeSymbolHelpers.IsObjectType(operation.LeftOperand.Type) &&
                              ITypeSymbolHelpers.IsObjectType(operation.RightOperand.Type))
                     {
-                        return VisitObjectBinaryConditionalOperator(operation, captureIdForResult);
+                        return VisitObjectBinaryConditionalOperator(operation);
                     }
                     else if (ITypeSymbolHelpers.IsDynamicType(operation.Type) &&
                              (ITypeSymbolHelpers.IsDynamicType(operation.LeftOperand.Type) ||
@@ -2203,18 +2200,12 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
         private static bool CalculateAndOrSense(IBinaryOperation binOp, bool sense)
         {
-            switch (binOp.OperatorKind)
+            return binOp.OperatorKind switch
             {
-                case BinaryOperatorKind.ConditionalOr:
-                    // Rewrite (a || b) as ~(~a && ~b)
-                    return !sense;
-
-                case BinaryOperatorKind.ConditionalAnd:
-                    return sense;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(binOp.OperatorKind);
-            }
+                BinaryOperatorKind.ConditionalOr => !sense,// Rewrite (a || b) as ~(~a && ~b)
+                BinaryOperatorKind.ConditionalAnd => sense,
+                _ => throw ExceptionUtilities.UnexpectedValue(binOp.OperatorKind),
+            };
         }
 
         private IOperation VisitBinaryConditionalOperator(IBinaryOperation binOp, bool sense, int? captureIdForResult,
@@ -2330,7 +2321,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
             return GetCaptureReference(resultId, binOp);
 
-            IOperation negateNullable(IOperation operand)
+            static IOperation negateNullable(IOperation operand)
             {
                 return new UnaryOperation(UnaryOperatorKind.Not, operand, isLifted: true, isChecked: false, operatorMethod: null,
                                                    semanticModel: null, operand.Syntax, operand.Type, constantValue: null, isImplicit: true);
@@ -2338,7 +2329,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             }
         }
 
-        private IOperation VisitObjectBinaryConditionalOperator(IBinaryOperation binOp, int? captureIdForResult)
+        private IOperation VisitObjectBinaryConditionalOperator(IBinaryOperation binOp)
         {
             SpillEvalStack();
 
@@ -3430,7 +3421,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
         private IOperation VisitConditionalAccessTestExpression(IOperation testExpression)
         {
             Debug.Assert(!_currentConditionalAccessTracker.IsDefault);
-            SyntaxNode testExpressionSyntax = testExpression.Syntax;
+            SyntaxNode _ = testExpression.Syntax;
             ITypeSymbol? testExpressionType = testExpression.Type;
 
             var frame = PushStackFrame();
@@ -4193,7 +4184,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             EnterRegion(new RegionBuilder(ControlFlowRegionKind.TryAndFinally));
             EnterRegion(new RegionBuilder(ControlFlowRegionKind.Try));
 
-            IOperation? lockTaken = null;
+            IOperation? lockTaken;
             if (!legacyMode)
             {
                 // Monitor.Enter($lock, ref $lockTaken);

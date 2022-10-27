@@ -153,9 +153,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // In machine-generated code we frequently end up with binary operator trees that are deep on the left,
                 // such as a + b + c + d ...
                 // To avoid blowing the call stack, we build an explicit stack to handle the left-hand recursion.
-                var binOp = current as BoundBinaryOperator;
 
-                if (binOp != null)
+                if (current is BoundBinaryOperator binOp)
                 {
                     var stack = ArrayBuilder<BoundExpression>.GetInstance();
 

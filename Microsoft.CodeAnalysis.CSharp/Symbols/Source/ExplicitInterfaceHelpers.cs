@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static string GetMemberName(string name, TypeSymbol explicitInterfaceTypeOpt, string aliasQualifierOpt)
         {
-            if ((object)explicitInterfaceTypeOpt == null)
+            if (explicitInterfaceTypeOpt is null)
             {
                 return name;
             }
@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifierSyntax,
             BindingDiagnosticBag diagnostics)
         {
-            if ((object)explicitInterfaceType == null)
+            if (explicitInterfaceType is null)
             {
                 return null;
             }
@@ -279,7 +279,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             // Make sure implemented member is accessible
-            if ((object)implementedMember != null)
+            if (implementedMember is object)
             {
                 var useSiteInfo = new CompoundUseSiteInfo<AssemblySymbol>(diagnostics, implementingMember.ContainingAssembly);
 
@@ -325,7 +325,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             Symbol implementedMember,
             BindingDiagnosticBag diagnostics)
         {
-            if ((object)implementedMember == null)
+            if (implementedMember is null)
             {
                 return;
             }
@@ -350,7 +350,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         private static void FindExplicitImplementationCollisions(Symbol implementingMember, Symbol implementedMember, BindingDiagnosticBag diagnostics)
         {
-            if ((object)implementedMember == null)
+            if (implementedMember is null)
             {
                 return;
             }

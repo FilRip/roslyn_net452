@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             PooledStringBuilder sb = PooledStringBuilder.GetInstance();
-            StringBuilder builder = sb.Builder;
+            _ = sb.Builder;
             AppendKey(sb, key);
             return sb.ToStringAndFree();
         }

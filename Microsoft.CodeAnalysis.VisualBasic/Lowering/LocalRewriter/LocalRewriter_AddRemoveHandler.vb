@@ -101,8 +101,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Dim delegateCreationArgument = If(boundTemp, If(rewrittenReceiverOpt, New BoundTypeExpression(syntax, eventType).MakeCompilerGenerated)).MakeRValue
 
-            Dim removeDelegate As BoundDelegateCreationExpression =
-                New BoundDelegateCreationExpression(
+            Dim removeDelegate As                 New BoundDelegateCreationExpression(
                     syntax:=syntax,
                     receiverOpt:=delegateCreationArgument,
                     method:=eventSymbol.RemoveMethod,
@@ -117,8 +116,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim func2Type As NamedTypeSymbol = Me.Compilation.GetWellKnownType(WellKnownType.System_Func_T2)
                 func2Type = func2Type.Construct(eventType, tokenType)
 
-                Dim addDelegate As BoundDelegateCreationExpression =
-                    New BoundDelegateCreationExpression(
+                Dim addDelegate As                     New BoundDelegateCreationExpression(
                         syntax:=syntax,
                         receiverOpt:=delegateCreationArgument,
                         method:=eventSymbol.AddMethod,

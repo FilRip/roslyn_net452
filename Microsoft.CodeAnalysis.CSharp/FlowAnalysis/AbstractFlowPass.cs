@@ -346,8 +346,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         [DebuggerStepThrough]
         private BoundNode VisitWithStackGuard(BoundNode node)
         {
-            var expression = node as BoundExpression;
-            if (expression != null)
+            if (node is BoundExpression expression)
             {
                 return VisitExpressionWithStackGuard(ref _recursionDepth, expression);
             }
@@ -451,8 +450,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                var method = _symbol as MethodSymbol;
-                return (object)method == null ? ImmutableArray<ParameterSymbol>.Empty : method.Parameters;
+                return _symbol is not MethodSymbol method ? ImmutableArray<ParameterSymbol>.Empty : method.Parameters;
             }
         }
 
@@ -479,8 +477,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns>true if the out parameters of the method should be analyzed</returns>
         protected bool ShouldAnalyzeOutParameters(out Location location)
         {
-            var method = _symbol as MethodSymbol;
-            if ((object)method == null || method.Locations.Length != 1)
+            if (_symbol is not MethodSymbol method || method.Locations.Length != 1)
             {
                 location = null;
                 return false;
@@ -623,7 +620,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Unsplit();
                 SetConditionalState(UnreachableState(), this.State);
             }
-            else if ((object)node.Type == null || node.Type.SpecialType != SpecialType.System_Boolean)
+            else if (node.Type is null || node.Type.SpecialType != SpecialType.System_Boolean)
             {
                 // a dynamic type or a type with operator true/false
                 Unsplit();
@@ -1248,26 +1245,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns></returns>
         private static bool TypeIsImmutable(TypeSymbol t)
         {
-            switch (t.SpecialType)
+            return t.SpecialType switch
             {
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Decimal:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                case SpecialType.System_DateTime:
-                    return true;
-                default:
-                    return t.IsNullableType();
-            }
+                SpecialType.System_Boolean or SpecialType.System_Char or SpecialType.System_SByte or SpecialType.System_Byte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_Decimal or SpecialType.System_Single or SpecialType.System_Double or SpecialType.System_DateTime => true,
+                _ => t.IsNullableType(),
+            };
         }
 
         public override BoundNode VisitIndexerAccess(BoundIndexerAccess node)
@@ -1275,7 +1257,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var method = GetReadMethod(node.Indexer);
             VisitReceiverBeforeCall(node.ReceiverOpt, method);
             VisitArguments(node.Arguments, node.ArgumentRefKindsOpt, method);
-            if ((object)method != null)
+            if (method is object)
             {
                 VisitReceiverAfterCall(node.ReceiverOpt, method);
             }
@@ -1403,10 +1385,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitDelegateCreationExpression(BoundDelegateCreationExpression node)
         {
-            var methodGroup = node.Argument as BoundMethodGroup;
-            if (methodGroup != null)
+            if (node.Argument is BoundMethodGroup methodGroup)
             {
-                if ((object)node.MethodOpt != null && node.MethodOpt.RequiresInstanceReceiver)
+                if (node.MethodOpt is object && node.MethodOpt.RequiresInstanceReceiver)
                 {
                     if (TrackingRegions)
                     {
@@ -1491,7 +1472,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node.ConversionKind == ConversionKind.MethodGroup)
             {
-                if (node.IsExtensionMethod || ((object)node.SymbolOpt != null && node.SymbolOpt.RequiresInstanceReceiver))
+                if (node.IsExtensionMethod || (node.SymbolOpt is object && node.SymbolOpt.RequiresInstanceReceiver))
                 {
                     BoundExpression receiver = ((BoundMethodGroup)node.Operand).ReceiverOpt;
                     // A method group's "implicit this" is only used for instance methods.
@@ -1928,13 +1909,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitFieldAccessInternal(BoundExpression receiverOpt, FieldSymbol fieldSymbol)
         {
-            bool asLvalue = (object)fieldSymbol != null &&
+            bool asLvalue = fieldSymbol is object &&
                 (fieldSymbol.IsFixedSizeBuffer ||
                 !fieldSymbol.IsStatic &&
                 fieldSymbol.ContainingType.TypeKind == TypeKind.Struct &&
                 receiverOpt != null &&
                 receiverOpt.Kind != BoundKind.TypeExpression &&
-                (object)receiverOpt.Type != null &&
+                receiverOpt.Type is object &&
                 !receiverOpt.Type.IsPrimitiveRecursiveStruct());
             if (asLvalue)
             {

@@ -218,7 +218,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 get
                 {
-                    if ((object?)_lazyContainingNamespace == null)
+                    if (_lazyContainingNamespace is null)
                     {
                         NamespaceSymbol container = _containingModule.GlobalNamespace;
 
@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                     }
                                 }
 
-                                if ((object?)newContainer == null)
+                                if (newContainer is null)
                                 {
                                     break;
                                 }
@@ -272,7 +272,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                         AssemblySymbol containingAssembly = _containingModule.ContainingAssembly;
 
-                        if ((Arity == 0 || MangleName) && (object)containingAssembly != null && ReferenceEquals(containingAssembly, containingAssembly.CorLibrary) && _containingModule.Ordinal == 0)
+                        if ((Arity == 0 || MangleName) && containingAssembly is object && ReferenceEquals(containingAssembly, containingAssembly.CorLibrary) && _containingModule.Ordinal == 0)
                         {
                             // Check the name 
                             string emittedName = MetadataHelpers.BuildQualifiedName(_namespaceName, MetadataName);
@@ -351,15 +351,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // if ignoring dynamic, then treat dynamic the same as the type 'object'
                 if ((comparison & TypeCompareKind.IgnoreDynamic) != 0 &&
-                    (object)t2 != null &&
+                    t2 is object &&
                     t2.TypeKind == TypeKind.Dynamic &&
                     this.SpecialType == Microsoft.CodeAnalysis.SpecialType.System_Object)
                 {
                     return true;
                 }
 
-                var other = t2 as TopLevel;
-                if (other is null)
+                if (t2 is not TopLevel other)
                 {
                     return false;
                 }
@@ -438,8 +437,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 }
 
-                var other = t2 as Nested;
-                return (object?)other != null && string.Equals(MetadataName, other.MetadataName, StringComparison.Ordinal) &&
+                return t2 is Nested other && string.Equals(MetadataName, other.MetadataName, StringComparison.Ordinal) &&
                     arity == other.arity &&
                     _containingType.Equals(other._containingType, comparison);
             }

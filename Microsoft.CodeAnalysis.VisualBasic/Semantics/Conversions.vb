@@ -1097,9 +1097,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Else
                 Dim wasExpressionTree As Boolean
                 Dim delegateType As NamedTypeSymbol = destination.DelegateOrExpressionDelegate(source.Binder, wasExpressionTree)
-                delegateInvoke = If(delegateType IsNot Nothing,
-                                    delegateType.DelegateInvokeMethod,
-                                    Nothing)
+                delegateInvoke = delegateType?.DelegateInvokeMethod
                 If wasExpressionTree Then
                     conversionKindExpressionTree = ConversionKind.ConvertedToExpressionTree
                 End If
@@ -1169,7 +1167,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Dim sourceType = source.InferredType
             Dim targetType = TryCast(destination, NamedTypeSymbol)
-            Dim originalTargetType = If(targetType IsNot Nothing, targetType.OriginalDefinition, Nothing)
+            Dim originalTargetType = targetType?.OriginalDefinition
             Dim targetElementType As TypeSymbol = Nothing
             Dim targetArrayType As ArrayTypeSymbol = TryCast(destination, ArrayTypeSymbol)
 

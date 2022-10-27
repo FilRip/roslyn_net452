@@ -154,8 +154,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
-                    var parentType = methodDecl.Parent as TypeDeclarationSyntax;
-                    if (parentType != null)
+                    if (methodDecl.Parent is TypeDeclarationSyntax parentType)
                     {
                         resultBinder = VisitTypeDeclarationCore(parentType, NodeUsage.NamedTypeBodyOrTypeParameters);
                     }
@@ -205,7 +204,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (inBodyOrInitializer)
                     {
                         var method = GetMethodSymbol(parent, resultBinder);
-                        if ((object)method != null)
+                        if (method is object)
                         {
                             // Ctors cannot be generic
                             //TODO: the error should be given in a different place, but should we ignore or consider the type args?
@@ -275,7 +274,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SyntaxKind.IndexerDeclaration:
                                 {
                                     var propertySymbol = GetPropertySymbol((BasePropertyDeclarationSyntax)propertyOrEventDecl, resultBinder);
-                                    if ((object)propertySymbol != null)
+                                    if (propertySymbol is object)
                                     {
                                         accessor = (parent.Kind() == SyntaxKind.GetAccessorDeclaration) ? propertySymbol.GetMethod : propertySymbol.SetMethod;
                                     }
@@ -288,7 +287,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     // but we want to bind them anyway for error tolerance reasons.
 
                                     var eventSymbol = GetEventSymbol((EventDeclarationSyntax)propertyOrEventDecl, resultBinder);
-                                    if ((object)eventSymbol != null)
+                                    if (eventSymbol is object)
                                     {
                                         accessor = (parent.Kind() == SyntaxKind.AddAccessorDeclaration) ? eventSymbol.AddMethod : eventSymbol.RemoveMethod;
                                     }
@@ -298,7 +297,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 throw ExceptionUtilities.UnexpectedValue(propertyOrEventDecl.Kind());
                         }
 
-                        if ((object)accessor != null)
+                        if (accessor is object)
                         {
                             resultBinder = new InMethodBinder(accessor, resultBinder);
                         }
@@ -327,7 +326,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     resultBinder = VisitCore(parent.Parent);
 
                     MethodSymbol method = GetMethodSymbol(parent, resultBinder);
-                    if ((object)method != null && inBody)
+                    if (method is object && inBody)
                     {
                         resultBinder = new InMethodBinder(method, resultBinder);
                     }
@@ -395,7 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     var propertySymbol = GetPropertySymbol(parent, resultBinder);
                     var accessor = propertySymbol.GetMethod;
-                    if ((object)accessor != null)
+                    if (accessor is object)
                     {
                         resultBinder = new InMethodBinder(accessor, resultBinder);
                     }
@@ -409,8 +408,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             private NamedTypeSymbol GetContainerType(Binder binder, CSharpSyntaxNode node)
             {
                 Symbol containingSymbol = binder.ContainingMemberOrLambda;
-                var container = containingSymbol as NamedTypeSymbol;
-                if ((object)container == null)
+                if (containingSymbol is not NamedTypeSymbol container)
                 {
                     if (node.Parent.Kind() == SyntaxKind.CompilationUnit && SyntaxTree.Options.Kind != SourceCodeKind.Regular)
                     {
@@ -486,7 +484,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 NamedTypeSymbol container = GetContainerType(outerBinder, baseMethodDeclarationSyntax);
-                if ((object)container == null)
+                if (container is null)
                 {
                     return null;
                 }
@@ -504,7 +502,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 NamedTypeSymbol container = GetContainerType(outerBinder, basePropertyDeclarationSyntax);
-                if ((object)container == null)
+                if (container is null)
                 {
                     return null;
                 }
@@ -521,7 +519,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 NamedTypeSymbol container = GetContainerType(outerBinder, eventDeclarationSyntax);
-                if ((object)container == null)
+                if (container is null)
                 {
                     return null;
                 }
@@ -551,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // not the implementation (method.Locations includes both parts). If the
                         // span is in fact in the implementation, return that method instead.
                         var implementation = ((MethodSymbol)sym).PartialImplementationPart;
-                        if ((object)implementation != null)
+                        if (implementation is object)
                         {
                             if (InSpan(implementation.Locations[0], this.SyntaxTree, memberSpan))
                             {
@@ -819,7 +817,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 NamespaceSymbol ns = ((NamespaceSymbol)container).GetNestedNamespace(name);
-                if ((object)ns == null) return outer;
+                if (ns is null) return outer;
 
                 if (node is NamespaceDeclarationSyntax namespaceDecl)
                 {
@@ -1066,24 +1064,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 XmlNameAttributeElementKind elementKind = parent.GetElementKind();
-
-
-                NodeUsage extraInfo;
-                switch (elementKind)
+                var extraInfo = elementKind switch
                 {
-                    case XmlNameAttributeElementKind.Parameter:
-                    case XmlNameAttributeElementKind.ParameterReference:
-                        extraInfo = NodeUsage.DocumentationCommentParameter;
-                        break;
-                    case XmlNameAttributeElementKind.TypeParameter:
-                        extraInfo = NodeUsage.DocumentationCommentTypeParameter;
-                        break;
-                    case XmlNameAttributeElementKind.TypeParameterReference:
-                        extraInfo = NodeUsage.DocumentationCommentTypeParameterReference;
-                        break;
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(elementKind);
-                }
+                    XmlNameAttributeElementKind.Parameter or XmlNameAttributeElementKind.ParameterReference => NodeUsage.DocumentationCommentParameter,
+                    XmlNameAttributeElementKind.TypeParameter => NodeUsage.DocumentationCommentTypeParameter,
+                    XmlNameAttributeElementKind.TypeParameterReference => NodeUsage.DocumentationCommentTypeParameterReference,
+                    _ => throw ExceptionUtilities.UnexpectedValue(elementKind),
+                };
 
                 // Cleverness: rather than using this node as the key, we're going to use the
                 // enclosing doc comment, because all name attributes with the same element
@@ -1165,7 +1152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // BREAK: Dev11 also allows "value" for readonly properties, but that doesn't
                     // make sense and we don't have a symbol.
-                    if ((object)property.SetMethod != null)
+                    if (property.SetMethod is object)
                     {
                         parameters = parameters.Add(property.SetMethod.Parameters.Last());
                     }
@@ -1199,7 +1186,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (includeContainingSymbols)
                 {
                     Binder outerBinder = VisitCore(memberSyntax.Parent);
-                    for (NamedTypeSymbol curr = outerBinder.ContainingType; (object)curr != null; curr = curr.ContainingType)
+                    for (NamedTypeSymbol curr = outerBinder.ContainingType; curr is object; curr = curr.ContainingType)
                     {
                         if (curr.Arity > 0)
                         {
@@ -1209,8 +1196,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 // NOTE: don't care about enums, since they don't have type parameters.
-                TypeDeclarationSyntax typeDeclSyntax = memberSyntax as TypeDeclarationSyntax;
-                if (typeDeclSyntax != null && typeDeclSyntax.Arity > 0)
+                if (memberSyntax is TypeDeclarationSyntax typeDeclSyntax && typeDeclSyntax.Arity > 0)
                 {
                     Binder outerBinder = VisitCore(memberSyntax.Parent);
                     SourceNamedTypeSymbol typeSymbol = ((NamespaceOrTypeSymbol)outerBinder.ContainingMemberOrLambda).GetSourceTypeMember(typeDeclSyntax);
@@ -1261,10 +1247,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         internal static Binder MakeCrefBinder(CrefSyntax crefSyntax, MemberDeclarationSyntax memberSyntax, BinderFactory factory, bool inParameterOrReturnType = false)
         {
-
-            BaseTypeDeclarationSyntax typeDeclSyntax = memberSyntax as BaseTypeDeclarationSyntax;
-
-            Binder binder = typeDeclSyntax == null
+            Binder binder = memberSyntax is not BaseTypeDeclarationSyntax typeDeclSyntax
                 ? factory.GetBinder(memberSyntax)
                 : factory.GetBinder(memberSyntax, typeDeclSyntax.OpenBraceToken.SpanStart);
 
@@ -1302,8 +1285,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CSharpSyntaxNode curr = (CSharpSyntaxNode)associatedToken.Parent;
             while (curr != null)
             {
-                MemberDeclarationSyntax memberSyntax = curr as MemberDeclarationSyntax;
-                if (memberSyntax != null)
+                if (curr is MemberDeclarationSyntax memberSyntax)
                 {
                     // CONSIDER: require that the xml syntax precede the start of the member span?
                     return memberSyntax;

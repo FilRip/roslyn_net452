@@ -37,20 +37,13 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static CharSet ToCharSet(this TypeAttributes flags)
         {
-            switch (flags & TypeAttributes.StringFormatMask)
+            return (flags & TypeAttributes.StringFormatMask) switch
             {
-                case TypeAttributes.AutoClass:
-                    return Cci.Constants.CharSet_Auto;
-
-                case TypeAttributes.AnsiClass:
-                    return CharSet.Ansi;
-
-                case TypeAttributes.UnicodeClass:
-                    return CharSet.Unicode;
-
-                default:
-                    return 0;
-            }
+                TypeAttributes.AutoClass => Cci.Constants.CharSet_Auto,
+                TypeAttributes.AnsiClass => CharSet.Ansi,
+                TypeAttributes.UnicodeClass => CharSet.Unicode,
+                _ => 0,
+            };
         }
     }
 }

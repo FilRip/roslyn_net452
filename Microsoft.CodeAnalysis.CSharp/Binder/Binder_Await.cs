@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var call = (BoundCall)expression;
 
             // First check if the target method is async.
-            if ((object)call.Method != null && call.Method.IsAsync)
+            if (call.Method is object && call.Method.IsAsync)
             {
                 return true;
             }
@@ -102,8 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Finally, if we're in an async method, and the expression could be awaited, report that it is instead discarded.
-            var containingMethod = this.ContainingMemberOrLambda as MethodSymbol;
-            if (containingMethod is null || !containingMethod.IsAsync)
+            if (this.ContainingMemberOrLambda is not MethodSymbol containingMethod || !containingMethod.IsAsync)
             {
                 return false;
             }

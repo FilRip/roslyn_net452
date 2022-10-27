@@ -860,9 +860,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return true;
                 }
 
-                var other = obj as ReturnInferenceCacheKey;
 
-                if (other is null ||
+                if (obj is not ReturnInferenceCacheKey other ||
                     other.ParameterTypes.Length != this.ParameterTypes.Length ||
                     !TypeSymbol.Equals(other.TaskLikeReturnTypeOpt, this.TaskLikeReturnTypeOpt, TypeCompareKind.ConsiderEverything2))
                 {
@@ -1267,16 +1266,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override Location ParameterLocation(int index)
         {
             var syntax = UnboundLambda.Syntax;
-            switch (syntax.Kind())
+            return syntax.Kind() switch
             {
-                default:
-                case SyntaxKind.SimpleLambdaExpression:
-                    return ((SimpleLambdaExpressionSyntax)syntax).Parameter.Identifier.GetLocation();
-                case SyntaxKind.ParenthesizedLambdaExpression:
-                    return ((ParenthesizedLambdaExpressionSyntax)syntax).ParameterList.Parameters[index].Identifier.GetLocation();
-                case SyntaxKind.AnonymousMethodExpression:
-                    return ((AnonymousMethodExpressionSyntax)syntax).ParameterList!.Parameters[index].Identifier.GetLocation();
-            }
+                SyntaxKind.ParenthesizedLambdaExpression => ((ParenthesizedLambdaExpressionSyntax)syntax).ParameterList.Parameters[index].Identifier.GetLocation(),
+                SyntaxKind.AnonymousMethodExpression => ((AnonymousMethodExpressionSyntax)syntax).ParameterList!.Parameters[index].Identifier.GetLocation(),
+                _ => ((SimpleLambdaExpressionSyntax)syntax).Parameter.Identifier.GetLocation(),
+            };
         }
 
         private bool IsExpressionLambda { get { return Body.Kind() != SyntaxKind.Block; } }
@@ -1293,7 +1288,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override bool ParameterIsDiscard(int index)
         {
-            return _parameterIsDiscardOpt.IsDefault ? false : _parameterIsDiscardOpt[index];
+            return !_parameterIsDiscardOpt.IsDefault && _parameterIsDiscardOpt[index];
         }
 
         public override RefKind RefKind(int index)

@@ -292,9 +292,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
             Dim result As NamedTypeSymbol = Nothing
 
-            Dim interfaceGuidValue As Guid = New Guid()
+            Dim interfaceGuidValue As New Guid()
             Dim haveInterfaceGuidValue As Boolean = False
-            Dim scopeGuidValue As Guid = New Guid()
+            Dim scopeGuidValue As New Guid()
             Dim haveScopeGuidValue As Boolean = False
 
             If isInterface AndAlso interfaceGuid IsNot Nothing Then
@@ -337,7 +337,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
                 Dim candidateGuid As String = Nothing
                 Dim haveCandidateGuidValue As Boolean = False
-                Dim candidateGuidValue As Guid = New Guid()
+                Dim candidateGuidValue As New Guid()
 
                 ' The type must be of the same kind (interface, struct, delegate or enum).
                 Select Case candidate.TypeKind

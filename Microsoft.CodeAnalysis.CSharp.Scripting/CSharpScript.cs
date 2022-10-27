@@ -4,8 +4,6 @@
 
 #nullable disable
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
-
 using System;
 using System.IO;
 using System.Threading;

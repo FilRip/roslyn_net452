@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 object key;
                 var constantValue = label.SwitchCaseLabelConstant;
-                if ((object)constantValue != null && !constantValue.IsBad)
+                if (constantValue is object && !constantValue.IsBad)
                 {
                     // Case labels with a non-null constant value are indexed on their ConstantValue.
                     key = KeyForConstant(constantValue);
@@ -281,7 +281,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Invalid case labels (with null constant value) are indexed on the label syntax.
 
             object key;
-            if ((object)constantValue != null && !constantValue.IsBad)
+            if (constantValue is object && !constantValue.IsBad)
             {
                 key = KeyForConstant(constantValue);
             }
@@ -368,7 +368,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var switchGoverningExpression = binder.BindRValueWithoutTargetType(node, diagnostics);
             var switchGoverningType = switchGoverningExpression.Type;
 
-            if ((object)switchGoverningType != null && !switchGoverningType.IsErrorType())
+            if (switchGoverningType is object && !switchGoverningType.IsErrorType())
             {
                 // SPEC:    The governing type of a switch statement is established by the switch expression.
                 // SPEC:    1) If the type of the switch expression is sbyte, byte, short, ushort, int, uint,
@@ -500,7 +500,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     matchedLabelSymbol = GetDefaultLabel();
                 }
 
-                if ((object)matchedLabelSymbol == null)
+                if (matchedLabelSymbol is null)
                 {
                     if (!hasErrors)
                     {

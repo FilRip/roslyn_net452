@@ -65,9 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         Cci.ITypeReference Cci.ITypeMemberReference.GetContainingType(EmitContext context)
         {
-
-            var synthesizedGlobalMethod = AdaptedMethodSymbol as SynthesizedGlobalMethodSymbol;
-            if ((object)synthesizedGlobalMethod != null)
+            if (AdaptedMethodSymbol is SynthesizedGlobalMethodSymbol synthesizedGlobalMethod)
             {
                 return synthesizedGlobalMethod.ContainingPrivateImplementationDetailsType;
             }
@@ -282,8 +280,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 CheckDefinitionInvariant();
 
-                var synthesizedGlobalMethod = AdaptedMethodSymbol as SynthesizedGlobalMethodSymbol;
-                if ((object)synthesizedGlobalMethod != null)
+                if (AdaptedMethodSymbol is SynthesizedGlobalMethodSymbol synthesizedGlobalMethod)
                 {
                     return synthesizedGlobalMethod.ContainingPrivateImplementationDetailsType;
                 }
@@ -589,7 +586,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Note that we don't force methods marked with MethodImplAttributes.InternalCall or MethodImplAttributes.Runtime
                 // to be external, so it is possible to mark methods with bodies by these flags. It's up to the VM to interpret these flags
                 // and throw runtime exception if they are applied incorrectly.
-                return this.IsExtern || (object)ContainingType != null && ContainingType.TypeKind == TypeKind.Delegate;
+                return this.IsExtern || ContainingType is object && ContainingType.TypeKind == TypeKind.Delegate;
             }
         }
 

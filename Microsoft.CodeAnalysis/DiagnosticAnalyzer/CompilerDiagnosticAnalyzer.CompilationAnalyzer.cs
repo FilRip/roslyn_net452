@@ -86,9 +86,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     _properties = properties;
                 }
 
-#pragma warning disable RS0013 // we are delegating so it is okay here
                 public override DiagnosticDescriptor Descriptor => _original.Descriptor;
-#pragma warning restore RS0013 
 
                 public override int Code => _original.Code;
                 public override IReadOnlyList<object?> Arguments => _original.Arguments;

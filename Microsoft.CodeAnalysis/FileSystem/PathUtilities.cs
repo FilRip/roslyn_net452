@@ -51,7 +51,7 @@ namespace Roslyn.Utilities
             int lastSeparator = s.Length;
             while (lastSeparator > 0 && IsDirectorySeparator(s[lastSeparator - 1]))
             {
-                lastSeparator -= 1;
+                lastSeparator--;
             }
 
             if (lastSeparator != s.Length)
@@ -411,18 +411,12 @@ namespace Roslyn.Utilities
                 return null;
             }
 
-            switch (GetPathKind(relativePath))
+            return GetPathKind(relativePath) switch
             {
-                case PathKind.Empty:
-                    return root;
-
-                case PathKind.Absolute:
-                case PathKind.RelativeToCurrentRoot:
-                case PathKind.RelativeToDriveDirectory:
-                    return null;
-            }
-
-            return CombinePathsUnchecked(root, relativePath);
+                PathKind.Empty => root,
+                PathKind.Absolute or PathKind.RelativeToCurrentRoot or PathKind.RelativeToDriveDirectory => null,
+                _ => CombinePathsUnchecked(root, relativePath),
+            };
         }
 
         public static string CombinePathsUnchecked(string root, string? relativePath)

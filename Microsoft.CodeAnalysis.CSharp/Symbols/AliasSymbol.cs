@@ -228,8 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal void CheckConstraints(BindingDiagnosticBag diagnostics)
         {
-            var target = this.Target as TypeSymbol;
-            if ((object?)target != null && Locations.Length > 0)
+            if (this.Target is TypeSymbol target && Locations.Length > 0)
             {
                 var corLibrary = this.ContainingAssembly.CorLibrary;
                 var conversions = new TypeConversions(corLibrary);
@@ -244,14 +243,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if (ReferenceEquals(obj, null))
+            if (obj is null)
             {
                 return false;
             }
 
-            AliasSymbol? other = obj as AliasSymbol;
 
-            return (object?)other != null &&
+            return obj is AliasSymbol other &&
                 Equals(this.Locations.FirstOrDefault(), other.Locations.FirstOrDefault()) &&
                 this.ContainingAssembly.Equals(other.ContainingAssembly, compareKind);
         }
@@ -322,7 +320,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     ResolveExternAliasTarget(newDiagnostics) :
                     ResolveAliasTarget(((UsingDirectiveSyntax)_directive.GetSyntax()).Name, newDiagnostics, basesBeingResolved);
 
-                if ((object?)Interlocked.CompareExchange(ref _aliasTarget, symbol, null) == null)
+                if (Interlocked.CompareExchange(ref _aliasTarget, symbol, null) is null)
                 {
                     // Note: It's important that we don't call newDiagnosticsToReadOnlyAndFree here. That call
                     // can force the prompt evaluation of lazy initialized diagnostics.  That in turn can 

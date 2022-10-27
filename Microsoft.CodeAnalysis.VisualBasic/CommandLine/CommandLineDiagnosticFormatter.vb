@@ -112,7 +112,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Next
 
                 ' The error span can continue over multiple lines
-                linenumber = linenumber + 1
+                linenumber += 1
                 If linenumber >= text.Lines.Count Then
                     ' Exit the loop when we reach the end line (0-based)
                     Exit While

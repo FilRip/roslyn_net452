@@ -357,7 +357,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             var result = subpatternBuilder.ToString();
                             if (deconstruction != null && needsPropertyString)
                             {
-                                deconstruction = deconstruction + " { }";
+                                deconstruction += " { }";
                                 needsPropertyString = properties.Count != 0;
                             }
 

@@ -83,25 +83,14 @@ namespace Microsoft.CodeAnalysis
 
         internal string GetMessagePrefix(Diagnostic diagnostic)
         {
-            string prefix;
-            switch (diagnostic.Severity)
+            string prefix = diagnostic.Severity switch
             {
-                case DiagnosticSeverity.Hidden:
-                    prefix = "hidden";
-                    break;
-                case DiagnosticSeverity.Info:
-                    prefix = "info";
-                    break;
-                case DiagnosticSeverity.Warning:
-                    prefix = "warning";
-                    break;
-                case DiagnosticSeverity.Error:
-                    prefix = "error";
-                    break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(diagnostic.Severity);
-            }
-
+                DiagnosticSeverity.Hidden => "hidden",
+                DiagnosticSeverity.Info => "info",
+                DiagnosticSeverity.Warning => "warning",
+                DiagnosticSeverity.Error => "error",
+                _ => throw ExceptionUtilities.UnexpectedValue(diagnostic.Severity),
+            };
             return string.Format("{0} {1}", prefix, diagnostic.Id);
         }
 

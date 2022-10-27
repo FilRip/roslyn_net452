@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Char:
@@ -288,7 +288,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.SByte:
@@ -296,7 +296,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Byte:
@@ -304,7 +304,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Int16:
@@ -312,7 +312,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.UInt16:
@@ -320,7 +320,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Int32:
@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.UInt32:
@@ -336,7 +336,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Int64:
@@ -344,7 +344,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.UInt64:
@@ -352,7 +352,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Single:
@@ -360,7 +360,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Double:
@@ -368,7 +368,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.String:
@@ -376,7 +376,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.Object:
@@ -384,7 +384,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SerializationTypeCode.Type:
@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 return false;
                             }
-                            parameterIndex += 1;
+                            parameterIndex++;
                             break;
 
                         case (byte)SignatureTypeCode.SZArray:

@@ -73,8 +73,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 return true;
             }
 
-            var other = obj as AnalyzerOptions;
-            return other != null &&
+            return obj is AnalyzerOptions other &&
                 (this.AdditionalFiles == other.AdditionalFiles ||
                 this.AdditionalFiles.SequenceEqual(other.AdditionalFiles, ReferenceEquals));
         }

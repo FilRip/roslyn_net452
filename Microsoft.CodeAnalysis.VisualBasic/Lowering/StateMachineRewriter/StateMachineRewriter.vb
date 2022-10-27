@@ -311,7 +311,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             If slotIndex = -1 Then
                 slotIndex = Me.nextFreeHoistedLocalSlot
-                Me.nextFreeHoistedLocalSlot = Me.nextFreeHoistedLocalSlot + 1
+                Me.nextFreeHoistedLocalSlot += 1
             End If
 
             proxy = CreateByValLocalCapture(MakeHoistedFieldForLocal(local, fieldType, slotIndex, id), local)

@@ -413,7 +413,7 @@ namespace Microsoft.CodeAnalysis
 
             return new AssemblyIdentity(
                 GetName(nameObject),
-                GetVersion(nameObject, out AssemblyIdentityParts versionParts),
+                GetVersion(nameObject, out AssemblyIdentityParts _),
                 GetCulture(nameObject) ?? "",
                 (hasPublicKey ? publicKey : GetPublicKeyToken(nameObject)).AsImmutableOrNull(),
                 hasPublicKey: hasPublicKey,

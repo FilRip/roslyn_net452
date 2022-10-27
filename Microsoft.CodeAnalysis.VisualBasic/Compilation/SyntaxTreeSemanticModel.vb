@@ -1895,7 +1895,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim memberModel As MemberSemanticModel = GetMemberSemanticModel(expression)
             If memberModel Is Nothing Then
                 ' Recover from error cases
-                Dim node As BoundBadStatement = New BoundBadStatement(expression, ImmutableArray(Of BoundNode).Empty)
+                Dim node As New BoundBadStatement(expression, ImmutableArray(Of BoundNode).Empty)
                 Return New RegionAnalysisContext(Compilation, Nothing, node, node, node, region)
             End If
 
@@ -1911,7 +1911,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim memberModel As MemberSemanticModel = GetMemberSemanticModel(firstStatement)
             If memberModel Is Nothing Then
                 ' Recover from error cases
-                Dim node As BoundBadStatement = New BoundBadStatement(firstStatement, ImmutableArray(Of BoundNode).Empty)
+                Dim node As New BoundBadStatement(firstStatement, ImmutableArray(Of BoundNode).Empty)
                 Return New RegionAnalysisContext(Compilation, Nothing, node, node, node, region)
             End If
 

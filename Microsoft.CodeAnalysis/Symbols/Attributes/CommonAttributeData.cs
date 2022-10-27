@@ -254,17 +254,13 @@ namespace Microsoft.CodeAnalysis
 
         public ObsoleteAttributeData DecodeObsoleteAttribute(ObsoleteAttributeKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case ObsoleteAttributeKind.Obsolete:
-                    return DecodeObsoleteAttribute();
-                case ObsoleteAttributeKind.Deprecated:
-                    return DecodeDeprecatedAttribute();
-                case ObsoleteAttributeKind.Experimental:
-                    return DecodeExperimentalAttribute();
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(kind);
-            }
+                ObsoleteAttributeKind.Obsolete => DecodeObsoleteAttribute(),
+                ObsoleteAttributeKind.Deprecated => DecodeDeprecatedAttribute(),
+                ObsoleteAttributeKind.Experimental => DecodeExperimentalAttribute(),
+                _ => throw ExceptionUtilities.UnexpectedValue(kind),
+            };
         }
 
 #nullable enable

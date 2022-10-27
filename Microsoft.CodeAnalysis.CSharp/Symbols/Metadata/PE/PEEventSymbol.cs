@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
             catch (BadImageFormatException mrEx)
             {
-                _name = _name ?? string.Empty;
+                _name ??= string.Empty;
                 _lazyCachedUseSiteInfo.Initialize(new CSDiagnosticInfo(ErrorCode.ERR_BindToBogus, this));
 
                 if (eventType.IsNil)
@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 _removeMethod.SetAssociatedEvent(this, MethodKind.EventRemove);
 
                 PEFieldSymbol? associatedField = GetAssociatedField(privateFieldNameToSymbols, isWindowsRuntimeEvent);
-                if ((object?)associatedField != null)
+                if (associatedField is object)
                 {
                     _associatedFieldOpt = associatedField;
                     associatedField.SetAssociatedEvent(this);

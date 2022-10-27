@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
             catch (BadImageFormatException)
             {
-                if ((object)_name == null)
+                if (_name is null)
                 {
                     _name = string.Empty;
                 }
@@ -295,7 +295,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private static bool? IsNotNullableFromConstraintType(TypeWithAnnotations constraintType, ConsList<PETypeParameterSymbol> inProgress, out bool isNonNullableValueType)
         {
-            if (!(constraintType.Type is PETypeParameterSymbol typeParameter) ||
+            if (constraintType.Type is not PETypeParameterSymbol typeParameter ||
                 (object)typeParameter.ContainingSymbol != inProgress.Head.ContainingSymbol ||
                 typeParameter.GetConstraintHandleCollection().Count == 0)
             {
@@ -471,15 +471,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     return false;
                 }
 
-                switch (GetNullableAttributeValue())
+                return GetNullableAttributeValue() switch
                 {
-                    case NullableAnnotationExtensions.AnnotatedAttributeValue:
-                        return true;
-                    case NullableAnnotationExtensions.NotAnnotatedAttributeValue:
-                        return false;
-                }
-
-                return null;
+                    NullableAnnotationExtensions.AnnotatedAttributeValue => true,
+                    NullableAnnotationExtensions.NotAnnotatedAttributeValue => false,
+                    _ => null,
+                };
             }
         }
 

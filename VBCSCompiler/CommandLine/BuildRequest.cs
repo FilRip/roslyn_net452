@@ -7,23 +7,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal class BuildRequest
     {
-        private const int MaximumRequestSize = 5242880;
+        //private const int MaximumRequestSize = 5242880;
         public readonly Guid RequestId;
         public readonly RequestLanguage Language;
         public readonly ReadOnlyCollection<BuildRequest.Argument> Arguments;
         public readonly string CompilerHash;
 
         public BuildRequest(
-          RequestLanguage language,
-          string compilerHash,
-          IEnumerable<BuildRequest.Argument> arguments,
-          Guid? requestId = null)
+            RequestLanguage language,
+            string compilerHash,
+            IEnumerable<BuildRequest.Argument> arguments,
+            Guid? requestId = null)
         {
             this.RequestId = requestId ?? Guid.Empty;
             this.Language = language;
@@ -34,14 +34,14 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         public static BuildRequest Create(
-          RequestLanguage language,
-          IList<string> args,
-          string workingDirectory,
-          string tempDirectory,
-          string compilerHash,
-          Guid? requestId = null,
-          string? keepAlive = null,
-          string? libDirectory = null)
+            RequestLanguage language,
+            IList<string> args,
+            string workingDirectory,
+            string tempDirectory,
+            string compilerHash,
+            Guid? requestId = null,
+            string? keepAlive = null,
+            string? libDirectory = null)
         {
             List<Argument> arguments = new(args.Count + 1 + (libDirectory == null ? 0 : 1));
             arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory));
@@ -60,16 +60,16 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public static BuildRequest CreateShutdown()
         {
-            BuildRequest.Argument[] arguments = new BuildRequest.Argument[1]
+            Argument[] arguments = new BuildRequest.Argument[1]
             {
-        new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.Shutdown, 0, "")
+                new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.Shutdown, 0, "")
             };
             return new BuildRequest(RequestLanguage.CSharpCompile, BuildProtocolConstants.GetCommitHash() ?? "", arguments);
         }
 
         public static async Task<BuildRequest> ReadAsync(
-          Stream inStream,
-          CancellationToken cancellationToken)
+            Stream inStream,
+            CancellationToken cancellationToken)
         {
             byte[] lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(inStream, lengthBuffer, 4, cancellationToken).ConfigureAwait(false);
@@ -96,8 +96,6 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 buildRequest = new BuildRequest(language, compilerHash, arguments, new Guid?(guid));
             }
 #nullable restore
-            lengthBuffer = null;
-            requestBuffer = null;
             return buildRequest;
 
             static Guid readGuid(BinaryReader reader)
@@ -110,35 +108,32 @@ namespace Microsoft.CodeAnalysis.CommandLine
         public async Task WriteAsync(Stream outStream, CancellationToken cancellationToken = default)
         {
             BinaryWriter writer;
-            using (MemoryStream memoryStream = new())
+            using MemoryStream memoryStream = new();
+            writer = new BinaryWriter(memoryStream, Encoding.Unicode);
+            try
             {
-                writer = new BinaryWriter(memoryStream, Encoding.Unicode);
-                try
+                writer.Write(this.RequestId.ToByteArray());
+                writer.Write((uint)this.Language);
+                writer.Write(this.CompilerHash);
+                writer.Write(this.Arguments.Count);
+                foreach (BuildRequest.Argument obj in this.Arguments)
                 {
-                    writer.Write(this.RequestId.ToByteArray());
-                    writer.Write((uint)this.Language);
-                    writer.Write(this.CompilerHash);
-                    writer.Write(this.Arguments.Count);
-                    foreach (BuildRequest.Argument obj in this.Arguments)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        obj.WriteToBinaryWriter(writer);
-                    }
-                    writer.Flush();
                     cancellationToken.ThrowIfCancellationRequested();
-                    int length = checked((int)memoryStream.Length);
-                    if (memoryStream.Length > 5242880L)
-                        throw new ArgumentOutOfRangeException(string.Format("Request is over {0}MB in length", 5));
-                    await outStream.WriteAsync(BitConverter.GetBytes(length), 0, 4, cancellationToken).ConfigureAwait(false);
-                    memoryStream.Position = 0L;
-                    await memoryStream.CopyToAsync(outStream, length, cancellationToken).ConfigureAwait(false);
+                    obj.WriteToBinaryWriter(writer);
                 }
-                finally
-                {
-                    writer?.Dispose();
-                }
+                writer.Flush();
+                cancellationToken.ThrowIfCancellationRequested();
+                int length = checked((int)memoryStream.Length);
+                if (memoryStream.Length > 5242880L)
+                    throw new ArgumentOutOfRangeException(string.Format("Request is over {0}MB in length", 5));
+                await outStream.WriteAsync(BitConverter.GetBytes(length), 0, 4, cancellationToken).ConfigureAwait(false);
+                memoryStream.Position = 0L;
+                await memoryStream.CopyToAsync(outStream, length, cancellationToken).ConfigureAwait(false);
             }
-            writer = null;
+            finally
+            {
+                writer?.Dispose();
+            }
         }
 
 #nullable enable
@@ -150,9 +145,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
             public readonly string? Value;
 
             public Argument(
-              BuildProtocolConstants.ArgumentId argumentId,
-              int argumentIndex,
-              string? value)
+                BuildProtocolConstants.ArgumentId argumentId,
+                int argumentIndex,
+                string? value)
             {
                 this.ArgumentId = argumentId;
                 this.ArgumentIndex = argumentIndex;

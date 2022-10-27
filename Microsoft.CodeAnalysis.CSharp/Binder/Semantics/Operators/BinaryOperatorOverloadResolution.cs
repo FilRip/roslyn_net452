@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // In order to preserve backward compatibility, at first we ignore interface sources.
 
-            if ((object)leftOperatorSourceOpt != null && !leftSourceIsInterface)
+            if (leftOperatorSourceOpt is object && !leftSourceIsInterface)
             {
                 hadApplicableCandidates = GetUserDefinedOperators(kind, leftOperatorSourceOpt, left, right, result.Results, ref useSiteInfo);
                 if (!hadApplicableCandidates)
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if ((object)rightOperatorSourceOpt != null && !rightSourceIsInterface && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
+            if (rightOperatorSourceOpt is object && !rightSourceIsInterface && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
             {
                 var rightOperators = ArrayBuilder<BinaryOperatorAnalysisResult>.GetInstance();
                 if (GetUserDefinedOperators(kind, rightOperatorSourceOpt, left, right, rightOperators, ref useSiteInfo))
@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     result.Results.Clear();
                 }
 
-                if ((object)rightOperatorSourceOpt != null && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
+                if (rightOperatorSourceOpt is object && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
                 {
                     var rightOperators = ArrayBuilder<BinaryOperatorAnalysisResult>.GetInstance();
                     if (GetUserDefinedBinaryOperatorsFromInterfaces(kind, name,
@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Dictionary<TypeSymbol, bool> lookedInInterfaces, ArrayBuilder<BinaryOperatorAnalysisResult> candidates)
         {
 
-            if ((object)operatorSourceOpt == null)
+            if (operatorSourceOpt is null)
             {
                 return false;
             }
@@ -317,9 +317,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var leftType = left.Type;
-            var leftDelegate = (object)leftType != null && leftType.IsDelegateType();
+            var leftDelegate = leftType is object && leftType.IsDelegateType();
             var rightType = right.Type;
-            var rightDelegate = (object)rightType != null && rightType.IsDelegateType();
+            var rightDelegate = rightType is object && rightType.IsDelegateType();
 
             // If no operands have delegate types then add nothing.
             if (!leftDelegate && !rightDelegate)
@@ -559,65 +559,42 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var leftType = left.Type;
-            if ((object)leftType != null)
+            if (leftType is object)
             {
                 leftType = leftType.StrippedType();
             }
 
             var rightType = right.Type;
-            if ((object)rightType != null)
+            if (rightType is object)
             {
                 rightType = rightType.StrippedType();
             }
 
-            bool useIdentityConversion;
-            switch (kind)
-            {
-                case BinaryOperatorKind.And:
-                case BinaryOperatorKind.Or:
-                case BinaryOperatorKind.Xor:
-                    // These operations are ambiguous on non-equal identity-convertible types - 
-                    // it's not clear what the resulting type of the operation should be:
-                    //   C<?>.E operator +(C<dynamic>.E x, C<object>.E y)
-                    useIdentityConversion = false;
-                    break;
-
-                case BinaryOperatorKind.Addition:
-                    // Addition only accepts a single enum type, so operations on non-equal identity-convertible types are not ambiguous. 
-                    //   E operator +(E x, U y)
-                    //   E operator +(U x, E y)
-                    useIdentityConversion = true;
-                    break;
-
-                case BinaryOperatorKind.Subtraction:
-                    // Subtraction either returns underlying type or only accept a single enum type, so operations on non-equal identity-convertible types are not ambiguous. 
-                    //   U operator –(E x, E y)
-                    //   E operator –(E x, U y)
-                    useIdentityConversion = true;
-                    break;
-
-                case BinaryOperatorKind.Equal:
-                case BinaryOperatorKind.NotEqual:
-                case BinaryOperatorKind.GreaterThan:
-                case BinaryOperatorKind.LessThan:
-                case BinaryOperatorKind.GreaterThanOrEqual:
-                case BinaryOperatorKind.LessThanOrEqual:
-                    // Relational operations return Boolean, so operations on non-equal identity-convertible types are not ambiguous. 
-                    //   Boolean operator op(C<dynamic>.E, C<object>.E)
-                    useIdentityConversion = true;
-                    break;
-
-                default:
-                    // Unhandled bin op kind in get enum operations
-                    throw ExceptionUtilities.UnexpectedValue(kind);
-            }
-
-            if ((object)leftType != null)
+            var
+                                // These operations are ambiguous on non-equal identity-convertible types - 
+                                // it's not clear what the resulting type of the operation should be:
+                                //   C<?>.E operator +(C<dynamic>.E x, C<object>.E y)
+                                useIdentityConversion = kind switch
+                                {
+                                    BinaryOperatorKind.And or BinaryOperatorKind.Or or BinaryOperatorKind.Xor => false,// These operations are ambiguous on non-equal identity-convertible types - 
+                                                                                                                       // it's not clear what the resulting type of the operation should be:
+                                                                                                                       //   C<?>.E operator +(C<dynamic>.E x, C<object>.E y)
+                                    BinaryOperatorKind.Addition => true,// Addition only accepts a single enum type, so operations on non-equal identity-convertible types are not ambiguous. 
+                                                            //   E operator +(E x, U y)
+                                                            //   E operator +(U x, E y)
+                                    BinaryOperatorKind.Subtraction => true,// Subtraction either returns underlying type or only accept a single enum type, so operations on non-equal identity-convertible types are not ambiguous. 
+                                                               //   U operator –(E x, E y)
+                                                               //   E operator –(E x, U y)
+                                    BinaryOperatorKind.Equal or BinaryOperatorKind.NotEqual or BinaryOperatorKind.GreaterThan or BinaryOperatorKind.LessThan or BinaryOperatorKind.GreaterThanOrEqual or BinaryOperatorKind.LessThanOrEqual => true,// Relational operations return Boolean, so operations on non-equal identity-convertible types are not ambiguous. 
+                                                                                                                                                                                                                                        //   Boolean operator op(C<dynamic>.E, C<object>.E)
+                                    _ => throw ExceptionUtilities.UnexpectedValue(kind),// Unhandled bin op kind in get enum operations
+                                };
+            if (leftType is object)
             {
                 GetEnumOperation(kind, leftType, left, right, results);
             }
 
-            if ((object)rightType != null && ((object)leftType == null || !(useIdentityConversion ? Conversions.HasIdentityConversion(rightType, leftType) : rightType.Equals(leftType))))
+            if (rightType is object && (leftType is null || !(useIdentityConversion ? Conversions.HasIdentityConversion(rightType, leftType) : rightType.Equals(leftType))))
             {
                 GetEnumOperation(kind, rightType, left, right, results);
             }
@@ -634,7 +611,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var leftType = left.Type as PointerTypeSymbol;
             var rightType = right.Type as PointerTypeSymbol;
 
-            if ((object)leftType != null)
+            if (leftType is object)
             {
                 GetPointerArithmeticOperators(kind, leftType, results);
             }
@@ -642,12 +619,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The only arithmetic operator that is applicable on two distinct pointer types is
             //   long operator –(T* x, T* y)
             // This operator returns long and so it's not ambiguous to apply it on T1 and T2 that are identity convertible to each other.
-            if ((object)rightType != null && ((object)leftType == null || !Conversions.HasIdentityConversion(rightType, leftType)))
+            if (rightType is object && (leftType is null || !Conversions.HasIdentityConversion(rightType, leftType)))
             {
                 GetPointerArithmeticOperators(kind, rightType, results);
             }
 
-            if ((object)leftType != null || (object)rightType != null || left.Type is FunctionPointerTypeSymbol || right.Type is FunctionPointerTypeSymbol)
+            if (leftType is object || rightType is object || left.Type is FunctionPointerTypeSymbol || right.Type is FunctionPointerTypeSymbol)
             {
                 // The pointer comparison operators are all "void* OP void*".
                 GetPointerComparisonOperators(kind, results);
@@ -690,8 +667,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // We consider the `null` literal, but not the `default` literal, since the latter does not require a reference equality
                 return
                     BuiltInOperators.IsValidObjectEquality(conversions, left.Type, left.IsLiteralNull(), leftIsDefault: false, right.Type, right.IsLiteralNull(), rightIsDefault: false, ref useSiteInfo) &&
-                    ((object)left.Type == null || (!left.Type.IsDelegateType() && left.Type.SpecialType != SpecialType.System_String && left.Type.SpecialType != SpecialType.System_Delegate)) &&
-                    ((object)right.Type == null || (!right.Type.IsDelegateType() && right.Type.SpecialType != SpecialType.System_String && right.Type.SpecialType != SpecialType.System_Delegate));
+                    (left.Type is null || (!left.Type.IsDelegateType() && left.Type.SpecialType != SpecialType.System_String && left.Type.SpecialType != SpecialType.System_Delegate)) &&
+                    (right.Type is null || (!right.Type.IsDelegateType() && right.Type.SpecialType != SpecialType.System_String && right.Type.SpecialType != SpecialType.System_Delegate));
             }
         }
 
@@ -769,7 +746,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ArrayBuilder<BinaryOperatorAnalysisResult> results,
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if ((object)type0 == null || OperatorFacts.DefinitelyHasNoUserDefinedOperators(type0))
+            if (type0 is null || OperatorFacts.DefinitelyHasNoUserDefinedOperators(type0))
             {
                 return false;
             }
@@ -796,18 +773,17 @@ namespace Microsoft.CodeAnalysis.CSharp
             var operators = ArrayBuilder<BinaryOperatorSignature>.GetInstance();
             bool hadApplicableCandidates = false;
 
-            NamedTypeSymbol current = type0 as NamedTypeSymbol;
-            if ((object)current == null)
+            if (type0 is not NamedTypeSymbol current)
             {
                 current = type0.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
             }
 
-            if ((object)current == null && type0.IsTypeParameter())
+            if (current is null && type0.IsTypeParameter())
             {
                 current = ((TypeParameterSymbol)type0).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            for (; (object)current != null; current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (; current is object; current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 operators.Clear();
                 GetUserDefinedBinaryOperatorsFromType(current, kind, name, operators);
@@ -1174,7 +1150,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BetterResult MoreSpecificOperator(BinaryOperatorSignature op1, BinaryOperatorSignature op2, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             TypeSymbol op1Left, op1Right, op2Left, op2Right;
-            if ((object)op1.Method != null)
+            if (op1.Method is object)
             {
                 var p = op1.Method.OriginalDefinition.GetParameters();
                 op1Left = p[0].Type;
@@ -1191,7 +1167,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 op1Right = op1.RightType;
             }
 
-            if ((object)op2.Method != null)
+            if (op2.Method is object)
             {
                 var p = op2.Method.OriginalDefinition.GetParameters();
                 op2Left = p[0].Type;

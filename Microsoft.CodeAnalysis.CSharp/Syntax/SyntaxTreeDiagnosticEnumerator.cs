@@ -141,8 +141,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             internal void PushNodeOrToken(GreenNode node)
             {
-                var token = node as Syntax.InternalSyntax.SyntaxToken;
-                if (token != null)
+                if (node is Syntax.InternalSyntax.SyntaxToken token)
                 {
                     PushToken(token);
                 }

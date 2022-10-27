@@ -364,7 +364,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // Set up the current method locals
                     DeclareLocals(_currentScope, _topLevelMethod.Parameters);
                     // Treat 'this' as a formal parameter of the top-level method
-                    if (_topLevelMethod.TryGetThisParameter(out var thisParam) && (object)thisParam != null)
+                    if (_topLevelMethod.TryGetThisParameter(out var thisParam) && thisParam is object)
                     {
                         DeclareLocals(_currentScope, ImmutableArray.Create<Symbol>(thisParam));
                     }

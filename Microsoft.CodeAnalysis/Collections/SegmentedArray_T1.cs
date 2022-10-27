@@ -297,7 +297,7 @@ namespace Microsoft.CodeAnalysis.Collections
 
             // Matches System.Array
             // https://github.com/dotnet/runtime/blob/e0ec035994179e8ebd6ccf081711ee11d4c5491b/src/libraries/System.Private.CoreLib/src/System/Array.cs#L320-L323
-            if (!(other is SegmentedArray<T> o)
+            if (other is not SegmentedArray<T> o
                 || Length != o.Length)
             {
                 throw new ArgumentException(Properties.Resources.ArgumentException_OtherNotArrayOfCorrectLength, nameof(other));
@@ -318,7 +318,7 @@ namespace Microsoft.CodeAnalysis.Collections
             if (other is null)
                 return false;
 
-            if (!(other is SegmentedArray<T> o))
+            if (other is not SegmentedArray<T> o)
                 return false;
 
             if (_items == o._items)

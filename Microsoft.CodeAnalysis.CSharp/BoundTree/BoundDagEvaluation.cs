@@ -24,15 +24,15 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                switch (this)
+                return this switch
                 {
-                    case BoundDagFieldEvaluation e: return e.Field.CorrespondingTupleField ?? e.Field;
-                    case BoundDagPropertyEvaluation e: return e.Property;
-                    case BoundDagTypeEvaluation e: return e.Type;
-                    case BoundDagDeconstructEvaluation e: return e.DeconstructMethod;
-                    case BoundDagIndexEvaluation e: return e.Property;
-                    default: throw ExceptionUtilities.UnexpectedValue(this.Kind);
-                }
+                    BoundDagFieldEvaluation e => e.Field.CorrespondingTupleField ?? e.Field,
+                    BoundDagPropertyEvaluation e => e.Property,
+                    BoundDagTypeEvaluation e => e.Type,
+                    BoundDagDeconstructEvaluation e => e.DeconstructMethod,
+                    BoundDagIndexEvaluation e => e.Property,
+                    _ => throw ExceptionUtilities.UnexpectedValue(this.Kind),
+                };
             }
         }
 

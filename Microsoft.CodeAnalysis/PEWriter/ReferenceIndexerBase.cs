@@ -192,15 +192,13 @@ namespace Microsoft.Cci
 
             var unit = namespaceTypeReference.GetUnit(Context);
 
-            var assemblyReference = unit as IAssemblyReference;
-            if (assemblyReference != null)
+            if (unit is IAssemblyReference assemblyReference)
             {
                 this.Visit(assemblyReference);
             }
             else
             {
-                var moduleReference = unit as IModuleReference;
-                if (moduleReference != null)
+                if (unit is IModuleReference moduleReference)
                 {
                     // If this is a module from a referenced multi-module assembly,
                     // the assembly should be used as the resolution scope. 

@@ -482,7 +482,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Private Function TranslateImports(moduleBuilder As Emit.PEModuleBuilder, diagnostics As DiagnosticBag) As ImmutableArray(Of Cci.UsedNamespaceOrType)
             Return NamespaceScopeBuilder.BuildNamespaceScope(moduleBuilder,
                                                              XmlNamespacesOpt,
-                                                             If(AliasImportsOpt IsNot Nothing, AliasImportsOpt.Values, Nothing),
+                                                             AliasImportsOpt?.Values,
                                                              MemberImports,
                                                              diagnostics)
         End Function

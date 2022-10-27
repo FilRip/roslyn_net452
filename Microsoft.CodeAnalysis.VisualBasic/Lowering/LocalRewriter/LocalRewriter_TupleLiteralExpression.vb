@@ -61,7 +61,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
 
                 Dim smallestConstructor As MethodSymbol = smallestCtor.AsMember(smallestType)
-                Dim currentCreation As BoundObjectCreationExpression = New BoundObjectCreationExpression(syntax, smallestConstructor, smallestCtorArguments, initializerOpt:=Nothing, type:=smallestType)
+                Dim currentCreation As New BoundObjectCreationExpression(syntax, smallestConstructor, smallestCtorArguments, initializerOpt:=Nothing, type:=smallestType)
 
                 If underlyingTupleTypeChain.Count > 0 Then
                     Dim tuple8Type As NamedTypeSymbol = underlyingTupleTypeChain.Peek()

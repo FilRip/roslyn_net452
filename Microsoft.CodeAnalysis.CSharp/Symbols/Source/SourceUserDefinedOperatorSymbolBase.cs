@@ -246,22 +246,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static bool DoesOperatorHaveCorrectArity(string name, int parameterCount)
         {
-            switch (name)
+            return name switch
             {
-                case WellKnownMemberNames.IncrementOperatorName:
-                case WellKnownMemberNames.DecrementOperatorName:
-                case WellKnownMemberNames.UnaryNegationOperatorName:
-                case WellKnownMemberNames.UnaryPlusOperatorName:
-                case WellKnownMemberNames.LogicalNotOperatorName:
-                case WellKnownMemberNames.OnesComplementOperatorName:
-                case WellKnownMemberNames.TrueOperatorName:
-                case WellKnownMemberNames.FalseOperatorName:
-                case WellKnownMemberNames.ImplicitConversionName:
-                case WellKnownMemberNames.ExplicitConversionName:
-                    return parameterCount == 1;
-                default:
-                    return parameterCount == 2;
-            }
+                WellKnownMemberNames.IncrementOperatorName or WellKnownMemberNames.DecrementOperatorName or WellKnownMemberNames.UnaryNegationOperatorName or WellKnownMemberNames.UnaryPlusOperatorName or WellKnownMemberNames.LogicalNotOperatorName or WellKnownMemberNames.OnesComplementOperatorName or WellKnownMemberNames.TrueOperatorName or WellKnownMemberNames.FalseOperatorName or WellKnownMemberNames.ImplicitConversionName or WellKnownMemberNames.ExplicitConversionName => parameterCount == 1,
+                _ => parameterCount == 2,
+            };
         }
 
         private void CheckUserDefinedConversionSignature(BindingDiagnosticBag diagnostics)

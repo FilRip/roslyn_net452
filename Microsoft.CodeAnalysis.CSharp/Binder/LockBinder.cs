@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             bool hasErrors = false;
 
-            if ((object)exprType == null)
+            if (exprType is null)
             {
                 if (expr.ConstantValue != ConstantValue.Null || Compilation.FeatureStrictEnabled) // Dev10 allows the null literal.
                 {

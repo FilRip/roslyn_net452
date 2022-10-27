@@ -182,8 +182,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                XContainer container = node as XContainer;
-                if (container == null)
+                if (node is not XContainer container)
                 {
                     return new XNode[] { node.Copy(copyAttributeAnnotations: false) };
                 }

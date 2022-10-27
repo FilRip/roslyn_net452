@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class ServerDispatcher
@@ -27,9 +27,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         private bool _keepAliveIsDefault;
 
         internal ServerDispatcher(
-          ICompilerServerHost compilerServerHost,
-          IClientConnectionHost clientConnectionHost,
-          IDiagnosticListener? diagnosticListener = null)
+            ICompilerServerHost compilerServerHost,
+            IClientConnectionHost clientConnectionHost,
+            IDiagnosticListener? diagnosticListener = null)
         {
             this._compilerServerHost = compilerServerHost;
             this._logger = compilerServerHost.Logger;
@@ -38,8 +38,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         public void ListenAndDispatchConnections(
-          TimeSpan? keepAlive,
-          CancellationToken cancellationToken = default)
+            TimeSpan? keepAlive,
+            CancellationToken cancellationToken = default)
         {
             this._state = State.Running;
             this._keepAlive = keepAlive;
@@ -246,10 +246,10 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         internal static async Task<CompletionData> ProcessClientConnectionAsync(
-          ICompilerServerHost compilerServerHost,
-          Task<IClientConnection> clientStreamTask,
-          bool allowCompilationRequests,
-          CancellationToken cancellationToken)
+            ICompilerServerHost compilerServerHost,
+            Task<IClientConnection> clientStreamTask,
+            bool allowCompilationRequests,
+            CancellationToken cancellationToken)
         {
             return await new ClientConnectionHandler(compilerServerHost).ProcessAsync(clientStreamTask, allowCompilationRequests, cancellationToken).ConfigureAwait(false);
         }

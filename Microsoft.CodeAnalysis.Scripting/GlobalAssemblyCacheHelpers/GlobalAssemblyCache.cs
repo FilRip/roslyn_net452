@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis
             ImmutableArray<ProcessorArchitecture> architectureFilter = default,
             CultureInfo preferredCulture = null)
         {
-            return ResolvePartialName(displayName, out string location, architectureFilter, preferredCulture);
+            return ResolvePartialName(displayName, out _, architectureFilter, preferredCulture);
         }
 
         /// <summary>

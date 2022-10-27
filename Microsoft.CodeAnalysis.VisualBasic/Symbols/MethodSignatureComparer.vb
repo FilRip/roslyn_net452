@@ -100,8 +100,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' This instance is intended to reflect the definition of signature equality used by the runtime (ECMA 335 Section 8.6.1.6).
         ''' It considers return type, name, parameters, calling convention, and custom modifiers.
         ''' </summary>
-        Public Shared ReadOnly RuntimeMethodSignatureComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=True,
+        Public Shared ReadOnly RuntimeMethodSignatureComparer As             New MethodSignatureComparer(considerName:=True,
                                         considerReturnType:=True,
                                         considerTypeConstraints:=False,
                                         considerByRef:=True,
@@ -112,8 +111,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' <summary>
         ''' This instance is used to compare all aspects.
         ''' </summary>
-        Public Shared ReadOnly AllAspectsSignatureComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=True,
+        Public Shared ReadOnly AllAspectsSignatureComparer As             New MethodSignatureComparer(considerName:=True,
                                         considerReturnType:=True,
                                         considerTypeConstraints:=True,
                                         considerByRef:=True,
@@ -124,8 +122,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' <summary>
         ''' This instance is used to compare parameter and return types, including byref.
         ''' </summary>
-        Public Shared ReadOnly ParametersAndReturnTypeSignatureComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=False,
+        Public Shared ReadOnly ParametersAndReturnTypeSignatureComparer As             New MethodSignatureComparer(considerName:=False,
                                         considerReturnType:=True,
                                         considerTypeConstraints:=False,
                                         considerByRef:=True,
@@ -136,8 +133,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' <summary>
         ''' This instance is used to compare custom modifiers, parameter and return types, including byref.
         ''' </summary>
-        Public Shared ReadOnly CustomModifiersAndParametersAndReturnTypeSignatureComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=False,
+        Public Shared ReadOnly CustomModifiersAndParametersAndReturnTypeSignatureComparer As             New MethodSignatureComparer(considerName:=False,
                                         considerReturnType:=True,
                                         considerTypeConstraints:=False,
                                         considerByRef:=True,
@@ -149,8 +145,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' This instance is used to search for methods that have the same signature, return type,
         ''' and constraints according to the VisualBasic definition.  Custom modifiers are ignored.
         ''' </summary>
-        Public Shared ReadOnly VisualBasicSignatureAndConstraintsAndReturnTypeComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=True,
+        Public Shared ReadOnly VisualBasicSignatureAndConstraintsAndReturnTypeComparer As             New MethodSignatureComparer(considerName:=True,
                                         considerReturnType:=True,
                                         considerTypeConstraints:=True,
                                         considerByRef:=True,
@@ -161,8 +156,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' <summary>
         ''' This instance is used to search for methods that have identical signatures in every regard.
         ''' </summary>
-        Public Shared ReadOnly RetargetedExplicitMethodImplementationComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=True,
+        Public Shared ReadOnly RetargetedExplicitMethodImplementationComparer As             New MethodSignatureComparer(considerName:=True,
                                         considerReturnType:=True,
                                         considerTypeConstraints:=False,
                                         considerByRef:=True,
@@ -180,8 +174,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' The real fix here is to establish a spec for how WinRT conflict comparison should be
         ''' performed. Once this is done we should remove these comments.
         ''' </summary>
-        Public Shared ReadOnly WinRTConflictComparer As MethodSignatureComparer =
-            New MethodSignatureComparer(considerName:=True,
+        Public Shared ReadOnly WinRTConflictComparer As             New MethodSignatureComparer(considerName:=True,
                                         considerReturnType:=False,
                                         considerTypeConstraints:=False,
                                         considerByRef:=False,

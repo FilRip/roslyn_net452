@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public override bool Equals(object? obj)
         {
-            if (!(obj is Rope other) || Length != other.Length)
+            if (obj is not Rope other || Length != other.Length)
                 return false;
             if (Length == 0)
                 return true;

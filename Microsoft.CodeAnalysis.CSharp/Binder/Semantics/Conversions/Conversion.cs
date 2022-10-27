@@ -170,41 +170,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         [Conditional("DEBUG")]
         private static void AssertTrivialConversion(ConversionKind kind)
         {
-            bool isTrivial;
-
-            switch (kind)
+            var isTrivial = kind switch
             {
-                case ConversionKind.NoConversion:
-                case ConversionKind.Identity:
-                case ConversionKind.ImplicitConstant:
-                case ConversionKind.ImplicitNumeric:
-                case ConversionKind.ImplicitReference:
-                case ConversionKind.ImplicitEnumeration:
-                case ConversionKind.ImplicitThrow:
-                case ConversionKind.AnonymousFunction:
-                case ConversionKind.Boxing:
-                case ConversionKind.NullLiteral:
-                case ConversionKind.DefaultLiteral:
-                case ConversionKind.ImplicitNullToPointer:
-                case ConversionKind.ImplicitPointerToVoid:
-                case ConversionKind.ExplicitPointerToPointer:
-                case ConversionKind.ExplicitPointerToInteger:
-                case ConversionKind.ExplicitIntegerToPointer:
-                case ConversionKind.Unboxing:
-                case ConversionKind.ExplicitReference:
-                case ConversionKind.IntPtr:
-                case ConversionKind.ExplicitEnumeration:
-                case ConversionKind.ExplicitNumeric:
-                case ConversionKind.ImplicitDynamic:
-                case ConversionKind.ExplicitDynamic:
-                case ConversionKind.InterpolatedString:
-                    isTrivial = true;
-                    break;
-
-                default:
-                    isTrivial = false;
-                    break;
-            }
+                ConversionKind.NoConversion or ConversionKind.Identity or ConversionKind.ImplicitConstant or ConversionKind.ImplicitNumeric or ConversionKind.ImplicitReference or ConversionKind.ImplicitEnumeration or ConversionKind.ImplicitThrow or ConversionKind.AnonymousFunction or ConversionKind.Boxing or ConversionKind.NullLiteral or ConversionKind.DefaultLiteral or ConversionKind.ImplicitNullToPointer or ConversionKind.ImplicitPointerToVoid or ConversionKind.ExplicitPointerToPointer or ConversionKind.ExplicitPointerToInteger or ConversionKind.ExplicitIntegerToPointer or ConversionKind.Unboxing or ConversionKind.ExplicitReference or ConversionKind.IntPtr or ConversionKind.ExplicitEnumeration or ConversionKind.ExplicitNumeric or ConversionKind.ImplicitDynamic or ConversionKind.ExplicitDynamic or ConversionKind.InterpolatedString => true,
+                _ => false,
+            };
         }
 #pragma warning restore CS0219, IDE0059
 
@@ -277,33 +247,16 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static Conversion MakeNullableConversion(ConversionKind kind, Conversion nestedConversion)
         {
-
-            ImmutableArray<Conversion> nested;
-            switch (nestedConversion.Kind)
+            var nested = nestedConversion.Kind switch
             {
-                case ConversionKind.Identity:
-                    nested = IdentityUnderlying;
-                    break;
-                case ConversionKind.ImplicitConstant:
-                    nested = ImplicitConstantUnderlying;
-                    break;
-                case ConversionKind.ImplicitNumeric:
-                    nested = ImplicitNumericUnderlying;
-                    break;
-                case ConversionKind.ExplicitNumeric:
-                    nested = ExplicitNumericUnderlying;
-                    break;
-                case ConversionKind.ExplicitEnumeration:
-                    nested = ExplicitEnumerationUnderlying;
-                    break;
-                case ConversionKind.ExplicitPointerToInteger:
-                    nested = PointerToIntegerUnderlying;
-                    break;
-                default:
-                    nested = ImmutableArray.Create(nestedConversion);
-                    break;
-            }
-
+                ConversionKind.Identity => IdentityUnderlying,
+                ConversionKind.ImplicitConstant => ImplicitConstantUnderlying,
+                ConversionKind.ImplicitNumeric => ImplicitNumericUnderlying,
+                ConversionKind.ExplicitNumeric => ExplicitNumericUnderlying,
+                ConversionKind.ExplicitEnumeration => ExplicitEnumerationUnderlying,
+                ConversionKind.ExplicitPointerToInteger => PointerToIntegerUnderlying,
+                _ => ImmutableArray.Create(nestedConversion),
+            };
             return new Conversion(kind, nested);
         }
 

@@ -65,7 +65,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 If insertStars Then
                     AddPunctuation(SyntaxKind.AsteriskToken)
                 End If
-                i = i + 1
+                i += 1
             End While
             AddPunctuation(SyntaxKind.CloseParenToken)
         End Sub
@@ -287,7 +287,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim i As Integer = 0
                     While i < symbol.Arity - 1
                         AddPunctuation(SyntaxKind.CommaToken)
-                        i = i + 1
+                        i += 1
                     End While
                     AddPunctuation(SyntaxKind.CloseParenToken)
                 Else

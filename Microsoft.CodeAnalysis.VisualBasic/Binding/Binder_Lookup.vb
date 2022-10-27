@@ -1456,8 +1456,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim lookIn As New Queue(Of InterfaceInfo)
                 lookIn.Enqueue(info)
 
-                Dim processed As New HashSet(Of InterfaceInfo)
-                processed.Add(info)
+                Dim processed As New HashSet(Of InterfaceInfo) From {
+                    info
+                }
 
                 LookupInInterfaces(lookupResult, container, lookIn, processed, name, arity, options, binder, methodsOnly, useSiteInfo)
 
@@ -1995,8 +1996,9 @@ ExitForFor:
                 Dim lookIn As New Queue(Of InterfaceInfo)
                 lookIn.Enqueue(info)
 
-                Dim processed As New HashSet(Of InterfaceInfo)
-                processed.Add(info)
+                Dim processed As New HashSet(Of InterfaceInfo) From {
+                    info
+                }
 
                 AddLookupSymbolsInfoInInterfaces(nameSet, container, lookIn, processed, options, binder)
 

@@ -154,20 +154,12 @@ namespace Microsoft.CodeAnalysis
             if (platform == Platform.Arm)
                 return Windows8;
 
-            switch (outputKind)
+            return outputKind switch
             {
-                case OutputKind.ConsoleApplication:
-                case OutputKind.DynamicallyLinkedLibrary:
-                case OutputKind.NetModule:
-                case OutputKind.WindowsApplication:
-                    return new SubsystemVersion(4, 0);
-                case OutputKind.WindowsRuntimeApplication:
-                case OutputKind.WindowsRuntimeMetadata:
-                    return Windows8;
-
-                default:
-                    throw new ArgumentOutOfRangeException(Properties.Resources.OutputKindNotSupported, "outputKind");
-            }
+                OutputKind.ConsoleApplication or OutputKind.DynamicallyLinkedLibrary or OutputKind.NetModule or OutputKind.WindowsApplication => new SubsystemVersion(4, 0),
+                OutputKind.WindowsRuntimeApplication or OutputKind.WindowsRuntimeMetadata => Windows8,
+                _ => throw new ArgumentOutOfRangeException(Properties.Resources.OutputKindNotSupported, "outputKind"),
+            };
         }
 
         /// <summary>
@@ -185,7 +177,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is SubsystemVersion && Equals((SubsystemVersion)obj);
+            return obj is SubsystemVersion version && Equals(version);
         }
 
         public override int GetHashCode()

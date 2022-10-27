@@ -640,7 +640,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override bool Equals(TypeSymbol t2, TypeCompareKind comparison)
         {
             if ((object)t2 == this) return true;
-            if ((object)t2 == null) return false;
+            if (t2 is null) return false;
 
             if ((comparison & TypeCompareKind.IgnoreDynamic) != 0)
             {
@@ -654,8 +654,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            NamedTypeSymbol other = t2 as NamedTypeSymbol;
-            if ((object)other == null) return false;
+            if (t2 is not NamedTypeSymbol other) return false;
 
             // Compare OriginalDefinitions.
             var thisOriginalDefinition = this.OriginalDefinition;
@@ -695,7 +694,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         private bool EqualsComplicatedCases(NamedTypeSymbol other, TypeCompareKind comparison)
         {
-            if ((object)this.ContainingType != null &&
+            if (this.ContainingType is object &&
                 !this.ContainingType.Equals(other.ContainingType, comparison))
             {
                 return false;
@@ -924,23 +923,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static VarianceKind GetTypeArgumentVariance(VarianceKind typeVariance, VarianceKind typeParameterVariance)
         {
-            switch (typeVariance)
+            return typeVariance switch
             {
-                case VarianceKind.In:
-                    switch (typeParameterVariance)
-                    {
-                        case VarianceKind.In:
-                            return VarianceKind.Out;
-                        case VarianceKind.Out:
-                            return VarianceKind.In;
-                        default:
-                            return VarianceKind.None;
-                    }
-                case VarianceKind.Out:
-                    return typeParameterVariance;
-                default:
-                    return VarianceKind.None;
-            }
+                VarianceKind.In => typeParameterVariance switch
+                {
+                    VarianceKind.In => VarianceKind.Out,
+                    VarianceKind.Out => VarianceKind.In,
+                    _ => VarianceKind.None,
+                },
+                VarianceKind.Out => typeParameterVariance,
+                _ => VarianceKind.None,
+            };
         }
 
         /// <summary>
@@ -1071,7 +1064,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                for (var current = this; !ReferenceEquals(current, null); current = current.ContainingType)
+                for (var current = this; current is not null; current = current.ContainingType)
                 {
                     if (current.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics.Length != 0)
                     {
@@ -1103,7 +1096,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal void GetAllTypeArguments(ArrayBuilder<TypeSymbol> builder, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             var outer = ContainingType;
-            if (!ReferenceEquals(outer, null))
+            if (outer is not null)
             {
                 outer.GetAllTypeArguments(builder, ref useSiteInfo);
             }
@@ -1124,7 +1117,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal void GetAllTypeArguments(ArrayBuilder<TypeWithAnnotations> builder, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             var outer = ContainingType;
-            if (!ReferenceEquals(outer, null))
+            if (outer is not null)
             {
                 outer.GetAllTypeArguments(builder, ref useSiteInfo);
             }
@@ -1143,7 +1136,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             int count = TypeArgumentsWithAnnotationsNoUseSiteDiagnostics.Length;
 
             var outer = ContainingType;
-            if (!ReferenceEquals(outer, null))
+            if (outer is not null)
             {
                 count += outer.AllTypeArgumentCount();
             }
@@ -1261,7 +1254,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             NamedTypeSymbol @base = this.BaseTypeNoUseSiteDiagnostics;
 
-            while ((object)@base != null)
+            while (@base is object)
             {
                 if (@base.IsErrorType() && @base is NoPiaIllegalGenericInstantiationSymbol)
                 {
@@ -1296,7 +1289,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // being reported twice if Goo is bad.
 
             var @base = this.BaseTypeNoUseSiteDiagnostics;
-            if ((object)@base != null && @base.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes))
+            if (@base is object && @base.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes))
             {
                 return true;
             }
@@ -1360,7 +1353,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // Conditional attributes are inherited by derived types.
                 var baseType = this.BaseTypeNoUseSiteDiagnostics;
-                return (object)baseType != null ? baseType.IsConditional : false;
+                return baseType is object && baseType.IsConditional;
             }
         }
 

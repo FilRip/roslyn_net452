@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override void EnterRegion()
         {
-            for (var m = this.CurrentSymbol as MethodSymbol; (object)m != null; m = m.ContainingSymbol as MethodSymbol)
+            for (var m = this.CurrentSymbol as MethodSymbol; m is object; m = m.ContainingSymbol as MethodSymbol)
             {
                 foreach (var p in m.Parameters)
                 {
@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var thisParameter = m.ThisParameter;
-                if ((object)thisParameter != null && thisParameter.RefKind != RefKind.None)
+                if (thisParameter is object && thisParameter.RefKind != RefKind.None)
                 {
                     _readOutside.Add(thisParameter);
                 }
@@ -98,14 +98,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="rangeVariableUnderlyingParameter">If variable.Kind is RangeVariable, its underlying lambda parameter. Else null.</param>
         protected override void NoteRead(Symbol variable, ParameterSymbol rangeVariableUnderlyingParameter = null)
         {
-            if ((object)variable == null) return;
+            if (variable is null) return;
             if (variable.Kind != SymbolKind.Field) (IsInside ? _readInside : _readOutside).Add(variable);
             base.NoteRead(variable, rangeVariableUnderlyingParameter);
         }
 
         protected override void NoteWrite(Symbol variable, BoundExpression value, bool read)
         {
-            if ((object)variable == null) return;
+            if (variable is null) return;
             (IsInside ? _writtenInside : _writtenOutside).Add(variable);
             base.NoteWrite(variable, value, read);
         }
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         base.AssignImpl(node, value, isRef, written, read);
                         var symbol = ((BoundQueryClause)node).DefinedSymbol;
-                        if ((object)symbol != null)
+                        if (symbol is object)
                         {
                             if (written) NoteWrite(symbol, value, read);
                         }

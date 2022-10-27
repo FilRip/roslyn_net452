@@ -31,9 +31,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static T RunWithUtf8Output<T>(
-          bool utf8Output,
-          TextWriter textWriter,
-          Func<TextWriter, T> func)
+            bool utf8Output,
+            TextWriter textWriter,
+            Func<TextWriter, T> func)
         {
             if (!utf8Output || textWriter.Encoding.CodePage == ConsoleUtil.s_utf8Encoding.CodePage)
                 return func(textWriter);

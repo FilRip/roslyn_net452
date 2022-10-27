@@ -51,13 +51,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal FieldSymbol GetHostObjectField()
         {
-            if ((object)_hostObjectField != null)
+            if (_hostObjectField is object)
             {
                 return _hostObjectField;
             }
 
             var hostObjectTypeSymbol = _compilation.GetHostObjectTypeSymbol();
-            if ((object)hostObjectTypeSymbol != null && hostObjectTypeSymbol.Kind != SymbolKind.ErrorType)
+            if (hostObjectTypeSymbol is object && hostObjectTypeSymbol.Kind != SymbolKind.ErrorType)
             {
                 return _hostObjectField = new SynthesizedFieldSymbol(
                     _declaringSubmissionClass, hostObjectTypeSymbol, "<host-object>", isPublic: false, isReadOnly: true, isStatic: false);
@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             FieldSymbol hostObjectField = GetHostObjectField();
-            if ((object)hostObjectField != null)
+            if (hostObjectField is object)
             {
                 moduleBeingBuilt.AddSynthesizedDefinition(containingType, hostObjectField.GetCciAdapter());
             }

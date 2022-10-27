@@ -2,8 +2,8 @@
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal interface ICompilerServerHost
@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         ICompilerServerLogger Logger { get; }
 
         BuildResponse RunCompilation(
-          in RunRequest request,
-          CancellationToken cancellationToken);
+            in RunRequest request,
+            CancellationToken cancellationToken);
     }
 }

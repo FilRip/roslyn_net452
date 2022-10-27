@@ -704,36 +704,29 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!expression.Type.IsNullableType())
                 return null;
 
-            switch (expression)
+            return expression switch
             {
                 // Detect the lowered nullable conversion from value type K to type Nullable<K>
-                case BoundObjectCreationExpression { Arguments: { Length: 1 } args }:
-                    return args[0];
-
+                BoundObjectCreationExpression { Arguments: { Length: 1 } args } => args[0],
                 // Detect the unlowered nullable conversion from value type K to type Nullable<K>
                 // This arises in lowering tuple equality operators
-                case BoundConversion { Conversion: { Kind: ConversionKind.ImplicitNullable }, Operand: var convertedArgument }
-                        when convertedArgument.Type!.Equals(expression.Type.StrippedType(), TypeCompareKind.AllIgnoreOptions):
-                    return convertedArgument;
-
+                BoundConversion { Conversion: { Kind: ConversionKind.ImplicitNullable }, Operand: var convertedArgument }
+                                        when convertedArgument.Type!.Equals(expression.Type.StrippedType(), TypeCompareKind.AllIgnoreOptions) => convertedArgument,
                 // Detect the unlowered nullable conversion from a tuple type T1 to Nullable<T2> for a tuple type T2.
-                case BoundConversion { Conversion: { Kind: ConversionKind.ImplicitNullable, UnderlyingConversions: var underlying }, Operand: var convertedArgument } conversion
-                        when underlying.Length == 1 && underlying[0].Kind == ConversionKind.ImplicitTuple && !convertedArgument.Type!.IsNullableType():
-                    return new BoundConversion(
-                        syntax: expression.Syntax,
-                        operand: convertedArgument,
-                        conversion: underlying[0],
-                        @checked: conversion.Checked,
-                        explicitCastInCode: conversion.ExplicitCastInCode,
-                        conversionGroupOpt: null,
-                        constantValueOpt: null,
-                        type: conversion.Type.StrippedType(),
-                        hasErrors: conversion.HasErrors);
-
+                BoundConversion { Conversion: { Kind: ConversionKind.ImplicitNullable, UnderlyingConversions: var underlying }, Operand: var convertedArgument } conversion
+                                        when underlying.Length == 1 && underlying[0].Kind == ConversionKind.ImplicitTuple && !convertedArgument.Type!.IsNullableType() => new BoundConversion(
+                                        syntax: expression.Syntax,
+                                        operand: convertedArgument,
+                                        conversion: underlying[0],
+                                        @checked: conversion.Checked,
+                                        explicitCastInCode: conversion.ExplicitCastInCode,
+                                        conversionGroupOpt: null,
+                                        constantValueOpt: null,
+                                        type: conversion.Type.StrippedType(),
+                                        hasErrors: conversion.HasErrors),
                 // No other cases are recognized
-                default:
-                    return null;
-            }
+                _ => null,
+            };
         }
 
 #nullable enable
@@ -1320,42 +1313,40 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (typeFrom.SpecialType == SpecialType.System_Decimal)
             {
                 // Rewrite Decimal to Numeric
-                switch (typeTo.SpecialType)
+                return typeTo.SpecialType switch
                 {
-                    case SpecialType.System_Char: return SpecialMember.System_Decimal__op_Explicit_ToChar;
-                    case SpecialType.System_SByte: return SpecialMember.System_Decimal__op_Explicit_ToSByte;
-                    case SpecialType.System_Byte: return SpecialMember.System_Decimal__op_Explicit_ToByte;
-                    case SpecialType.System_Int16: return SpecialMember.System_Decimal__op_Explicit_ToInt16;
-                    case SpecialType.System_UInt16: return SpecialMember.System_Decimal__op_Explicit_ToUInt16;
-                    case SpecialType.System_Int32: return SpecialMember.System_Decimal__op_Explicit_ToInt32;
-                    case SpecialType.System_UInt32: return SpecialMember.System_Decimal__op_Explicit_ToUInt32;
-                    case SpecialType.System_Int64: return SpecialMember.System_Decimal__op_Explicit_ToInt64;
-                    case SpecialType.System_UInt64: return SpecialMember.System_Decimal__op_Explicit_ToUInt64;
-                    case SpecialType.System_Single: return SpecialMember.System_Decimal__op_Explicit_ToSingle;
-                    case SpecialType.System_Double: return SpecialMember.System_Decimal__op_Explicit_ToDouble;
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(typeTo.SpecialType);
-                }
+                    SpecialType.System_Char => SpecialMember.System_Decimal__op_Explicit_ToChar,
+                    SpecialType.System_SByte => SpecialMember.System_Decimal__op_Explicit_ToSByte,
+                    SpecialType.System_Byte => SpecialMember.System_Decimal__op_Explicit_ToByte,
+                    SpecialType.System_Int16 => SpecialMember.System_Decimal__op_Explicit_ToInt16,
+                    SpecialType.System_UInt16 => SpecialMember.System_Decimal__op_Explicit_ToUInt16,
+                    SpecialType.System_Int32 => SpecialMember.System_Decimal__op_Explicit_ToInt32,
+                    SpecialType.System_UInt32 => SpecialMember.System_Decimal__op_Explicit_ToUInt32,
+                    SpecialType.System_Int64 => SpecialMember.System_Decimal__op_Explicit_ToInt64,
+                    SpecialType.System_UInt64 => SpecialMember.System_Decimal__op_Explicit_ToUInt64,
+                    SpecialType.System_Single => SpecialMember.System_Decimal__op_Explicit_ToSingle,
+                    SpecialType.System_Double => SpecialMember.System_Decimal__op_Explicit_ToDouble,
+                    _ => throw ExceptionUtilities.UnexpectedValue(typeTo.SpecialType),
+                };
             }
             else
             {
                 // Rewrite Numeric to Decimal
-                switch (typeFrom.SpecialType)
+                return typeFrom.SpecialType switch
                 {
-                    case SpecialType.System_Char: return SpecialMember.System_Decimal__op_Implicit_FromChar;
-                    case SpecialType.System_SByte: return SpecialMember.System_Decimal__op_Implicit_FromSByte;
-                    case SpecialType.System_Byte: return SpecialMember.System_Decimal__op_Implicit_FromByte;
-                    case SpecialType.System_Int16: return SpecialMember.System_Decimal__op_Implicit_FromInt16;
-                    case SpecialType.System_UInt16: return SpecialMember.System_Decimal__op_Implicit_FromUInt16;
-                    case SpecialType.System_Int32: return SpecialMember.System_Decimal__op_Implicit_FromInt32;
-                    case SpecialType.System_UInt32: return SpecialMember.System_Decimal__op_Implicit_FromUInt32;
-                    case SpecialType.System_Int64: return SpecialMember.System_Decimal__op_Implicit_FromInt64;
-                    case SpecialType.System_UInt64: return SpecialMember.System_Decimal__op_Implicit_FromUInt64;
-                    case SpecialType.System_Single: return SpecialMember.System_Decimal__op_Explicit_FromSingle;
-                    case SpecialType.System_Double: return SpecialMember.System_Decimal__op_Explicit_FromDouble;
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(typeFrom.SpecialType);
-                }
+                    SpecialType.System_Char => SpecialMember.System_Decimal__op_Implicit_FromChar,
+                    SpecialType.System_SByte => SpecialMember.System_Decimal__op_Implicit_FromSByte,
+                    SpecialType.System_Byte => SpecialMember.System_Decimal__op_Implicit_FromByte,
+                    SpecialType.System_Int16 => SpecialMember.System_Decimal__op_Implicit_FromInt16,
+                    SpecialType.System_UInt16 => SpecialMember.System_Decimal__op_Implicit_FromUInt16,
+                    SpecialType.System_Int32 => SpecialMember.System_Decimal__op_Implicit_FromInt32,
+                    SpecialType.System_UInt32 => SpecialMember.System_Decimal__op_Implicit_FromUInt32,
+                    SpecialType.System_Int64 => SpecialMember.System_Decimal__op_Implicit_FromInt64,
+                    SpecialType.System_UInt64 => SpecialMember.System_Decimal__op_Implicit_FromUInt64,
+                    SpecialType.System_Single => SpecialMember.System_Decimal__op_Explicit_FromSingle,
+                    SpecialType.System_Double => SpecialMember.System_Decimal__op_Explicit_FromDouble,
+                    _ => throw ExceptionUtilities.UnexpectedValue(typeFrom.SpecialType),
+                };
             }
         }
 

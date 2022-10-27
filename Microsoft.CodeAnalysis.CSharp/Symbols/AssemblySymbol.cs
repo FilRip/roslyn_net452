@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             NamespaceSymbol container = namespaceSymbol.ContainingNamespace;
 
-            if ((object)container == null)
+            if (container is null)
             {
                 return this.GlobalNamespace;
             }
@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return namespaceSymbol;
             }
 
-            if ((object)assemblyContainer == null)
+            if (assemblyContainer is null)
             {
                 return null;
             }
@@ -614,7 +614,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 type = GetTopLevelTypeByMetadataName(ref mdName, assemblyOpt: null, includeReferences: includeReferences, isWellKnownType: isWellKnownType,
                     conflicts: out conflicts, warnings: warnings, ignoreCorLibraryDuplicatedTypes: ignoreCorLibraryDuplicatedTypes);
 
-                for (int i = 1; (object)type != null && !type.IsErrorType() && i < parts.Length; i++)
+                for (int i = 1; type is object && !type.IsErrorType() && i < parts.Length; i++)
                 {
                     mdName = MetadataTypeName.FromTypeName(parts[i]);
                     NamedTypeSymbol temp = type.LookupMetadataType(ref mdName);
@@ -628,7 +628,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     conflicts: out conflicts, warnings: warnings, ignoreCorLibraryDuplicatedTypes: ignoreCorLibraryDuplicatedTypes);
             }
 
-            return ((object)type == null || type.IsErrorType()) ? null : type;
+            return (type is null || type.IsErrorType()) ? null : type;
         }
 
         private static readonly char[] s_nestedTypeNameSeparators = new char[] { '+' };
@@ -650,7 +650,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (typeInfo.IsArray)
             {
                 TypeSymbol symbol = GetTypeByReflectionType(typeInfo.GetElementType(), includeReferences);
-                if ((object)symbol == null)
+                if (symbol is null)
                 {
                     return null;
                 }
@@ -662,7 +662,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else if (typeInfo.IsPointer)
             {
                 TypeSymbol symbol = GetTypeByReflectionType(typeInfo.GetElementType(), includeReferences);
-                if ((object)symbol == null)
+                if (symbol is null)
                 {
                     return null;
                 }
@@ -692,7 +692,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 int i = nestedTypes.Count - 1;
                 var symbol = (NamedTypeSymbol)GetTypeByReflectionType(nestedTypes[i].AsType(), includeReferences);
-                if ((object)symbol == null)
+                if (symbol is null)
                 {
                     return null;
                 }
@@ -703,13 +703,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     MetadataTypeName mdName = MetadataTypeName.FromTypeName(nestedTypes[i].Name, forcedArity: forcedArity);
 
                     symbol = symbol.LookupMetadataType(ref mdName);
-                    if ((object)symbol == null || symbol.IsErrorType())
+                    if (symbol is null || symbol.IsErrorType())
                     {
                         return null;
                     }
 
                     symbol = ApplyGenericArguments(symbol, genericArguments, ref typeArgumentIndex, includeReferences);
-                    if ((object)symbol == null)
+                    if (symbol is null)
                     {
                         return null;
                     }
@@ -729,7 +729,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 NamedTypeSymbol symbol = GetTopLevelTypeByMetadataName(ref mdName, assemblyId, includeReferences, isWellKnownType: false, conflicts: out var _);
 
-                if ((object)symbol == null || symbol.IsErrorType())
+                if (symbol is null || symbol.IsErrorType())
                 {
                     return null;
                 }
@@ -757,7 +757,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             for (int i = 0; i < length; i++)
             {
                 var argSymbol = GetTypeByReflectionType(typeArguments[currentTypeArgument++], includeReferences);
-                if ((object)argSymbol == null)
+                if (argSymbol is null)
                 {
                     return null;
                 }
@@ -796,7 +796,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             // ignore any types of the same name that might be in referenced assemblies (prefer the current assembly):
-            if ((object)result != null || !includeReferences)
+            if (result is object || !includeReferences)
             {
                 return result;
             }
@@ -847,7 +847,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
 
-                if ((object)result != null)
+                if (result is object)
                 {
                     // duplicate
                     if (ignoreCorLibraryDuplicatedTypes)
@@ -900,7 +900,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private bool IsValidWellKnownType(NamedTypeSymbol result)
         {
-            if ((object)result == null || result.TypeKind == TypeKind.Error)
+            if (result is null || result.TypeKind == TypeKind.Error)
             {
                 return false;
             }

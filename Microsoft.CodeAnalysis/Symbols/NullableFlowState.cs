@@ -34,15 +34,12 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static NullableAnnotation ToAnnotation(this NullableFlowState nullableFlowState)
         {
-            switch (nullableFlowState)
+            return nullableFlowState switch
             {
-                case CodeAnalysis.NullableFlowState.MaybeNull:
-                    return CodeAnalysis.NullableAnnotation.Annotated;
-                case CodeAnalysis.NullableFlowState.NotNull:
-                    return CodeAnalysis.NullableAnnotation.NotAnnotated;
-                default:
-                    return CodeAnalysis.NullableAnnotation.None;
-            }
+                CodeAnalysis.NullableFlowState.MaybeNull => CodeAnalysis.NullableAnnotation.Annotated,
+                CodeAnalysis.NullableFlowState.NotNull => CodeAnalysis.NullableAnnotation.NotAnnotated,
+                _ => CodeAnalysis.NullableAnnotation.None,
+            };
         }
     }
 }

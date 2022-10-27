@@ -350,19 +350,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         internal static ImmutableArray<ISymbol> ResolveTargetSymbols(Compilation compilation, string target, TargetScope scope)
         {
-            switch (scope)
+            return scope switch
             {
-                case TargetScope.Namespace:
-                case TargetScope.Type:
-                case TargetScope.Member:
-                    return new TargetSymbolResolver(compilation, scope, target).Resolve(out _);
-
-                case TargetScope.NamespaceAndDescendants:
-                    return ResolveTargetSymbols(compilation, target, TargetScope.Namespace);
-
-                default:
-                    return ImmutableArray<ISymbol>.Empty;
-            }
+                TargetScope.Namespace or TargetScope.Type or TargetScope.Member => new TargetSymbolResolver(compilation, scope, target).Resolve(out _),
+                TargetScope.NamespaceAndDescendants => ResolveTargetSymbols(compilation, target, TargetScope.Namespace),
+                _ => ImmutableArray<ISymbol>.Empty,
+            };
         }
 
         private static bool TryDecodeSuppressMessageAttributeData(AttributeData attribute, out SuppressMessageInfo info)

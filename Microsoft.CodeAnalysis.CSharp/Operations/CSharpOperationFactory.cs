@@ -552,19 +552,15 @@ namespace Microsoft.CodeAnalysis.Operations
 
         internal IOperation? CreateBoundPropertyReferenceInstance(BoundNode boundNode)
         {
-            switch (boundNode)
+            return boundNode switch
             {
-                case BoundPropertyAccess boundPropertyAccess:
-                    return CreateReceiverOperation(boundPropertyAccess.ReceiverOpt, boundPropertyAccess.PropertySymbol);
-                case BoundObjectInitializerMember boundObjectInitializerMember:
-                    return boundObjectInitializerMember.MemberSymbol?.IsStatic == true ?
-                        null :
-                        CreateImplicitReceiver(boundObjectInitializerMember.Syntax, boundObjectInitializerMember.ReceiverType);
-                case BoundIndexerAccess boundIndexerAccess:
-                    return CreateReceiverOperation(boundIndexerAccess.ReceiverOpt, boundIndexerAccess.ExpressionSymbol);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(boundNode.Kind);
-            }
+                BoundPropertyAccess boundPropertyAccess => CreateReceiverOperation(boundPropertyAccess.ReceiverOpt, boundPropertyAccess.PropertySymbol),
+                BoundObjectInitializerMember boundObjectInitializerMember => boundObjectInitializerMember.MemberSymbol?.IsStatic == true ?
+null :
+CreateImplicitReceiver(boundObjectInitializerMember.Syntax, boundObjectInitializerMember.ReceiverType),
+                BoundIndexerAccess boundIndexerAccess => CreateReceiverOperation(boundIndexerAccess.ReceiverOpt, boundIndexerAccess.ExpressionSymbol),
+                _ => throw ExceptionUtilities.UnexpectedValue(boundNode.Kind),
+            };
         }
 
         private IPropertyReferenceOperation CreateBoundPropertyAccessOperation(BoundPropertyAccess boundPropertyAccess)
@@ -704,19 +700,14 @@ namespace Microsoft.CodeAnalysis.Operations
 
         internal IOperation CreateBoundDynamicInvocationExpressionReceiver(BoundNode receiver)
         {
-            switch (receiver)
+            return receiver switch
             {
-                case BoundObjectOrCollectionValuePlaceholder implicitReceiver:
-                    return CreateBoundDynamicMemberAccessOperation(implicitReceiver, typeArgumentsOpt: ImmutableArray<TypeSymbol>.Empty, memberName: "Add",
-                                                                   implicitReceiver.Syntax, type: null, isImplicit: true);
-
-                case BoundMethodGroup methodGroup:
-                    return CreateBoundDynamicMemberAccessOperation(methodGroup.ReceiverOpt, TypeMap.AsTypeSymbols(methodGroup.TypeArgumentsOpt), methodGroup.Name,
-                                                                   methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGenerated);
-
-                default:
-                    return Create(receiver);
-            }
+                BoundObjectOrCollectionValuePlaceholder implicitReceiver => CreateBoundDynamicMemberAccessOperation(implicitReceiver, typeArgumentsOpt: ImmutableArray<TypeSymbol>.Empty, memberName: "Add",
+                                                                                  implicitReceiver.Syntax, type: null, isImplicit: true),
+                BoundMethodGroup methodGroup => CreateBoundDynamicMemberAccessOperation(methodGroup.ReceiverOpt, TypeMap.AsTypeSymbols(methodGroup.TypeArgumentsOpt), methodGroup.Name,
+methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGenerated),
+                _ => Create(receiver),
+            };
         }
 
         private IDynamicInvocationOperation CreateBoundDynamicInvocationExpressionOperation(BoundDynamicInvocation boundDynamicInvocation)
@@ -733,32 +724,22 @@ namespace Microsoft.CodeAnalysis.Operations
 
         internal IOperation CreateBoundDynamicIndexerAccessExpressionReceiver(BoundExpression indexer)
         {
-            switch (indexer)
+            return indexer switch
             {
-                case BoundDynamicIndexerAccess boundDynamicIndexerAccess:
-                    return Create(boundDynamicIndexerAccess.Receiver);
-
-                case BoundObjectInitializerMember boundObjectInitializerMember:
-                    return CreateImplicitReceiver(boundObjectInitializerMember.Syntax, boundObjectInitializerMember.ReceiverType);
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(indexer.Kind);
-            }
+                BoundDynamicIndexerAccess boundDynamicIndexerAccess => Create(boundDynamicIndexerAccess.Receiver),
+                BoundObjectInitializerMember boundObjectInitializerMember => CreateImplicitReceiver(boundObjectInitializerMember.Syntax, boundObjectInitializerMember.ReceiverType),
+                _ => throw ExceptionUtilities.UnexpectedValue(indexer.Kind),
+            };
         }
 
         internal ImmutableArray<IOperation> CreateBoundDynamicIndexerAccessArguments(BoundExpression indexer)
         {
-            switch (indexer)
+            return indexer switch
             {
-                case BoundDynamicIndexerAccess boundDynamicAccess:
-                    return CreateFromArray<BoundExpression, IOperation>(boundDynamicAccess.Arguments);
-
-                case BoundObjectInitializerMember boundObjectInitializerMember:
-                    return CreateFromArray<BoundExpression, IOperation>(boundObjectInitializerMember.Arguments);
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(indexer.Kind);
-            }
+                BoundDynamicIndexerAccess boundDynamicAccess => CreateFromArray<BoundExpression, IOperation>(boundDynamicAccess.Arguments),
+                BoundObjectInitializerMember boundObjectInitializerMember => CreateFromArray<BoundExpression, IOperation>(boundObjectInitializerMember.Arguments),
+                _ => throw ExceptionUtilities.UnexpectedValue(indexer.Kind),
+            };
         }
 
         private IDynamicIndexerAccessOperation CreateBoundDynamicIndexerAccessExpressionOperation(BoundDynamicIndexerAccess boundDynamicIndexerAccess)
@@ -798,7 +779,7 @@ namespace Microsoft.CodeAnalysis.Operations
             ITypeSymbol? type = boundObjectInitializerMember.GetPublicTypeSymbol();
             bool isImplicit = boundObjectInitializerMember.WasCompilerGenerated;
 
-            if ((object?)memberSymbol == null)
+            if (memberSymbol is null)
             {
 
                 IOperation operation = CreateBoundDynamicIndexerAccessExpressionReceiver(boundObjectInitializerMember);
@@ -1301,7 +1282,7 @@ namespace Microsoft.CodeAnalysis.Operations
 
             while (stack.TryPop(out currentBinary))
             {
-                left = left ?? Create(currentBinary.Left);
+                left ??= Create(currentBinary.Left);
                 IOperation right = Create(currentBinary.Right);
                 left = currentBinary switch
                 {
@@ -1645,12 +1626,10 @@ namespace Microsoft.CodeAnalysis.Operations
                                                     enumeratorInfoOpt.MoveNextInfo.Method.GetPublicSymbol(),
                                                     isAsynchronous: enumeratorInfoOpt.IsAsync,
                                                     needsDispose: enumeratorInfoOpt.NeedsDisposal,
-                                                    knownToImplementIDisposable: enumeratorInfoOpt.NeedsDisposal ?
-                                                                                     compilation.Conversions.
+                                                    knownToImplementIDisposable: enumeratorInfoOpt.NeedsDisposal && compilation.Conversions.
                                                                                          ClassifyImplicitConversionFromType(enumeratorInfoOpt.GetEnumeratorInfo.Method.ReturnType,
                                                                                                                             iDisposable,
-                                                                                                                            ref discardedUseSiteInfo).IsImplicit :
-                                                                                     false,
+                                                                                                                            ref discardedUseSiteInfo).IsImplicit,
                                                     enumeratorInfoOpt.PatternDisposeInfo?.Method.GetPublicSymbol(),
                                                     enumeratorInfoOpt.CurrentConversion,
                                                     boundForEachStatement.ElementConversion,

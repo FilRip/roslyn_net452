@@ -8,7 +8,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Public Overrides ReadOnly Property IsLValue As Boolean
             Get
-                Return If(Me.ValueOpt IsNot Nothing, Me.ValueOpt.IsLValue, False)
+                Return ValueOpt IsNot Nothing AndAlso ValueOpt.IsLValue
             End Get
         End Property
 

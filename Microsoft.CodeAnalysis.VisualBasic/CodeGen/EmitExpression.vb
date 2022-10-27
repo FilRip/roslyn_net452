@@ -537,7 +537,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             While i < expressions.Length
                 Dim expression = expressions(i)
                 EmitExpression(expression, used)
-                i = i + 1
+                i += 1
             End While
         End Sub
 
@@ -789,7 +789,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             Dim sym = parameter.ParameterSymbol
             Dim slot As Integer = sym.Ordinal
             If Not sym.ContainingSymbol.IsShared Then
-                slot = slot + 1 ' skip this
+                slot += 1 ' skip this
             End If
             Return slot
         End Function
@@ -979,7 +979,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             If method.IsShared Then
                 callKind = CallKind.Call
             Else
-                stackBehavior = stackBehavior - 1
+                stackBehavior -= 1
                 Dim receiverType = receiver.Type
                 If IsVerifierReference(receiverType) Then
                     tempOpt = EmitReceiverRef(receiver, isAccessConstrained:=False, addressKind:=AddressKind.ReadOnly)

@@ -1103,15 +1103,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private static bool HidesByName(Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).HidesBaseMethodsByName;
-                case SymbolKind.Property:
-                    return ((PropertySymbol)member).HidesBasePropertiesByName;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).HidesBaseMethodsByName,
+                SymbolKind.Property => ((PropertySymbol)member).HidesBasePropertiesByName,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         private void RemoveInaccessibleTypeArguments<TMember>(ArrayBuilder<MemberResolutionResult<TMember>> results, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -1848,7 +1845,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (allSame && m1ParametersUsedIncludingExpansionAndOptional == m2ParametersUsedIncludingExpansionAndOptional)
             {
                 // Complete comparison for the remaining parameter types
-                for (i = i + 1; i < arguments.Count; ++i)
+                for (i++; i < arguments.Count; ++i)
                 {
                     var argumentKind = arguments[i].Kind;
 
@@ -2234,10 +2231,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             //   argument is more specific and no type argument is less specific than the
             //   corresponding type argument in the other. 
 
-            var n1 = t1 as NamedTypeSymbol;
             var n2 = t2 as NamedTypeSymbol;
 
-            if ((object)n1 == null)
+            if (t1 is not NamedTypeSymbol n1)
             {
                 return BetterResult.Neither;
             }
@@ -2386,7 +2382,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Given an expression E and a type T, E exactly matches T if one of the following holds:
 
             // - E has a type S, and an identity conversion exists from S to T 
-            if ((object)node.Type != null && Conversions.HasIdentityConversion(node.Type, t))
+            if (node.Type is object && Conversions.HasIdentityConversion(node.Type, t))
             {
                 return true;
             }
@@ -2408,8 +2404,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol y;
 
             if (node.Kind == BoundKind.UnboundLambda &&
-                (object)(d = t.GetDelegateType()) != null &&
-                (object)(invoke = d.DelegateInvokeMethod) != null &&
+                (d = t.GetDelegateType()) is object &&
+                (invoke = d.DelegateInvokeMethod) is object &&
                 !(y = invoke.ReturnType).IsVoidType())
             {
                 BoundLambda lambda = ((UnboundLambda)node).BindForReturnTypeInference(d);
@@ -2434,7 +2430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                if ((object)y != null)
+                if (y is object)
                 {
                     // - The body of E is an expression that exactly matches Y, or
                     //   has a return statement with expression and all return statements have expression that 
@@ -2667,11 +2663,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             NamedTypeSymbol d1;
 
-            if ((object)(d1 = type1.GetDelegateType()) != null)
+            if ((d1 = type1.GetDelegateType()) is object)
             {
                 NamedTypeSymbol d2;
 
-                if ((object)(d2 = type2.GetDelegateType()) != null)
+                if ((d2 = type2.GetDelegateType()) is object)
                 {
                     // - T1 is either a delegate type D1 or an expression tree type Expression<D1>,
                     //   T2 is either a delegate type D2 or an expression tree type Expression<D2>,
@@ -2679,7 +2675,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     MethodSymbol invoke1 = d1.DelegateInvokeMethod;
                     MethodSymbol invoke2 = d2.DelegateInvokeMethod;
 
-                    if ((object)invoke1 != null && (object)invoke2 != null)
+                    if (invoke1 is object && invoke2 is object)
                     {
                         TypeSymbol r1 = invoke1.ReturnType;
                         TypeSymbol r2 = invoke2.ReturnType;
@@ -2732,7 +2728,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // A shortcut, a delegate or an expression tree cannot satisfy other rules.
                 return BetterResult.Neither;
             }
-            else if ((object)type2.GetDelegateType() != null)
+            else if (type2.GetDelegateType() is object)
             {
                 // A shortcut, a delegate or an expression tree cannot satisfy other rules.
                 return BetterResult.Neither;
@@ -2782,16 +2778,16 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             NamedTypeSymbol d1;
 
-            if ((object)(d1 = type1.GetDelegateType()) != null)
+            if ((d1 = type1.GetDelegateType()) is object)
             {
                 NamedTypeSymbol d2;
 
-                if ((object)(d2 = type2.GetDelegateType()) != null)
+                if ((d2 = type2.GetDelegateType()) is object)
                 {
                     MethodSymbol invoke1 = d1.DelegateInvokeMethod;
                     MethodSymbol invoke2 = d2.DelegateInvokeMethod;
 
-                    if ((object)invoke1 != null && (object)invoke2 != null)
+                    if (invoke1 is object && invoke2 is object)
                     {
                         if (!IdenticalParameters(invoke1.Parameters, invoke2.Parameters))
                         {
@@ -2885,44 +2881,30 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsSignedIntegralType(TypeSymbol type)
         {
-            if ((object)type != null && type.IsNullableType())
+            if (type is object && type.IsNullableType())
             {
                 type = type.GetNullableUnderlyingType();
             }
 
-            switch (type.GetSpecialTypeSafe())
+            return type.GetSpecialTypeSafe() switch
             {
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_IntPtr:
-                    return true;
-
-                default:
-                    return false;
-            }
+                SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_Int32 or SpecialType.System_Int64 or SpecialType.System_IntPtr => true,
+                _ => false,
+            };
         }
 
         private static bool IsUnsignedIntegralType(TypeSymbol type)
         {
-            if ((object)type != null && type.IsNullableType())
+            if (type is object && type.IsNullableType())
             {
                 type = type.GetNullableUnderlyingType();
             }
 
-            switch (type.GetSpecialTypeSafe())
+            return type.GetSpecialTypeSafe() switch
             {
-                case SpecialType.System_Byte:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_UIntPtr:
-                    return true;
-
-                default:
-                    return false;
-            }
+                SpecialType.System_Byte or SpecialType.System_UInt16 or SpecialType.System_UInt32 or SpecialType.System_UInt64 or SpecialType.System_UIntPtr => true,
+                _ => false,
+            };
         }
 
         internal static void GetEffectiveParameterTypes(
@@ -3491,7 +3473,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        badArguments = badArguments ?? ArrayBuilder<int>.GetInstance();
+                        badArguments ??= ArrayBuilder<int>.GetInstance();
                         badArguments.Add(argumentPosition);
                         conversion = Conversion.NoConversion;
                     }
@@ -3536,7 +3518,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (!conversion.Exists)
                     {
-                        badArguments = badArguments ?? ArrayBuilder<int>.GetInstance();
+                        badArguments ??= ArrayBuilder<int>.GetInstance();
                         badArguments.Add(argumentPosition);
                     }
                 }
@@ -3613,7 +3595,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var argType = argument.Type;
             if (argument.Kind == BoundKind.OutVariablePendingInference ||
                 argument.Kind == BoundKind.OutDeconstructVarPendingInference ||
-                (argument.Kind == BoundKind.DiscardExpression && (object)argType == null))
+                (argument.Kind == BoundKind.DiscardExpression && argType is null))
             {
 
                 // Any parameter type is good, we'll use it for the var local.
@@ -3628,7 +3610,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if ((object)argType != null && Conversions.HasIdentityConversion(argType, parameterType))
+            if (argType is object && Conversions.HasIdentityConversion(argType, parameterType))
             {
                 return Conversion.Identity;
             }
@@ -3640,15 +3622,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static TMember GetConstructedFrom<TMember>(TMember member) where TMember : Symbol
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Property:
-                    return member;
-                case SymbolKind.Method:
-                    return (TMember)(Symbol)(member as MethodSymbol).ConstructedFrom;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Property => member,
+                SymbolKind.Method => (TMember)(Symbol)(member as MethodSymbol).ConstructedFrom,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
     }
 }

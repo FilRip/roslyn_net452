@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis
 
             public override bool Equals(object? obj)
             {
-                return obj is Reversed && Equals((Reversed)obj);
+                return obj is Reversed reversed && Equals(reversed);
             }
 
             public bool Equals(Reversed other)

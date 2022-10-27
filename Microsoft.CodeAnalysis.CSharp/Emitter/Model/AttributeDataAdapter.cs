@@ -102,17 +102,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return CreateMetadataConstant(argument.TypeInternal, null, context);
             }
 
-            switch (argument.Kind)
+            return argument.Kind switch
             {
-                case TypedConstantKind.Array:
-                    return CreateMetadataArray(argument, context);
-
-                case TypedConstantKind.Type:
-                    return CreateType(argument, context);
-
-                default:
-                    return CreateMetadataConstant(argument.TypeInternal, argument.ValueInternal, context);
-            }
+                TypedConstantKind.Array => CreateMetadataArray(argument, context),
+                TypedConstantKind.Type => CreateType(argument, context),
+                _ => CreateMetadataConstant(argument.TypeInternal, argument.ValueInternal, context),
+            };
         }
 
         private MetadataCreateArray CreateMetadataArray(TypedConstant argument, EmitContext context)
@@ -158,8 +153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var symbol = LookupName(name);
             var value = CreateMetadataExpression(argument, context);
             TypeSymbol type;
-            var fieldSymbol = symbol as FieldSymbol;
-            if ((object)fieldSymbol != null)
+            if (symbol is FieldSymbol fieldSymbol)
             {
                 type = fieldSymbol.Type;
             }
@@ -175,7 +169,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private Symbol LookupName(string name)
         {
             var type = this.AttributeClass;
-            while ((object)type != null)
+            while (type is object)
             {
                 foreach (var member in type.GetMembers(name))
                 {

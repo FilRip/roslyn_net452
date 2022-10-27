@@ -21,8 +21,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' The real fix here is to establish a spec for how WinRT conflict comparison should be
         ''' performed. Once this is done we should remove these comments.
         ''' </summary>
-        Public Shared ReadOnly WinRTComparer As MemberSignatureComparer =
-            New MemberSignatureComparer(MethodSignatureComparer.WinRTConflictComparer,
+        Public Shared ReadOnly WinRTComparer As             New MemberSignatureComparer(MethodSignatureComparer.WinRTConflictComparer,
                                         PropertySignatureComparer.WinRTConflictComparer,
                                         EventSignatureComparer.WinRTConflictComparer)
 

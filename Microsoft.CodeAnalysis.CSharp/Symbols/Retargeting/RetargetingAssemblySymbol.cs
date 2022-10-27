@@ -278,7 +278,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         {
             NamedTypeSymbol underlying = _underlyingAssembly.TryLookupForwardedMetadataType(ref emittedName);
 
-            if ((object)underlying == null)
+            if (underlying is null)
             {
                 return null;
             }

@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsNestedType([NotNullWhen(true)] this Symbol? symbol)
         {
-            return symbol is NamedTypeSymbol && (object?)symbol.ContainingType != null;
+            return symbol is NamedTypeSymbol && symbol.ContainingType is object;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // This text is missing in the current version of the spec, but we believe this is accidental.
             NamedTypeSymbol originalSuperType = superType.OriginalDefinition;
             for (NamedTypeSymbol? current = subType;
-                (object?)current != null;
+                current is object;
                 current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 if (ReferenceEquals(current.OriginalDefinition, originalSuperType))
@@ -129,7 +129,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static NamespaceOrTypeSymbol? ContainingNamespaceOrType(this Symbol symbol)
         {
             var containingSymbol = symbol.ContainingSymbol;
-            if ((object?)containingSymbol != null)
+            if (containingSymbol is object)
             {
                 switch (containingSymbol.Kind)
                 {
@@ -198,30 +198,22 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static Symbol ConstructedFrom(this Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.NamedType:
-                    return ((NamedTypeSymbol)symbol).ConstructedFrom;
-
-                case SymbolKind.Method:
-                    return ((MethodSymbol)symbol).ConstructedFrom;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
-            }
+                SymbolKind.NamedType => ((NamedTypeSymbol)symbol).ConstructedFrom,
+                SymbolKind.Method => ((MethodSymbol)symbol).ConstructedFrom,
+                _ => throw ExceptionUtilities.UnexpectedValue(symbol.Kind),
+            };
         }
 
         public static bool IsSourceParameterWithEnumeratorCancellationAttribute(this ParameterSymbol parameter)
         {
-            switch (parameter)
+            return parameter switch
             {
-                case SourceComplexParameterSymbol source:
-                    return source.HasEnumeratorCancellationAttribute;
-                case SynthesizedComplexParameterSymbol synthesized:
-                    return synthesized.HasEnumeratorCancellationAttribute;
-                default:
-                    return false;
-            }
+                SourceComplexParameterSymbol source => source.HasEnumeratorCancellationAttribute,
+                SynthesizedComplexParameterSymbol synthesized => synthesized.HasEnumeratorCancellationAttribute,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -250,7 +242,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (type.TypeKind == TypeKind.TypeParameter)
             {
                 var symbol = type.ContainingSymbol;
-                for (; ((object?)containingSymbol != null) && (containingSymbol.Kind != SymbolKind.Namespace); containingSymbol = containingSymbol.ContainingSymbol)
+                for (; (containingSymbol is object) && (containingSymbol.Kind != SymbolKind.Namespace); containingSymbol = containingSymbol.ContainingSymbol)
                 {
                     if (containingSymbol == symbol)
                     {
@@ -264,21 +256,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsTypeOrTypeAlias(this Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.ArrayType:
-                case SymbolKind.DynamicType:
-                case SymbolKind.ErrorType:
-                case SymbolKind.NamedType:
-                case SymbolKind.PointerType:
-                case SymbolKind.FunctionPointerType:
-                case SymbolKind.TypeParameter:
-                    return true;
-                case SymbolKind.Alias:
-                    return IsTypeOrTypeAlias(((AliasSymbol)symbol).Target);
-                default:
-                    return false;
-            }
+                SymbolKind.ArrayType or SymbolKind.DynamicType or SymbolKind.ErrorType or SymbolKind.NamedType or SymbolKind.PointerType or SymbolKind.FunctionPointerType or SymbolKind.TypeParameter => true,
+                SymbolKind.Alias => IsTypeOrTypeAlias(((AliasSymbol)symbol).Target),
+                _ => false,
+            };
         }
 
         internal static bool CompilationAllowsUnsafe(this Symbol symbol)
@@ -306,12 +289,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             // Only upper-level types should be checked 
             var upperLevelType = symbol.Kind == SymbolKind.NamedType ? (NamedTypeSymbol)symbol : symbol.ContainingType;
-            if ((object?)upperLevelType == null)
+            if (upperLevelType is null)
             {
                 return false;
             }
 
-            while ((object?)upperLevelType.ContainingType != null)
+            while (upperLevelType.ContainingType is object)
             {
                 upperLevelType = upperLevelType.ContainingType;
             }
@@ -321,15 +304,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool MustCallMethodsDirectly(this Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Property:
-                    return ((PropertySymbol)symbol).MustCallMethodsDirectly;
-                case SymbolKind.Event:
-                    return ((EventSymbol)symbol).MustCallMethodsDirectly;
-                default:
-                    return false;
-            }
+                SymbolKind.Property => ((PropertySymbol)symbol).MustCallMethodsDirectly,
+                SymbolKind.Event => ((EventSymbol)symbol).MustCallMethodsDirectly,
+                _ => false,
+            };
         }
 
         public static int GetArity(this Symbol? symbol)
@@ -357,7 +337,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (reference == null && symbol.IsImplicitlyDeclared)
                 {
                     Symbol? containingSymbol = symbol.ContainingSymbol;
-                    if ((object?)containingSymbol != null)
+                    if (containingSymbol is object)
                     {
                         reference = containingSymbol.DeclaringSyntaxReferences.FirstOrDefault();
                     }
@@ -375,9 +355,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         [return: NotNullIfNotNull("symbol")]
         internal static Symbol? EnsureCSharpSymbolOrNull(this ISymbol? symbol, string paramName)
         {
-            var csSymbol = symbol as PublicModel.Symbol;
-
-            if (csSymbol is null)
+            if (symbol is not PublicModel.Symbol csSymbol)
             {
                 if (symbol is object)
                 {

@@ -69,29 +69,25 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static CandidateReason ToCandidateReason(this LookupResultKind resultKind)
         {
-            switch (resultKind)
+            return resultKind switch
             {
-                case LookupResultKind.Empty: return CandidateReason.None;
-                case LookupResultKind.NotATypeOrNamespace: return CandidateReason.NotATypeOrNamespace;
-                case LookupResultKind.NotAnAttributeType: return CandidateReason.NotAnAttributeType;
-                case LookupResultKind.WrongArity: return CandidateReason.WrongArity;
-                case LookupResultKind.Inaccessible: return CandidateReason.Inaccessible;
-                case LookupResultKind.NotCreatable: return CandidateReason.NotCreatable;
-                case LookupResultKind.NotReferencable: return CandidateReason.NotReferencable;
-                case LookupResultKind.NotAValue: return CandidateReason.NotAValue;
-                case LookupResultKind.NotAVariable: return CandidateReason.NotAVariable;
-                case LookupResultKind.NotInvocable: return CandidateReason.NotInvocable;
-                case LookupResultKind.StaticInstanceMismatch: return CandidateReason.StaticInstanceMismatch;
-                case LookupResultKind.OverloadResolutionFailure: return CandidateReason.OverloadResolutionFailure;
-                case LookupResultKind.Ambiguous: return CandidateReason.Ambiguous;
-                case LookupResultKind.MemberGroup: return CandidateReason.MemberGroup;
-
-                case LookupResultKind.Viable:
-                    return CandidateReason.None;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(resultKind);
-            }
+                LookupResultKind.Empty => CandidateReason.None,
+                LookupResultKind.NotATypeOrNamespace => CandidateReason.NotATypeOrNamespace,
+                LookupResultKind.NotAnAttributeType => CandidateReason.NotAnAttributeType,
+                LookupResultKind.WrongArity => CandidateReason.WrongArity,
+                LookupResultKind.Inaccessible => CandidateReason.Inaccessible,
+                LookupResultKind.NotCreatable => CandidateReason.NotCreatable,
+                LookupResultKind.NotReferencable => CandidateReason.NotReferencable,
+                LookupResultKind.NotAValue => CandidateReason.NotAValue,
+                LookupResultKind.NotAVariable => CandidateReason.NotAVariable,
+                LookupResultKind.NotInvocable => CandidateReason.NotInvocable,
+                LookupResultKind.StaticInstanceMismatch => CandidateReason.StaticInstanceMismatch,
+                LookupResultKind.OverloadResolutionFailure => CandidateReason.OverloadResolutionFailure,
+                LookupResultKind.Ambiguous => CandidateReason.Ambiguous,
+                LookupResultKind.MemberGroup => CandidateReason.MemberGroup,
+                LookupResultKind.Viable => CandidateReason.None,
+                _ => throw ExceptionUtilities.UnexpectedValue(resultKind),
+            };
         }
 
         // Return the lowest non-empty result kind

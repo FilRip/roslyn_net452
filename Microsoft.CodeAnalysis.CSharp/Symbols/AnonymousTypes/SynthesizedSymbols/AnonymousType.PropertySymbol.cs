@@ -204,15 +204,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 }
 
-                var other = obj as AnonymousTypePropertySymbol;
-                if ((object)other == null)
+                if (obj is not AnonymousTypePropertySymbol other)
                 {
                     return false;
                 }
 
                 //  consider properties the same is the owning types are the same and 
                 //  the names are equal
-                return ((object)other != null) && other.Name == this.Name
+                return (other is object) && other.Name == this.Name
                     && other.ContainingType.Equals(this.ContainingType, compareKind);
             }
 

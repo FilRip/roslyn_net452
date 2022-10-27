@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var (methodSymbol, isFunctionPointer, callingConventionInfo) = GetDelegateInvokeOrFunctionPointerMethodIfAvailable(source, destination, ref useSiteInfo);
-            if ((object)methodSymbol == null)
+            if (methodSymbol is null)
             {
                 return Conversion.NoConversion;
             }
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static MethodGroupResolution ResolveDelegateOrFunctionPointerMethodGroup(Binder binder, BoundMethodGroup source, MethodSymbol delegateInvokeMethodOpt, bool isFunctionPointer, in CallingConventionInfo callingConventionInfo, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if ((object)delegateInvokeMethodOpt != null)
+            if (delegateInvokeMethodOpt is object)
             {
                 var analyzedArguments = AnalyzedArguments.GetInstance();
                 GetDelegateOrFunctionPointerArguments(source.Syntax, analyzedArguments, delegateInvokeMethodOpt.Parameters, binder.Compilation);
@@ -126,13 +126,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _binder.GetMethodGroupDelegateType(methodGroup, ref useSiteInfo) :
                 type.GetDelegateType();
 
-            if ((object)delegateType == null)
+            if (delegateType is null)
             {
                 return (null, false, default);
             }
 
             MethodSymbol methodSymbol = delegateType.DelegateInvokeMethod;
-            if ((object)methodSymbol == null || methodSymbol.HasUseSiteError)
+            if (methodSymbol is null || methodSymbol.HasUseSiteError)
             {
                 return (null, false, default);
             }

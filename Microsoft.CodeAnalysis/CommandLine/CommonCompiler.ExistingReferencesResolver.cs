@@ -54,8 +54,7 @@ namespace Microsoft.CodeAnalysis
 
             private static AssemblyIdentity? TryGetIdentity(MetadataReference metadataReference)
             {
-                var peReference = metadataReference as PortableExecutableReference;
-                if (peReference == null || peReference.Properties.Kind != MetadataImageKind.Assembly)
+                if (metadataReference is not PortableExecutableReference peReference || peReference.Properties.Kind != MetadataImageKind.Assembly)
                 {
                     return null;
                 }

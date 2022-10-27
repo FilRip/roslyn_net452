@@ -55,13 +55,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </returns>
         private static ThreeState GetObsoleteContextState(Symbol symbol, bool forceComplete)
         {
-            while ((object)symbol != null)
+            while (symbol is object)
             {
                 if (symbol.Kind == SymbolKind.Field)
                 {
                     // If this is the backing field of an event, look at the event instead.
                     var associatedSymbol = ((FieldSymbol)symbol).AssociatedSymbol;
-                    if ((object)associatedSymbol != null)
+                    if (associatedSymbol is object)
                     {
                         symbol = associatedSymbol;
                     }
@@ -94,33 +94,23 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static ObsoleteDiagnosticKind GetObsoleteDiagnosticKind(Symbol symbol, Symbol containingMember, bool forceComplete = false)
         {
-            switch (symbol.ObsoleteKind)
+            return symbol.ObsoleteKind switch
             {
-                case ObsoleteAttributeKind.None:
-                    return ObsoleteDiagnosticKind.NotObsolete;
-                case ObsoleteAttributeKind.Experimental:
-                    return ObsoleteDiagnosticKind.Diagnostic;
-                case ObsoleteAttributeKind.Uninitialized:
-                    // If we haven't cracked attributes on the symbol at all or we haven't
-                    // cracked attribute arguments enough to be able to report diagnostics for
-                    // ObsoleteAttribute, store the symbol so that we can report diagnostics at a 
-                    // later stage.
-                    return ObsoleteDiagnosticKind.Lazy;
-            }
-
-            switch (GetObsoleteContextState(containingMember, forceComplete))
-            {
-                case ThreeState.False:
-                    return ObsoleteDiagnosticKind.Diagnostic;
-                case ThreeState.True:
-                    // If we are in a context that is already obsolete, there is no point reporting
-                    // more obsolete diagnostics.
-                    return ObsoleteDiagnosticKind.Suppressed;
-                default:
-                    // If the context is unknown, then store the symbol so that we can do this check at a
-                    // later stage
-                    return ObsoleteDiagnosticKind.LazyPotentiallySuppressed;
-            }
+                ObsoleteAttributeKind.None => ObsoleteDiagnosticKind.NotObsolete,
+                ObsoleteAttributeKind.Experimental => ObsoleteDiagnosticKind.Diagnostic,
+                ObsoleteAttributeKind.Uninitialized => ObsoleteDiagnosticKind.Lazy,// If we haven't cracked attributes on the symbol at all or we haven't
+                                                                                   // cracked attribute arguments enough to be able to report diagnostics for
+                                                                                   // ObsoleteAttribute, store the symbol so that we can report diagnostics at a 
+                                                                                   // later stage.
+                _ => GetObsoleteContextState(containingMember, forceComplete) switch
+                {
+                    ThreeState.False => ObsoleteDiagnosticKind.Diagnostic,
+                    ThreeState.True => ObsoleteDiagnosticKind.Suppressed,// If we are in a context that is already obsolete, there is no point reporting
+                                                                         // more obsolete diagnostics.
+                    _ => ObsoleteDiagnosticKind.LazyPotentiallySuppressed,// If the context is unknown, then store the symbol so that we can do this check at a
+                                                                          // later stage
+                },
+            };
         }
 
         /// <summary>

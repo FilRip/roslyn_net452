@@ -3262,7 +3262,7 @@ namespace Microsoft.Cci
                     case OperandType.ShortInlineBrTarget:
                     case OperandType.ShortInlineI:
                     case OperandType.ShortInlineVar:
-                        offset += 1;
+                        offset++;
                         break;
 
                     default:
@@ -3396,7 +3396,7 @@ namespace Microsoft.Cci
             {
                 ITypeReference targetElementType;
                 VectorEncoder vectorEncoder;
-                if (!(targetType is IArrayTypeReference targetArrayType))
+                if (targetType is not IArrayTypeReference targetArrayType)
                 {
                     // implicit conversion from array to object
                     Debug.Assert(this.module.IsPlatformType(targetType, PlatformType.SystemObject));

@@ -19,7 +19,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Inherits Symbol
         Implements ILocalSymbol, ILocalSymbolInternal
 
-        Friend Shared ReadOnly UseBeforeDeclarationResultType As ErrorTypeSymbol = New ErrorTypeSymbol()
+        Friend Shared ReadOnly UseBeforeDeclarationResultType As New ErrorTypeSymbol()
 
         Private ReadOnly _container As Symbol ' the method, field or property that contains the declaration of this variable
 
@@ -353,7 +353,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 End If
 
                 Dim constant As ConstantValue = Me.GetConstantValue(Nothing)
-                Return If(constant Is Nothing, Nothing, constant.Value)
+                Return constant?.Value
             End Get
         End Property
 
@@ -884,12 +884,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     GetConstantExpression(localBinder)
                 End If
 
-                Return If(_evaluatedConstant IsNot Nothing, _evaluatedConstant.Value, Nothing)
+                Return _evaluatedConstant?.Value
             End Function
 
             Friend Overrides Function GetConstantValueDiagnostics(containingBinder As Binder) As BindingDiagnosticBag
                 GetConstantValue(containingBinder)
-                Return If(_evaluatedConstant IsNot Nothing, _evaluatedConstant.Diagnostics, Nothing)
+                Return _evaluatedConstant?.Diagnostics
             End Function
 
             Private Sub SetConstantExpression(type As TypeSymbol, constantValue As ConstantValue, expression As BoundExpression, diagnostics As BindingDiagnosticBag)

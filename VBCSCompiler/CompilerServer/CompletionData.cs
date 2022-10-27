@@ -1,7 +1,7 @@
 ﻿using System;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal readonly struct CompletionData
@@ -13,9 +13,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         internal bool ShutdownRequest { get; }
 
         internal CompletionData(
-          CompletionReason reason,
-          TimeSpan? newKeepAlive = null,
-          bool shutdownRequested = false)
+            CompletionReason reason,
+            TimeSpan? newKeepAlive = null,
+            bool shutdownRequested = false)
         {
             this.Reason = reason;
             this.NewKeepAlive = newKeepAlive;

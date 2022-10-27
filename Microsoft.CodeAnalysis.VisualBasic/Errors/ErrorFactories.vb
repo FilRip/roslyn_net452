@@ -14,7 +14,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private Const s_titleSuffix As String = "_Title"
         Private Const s_descriptionSuffix As String = "_Description"
-        Private Shared ReadOnly s_categoriesMap As Lazy(Of ImmutableDictionary(Of ERRID, String)) = New Lazy(Of ImmutableDictionary(Of ERRID, String))(AddressOf CreateCategoriesMap)
+        Private Shared ReadOnly s_categoriesMap As New Lazy(Of ImmutableDictionary(Of ERRID, String))(AddressOf CreateCategoriesMap)
 
         Private Shared Function CreateCategoriesMap() As ImmutableDictionary(Of ERRID, String)
             Dim map = New Dictionary(Of ERRID, String) From

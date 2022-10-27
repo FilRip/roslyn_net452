@@ -40,35 +40,31 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             bool IValueSet.IsEmpty => !_hasFalse && !_hasTrue;
 
-            ConstantValue IValueSet.Sample => ConstantValue.Create(_hasTrue ? true : _hasFalse ? false : throw new ArgumentException());
+            ConstantValue IValueSet.Sample => ConstantValue.Create(_hasTrue || (_hasFalse ? false : throw new ArgumentException()));
 
 
             public bool Any(BinaryOperatorKind relation, bool value)
             {
-                switch (relation, value)
+                return (relation, value)
+switch
                 {
-                    case (Equal, true):
-                        return _hasTrue;
-                    case (Equal, false):
-                        return _hasFalse;
-                    default:
-                        return true;
-                }
+                    (Equal, true) => _hasTrue,
+                    (Equal, false) => _hasFalse,
+                    _ => true,
+                };
             }
 
             bool IValueSet.Any(BinaryOperatorKind relation, ConstantValue value) => value.IsBad || Any(relation, value.BooleanValue);
 
             public bool All(BinaryOperatorKind relation, bool value)
             {
-                switch (relation, value)
+                return (relation, value)
+switch
                 {
-                    case (Equal, true):
-                        return !_hasFalse;
-                    case (Equal, false):
-                        return !_hasTrue;
-                    default:
-                        return true;
-                }
+                    (Equal, true) => !_hasFalse,
+                    (Equal, false) => !_hasTrue,
+                    _ => true,
+                };
             }
 
             bool IValueSet.All(BinaryOperatorKind relation, ConstantValue value) => !value.IsBad && All(relation, value.BooleanValue);

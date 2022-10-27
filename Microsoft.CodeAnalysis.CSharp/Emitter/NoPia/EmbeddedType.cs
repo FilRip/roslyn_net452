@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             // Embed all members
             foreach (MethodSymbol m in UnderlyingNamedType.AdaptedNamedTypeSymbol.GetMethodsToEmit())
             {
-                if ((object)m != null)
+                if (m is object)
                 {
                     TypeManager.EmbedMethod(this, m.GetCciAdapter(), syntaxNodeOpt, diagnostics);
                 }
@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         protected override Cci.ITypeReference GetBaseClass(PEModuleBuilder moduleBuilder, SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
         {
             NamedTypeSymbol baseType = UnderlyingNamedType.AdaptedNamedTypeSymbol.BaseTypeNoUseSiteDiagnostics;
-            return (object)baseType != null ? moduleBuilder.Translate(baseType, syntaxNodeOpt, diagnostics) : null;
+            return baseType is object ? moduleBuilder.Translate(baseType, syntaxNodeOpt, diagnostics) : null;
         }
 
         protected override IEnumerable<FieldSymbolAdapter> GetFieldsToEmit()
@@ -149,17 +149,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         {
             get
             {
-                switch (UnderlyingNamedType.AdaptedNamedTypeSymbol.TypeKind)
+                return UnderlyingNamedType.AdaptedNamedTypeSymbol.TypeKind switch
                 {
-                    case TypeKind.Enum:
-                    case TypeKind.Delegate:
-                    //C# interfaces don't have fields so the flag doesn't really matter, but Dev10 omits it
-                    case TypeKind.Interface:
-                        return false;
-                }
-
-                // We shouldn't embed static constructor.
-                return true;
+                    TypeKind.Enum or TypeKind.Delegate or TypeKind.Interface => false,
+                    // We shouldn't embed static constructor.
+                    _ => true,
+                };
             }
         }
 
@@ -247,7 +242,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
                 WellKnownMember.System_Runtime_InteropServices_TypeIdentifierAttribute__ctor :
                 WellKnownMember.System_Runtime_InteropServices_TypeIdentifierAttribute__ctorStringString;
             var ctor = TypeManager.GetWellKnownMethod(member, syntaxNodeOpt, diagnostics);
-            if ((object)ctor == null)
+            if (ctor is null)
             {
                 return null;
             }
@@ -268,7 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
                 var stringType = TypeManager.GetSystemStringType(syntaxNodeOpt, diagnostics);
 
-                if ((object)stringType != null)
+                if (stringType is object)
                 {
                     string guidString = TypeManager.GetAssemblyGuidString(UnderlyingNamedType.AdaptedNamedTypeSymbol.ContainingAssembly);
                     return new SynthesizedAttributeData(ctor,

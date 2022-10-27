@@ -488,7 +488,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             System.Diagnostics.Debug.Assert(!IsTrue(GetDeclaredOrInheritedCompliance(symbol)), "Only call on non-compliant symbols");
 
             NamedTypeSymbol containingType = symbol.ContainingType;
-            if ((object)containingType != null && containingType.IsInterface)
+            if (containingType is object && containingType.IsInterface)
             {
                 this.AddDiagnostic(ErrorCode.WRN_CLS_BadInterfaceMember, symbol.Locations[0], symbol);
             }
@@ -518,8 +518,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 NamedTypeSymbol baseType = symbol.EnumUnderlyingType ?? symbol.BaseTypeNoUseSiteDiagnostics; // null for interfaces
-                System.Diagnostics.Debug.Assert((object)baseType != null || symbol.SpecialType == SpecialType.System_Object, "Only object has no base.");
-                if ((object)baseType != null && !IsCompliantType(baseType, symbol))
+                System.Diagnostics.Debug.Assert(baseType is object || symbol.SpecialType == SpecialType.System_Object, "Only object has no base.");
+                if (baseType is object && !IsCompliantType(baseType, symbol))
                 {
                     // TODO: it would be nice to report this on the base type clause.
                     this.AddDiagnostic(ErrorCode.WRN_CLS_BadBase, symbol.Locations[0], symbol, baseType);
@@ -532,8 +532,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             System.Diagnostics.Debug.Assert(IsTrue(GetDeclaredOrInheritedCompliance(symbol)), "Only call on compliant symbols");
 
             NamedTypeSymbol containingType = symbol.ContainingType;
-            System.Diagnostics.Debug.Assert((object)containingType == null || !containingType.IsImplicitClass);
-            if ((object)containingType != null && !IsTrue(GetDeclaredOrInheritedCompliance(containingType)))
+            System.Diagnostics.Debug.Assert(containingType is null || !containingType.IsImplicitClass);
+            if (containingType is object && !IsTrue(GetDeclaredOrInheritedCompliance(containingType)))
             {
                 this.AddDiagnostic(ErrorCode.WRN_CLS_IllegalTrueInFalse, symbol.Locations[0], symbol, containingType);
             }
@@ -619,7 +619,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 // This catches things like param arrays and converted null literals.
-                if ((object)attribute.AttributeConstructor != null) // Happens in error scenarios.
+                if (attribute.AttributeConstructor is object) // Happens in error scenarios.
                 {
                     foreach (var type in attribute.AttributeConstructor.ParameterTypesWithAnnotations)
                     {
@@ -667,7 +667,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (container.Kind == SymbolKind.Method)
             {
                 Symbol associated = ((MethodSymbol)container).AssociatedSymbol;
-                if ((object)associated != null && associated.Kind == SymbolKind.Property)
+                if (associated is object && associated.Kind == SymbolKind.Property)
                 {
                     // Only care about "value" parameter for accessors.
                     // NOTE: public caller would have to count parameters.
@@ -729,7 +729,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
                 case SymbolKind.NamedType:
                     symbol = ((NamedTypeSymbol)symbol).DelegateInvokeMethod;
-                    if ((object)symbol == null)
+                    if (symbol is null)
                     {
                         return;
                     }
@@ -817,7 +817,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 NamedTypeSymbol baseType = type.BaseTypeNoUseSiteDiagnostics;
-                while ((object)baseType != null)
+                while (baseType is object)
                 {
                     foreach (Symbol member in baseType.GetMembersUnordered())
                     {
@@ -961,33 +961,18 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool IsCompliantType(TypeSymbol type, NamedTypeSymbol context)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Array:
-                    return IsCompliantType(((ArrayTypeSymbol)type).ElementType, context);
-                case TypeKind.Dynamic:
-                    // NOTE: It would probably be most correct to return 
-                    // IsCompliantType(this.compilation.GetSpecialType(SpecialType.System_Object), context)
-                    // but that's way too much work in the 99.9% case.
-                    return true;
-                case TypeKind.Pointer:
-                case TypeKind.FunctionPointer:
-                    return false;
-                case TypeKind.Error:
-                case TypeKind.TypeParameter:
-                    // Possibly not the most accurate answer, but the gist is that we
-                    // don't want to report problems with these types.
-                    return true;
-                case TypeKind.Class:
-                case TypeKind.Struct:
-                case TypeKind.Interface:
-                case TypeKind.Delegate:
-                case TypeKind.Enum:
-                case TypeKind.Submission:
-                    return IsCompliantType((NamedTypeSymbol)type, context);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(type.TypeKind);
-            }
+                TypeKind.Array => IsCompliantType(((ArrayTypeSymbol)type).ElementType, context),
+                TypeKind.Dynamic => true,// NOTE: It would probably be most correct to return 
+                                         // IsCompliantType(this.compilation.GetSpecialType(SpecialType.System_Object), context)
+                                         // but that's way too much work in the 99.9% case.
+                TypeKind.Pointer or TypeKind.FunctionPointer => false,
+                TypeKind.Error or TypeKind.TypeParameter => true,// Possibly not the most accurate answer, but the gist is that we
+                                                                 // don't want to report problems with these types.
+                TypeKind.Class or TypeKind.Struct or TypeKind.Interface or TypeKind.Delegate or TypeKind.Enum or TypeKind.Submission => IsCompliantType((NamedTypeSymbol)type, context),
+                _ => throw ExceptionUtilities.UnexpectedValue(type.TypeKind),
+            };
         }
 
         private bool IsCompliantType(NamedTypeSymbol type, NamedTypeSymbol context)
@@ -1049,7 +1034,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Dictionary<NamedTypeSymbol, NamedTypeSymbol> containingTypes = null; // maps definition to constructed
             {
                 NamedTypeSymbol containingType = type.ContainingType;
-                while ((object)containingType != null)
+                while (containingType is object)
                 {
                     if (containingTypes == null)
                     {
@@ -1070,10 +1055,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            while ((object)context != null)
+            while (context is object)
             {
                 NamedTypeSymbol contextBaseType = context;
-                while ((object)contextBaseType != null)
+                while (contextBaseType is object)
                 {
                     if (containingTypes.TryGetValue(contextBaseType.OriginalDefinition, out NamedTypeSymbol containingType))
                     {
@@ -1105,7 +1090,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 MethodSymbol method = (MethodSymbol)symbol;
                 Symbol associated = method.AssociatedSymbol;
-                if ((object)associated != null)
+                if (associated is object)
                 {
                     // Don't bother storing entries for accessors - just go straight to the property/event.
                     return GetDeclaredOrInheritedCompliance(associated);
@@ -1145,7 +1130,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             System.Diagnostics.Debug.Assert(symbol.Kind != SymbolKind.Assembly);
 
             Symbol containing = (Symbol)symbol.ContainingType ?? symbol.ContainingAssembly;
-            System.Diagnostics.Debug.Assert((object)containing != null);
+            System.Diagnostics.Debug.Assert(containing is object);
             return GetDeclaredOrInheritedCompliance(containing);
         }
 
@@ -1163,7 +1148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (data.IsTargetAttribute(symbol, AttributeDescription.CLSCompliantAttribute))
                 {
                     NamedTypeSymbol attributeClass = data.AttributeClass;
-                    if ((object)attributeClass != null)
+                    if (attributeClass is object)
                     {
                         if (_diagnostics.ReportUseSite(attributeClass, symbol.Locations.IsEmpty ? NoLocation.Singleton : symbol.Locations[0]))
                         {
@@ -1192,7 +1177,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsAccessibleOutsideAssembly(Symbol symbol)
         {
-            while ((object)symbol != null && !IsImplicitClass(symbol))
+            while (symbol is object && !IsImplicitClass(symbol))
             {
                 if (!IsAccessibleIfContainerIsAccessible(symbol))
                 {
@@ -1244,34 +1229,22 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsTrue(Compliance compliance)
         {
-            switch (compliance)
+            return compliance switch
             {
-                case Compliance.DeclaredTrue:
-                case Compliance.InheritedTrue:
-                    return true;
-                case Compliance.DeclaredFalse:
-                case Compliance.InheritedFalse:
-                case Compliance.ImpliedFalse:
-                    return false;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(compliance);
-            }
+                Compliance.DeclaredTrue or Compliance.InheritedTrue => true,
+                Compliance.DeclaredFalse or Compliance.InheritedFalse or Compliance.ImpliedFalse => false,
+                _ => throw ExceptionUtilities.UnexpectedValue(compliance),
+            };
         }
 
         private static bool IsDeclared(Compliance compliance)
         {
-            switch (compliance)
+            return compliance switch
             {
-                case Compliance.DeclaredTrue:
-                case Compliance.DeclaredFalse:
-                    return true;
-                case Compliance.InheritedTrue:
-                case Compliance.InheritedFalse:
-                case Compliance.ImpliedFalse:
-                    return false;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(compliance);
-            }
+                Compliance.DeclaredTrue or Compliance.DeclaredFalse => true,
+                Compliance.InheritedTrue or Compliance.InheritedFalse or Compliance.ImpliedFalse => false,
+                _ => throw ExceptionUtilities.UnexpectedValue(compliance),
+            };
         }
 
         private enum Compliance
@@ -1288,8 +1261,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private static bool TryGetCollisionErrorCode(Symbol x, Symbol y, out ErrorCode code)
         {
-            System.Diagnostics.Debug.Assert((object)x != null);
-            System.Diagnostics.Debug.Assert((object)y != null);
+            System.Diagnostics.Debug.Assert(x is object);
+            System.Diagnostics.Debug.Assert(y is object);
             System.Diagnostics.Debug.Assert(x != (object)y);
             System.Diagnostics.Debug.Assert(x.Kind == y.Kind);
 

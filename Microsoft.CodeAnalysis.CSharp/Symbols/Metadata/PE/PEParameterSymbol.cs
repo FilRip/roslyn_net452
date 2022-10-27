@@ -801,7 +801,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 ConstantValue defaultValue = this.ExplicitDefaultConstantValue;
                 AttributeDescription filterOutConstantAttributeDescription = default;
 
-                if ((object)defaultValue != null)
+                if (defaultValue is object)
                 {
                     if (defaultValue.Discriminator == ConstantValueTypeDiscriminator.DateTime)
                     {

@@ -210,15 +210,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             if (node != null && node.ContainsDirectives)
             {
-                var d = node as DirectiveTriviaSyntax;
-                if (d != null)
+                if (node is DirectiveTriviaSyntax d)
                 {
                     directives.Add(d);
                 }
                 else
                 {
-                    var t = node as SyntaxToken;
-                    if (t != null)
+                    if (node is SyntaxToken t)
                     {
                         GetDirectives(t.GetLeadingTrivia(), directives);
                         GetDirectives(t.GetTrailingTrivia(), directives);

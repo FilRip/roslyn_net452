@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class ShutdownBuildResponse : BuildResponse
@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public ShutdownBuildResponse(int serverProcessId) => this.ServerProcessId = serverProcessId;
 
-        public override BuildResponse.ResponseType Type => BuildResponse.ResponseType.Shutdown;
+        public override ResponseType Type => ResponseType.Shutdown;
 
         protected override void AddResponseBody(BinaryWriter writer) => writer.Write(this.ServerProcessId);
 

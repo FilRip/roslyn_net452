@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         public static AnalyzerInconsistencyBuildResponse Create(
-          BinaryReader reader)
+            BinaryReader reader)
         {
             int capacity = reader.ReadInt32();
             List<string> list = new(capacity);

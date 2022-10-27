@@ -4,8 +4,8 @@ using System.Configuration;
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal static class VBCSCompiler

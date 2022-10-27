@@ -13,8 +13,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 using Roslyn.Utilities;
 
-#pragma warning disable RS0013 // We need to invoke Diagnostic.Descriptor here to log all the metadata properties of the diagnostic.
-
 #nullable enable
 
 namespace Microsoft.CodeAnalysis
@@ -294,5 +292,3 @@ namespace Microsoft.CodeAnalysis
         }
     }
 }
-
-#pragma warning restore RS0013

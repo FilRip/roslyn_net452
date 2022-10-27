@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var sourceType = sourceExpression.Type;
 
             //PERF: identity conversion is by far the most common implicit conversion, check for that first
-            if ((object)sourceType != null && HasIdentityConversionInternal(sourceType, destination))
+            if (sourceType is object && HasIdentityConversionInternal(sourceType, destination))
             {
                 return Conversion.Identity;
             }
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if ((object)sourceType != null)
+            if (sourceType is object)
             {
                 // Try using the short-circuit "fast-conversion" path.
                 Conversion fastConversion = FastClassifyConversion(sourceType, destination);
@@ -482,7 +482,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if ((object)source != null)
+            if (source is object)
             {
                 return DeriveStandardExplicitFromOppositeStandardImplicitConversion(source, destination, ref useSiteInfo);
             }
@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if ((object)source != null)
+            if (source is object)
             {
                 return ClassifyStandardImplicitConversion(source, destination, ref useSiteInfo);
             }
@@ -747,14 +747,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public bool IsBaseInterface(TypeSymbol baseType, TypeSymbol derivedType, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-
             if (!baseType.IsInterfaceType())
             {
                 return false;
             }
 
-            var d = derivedType as NamedTypeSymbol;
-            if ((object)d == null)
+            if (derivedType is not NamedTypeSymbol d)
             {
                 return false;
             }
@@ -787,7 +785,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            for (TypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); (object)b != null; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (TypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); b is object; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 if (HasIdentityConversionInternal(b, baseType))
                 {
@@ -803,19 +801,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static bool ExplicitConversionMayDifferFromImplicit(Conversion implicitConversion)
         {
-            switch (implicitConversion.Kind)
+            return implicitConversion.Kind switch
             {
-                case ConversionKind.ImplicitUserDefined:
-                case ConversionKind.ImplicitDynamic:
-                case ConversionKind.ImplicitTuple:
-                case ConversionKind.ImplicitTupleLiteral:
-                case ConversionKind.ImplicitNullable:
-                case ConversionKind.ConditionalExpression:
-                    return true;
-
-                default:
-                    return false;
-            }
+                ConversionKind.ImplicitUserDefined or ConversionKind.ImplicitDynamic or ConversionKind.ImplicitTuple or ConversionKind.ImplicitTupleLiteral or ConversionKind.ImplicitNullable or ConversionKind.ConditionalExpression => true,
+                _ => false,
+            };
         }
 
         private Conversion ClassifyImplicitBuiltInConversionFromExpression(BoundExpression sourceExpression, TypeSymbol source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -953,7 +943,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private Conversion GetConditionalExpressionConversion(BoundExpression source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if (!(source is BoundUnconvertedConditionalOperator conditionalOperator))
+            if (source is not BoundUnconvertedConditionalOperator conditionalOperator)
                 return Conversion.NoConversion;
 
             var trueConversion = this.ClassifyImplicitConversionFromExpression(conditionalOperator.Consequence, destination, ref useSiteInfo);
@@ -1090,7 +1080,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var constantValue = source.ConstantValue;
 
-            if (constantValue == null || (object)source.Type == null)
+            if (constantValue == null || source.Type is null)
             {
                 return false;
             }
@@ -1154,7 +1144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if ((object)sourceType != null)
+            if (sourceType is object)
             {
                 // Try using the short-circuit "fast-conversion" path.
                 Conversion fastConversion = FastClassifyConversion(sourceType, destination);
@@ -1212,7 +1202,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var delegateType = (NamedTypeSymbol)type;
             var invokeMethod = delegateType.DelegateInvokeMethod;
 
-            if ((object)invokeMethod == null || invokeMethod.HasUseSiteError)
+            if (invokeMethod is null || invokeMethod.HasUseSiteError)
             {
                 return LambdaConversionResult.BadTargetType;
             }
@@ -1564,7 +1554,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public Conversion ClassifyImplicitExtensionMethodThisArgConversion(BoundExpression sourceExpressionOpt, TypeSymbol sourceType, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
 
-            if ((object)sourceType != null)
+            if (sourceType is object)
             {
                 if (HasIdentityConversionInternal(sourceType, destination))
                 {
@@ -1600,7 +1590,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if ((object)sourceType != null)
+            if (sourceType is object)
             {
                 var tupleConversion = ClassifyTupleConversion(
                     sourceType,
@@ -1725,22 +1715,22 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static int GetNumericTypeIndex(SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_SByte: return 0;
-                case SpecialType.System_Byte: return 1;
-                case SpecialType.System_Int16: return 2;
-                case SpecialType.System_UInt16: return 3;
-                case SpecialType.System_Int32: return 4;
-                case SpecialType.System_UInt32: return 5;
-                case SpecialType.System_Int64: return 6;
-                case SpecialType.System_UInt64: return 7;
-                case SpecialType.System_Char: return 8;
-                case SpecialType.System_Single: return 9;
-                case SpecialType.System_Double: return 10;
-                case SpecialType.System_Decimal: return 11;
-                default: return -1;
-            }
+                SpecialType.System_SByte => 0,
+                SpecialType.System_Byte => 1,
+                SpecialType.System_Int16 => 2,
+                SpecialType.System_UInt16 => 3,
+                SpecialType.System_Int32 => 4,
+                SpecialType.System_UInt32 => 5,
+                SpecialType.System_Int64 => 6,
+                SpecialType.System_UInt64 => 7,
+                SpecialType.System_Char => 8,
+                SpecialType.System_Single => 9,
+                SpecialType.System_Double => 10,
+                SpecialType.System_Decimal => 11,
+                _ => -1,
+            };
         }
 
 #nullable enable
@@ -1784,33 +1774,20 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsConstantNumericZero(ConstantValue value)
         {
-            switch (value.Discriminator)
+            return value.Discriminator switch
             {
-                case ConstantValueTypeDiscriminator.SByte:
-                    return value.SByteValue == 0;
-                case ConstantValueTypeDiscriminator.Byte:
-                    return value.ByteValue == 0;
-                case ConstantValueTypeDiscriminator.Int16:
-                    return value.Int16Value == 0;
-                case ConstantValueTypeDiscriminator.Int32:
-                case ConstantValueTypeDiscriminator.NInt:
-                    return value.Int32Value == 0;
-                case ConstantValueTypeDiscriminator.Int64:
-                    return value.Int64Value == 0;
-                case ConstantValueTypeDiscriminator.UInt16:
-                    return value.UInt16Value == 0;
-                case ConstantValueTypeDiscriminator.UInt32:
-                case ConstantValueTypeDiscriminator.NUInt:
-                    return value.UInt32Value == 0;
-                case ConstantValueTypeDiscriminator.UInt64:
-                    return value.UInt64Value == 0;
-                case ConstantValueTypeDiscriminator.Single:
-                case ConstantValueTypeDiscriminator.Double:
-                    return value.DoubleValue == 0;
-                case ConstantValueTypeDiscriminator.Decimal:
-                    return value.DecimalValue == 0;
-            }
-            return false;
+                ConstantValueTypeDiscriminator.SByte => value.SByteValue == 0,
+                ConstantValueTypeDiscriminator.Byte => value.ByteValue == 0,
+                ConstantValueTypeDiscriminator.Int16 => value.Int16Value == 0,
+                ConstantValueTypeDiscriminator.Int32 or ConstantValueTypeDiscriminator.NInt => value.Int32Value == 0,
+                ConstantValueTypeDiscriminator.Int64 => value.Int64Value == 0,
+                ConstantValueTypeDiscriminator.UInt16 => value.UInt16Value == 0,
+                ConstantValueTypeDiscriminator.UInt32 or ConstantValueTypeDiscriminator.NUInt => value.UInt32Value == 0,
+                ConstantValueTypeDiscriminator.UInt64 => value.UInt64Value == 0,
+                ConstantValueTypeDiscriminator.Single or ConstantValueTypeDiscriminator.Double => value.DoubleValue == 0,
+                ConstantValueTypeDiscriminator.Decimal => value.DecimalValue == 0,
+                _ => false,
+            };
         }
 
         private static bool IsNumericType(TypeSymbol type)
@@ -1898,24 +1875,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
-            switch (otherType.SpecialType)
+            return otherType.SpecialType switch
             {
-                case SpecialType.System_SByte:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Char:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Double:
-                case SpecialType.System_Single:
-                case SpecialType.System_Decimal:
-                    return true;
-            }
-
-            return false;
+                SpecialType.System_SByte or SpecialType.System_Byte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Char or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_Double or SpecialType.System_Single or SpecialType.System_Decimal => true,
+                _ => false,
+            };
 
             static bool isIntPtrOrUIntPtr(TypeSymbol type) =>
                 (type.SpecialType == SpecialType.System_IntPtr || type.SpecialType == SpecialType.System_UIntPtr) && !type.IsNativeIntegerType;
@@ -2178,9 +2142,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HasCovariantArrayConversion(TypeSymbol source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            var s = source as ArrayTypeSymbol;
-            var d = destination as ArrayTypeSymbol;
-            if ((object)s == null || (object)d == null)
+            if (source is not ArrayTypeSymbol s || destination is not ArrayTypeSymbol d)
             {
                 return false;
             }
@@ -2398,8 +2360,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HasImplicitConversionFromArray(TypeSymbol source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            ArrayTypeSymbol s = source as ArrayTypeSymbol;
-            if ((object)s == null)
+            if (source is not ArrayTypeSymbol s)
             {
                 return false;
             }
@@ -2581,8 +2542,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            var d = derivedType as NamedTypeSymbol;
-            if ((object)d == null)
+            if (derivedType is not NamedTypeSymbol d)
             {
                 return false;
             }
@@ -2613,9 +2573,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HasInterfaceVarianceConversion(TypeSymbol source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            NamedTypeSymbol s = source as NamedTypeSymbol;
-            NamedTypeSymbol d = destination as NamedTypeSymbol;
-            if ((object)s == null || (object)d == null)
+            if (source is not NamedTypeSymbol s || destination is not NamedTypeSymbol d)
             {
                 return false;
             }
@@ -2630,9 +2588,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HasDelegateVarianceConversion(TypeSymbol source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            NamedTypeSymbol s = source as NamedTypeSymbol;
-            NamedTypeSymbol d = destination as NamedTypeSymbol;
-            if ((object)s == null || (object)d == null)
+            if (source is not NamedTypeSymbol s || destination is not NamedTypeSymbol d)
             {
                 return false;
             }
@@ -2938,18 +2894,15 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             bool hasConversion(RefKind refKind, TypeWithAnnotations sourceType, TypeWithAnnotations destinationType, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
             {
-                switch (refKind)
+                return refKind switch
                 {
-                    case RefKind.None:
-                        return (!IncludeNullability || HasTopLevelNullabilityImplicitConversion(sourceType, destinationType))
-                               && (HasIdentityOrImplicitReferenceConversion(sourceType.Type, destinationType.Type, ref useSiteInfo)
-                                   || HasImplicitPointerToVoidConversion(sourceType.Type, destinationType.Type)
-                                   || HasImplicitPointerConversion(sourceType.Type, destinationType.Type, ref useSiteInfo));
-
-                    default:
-                        return (!IncludeNullability || HasTopLevelNullabilityIdentityConversion(sourceType, destinationType))
-                               && HasIdentityConversion(sourceType.Type, destinationType.Type);
-                }
+                    RefKind.None => (!IncludeNullability || HasTopLevelNullabilityImplicitConversion(sourceType, destinationType))
+                                                  && (HasIdentityOrImplicitReferenceConversion(sourceType.Type, destinationType.Type, ref useSiteInfo)
+                                                      || HasImplicitPointerToVoidConversion(sourceType.Type, destinationType.Type)
+                                                      || HasImplicitPointerConversion(sourceType.Type, destinationType.Type, ref useSiteInfo)),
+                    _ => (!IncludeNullability || HasTopLevelNullabilityIdentityConversion(sourceType, destinationType))
+&& HasIdentityConversion(sourceType.Type, destinationType.Type),
+                };
             }
         }
 #nullable disable
@@ -3059,9 +3012,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: If T is not known to be a reference type, the conversions are classified as unboxing conversions.
 
             // SPEC: From the effective base class C of T to T and from any base class of C to T. 
-            if ((object)t != null && t.IsReferenceType)
+            if (t is object && t.IsReferenceType)
             {
-                for (var type = t.EffectiveBaseClass(ref useSiteInfo); (object)type != null; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+                for (var type = t.EffectiveBaseClass(ref useSiteInfo); type is object; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
                 {
                     if (HasIdentityConversionInternal(type, source))
                     {
@@ -3071,19 +3024,19 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // SPEC: From any interface type to T. 
-            if ((object)t != null && source.IsInterfaceType() && t.IsReferenceType)
+            if (t is object && source.IsInterfaceType() && t.IsReferenceType)
             {
                 return true;
             }
 
             // SPEC: From T to any interface-type I provided there is not already an implicit conversion from T to I.
-            if ((object)s != null && s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
+            if (s is object && s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
             {
                 return true;
             }
 
             // SPEC: From a type parameter U to T, provided T depends on U (Â§10.1.5)
-            if ((object)s != null && (object)t != null && t.IsReferenceType && t.DependsOn(s))
+            if (s is object && t is object && t.IsReferenceType && t.DependsOn(s))
             {
                 return true;
             }
@@ -3104,9 +3057,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: If T is not known to be a reference type, the conversions are classified as unboxing conversions.
 
             // SPEC: From the effective base class C of T to T and from any base class of C to T. 
-            if ((object)t != null && !t.IsReferenceType)
+            if (t is object && !t.IsReferenceType)
             {
-                for (var type = t.EffectiveBaseClass(ref useSiteInfo); (object)type != null; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+                for (var type = t.EffectiveBaseClass(ref useSiteInfo); type is object; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
                 {
                     if (TypeSymbol.Equals(type, source, TypeCompareKind.ConsiderEverything2))
                     {
@@ -3116,19 +3069,19 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // SPEC: From any interface type to T. 
-            if (source.IsInterfaceType() && (object)t != null && !t.IsReferenceType)
+            if (source.IsInterfaceType() && t is object && !t.IsReferenceType)
             {
                 return true;
             }
 
             // SPEC: From T to any interface-type I provided there is not already an implicit conversion from T to I.
-            if ((object)s != null && !s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
+            if (s is object && !s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
             {
                 return true;
             }
 
             // SPEC: From a type parameter U to T, provided T depends on U (Â§10.1.5)
-            if ((object)s != null && (object)t != null && !t.IsReferenceType && t.DependsOn(s))
+            if (s is object && t is object && !t.IsReferenceType && t.DependsOn(s))
             {
                 return true;
             }
@@ -3233,7 +3186,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: S and T differ only in element type. (In other words, S and T have the same number of dimensions.)
             // SPEC: Both SE and TE are reference-types.
             // SPEC: An explicit reference conversion exists from SE to TE.
-            if ((object)sourceArray != null && (object)destinationArray != null)
+            if (sourceArray is object && destinationArray is object)
             {
                 // HasExplicitReferenceConversion checks that SE and TE are reference types so
                 // there's no need for that check here. Moreover, it's not as simple as checking
@@ -3246,7 +3199,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // SPEC: From System.Array and the interfaces it implements to any array-type.
-            if ((object)destinationArray != null)
+            if (destinationArray is object)
             {
                 if (source.SpecialType == SpecialType.System_Array)
                 {
@@ -3268,7 +3221,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The framework now also allows arrays to be converted to IReadOnlyList<T> and IReadOnlyCollection<T>; we 
             // honor that as well.
 
-            if ((object)sourceArray != null && sourceArray.IsSZArray && destination.IsPossibleArrayGenericInterface())
+            if (sourceArray is object && sourceArray.IsSZArray && destination.IsPossibleArrayGenericInterface())
             {
                 if (HasExplicitReferenceConversion(sourceArray.ElementType, ((NamedTypeSymbol)destination).TypeArgumentWithDefinitionUseSiteDiagnostics(0, ref useSiteInfo).Type, ref useSiteInfo))
                 {
@@ -3280,7 +3233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // provided that there is an explicit identity or reference conversion from S to T.
 
             // Similarly, we honor IReadOnlyList<S> and IReadOnlyCollection<S> in the same way.
-            if ((object)destinationArray != null && destinationArray.IsSZArray)
+            if (destinationArray is object && destinationArray.IsSZArray)
             {
                 var specialDefinition = source.OriginalDefinition.SpecialType;
 
@@ -3415,23 +3368,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsIntegerTypeSupportingPointerConversions(TypeSymbol type)
         {
-            switch (type.SpecialType)
+            return type.SpecialType switch
             {
-                case SpecialType.System_SByte:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                    return true;
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                    return type.IsNativeIntegerType;
-            }
-
-            return false;
+                SpecialType.System_SByte or SpecialType.System_Byte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 => true,
+                SpecialType.System_IntPtr or SpecialType.System_UIntPtr => type.IsNativeIntegerType,
+                _ => false,
+            };
         }
     }
 }

@@ -417,8 +417,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(boundAttributeTypes.Any())
             Debug.Assert(attributesToBind.Any())
 
-            Dim arguments = New EarlyDecodeWellKnownAttributeArguments(Of EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation)()
-            arguments.SymbolPart = symbolPart
+            Dim arguments = New EarlyDecodeWellKnownAttributeArguments(Of EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation) With {
+                .SymbolPart = symbolPart
+            }
 
             For i = 0 To boundAttributeTypes.Length - 1
                 Dim attributeType As NamedTypeSymbol = boundAttributeTypes(i)
@@ -455,10 +456,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Dim totalAttributesCount As Integer = boundAttributes.Length
             Dim uniqueAttributeTypes = New HashSet(Of NamedTypeSymbol)
-            Dim arguments = New DecodeWellKnownAttributeArguments(Of AttributeSyntax, VisualBasicAttributeData, AttributeLocation)()
-            arguments.AttributesCount = totalAttributesCount
-            arguments.Diagnostics = diagnostics
-            arguments.SymbolPart = symbolPart
+            Dim arguments = New DecodeWellKnownAttributeArguments(Of AttributeSyntax, VisualBasicAttributeData, AttributeLocation) With {
+                .AttributesCount = totalAttributesCount,
+                .Diagnostics = diagnostics,
+                .SymbolPart = symbolPart
+            }
 
             For i = 0 To totalAttributesCount - 1
                 Dim boundAttribute As VisualBasicAttributeData = boundAttributes(i)

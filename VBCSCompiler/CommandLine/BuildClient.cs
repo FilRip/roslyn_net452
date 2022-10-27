@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
         private readonly RequestLanguage _language;
         private readonly
 #nullable disable
-    CompileFunc _compileFunc;
+        CompileFunc _compileFunc;
         private readonly ICompilerServerLogger _logger;
         private readonly CreateServerFunc _createServerFunc;
         private readonly int? _timeoutOverride;
@@ -29,11 +29,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
         internal static bool IsRunningOnWindows => Path.DirectorySeparatorChar == '\\';
 
         internal BuildClient(
-          RequestLanguage language,
-          CompileFunc compileFunc,
-          ICompilerServerLogger logger,
-          CreateServerFunc createServerFunc = null,
-          int? timeoutOverride = null)
+            RequestLanguage language,
+            CompileFunc compileFunc,
+            ICompilerServerLogger logger,
+            CreateServerFunc createServerFunc = null,
+            int? timeoutOverride = null)
         {
             this._language = language;
             this._compileFunc = compileFunc;
@@ -45,11 +45,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
         public static string GetSystemSdkDirectory() => !RuntimeHostInfo.IsCoreClrRuntime ? RuntimeEnvironment.GetRuntimeDirectory() : null;
 
         internal static int Run(
-          IEnumerable<string> arguments,
-          RequestLanguage language,
-          CompileFunc compileFunc,
-          ICompilerServerLogger logger,
-          Guid? requestId = null)
+            IEnumerable<string> arguments,
+            RequestLanguage language,
+            CompileFunc compileFunc,
+            ICompilerServerLogger logger,
+            Guid? requestId = null)
         {
             string systemSdkDirectory = BuildClient.GetSystemSdkDirectory();
             if (RuntimeHostInfo.IsCoreClrRuntime)
@@ -66,11 +66,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal RunCompilationResult RunCompilation(
-          IEnumerable<string> originalArguments,
-          BuildPaths buildPaths,
-          TextWriter textWriter = null,
-          string pipeName = null,
-          Guid? requestId = null)
+            IEnumerable<string> originalArguments,
+            BuildPaths buildPaths,
+            TextWriter textWriter = null,
+            string pipeName = null,
+            Guid? requestId = null)
         {
             textWriter ??= Console.Out;
             if (CommandLineParser.TryParseClientArgs(originalArguments.Select<string, string>(arg => arg.Trim()).ToArray<string>(), out List<string> parsedArgs, out bool containsShared, out string keepAliveValue, out string pipeName1, out string errorMessage))
@@ -112,9 +112,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }*/
 
         public Task<RunCompilationResult> RunCompilationAsync(
-          IEnumerable<string> originalArguments,
-          BuildPaths buildPaths,
-          TextWriter textWriter = null)
+            IEnumerable<string> originalArguments,
+            BuildPaths buildPaths,
+            TextWriter textWriter = null)
         {
             TaskCompletionSource<RunCompilationResult> tcs = new();
             new Thread(() =>
@@ -132,22 +132,22 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         private int RunLocalCompilation(
-          string[] arguments,
-          BuildPaths buildPaths,
-          TextWriter textWriter)
+            string[] arguments,
+            BuildPaths buildPaths,
+            TextWriter textWriter)
         {
             DefaultAnalyzerAssemblyLoader analyzerAssemblyLoader = new();
             return this._compileFunc(arguments, buildPaths, textWriter, analyzerAssemblyLoader);
         }
 
         private RunCompilationResult? RunServerCompilation(
-          TextWriter textWriter,
-          List<string> arguments,
-          BuildPaths buildPaths,
-          string libDirectory,
-          string pipeName,
-          string keepAlive,
-          Guid? requestId)
+            TextWriter textWriter,
+            List<string> arguments,
+            BuildPaths buildPaths,
+            string libDirectory,
+            string pipeName,
+            string keepAlive,
+            Guid? requestId)
         {
             if (!BuildClient.AreNamedPipesSupported())
                 return new RunCompilationResult?();

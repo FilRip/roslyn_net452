@@ -399,7 +399,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             if (boundInitializersOpt.IsDefault)
             {
-                if (!(ContainingType is SourceMemberContainerTypeSymbol sourceType))
+                if (ContainingType is not SourceMemberContainerTypeSymbol sourceType)
                 {
                     return true;
                 }

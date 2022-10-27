@@ -51,8 +51,7 @@ namespace Microsoft.Cci
             // Do not visit the reference to aliased type, it does not get into the type ref table based only on its membership of the exported types collection.
             // but DO visit the reference to assembly (if any) that defines the aliased type. That assembly might not already be in the assembly reference list.
             var definingUnit = MetadataWriter.GetDefiningUnitReference(exportedType, Context);
-            var definingAssembly = definingUnit as IAssemblyReference;
-            if (definingAssembly != null)
+            if (definingUnit is IAssemblyReference definingAssembly)
             {
                 Visit(definingAssembly);
             }
@@ -68,8 +67,7 @@ namespace Microsoft.Cci
 
         public void VisitMethodBodyReference(IReference reference)
         {
-            var typeReference = reference as ITypeReference;
-            if (typeReference != null)
+            if (reference is ITypeReference typeReference)
             {
                 this.typeReferenceNeedsToken = true;
                 this.Visit(typeReference);
@@ -77,8 +75,7 @@ namespace Microsoft.Cci
             }
             else
             {
-                var fieldReference = reference as IFieldReference;
-                if (fieldReference != null)
+                if (reference is IFieldReference fieldReference)
                 {
                     if (fieldReference.IsContextualNamedEntity)
                     {
@@ -89,8 +86,7 @@ namespace Microsoft.Cci
                 }
                 else
                 {
-                    var methodReference = reference as IMethodReference;
-                    if (methodReference != null)
+                    if (reference is IMethodReference methodReference)
                     {
                         this.Visit(methodReference);
                     }

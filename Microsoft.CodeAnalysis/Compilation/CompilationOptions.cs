@@ -362,18 +362,11 @@ namespace Microsoft.CodeAnalysis
 
         public static bool IsValidFileAlignment(int value)
         {
-            switch (value)
+            return value switch
             {
-                case 512:
-                case 1024:
-                case 2048:
-                case 4096:
-                case 8192:
-                    return true;
-
-                default:
-                    return false;
-            }
+                512 or 1024 or 2048 or 4096 or 8192 => true,
+                _ => false,
+            };
         }
 
         public abstract ImmutableArray<string> GetImports();
@@ -612,7 +605,7 @@ namespace Microsoft.CodeAnalysis
 
         protected bool EqualsHelper([NotNullWhen(true)] CompilationOptions? other)
         {
-            if (object.ReferenceEquals(other, null))
+            if (other is null)
             {
                 return false;
             }

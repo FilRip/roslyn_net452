@@ -35,10 +35,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // which is typically the "trivial" expression x where x is the query
             // variable.  So that we can make sense of x in this
             // context, we store the unoptimized form and visit this extra argument.
-            var qc = unoptimizedForm as BoundQueryClause;
-            if (qc != null) unoptimizedForm = qc.Value;
-            var call = unoptimizedForm as BoundCall;
-            if (call != null && (object)call.Method != null)
+            if (unoptimizedForm is BoundQueryClause qc) unoptimizedForm = qc.Value;
+            if (unoptimizedForm is BoundCall call && call.Method is object)
             {
                 var arguments = call.Arguments;
                 if (call.Method.Name == "Select")
@@ -72,8 +70,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? Visit(BoundNode? node)
         {
-            var expression = node as BoundExpression;
-            if (expression != null)
+            if (node is BoundExpression expression)
             {
                 return VisitExpressionWithStackGuard(ref _recursionDepth, expression);
             }

@@ -17,8 +17,8 @@ namespace Microsoft.CodeAnalysis
         private static string NativeToolSuffix => !PlatformInformation.IsWindows ? "" : ".exe";
 
         internal static (string processFilePath, string commandLineArguments, string toolFilePath) GetProcessInfo(
-          string toolFilePathWithoutExtension,
-          string commandLineArguments)
+            string toolFilePathWithoutExtension,
+            string commandLineArguments)
         {
             string path = toolFilePathWithoutExtension + RuntimeHostInfo.NativeToolSuffix;
             if (IsCoreClrRuntime && File.Exists(path))
@@ -39,10 +39,10 @@ namespace Microsoft.CodeAnalysis
         }
 
         internal static NamedPipeClientStream CreateNamedPipeClient(
-          string serverName,
-          string pipeName,
-          PipeDirection direction,
-          PipeOptions options)
+            string serverName,
+            string pipeName,
+            PipeDirection direction,
+            PipeOptions options)
         {
             return new NamedPipeClientStream(serverName, pipeName, direction, options);
         }

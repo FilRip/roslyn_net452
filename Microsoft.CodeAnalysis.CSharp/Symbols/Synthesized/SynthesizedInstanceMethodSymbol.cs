@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override bool TryGetThisParameter(out ParameterSymbol thisParameter)
         {
 
-            if ((object)_lazyThisParameter == null)
+            if (_lazyThisParameter is null)
             {
                 Interlocked.CompareExchange(ref _lazyThisParameter, new ThisParameterSymbol(this), null);
             }

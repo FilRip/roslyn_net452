@@ -942,8 +942,7 @@ namespace Microsoft.CodeAnalysis
                     index++;
                     var methodTypeParameterIndex = ReadNextInteger(id, ref index);
 
-                    var methodContext = typeParameterContext as IMethodSymbol;
-                    if (methodContext != null)
+                    if (typeParameterContext is IMethodSymbol methodContext)
                     {
                         var count = methodContext.TypeParameters.Length;
                         if (count > 0 && methodTypeParameterIndex < count)
@@ -957,8 +956,7 @@ namespace Microsoft.CodeAnalysis
                     // regular type parameter
                     var typeParameterIndex = ReadNextInteger(id, ref index);
 
-                    var methodContext = typeParameterContext as IMethodSymbol;
-                    var typeContext = methodContext != null ? methodContext.ContainingType : typeParameterContext as INamedTypeSymbol;
+                    var typeContext = typeParameterContext is IMethodSymbol methodContext ? methodContext.ContainingType : typeParameterContext as INamedTypeSymbol;
 
                     if (typeContext != null)
                     {
@@ -1195,8 +1193,7 @@ namespace Microsoft.CodeAnalysis
                         {
                             index = startIndex;
 
-                            var methodSymbol = symbol as IMethodSymbol;
-                            if (methodSymbol != null && methodSymbol.Arity == arity)
+                            if (symbol is IMethodSymbol methodSymbol && methodSymbol.Arity == arity)
                             {
                                 parameters.Clear();
 
@@ -1263,8 +1260,7 @@ namespace Microsoft.CodeAnalysis
                         {
                             index = startIndex;
 
-                            var propertySymbol = symbol as IPropertySymbol;
-                            if (propertySymbol != null)
+                            if (symbol is IPropertySymbol propertySymbol)
                             {
                                 if (PeekNextChar(id, index) == '(')
                                 {

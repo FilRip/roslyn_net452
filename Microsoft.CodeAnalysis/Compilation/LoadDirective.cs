@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is LoadDirective && Equals((LoadDirective)obj);
+            return obj is LoadDirective directive && Equals(directive);
         }
 
         public override int GetHashCode()

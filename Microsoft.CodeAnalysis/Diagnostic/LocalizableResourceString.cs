@@ -50,30 +50,10 @@ namespace Microsoft.CodeAnalysis
         /// <param name="formatArguments">Optional arguments for formatting the localizable resource string.</param>
         public LocalizableResourceString(string nameOfLocalizableResource, ResourceManager resourceManager, Type resourceSource, params string[] formatArguments)
         {
-            if (nameOfLocalizableResource == null)
-            {
-                throw new ArgumentNullException(nameof(nameOfLocalizableResource));
-            }
-
-            if (resourceManager == null)
-            {
-                throw new ArgumentNullException(nameof(resourceManager));
-            }
-
-            if (resourceSource == null)
-            {
-                throw new ArgumentNullException(nameof(resourceSource));
-            }
-
-            if (formatArguments == null)
-            {
-                throw new ArgumentNullException(nameof(formatArguments));
-            }
-
-            _resourceManager = resourceManager;
-            _nameOfLocalizableResource = nameOfLocalizableResource;
-            _resourceSource = resourceSource;
-            _formatArguments = formatArguments;
+            _resourceManager = resourceManager ?? throw new ArgumentNullException(nameof(resourceManager));
+            _nameOfLocalizableResource = nameOfLocalizableResource ?? throw new ArgumentNullException(nameof(nameOfLocalizableResource));
+            _resourceSource = resourceSource ?? throw new ArgumentNullException(nameof(resourceSource));
+            _formatArguments = formatArguments ?? throw new ArgumentNullException(nameof(formatArguments));
         }
 
         private LocalizableResourceString(ObjectReader reader)
@@ -124,8 +104,7 @@ namespace Microsoft.CodeAnalysis
 
         protected override bool AreEqual(object? other)
         {
-            var otherResourceString = other as LocalizableResourceString;
-            return otherResourceString != null &&
+            return other is LocalizableResourceString otherResourceString &&
                 _nameOfLocalizableResource == otherResourceString._nameOfLocalizableResource &&
                 _resourceManager == otherResourceString._resourceManager &&
                 _resourceSource == otherResourceString._resourceSource &&

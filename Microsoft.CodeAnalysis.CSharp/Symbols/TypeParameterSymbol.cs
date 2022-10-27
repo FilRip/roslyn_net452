@@ -271,7 +271,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             AppendConstraintsUseSiteErrorInfo(ref useSiteInfo);
             var result = EffectiveBaseClassNoUseSiteDiagnostics;
 
-            if ((object)result != null)
+            if (result is object)
             {
                 result.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
             }
@@ -308,7 +308,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             AppendConstraintsUseSiteErrorInfo(ref useSiteInfo);
             var result = DeducedBaseTypeNoUseSiteDiagnostics;
 
-            if ((object)result != null)
+            if (result is object)
             {
                 result.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
             }
@@ -336,7 +336,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // Since bases affect content of AllInterfaces set, we need to make sure they all are good.
             var current = DeducedBaseType(ref useSiteInfo);
 
-            while ((object)current != null)
+            while (current is object)
             {
                 current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
             }
@@ -396,23 +396,16 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else
             {
-                switch (constraint.TypeKind)
+                return constraint.TypeKind switch
                 {
-                    case TypeKind.Interface:
-                        return false; // can be satisfied by value types
-                    case TypeKind.Error:
-                        return false;
-                }
-
-                switch (constraint.SpecialType)
-                {
-                    case SpecialType.System_Object:
-                    case SpecialType.System_ValueType:
-                    case SpecialType.System_Enum:
-                        return false; // can be satisfied by value types
-                }
-
-                return true;
+                    TypeKind.Interface => false,// can be satisfied by value types
+                    TypeKind.Error => false,
+                    _ => constraint.SpecialType switch
+                    {
+                        SpecialType.System_Object or SpecialType.System_ValueType or SpecialType.System_Enum => false,// can be satisfied by value types
+                        _ => true,
+                    },
+                };
             }
         }
 
@@ -642,7 +635,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if ((object)other == null || !ReferenceEquals(other.OriginalDefinition, this.OriginalDefinition))
+            if (other is null || !ReferenceEquals(other.OriginalDefinition, this.OriginalDefinition))
             {
                 return false;
             }

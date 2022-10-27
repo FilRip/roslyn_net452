@@ -301,8 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 // expect to hit it before exiting the method.
                 // We do it by rewriting all returns into a jump to an Exit label 
                 // and mark the Exit sequence with sequence point for the span of the last "}".
-                BlockSyntax blockSyntax = _methodBodySyntaxOpt as BlockSyntax;
-                if (blockSyntax != null)
+                if (_methodBodySyntaxOpt is BlockSyntax blockSyntax)
                 {
                     EmitSequencePoint(blockSyntax.SyntaxTree, blockSyntax.CloseBraceToken.Span);
                 }

@@ -66,16 +66,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     {
         internal static bool IsTypeName(this GeneratedNameKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case GeneratedNameKind.LambdaDisplayClass:
-                case GeneratedNameKind.StateMachineType:
-                case GeneratedNameKind.DynamicCallSiteContainerType:
-                    return true;
-
-                default:
-                    return false;
-            }
+                GeneratedNameKind.LambdaDisplayClass or GeneratedNameKind.StateMachineType or GeneratedNameKind.DynamicCallSiteContainerType => true,
+                _ => false,
+            };
         }
     }
 }

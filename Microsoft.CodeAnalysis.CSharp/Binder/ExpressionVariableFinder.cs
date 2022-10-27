@@ -535,15 +535,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private LocalSymbol MakePatternVariable(TypeSyntax type, VariableDesignationSyntax variableDesignation, SyntaxNode nodeToBind)
         {
-            var designation = variableDesignation as SingleVariableDesignationSyntax;
-            if (designation == null)
+            if (variableDesignation is not SingleVariableDesignationSyntax designation)
             {
                 return null;
             }
 
             NamedTypeSymbol container = _scopeBinder.ContainingType;
-            if ((object)container != null && container.IsScriptClass &&
-                (object)_scopeBinder.LookupDeclaredField(designation) != null)
+            if (container is object && container.IsScriptClass &&
+                _scopeBinder.LookupDeclaredField(designation) is object)
             {
                 // This is a field declaration
                 return null;
@@ -564,8 +563,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             NamedTypeSymbol container = _scopeBinder.ContainingType;
 
-            if ((object)container != null && container.IsScriptClass &&
-                (object)_scopeBinder.LookupDeclaredField(designation) != null)
+            if (container is object && container.IsScriptClass &&
+                _scopeBinder.LookupDeclaredField(designation) is object)
             {
                 // This is a field declaration
                 return null;
@@ -589,8 +588,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             NamedTypeSymbol container = _scopeBinder.ContainingType;
 
-            if ((object)container != null && container.IsScriptClass &&
-                (object)_scopeBinder.LookupDeclaredField(designation) != null)
+            if (container is object && container.IsScriptClass &&
+                _scopeBinder.LookupDeclaredField(designation) is object)
             {
                 // This is a field declaration
                 return null;

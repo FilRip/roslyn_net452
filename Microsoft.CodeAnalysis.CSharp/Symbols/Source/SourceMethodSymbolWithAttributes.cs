@@ -39,25 +39,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         protected CSharpSyntaxNode? GetInMethodSyntaxNode()
         {
-            switch (SyntaxNode)
+            return SyntaxNode switch
             {
-                case ConstructorDeclarationSyntax constructor:
-                    return constructor.Initializer ?? (CSharpSyntaxNode?)constructor.Body ?? constructor.ExpressionBody;
-                case BaseMethodDeclarationSyntax method:
-                    return (CSharpSyntaxNode?)method.Body ?? method.ExpressionBody;
-                case AccessorDeclarationSyntax accessor:
-                    return (CSharpSyntaxNode?)accessor.Body ?? accessor.ExpressionBody;
-                case ArrowExpressionClauseSyntax arrowExpression:
-                    return arrowExpression;
-                case LocalFunctionStatementSyntax localFunction:
-                    return (CSharpSyntaxNode?)localFunction.Body ?? localFunction.ExpressionBody;
-                case CompilationUnitSyntax _ when this is SynthesizedSimpleProgramEntryPointSymbol entryPoint:
-                    return (CSharpSyntaxNode)entryPoint.ReturnTypeSyntax;
-                case RecordDeclarationSyntax recordDecl:
-                    return recordDecl;
-                default:
-                    return null;
-            }
+                ConstructorDeclarationSyntax constructor => constructor.Initializer ?? (CSharpSyntaxNode?)constructor.Body ?? constructor.ExpressionBody,
+                BaseMethodDeclarationSyntax method => (CSharpSyntaxNode?)method.Body ?? method.ExpressionBody,
+                AccessorDeclarationSyntax accessor => (CSharpSyntaxNode?)accessor.Body ?? accessor.ExpressionBody,
+                ArrowExpressionClauseSyntax arrowExpression => arrowExpression,
+                LocalFunctionStatementSyntax localFunction => (CSharpSyntaxNode?)localFunction.Body ?? localFunction.ExpressionBody,
+                CompilationUnitSyntax _ when this is SynthesizedSimpleProgramEntryPointSymbol entryPoint => (CSharpSyntaxNode)entryPoint.ReturnTypeSyntax,
+                RecordDeclarationSyntax recordDecl => recordDecl,
+                _ => null,
+            };
         }
 
         internal virtual Binder? SignatureBinder => null;
@@ -86,7 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return this.syntaxReferenceOpt == null ? null : this.syntaxReferenceOpt.SyntaxTree;
+                return this.syntaxReferenceOpt?.SyntaxTree;
             }
         }
 
@@ -138,21 +130,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                switch (MethodKind)
+                return MethodKind switch
                 {
-                    case MethodKind.Constructor:
-                    case MethodKind.Destructor:
-                    case MethodKind.StaticConstructor:
-                        return AttributeLocation.Method;
-
-                    case MethodKind.PropertySet:
-                    case MethodKind.EventRemove:
-                    case MethodKind.EventAdd:
-                        return AttributeLocation.Method | AttributeLocation.Return | AttributeLocation.Parameter;
-
-                    default:
-                        return AttributeLocation.Method | AttributeLocation.Return;
-                }
+                    MethodKind.Constructor or MethodKind.Destructor or MethodKind.StaticConstructor => AttributeLocation.Method,
+                    MethodKind.PropertySet or MethodKind.EventRemove or MethodKind.EventAdd => AttributeLocation.Method | AttributeLocation.Return | AttributeLocation.Parameter,
+                    _ => AttributeLocation.Method | AttributeLocation.Return,
+                };
             }
         }
 
@@ -266,7 +249,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // prevent infinite recursion:
 
             bool bagCreatedOnThisThread;
-            if ((object)copyFrom != null)
+            if (copyFrom is object)
             {
                 var attributesBag = forReturnType ? copyFrom.GetReturnTypeAttributesBag() : copyFrom.GetAttributesBag();
                 bagCreatedOnThisThread = Interlocked.CompareExchange(ref lazyCustomAttributesBag, attributesBag, null) == null;
@@ -381,7 +364,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (lazyCustomAttributesBag != null && lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed)
                 {
                     var data = (MethodEarlyWellKnownAttributeData)lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData;
-                    return data != null ? data.ObsoleteAttributeData : null;
+                    return data?.ObsoleteAttributeData;
                 }
 
                 if (syntaxReferenceOpt is null)
@@ -1034,10 +1017,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     hasErrors = true;
                 }
 
-                for (NamedTypeSymbol curr = this.ContainingType; (object)curr != null; curr = curr.ContainingType)
+                for (NamedTypeSymbol curr = this.ContainingType; curr is object; curr = curr.ContainingType)
                 {
-                    var sourceNamedTypeSymbol = curr as SourceNamedTypeSymbol;
-                    if ((object)sourceNamedTypeSymbol != null && sourceNamedTypeSymbol.HasSecurityCriticalAttributes)
+                    if (curr is SourceNamedTypeSymbol sourceNamedTypeSymbol && sourceNamedTypeSymbol.HasSecurityCriticalAttributes)
                     {
                         diagnostics.Add(ErrorCode.ERR_SecurityCriticalOrSecuritySafeCriticalOnAsyncInClassOrStruct, errorLocation);
                         hasErrors = true;
@@ -1185,7 +1167,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override DllImportData GetDllImportData()
         {
             var data = this.GetDecodedWellKnownAttributeData();
-            return data != null ? data.DllImportPlatformInvokeData : null;
+            return data?.DllImportPlatformInvokeData;
         }
 
         internal override MarshalPseudoCustomAttributeData ReturnValueMarshallingInformation
@@ -1193,7 +1175,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var data = this.GetDecodedReturnTypeWellKnownAttributeData();
-                return data != null ? data.MarshallingInformation : null;
+                return data?.MarshallingInformation;
             }
         }
 

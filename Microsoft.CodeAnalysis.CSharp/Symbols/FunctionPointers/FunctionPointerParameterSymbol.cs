@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if (!(other is FunctionPointerParameterSymbol param))
+            if (other is not FunctionPointerParameterSymbol param)
             {
                 return false;
             }

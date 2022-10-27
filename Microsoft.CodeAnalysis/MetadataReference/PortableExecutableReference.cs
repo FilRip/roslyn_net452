@@ -193,8 +193,7 @@ namespace Microsoft.CodeAnalysis
                 return messageProvider.CreateDiagnostic(errorCode, location, display, e.Message);
             }
 
-            var fileNotFound = e as FileNotFoundException;
-            if (fileNotFound != null)
+            if (e is FileNotFoundException fileNotFound)
             {
                 return messageProvider.CreateDiagnostic(messageProvider.ERR_MetadataFileNotFound, location, fileNotFound.FileName ?? string.Empty);
             }

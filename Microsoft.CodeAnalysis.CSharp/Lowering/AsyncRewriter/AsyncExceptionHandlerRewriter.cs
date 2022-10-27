@@ -144,8 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return finalizedRegion;
                 }
 
-                var asTry = finalizedRegion as BoundTryStatement;
-                if (asTry != null)
+                if (finalizedRegion is BoundTryStatement asTry)
                 {
                     // since finalized region is a try we can just attach finally to it
                     return asTry.Update(asTry.TryBlock, asTry.CatchBlocks, rewrittenFinally, asTry.FinallyLabelOpt, asTry.PreferFaultHandler);
@@ -789,7 +788,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                _seenAwait = _seenAwait | origSeenAwait;
+                _seenAwait |= origSeenAwait;
                 return null;
             }
 

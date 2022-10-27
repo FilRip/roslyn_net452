@@ -201,8 +201,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 {
                     Debug.Assert(this.Count >= 1);
 
-                    var arrayBuilder = _value as ArrayBuilder<V>;
-                    if (arrayBuilder == null)
+                    if (_value is not ArrayBuilder<V> arrayBuilder)
                     {
                         if (index == 0)
                         {
@@ -252,8 +251,7 @@ namespace Microsoft.CodeAnalysis.Collections
             internal bool Contains(V item)
             {
                 Debug.Assert(this.Count >= 1);
-                var arrayBuilder = _value as ArrayBuilder<V>;
-                return arrayBuilder == null
+                return _value is not ArrayBuilder<V> arrayBuilder
                     ? EqualityComparer<V>.Default.Equals(item, (V)_value)
                     : arrayBuilder.Contains(item);
             }
@@ -264,8 +262,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 {
                     Debug.Assert(this.Count >= 1);
 
-                    var arrayBuilder = _value as ArrayBuilder<V>;
-                    if (arrayBuilder == null)
+                    if (_value is not ArrayBuilder<V> arrayBuilder)
                     {
                         // promote singleton to set
                         Debug.Assert(_value is V, "Item must be a a V");
@@ -299,8 +296,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 Debug.Assert(this.Count >= 1);
 
-                var arrayBuilder = _value as ArrayBuilder<V>;
-                if (arrayBuilder == null)
+                if (_value is not ArrayBuilder<V> arrayBuilder)
                 {
                     // Promote from singleton V to ArrayBuilder<V>.
                     Debug.Assert(_value is V, "_value must be a V");

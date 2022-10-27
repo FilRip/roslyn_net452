@@ -159,8 +159,7 @@ namespace Microsoft.CodeAnalysis.Text
 
         internal static void AddSegments(ArrayBuilder<SourceText> segments, SourceText text)
         {
-            CompositeText? composite = text as CompositeText;
-            if (composite == null)
+            if (text is not CompositeText composite)
             {
                 segments.Add(text);
             }

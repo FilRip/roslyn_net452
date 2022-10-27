@@ -732,7 +732,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void MakeOutputTypeInferences(Binder binder, BoundExpression argument, TypeWithAnnotations formalType, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if (argument.Kind == BoundKind.TupleLiteral && (object)argument.Type == null)
+            if (argument.Kind == BoundKind.TupleLiteral && argument.Type is null)
             {
                 MakeOutputTypeInferences(binder, (BoundTupleLiteral)argument, formalType, ref useSiteInfo);
             }
@@ -841,7 +841,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: input types of E with type T.
 
             var delegateOrFunctionPointerType = formalParameterType.GetDelegateOrFunctionPointerType();
-            if ((object)delegateOrFunctionPointerType == null)
+            if (delegateOrFunctionPointerType is null)
             {
                 return false; // No input types.
             }
@@ -897,7 +897,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: of E with type T.
 
             var delegateOrFunctionPointerType = formalParameterType.GetDelegateOrFunctionPointerType();
-            if ((object)delegateOrFunctionPointerType == null)
+            if (delegateOrFunctionPointerType is null)
             {
                 return false;
             }
@@ -916,13 +916,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _ => throw ExceptionUtilities.UnexpectedValue(delegateOrFunctionPointerType)
             };
 
-            if ((object)method == null || method.HasUseSiteError)
+            if (method is null || method.HasUseSiteError)
             {
                 return false;
             }
 
             var returnType = method.ReturnType;
-            if ((object)returnType == null)
+            if (returnType is null)
             {
                 return false;
             }
@@ -1213,7 +1213,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC:   then a lower bound inference is made from U to Tb.
 
             var delegateType = target.Type.GetDelegateType();
-            if ((object)delegateType == null)
+            if (delegateType is null)
             {
                 return false;
             }
@@ -1250,7 +1250,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var delegateOrFunctionPointerType = target.GetDelegateOrFunctionPointerType();
-            if ((object)delegateOrFunctionPointerType == null)
+            if (delegateOrFunctionPointerType is null)
             {
                 return false;
             }
@@ -1360,7 +1360,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var delegateType = target.Type.GetDelegateType();
-            if ((object)delegateType == null)
+            if (delegateType is null)
             {
                 return;
             }
@@ -1548,19 +1548,16 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool ExactConstructedInference(TypeWithAnnotations source, TypeWithAnnotations target, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-
             // SPEC: * Otherwise, if V is a constructed type C<V1...Vk> and U is a constructed
             // SPEC:   type C<U1...Uk> then an exact inference 
             // SPEC:   is made from each Ui to the corresponding Vi.
 
-            var namedSource = source.Type as NamedTypeSymbol;
-            if ((object)namedSource == null)
+            if (source.Type is not NamedTypeSymbol namedSource)
             {
                 return false;
             }
 
-            var namedTarget = target.Type as NamedTypeSymbol;
-            if ((object)namedTarget == null)
+            if (target.Type is not NamedTypeSymbol namedTarget)
             {
                 return false;
             }
@@ -1825,9 +1822,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool LowerBoundConstructedInference(TypeSymbol source, TypeSymbol target, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-
-            var constructedTarget = target as NamedTypeSymbol;
-            if ((object)constructedTarget == null)
+            if (target is not NamedTypeSymbol constructedTarget)
             {
                 return false;
             }
@@ -1846,8 +1841,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC:   lower bound inference or upper bound inference
             // SPEC:   is made from each Ui to the corresponding Vi.
 
-            var constructedSource = source as NamedTypeSymbol;
-            if ((object)constructedSource != null &&
+            if (source is NamedTypeSymbol constructedSource &&
                 TypeSymbol.Equals(constructedSource.OriginalDefinition, constructedTarget.OriginalDefinition, TypeCompareKind.ConsiderEverything2))
             {
                 if (constructedSource.IsInterface || constructedSource.IsDelegateType())
@@ -1916,7 +1910,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 sourceBase = ((TypeParameterSymbol)source).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            while ((object)sourceBase != null)
+            while (sourceBase is object)
             {
                 if (TypeSymbol.Equals(sourceBase.OriginalDefinition, target.OriginalDefinition, TypeCompareKind.ConsiderEverything2))
                 {
@@ -1968,7 +1962,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             allInterfaces = ModuloReferenceTypeNullabilityDifferences(allInterfaces, VarianceKind.In);
 
             NamedTypeSymbol matchingInterface = GetInterfaceInferenceBound(allInterfaces, target);
-            if ((object)matchingInterface == null)
+            if (matchingInterface is null)
             {
                 return false;
             }
@@ -2211,8 +2205,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var source = sourceWithAnnotations.Type;
             var target = targetWithAnnotations.Type;
 
-            var constructedSource = source as NamedTypeSymbol;
-            if ((object)constructedSource == null)
+            if (source is not NamedTypeSymbol constructedSource)
             {
                 return false;
             }
@@ -2227,9 +2220,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC:   lower bound inference or upper bound inference
             // SPEC:   is made from each Ui to the corresponding Vi.
 
-            var constructedTarget = target as NamedTypeSymbol;
 
-            if ((object)constructedTarget != null &&
+            if (target is NamedTypeSymbol constructedTarget &&
                 TypeSymbol.Equals(constructedSource.OriginalDefinition, target.OriginalDefinition, TypeCompareKind.ConsiderEverything2))
             {
                 if (constructedTarget.IsInterface || constructedTarget.IsDelegateType())
@@ -2277,7 +2269,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC:   inference is made from each Ui to the corresponding Vi.
 
             var targetBase = target.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
-            while ((object)targetBase != null)
+            while (targetBase is object)
             {
                 if (TypeSymbol.Equals(targetBase.OriginalDefinition, source.OriginalDefinition, TypeCompareKind.ConsiderEverything2))
                 {
@@ -2321,7 +2313,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             allInterfaces = ModuloReferenceTypeNullabilityDifferences(allInterfaces, VarianceKind.Out);
 
             NamedTypeSymbol bestInterface = GetInterfaceInferenceBound(allInterfaces, source);
-            if ((object)bestInterface == null)
+            if (bestInterface is null)
             {
                 return false;
             }
@@ -2680,7 +2672,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (TypeSymbol.Equals(currentInterface.OriginalDefinition, target.OriginalDefinition, TypeCompareKind.ConsiderEverything))
                 {
-                    if ((object)matchingInterface == null)
+                    if (matchingInterface is null)
                     {
                         matchingInterface = currentInterface;
                     }
@@ -2793,7 +2785,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsReallyAType(TypeSymbol type)
         {
-            return (object)type != null &&
+            return type is object &&
                 !type.IsErrorType() &&
                 !type.IsVoidType();
         }

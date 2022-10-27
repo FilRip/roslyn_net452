@@ -369,7 +369,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             compareExchangeMethod = compareExchangeMethod.Construct(ImmutableArray.Create(Of TypeSymbol)(delegateType))
 
-            Dim loopLabel As GeneratedLabelSymbol = New GeneratedLabelSymbol("LOOP")
+            Dim loopLabel As New GeneratedLabelSymbol("LOOP")
             Const numTemps As Integer = 3
             Dim tmps As LocalSymbol() = New LocalSymbol(numTemps - 1) {}
             Dim boundTmps As BoundLocal() = New BoundLocal(numTemps - 1) {}

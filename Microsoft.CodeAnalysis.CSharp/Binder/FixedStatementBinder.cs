@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             ExpressionVariableFinder.FindExpressionVariables(args.binder, args.locals, size);
                         }
                     }
-                }, (binder: this, locals: locals));
+                }, (binder: this, locals));
 
                 foreach (VariableDeclaratorSyntax declarator in _syntax.Declaration.Variables)
                 {

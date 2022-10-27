@@ -35,10 +35,10 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static async Task ReadAllAsync(
-          Stream stream,
-          byte[] buffer,
-          int count,
-          CancellationToken cancellationToken)
+            Stream stream,
+            byte[] buffer,
+            int count,
+            CancellationToken cancellationToken)
         {
             int totalBytesRead = 0;
             do

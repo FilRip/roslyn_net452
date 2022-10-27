@@ -348,8 +348,7 @@ namespace Microsoft.CodeAnalysis
             object[]? argumentsToUse = null;
             for (int i = 0; i < _arguments.Length; i++)
             {
-                var embedded = _arguments[i] as DiagnosticInfo;
-                if (embedded != null)
+                if (_arguments[i] is DiagnosticInfo embedded)
                 {
                     argumentsToUse = InitializeArgumentListIfNeeded(argumentsToUse);
                     argumentsToUse[i] = embedded.GetMessage(formatProvider);
@@ -421,11 +420,9 @@ namespace Microsoft.CodeAnalysis
 
         public sealed override bool Equals(object? obj)
         {
-            DiagnosticInfo? other = obj as DiagnosticInfo;
-
             bool result = false;
 
-            if (other != null &&
+            if (obj is DiagnosticInfo other &&
                 other._errorCode == _errorCode &&
                 other.GetType() == this.GetType())
             {
@@ -450,17 +447,12 @@ namespace Microsoft.CodeAnalysis
         {
             // There aren't message resources for our internal error codes, so make
             // sure we don't call ToString for those.
-            switch (Code)
+            return Code switch
             {
-                case InternalErrorCode.Unknown:
-                    return "Unresolved DiagnosticInfo";
-
-                case InternalErrorCode.Void:
-                    return "Void DiagnosticInfo";
-
-                default:
-                    return ToString();
-            }
+                InternalErrorCode.Unknown => "Unresolved DiagnosticInfo",
+                InternalErrorCode.Void => "Void DiagnosticInfo",
+                _ => ToString(),
+            };
         }
 
         /// <summary>

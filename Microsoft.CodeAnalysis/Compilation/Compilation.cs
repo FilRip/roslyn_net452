@@ -1050,7 +1050,6 @@ namespace Microsoft.CodeAnalysis
 
         protected abstract INamedTypeSymbol? CommonGetTypeByMetadataName(string metadataName);
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         /// <summary>
         /// Returns a new INamedTypeSymbol with the given element types and
         /// (optional) element names, locations, and nullable annotations.
@@ -1091,7 +1090,6 @@ namespace Microsoft.CodeAnalysis
 
             return CommonCreateTupleTypeSymbol(elementTypes, elementNames, elementLocations, elementNullableAnnotations);
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         /// <summary>
         /// Returns a new INamedTypeSymbol with the given element types, names, and locations.
@@ -1167,7 +1165,6 @@ namespace Microsoft.CodeAnalysis
             ImmutableArray<Location?> elementLocations,
             ImmutableArray<NullableAnnotation> elementNullableAnnotations);
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         /// <summary>
         /// Returns a new INamedTypeSymbol with the given underlying type and
         /// (optional) element names, locations, and nullable annotations.
@@ -1186,7 +1183,6 @@ namespace Microsoft.CodeAnalysis
 
             return CommonCreateTupleTypeSymbol(underlyingType, elementNames, elementLocations, elementNullableAnnotations);
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         /// <summary>
         /// Returns a new INamedTypeSymbol with the given underlying type and element names and locations.
@@ -1948,38 +1944,16 @@ namespace Microsoft.CodeAnalysis
                 subsystemVersion = emitOptions.SubsystemVersion;
             }
 
-            Machine machine;
-            switch (platform)
+            var machine = platform switch
             {
-                case Platform.Arm64:
-                    machine = Machine.Arm64;
-                    break;
-
-                case Platform.Arm:
-                    machine = Machine.ArmThumb2;
-                    break;
-
-                case Platform.X64:
-                    machine = Machine.Amd64;
-                    break;
-
-                case Platform.Itanium:
-                    machine = Machine.IA64;
-                    break;
-
-                case Platform.X86:
-                    machine = Machine.I386;
-                    break;
-
-                case Platform.AnyCpu:
-                case Platform.AnyCpu32BitPreferred:
-                    machine = Machine.Unknown;
-                    break;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(platform);
-            }
-
+                Platform.Arm64 => Machine.Arm64,
+                Platform.Arm => Machine.ArmThumb2,
+                Platform.X64 => Machine.Amd64,
+                Platform.Itanium => Machine.IA64,
+                Platform.X86 => Machine.I386,
+                Platform.AnyCpu or Platform.AnyCpu32BitPreferred => Machine.Unknown,
+                _ => throw ExceptionUtilities.UnexpectedValue(platform),
+            };
             return new Cci.ModulePropertiesForSerialization(
                 persistentIdentifier: moduleVersionId,
                 corFlags: GetCorHeaderFlags(machine, HasStrongName, prefers32Bit: platform == Platform.AnyCpu32BitPreferred),
@@ -2083,21 +2057,12 @@ namespace Microsoft.CodeAnalysis
 
         private static Subsystem GetSubsystem(OutputKind outputKind)
         {
-            switch (outputKind)
+            return outputKind switch
             {
-                case OutputKind.ConsoleApplication:
-                case OutputKind.DynamicallyLinkedLibrary:
-                case OutputKind.NetModule:
-                case OutputKind.WindowsRuntimeMetadata:
-                    return Subsystem.WindowsCui;
-
-                case OutputKind.WindowsRuntimeApplication:
-                case OutputKind.WindowsApplication:
-                    return Subsystem.WindowsGui;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(outputKind);
-            }
+                OutputKind.ConsoleApplication or OutputKind.DynamicallyLinkedLibrary or OutputKind.NetModule or OutputKind.WindowsRuntimeMetadata => Subsystem.WindowsCui,
+                OutputKind.WindowsRuntimeApplication or OutputKind.WindowsApplication => Subsystem.WindowsGui,
+                _ => throw ExceptionUtilities.UnexpectedValue(outputKind),
+            };
         }
 
         /// <summary>
@@ -3278,7 +3243,6 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public abstract IEnumerable<ISymbol> GetSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         /// <summary>
         /// Return true if there is a source declaration symbol name that matches the provided name.
         /// This may be faster than <see cref="ContainsSymbolsWithName(Func{string, bool},
@@ -3294,7 +3258,6 @@ namespace Microsoft.CodeAnalysis
         /// name="name"/> is case sensitive or not depending on the target language.
         /// </summary>
         public abstract IEnumerable<ISymbol> GetSymbolsWithName(string name, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         #endregion
 

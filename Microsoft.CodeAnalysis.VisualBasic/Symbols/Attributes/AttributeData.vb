@@ -368,7 +368,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     ' resolve file prop path
                     Dim fileName = DirectCast(namedArg.Value.ValueInternal, String)
                     Dim resolver = compilation.Options.XmlReferenceResolver
-                    resolvedFilePath = If(resolver IsNot Nothing, resolver.ResolveReference(fileName, baseFilePath:=Nothing), Nothing)
+                    resolvedFilePath = resolver?.ResolveReference(fileName, baseFilePath:=Nothing)
 
                     If resolvedFilePath Is Nothing Then
 

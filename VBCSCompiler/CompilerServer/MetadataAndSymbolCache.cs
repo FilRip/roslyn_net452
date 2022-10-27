@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal class MetadataAndSymbolCache
     {
-        private const int CacheSize = 500;
+        //private const int CacheSize = 500;
         private readonly ConcurrentLruCache<FileKey, Metadata> _metadataCache = new(500);
 
         private ModuleMetadata CreateModuleMetadata(string path, bool prefetchEntireImage)
@@ -28,8 +28,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         private ImmutableArray<ModuleMetadata> GetAllModules(
-          ModuleMetadata manifestModule,
-          string assemblyDir)
+            ModuleMetadata manifestModule,
+            string assemblyDir)
         {
 #nullable restore
             ArrayBuilder<ModuleMetadata> arrayBuilder = null;

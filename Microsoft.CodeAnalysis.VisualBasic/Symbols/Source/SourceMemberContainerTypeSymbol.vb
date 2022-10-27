@@ -988,7 +988,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     syntax = method.ContainingType.GetDeclaringSyntaxNode(Of MethodBaseSyntax)()
                 End If
 
-                Dim asClause As AsClauseSyntax = If(syntax IsNot Nothing, syntax.AsClauseInternal, Nothing)
+                Dim asClause As AsClauseSyntax = syntax?.AsClauseInternal
 
                 If asClause IsNot Nothing Then
                     location = asClause.Type.GetLocation()
@@ -1542,7 +1542,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         '''  Accumulates different members kinds used while building the members.
         ''' </summary>
         Friend NotInheritable Class MembersAndInitializersBuilder
-            Friend ReadOnly Members As Dictionary(Of String, ArrayBuilder(Of Symbol)) = New Dictionary(Of String, ArrayBuilder(Of Symbol))(CaseInsensitiveComparison.Comparer)
+            Friend ReadOnly Members As New Dictionary(Of String, ArrayBuilder(Of Symbol))(CaseInsensitiveComparison.Comparer)
             Friend Property StaticInitializers As ArrayBuilder(Of ImmutableArray(Of FieldOrPropertyInitializer))
             Friend Property InstanceInitializers As ArrayBuilder(Of ImmutableArray(Of FieldOrPropertyInitializer))
 

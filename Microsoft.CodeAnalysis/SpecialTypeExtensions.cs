@@ -15,24 +15,11 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool IsClrInteger(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Boolean or SpecialType.System_Char or SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_IntPtr or SpecialType.System_UIntPtr => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -40,97 +27,41 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool IsBlittable(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Boolean or SpecialType.System_Char or SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_Single or SpecialType.System_Double => true,
+                _ => false,
+            };
         }
 
         public static bool IsValueType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Void:
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                case SpecialType.System_Decimal:
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                case SpecialType.System_Nullable_T:
-                case SpecialType.System_DateTime:
-                case SpecialType.System_TypedReference:
-                case SpecialType.System_ArgIterator:
-                case SpecialType.System_RuntimeArgumentHandle:
-                case SpecialType.System_RuntimeFieldHandle:
-                case SpecialType.System_RuntimeMethodHandle:
-                case SpecialType.System_RuntimeTypeHandle:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Void or SpecialType.System_Boolean or SpecialType.System_Char or SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_Single or SpecialType.System_Double or SpecialType.System_Decimal or SpecialType.System_IntPtr or SpecialType.System_UIntPtr or SpecialType.System_Nullable_T or SpecialType.System_DateTime or SpecialType.System_TypedReference or SpecialType.System_ArgIterator or SpecialType.System_RuntimeArgumentHandle or SpecialType.System_RuntimeFieldHandle or SpecialType.System_RuntimeMethodHandle or SpecialType.System_RuntimeTypeHandle => true,
+                _ => false,
+            };
         }
 
         public static int SizeInBytes(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_SByte:
-                    return sizeof(sbyte);
-                case SpecialType.System_Byte:
-                    return sizeof(byte);
-                case SpecialType.System_Int16:
-                    return sizeof(short);
-                case SpecialType.System_UInt16:
-                    return sizeof(ushort);
-                case SpecialType.System_Int32:
-                    return sizeof(int);
-                case SpecialType.System_UInt32:
-                    return sizeof(uint);
-                case SpecialType.System_Int64:
-                    return sizeof(long);
-                case SpecialType.System_UInt64:
-                    return sizeof(ulong);
-                case SpecialType.System_Char:
-                    return sizeof(char);
-                case SpecialType.System_Single:
-                    return sizeof(float);
-                case SpecialType.System_Double:
-                    return sizeof(double);
-                case SpecialType.System_Boolean:
-                    return sizeof(bool);
-
-                case SpecialType.System_Decimal:
-                    //This isn't in the spec, but it is handled by dev10
-                    return sizeof(decimal);
-
-                default:
-                    // invalid
-                    return 0;
-            }
+                SpecialType.System_SByte => sizeof(sbyte),
+                SpecialType.System_Byte => sizeof(byte),
+                SpecialType.System_Int16 => sizeof(short),
+                SpecialType.System_UInt16 => sizeof(ushort),
+                SpecialType.System_Int32 => sizeof(int),
+                SpecialType.System_UInt32 => sizeof(uint),
+                SpecialType.System_Int64 => sizeof(long),
+                SpecialType.System_UInt64 => sizeof(ulong),
+                SpecialType.System_Char => sizeof(char),
+                SpecialType.System_Single => sizeof(float),
+                SpecialType.System_Double => sizeof(double),
+                SpecialType.System_Boolean => sizeof(bool),
+                SpecialType.System_Decimal => sizeof(decimal),//This isn't in the spec, but it is handled by dev10
+                _ => 0,// invalid
+            };
         }
 
         /// <summary>
@@ -139,65 +70,29 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool IsPrimitiveRecursiveStruct(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Char:
-                case SpecialType.System_Double:
-                case SpecialType.System_Int16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Single:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Boolean or SpecialType.System_Byte or SpecialType.System_Char or SpecialType.System_Double or SpecialType.System_Int16 or SpecialType.System_Int32 or SpecialType.System_Int64 or SpecialType.System_UInt16 or SpecialType.System_UInt32 or SpecialType.System_UInt64 or SpecialType.System_IntPtr or SpecialType.System_UIntPtr or SpecialType.System_SByte or SpecialType.System_Single => true,
+                _ => false,
+            };
         }
 
         public static bool IsValidEnumUnderlyingType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 => true,
+                _ => false,
+            };
         }
 
         public static bool IsNumericType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                case SpecialType.System_Decimal:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_Single or SpecialType.System_Double or SpecialType.System_Decimal => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -205,48 +100,29 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool IsIntegralType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 => true,
+                _ => false,
+            };
         }
 
         public static bool IsUnsignedIntegralType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Byte:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_UInt64:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Byte or SpecialType.System_UInt16 or SpecialType.System_UInt32 or SpecialType.System_UInt64 => true,
+                _ => false,
+            };
         }
 
         public static bool IsSignedIntegralType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_Int64:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_Int32 or SpecialType.System_Int64 => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -256,19 +132,14 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static int VBForToShiftBits(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_SByte:
-                    return 7;
-                case SpecialType.System_Int16:
-                    return 15;
-                case SpecialType.System_Int32:
-                    return 31;
-                case SpecialType.System_Int64:
-                    return 63;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(specialType);
-            }
+                SpecialType.System_SByte => 7,
+                SpecialType.System_Int16 => 15,
+                SpecialType.System_Int32 => 31,
+                SpecialType.System_Int64 => 63,
+                _ => throw ExceptionUtilities.UnexpectedValue(specialType),
+            };
         }
 
         public static SpecialType FromRuntimeTypeOfLiteralValue(object value)

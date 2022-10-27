@@ -173,8 +173,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // The constructor can always be used to construct a range,
                     // but if any of the arguments are missing then we need to
                     // construct replacement Indexes
-                    left = left ?? newIndexZero(fromEnd: false);
-                    right = right ?? newIndexZero(fromEnd: true);
+                    left ??= newIndexZero(fromEnd: false);
+                    right ??= newIndexZero(fromEnd: true);
 
                     return F.New(constructionMethod, ImmutableArray.Create(left, right));
 

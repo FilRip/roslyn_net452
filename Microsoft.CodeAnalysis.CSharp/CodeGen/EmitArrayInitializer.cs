@@ -297,9 +297,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
             foreach (var init in inits)
             {
-                var asArrayInit = init as BoundArrayInitialization;
-
-                if (asArrayInit != null)
+                if (init is BoundArrayInitialization asArrayInit)
                 {
                     InitializerCountRecursive(asArrayInit.Initializers, ref initCount, ref constInits);
                 }
@@ -309,10 +307,10 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     //       .NET arrays are always zero-inited.
                     if (!init.IsDefaultValue())
                     {
-                        initCount += 1;
+                        initCount++;
                         if (init.ConstantValue != null)
                         {
-                            constInits += 1;
+                            constInits++;
                         }
                     }
                 }

@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override bool IsSealed => true;
 
-        public override bool IsAbstract => (object)Constructor == null && this.TypeKind != TypeKind.Struct;
+        public override bool IsAbstract => Constructor is null && this.TypeKind != TypeKind.Struct;
 
         internal override ImmutableArray<TypeWithAnnotations> TypeArgumentsWithAnnotationsNoUseSiteDiagnostics
         {
@@ -127,13 +127,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override ImmutableArray<Symbol> GetMembers()
         {
             Symbol constructor = this.Constructor;
-            return (object)constructor == null ? ImmutableArray<Symbol>.Empty : ImmutableArray.Create(constructor);
+            return constructor is null ? ImmutableArray<Symbol>.Empty : ImmutableArray.Create(constructor);
         }
 
         public override ImmutableArray<Symbol> GetMembers(string name)
         {
             var ctor = Constructor;
-            return ((object)ctor != null && name == ctor.Name) ? ImmutableArray.Create<Symbol>(ctor) : ImmutableArray<Symbol>.Empty;
+            return (ctor is object && name == ctor.Name) ? ImmutableArray.Create<Symbol>(ctor) : ImmutableArray<Symbol>.Empty;
         }
 
         internal override IEnumerable<FieldSymbol> GetFieldsToEmit()

@@ -155,7 +155,6 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Gets the root node of the syntax tree asynchronously.
         /// </summary>
-        [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "Public API.")]
         protected abstract Task<SyntaxNode> GetRootAsyncCore(CancellationToken cancellationToken);
 
         /// <summary>

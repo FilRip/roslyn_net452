@@ -78,9 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var members = constant.Type!.GetMembers();
             foreach (var member in members)
             {
-                var field = member as IFieldSymbol;
-
-                if (field is object && field.HasConstantValue)
+                if (member is IFieldSymbol field && field.HasConstantValue)
                 {
                     ConstantValue memberConstant = ConstantValue.Create(field.ConstantValue, specialType);
                     ulong memberValue = memberConstant.UInt64Value;
@@ -101,7 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if ((memberValue & constantToDecode) == memberValue)
                     {
                         // update the current value
-                        curValue = curValue | memberValue;
+                        curValue |= memberValue;
 
                         if (valueStringBuilder == null)
                         {
@@ -156,8 +154,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var members = constant.Type!.GetMembers();
             foreach (var member in members)
             {
-                var field = member as IFieldSymbol;
-                if (field is object && field.HasConstantValue)
+                if (member is IFieldSymbol field && field.HasConstantValue)
                 {
                     ConstantValue memberConstant = ConstantValue.Create(field.ConstantValue, specialType);
                     long memberValue = memberConstant.Int64Value;
@@ -178,7 +175,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if ((memberValue & constantToDecode) == memberValue)
                     {
                         // update the current value
-                        curValue = curValue | memberValue;
+                        curValue |= memberValue;
 
                         if (valueStringBuilder == null)
                         {

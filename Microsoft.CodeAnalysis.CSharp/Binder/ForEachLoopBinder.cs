@@ -291,22 +291,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         if (!hasErrors)
                         {
-                            BindValueKind requiredCurrentKind;
-                            switch (local.RefKind)
+                            var requiredCurrentKind = local.RefKind switch
                             {
-                                case RefKind.None:
-                                    requiredCurrentKind = BindValueKind.RValue;
-                                    break;
-                                case RefKind.Ref:
-                                    requiredCurrentKind = BindValueKind.Assignable | BindValueKind.RefersToLocation;
-                                    break;
-                                case RefKind.RefReadOnly:
-                                    requiredCurrentKind = BindValueKind.RefersToLocation;
-                                    break;
-                                default:
-                                    throw ExceptionUtilities.UnexpectedValue(local.RefKind);
-                            }
-
+                                RefKind.None => BindValueKind.RValue,
+                                RefKind.Ref => BindValueKind.Assignable | BindValueKind.RefersToLocation,
+                                RefKind.RefReadOnly => BindValueKind.RefersToLocation,
+                                _ => throw ExceptionUtilities.UnexpectedValue(local.RefKind),
+                            };
                             hasErrors |= !CheckMethodReturnValueKind(
                                 builder.CurrentPropertyGetter,
                                 callSyntaxOpt: null,
@@ -549,12 +540,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // If collectionExprType is a nullable type, then use the underlying type and take the value (i.e. .Value) of collectionExpr.
             // This behavior is not spec'd, but it's what Dev10 does.
-            if ((object)collectionExprType != null && collectionExprType.IsNullableType())
+            if (collectionExprType is object && collectionExprType.IsNullableType())
             {
                 SyntaxNode exprSyntax = collectionExpr.Syntax;
 
                 MethodSymbol nullableValueGetter = (MethodSymbol)GetSpecialTypeMember(SpecialMember.System_Nullable_T_get_Value, diagnostics, exprSyntax);
-                if ((object)nullableValueGetter != null)
+                if (nullableValueGetter is object)
                 {
                     nullableValueGetter = nullableValueGetter.AsMember((NamedTypeSymbol)collectionExprType);
 
@@ -816,7 +807,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 MethodSymbol moveNextMethod = null;
-                if ((object)getEnumeratorMethod != null)
+                if (getEnumeratorMethod is object)
                 {
                     MethodSymbol specificGetEnumeratorMethod = getEnumeratorMethod.AsMember(collectionType);
                     TypeSymbol enumeratorType = specificGetEnumeratorMethod.ReturnType;
@@ -840,7 +831,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         MethodSymbol moveNextAsync = (MethodSymbol)GetWellKnownTypeMember(WellKnownMember.System_Collections_Generic_IAsyncEnumerator_T__MoveNextAsync,
                             diagnostics, errorLocationSyntax.Location, isOptional: false);
 
-                        if ((object)moveNextAsync != null)
+                        if (moveNextAsync is object)
                         {
                             moveNextMethod = moveNextAsync.AsMember((NamedTypeSymbol)enumeratorType);
                         }
@@ -852,7 +843,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         currentPropertyGetter = (MethodSymbol)GetSpecialTypeMember(SpecialMember.System_Collections_Generic_IEnumerator_T__get_Current, diagnostics, errorLocationSyntax);
                     }
 
-                    if ((object)currentPropertyGetter != null)
+                    if (currentPropertyGetter is object)
                     {
                         builder.CurrentPropertyGetter = currentPropertyGetter.AsMember((NamedTypeSymbol)enumeratorType);
                     }
@@ -1005,7 +996,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             builder.GetEnumeratorInfo = getEnumeratorInfo;
-            return (object)getEnumeratorInfo != null;
+            return getEnumeratorInfo is object;
         }
 
         /// <summary>
@@ -1315,7 +1306,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // NOTE: accessor can be inherited from overridden property
                 MethodSymbol currentPropertyGetterCandidate = ((PropertySymbol)lookupSymbol).GetOwnOrInheritedGetMethod();
 
-                if ((object)currentPropertyGetterCandidate == null)
+                if (currentPropertyGetterCandidate is null)
                 {
                     return false;
                 }
@@ -1339,7 +1330,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     isAsync ? MoveNextAsyncMethodName : MoveNextMethodName,
                     lookupResult, warningsOnly: false, diagnostics, isAsync);
 
-                if ((object)moveNextMethodCandidate == null ||
+                if (moveNextMethodCandidate is null ||
                     moveNextMethodCandidate.Method.IsStatic || moveNextMethodCandidate.Method.DeclaredAccessibility != Accessibility.Public ||
                     IsInvalidMoveNextMethod(moveNextMethodCandidate.Method, isAsync))
                 {
@@ -1381,14 +1372,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsIEnumerable(TypeSymbol type)
         {
-            switch (type.OriginalDefinition.SpecialType)
+            return type.OriginalDefinition.SpecialType switch
             {
-                case SpecialType.System_Collections_IEnumerable:
-                case SpecialType.System_Collections_Generic_IEnumerable_T:
-                    return true;
-                default:
-                    return false;
-            }
+                SpecialType.System_Collections_IEnumerable or SpecialType.System_Collections_Generic_IEnumerable_T => true,
+                _ => false,
+            };
         }
 
         private bool IsIAsyncEnumerable(TypeSymbol type)
@@ -1418,14 +1406,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             NamedTypeSymbol implementedIEnumerable = GetIEnumerableOfT(type, isAsync, Compilation, ref useSiteInfo, out foundMultiple);
 
             // Prefer generic to non-generic, unless it is inaccessible.
-            if (((object)implementedIEnumerable == null) || !this.IsAccessible(implementedIEnumerable, ref useSiteInfo))
+            if ((implementedIEnumerable is null) || !this.IsAccessible(implementedIEnumerable, ref useSiteInfo))
             {
                 implementedIEnumerable = null;
 
                 if (!isAsync)
                 {
                     var implementedNonGeneric = this.Compilation.GetSpecialType(SpecialType.System_Collections_IEnumerable);
-                    if ((object)implementedNonGeneric != null)
+                    if (implementedNonGeneric is object)
                     {
                         var conversion = this.Conversions.ClassifyImplicitConversionFromType(type, implementedNonGeneric, ref useSiteInfo);
                         if (conversion.IsImplicit)
@@ -1439,7 +1427,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             diagnostics.Add(_syntax.Expression, useSiteInfo);
 
             builder.CollectionType = implementedIEnumerable;
-            return (object)implementedIEnumerable != null;
+            return implementedIEnumerable is object;
         }
 
         internal static NamedTypeSymbol GetIEnumerableOfT(TypeSymbol type, bool isAsync, CSharpCompilation compilation, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, out bool foundMultiple)
@@ -1475,7 +1463,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (IsIEnumerableT(@interface.OriginalDefinition, isAsync, compilation))
                 {
-                    if ((object)result == null ||
+                    if (result is null ||
                         TypeSymbol.Equals(@interface, result, TypeCompareKind.IgnoreTupleNames))
                     {
                         result = @interface;

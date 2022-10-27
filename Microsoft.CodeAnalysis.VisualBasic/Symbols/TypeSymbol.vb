@@ -721,7 +721,7 @@ Done:
         End Property
 
         ' An empty dictionary to use if there are no members in the explicit interface map.
-        Protected Shared ReadOnly EmptyExplicitImplementationMap As MultiDictionary(Of Symbol, Symbol) = New MultiDictionary(Of Symbol, Symbol)
+        Protected Shared ReadOnly EmptyExplicitImplementationMap As New MultiDictionary(Of Symbol, Symbol)
 
         ' Build the explicit interface map for this type. 
         ' This implementation is not used by source symbols, which additionally diagnose errors.

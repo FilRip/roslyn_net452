@@ -301,8 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool hasExterns = node.Externs.Any();
             NameSyntax name = node.Name;
             CSharpSyntaxNode currentNode = node;
-            QualifiedNameSyntax dotted;
-            while ((dotted = name as QualifiedNameSyntax) != null)
+            while (name is QualifiedNameSyntax dotted)
             {
                 var ns = SingleNamespaceDeclaration.Create(
                     name: dotted.Right.Identifier.ValueText,
@@ -475,8 +474,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var children = ArrayBuilder<SingleTypeDeclaration>.GetInstance();
             foreach (var member in node.Members)
             {
-                var typeDecl = Visit(member) as SingleTypeDeclaration;
-                if (typeDecl != null)
+                if (Visit(member) is SingleTypeDeclaration typeDecl)
                 {
                     children.Add(typeDecl);
                 }

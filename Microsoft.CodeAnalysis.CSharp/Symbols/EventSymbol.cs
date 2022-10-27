@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return (object?)this.AssociatedField != null;
+                return this.AssociatedField is object;
             }
         }
 
@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </remarks>
         public ImmutableArray<CSharpAttributeData> GetFieldAttributes()
         {
-            return (object?)this.AssociatedField == null ?
+            return this.AssociatedField is null ?
                 ImmutableArray<CSharpAttributeData>.Empty :
                 this.AssociatedField.GetAttributes();
         }
@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 MethodSymbol? accessor = AddMethod ?? RemoveMethod;
-                return (object?)accessor != null && accessor.HidesBaseMethodsByName;
+                return accessor is object && accessor.HidesBaseMethodsByName;
             }
         }
 
@@ -193,7 +193,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // See InternalsVisibleToAndStrongNameTests: IvtVirtualCall1, IvtVirtualCall2, IvtVirtual_ParamsAndDynamic.
                 EventSymbol? overridden = e.OverriddenEvent;
                 var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                if ((object?)overridden == null ||
+                if (overridden is null ||
                     (accessingTypeOpt is { } && !AccessCheck.IsSymbolAccessible(overridden, accessingTypeOpt, ref discardedUseSiteInfo)))
                 {
                     break;
@@ -334,7 +334,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             EventSymbol? other = obj as EventSymbol;
 
-            if (ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
             }

@@ -46,25 +46,22 @@ namespace Microsoft.Cci
                 try
                 {
 #nullable disable // Can '_streamProvider' be null? https://github.com/dotnet/roslyn/issues/39166
-                    using (Stream stream = _streamProvider())
-#nullable enable
+                    using Stream stream = _streamProvider();
+                    if (stream == null)
                     {
-                        if (stream == null)
-                        {
-                            throw new InvalidOperationException(CodeAnalysis.Properties.Resources.ResourceStreamProviderShouldReturnNonNullStream);
-                        }
-
-                        var count = (int)(stream.Length - stream.Position);
-                        resourceWriter.WriteInt32(count);
-
-                        int bytesWritten = resourceWriter.TryWriteBytes(stream, count);
-                        if (bytesWritten != count)
-                        {
-                            throw new EndOfStreamException(
-                                    string.Format(CultureInfo.CurrentUICulture, CodeAnalysis.Properties.Resources.ResourceStreamEndedUnexpectedly, bytesWritten, count));
-                        }
-                        resourceWriter.Align(8);
+                        throw new InvalidOperationException(CodeAnalysis.Properties.Resources.ResourceStreamProviderShouldReturnNonNullStream);
                     }
+
+                    var count = (int)(stream.Length - stream.Position);
+                    resourceWriter.WriteInt32(count);
+
+                    int bytesWritten = resourceWriter.TryWriteBytes(stream, count);
+                    if (bytesWritten != count)
+                    {
+                        throw new EndOfStreamException(
+                                string.Format(CultureInfo.CurrentUICulture, CodeAnalysis.Properties.Resources.ResourceStreamEndedUnexpectedly, bytesWritten, count));
+                    }
+                    resourceWriter.Align(8);
                 }
                 catch (Exception e)
                 {
@@ -73,6 +70,7 @@ namespace Microsoft.Cci
             }
         }
 
+#nullable enable
         public IFileReference? ExternalFile
         {
             get

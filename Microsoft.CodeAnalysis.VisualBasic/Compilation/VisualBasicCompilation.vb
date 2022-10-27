@@ -48,8 +48,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' most of time all compilation would use same MyTemplate. no reason to create (reparse) one for each compilation
         ''' as long as its parse option is same
         ''' </summary>
-        Private Shared ReadOnly s_myTemplateCache As ConcurrentLruCache(Of VisualBasicParseOptions, SyntaxTree) =
-            New ConcurrentLruCache(Of VisualBasicParseOptions, SyntaxTree)(capacity:=5)
+        Private Shared ReadOnly s_myTemplateCache As             New ConcurrentLruCache(Of VisualBasicParseOptions, SyntaxTree)(capacity:=5)
 
         ''' <summary>
         ''' The SourceAssemblySymbol for this compilation. Do not access directly, use Assembly
@@ -322,7 +321,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ) As VisualBasicCompilation
             Return Create(assemblyName,
                           options,
-                          If(syntaxTrees IsNot Nothing, syntaxTrees.Cast(Of SyntaxTree), Nothing),
+                          syntaxTrees?.Cast(Of SyntaxTree),
                           references,
                           previousSubmission:=Nothing,
                           returnType:=Nothing,
@@ -457,7 +456,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Else
                 _referenceManager = New ReferenceManager(MakeSourceAssemblySimpleName(),
                                                               options.AssemblyIdentityComparer,
-                                                              If(referenceManager IsNot Nothing, referenceManager.ObservedMetadata, Nothing))
+                                                              referenceManager?.ObservedMetadata)
             End If
 
             Debug.Assert(_lazyAssemblySymbol Is Nothing)
@@ -1471,7 +1470,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Friend Shadows Function GetEntryPoint(cancellationToken As CancellationToken) As MethodSymbol
             Dim entryPoint As EntryPoint = GetEntryPointAndDiagnostics(cancellationToken)
-            Return If(entryPoint Is Nothing, Nothing, entryPoint.MethodSymbol)
+            Return entryPoint?.MethodSymbol
         End Function
 
         Friend Function GetEntryPointAndDiagnostics(cancellationToken As CancellationToken) As EntryPoint
@@ -2879,7 +2878,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             For Each t In memberTypes
                 t.EnsureVbSymbolOrNothing(Of TypeSymbol)($"{NameOf(memberTypes)}({i})")
 
-                i = i + 1
+                i += 1
             Next
 
             Dim fields = ArrayBuilder(Of AnonymousTypeField).GetInstance()

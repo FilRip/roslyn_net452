@@ -108,21 +108,18 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             ImmutableArray<BoundDecisionDagNode> nonNullSuccessors(BoundDecisionDagNode n)
             {
-                switch (n)
+                return n switch
                 {
-                    case BoundTestDecisionDagNode p:
-                        switch (p.Test)
-                        {
-                            case BoundDagNonNullTest t: // checks that the input is not null
-                                return ImmutableArray.Create(p.WhenTrue);
-                            case BoundDagExplicitNullTest t: // checks that the input is null
-                                return ImmutableArray.Create(p.WhenFalse);
-                            default:
-                                return BoundDecisionDag.Successors(n);
-                        }
-                    default:
-                        return BoundDecisionDag.Successors(n);
-                }
+                    BoundTestDecisionDagNode p => p.Test switch
+                    {
+                        // checks that the input is not null
+                        BoundDagNonNullTest t => ImmutableArray.Create(p.WhenTrue),
+                        // checks that the input is null
+                        BoundDagExplicitNullTest t => ImmutableArray.Create(p.WhenFalse),
+                        _ => BoundDecisionDag.Successors(n),
+                    },
+                    _ => BoundDecisionDag.Successors(n),
+                };
             }
         }
 

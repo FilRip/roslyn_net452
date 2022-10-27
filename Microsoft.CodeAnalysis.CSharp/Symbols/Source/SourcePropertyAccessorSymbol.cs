@@ -260,7 +260,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // This will cause another call to SourceMethodSymbol.LazyMethodChecks,
                 // but that method already handles reentrancy for exactly this case.
                 MethodSymbol overriddenMethod = this.OverriddenMethod;
-                if ((object)overriddenMethod != null)
+                if (overriddenMethod is object)
                 {
                     CustomModifierUtils.CopyMethodCustomModifiers(overriddenMethod, this, out _lazyReturnType,
                                                                   out _lazyRefCustomModifiers,
@@ -611,7 +611,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             ? explicitlyImplementedPropertyOpt.GetMethod
                             : explicitlyImplementedPropertyOpt.SetMethod;
 
-                        explicitInterfaceImplementations = (object)implementedAccessor == null
+                        explicitInterfaceImplementations = implementedAccessor is null
                             ? ImmutableArray<MethodSymbol>.Empty
                             : ImmutableArray.Create<MethodSymbol>(implementedAccessor);
                     }
@@ -627,15 +627,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal sealed override OneOrMany<SyntaxList<AttributeListSyntax>> GetAttributeDeclarations()
         {
             var syntax = this.GetSyntax();
-            switch (syntax.Kind())
+            return syntax.Kind() switch
             {
-                case SyntaxKind.GetAccessorDeclaration:
-                case SyntaxKind.SetAccessorDeclaration:
-                case SyntaxKind.InitAccessorDeclaration:
-                    return OneOrMany.Create(((AccessorDeclarationSyntax)syntax).AttributeLists);
-            }
-
-            return base.GetAttributeDeclarations();
+                SyntaxKind.GetAccessorDeclaration or SyntaxKind.SetAccessorDeclaration or SyntaxKind.InitAccessorDeclaration => OneOrMany.Create(((AccessorDeclarationSyntax)syntax).AttributeLists),
+                _ => base.GetAttributeDeclarations(),
+            };
         }
 
 #nullable enable
@@ -658,7 +654,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 ? explicitlyImplementedPropertyOpt.GetMethod
                                 : explicitlyImplementedPropertyOpt.SetMethod;
 
-                            string accessorName = (object)implementedAccessor != null
+                            string accessorName = implementedAccessor is object
                                 ? implementedAccessor.Name
                                 : GetAccessorName(explicitlyImplementedPropertyOpt.MetadataName,
                                     isGetMethod, isWinMdOutput: _property.IsCompilationOutputWinMdObj()); //Not name - could be indexer placeholder
@@ -670,7 +666,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     else if (IsOverride)
                     {
                         MethodSymbol overriddenMethod = this.OverriddenMethod;
-                        if ((object)overriddenMethod != null)
+                        if (overriddenMethod is object)
                         {
                             // If this accessor is overriding a method from metadata, it is possible that
                             // the name of the overridden method doesn't follow the C# get_X/set_X pattern.

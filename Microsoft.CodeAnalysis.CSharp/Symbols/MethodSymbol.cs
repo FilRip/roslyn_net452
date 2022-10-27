@@ -445,7 +445,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // See InternalsVisibleToAndStrongNameTests: IvtVirtualCall1, IvtVirtualCall2, IvtVirtual_ParamsAndDynamic.
                 MethodSymbol overridden = m.OverriddenMethod;
                 var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                if ((object)overridden == null ||
+                if (overridden is null ||
                     (accessingTypeOpt is { } && !AccessCheck.IsSymbolAccessible(overridden, accessingTypeOpt, ref discardedUseSiteInfo)) ||
                     (requireSameReturnType && !this.ReturnType.Equals(overridden.ReturnType, TypeCompareKind.AllIgnoreOptions)))
                 {
@@ -529,7 +529,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.IsOverride)
                 {
                     var overriddenMethod = this.OverriddenMethod;
-                    if ((object)overriddenMethod != null && overriddenMethod.IsConditional)
+                    if (overriddenMethod is object && overriddenMethod.IsConditional)
                     {
                         return overriddenMethod.CallsAreConditionallyOmitted(syntaxTree);
                     }
@@ -567,7 +567,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.IsOverride)
                 {
                     var overriddenMethod = this.OverriddenMethod;
-                    if ((object)overriddenMethod != null)
+                    if (overriddenMethod is object)
                     {
                         return overriddenMethod.IsConditional;
                     }
@@ -582,28 +582,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static bool CanOverrideOrHide(MethodKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case MethodKind.AnonymousFunction:
-                case MethodKind.Constructor:
-                case MethodKind.Destructor:
-                case MethodKind.ExplicitInterfaceImplementation:
-                case MethodKind.StaticConstructor:
-                case MethodKind.ReducedExtension:
-                    return false;
-                case MethodKind.Conversion:
-                case MethodKind.DelegateInvoke:
-                case MethodKind.EventAdd:
-                case MethodKind.EventRemove:
-                case MethodKind.LocalFunction:
-                case MethodKind.UserDefinedOperator:
-                case MethodKind.Ordinary:
-                case MethodKind.PropertyGet:
-                case MethodKind.PropertySet:
-                    return true;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(kind);
-            }
+                MethodKind.AnonymousFunction or MethodKind.Constructor or MethodKind.Destructor or MethodKind.ExplicitInterfaceImplementation or MethodKind.StaticConstructor or MethodKind.ReducedExtension => false,
+                MethodKind.Conversion or MethodKind.DelegateInvoke or MethodKind.EventAdd or MethodKind.EventRemove or MethodKind.LocalFunction or MethodKind.UserDefinedOperator or MethodKind.Ordinary or MethodKind.PropertyGet or MethodKind.PropertySet => true,
+                _ => throw ExceptionUtilities.UnexpectedValue(kind),
+            };
         }
 
         internal virtual OverriddenOrHiddenMembersResult OverriddenOrHiddenMembers
@@ -727,7 +711,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// language version.</param>
         public MethodSymbol ReduceExtensionMethod(TypeSymbol receiverType, CSharpCompilation compilation)
         {
-            if ((object)receiverType == null)
+            if (receiverType is null)
             {
                 throw new ArgumentNullException(nameof(receiverType));
             }
@@ -983,7 +967,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var builder = PooledHashSet<INamedTypeSymbolInternal>.GetInstance();
             foreach (var callConvTypedConstant in value.Values)
             {
-                if (!(callConvTypedConstant.ValueInternal is NamedTypeSymbol callConvType)
+                if (callConvTypedConstant.ValueInternal is not NamedTypeSymbol callConvType
                     || !FunctionPointerTypeSymbol.IsCallingConventionModifier(callConvType))
                 {
                     // `{0}` is not a valid calling convention type for 'UnmanagedCallersOnly'.

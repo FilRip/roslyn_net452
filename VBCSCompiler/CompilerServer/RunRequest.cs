@@ -1,7 +1,7 @@
 ﻿using System;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal readonly struct RunRequest
@@ -19,12 +19,12 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         public string[] Arguments { get; }
 
         public RunRequest(
-          Guid requestId,
-          string language,
-          string? workingDirectory,
-          string? tempDirectory,
-          string? libDirectory,
-          string[] arguments)
+            Guid requestId,
+            string language,
+            string? workingDirectory,
+            string? tempDirectory,
+            string? libDirectory,
+            string[] arguments)
         {
             this.RequestId = requestId;
             this.Language = language;

@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return (object)ContainingNamespace == null;
+                return ContainingNamespace is null;
             }
         }
 
@@ -254,11 +254,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 foreach (NamespaceOrTypeSymbol symbol in scope.GetMembers(name))
                 {
-                    var ns = symbol as NamespaceSymbol;
-
-                    if ((object)ns != null)
+                    if (symbol is NamespaceSymbol ns)
                     {
-                        if ((object)nextScope != null)
+                        if (nextScope is object)
                         {
                             nextScope = null;
                             break;
@@ -270,7 +268,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 scope = nextScope;
 
-                if ((object)scope == null)
+                if (scope is null)
                 {
                     break;
                 }
@@ -303,7 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case SyntaxKind.QualifiedName:
                     var qn = (QualifiedNameSyntax)name;
                     var leftNs = this.GetNestedNamespace(qn.Left);
-                    if ((object)leftNs != null)
+                    if (leftNs is object)
                     {
                         return leftNs.GetNestedNamespace(qn.Right);
                     }
@@ -367,8 +365,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return _lazyQualifiedName ??
-                    (_lazyQualifiedName = this.ToDisplayString(SymbolDisplayFormat.QualifiedNameOnlyFormat));
+                return _lazyQualifiedName ??= this.ToDisplayString(SymbolDisplayFormat.QualifiedNameOnlyFormat);
             }
         }
 

@@ -49,17 +49,12 @@ namespace Microsoft.CodeAnalysis
         {
             Debug.Assert(collections.All(c => selector(c).IsReadOnly));
 
-            switch (collections.Length)
+            return collections.Length switch
             {
-                case 0:
-                    return SpecializedCollections.EmptyCollection<T>();
-
-                case 1:
-                    return selector(collections[0]);
-
-                default:
-                    return new UnionCollection<T>(ImmutableArray.CreateRange(collections, selector));
-            }
+                0 => SpecializedCollections.EmptyCollection<T>(),
+                1 => selector(collections[0]),
+                _ => new UnionCollection<T>(ImmutableArray.CreateRange(collections, selector)),
+            };
         }
 
         private UnionCollection(ImmutableArray<ICollection<T>> collections)

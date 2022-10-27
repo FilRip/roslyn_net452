@@ -55,7 +55,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Function
 
         Friend Shared Function Token(leading As GreenNode, kind As SyntaxKind, trailing As GreenNode, Optional text As String = Nothing) As SyntaxToken
-            Return SyntaxToken.Create(kind, leading, trailing, If(text Is Nothing, SyntaxFacts.GetText(kind), text))
+            Return SyntaxToken.Create(kind, leading, trailing, If(text, SyntaxFacts.GetText(kind)))
         End Function
 
         Friend Shared Function GetWellKnownTrivia() As IEnumerable(Of SyntaxTrivia)

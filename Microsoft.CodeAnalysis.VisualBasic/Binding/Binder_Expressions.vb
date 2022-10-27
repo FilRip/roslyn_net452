@@ -1520,7 +1520,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' This code must be kept in sync with Conversions.ClassifyArrayLiteralConversion
             Dim sourceType = arrayLiteral.InferredType
             Dim targetType = TryCast(destination, NamedTypeSymbol)
-            Dim originalTargetType = If(targetType IsNot Nothing, targetType.OriginalDefinition, Nothing)
+            Dim originalTargetType = targetType?.OriginalDefinition
             Dim targetArrayType As ArrayTypeSymbol = TryCast(destination, ArrayTypeSymbol)
             Dim targetElementType As TypeSymbol = Nothing
 
@@ -4243,7 +4243,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     ' We are processing the nth dimension of a rank-n array. We expect
                     ' that these will only be values, not array initializers.
-                    Dim elemType As TypeSymbol = If(type IsNot Nothing, type.ElementType, Nothing)
+                    Dim elemType As TypeSymbol = type?.ElementType
 
                     For Each expressionSyntax In node.Initializers
 

@@ -152,8 +152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // this.state = finishedState
             var stateDone = F.Assignment(F.Field(F.This(), stateField), F.Literal(StateMachineStates.FinishedStateMachine));
-            var block = body.Syntax as BlockSyntax;
-            if (block == null)
+            if (body.Syntax is not BlockSyntax block)
             {
                 // this happens, for example, in (async () => await e) where there is no block syntax
                 bodyBuilder.Add(stateDone);
@@ -177,8 +176,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var locals = ArrayBuilder<LocalSymbol>.GetInstance();
             locals.Add(cachedState);
-            if ((object)cachedThis != null) locals.Add(cachedThis);
-            if ((object)_exprRetValue != null) locals.Add(_exprRetValue);
+            if (cachedThis is object) locals.Add(cachedThis);
+            if (_exprRetValue is object) locals.Add(_exprRetValue);
 
             var newBody =
                 F.SequencePoint(
@@ -335,7 +334,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             resultPlace = (BoundExpression)Visit(resultPlace);
             MethodSymbol getResult = VisitMethodSymbol(node.AwaitableInfo.GetResult);
-            MethodSymbol isCompletedMethod = ((object)node.AwaitableInfo.IsCompleted != null) ? VisitMethodSymbol(node.AwaitableInfo.IsCompleted.GetMethod) : null;
+            MethodSymbol isCompletedMethod = (node.AwaitableInfo.IsCompleted is object) ? VisitMethodSymbol(node.AwaitableInfo.IsCompleted.GetMethod) : null;
             TypeSymbol type = VisitType(node.Type);
 
             if (awaitablePlaceholder != null)
@@ -388,7 +387,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             string methodName = null,
             bool resultsDiscarded = false)
         {
-            if ((object)methodSymbol != null)
+            if (methodSymbol is object)
             {
                 // non-dynamic:
 

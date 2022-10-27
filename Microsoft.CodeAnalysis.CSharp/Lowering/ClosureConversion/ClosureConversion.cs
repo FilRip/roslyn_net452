@@ -354,7 +354,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 DebugId closureId = _analysis.GetClosureId(syntax, closureDebugInfo);
 
                 var containingMethod = scope.ContainingFunctionOpt?.OriginalMethodSymbol ?? _topLevelMethod;
-                if ((object)_substitutedSourceMethod != null && containingMethod == _topLevelMethod)
+                if (_substitutedSourceMethod is object && containingMethod == _topLevelMethod)
                 {
                     containingMethod = _substitutedSourceMethod;
                 }
@@ -478,7 +478,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </param>
         private SynthesizedClosureEnvironment GetStaticFrame(BindingDiagnosticBag diagnostics, SyntaxNode syntax)
         {
-            if ((object)_lazyStaticLambdaFrame == null)
+            if (_lazyStaticLambdaFrame is null)
             {
                 var isNonGeneric = !_topLevelMethod.IsGenericMethod;
                 if (isNonGeneric)
@@ -486,7 +486,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     _lazyStaticLambdaFrame = CompilationState.StaticLambdaFrame;
                 }
 
-                if ((object)_lazyStaticLambdaFrame == null)
+                if (_lazyStaticLambdaFrame is null)
                 {
                     DebugId methodId;
                     if (isNonGeneric)
@@ -567,7 +567,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             // If in an instance method of the right type, we can just return the "this" pointer.
-            if ((object)_currentFrameThis != null && TypeSymbol.Equals(_currentFrameThis.Type, frameClass, TypeCompareKind.ConsiderEverything2))
+            if (_currentFrameThis is object && TypeSymbol.Equals(_currentFrameThis.Type, frameClass, TypeCompareKind.ConsiderEverything2))
             {
                 return new BoundThisReference(syntax, frameClass);
             }
@@ -639,7 +639,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var prologue = ArrayBuilder<BoundExpression>.GetInstance();
 
-            if ((object)frame.Constructor != null)
+            if (frame.Constructor is object)
             {
                 MethodSymbol constructor = frame.Constructor.AsMember(frameType);
 
@@ -650,7 +650,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             CapturedSymbolReplacement oldInnermostFrameProxy = null;
-            if ((object)_innermostFramePointer != null)
+            if (_innermostFramePointer is object)
             {
                 proxies.TryGetValue(_innermostFramePointer, out oldInnermostFrameProxy);
                 if (env.CapturesParent)
@@ -692,7 +692,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             _innermostFramePointer = oldInnermostFramePointer;
 
-            if ((object)_innermostFramePointer != null)
+            if (_innermostFramePointer is object)
             {
                 if (oldInnermostFrameProxy != null)
                 {
@@ -957,7 +957,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 realTypeArguments = realTypeArguments.Concat(typeArgumentsOpt);
             }
 
-            if ((object)containerAsFrame != null && containerAsFrame.Arity != 0)
+            if (containerAsFrame is object && containerAsFrame.Arity != 0)
             {
                 var containerTypeArguments = ImmutableArray.Create(realTypeArguments, 0, containerAsFrame.Arity);
                 realTypeArguments = ImmutableArray.Create(realTypeArguments, containerAsFrame.Arity, realTypeArguments.Length - containerAsFrame.Arity);
@@ -1560,7 +1560,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 try
                 {
                     BoundExpression cache;
-                    if (shouldCacheForStaticMethod || shouldCacheInLoop && (object)containerAsFrame != null)
+                    if (shouldCacheForStaticMethod || shouldCacheInLoop && containerAsFrame is object)
                     {
                         // Since the cache variable will be in a container with possibly alpha-rewritten generic parameters, we need to
                         // substitute the original type according to the type map for that container. That substituted type may be

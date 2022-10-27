@@ -25,7 +25,7 @@ Namespace Microsoft.CodeAnalysis.Operations
         End Function
 
         Friend Function CreateCompoundAssignmentRightOperand(boundAssignment As BoundAssignmentOperator) As IOperation
-            Dim binaryOperator As BoundExpression = Nothing
+            Dim binaryOperator As BoundExpression
             Select Case boundAssignment.Right.Kind
                 Case BoundKind.Conversion
                     Dim inConversionNode = DirectCast(boundAssignment.Right, BoundConversion)
@@ -54,7 +54,7 @@ Namespace Microsoft.CodeAnalysis.Operations
             Debug.Assert(boundAssignment.LeftOnTheRightOpt IsNot Nothing)
             Dim inConversion = New Conversion(Conversions.Identity)
             Dim outConversion As Conversion = inConversion
-            Dim binaryOperator As BoundExpression = Nothing
+            Dim binaryOperator As BoundExpression
             Select Case boundAssignment.Right.Kind
                 Case BoundKind.Conversion
                     Dim inConversionNode = DirectCast(boundAssignment.Right, BoundConversion)
@@ -189,7 +189,7 @@ Namespace Microsoft.CodeAnalysis.Operations
             End Select
         End Function
 
-        Friend Function DeriveArguments(boundArguments As ImmutableArray(Of BoundExpression), parameters As ImmutableArray(Of VisualBasic.Symbols.ParameterSymbol), ByRef defaultArguments As BitVector) As ImmutableArray(Of IArgumentOperation)
+        Friend Function DeriveArguments(boundArguments As ImmutableArray(Of BoundExpression), parameters As ImmutableArray(Of ParameterSymbol), ByRef defaultArguments As BitVector) As ImmutableArray(Of IArgumentOperation)
             Dim argumentsLength As Integer = boundArguments.Length
             Debug.Assert(argumentsLength = parameters.Length)
 
@@ -204,7 +204,7 @@ Namespace Microsoft.CodeAnalysis.Operations
         Private Function DeriveArgument(
             index As Integer,
             argument As BoundExpression,
-            parameters As ImmutableArray(Of VisualBasic.Symbols.ParameterSymbol),
+            parameters As ImmutableArray(Of ParameterSymbol),
             isDefault As Boolean
         ) As IArgumentOperation
             Dim isImplicit As Boolean = argument.WasCompilerGenerated AndAlso argument.Syntax.Kind <> SyntaxKind.OmittedArgument
@@ -287,9 +287,9 @@ Namespace Microsoft.CodeAnalysis.Operations
             Return Create(node)
         End Function
 
-        Private Shared Function ParameterIsParamArray(parameter As VisualBasic.Symbols.ParameterSymbol) As Boolean
-            Return If(parameter.IsParamArray AndAlso parameter.Type.Kind = SymbolKind.ArrayType, DirectCast(parameter.Type, VisualBasic.Symbols.ArrayTypeSymbol).IsSZArray, False)
-        End Function
+        'Private Shared Function ParameterIsParamArray(parameter As ParameterSymbol) As Boolean
+        '    Return parameter.IsParamArray AndAlso parameter.Type.Kind = SymbolKind.ArrayType AndAlso DirectCast(parameter.Type, ArrayTypeSymbol).IsSZArray
+        'End Function
 
         Private Function GetChildOfBadExpression(parent As BoundNode, index As Integer) As IOperation
             Dim child = Create(GetChildOfBadExpressionBoundNode(parent, index))
@@ -309,9 +309,9 @@ Namespace Microsoft.CodeAnalysis.Operations
             Return Nothing
         End Function
 
-        Private Function GetObjectCreationInitializers(expression As BoundObjectCreationExpression) As ImmutableArray(Of IOperation)
-            Return If(expression.InitializerOpt IsNot Nothing, expression.InitializerOpt.Initializers.SelectAsArray(Function(n) Create(n)), ImmutableArray(Of IOperation).Empty)
-        End Function
+        'Private Function GetObjectCreationInitializers(expression As BoundObjectCreationExpression) As ImmutableArray(Of IOperation)
+        '    Return If(expression.InitializerOpt IsNot Nothing, expression.InitializerOpt.Initializers.SelectAsArray(Function(n) Create(n)), ImmutableArray(Of IOperation).Empty)
+        'End Function
 
         Friend Function GetAnonymousTypeCreationInitializers(expression As BoundAnonymousTypeCreationExpression) As ImmutableArray(Of IOperation)
             ' For error cases and non-assignment initializers, the binder generates only the argument.
@@ -691,5 +691,7 @@ Namespace Microsoft.CodeAnalysis.Operations
                 End Select
             End Function
         End Class
+
     End Class
+
 End Namespace

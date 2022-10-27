@@ -39,8 +39,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object obj)
         {
-            var other = obj as FormattedSymbol;
-            return other != null &&
+            return obj is FormattedSymbol other &&
                 _symbol.Equals(other._symbol) &&
                 _symbolDisplayFormat == other._symbolDisplayFormat;
         }

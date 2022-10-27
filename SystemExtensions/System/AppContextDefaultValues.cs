@@ -45,8 +45,8 @@ namespace System
 
         public static void PopulateDefaultValues()
         {
-            ParseTargetFrameworkName(out var identifier, out var profile, out var version);
-            PopulateDefaultValuesPartial(identifier, profile, version);
+            ParseTargetFrameworkName(out var identifier, out _, out var version);
+            PopulateDefaultValuesPartial(identifier, version);
         }
 
         private static void ParseTargetFrameworkName(out string identifier, out string profile, out int version)
@@ -147,7 +147,7 @@ namespace System
             }
         }
 
-        private static void PopulateDefaultValuesPartial(string platformIdentifier, string profile, int version)
+        private static void PopulateDefaultValuesPartial(string platformIdentifier, int version)
         {
             switch (platformIdentifier)
             {

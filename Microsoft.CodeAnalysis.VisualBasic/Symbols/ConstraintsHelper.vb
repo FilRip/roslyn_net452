@@ -411,10 +411,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                         diagnosticsBuilder As ArrayBuilder(Of TypeParameterDiagnosticInfo),
                                         <[In], Out> ByRef useSiteDiagnosticsBuilder As ArrayBuilder(Of TypeParameterDiagnosticInfo),
                                         template As CompoundUseSiteInfo(Of AssemblySymbol))
-            Dim diagnostics As New CheckConstraintsDiagnosticsBuilders()
-            diagnostics.diagnosticsBuilder = diagnosticsBuilder
-            diagnostics.useSiteDiagnosticsBuilder = useSiteDiagnosticsBuilder
-            diagnostics.template = template
+            Dim diagnostics As New CheckConstraintsDiagnosticsBuilders() With {
+                .diagnosticsBuilder = diagnosticsBuilder,
+                .useSiteDiagnosticsBuilder = useSiteDiagnosticsBuilder,
+                .template = template
+            }
 
             type.VisitType(s_checkConstraintsSingleTypeFunc, diagnostics)
 

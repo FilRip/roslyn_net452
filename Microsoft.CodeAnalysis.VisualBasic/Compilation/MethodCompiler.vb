@@ -405,7 +405,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Sub VisitEmbeddedMethod(method As MethodSymbol)
             ' Lazily created collection of synthetic methods which 
             ' may be created during compilation of methods
-            Dim compilationState As TypeCompilationState = New TypeCompilationState(_compilation, _moduleBeingBuiltOpt, initializeComponentOpt:=Nothing)
+            Dim compilationState As New TypeCompilationState(_compilation, _moduleBeingBuiltOpt, initializeComponentOpt:=Nothing)
 
             ' Containing type binder
 
@@ -572,7 +572,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' Lazily created collection of synthetic methods which 
             ' may be created during compilation of methods
-            Dim compilationState As TypeCompilationState = New TypeCompilationState(_compilation, _moduleBeingBuiltOpt, initializeComponent)
+            Dim compilationState As New TypeCompilationState(_compilation, _moduleBeingBuiltOpt, initializeComponent)
 
             ' Containing type binder
             Dim sourceTypeBinder As Binder = Nothing
@@ -1555,7 +1555,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 optimizations = OptimizationLevel.Release
             End If
 
-            Dim builder As ILBuilder = New ILBuilder(moduleBuilder, localSlotManager, optimizations, areLocalsZeroed:=True)
+            Dim builder As New ILBuilder(moduleBuilder, localSlotManager, optimizations, areLocalsZeroed:=True)
 
             Try
                 Debug.Assert(Not diagnostics.HasAnyErrors)

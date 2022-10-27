@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else if (!this.InUnsafeRegion)
             {
-                return ((object)sizeOfTypeOpt == null)
+                return (sizeOfTypeOpt is null)
                     ? new CSDiagnosticInfo(ErrorCode.ERR_UnsafeNeeded)
                     : new CSDiagnosticInfo(ErrorCode.ERR_SizeofUnsafe, sizeOfTypeOpt);
             }

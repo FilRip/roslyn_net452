@@ -29,7 +29,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 again:
                 hashCode = CUInt((AscW(text(i)) Xor hashCode) * 16777619)
-                i = i + 1
+                i += 1
 
 start:
                 If (i < text.Length) Then

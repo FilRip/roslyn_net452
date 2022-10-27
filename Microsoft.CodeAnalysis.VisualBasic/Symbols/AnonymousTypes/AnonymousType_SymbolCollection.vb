@@ -115,7 +115,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 End Select
             Next
 
-            Return If(hasClass OrElse hasDelegate, Me.ReportMissingOrErroneousSymbols(diagnostics, hasClass, hasDelegate, hasKeys), True)
+            Return Not hasClass AndAlso Not hasDelegate OrElse Me.ReportMissingOrErroneousSymbols(diagnostics, hasClass, hasDelegate, hasKeys)
         End Function
 
         Public ReadOnly Property System_Boolean As NamedTypeSymbol

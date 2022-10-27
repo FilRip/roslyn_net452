@@ -295,14 +295,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // any token that was fabricated by the parser
             private static bool IsFabricatedToken(SyntaxKind kind)
             {
-                switch (kind)
+                return kind switch
                 {
-                    case SyntaxKind.GreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                        return true;
-                    default:
-                        return SyntaxFacts.IsContextualKeyword(kind);
-                }
+                    SyntaxKind.GreaterThanGreaterThanToken or SyntaxKind.GreaterThanGreaterThanEqualsToken => true,
+                    _ => SyntaxFacts.IsContextualKeyword(kind),
+                };
             }
 
             private BlendedNode CreateBlendedNode(CSharp.CSharpSyntaxNode node, SyntaxToken token)

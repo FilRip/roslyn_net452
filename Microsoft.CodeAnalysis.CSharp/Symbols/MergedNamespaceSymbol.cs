@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     if (childSymbol.Kind == SymbolKind.Namespace)
                     {
-                        namespaceSymbols = namespaceSymbols ?? ArrayBuilder<NamespaceSymbol>.GetInstance();
+                        namespaceSymbols ??= ArrayBuilder<NamespaceSymbol>.GetInstance();
                         namespaceSymbols.Add((NamespaceSymbol)childSymbol);
                     }
                     else

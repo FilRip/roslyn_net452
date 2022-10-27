@@ -849,7 +849,7 @@
     <Compile Include="Symbols\SymbolKind.cs" />
     <Compile Include="Symbols\SymbolKindExtensions.cs" />
     <Compile Include="Symbols\SymbolVisitor.cs" />
-    <Compile Include="Symbols\SymbolVisitor`1.cs" />
+    <Compile Include="Symbols\SymbolVisitor_T1.cs" />
     <Compile Include="Symbols\TypeCompareKind.cs" />
     <Compile Include="Symbols\TypedConstant.cs" />
     <Compile Include="Symbols\TypedConstantKind.cs" />
@@ -883,7 +883,7 @@
     <Compile Include="Syntax\InternalSyntax\SyntaxList.WithTwoChildren.cs" />
     <Compile Include="Syntax\InternalSyntax\SyntaxListBuilder.cs" />
     <Compile Include="Syntax\InternalSyntax\SyntaxListBuilderExtensions.cs" />
-    <Compile Include="Syntax\InternalSyntax\SyntaxListBuilder`1.cs" />
+    <Compile Include="Syntax\InternalSyntax\SyntaxListBuilder_T1.cs" />
     <Compile Include="Syntax\InternalSyntax\SyntaxListPool.cs" />
     <Compile Include="Syntax\InternalSyntax\SyntaxList_T1.cs" />
     <Compile Include="Syntax\InternalSyntax\SyntaxList_T1.Enumerator.cs" />
@@ -907,7 +907,7 @@
     <Compile Include="Syntax\SyntaxList.WithTwoChildren.cs" />
     <Compile Include="Syntax\SyntaxListBuilder.cs" />
     <Compile Include="Syntax\SyntaxListBuilderExtensions.cs" />
-    <Compile Include="Syntax\SyntaxListBuilder`1.cs" />
+    <Compile Include="Syntax\SyntaxListBuilder_T1.cs" />
     <Compile Include="Syntax\SyntaxList_T1.cs" />
     <Compile Include="Syntax\SyntaxList_T1.Enumerator.cs" />
     <Compile Include="Syntax\SyntaxNavigator.cs" />

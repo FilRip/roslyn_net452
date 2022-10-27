@@ -191,7 +191,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override bool Equals(object obj)
             {
-                return obj is TypeDeclarationIdentity && Equals((TypeDeclarationIdentity)obj);
+                return obj is TypeDeclarationIdentity identity && Equals(identity);
             }
 
             public bool Equals(TypeDeclarationIdentity other)

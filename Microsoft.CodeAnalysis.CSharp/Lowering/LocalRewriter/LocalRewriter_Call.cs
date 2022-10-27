@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var assembly = receiver.Type.ContainingAssembly;
 
-                if ((object)assembly != null && assembly.IsLinked)
+                if (assembly is object && assembly.IsLinked)
                 {
                     foreach (var m in methods)
                     {
@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var assembly = receiver.Type.ContainingAssembly;
 
-                if ((object)assembly != null && assembly.IsLinked)
+                if (assembly is object && assembly.IsLinked)
                 {
                     foreach (var p in properties)
                     {

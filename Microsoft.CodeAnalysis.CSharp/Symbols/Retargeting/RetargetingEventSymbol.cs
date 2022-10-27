@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         {
             get
             {
-                return (object?)_underlyingEvent.AddMethod == null
+                return _underlyingEvent.AddMethod is null
                     ? null
                     : this.RetargetingTranslator.Retarget(_underlyingEvent.AddMethod);
             }
@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         {
             get
             {
-                return (object?)_underlyingEvent.RemoveMethod == null
+                return _underlyingEvent.RemoveMethod is null
                     ? null
                     : this.RetargetingTranslator.Retarget(_underlyingEvent.RemoveMethod);
             }
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
         {
             get
             {
-                return (object?)_underlyingEvent.AssociatedField == null
+                return _underlyingEvent.AssociatedField is null
                     ? null
                     : this.RetargetingTranslator.Retarget(_underlyingEvent.AssociatedField);
             }
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             for (int i = 0; i < impls.Length; i++)
             {
                 var retargeted = this.RetargetingTranslator.Retarget(impls[i]);
-                if ((object?)retargeted != null)
+                if (retargeted is object)
                 {
                     builder.Add(retargeted);
                 }

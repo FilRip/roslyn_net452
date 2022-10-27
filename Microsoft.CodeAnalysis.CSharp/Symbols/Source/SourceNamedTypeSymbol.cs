@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var baseBinder = this.DeclaringCompilation.GetBinder(bases);
                 baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
 
-                if ((object)backupLocation == null)
+                if (backupLocation is null)
                 {
                     backupLocation = inheritedTypeDecls[0].Type.GetLocation();
                 }
@@ -114,21 +114,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static SyntaxToken GetName(CSharpSyntaxNode node)
         {
-            switch (node.Kind())
+            return node.Kind() switch
             {
-                case SyntaxKind.EnumDeclaration:
-                    return ((EnumDeclarationSyntax)node).Identifier;
-                case SyntaxKind.DelegateDeclaration:
-                    return ((DelegateDeclarationSyntax)node).Identifier;
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.StructDeclaration:
-                case SyntaxKind.RecordDeclaration:
-                case SyntaxKind.RecordStructDeclaration:
-                    return ((BaseTypeDeclarationSyntax)node).Identifier;
-                default:
-                    return default;
-            }
+                SyntaxKind.EnumDeclaration => ((EnumDeclarationSyntax)node).Identifier,
+                SyntaxKind.DelegateDeclaration => ((DelegateDeclarationSyntax)node).Identifier,
+                SyntaxKind.ClassDeclaration or SyntaxKind.InterfaceDeclaration or SyntaxKind.StructDeclaration or SyntaxKind.RecordDeclaration or SyntaxKind.RecordStructDeclaration => ((BaseTypeDeclarationSyntax)node).Identifier,
+                _ => default,
+            };
         }
 
         public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default)
@@ -157,29 +149,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 var typeDecl = (CSharpSyntaxNode)syntaxRef.GetSyntax();
                 var syntaxTree = syntaxRef.SyntaxTree;
-
-                TypeParameterListSyntax tpl;
                 SyntaxKind typeKind = typeDecl.Kind();
-                switch (typeKind)
+                TypeParameterListSyntax tpl = typeKind switch
                 {
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.StructDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.RecordDeclaration:
-                    case SyntaxKind.RecordStructDeclaration:
-                        tpl = ((TypeDeclarationSyntax)typeDecl).TypeParameterList;
-                        break;
-
-                    case SyntaxKind.DelegateDeclaration:
-                        tpl = ((DelegateDeclarationSyntax)typeDecl).TypeParameterList;
-                        break;
-
-                    case SyntaxKind.EnumDeclaration:
-                    default:
-                        // there is no such thing as a generic enum, so code should never reach here.
-                        throw ExceptionUtilities.UnexpectedValue(typeDecl.Kind());
-                }
-
+                    SyntaxKind.ClassDeclaration or SyntaxKind.StructDeclaration or SyntaxKind.InterfaceDeclaration or SyntaxKind.RecordDeclaration or SyntaxKind.RecordStructDeclaration => ((TypeDeclarationSyntax)typeDecl).TypeParameterList,
+                    SyntaxKind.DelegateDeclaration => ((DelegateDeclarationSyntax)typeDecl).TypeParameterList,
+                    _ => throw ExceptionUtilities.UnexpectedValue(typeDecl.Kind()),// there is no such thing as a generic enum, so code should never reach here.
+                };
                 bool isInterfaceOrDelegate = typeKind == SyntaxKind.InterfaceDeclaration || typeKind == SyntaxKind.DelegateDeclaration;
                 var parameterBuilder = new List<TypeParameterBuilder>();
                 parameterBuilders1.Add(parameterBuilder);
@@ -212,10 +188,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             }
                         }
 
-                        if (!ReferenceEquals(ContainingType, null))
+                        if (ContainingType is not null)
                         {
                             var tpEnclosing = ContainingType.FindEnclosingTypeParameter(name);
-                            if ((object)tpEnclosing != null)
+                            if (tpEnclosing is object)
                             {
                                 // Type parameter '{0}' has the same name as the type parameter from outer type '{1}'
                                 diagnostics.Add(ErrorCode.WRN_TypeParameterSameAsOuterTypeParameter, location, name, tpEnclosing.ContainingType);
@@ -762,22 +738,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                switch (TypeKind)
+                return TypeKind switch
                 {
-                    case TypeKind.Delegate:
-                        return AttributeLocation.Type | AttributeLocation.Return;
-
-                    case TypeKind.Enum:
-                    case TypeKind.Interface:
-                        return AttributeLocation.Type;
-
-                    case TypeKind.Struct:
-                    case TypeKind.Class:
-                        return AttributeLocation.Type;
-
-                    default:
-                        return AttributeLocation.None;
-                }
+                    TypeKind.Delegate => AttributeLocation.Type | AttributeLocation.Return,
+                    TypeKind.Enum or TypeKind.Interface => AttributeLocation.Type,
+                    TypeKind.Struct or TypeKind.Class => AttributeLocation.Type,
+                    _ => AttributeLocation.None,
+                };
             }
         }
 
@@ -943,7 +910,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return data.AttributeUsageInfo;
             }
 
-            return ((object)this.BaseTypeNoUseSiteDiagnostics != null) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
+            return (this.BaseTypeNoUseSiteDiagnostics is object) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
         }
 
         /// <summary>
@@ -958,7 +925,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (lazyCustomAttributesBag != null && lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed)
                 {
                     var data = (CommonTypeEarlyWellKnownAttributeData)lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData;
-                    return data != null ? data.ObsoleteAttributeData : null;
+                    return data?.ObsoleteAttributeData;
                 }
 
                 foreach (var decl in this.declaration.Declarations)
@@ -1157,12 +1124,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var attribute = arguments.Attribute;
 
-            if (this.IsInterfaceType() && (!arguments.HasDecodedData || (object)((TypeWellKnownAttributeData)arguments.DecodedData).ComImportCoClass == null))
+            if (this.IsInterfaceType() && (!arguments.HasDecodedData || ((TypeWellKnownAttributeData)arguments.DecodedData).ComImportCoClass is null))
             {
                 TypedConstant argument = attribute.CommonConstructorArguments[0];
 
-                var coClassType = argument.ValueInternal as NamedTypeSymbol;
-                if ((object)coClassType != null && coClassType.TypeKind == TypeKind.Class)
+                if (argument.ValueInternal is NamedTypeSymbol coClassType && coClassType.TypeKind == TypeKind.Class)
                 {
                     arguments.GetOrCreateData<TypeWellKnownAttributeData>().ComImportCoClass = coClassType;
                 }
@@ -1183,7 +1149,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 TypeWellKnownAttributeData data = this.GetDecodedWellKnownAttributeData();
-                return data != null ? data.ComImportCoClass : null;
+                return data?.ComImportCoClass;
             }
         }
 
@@ -1375,7 +1341,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.TypeKind == TypeKind.Class)
                 {
                     var baseType = this.BaseTypeNoUseSiteDiagnostics;
-                    if ((object)baseType != null && baseType.SpecialType != SpecialType.System_Object)
+                    if (baseType is object && baseType.SpecialType != SpecialType.System_Object)
                     {
                         // CS0424: '{0}': a class with the ComImport attribute cannot specify a base class
                         diagnostics.Add(ErrorCode.ERR_ComImportWithBase, this.Locations[0], this.Name);
@@ -1411,7 +1377,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
                 }
             }
-            else if ((object)this.ComImportCoClass != null)
+            else if (this.ComImportCoClass is object)
             {
 
                 // Symbol with CoClassAttribute must have a ComImportAttribute

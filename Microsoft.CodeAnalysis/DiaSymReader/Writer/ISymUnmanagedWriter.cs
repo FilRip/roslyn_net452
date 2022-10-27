@@ -151,9 +151,7 @@ namespace Microsoft.DiaSymReader
         public VariantStructure(DateTime date) : this() // Need this to avoid errors about the uninteresting union fields.
         {
             _longValue = date.Ticks;
-#pragma warning disable CS0618 // Type or member is obsolete
             _type = (short)VarEnum.VT_DATE;
-#pragma warning restore CS0618
         }
 
         [FieldOffset(0)]

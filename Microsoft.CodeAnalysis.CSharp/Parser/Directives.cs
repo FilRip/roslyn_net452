@@ -50,18 +50,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 return false;
             }
 
-            switch (this.Kind)
+            return this.Kind switch
             {
-                case SyntaxKind.DefineDirectiveTrivia:
-                case SyntaxKind.UndefDirectiveTrivia:
-                    return this.GetIdentifier() == other.GetIdentifier();
-                case SyntaxKind.IfDirectiveTrivia:
-                case SyntaxKind.ElifDirectiveTrivia:
-                case SyntaxKind.ElseDirectiveTrivia:
-                    return this.BranchTaken == other.BranchTaken;
-                default:
-                    return true;
-            }
+                SyntaxKind.DefineDirectiveTrivia or SyntaxKind.UndefDirectiveTrivia => this.GetIdentifier() == other.GetIdentifier(),
+                SyntaxKind.IfDirectiveTrivia or SyntaxKind.ElifDirectiveTrivia or SyntaxKind.ElseDirectiveTrivia => this.BranchTaken == other.BranchTaken,
+                _ => true,
+            };
         }
 
         // Can't be private as it's called by DirectiveStack in its GetDebuggerDisplay()
@@ -74,15 +68,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         internal string GetIdentifier()
         {
-            switch (_node.Kind)
+            return _node.Kind switch
             {
-                case SyntaxKind.DefineDirectiveTrivia:
-                    return ((DefineDirectiveTriviaSyntax)_node).Name.ValueText;
-                case SyntaxKind.UndefDirectiveTrivia:
-                    return ((UndefDirectiveTriviaSyntax)_node).Name.ValueText;
-                default:
-                    return null;
-            }
+                SyntaxKind.DefineDirectiveTrivia => ((DefineDirectiveTriviaSyntax)_node).Name.ValueText,
+                SyntaxKind.UndefDirectiveTrivia => ((UndefDirectiveTriviaSyntax)_node).Name.ValueText,
+                _ => null,
+            };
         }
 
         internal bool IsActive
@@ -94,8 +85,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             get
             {
-                var branching = _node as BranchingDirectiveTriviaSyntax;
-                if (branching != null)
+                if (_node is BranchingDirectiveTriviaSyntax branching)
                 {
                     return branching.BranchTaken;
                 }
@@ -241,7 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                     return new DirectiveStack(CompleteRegion(_directives)); // remove region directives from stack but leave everything else
                 default:
-                    return new DirectiveStack(new ConsList<Directive>(directive, _directives != null ? _directives : ConsList<Directive>.Empty));
+                    return new DirectiveStack(new ConsList<Directive>(directive, _directives ?? ConsList<Directive>.Empty));
             }
         }
 

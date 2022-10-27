@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 this.SetFrom(result);
             }
-            else if ((object)result.Symbol != null)
+            else if (result.Symbol is object)
             {
                 // Same goodness. Include all symbols
                 _symbolList.Add(result.Symbol);

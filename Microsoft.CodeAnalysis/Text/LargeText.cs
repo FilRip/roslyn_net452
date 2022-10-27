@@ -69,16 +69,14 @@ namespace Microsoft.CodeAnalysis.Text
             Debug.Assert(longLength > 0 && longLength <= int.MaxValue); // GetMaxCharCountOrThrowIfHuge should have thrown.
             int length = (int)longLength;
 
-            using (var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: Math.Min(length, 4096), leaveOpen: true))
-            {
-                var chunks = ReadChunksFromTextReader(reader, maxCharRemainingGuess, throwIfBinaryDetected);
+            using var reader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks: true, bufferSize: Math.Min(length, 4096), leaveOpen: true);
+            var chunks = ReadChunksFromTextReader(reader, maxCharRemainingGuess, throwIfBinaryDetected);
 
-                // We must compute the checksum and embedded text blob now while we still have the original bytes in hand.
-                // We cannot re-encode to obtain checksum and blob as the encoding is not guaranteed to round-trip.
-                var checksum = CalculateChecksum(stream, checksumAlgorithm);
-                var embeddedTextBlob = canBeEmbedded ? EmbeddedText.CreateBlob(stream) : default;
-                return new LargeText(chunks, reader.CurrentEncoding, checksum, checksumAlgorithm, embeddedTextBlob);
-            }
+            // We must compute the checksum and embedded text blob now while we still have the original bytes in hand.
+            // We cannot re-encode to obtain checksum and blob as the encoding is not guaranteed to round-trip.
+            var checksum = CalculateChecksum(stream, checksumAlgorithm);
+            var embeddedTextBlob = canBeEmbedded ? EmbeddedText.CreateBlob(stream) : default;
+            return new LargeText(chunks, reader.CurrentEncoding, checksum, checksumAlgorithm, embeddedTextBlob);
         }
 
         internal static SourceText Decode(TextReader reader, int length, Encoding? encodingOpt, SourceHashAlgorithm checksumAlgorithm)
@@ -153,7 +151,7 @@ namespace Microsoft.CodeAnalysis.Text
                         return true;
                     }
 
-                    i += 1;
+                    i++;
                 }
                 else
                 {
@@ -223,7 +221,6 @@ namespace Microsoft.CodeAnalysis.Text
                 return;
             }
 
-            var chunkWriter = writer as LargeTextWriter;
 
             int chunkIndex = GetIndexFromPosition(span.Start);
             int chunkStartOffset = span.Start - _chunkStartOffsets[chunkIndex];
@@ -233,7 +230,7 @@ namespace Microsoft.CodeAnalysis.Text
                 var chunk = _chunks[chunkIndex];
                 int charsToWrite = Math.Min(chunk.Length - chunkStartOffset, count);
 
-                if (chunkWriter != null && chunkStartOffset == 0 && charsToWrite == chunk.Length)
+                if (writer is LargeTextWriter chunkWriter && chunkStartOffset == 0 && charsToWrite == chunk.Length)
                 {
                     // reuse entire chunk
                     chunkWriter.AppendChunk(chunk);

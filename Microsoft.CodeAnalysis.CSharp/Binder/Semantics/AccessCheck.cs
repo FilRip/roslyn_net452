@@ -235,7 +235,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var containingType = type.ContainingType;
-            return (object)containingType == null
+            return containingType is null
                 ? IsNonNestedTypeAccessible(type.ContainingAssembly, type.DeclaredAccessibility, within)
                 : IsMemberAccessible(containingType, type.DeclaredAccessibility, within, null, out unused, compilation, ref useSiteInfo, basesBeingResolved);
         }
@@ -265,10 +265,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case Accessibility.Internal:
                 case Accessibility.ProtectedOrInternal:
-
                     // within is typically a type
-                    var withinType = within as NamedTypeSymbol;
-                    var withinAssembly = (object)withinType != null ? withinType.ContainingAssembly : (AssemblySymbol)within;
+                    var withinAssembly = within is NamedTypeSymbol withinType ? withinType.ContainingAssembly : (AssemblySymbol)within;
 
                     // An internal type is accessible if we're in the same assembly or we have
                     // friend access to the assembly it was defined in.
@@ -339,7 +337,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var originalContainingType = containingType.OriginalDefinition;
             var withinType = within as NamedTypeSymbol;
-            var withinAssembly = (object)withinType != null ? withinType.ContainingAssembly : (AssemblySymbol)within;
+            var withinAssembly = withinType is object ? withinType.ContainingAssembly : (AssemblySymbol)within;
 
             switch (declaredAccessibility)
             {
@@ -357,7 +355,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     // private members never accessible from outside a type.
-                    return (object)withinType != null && IsPrivateSymbolAccessible(withinType, originalContainingType);
+                    return withinType is object && IsPrivateSymbolAccessible(withinType, originalContainingType);
 
                 case Accessibility.Internal:
                     // An internal type is accessible if we're in the same assembly or we have
@@ -419,7 +417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
-            if ((object)withinType == null)
+            if (withinType is null)
             {
                 // If we're not within a type, we can't access a protected symbol
                 return false;
@@ -445,8 +443,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // LangCompiler::CheckAccessCore
             {
                 var current = withinType.OriginalDefinition;
-                var originalThroughTypeOpt = (object)throughTypeOpt == null ? null : throughTypeOpt.OriginalDefinition;
-                while ((object)current != null)
+                var originalThroughTypeOpt = throughTypeOpt?.OriginalDefinition;
+                while (current is object)
                 {
 
                     if (current.InheritsFromOrImplementsIgnoringConstruction(originalContainingType, compilation, ref useSiteInfo, basesBeingResolved))
@@ -457,7 +455,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // inheritance chains should be very short.  As such, it might actually be
                         // slower to create and check inside the set versus just walking the
                         // inheritance chain.
-                        if ((object)originalThroughTypeOpt == null ||
+                        if (originalThroughTypeOpt is null ||
                             originalThroughTypeOpt.InheritsFromOrImplementsIgnoringConstruction(current, compilation, ref useSiteInfo))
                         {
                             return true;
@@ -480,9 +478,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Symbol within,
             NamedTypeSymbol originalContainingType)
         {
-
-            var withinType = within as NamedTypeSymbol;
-            if ((object)withinType == null)
+            if (within is not NamedTypeSymbol withinType)
             {
                 // If we're not within a type, we can't access a private symbol
                 return false;
@@ -504,7 +500,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Walk up my parent chain and see if I eventually hit the owner.  If so then I'm a
             // nested type of that owner and I'm allowed access to everything inside of it.
             var current = withinType.OriginalDefinition;
-            while ((object)current != null)
+            while (current is object)
             {
                 if (current == (object)originalContainingType)
                 {
@@ -544,7 +540,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var current = type;
             bool result = false;
 
-            while ((object)current != null)
+            while (current is object)
             {
                 if (baseTypeIsInterface == current.IsInterfaceType() &&
                     current == (object)baseType)
@@ -562,7 +558,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // "class Goo : IBar<int>".  We must map it back to the 'original' when as we walk up
                 // the base type hierarchy.
                 var next = current.GetNextBaseTypeNoUseSiteDiagnostics(basesBeingResolved, compilation, ref visited);
-                if ((object)next == null)
+                if (next is null)
                 {
                     current = null;
                 }
@@ -616,23 +612,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return;
                 }
 
-                ImmutableArray<NamedTypeSymbol> declaredInterfaces;
-
-                switch (derived)
+                var declaredInterfaces = derived switch
                 {
-                    case TypeParameterSymbol typeParameter:
-                        declaredInterfaces = typeParameter.AllEffectiveInterfacesNoUseSiteDiagnostics;
-                        break;
-
-                    case NamedTypeSymbol namedType:
-                        declaredInterfaces = namedType.GetDeclaredInterfaces(basesBeingResolved);
-                        break;
-
-                    default:
-                        declaredInterfaces = derived.InterfacesNoUseSiteDiagnostics(basesBeingResolved);
-                        break;
-                }
-
+                    TypeParameterSymbol typeParameter => typeParameter.AllEffectiveInterfacesNoUseSiteDiagnostics,
+                    NamedTypeSymbol namedType => namedType.GetDeclaredInterfaces(basesBeingResolved),
+                    _ => derived.InterfacesNoUseSiteDiagnostics(basesBeingResolved),
+                };
                 foreach (var @interface in declaredInterfaces)
                 {
                     NamedTypeSymbol definition = @interface.OriginalDefinition;

@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var containingAssembly1 = unwrappedSymbol1.ContainingAssembly;
 
                     // May not be the case if there are error types.
-                    if ((object)containingAssembly0 != null && (object)containingAssembly1 != null)
+                    if (containingAssembly0 is object && containingAssembly1 is object)
                     {
                         // Use the assembly identities rather than locations. Note that the
                         // assembly identities may be identical as well. (For instance, the
@@ -167,7 +167,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var tree = syntaxReferences[0].SyntaxTree;
                 var span = syntaxReferences[0].Span;
-                string path = tree.GetDisplayPath(span, (compilation != null) ? compilation.Options.SourceReferenceResolver : null);
+                string path = tree.GetDisplayPath(span, compilation?.Options.SourceReferenceResolver);
                 if (!string.IsNullOrEmpty(path))
                 {
                     return $"{path}({tree.GetDisplayLineNumber(span)})";
@@ -175,12 +175,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             AssemblySymbol containingAssembly = unwrappedSymbol.ContainingAssembly;
-            if ((object)containingAssembly != null)
+            if (containingAssembly is object)
             {
                 if (compilation != null)
                 {
-                    PortableExecutableReference metadataReference = compilation.GetMetadataReference(containingAssembly) as PortableExecutableReference;
-                    if (metadataReference != null)
+                    if (compilation.GetMetadataReference(containingAssembly) is PortableExecutableReference metadataReference)
                     {
                         string path = metadataReference.FilePath;
                         if (!string.IsNullOrEmpty(path))
@@ -220,8 +219,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override bool Equals(object obj)
             {
-                var other = obj as Description;
-                return other != null &&
+                return obj is Description other &&
                     _distinguisher._compilation == other._distinguisher._compilation &&
                     GetSymbol() == other.GetSymbol();
             }

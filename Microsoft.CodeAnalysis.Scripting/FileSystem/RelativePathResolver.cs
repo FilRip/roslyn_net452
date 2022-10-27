@@ -4,8 +4,6 @@
 
 #nullable disable
 
-#pragma warning disable 436 // The type 'RelativePathResolver' conflicts with imported type
-
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics;

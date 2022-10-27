@@ -169,7 +169,7 @@ namespace Microsoft.CodeAnalysis
 
             while (true)
             {
-                hr = enumerator.GetNextAssembly(out applicationContext, out FusionAssemblyIdentity.IAssemblyName nameObject, 0);
+                hr = enumerator.GetNextAssembly(out _, out FusionAssemblyIdentity.IAssemblyName nameObject, 0);
                 if (hr != 0)
                 {
                     if (hr < 0)

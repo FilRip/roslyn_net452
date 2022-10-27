@@ -177,8 +177,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 
         internal static CSharpSemanticModel GetCSharpSemanticModel(SemanticModel semanticModel)
         {
-            var csharpModel = semanticModel as CSharpSemanticModel;
-            if (csharpModel == null)
+            if (semanticModel is not CSharpSemanticModel csharpModel)
             {
                 throw new ArgumentException(Properties.Resources.WrongSemanticModelType, LanguageNames.CSharp);
             }

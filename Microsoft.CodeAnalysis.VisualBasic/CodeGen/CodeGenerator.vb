@@ -30,7 +30,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
         ''' <summary> Current enclosing Catch block if there is any. </summary>
         Private _currentCatchBlock As BoundCatchBlock = Nothing
 
-        Private ReadOnly _synthesizedLocalOrdinals As SynthesizedLocalOrdinalsDispenser = New SynthesizedLocalOrdinalsDispenser()
+        Private ReadOnly _synthesizedLocalOrdinals As New SynthesizedLocalOrdinalsDispenser()
         Private _uniqueNameId As Integer
 
         ' label used when return is emitted in a form of store/goto

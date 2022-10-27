@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static ImmutableArray<Symbol> UnwrapErrorCandidates(ImmutableArray<Symbol> candidateSymbols)
         {
             var candidate = candidateSymbols.IsEmpty ? null : candidateSymbols[0] as ErrorTypeSymbol;
-            return ((object?)candidate != null && !candidate.CandidateSymbols.IsEmpty) ? candidate.CandidateSymbols : candidateSymbols;
+            return (candidate is object && !candidate.CandidateSymbols.IsEmpty) ? candidate.CandidateSymbols : candidateSymbols;
         }
 
         protected override NamedTypeSymbol WithTupleDataCore(TupleExtraData newData)
@@ -209,7 +209,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </remarks>
         internal static TypeSymbol? ExtractNonErrorType(TypeSymbol? oldSymbol)
         {
-            if ((object?)oldSymbol == null || oldSymbol.TypeKind != TypeKind.Error)
+            if (oldSymbol is null || oldSymbol.TypeKind != TypeKind.Error)
             {
                 return oldSymbol;
             }
@@ -219,15 +219,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // original definition.  In the former case, it is its own original definition.
             // Thus, if there's a CSErrorTypeSymbol in there somewhere, it's returned by
             // OriginalDefinition.
-            ExtendedErrorTypeSymbol? oldError = oldSymbol.OriginalDefinition as ExtendedErrorTypeSymbol;
 
             // If the original definition isn't a CSErrorTypeSymbol, then we don't know how to
             // pull out a non-error type.  If it is, then if there is a unambiguous type inside it,
             // use that.
-            if ((object?)oldError != null && !oldError._candidateSymbols.IsDefault && oldError._candidateSymbols.Length == 1)
+            if (oldSymbol.OriginalDefinition is ExtendedErrorTypeSymbol oldError && !oldError._candidateSymbols.IsDefault && oldError._candidateSymbols.Length == 1)
             {
-                TypeSymbol? type = oldError._candidateSymbols[0] as TypeSymbol;
-                if ((object?)type != null)
+                if (oldError._candidateSymbols[0] is TypeSymbol type)
                     return type.GetNonErrorGuess();
             }
 
@@ -247,18 +245,16 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // original definition.  In the former case, it is its own original definition.
             // Thus, if there's a CSErrorTypeSymbol in there somewhere, it's returned by
             // OriginalDefinition.
-            ExtendedErrorTypeSymbol? oldError = oldSymbol.OriginalDefinition as ExtendedErrorTypeSymbol;
 
             // If the original definition isn't a CSErrorTypeSymbol, then we don't know how to
             // pull out a non-error type.  If it is, then if there is a unambiguous type inside it,
             // use that.
             TypeKind commonTypeKind = TypeKind.Error;
-            if ((object?)oldError != null && !oldError._candidateSymbols.IsDefault && oldError._candidateSymbols.Length > 0)
+            if (oldSymbol.OriginalDefinition is ExtendedErrorTypeSymbol oldError && !oldError._candidateSymbols.IsDefault && oldError._candidateSymbols.Length > 0)
             {
                 foreach (Symbol sym in oldError._candidateSymbols)
                 {
-                    TypeSymbol? type = sym as TypeSymbol;
-                    if ((object?)type != null && type.TypeKind != TypeKind.Error)
+                    if (sym is TypeSymbol type && type.TypeKind != TypeKind.Error)
                     {
                         if (commonTypeKind == TypeKind.Error)
                             commonTypeKind = type.TypeKind;
@@ -278,37 +274,32 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            var other = t2 as ExtendedErrorTypeSymbol;
-            if ((object?)other == null || _unreported || other._unreported)
+            if (t2 is not ExtendedErrorTypeSymbol other || _unreported || other._unreported)
             {
                 return false;
             }
 
             return
-                ((object)this.ContainingType != null ? this.ContainingType.Equals(other.ContainingType, comparison) :
-                 (object?)this.ContainingSymbol == null ? (object?)other.ContainingSymbol == null : this.ContainingSymbol.Equals(other.ContainingSymbol)) &&
+                (this.ContainingType is object ? this.ContainingType.Equals(other.ContainingType, comparison) :
+                 this.ContainingSymbol is null ? other.ContainingSymbol is null : this.ContainingSymbol.Equals(other.ContainingSymbol)) &&
                 this.Name == other.Name && this.Arity == other.Arity;
         }
 
         public override int GetHashCode()
         {
             return Hash.Combine(this.Arity,
-                        Hash.Combine((object?)this.ContainingSymbol != null ? this.ContainingSymbol.GetHashCode() : 0,
+                        Hash.Combine(this.ContainingSymbol is object ? this.ContainingSymbol.GetHashCode() : 0,
                                      this.Name != null ? this.Name.GetHashCode() : 0));
         }
 
         private static int GetArity(Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.NamedType:
-                case SymbolKind.ErrorType:
-                    return ((NamedTypeSymbol)symbol).Arity;
-                case SymbolKind.Method:
-                    return ((MethodSymbol)symbol).Arity;
-                default:
-                    return 0;
-            }
+                SymbolKind.NamedType or SymbolKind.ErrorType => ((NamedTypeSymbol)symbol).Arity,
+                SymbolKind.Method => ((MethodSymbol)symbol).Arity,
+                _ => 0,
+            };
         }
     }
 }

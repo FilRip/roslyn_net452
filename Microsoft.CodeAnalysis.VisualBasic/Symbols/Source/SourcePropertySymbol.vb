@@ -249,15 +249,15 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 memberFlags = memberFlags Or SourceMemberFlags.FirstFieldDeclarationOfType
             End If
 
-            Dim prop = New SourcePropertySymbol(containingType,
-                                                name,
-                                                memberFlags,
-                                                syntaxRef,
-                                                Nothing,
-                                                location)
-
             ' no implements.
-            prop._lazyImplementedProperties = ImmutableArray(Of PropertySymbol).Empty
+            Dim prop = New SourcePropertySymbol(containingType,
+                                name,
+                                memberFlags,
+                                syntaxRef,
+                                Nothing,
+                                location) With {
+                ._lazyImplementedProperties = ImmutableArray(Of PropertySymbol).Empty
+                                }
             prop.SetCustomAttributeData(CustomAttributesBag(Of VisualBasicAttributeData).Empty)
 
             Dim fieldName = "_" + prop._name
@@ -610,7 +610,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend ReadOnly Property ReturnTypeMarshallingInformation As MarshalPseudoCustomAttributeData
             Get
                 Dim data = GetDecodedReturnTypeWellKnownAttributeData()
-                Return If(data IsNot Nothing, data.MarshallingInformation, Nothing)
+                Return data?.MarshallingInformation
             End Get
         End Property
 
@@ -958,7 +958,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </summary>
         Friend ReadOnly Property Syntax As VisualBasicSyntaxNode
             Get
-                Return If(_syntaxRef IsNot Nothing, _syntaxRef.GetVisualBasicSyntax(), Nothing)
+                Return _syntaxRef?.GetVisualBasicSyntax()
             End Get
         End Property
 
@@ -984,7 +984,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim lazyCustomAttributesBag = Me._lazyCustomAttributesBag
                 If (lazyCustomAttributesBag IsNot Nothing AndAlso lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed) Then
                     Dim data = DirectCast(_lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData, CommonPropertyEarlyWellKnownAttributeData)
-                    Return If(data IsNot Nothing, data.ObsoleteAttributeData, Nothing)
+                    Return data?.ObsoleteAttributeData
                 End If
 
                 Return ObsoleteAttributeData.Uninitialized

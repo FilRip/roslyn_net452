@@ -30,14 +30,12 @@ namespace Microsoft.Cci
                 return false;
             }
 
-            var asIListT = enumerable as IList<T>;
-            if (asIListT != null)
+            if (enumerable is IList<T> asIListT)
             {
                 return asIListT.Count != 0;
             }
 
-            var asIList = enumerable as IList;
-            if (asIList != null)
+            if (enumerable is IList asIList)
             {
                 return asIList.Count != 0;
             }
@@ -64,14 +62,12 @@ namespace Microsoft.Cci
                 return 0;
             }
 
-            var asIListT = enumerable as IList<T>;
-            if (asIListT != null)
+            if (enumerable is IList<T> asIListT)
             {
                 return (uint)asIListT.Count;
             }
 
-            var asIList = enumerable as IList;
-            if (asIList != null)
+            if (enumerable is IList asIList)
             {
                 return (uint)asIList.Count;
             }

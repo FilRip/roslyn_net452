@@ -826,7 +826,7 @@ DoneWithDiagnostics:
                         Continue For
                     End If
 
-                    Dim conv As ConversionKind = Nothing
+                    Dim conv As ConversionKind
 
                     Select Case typeParameters(i).Variance
                         Case VarianceKind.Out
@@ -1272,7 +1272,7 @@ DoneWithDiagnostics:
 
                 Case BoundKind.InterpolatedStringExpression
 
-                    argument = ReclassifyInterpolatedStringExpression(conversionSemantics, tree, convKind, isExplicit, DirectCast(argument, BoundInterpolatedStringExpression), targetType, diagnostics)
+                    argument = ReclassifyInterpolatedStringExpression(conversionSemantics, tree, convKind, isExplicit, DirectCast(argument, BoundInterpolatedStringExpression), targetType)
                     Return argument.Kind = BoundKind.Conversion
 
                 Case BoundKind.TupleLiteral
@@ -1528,9 +1528,7 @@ DoneWithDiagnostics:
                                                                                invoke.ReturnType,
                                                                                lambda.Expression,
                                                                                diagnostics,
-                                                                               If(invoke.ReturnType.IsBooleanType,
-                                                                                  lambda.ExprIsOperandOfConditionalBranch,
-                                                                                  False)),
+                                                                               invoke.ReturnType.IsBooleanType AndAlso lambda.ExprIsOperandOfConditionalBranch),
                                                        exprIsOperandOfConditionalBranch:=False)
 
                             Else
@@ -1584,7 +1582,7 @@ DoneWithDiagnostics:
                 lambda = lambda.Update(lambda.LambdaSymbol, lambda.RangeVariables,
                               ApplyImplicitConversion(lambda.Expression.Syntax, delegateReturnType, lambda.Expression,
                                                       diagnostics,
-                                                      If(delegateReturnType.IsBooleanType(), lambda.ExprIsOperandOfConditionalBranch, False)),
+                                                      delegateReturnType.IsBooleanType() AndAlso lambda.ExprIsOperandOfConditionalBranch),
                               exprIsOperandOfConditionalBranch:=False)
             Else
                 lambda = lambda.Update(lambda.LambdaSymbol, lambda.RangeVariables,
@@ -1602,15 +1600,13 @@ DoneWithDiagnostics:
             Throw ExceptionUtilities.UnexpectedValue(conversionSemantics)
         End Function
 
-        Private Function ReclassifyInterpolatedStringExpression(conversionSemantics As SyntaxKind, tree As SyntaxNode, convKind As ConversionKind, isExplicit As Boolean, node As BoundInterpolatedStringExpression, targetType As TypeSymbol, diagnostics As BindingDiagnosticBag) As BoundExpression
-
+        Private Function ReclassifyInterpolatedStringExpression(conversionSemantics As SyntaxKind, tree As SyntaxNode, convKind As ConversionKind, isExplicit As Boolean, node As BoundInterpolatedStringExpression, targetType As TypeSymbol) As BoundExpression
             If (convKind And ConversionKind.InterpolatedString) = ConversionKind.InterpolatedString Then
                 Debug.Assert(targetType.Equals(Compilation.GetWellKnownType(WellKnownType.System_IFormattable)) OrElse targetType.Equals(Compilation.GetWellKnownType(WellKnownType.System_FormattableString)))
                 Return New BoundConversion(tree, node, ConversionKind.InterpolatedString, False, isExplicit, targetType)
             End If
 
             Return node
-
         End Function
 
         Private Function ReclassifyTupleLiteral(

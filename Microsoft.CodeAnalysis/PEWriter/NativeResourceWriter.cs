@@ -321,8 +321,7 @@ namespace Microsoft.Cci
             k = offset + 16 + n * 8;
             for (int i = 0; i < n; i++)
             {
-                Directory subDir = directory.Entries[i] as Directory;
-                if (subDir != null)
+                if (directory.Entries[i] is Directory subDir)
                 {
                     WriteDirectory(subDir, writer, k, level + 1, sizeOfDirectoryTree, virtualAddressBase, dataWriter);
                     if (level == 0)
@@ -343,8 +342,7 @@ namespace Microsoft.Cci
             uint size = 16 + 8 * n;
             for (int i = 0; i < n; i++)
             {
-                Directory subDir = directory.Entries[i] as Directory;
-                if (subDir != null)
+                if (directory.Entries[i] is Directory subDir)
                 {
                     size += 16 + 8 * (uint)subDir.Entries.Count;
                 }

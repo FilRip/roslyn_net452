@@ -453,7 +453,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' declare the control variable inside of the while loop to capture it for each
             ' iteration of this loop with a copy constructor
-            Dim rewrittenBodyBlock As BoundBlock = New BoundBlock(statementSyntax,
+            Dim rewrittenBodyBlock As New BoundBlock(statementSyntax,
                                                                   Nothing,
                                                                   If(forEachStatement.DeclaredOrInferredLocalOpt IsNot Nothing,
                                                                      ImmutableArray.Create(Of LocalSymbol)(forEachStatement.DeclaredOrInferredLocalOpt),
@@ -606,7 +606,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' declare the control variable inside of the while loop to capture it for each
             ' iteration of this loop with a copy constructor
-            Dim rewrittenBodyBlock As BoundBlock = New BoundBlock(syntaxNode, Nothing, If(node.DeclaredOrInferredLocalOpt IsNot Nothing, ImmutableArray.Create(Of LocalSymbol)(node.DeclaredOrInferredLocalOpt), ImmutableArray(Of LocalSymbol).Empty), rewrittenBodyStatements)
+            Dim rewrittenBodyBlock As New BoundBlock(syntaxNode, Nothing, If(node.DeclaredOrInferredLocalOpt IsNot Nothing, ImmutableArray.Create(Of LocalSymbol)(node.DeclaredOrInferredLocalOpt), ImmutableArray(Of LocalSymbol).Empty), rewrittenBodyStatements)
 
             Dim bodyEpilogue As BoundStatement = New BoundLabelStatement(syntaxNode, node.ContinueLabel)
 

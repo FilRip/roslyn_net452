@@ -124,9 +124,9 @@ namespace Microsoft.CodeAnalysis
 
         public static bool operator ==(Location? left, Location? right)
         {
-            if (object.ReferenceEquals(left, null))
+            if (left is null)
             {
-                return object.ReferenceEquals(right, null);
+                return right is null;
             }
 
             return left.Equals(right);

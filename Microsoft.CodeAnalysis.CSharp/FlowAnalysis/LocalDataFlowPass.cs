@@ -158,8 +158,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // force corresponding slots if do not exist
                 while (!TypeSymbol.Equals(containingType, symbol.ContainingType, TypeCompareKind.ConsiderEverything))
                 {
-                    var restField = containingType.GetMembers(NamedTypeSymbol.ValueTupleRestFieldName).FirstOrDefault() as FieldSymbol;
-                    if (restField is null)
+                    if (containingType.GetMembers(NamedTypeSymbol.ValueTupleRestFieldName).FirstOrDefault() is not FieldSymbol restField)
                     {
                         return -1;
                     }
@@ -196,7 +195,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 case BoundKind.ThisReference:
                 case BoundKind.BaseReference:
-                    return (object)MethodThisParameter != null ? GetOrCreateSlot(MethodThisParameter) : -1;
+                    return MethodThisParameter is object ? GetOrCreateSlot(MethodThisParameter) : -1;
                 case BoundKind.Local:
                     return GetOrCreateSlot(((BoundLocal)node).LocalSymbol);
                 case BoundKind.Parameter:

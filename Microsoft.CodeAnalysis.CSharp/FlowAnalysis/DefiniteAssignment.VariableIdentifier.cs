@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public bool Exists
             {
-                get { return (object)Symbol != null; }
+                get { return Symbol is object; }
             }
 
             public override int GetHashCode()

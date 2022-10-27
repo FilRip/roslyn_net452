@@ -242,7 +242,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             If _nodeStack.Count > 0 Then
                 Dim node = _nodeStack.Pop
                 _currentNode = DirectCast(node, VisualBasicSyntaxNode)
-                _curNodeStart = _curNodeStart + _curNodeLength
+                _curNodeStart += _curNodeLength
                 _curNodeLength = node.FullWidth
 
                 ' move blender preprocessor state forward if possible
@@ -534,7 +534,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Debug.Assert(CanReuseNode(_currentNode), "this node could not have been used.")
 
             ' just move forward
-            _lineBufferOffset = _lineBufferOffset + _curNodeLength
+            _lineBufferOffset += _curNodeLength
 
             ' this will just verify that we do not have any prefetched tokens, including current. 
             ' otherwise advancing line buffer offset could go out of sync with token stream.

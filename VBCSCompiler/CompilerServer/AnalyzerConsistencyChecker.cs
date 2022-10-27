@@ -8,32 +8,32 @@ using Microsoft.CodeAnalysis.CommandLine;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal static class AnalyzerConsistencyChecker
     {
         public static bool Check(
-          string baseDirectory,
-          IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
-          IAnalyzerAssemblyLoader loader,
-          ICompilerServerLogger? logger = null)
+            string baseDirectory,
+            IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
+            IAnalyzerAssemblyLoader loader,
+            ICompilerServerLogger? logger = null)
         {
             return AnalyzerConsistencyChecker.Check(baseDirectory, analyzerReferences, loader, logger, out List<string> _);
         }
 
         public static bool Check(
-          string baseDirectory,
-          IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
-          IAnalyzerAssemblyLoader loader,
-          ICompilerServerLogger? logger,
-          [NotNullWhen(false)] out List<string>? errorMessages)
+            string baseDirectory,
+            IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
+            IAnalyzerAssemblyLoader loader,
+            ICompilerServerLogger? logger,
+            [NotNullWhen(false)] out List<string>? errorMessages)
         {
             try
             {
                 logger?.Log("Begin Analyzer Consistency Check");
-                return AnalyzerConsistencyChecker.CheckCore(baseDirectory, analyzerReferences, loader, logger, out errorMessages);
+                return AnalyzerConsistencyChecker.CheckCore(baseDirectory, analyzerReferences, loader, /*logger, */out errorMessages);
             }
             catch (Exception ex)
             {
@@ -52,11 +52,11 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         private static bool CheckCore(
-          string baseDirectory,
-          IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
-          IAnalyzerAssemblyLoader loader,
-          ICompilerServerLogger? logger,
-          [NotNullWhen(false)] out List<string>? errorMessages)
+            string baseDirectory,
+            IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
+            IAnalyzerAssemblyLoader loader,
+            //ICompilerServerLogger? logger,
+            [NotNullWhen(false)] out List<string>? errorMessages)
         {
             errorMessages = null;
             List<string> stringList = new();

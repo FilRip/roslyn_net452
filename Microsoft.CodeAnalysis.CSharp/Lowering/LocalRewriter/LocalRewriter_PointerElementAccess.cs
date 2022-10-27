@@ -41,24 +41,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BinaryOperatorKind additionKind = BinaryOperatorKind.Addition;
 
-            switch (rewrittenIndex.Type.SpecialType)
+            additionKind |= rewrittenIndex.Type.SpecialType switch
             {
-                case SpecialType.System_Int32:
-                    additionKind |= BinaryOperatorKind.PointerAndIntAddition;
-                    break;
-                case SpecialType.System_UInt32:
-                    additionKind |= BinaryOperatorKind.PointerAndUIntAddition;
-                    break;
-                case SpecialType.System_Int64:
-                    additionKind |= BinaryOperatorKind.PointerAndLongAddition;
-                    break;
-                case SpecialType.System_UInt64:
-                    additionKind |= BinaryOperatorKind.PointerAndULongAddition;
-                    break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(rewrittenIndex.Type.SpecialType);
-            }
-
+                SpecialType.System_Int32 => BinaryOperatorKind.PointerAndIntAddition,
+                SpecialType.System_UInt32 => BinaryOperatorKind.PointerAndUIntAddition,
+                SpecialType.System_Int64 => BinaryOperatorKind.PointerAndLongAddition,
+                SpecialType.System_UInt64 => BinaryOperatorKind.PointerAndULongAddition,
+                _ => throw ExceptionUtilities.UnexpectedValue(rewrittenIndex.Type.SpecialType),
+            };
             if (node.Checked)
             {
                 additionKind |= BinaryOperatorKind.Checked;

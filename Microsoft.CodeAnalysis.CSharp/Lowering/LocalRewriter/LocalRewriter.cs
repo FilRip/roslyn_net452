@@ -159,8 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return node;
             }
 
-            BoundExpression? expr = node as BoundExpression;
-            if (expr != null)
+            if (node is BoundExpression expr)
             {
                 return VisitExpressionImpl(expr);
             }
@@ -759,8 +758,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            BoundAssignmentOperator? assignment = ((BoundExpressionStatement)statement).Expression as BoundAssignmentOperator;
-            if (assignment == null)
+            if (((BoundExpressionStatement)statement).Expression is not BoundAssignmentOperator assignment)
             {
                 return false;
             }

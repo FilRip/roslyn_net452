@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if (!(t2 is FunctionPointerTypeSymbol other))
+            if (t2 is not FunctionPointerTypeSymbol other)
             {
                 return false;
             }

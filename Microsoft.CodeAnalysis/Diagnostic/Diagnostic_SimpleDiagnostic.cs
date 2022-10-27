@@ -153,8 +153,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                var other = obj as SimpleDiagnostic;
-                if (other == null)
+                if (obj is not SimpleDiagnostic other)
                 {
                     return false;
                 }

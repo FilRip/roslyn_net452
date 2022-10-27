@@ -601,7 +601,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public new CSharpCompilationOptions WithAssemblyIdentityComparer(AssemblyIdentityComparer? comparer)
         {
-            comparer = comparer ?? AssemblyIdentityComparer.Default;
+            comparer ??= AssemblyIdentityComparer.Default;
 
             if (ReferenceEquals(comparer, this.AssemblyIdentityComparer))
             {

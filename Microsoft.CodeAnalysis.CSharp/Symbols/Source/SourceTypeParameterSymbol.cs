@@ -123,11 +123,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     mergedAttributesBuilder.Add(syntax.AttributeLists);
                 }
 
-                var sourceMethod = this.ContainingSymbol as SourceOrdinaryMethodSymbol;
-                if ((object)sourceMethod != null && sourceMethod.IsPartial)
+                if (this.ContainingSymbol is SourceOrdinaryMethodSymbol sourceMethod && sourceMethod.IsPartial)
                 {
                     var implementingPart = sourceMethod.SourcePartialImplementation;
-                    if ((object)implementingPart != null)
+                    if (implementingPart is object)
                     {
                         var typeParameter = (SourceTypeParameterSymbolBase)implementingPart.TypeParameters[_ordinal];
                         mergedAttributesBuilder.AddRange(typeParameter.MergedAttributeDeclarationSyntaxLists);
@@ -178,8 +177,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 bool lazyAttributesStored = false;
 
-                var sourceMethod = this.ContainingSymbol as SourceOrdinaryMethodSymbol;
-                if ((object)sourceMethod == null || (object)sourceMethod.SourcePartialDefinition == null)
+                if (this.ContainingSymbol is not SourceOrdinaryMethodSymbol sourceMethod || sourceMethod.SourcePartialDefinition is null)
                 {
                     lazyAttributesStored = LoadAndValidateAttributes(
                         OneOrMany.Create(this.MergedAttributeDeclarationSyntaxLists),
@@ -275,21 +273,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private bool ModifyCompilationForAttributeEmbedding()
         {
-            bool modifyCompilation;
-
-            switch (this.ContainingSymbol)
+            var modifyCompilation = this.ContainingSymbol switch
             {
-                case SourceOrdinaryMethodSymbol _:
-                case SourceMemberContainerTypeSymbol _:
-                    modifyCompilation = true;
-                    break;
-                case LocalFunctionSymbol _:
-                    modifyCompilation = false;
-                    break;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(this.ContainingSymbol);
-            }
-
+                SourceOrdinaryMethodSymbol _ or SourceMemberContainerTypeSymbol _ => true,
+                LocalFunctionSymbol _ => false,
+                _ => throw ExceptionUtilities.UnexpectedValue(this.ContainingSymbol),
+            };
             return modifyCompilation;
         }
 
@@ -431,15 +420,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return false;
             }
 
-            switch (constraints & TypeParameterConstraintKind.AllReferenceTypeKinds)
+            return (constraints & TypeParameterConstraintKind.AllReferenceTypeKinds) switch
             {
-                case TypeParameterConstraintKind.NullableReferenceType:
-                    return true;
-                case TypeParameterConstraintKind.NotNullableReferenceType:
-                    return false;
-            }
-
-            return null;
+                TypeParameterConstraintKind.NullableReferenceType => true,
+                TypeParameterConstraintKind.NotNullableReferenceType => false,
+                _ => null,
+            };
         }
     }
 
@@ -743,7 +729,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public TypeParameterSymbol GetOverriddenTypeParameter(int ordinal)
         {
             var overriddenMethod = this.OverriddenMethod;
-            return ((object)overriddenMethod != null) ? overriddenMethod.TypeParameters[ordinal] : null;
+            return (overriddenMethod is object) ? overriddenMethod.TypeParameters[ordinal] : null;
         }
 
         public TypeMap TypeMap
@@ -753,7 +739,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (_lazyTypeMap == null)
                 {
                     var overriddenMethod = this.OverriddenMethod;
-                    if ((object)overriddenMethod != null)
+                    if (overriddenMethod is object)
                     {
                         var overriddenTypeParameters = overriddenMethod.TypeParameters;
                         var overridingTypeParameters = _overridingMethod.TypeParameters;
@@ -796,7 +782,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             do
             {
                 method = method.OverriddenMethod;
-            } while (((object)method != null) && method.IsOverride);
+            } while ((method is object) && method.IsOverride);
             // OverriddenMethod may be null in error situations.
             return method;
         }
@@ -858,7 +844,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) && typeParameter.HasConstructorConstraint;
+                return (typeParameter is object) && typeParameter.HasConstructorConstraint;
             }
         }
 
@@ -867,7 +853,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) && typeParameter.HasValueTypeConstraint;
+                return (typeParameter is object) && typeParameter.HasValueTypeConstraint;
             }
         }
 
@@ -876,7 +862,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) && (typeParameter.IsValueTypeFromConstraintTypes || CalculateIsValueTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
+                return (typeParameter is object) && (typeParameter.IsValueTypeFromConstraintTypes || CalculateIsValueTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
             }
         }
 
@@ -885,7 +871,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) && typeParameter.HasReferenceTypeConstraint;
+                return (typeParameter is object) && typeParameter.HasReferenceTypeConstraint;
             }
         }
 
@@ -894,7 +880,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) && (typeParameter.IsReferenceTypeFromConstraintTypes || CalculateIsReferenceTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
+                return (typeParameter is object) && (typeParameter.IsReferenceTypeFromConstraintTypes || CalculateIsReferenceTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
             }
         }
 
@@ -903,7 +889,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 TypeParameterSymbol typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) ? typeParameter.ReferenceTypeConstraintIsNullable : false;
+                return (typeParameter is object) ? typeParameter.ReferenceTypeConstraintIsNullable : false;
             }
         }
 
@@ -928,7 +914,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return ((object)typeParameter != null) && typeParameter.HasUnmanagedTypeConstraint;
+                return (typeParameter is object) && typeParameter.HasUnmanagedTypeConstraint;
             }
         }
 
@@ -940,7 +926,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         protected override TypeParameterBounds ResolveBounds(ConsList<TypeParameterSymbol> inProgress, BindingDiagnosticBag diagnostics)
         {
             var typeParameter = this.OverriddenTypeParameter;
-            if ((object)typeParameter == null)
+            if (typeParameter is null)
             {
                 return null;
             }

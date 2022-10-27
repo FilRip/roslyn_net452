@@ -67,22 +67,14 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                switch (_flags & MethodImportAttributes.CharSetMask)
+                return (_flags & MethodImportAttributes.CharSetMask) switch
                 {
-                    case MethodImportAttributes.CharSetAnsi:
-                        return CharSet.Ansi;
-
-                    case MethodImportAttributes.CharSetUnicode:
-                        return CharSet.Unicode;
-
-                    case MethodImportAttributes.CharSetAuto:
-                        return Cci.Constants.CharSet_Auto;
-
-                    case 0:
-                        return Cci.Constants.CharSet_None;
-                }
-
-                throw ExceptionUtilities.UnexpectedValue(_flags);
+                    MethodImportAttributes.CharSetAnsi => CharSet.Ansi,
+                    MethodImportAttributes.CharSetUnicode => CharSet.Unicode,
+                    MethodImportAttributes.CharSetAuto => Cci.Constants.CharSet_Auto,
+                    0 => Cci.Constants.CharSet_None,
+                    _ => throw ExceptionUtilities.UnexpectedValue(_flags),
+                };
             }
         }
 
@@ -104,23 +96,14 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                switch (_flags & MethodImportAttributes.CallingConventionMask)
+                return (_flags & MethodImportAttributes.CallingConventionMask) switch
                 {
-                    default:
-                        return CallingConvention.Winapi;
-
-                    case MethodImportAttributes.CallingConventionCDecl:
-                        return CallingConvention.Cdecl;
-
-                    case MethodImportAttributes.CallingConventionStdCall:
-                        return CallingConvention.StdCall;
-
-                    case MethodImportAttributes.CallingConventionThisCall:
-                        return CallingConvention.ThisCall;
-
-                    case MethodImportAttributes.CallingConventionFastCall:
-                        return Cci.Constants.CallingConvention_FastCall;
-                }
+                    MethodImportAttributes.CallingConventionCDecl => CallingConvention.Cdecl,
+                    MethodImportAttributes.CallingConventionStdCall => CallingConvention.StdCall,
+                    MethodImportAttributes.CallingConventionThisCall => CallingConvention.ThisCall,
+                    MethodImportAttributes.CallingConventionFastCall => Cci.Constants.CallingConvention_FastCall,
+                    _ => CallingConvention.Winapi,
+                };
             }
         }
 
@@ -132,17 +115,12 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                switch (_flags & MethodImportAttributes.BestFitMappingMask)
+                return (_flags & MethodImportAttributes.BestFitMappingMask) switch
                 {
-                    case MethodImportAttributes.BestFitMappingEnable:
-                        return true;
-
-                    case MethodImportAttributes.BestFitMappingDisable:
-                        return false;
-
-                    default:
-                        return null;
-                }
+                    MethodImportAttributes.BestFitMappingEnable => true,
+                    MethodImportAttributes.BestFitMappingDisable => false,
+                    _ => null,
+                };
             }
         }
 
@@ -154,17 +132,12 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                switch (_flags & MethodImportAttributes.ThrowOnUnmappableCharMask)
+                return (_flags & MethodImportAttributes.ThrowOnUnmappableCharMask) switch
                 {
-                    case MethodImportAttributes.ThrowOnUnmappableCharEnable:
-                        return true;
-
-                    case MethodImportAttributes.ThrowOnUnmappableCharDisable:
-                        return false;
-
-                    default:
-                        return null;
-                }
+                    MethodImportAttributes.ThrowOnUnmappableCharEnable => true,
+                    MethodImportAttributes.ThrowOnUnmappableCharDisable => false,
+                    _ => null,
+                };
             }
         }
 
@@ -198,29 +171,15 @@ namespace Microsoft.CodeAnalysis
                 result |= MethodImportAttributes.SetLastError;
             }
 
-            switch (callingConvention)
+            result |= callingConvention switch
             {
-                default: // Dev10: uses default without reporting an error
-                    result |= MethodImportAttributes.CallingConventionWinApi;
-                    break;
-
-                case CallingConvention.Cdecl:
-                    result |= MethodImportAttributes.CallingConventionCDecl;
-                    break;
-
-                case CallingConvention.StdCall:
-                    result |= MethodImportAttributes.CallingConventionStdCall;
-                    break;
-
-                case CallingConvention.ThisCall:
-                    result |= MethodImportAttributes.CallingConventionThisCall;
-                    break;
-
-                case Cci.Constants.CallingConvention_FastCall:
-                    result |= MethodImportAttributes.CallingConventionFastCall;
-                    break;
-            }
-
+                CallingConvention.Cdecl => MethodImportAttributes.CallingConventionCDecl,
+                CallingConvention.StdCall => MethodImportAttributes.CallingConventionStdCall,
+                CallingConvention.ThisCall => MethodImportAttributes.CallingConventionThisCall,
+                Cci.Constants.CallingConvention_FastCall => MethodImportAttributes.CallingConventionFastCall,
+                // Dev10: uses default without reporting an error
+                _ => MethodImportAttributes.CallingConventionWinApi,
+            };
             if (throwOnUnmappable.HasValue)
             {
                 if (throwOnUnmappable.Value)

@@ -372,11 +372,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             internal static DeconstructionSideEffects GetInstance()
             {
-                var result = new DeconstructionSideEffects();
-                result.init = ArrayBuilder<BoundExpression>.GetInstance();
-                result.deconstructions = ArrayBuilder<BoundExpression>.GetInstance();
-                result.conversions = ArrayBuilder<BoundExpression>.GetInstance();
-                result.assignments = ArrayBuilder<BoundExpression>.GetInstance();
+                var result = new DeconstructionSideEffects()
+                {
+                    init = ArrayBuilder<BoundExpression>.GetInstance(),
+                    deconstructions = ArrayBuilder<BoundExpression>.GetInstance(),
+                    conversions = ArrayBuilder<BoundExpression>.GetInstance(),
+                    assignments = ArrayBuilder<BoundExpression>.GetInstance()
+                };
 
                 return result;
             }

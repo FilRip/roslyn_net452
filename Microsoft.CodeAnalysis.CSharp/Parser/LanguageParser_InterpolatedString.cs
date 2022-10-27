@@ -160,27 +160,25 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             using (var tempLexer = new Lexer(Text.SourceText.From(parsedText), this.Options, allowPreprocessorDirectives: false, interpolationFollowedByColon: interpolation.HasColon))
             {
                 // TODO: some of the trivia in the interpolation maybe should be trailing trivia of the openBraceToken
-                using (var tempParser = new LanguageParser(tempLexer, null, null))
+                using var tempParser = new LanguageParser(tempLexer, null, null);
+                tempParser.ParseInterpolationStart(out openBraceToken, out expression, out SyntaxToken commaToken, out ExpressionSyntax alignmentExpression);
+                if (alignmentExpression != null)
                 {
-                    tempParser.ParseInterpolationStart(out openBraceToken, out expression, out SyntaxToken commaToken, out ExpressionSyntax alignmentExpression);
-                    if (alignmentExpression != null)
-                    {
-                        alignment = SyntaxFactory.InterpolationAlignmentClause(commaToken, alignmentExpression);
-                    }
+                    alignment = SyntaxFactory.InterpolationAlignmentClause(commaToken, alignmentExpression);
+                }
 
-                    var extraTrivia = tempParser.CurrentToken.GetLeadingTrivia();
-                    if (interpolation.HasColon)
-                    {
-                        var colonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).TokenWithLeadingTrivia(extraTrivia);
-                        var formatText = Substring(text, interpolation.ColonPosition + 1, interpolation.FormatEndPosition);
-                        var formatString = MakeStringToken(formatText, formatText, isVerbatim, SyntaxKind.InterpolatedStringTextToken);
-                        format = SyntaxFactory.InterpolationFormatClause(colonToken, formatString);
-                    }
-                    else
-                    {
-                        // Move the leading trivia from the insertion's EOF token to the following token.
-                        closeBraceToken = closeBraceToken.TokenWithLeadingTrivia(extraTrivia);
-                    }
+                var extraTrivia = tempParser.CurrentToken.GetLeadingTrivia();
+                if (interpolation.HasColon)
+                {
+                    var colonToken = SyntaxFactory.Token(SyntaxKind.ColonToken).TokenWithLeadingTrivia(extraTrivia);
+                    var formatText = Substring(text, interpolation.ColonPosition + 1, interpolation.FormatEndPosition);
+                    var formatString = MakeStringToken(formatText, formatText, isVerbatim, SyntaxKind.InterpolatedStringTextToken);
+                    format = SyntaxFactory.InterpolationFormatClause(colonToken, formatString);
+                }
+                else
+                {
+                    // Move the leading trivia from the insertion's EOF token to the following token.
+                    closeBraceToken = closeBraceToken.TokenWithLeadingTrivia(extraTrivia);
                 }
             }
 
@@ -199,18 +197,16 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             var prefix = isVerbatim ? "@\"" : "\"";
             var fakeString = prefix + bodyText + "\"";
-            using (var tempLexer = new Lexer(Text.SourceText.From(fakeString), this.Options, allowPreprocessorDirectives: false))
+            using var tempLexer = new Lexer(Text.SourceText.From(fakeString), this.Options, allowPreprocessorDirectives: false);
+            LexerMode mode = LexerMode.Syntax;
+            SyntaxToken token = tempLexer.Lex(ref mode);
+            var result = SyntaxFactory.Literal(null, text, kind, token.ValueText, null);
+            if (token.ContainsDiagnostics)
             {
-                LexerMode mode = LexerMode.Syntax;
-                SyntaxToken token = tempLexer.Lex(ref mode);
-                var result = SyntaxFactory.Literal(null, text, kind, token.ValueText, null);
-                if (token.ContainsDiagnostics)
-                {
-                    result = result.WithDiagnosticsGreen(MoveDiagnostics(token.GetDiagnostics(), -prefix.Length));
-                }
-
-                return result;
+                result = result.WithDiagnosticsGreen(MoveDiagnostics(token.GetDiagnostics(), -prefix.Length));
             }
+
+            return result;
         }
 
         private static DiagnosticInfo[] MoveDiagnostics(DiagnosticInfo[] infos, int offset)

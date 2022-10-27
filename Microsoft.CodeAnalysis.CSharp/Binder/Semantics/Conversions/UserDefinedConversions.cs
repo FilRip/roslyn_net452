@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //   * If S or T are nullable types, let Su and Tu be their underlying types, otherwise let Su and Tu be S and T, respectively. 
             //   * If Su or Tu are type parameters, S0 and T0 are their effective base types, otherwise S0 and T0 are equal to Su and Tu, respectively.
 
-            if ((object)type != null)
+            if (type is object)
             {
                 type = type.StrippedType();
 
@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static void AddTypesParticipatingInUserDefinedConversion(ArrayBuilder<NamedTypeSymbol> result, TypeSymbol type, bool includeBaseTypes, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if ((object)type == null)
+            if (type is null)
             {
                 return;
             }
@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             NamedTypeSymbol t = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
-            while ((object)t != null)
+            while (t is object)
             {
                 if (!excludeExisting || !HasIdentityConversionToAny(t, result))
                 {

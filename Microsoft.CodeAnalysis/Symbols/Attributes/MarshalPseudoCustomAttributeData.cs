@@ -118,8 +118,7 @@ namespace Microsoft.CodeAnalysis
         object Cci.IMarshallingInformation.GetCustomMarshaller(EmitContext context)
         {
             Debug.Assert(_marshalType == Cci.Constants.UnmanagedType_CustomMarshaler);
-            var typeSymbol = _marshalTypeNameOrSymbol as ITypeSymbolInternal;
-            if (typeSymbol != null)
+            if (_marshalTypeNameOrSymbol is ITypeSymbolInternal typeSymbol)
             {
                 return context.Module.Translate(typeSymbol, context.SyntaxNode, context.Diagnostics);
             }

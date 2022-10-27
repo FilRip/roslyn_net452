@@ -429,22 +429,15 @@ namespace Microsoft.CodeAnalysis
 
         private string GetDebuggerDisplay()
         {
-            switch (this.Severity)
+            return this.Severity switch
             {
-                case InternalDiagnosticSeverity.Unknown:
-                    // If we called ToString before the diagnostic was resolved,
-                    // we would risk infinite recursion (e.g. if we were still computing
-                    // member lists).
-                    return "Unresolved diagnostic at " + this.Location;
-
-                case InternalDiagnosticSeverity.Void:
-                    // If we called ToString on a void diagnostic, the MessageProvider
-                    // would complain about the code.
-                    return "Void diagnostic at " + this.Location;
-
-                default:
-                    return ToString();
-            }
+                InternalDiagnosticSeverity.Unknown => "Unresolved diagnostic at " + this.Location,// If we called ToString before the diagnostic was resolved,
+                                                                                                  // we would risk infinite recursion (e.g. if we were still computing
+                                                                                                  // member lists).
+                InternalDiagnosticSeverity.Void => "Void diagnostic at " + this.Location,// If we called ToString on a void diagnostic, the MessageProvider
+                                                                                         // would complain about the code.
+                _ => ToString(),
+            };
         }
 
         /// <summary>
@@ -526,24 +519,16 @@ namespace Microsoft.CodeAnalysis
 
         public Diagnostic? WithReportDiagnostic(ReportDiagnostic reportAction)
         {
-            switch (reportAction)
+            return reportAction switch
             {
-                case ReportDiagnostic.Suppress:
-                    // Suppressed diagnostic.
-                    return null;
-                case ReportDiagnostic.Error:
-                    return this.WithSeverity(DiagnosticSeverity.Error);
-                case ReportDiagnostic.Default:
-                    return this;
-                case ReportDiagnostic.Warn:
-                    return this.WithSeverity(DiagnosticSeverity.Warning);
-                case ReportDiagnostic.Info:
-                    return this.WithSeverity(DiagnosticSeverity.Info);
-                case ReportDiagnostic.Hidden:
-                    return this.WithSeverity(DiagnosticSeverity.Hidden);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(reportAction);
-            }
+                ReportDiagnostic.Suppress => null,// Suppressed diagnostic.
+                ReportDiagnostic.Error => this.WithSeverity(DiagnosticSeverity.Error),
+                ReportDiagnostic.Default => this,
+                ReportDiagnostic.Warn => this.WithSeverity(DiagnosticSeverity.Warning),
+                ReportDiagnostic.Info => this.WithSeverity(DiagnosticSeverity.Info),
+                ReportDiagnostic.Hidden => this.WithSeverity(DiagnosticSeverity.Hidden),
+                _ => throw ExceptionUtilities.UnexpectedValue(reportAction),
+            };
         }
 
         /// <summary>
@@ -561,15 +546,11 @@ namespace Microsoft.CodeAnalysis
         /// <returns>The default compiler warning level for <paramref name="severity"/>.</returns>
         internal static int GetDefaultWarningLevel(DiagnosticSeverity severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case DiagnosticSeverity.Error:
-                    return 0;
-
-                case DiagnosticSeverity.Warning:
-                default:
-                    return 1;
-            }
+                DiagnosticSeverity.Error => 0,
+                _ => 1,
+            };
         }
 
         /// <summary>

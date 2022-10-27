@@ -79,8 +79,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Const GenerateFileNameForDocComment As String = "USE-OUTPUT-NAME"
 
-            Dim diagnostics As List(Of Diagnostic) = New List(Of Diagnostic)()
-            Dim flattenedArgs As List(Of String) = New List(Of String)()
+            Dim diagnostics As New List(Of Diagnostic)()
+            Dim flattenedArgs As New List(Of String)()
             Dim scriptArgs As List(Of String) = If(IsScriptCommandLineParser, New List(Of String)(), Nothing)
 
             ' normalized paths to directories containing response files:

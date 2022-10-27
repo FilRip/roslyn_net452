@@ -289,7 +289,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             var enumType = operand.Type;
-            if ((object)enumType == null)
+            if (enumType is null)
             {
                 return;
             }
@@ -317,9 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static UnaryOperatorSignature? GetPointerOperation(UnaryOperatorKind kind, BoundExpression operand)
         {
-
-            var pointerType = operand.Type as PointerTypeSymbol;
-            if ((object)pointerType == null)
+            if (operand.Type is not PointerTypeSymbol pointerType)
             {
                 return null;
             }
@@ -340,8 +338,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Returns true if there were any applicable candidates.
         private bool GetUserDefinedOperators(UnaryOperatorKind kind, BoundExpression operand, ArrayBuilder<UnaryOperatorAnalysisResult> results, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-
-            if ((object)operand.Type == null)
+            if (operand.Type is null)
             {
                 // If the operand has no type -- because it is a null reference or a lambda or a method group --
                 // there is no way we can determine what type to search for user-defined operators.
@@ -381,18 +378,17 @@ namespace Microsoft.CodeAnalysis.CSharp
             var operators = ArrayBuilder<UnaryOperatorSignature>.GetInstance();
             bool hadApplicableCandidates = false;
 
-            NamedTypeSymbol current = type0 as NamedTypeSymbol;
-            if ((object)current == null)
+            if (type0 is not NamedTypeSymbol current)
             {
                 current = type0.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
             }
 
-            if ((object)current == null && type0.IsTypeParameter())
+            if (current is null && type0.IsTypeParameter())
             {
                 current = ((TypeParameterSymbol)type0).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            for (; (object)current != null; current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (; current is object; current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 operators.Clear();
                 GetUserDefinedUnaryOperatorsFromType(current, kind, name, operators);

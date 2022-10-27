@@ -911,7 +911,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 End If
             Next
 
-            Return If(_parent Is Nothing, True, _parent.WasConstructedForModifiers())
+            Return _parent Is Nothing OrElse _parent.WasConstructedForModifiers()
         End Function
 
     End Class

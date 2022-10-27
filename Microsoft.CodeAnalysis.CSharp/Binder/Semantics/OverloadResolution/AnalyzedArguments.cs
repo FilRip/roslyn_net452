@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             IdentifierNameSyntax syntax = Names[i];
-            return syntax == null ? null : syntax.Identifier.ValueText;
+            return syntax?.Identifier.ValueText;
         }
 
         public ImmutableArray<string> GetNames()
@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var argument = Arguments[i];
 
                     // By-ref dynamic arguments don't make the invocation dynamic.
-                    if ((object)argument.Type != null && argument.Type.IsDynamic() && (!hasRefKinds || RefKinds[i] == Microsoft.CodeAnalysis.RefKind.None))
+                    if (argument.Type is object && argument.Type.IsDynamic() && (!hasRefKinds || RefKinds[i] == Microsoft.CodeAnalysis.RefKind.None))
                     {
                         _lazyHasDynamicArgument = ThreeState.True;
                         return true;

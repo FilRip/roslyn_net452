@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class CachingMetadataReference : PortableExecutableReference
@@ -8,7 +9,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         public new string FilePath { get; }
 
         public CachingMetadataReference(string fullPath, MetadataReferenceProperties properties)
-          : base(properties, fullPath)
+            : base(properties, fullPath)
         {
             this.FilePath = fullPath;
         }
@@ -18,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         protected override Metadata GetMetadataImpl() => s_mdCache.GetMetadata(this.FilePath, this.Properties);
 
         protected override PortableExecutableReference WithPropertiesImpl(
-          MetadataReferenceProperties properties)
+            MetadataReferenceProperties properties)
         {
             return new CachingMetadataReference(this.FilePath, properties);
         }

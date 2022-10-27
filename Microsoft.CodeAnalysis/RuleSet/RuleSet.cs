@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis
         {
             _filePath = filePath;
             _generalDiagnosticOption = generalOption;
-            _specificDiagnosticOptions = specificOptions == null ? ImmutableDictionary<string, ReportDiagnostic>.Empty : specificOptions;
+            _specificDiagnosticOptions = specificOptions ?? ImmutableDictionary<string, ReportDiagnostic>.Empty;
             _includes = includes.NullToEmpty();
         }
 
@@ -228,23 +228,16 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private static bool IsStricterThan(ReportDiagnostic action1, ReportDiagnostic action2)
         {
-            switch (action2)
+            return action2 switch
             {
-                case ReportDiagnostic.Suppress:
-                    return true;
-                case ReportDiagnostic.Default:
-                    return action1 == ReportDiagnostic.Warn || action1 == ReportDiagnostic.Error || action1 == ReportDiagnostic.Info || action1 == ReportDiagnostic.Hidden;
-                case ReportDiagnostic.Hidden:
-                    return action1 == ReportDiagnostic.Warn || action1 == ReportDiagnostic.Error || action1 == ReportDiagnostic.Info;
-                case ReportDiagnostic.Info:
-                    return action1 == ReportDiagnostic.Warn || action1 == ReportDiagnostic.Error;
-                case ReportDiagnostic.Warn:
-                    return action1 == ReportDiagnostic.Error;
-                case ReportDiagnostic.Error:
-                    return false;
-                default:
-                    return false;
-            }
+                ReportDiagnostic.Suppress => true,
+                ReportDiagnostic.Default => action1 == ReportDiagnostic.Warn || action1 == ReportDiagnostic.Error || action1 == ReportDiagnostic.Info || action1 == ReportDiagnostic.Hidden,
+                ReportDiagnostic.Hidden => action1 == ReportDiagnostic.Warn || action1 == ReportDiagnostic.Error || action1 == ReportDiagnostic.Info,
+                ReportDiagnostic.Info => action1 == ReportDiagnostic.Warn || action1 == ReportDiagnostic.Error,
+                ReportDiagnostic.Warn => action1 == ReportDiagnostic.Error,
+                ReportDiagnostic.Error => false,
+                _ => false,
+            };
         }
 
         /// <summary>

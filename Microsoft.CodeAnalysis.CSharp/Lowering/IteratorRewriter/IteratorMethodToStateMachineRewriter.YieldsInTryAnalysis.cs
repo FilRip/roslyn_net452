@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                _seenYield = _seenYield | origSeenYield;
+                _seenYield |= origSeenYield;
                 return null;
             }
 
@@ -129,7 +129,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void CollectLabel(LabelSymbol label)
         {
-            if ((object)label != null)
+            if (label is object)
             {
                 var currentLabels = this.currentLabels;
                 if (currentLabels == null)

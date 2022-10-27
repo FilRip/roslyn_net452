@@ -13,7 +13,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Inherits CommonMessageProvider
         Implements IObjectWritable
 
-        Public Shared ReadOnly Instance As MessageProvider = New MessageProvider()
+        Public Shared ReadOnly Instance As New MessageProvider()
 
         Shared Sub New()
             ObjectBinder.RegisterTypeReader(GetType(MessageProvider), Function(r) Instance)

@@ -159,8 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            var symbol = obj as RangeVariableSymbol;
-            return (object)symbol != null
+            return obj is RangeVariableSymbol symbol
                 && symbol._locations[0].Equals(_locations[0])
                 && _containingSymbol.Equals(symbol.ContainingSymbol, compareKind);
         }

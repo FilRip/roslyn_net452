@@ -249,8 +249,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // Parameters of accessors are always synthesized. (e.g., parameter of indexer accessors).
                 // The non-synthesized accessors are on the property/event itself.
-                MethodSymbol owningMethod = ContainingSymbol as MethodSymbol;
-                return (object)owningMethod != null && owningMethod.IsAccessor();
+                return ContainingSymbol is MethodSymbol owningMethod && owningMethod.IsAccessor();
             }
         }
 

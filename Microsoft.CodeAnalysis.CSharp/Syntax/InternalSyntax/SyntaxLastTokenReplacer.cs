@@ -41,8 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 _count--;
                 if (_count == 0)
                 {
-                    var token = node as SyntaxToken;
-                    if (token != null)
+                    if (node is SyntaxToken token)
                     {
                         _found = true;
                         return _newToken;

@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             get
             {
-                return _currentToken ?? (_currentToken = this.FetchCurrentToken());
+                return _currentToken ??= this.FetchCurrentToken();
             }
         }
 
@@ -709,8 +709,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
             int offset, width;
 
-            SyntaxToken token = node as SyntaxToken;
-            if (token != null && token.ContainsSkippedText)
+            if (node is SyntaxToken token && token.ContainsSkippedText)
             {
                 // This code exists to clean up an anti-pattern:
                 //   1) an undesirable token is parsed,
@@ -837,8 +836,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         protected TNode AddTrailingSkippedSyntax<TNode>(TNode node, GreenNode skippedSyntax) where TNode : CSharpSyntaxNode
         {
-            var token = node as SyntaxToken;
-            if (token != null)
+            if (node is SyntaxToken token)
             {
                 return (TNode)(object)AddSkippedSyntax(token, skippedSyntax, trailing: true);
             }
@@ -867,8 +865,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             int currentOffset = 0;
             foreach (var node in skippedSyntax.EnumerateNodes())
             {
-                SyntaxToken token = node as SyntaxToken;
-                if (token != null)
+                if (node is SyntaxToken token)
                 {
                     builder.Add(token.GetLeadingTrivia());
 

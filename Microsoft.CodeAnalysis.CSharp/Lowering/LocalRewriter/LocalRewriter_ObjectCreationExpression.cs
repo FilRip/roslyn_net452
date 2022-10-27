@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var createInstance = _factory.WellKnownMethod(WellKnownMember.System_Activator__CreateInstance);
             BoundExpression rewrittenObjectCreation;
 
-            if ((object)createInstance != null)
+            if (createInstance is object)
             {
                 rewrittenObjectCreation = _factory.Convert(node.Type, _factory.Call(null, createInstance, callGetTypeFromCLSID));
             }

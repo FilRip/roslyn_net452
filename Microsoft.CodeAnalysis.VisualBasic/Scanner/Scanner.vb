@@ -2436,7 +2436,7 @@ FullWidthRepeat2:
                     If haveAM Then
                         HourValue = HourValue Mod 12
                     ElseIf havePM Then
-                        HourValue = HourValue + 12
+                        HourValue += 12
 
                         If HourValue = 24 Then
                             HourValue = 12

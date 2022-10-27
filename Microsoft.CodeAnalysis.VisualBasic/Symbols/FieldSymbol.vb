@@ -147,7 +147,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 End If
 
                 Dim value = GetConstantValue(ConstantFieldsInProgress.Empty)
-                Return If(value IsNot Nothing, value.Value, Nothing) ' can be null in error scenarios
+                Return value?.Value ' can be null in error scenarios
             End Get
         End Property
 

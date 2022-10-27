@@ -51,16 +51,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case SymbolKind.Method:
                     var method = (MethodSymbol)this;
-                    switch (method.MethodKind)
+                    return method.MethodKind switch
                     {
-                        case MethodKind.Constructor:
-                        case MethodKind.StaticConstructor:
-                            return AttributeTargets.Constructor;
-
-                        default:
-                            return AttributeTargets.Method;
-                    }
-
+                        MethodKind.Constructor or MethodKind.StaticConstructor => AttributeTargets.Constructor,
+                        _ => AttributeTargets.Method,
+                    };
                 case SymbolKind.NamedType:
                     var namedType = (NamedTypeSymbol)this;
                     switch (namedType.TypeKind)
@@ -542,8 +537,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             var earlyBinder = new EarlyWellKnownAttributeBinder(binders[0]);
-            var arguments = new EarlyDecodeWellKnownAttributeArguments<EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation>();
-            arguments.SymbolPart = symbolPart;
+            var arguments = new EarlyDecodeWellKnownAttributeArguments<EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation>()
+            {
+                SymbolPart = symbolPart
+            };
 
             for (int i = 0; i < boundAttributeTypes.Length; i++)
             {
@@ -600,10 +597,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             int totalAttributesCount = boundAttributes.Length;
             HashSet<NamedTypeSymbol> uniqueAttributeTypes = new();
-            var arguments = new DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation>();
-            arguments.Diagnostics = diagnostics;
-            arguments.AttributesCount = totalAttributesCount;
-            arguments.SymbolPart = symbolPart;
+            var arguments = new DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation>()
+            {
+                Diagnostics = diagnostics,
+                AttributesCount = totalAttributesCount,
+                SymbolPart = symbolPart
+            };
 
             for (int i = 0; i < totalAttributesCount; i++)
             {

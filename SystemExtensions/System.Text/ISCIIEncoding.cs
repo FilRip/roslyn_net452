@@ -1,5 +1,7 @@
 using System.Runtime.Serialization;
 
+#pragma warning disable IDE0051
+
 namespace System.Text
 {
     internal class ISCIIEncoding : EncodingNLS, ISerializable
@@ -923,3 +925,4 @@ namespace System.Text
         }
     }
 }
+#pragma warning restore IDE0051

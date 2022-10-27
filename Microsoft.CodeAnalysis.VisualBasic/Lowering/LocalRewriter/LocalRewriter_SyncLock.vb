@@ -123,14 +123,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             ' rewrite the SyncLock body
-            Dim tryBody As BoundBlock = New BoundBlock(syntaxNode,
+            Dim tryBody As New BoundBlock(syntaxNode,
                                                        Nothing,
                                                        ImmutableArray(Of LocalSymbol).Empty,
                                                        tryStatements)
 
             Dim statementInFinally As BoundStatement = GenerateMonitorExit(syntaxNode, boundLockObjectLocal, boundLockTakenLocal)
 
-            Dim finallyBody As BoundBlock = New BoundBlock(syntaxNode,
+            Dim finallyBody As New BoundBlock(syntaxNode,
                                                            Nothing,
                                                            ImmutableArray(Of LocalSymbol).Empty,
                                                            ImmutableArray.Create(Of BoundStatement)(statementInFinally))

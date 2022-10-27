@@ -19,7 +19,7 @@ namespace Microsoft.DiaSymReader
     {
         private static readonly IntPtr s_ignoreIErrorInfo = new(-1);
 
-        internal static T[] NullToEmpty<T>(T[] items) => (items == null) ? EmptyArray<T>.Instance : items;
+        internal static T[] NullToEmpty<T>(T[] items) => items ?? EmptyArray<T>.Instance;
 
         internal static void ThrowExceptionForHR(int hr)
         {

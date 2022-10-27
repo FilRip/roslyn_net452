@@ -59,18 +59,12 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool ShouldImportField(FieldAttributes flags, MetadataImportOptions importOptions)
         {
-            switch (flags & FieldAttributes.FieldAccessMask)
+            return (flags & FieldAttributes.FieldAccessMask) switch
             {
-                case FieldAttributes.Private:
-                case FieldAttributes.PrivateScope:
-                    return importOptions == MetadataImportOptions.All;
-
-                case FieldAttributes.Assembly:
-                    return importOptions >= MetadataImportOptions.Internal;
-
-                default:
-                    return true;
-            }
+                FieldAttributes.Private or FieldAttributes.PrivateScope => importOptions == MetadataImportOptions.All,
+                FieldAttributes.Assembly => importOptions >= MetadataImportOptions.Internal,
+                _ => true,
+            };
         }
 
         /// <summary>

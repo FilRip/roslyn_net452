@@ -28,13 +28,13 @@ namespace Microsoft.CodeAnalysis.VisualBasic.CommandLine
         }
 
         public static int Run(
-          string[] args,
-          string clientDir,
-          string workingDir,
-          string sdkDir,
-          string tempDir,
-          TextWriter textWriter,
-          IAnalyzerAssemblyLoader analyzerLoader)
+            string[] args,
+            string clientDir,
+            string workingDir,
+            string sdkDir,
+            string tempDir,
+            TextWriter textWriter,
+            IAnalyzerAssemblyLoader analyzerLoader)
         {
             return Vbc.Run(args, new BuildPaths(clientDir, workingDir, sdkDir, tempDir), textWriter, analyzerLoader);
         }

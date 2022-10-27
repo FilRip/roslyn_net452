@@ -782,7 +782,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         best = current
                     End If
 
-                    i = i + 1
+                    i += 1
                 End While
 
                 Return best
@@ -2417,7 +2417,7 @@ BreakTheTie:
                                             ' unwrapping nullable, current lost
                                             current.State = CandidateAnalysisResultState.Shadowed
                                             candidates(i) = current
-                                            i = i + 1
+                                            i += 1
                                             GoTo Next_i
                                         End If
                                     End If
@@ -2426,7 +2426,7 @@ BreakTheTie:
                                 ' contender lost
                                 contender.State = CandidateAnalysisResultState.Shadowed
                                 candidates(i + 1) = contender
-                                i = i + 1
+                                i += 1
                                 GoTo Next_i
                             End If
                         End If

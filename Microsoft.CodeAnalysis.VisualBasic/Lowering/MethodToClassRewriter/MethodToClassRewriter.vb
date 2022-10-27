@@ -21,19 +21,19 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <summary>
         ''' For each captured variable, the corresponding field of its frame
         ''' </summary>
-        Protected ReadOnly Proxies As Dictionary(Of Symbol, TProxy) = New Dictionary(Of Symbol, TProxy)()
+        Protected ReadOnly Proxies As New Dictionary(Of Symbol, TProxy)()
 
         ''' <summary>
         ''' A mapping from every local variable to its replacement local variable. Local variables 
         ''' are replaced when their types change due to being inside of a lambda within a generic method.
         ''' </summary>
-        Protected ReadOnly LocalMap As Dictionary(Of LocalSymbol, LocalSymbol) = New Dictionary(Of LocalSymbol, LocalSymbol)()
+        Protected ReadOnly LocalMap As New Dictionary(Of LocalSymbol, LocalSymbol)()
 
         ''' <summary>
         ''' A mapping from every parameter to its replacement parameter. Local variables 
         ''' are replaced when their types change due to being inside of a lambda.
         ''' </summary>
-        Protected ReadOnly ParameterMap As Dictionary(Of ParameterSymbol, ParameterSymbol) = New Dictionary(Of ParameterSymbol, ParameterSymbol)()
+        Protected ReadOnly ParameterMap As New Dictionary(Of ParameterSymbol, ParameterSymbol)()
 
         Protected ReadOnly PlaceholderReplacementMap As New Dictionary(Of BoundValuePlaceholderBase, BoundExpression)
 

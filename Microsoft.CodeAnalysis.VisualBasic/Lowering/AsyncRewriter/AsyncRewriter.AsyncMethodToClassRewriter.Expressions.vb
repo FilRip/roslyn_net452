@@ -503,7 +503,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 _conditionalAccessReceiverPlaceholderReplacementInfo = Nothing
 
                 Dim whenNullOpt As BoundExpression = DirectCast(Me.Visit(node.WhenNullOpt), BoundExpression)
-                Dim whenNullNeedsSpill = If(whenNullOpt IsNot Nothing, NeedsSpill(whenNullOpt), False)
+                Dim whenNullNeedsSpill = whenNullOpt IsNot Nothing AndAlso NeedsSpill(whenNullOpt)
 
                 _conditionalAccessReceiverPlaceholderReplacementInfo = saveConditionalAccessReceiverPlaceholderReplacementInfo
 
@@ -568,7 +568,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 nullCheckTarget = SpillRValue(receiver.MakeRValue(), builder:=builder)
                                 capturedReceiver = nullCheckTarget
                             Else
-                                Dim receiverLocal As LocalSymbol = Nothing
+                                Dim receiverLocal As LocalSymbol
                                 receiverLocal = Me.F.SynthesizedLocal(receiver.Type)
                                 builder.AddLocal(receiverLocal)
 

@@ -71,8 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                PENamedTypeSymbol peNamedType = AdaptedNamedTypeSymbol as PENamedTypeSymbol;
-                if ((object)peNamedType != null)
+                if (AdaptedNamedTypeSymbol is PENamedTypeSymbol peNamedType)
                 {
                     return peNamedType.Handle;
                 }
@@ -112,7 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
 
                 if (AdaptedNamedTypeSymbol.IsDefinition &&
-                    (object)AdaptedNamedTypeSymbol.ContainingType == null)
+                    AdaptedNamedTypeSymbol.ContainingType is null)
                 {
                     return this;
                 }
@@ -126,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             PEModuleBuilder moduleBeingBuilt = (PEModuleBuilder)context.Module;
 
 
-            if ((object)AdaptedNamedTypeSymbol.ContainingType == null &&
+            if (AdaptedNamedTypeSymbol.ContainingType is null &&
                 AdaptedNamedTypeSymbol.IsDefinition &&
                 AdaptedNamedTypeSymbol.ContainingModule == moduleBeingBuilt.SourceModule)
             {
@@ -141,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                if ((object)AdaptedNamedTypeSymbol.ContainingType != null)
+                if (AdaptedNamedTypeSymbol.ContainingType is object)
                 {
                     return this;
                 }
@@ -160,7 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private Cci.INestedTypeDefinition AsNestedTypeDefinitionImpl(PEModuleBuilder moduleBeingBuilt)
         {
 
-            if ((object)AdaptedNamedTypeSymbol.ContainingType != null &&
+            if (AdaptedNamedTypeSymbol.ContainingType is object &&
                 AdaptedNamedTypeSymbol.IsDefinition &&
                 AdaptedNamedTypeSymbol.ContainingModule == moduleBeingBuilt.SourceModule)
             {
@@ -274,7 +273,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 baseType = AdaptedNamedTypeSymbol.ContainingAssembly.GetSpecialType(Microsoft.CodeAnalysis.SpecialType.System_Object);
             }
 
-            return ((object)baseType != null) ? moduleBeingBuilt.Translate(baseType,
+            return (baseType is object) ? moduleBeingBuilt.Translate(baseType,
                                                                    syntaxNodeOpt: (CSharpSyntaxNode)context.SyntaxNode,
                                                                    diagnostics: context.Diagnostics) : null;
         }
@@ -344,8 +343,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         TypeSymbol objectType = AdaptedNamedTypeSymbol.DeclaringCompilation.GetSpecialType(CodeAnalysis.SpecialType.System_Object);
                         foreach (Symbol objectMember in objectType.GetMembers(WellKnownMemberNames.DestructorName))
                         {
-                            MethodSymbol objectMethod = objectMember as MethodSymbol;
-                            if ((object)objectMethod != null && objectMethod.MethodKind == MethodKind.Destructor)
+                            if (objectMember is MethodSymbol objectMethod && objectMethod.MethodKind == MethodKind.Destructor)
                             {
                                 yield return new Microsoft.Cci.MethodImplementation(method.GetCciAdapter(), moduleBeingBuilt.TranslateOverriddenMethodReference(objectMethod, (CSharpSyntaxNode)context.SyntaxNode, context.Diagnostics));
                             }
@@ -364,8 +362,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 foreach (var m in syntheticMethods)
                 {
-                    var method = m.GetInternalSymbol() as MethodSymbol;
-                    if ((object)method != null)
+                    if (m.GetInternalSymbol() is MethodSymbol method)
                     {
 
                         foreach (var implemented in method.ExplicitInterfaceImplementations)

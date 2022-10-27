@@ -4,8 +4,8 @@ using Microsoft.CodeAnalysis.CommandLine;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     [StructLayout(LayoutKind.Sequential)]

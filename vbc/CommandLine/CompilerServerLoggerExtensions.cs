@@ -8,9 +8,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
     internal static class CompilerServerLoggerExtensions
     {
         internal static void Log(
-          this ICompilerServerLogger logger,
-          string format,
-          params object?[] arguments)
+            this ICompilerServerLogger logger,
+            string format,
+            params object?[] arguments)
         {
             if (!logger.IsLogging)
                 return;
@@ -25,9 +25,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static void LogError(
-          this ICompilerServerLogger logger,
-          string format,
-          params object?[] arguments)
+            this ICompilerServerLogger logger,
+            string format,
+            params object?[] arguments)
         {
             if (!logger.IsLogging)
                 return;
@@ -35,9 +35,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
         }
 
         internal static void LogException(
-          this ICompilerServerLogger logger,
-          Exception exception,
-          string reason)
+            this ICompilerServerLogger logger,
+            Exception exception,
+            string reason)
         {
             if (!logger.IsLogging)
                 return;

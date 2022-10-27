@@ -46,13 +46,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 throw new ArgumentOutOfRangeException(nameof(errorCode));
             }
 
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
             ErrorCode = errorCode;
-            Message = message;
+            Message = message ?? throw new ArgumentNullException(nameof(message));
             TypeName = typeNameOpt;
             Exception = exceptionOpt;
         }

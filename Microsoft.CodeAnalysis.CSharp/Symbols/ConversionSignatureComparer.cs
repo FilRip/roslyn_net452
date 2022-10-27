@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if (ReferenceEquals(member1, null) || ReferenceEquals(member2, null))
+            if (member1 is null || member2 is null)
             {
                 return false;
             }
@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public int GetHashCode(SourceUserDefinedConversionSymbol member)
         {
-            if ((object)member == null)
+            if (member is null)
             {
                 return 0;
             }

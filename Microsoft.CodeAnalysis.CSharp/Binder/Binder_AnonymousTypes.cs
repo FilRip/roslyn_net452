@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // build anonymous type field descriptor
                 fieldSyntaxNodes[i] = (nameToken.Kind() == SyntaxKind.IdentifierToken) ? (CSharpSyntaxNode)nameToken.Parent! : fieldInitializer;
                 fields[i] = new AnonymousTypeField(
-                    fieldName == null ? "$" + i.ToString() : fieldName,
+                    fieldName ?? "$" + i.ToString(),
                     fieldSyntaxNodes[i].Location,
                     TypeWithAnnotations.Create(fieldType));
 
@@ -182,20 +182,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return true;
-
-                case SymbolKind.Field:
-                    return !((FieldSymbol)member).IsConst;
-
-                case SymbolKind.NamedType:
-                    //  allow usage of anonymous types in script classes
-                    return ((NamedTypeSymbol)member).IsScriptClass;
-            }
-
-            return false;
+                SymbolKind.Method => true,
+                SymbolKind.Field => !((FieldSymbol)member).IsConst,
+                SymbolKind.NamedType => ((NamedTypeSymbol)member).IsScriptClass,//  allow usage of anonymous types in script classes
+                _ => false,
+            };
         }
 
         /// <summary>

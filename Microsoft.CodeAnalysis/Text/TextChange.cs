@@ -40,13 +40,8 @@ namespace Microsoft.CodeAnalysis.Text
         public TextChange(TextSpan span, string newText)
             : this()
         {
-            if (newText == null)
-            {
-                throw new ArgumentNullException(nameof(newText));
-            }
-
             this.Span = span;
-            this.NewText = newText;
+            this.NewText = newText ?? throw new ArgumentNullException(nameof(newText));
         }
 
         /// <summary>

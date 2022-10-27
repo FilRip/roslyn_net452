@@ -167,7 +167,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // on the assumption that they will be updated appropriately.
                     overriddenOrExplicitlyImplementedMethod = this.OverriddenMethod;
 
-                    if ((object)overriddenOrExplicitlyImplementedMethod != null)
+                    if (overriddenOrExplicitlyImplementedMethod is object)
                     {
                         CustomModifierUtils.CopyMethodCustomModifiers(overriddenOrExplicitlyImplementedMethod, this, out _lazyReturnType,
                                                                       out _lazyRefCustomModifiers,
@@ -181,12 +181,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     _lazyRefCustomModifiers = ImmutableArray.Create(CSharpCustomModifier.CreateRequired(modifierType));
                 }
             }
-            else if ((object)ExplicitInterfaceType != null)
+            else if (ExplicitInterfaceType is object)
             {
                 //do this last so that it can assume the method symbol is constructed (except for ExplicitInterfaceImplementation)
                 overriddenOrExplicitlyImplementedMethod = FindExplicitlyImplementedMethod(diagnostics);
 
-                if ((object)overriddenOrExplicitlyImplementedMethod != null)
+                if (overriddenOrExplicitlyImplementedMethod is object)
                 {
                     _lazyExplicitInterfaceImplementations = ImmutableArray.Create<MethodSymbol>(overriddenOrExplicitlyImplementedMethod);
 

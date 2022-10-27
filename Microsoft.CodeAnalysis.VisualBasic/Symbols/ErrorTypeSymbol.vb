@@ -11,7 +11,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Inherits NamedTypeSymbol
         Implements IErrorTypeSymbol
 
-        Friend Shared ReadOnly UnknownResultType As ErrorTypeSymbol = New ErrorTypeSymbol()
+        Friend Shared ReadOnly UnknownResultType As New ErrorTypeSymbol()
 
         ''' <summary>
         ''' Returns information about the reason that this type is in error.

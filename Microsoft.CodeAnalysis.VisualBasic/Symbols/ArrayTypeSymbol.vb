@@ -376,7 +376,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Friend Overrides Function GetUnificationUseSiteDiagnosticRecursive(owner As Symbol, ByRef checkedTypes As HashSet(Of TypeSymbol)) As DiagnosticInfo
             Return If(Me.ElementType.GetUnificationUseSiteDiagnosticRecursive(owner, checkedTypes),
-                   If(If(BaseTypeNoUseSiteDiagnostics IsNot Nothing, BaseTypeNoUseSiteDiagnostics.GetUnificationUseSiteDiagnosticRecursive(owner, checkedTypes), Nothing),
+                   If(BaseTypeNoUseSiteDiagnostics?.GetUnificationUseSiteDiagnosticRecursive(owner, checkedTypes),
                    If(GetUnificationUseSiteDiagnosticRecursive(Me.InterfacesNoUseSiteDiagnostics, owner, checkedTypes),
                       GetUnificationUseSiteDiagnosticRecursive(Me.CustomModifiers, owner, checkedTypes))))
 

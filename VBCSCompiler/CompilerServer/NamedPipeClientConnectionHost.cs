@@ -8,8 +8,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class NamedPipeClientConnectionHost : IClientConnectionHost
@@ -88,10 +88,10 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         private static async Task ListenCoreAsync(
-          string pipeName,
-          ICompilerServerLogger logger,
-          AsyncQueue<NamedPipeClientConnectionHost.ListenResult> queue,
-          CancellationToken cancellationToken)
+            string pipeName,
+            ICompilerServerLogger logger,
+            AsyncQueue<NamedPipeClientConnectionHost.ListenResult> queue,
+            CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -122,7 +122,6 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                     queue.Enqueue(new NamedPipeClientConnectionHost.ListenResult(exception: ex));
                     pipeStream?.Dispose();
                 }
-                pipeStream = null;
             }
         }
 

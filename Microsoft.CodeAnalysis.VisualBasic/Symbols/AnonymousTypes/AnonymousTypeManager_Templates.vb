@@ -46,8 +46,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 If Me._concurrentTypesCache Is Nothing Then
 
                     Dim previousSubmission As VisualBasicCompilation = Me.Compilation.PreviousSubmission
-                    Dim previousCache = If(previousSubmission Is Nothing, Nothing,
-                                       previousSubmission.AnonymousTypeManager._concurrentTypesCache)
+                    Dim previousCache = previousSubmission?.AnonymousTypeManager._concurrentTypesCache
 
                     Interlocked.CompareExchange(Me._concurrentTypesCache,
                                             If(previousCache Is Nothing,
@@ -64,8 +63,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Get
                 If Me._concurrentDelegatesCache Is Nothing Then
                     Dim previousSubmission As VisualBasicCompilation = Me.Compilation.PreviousSubmission
-                    Dim previousCache = If(previousSubmission Is Nothing, Nothing,
-                                       previousSubmission.AnonymousTypeManager._concurrentDelegatesCache)
+                    Dim previousCache = previousSubmission?.AnonymousTypeManager._concurrentDelegatesCache
 
                     Interlocked.CompareExchange(Me._concurrentDelegatesCache,
                                             If(previousCache Is Nothing,

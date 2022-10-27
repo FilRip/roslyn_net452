@@ -38,14 +38,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
                 return true;
             }
 
-            if (ReferenceEquals(obj, null))
+            if (obj is null)
             {
                 return false;
             }
 
-            PreprocessingSymbol other = obj as PreprocessingSymbol;
 
-            return other != null &&
+            return obj is PreprocessingSymbol other &&
                 this._name.Equals(other._name);
         }
 

@@ -117,8 +117,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
                 else
                 {
-                    node = new Node<SourceFieldSymbolWithSyntaxReference>();
-                    node.DependedOnBy = ImmutableHashSet<SourceFieldSymbolWithSyntaxReference>.Empty;
+                    node = new Node<SourceFieldSymbolWithSyntaxReference>()
+                    {
+                        DependedOnBy = ImmutableHashSet<SourceFieldSymbolWithSyntaxReference>.Empty
+                    };
                 }
 
                 var dependencies = field.GetConstantValueDependencies(earlyDecodingWellKnownAttributes);
@@ -137,8 +139,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     if (!graph.TryGetValue(dependency, out node))
                     {
-                        node = new Node<SourceFieldSymbolWithSyntaxReference>();
-                        node.DependedOnBy = ImmutableHashSet<SourceFieldSymbolWithSyntaxReference>.Empty;
+                        node = new Node<SourceFieldSymbolWithSyntaxReference>()
+                        {
+                            DependedOnBy = ImmutableHashSet<SourceFieldSymbolWithSyntaxReference>.Empty
+                        };
                     }
 
                     node.DependedOnBy = node.DependedOnBy.Add(field);

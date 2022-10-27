@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                     typeToCheck = typeToCheck.ContainingType;
                 }
-                while ((object)typeToCheck != null);
+                while (typeToCheck is object);
 
                 for (int i = argumentIndex; i >= 0; i--)
                 {
@@ -158,8 +158,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         public override TypeSymbol MakeUnboundIfGeneric(PEModuleSymbol moduleSymbol, TypeSymbol type)
         {
-            var namedType = type as NamedTypeSymbol;
-            return ((object)namedType != null && namedType.IsGenericType) ? namedType.AsUnboundGenericType() : type;
+            return (type is NamedTypeSymbol namedType && namedType.IsGenericType) ? namedType.AsUnboundGenericType() : type;
         }
 
         private static TypeWithAnnotations CreateType(TypeSymbol type, ImmutableArray<ModifierInfo<TypeSymbol>> customModifiers)

@@ -49,7 +49,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     new NamedTypeSymbol[(int)SpecialType.Count + 1], null);
             }
 
-            if ((object)_lazySpecialTypes[(int)type] == null)
+            if (_lazySpecialTypes[(int)type] is null)
             {
                 MetadataTypeName emittedFullName = MetadataTypeName.FromFullName(SpecialTypes.GetMetadataName(type), useCLSCompliantNameArityEncoding: true);
                 NamedTypeSymbol corType = new MissingMetadataTypeSymbol.TopLevel(this.moduleSymbol, ref emittedFullName, type);

@@ -156,9 +156,8 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            var other = obj as DiagnosticWithInfo;
 
-            if (other == null || this.GetType() != other.GetType())
+            if (obj is not DiagnosticWithInfo other || this.GetType() != other.GetType())
             {
                 return false;
             }
@@ -171,22 +170,15 @@ namespace Microsoft.CodeAnalysis
 
         private string GetDebuggerDisplay()
         {
-            switch (_info.Severity)
+            return _info.Severity switch
             {
-                case InternalDiagnosticSeverity.Unknown:
-                    // If we called ToString before the diagnostic was resolved,
-                    // we would risk infinite recursion (e.g. if we were still computing
-                    // member lists).
-                    return "Unresolved diagnostic at " + this.Location;
-
-                case InternalDiagnosticSeverity.Void:
-                    // If we called ToString on a void diagnostic, the MessageProvider
-                    // would complain about the code.
-                    return "Void diagnostic at " + this.Location;
-
-                default:
-                    return ToString();
-            }
+                InternalDiagnosticSeverity.Unknown => "Unresolved diagnostic at " + this.Location,// If we called ToString before the diagnostic was resolved,
+                                                                                                  // we would risk infinite recursion (e.g. if we were still computing
+                                                                                                  // member lists).
+                InternalDiagnosticSeverity.Void => "Void diagnostic at " + this.Location,// If we called ToString on a void diagnostic, the MessageProvider
+                                                                                         // would complain about the code.
+                _ => ToString(),
+            };
         }
 
         public override Diagnostic WithLocation(Location location)

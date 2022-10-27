@@ -201,7 +201,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 #If DEBUG Then
             ' NOTE: the logic is heavily relying on the fact that green nodes in 
             ' NOTE: one single tree are not reused, the following code assert this
-            Private ReadOnly _processedNodesWithoutDuplication As HashSet(Of VisualBasicSyntaxNode) = New HashSet(Of VisualBasicSyntaxNode)(ReferenceEqualityComparer.Instance)
+            Private ReadOnly _processedNodesWithoutDuplication As New HashSet(Of VisualBasicSyntaxNode)(ReferenceEqualityComparer.Instance)
 #End If
 
             Public Overrides Function VisitCompilationUnit(node As CompilationUnitSyntax) As VisualBasicSyntaxNode

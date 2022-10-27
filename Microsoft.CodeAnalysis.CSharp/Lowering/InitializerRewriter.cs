@@ -19,9 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         internal static BoundTypeOrInstanceInitializers RewriteConstructor(ImmutableArray<BoundInitializer> boundInitializers, MethodSymbol method)
         {
-
-            var sourceMethod = method as SourceMemberMethodSymbol;
-            var syntax = ((object)sourceMethod != null) ? sourceMethod.SyntaxNode : method.GetNonNullSyntaxNode();
+            var syntax = (method is SourceMemberMethodSymbol sourceMethod) ? sourceMethod.SyntaxNode : method.GetNonNullSyntaxNode();
             return new BoundTypeOrInstanceInitializers(syntax, boundInitializers.SelectAsArray(RewriteInitializersAsStatements));
         }
 
@@ -30,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var boundStatements = ArrayBuilder<BoundStatement>.GetInstance(boundInitializers.Length);
             var submissionResultType = method.ResultType;
-            var hasSubmissionResultType = (object)submissionResultType != null;
+            var hasSubmissionResultType = submissionResultType is object;
             BoundStatement lastStatement = null;
             BoundExpression trailingExpression = null;
 
@@ -47,7 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     lastStatement = ((BoundGlobalStatementInitializer)initializer).Statement;
                     var expression = GetTrailingScriptExpression(lastStatement);
                     if (expression != null &&
-                        (object)expression.Type != null &&
+                        expression.Type is object &&
                         !expression.Type.IsVoidType())
                     {
                         trailingExpression = expression;
@@ -112,15 +110,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static BoundStatement RewriteInitializersAsStatements(BoundInitializer initializer)
         {
-            switch (initializer.Kind)
+            return initializer.Kind switch
             {
-                case BoundKind.FieldEqualsValue:
-                    return RewriteFieldInitializer((BoundFieldEqualsValue)initializer);
-                case BoundKind.GlobalStatementInitializer:
-                    return ((BoundGlobalStatementInitializer)initializer).Statement;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(initializer.Kind);
-            }
+                BoundKind.FieldEqualsValue => RewriteFieldInitializer((BoundFieldEqualsValue)initializer),
+                BoundKind.GlobalStatementInitializer => ((BoundGlobalStatementInitializer)initializer).Statement,
+                _ => throw ExceptionUtilities.UnexpectedValue(initializer.Kind),
+            };
         }
     }
 }

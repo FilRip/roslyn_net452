@@ -168,7 +168,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 ConstantValue constantValue = GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false);
-                return constantValue == null ? null : constantValue.Value; //can be null in error scenarios
+                return constantValue?.Value; //can be null in error scenarios
             }
         }
 

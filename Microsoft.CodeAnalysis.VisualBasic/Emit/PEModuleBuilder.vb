@@ -18,7 +18,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         Inherits PEModuleBuilder(Of VisualBasicCompilation, SourceModuleSymbol, AssemblySymbol, TypeSymbol, NamedTypeSymbol, MethodSymbol, SyntaxNode, NoPia.EmbeddedTypesManager, ModuleCompilationState)
 
         ' Not many methods should end up here.
-        Private ReadOnly _disableJITOptimization As ConcurrentDictionary(Of MethodSymbol, Boolean) = New ConcurrentDictionary(Of MethodSymbol, Boolean)(ReferenceEqualityComparer.Instance)
+        Private ReadOnly _disableJITOptimization As New ConcurrentDictionary(Of MethodSymbol, Boolean)(ReferenceEqualityComparer.Instance)
 
         ' Gives the name of this module (may not reflect the name of the underlying symbol).
         ' See Assembly.MetadataName.

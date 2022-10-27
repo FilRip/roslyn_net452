@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class ServerNamedMutex : IServerMutex, IDisposable

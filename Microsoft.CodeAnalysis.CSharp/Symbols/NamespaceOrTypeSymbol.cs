@@ -202,8 +202,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (var member in GetTypeMembers(name, arity))
             {
-                var memberT = member as SourceNamedTypeSymbol;
-                if ((object?)memberT != null && memberT.TypeKind == typeKind)
+                if (member is SourceNamedTypeSymbol memberT && memberT.TypeKind == typeKind)
                 {
                     if (syntax != null)
                     {
@@ -264,7 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         if (emittedTypeName.InferredArity == named.Arity && named.MangleName)
                         {
-                            if ((object?)namedType != null)
+                            if (namedType is object)
                             {
                                 namedType = null;
                                 break;
@@ -308,7 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 if (!named.MangleName && (forcedArity == -1 || forcedArity == named.Arity))
                 {
-                    if ((object?)namedType != null)
+                    if (namedType is object)
                     {
                         namedType = null;
                         break;
@@ -319,7 +318,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
         Done:
-            if ((object?)namedType == null)
+            if (namedType is null)
             {
                 if (isTopLevel)
                 {
@@ -355,7 +354,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     // there might be multiple types of different arity, prefer a non-generic type:
                     namespaceOrType = symbols.OfMinimalArity();
-                    if ((object)namespaceOrType == null)
+                    if (namespaceOrType is null)
                     {
                         return SpecializedCollections.EmptyEnumerable<NamespaceOrTypeSymbol>();
                     }

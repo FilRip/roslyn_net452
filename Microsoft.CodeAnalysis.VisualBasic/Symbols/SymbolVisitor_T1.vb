@@ -9,7 +9,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
     Friend MustInherit Class VisualBasicSymbolVisitor(Of TResult)
 
         Public Overridable Function Visit(symbol As Symbol) As TResult
+#Disable Warning IDE0031
             Return If(symbol Is Nothing, Nothing, symbol.Accept(Me))
+#Enable Warning IDE0031
         End Function
 
         Public Overridable Function DefaultVisit(symbol As Symbol) As TResult

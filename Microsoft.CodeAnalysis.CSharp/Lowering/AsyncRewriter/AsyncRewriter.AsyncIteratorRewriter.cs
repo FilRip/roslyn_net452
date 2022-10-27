@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 bodyBuilder.Add(F.Assignment(F.InstanceField(stateField), F.Parameter(F.CurrentFunction.Parameters[0]))); // this.state = state;
 
                 var managedThreadId = MakeCurrentThreadId();
-                if (managedThreadId != null && (object)initialThreadIdField != null)
+                if (managedThreadId != null && initialThreadIdField is object)
                 {
                     // this.initialThreadId = {managedThreadId};
                     bodyBuilder.Add(F.Assignment(F.InstanceField(initialThreadIdField), managedThreadId));

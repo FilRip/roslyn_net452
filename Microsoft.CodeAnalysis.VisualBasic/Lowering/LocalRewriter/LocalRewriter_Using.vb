@@ -191,7 +191,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ) As BoundBlock
             Dim syntaxNode = DirectCast(node.Syntax, UsingBlockSyntax)
             Dim resourceType = localSymbol.Type
-            Dim boundResourceLocal As BoundLocal = New BoundLocal(syntaxNode, localSymbol, isLValue:=True, type:=resourceType)
+            Dim boundResourceLocal As New BoundLocal(syntaxNode, localSymbol, isLValue:=True, type:=resourceType)
 
             Dim resourcePlaceholder As BoundRValuePlaceholder = placeholderInfo.Item1
             Dim disposeConversion As BoundExpression = placeholderInfo.Item2

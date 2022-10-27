@@ -28,30 +28,21 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public static ILOpCode GetLeaveOpcode(this ILOpCode opcode)
         {
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Br:
-                    return ILOpCode.Leave;
-
-                case ILOpCode.Br_s:
-                    return ILOpCode.Leave_s;
-            }
-
-            throw ExceptionUtilities.UnexpectedValue(opcode);
+                ILOpCode.Br => ILOpCode.Leave,
+                ILOpCode.Br_s => ILOpCode.Leave_s,
+                _ => throw ExceptionUtilities.UnexpectedValue(opcode),
+            };
         }
 
         public static bool HasVariableStackBehavior(this ILOpCode opcode)
         {
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Call:
-                case ILOpCode.Calli:
-                case ILOpCode.Callvirt:
-                case ILOpCode.Newobj:
-                case ILOpCode.Ret:
-                    return true;
-            }
-            return false;
+                ILOpCode.Call or ILOpCode.Calli or ILOpCode.Callvirt or ILOpCode.Newobj or ILOpCode.Ret => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -65,91 +56,29 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 return true;
             }
 
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Ret:
-                case ILOpCode.Throw:
-                case ILOpCode.Rethrow:
-                case ILOpCode.Endfilter:
-                case ILOpCode.Endfinally:
-                case ILOpCode.Switch:
-                case ILOpCode.Jmp:
-                    return true;
-            }
-            return false;
+                ILOpCode.Ret or ILOpCode.Throw or ILOpCode.Rethrow or ILOpCode.Endfilter or ILOpCode.Endfinally or ILOpCode.Switch or ILOpCode.Jmp => true,
+                _ => false,
+            };
         }
 
         public static bool IsConditionalBranch(this ILOpCode opcode)
         {
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Brtrue:
-                case ILOpCode.Brtrue_s:
-                case ILOpCode.Brfalse:
-                case ILOpCode.Brfalse_s:
-                case ILOpCode.Beq:
-                case ILOpCode.Beq_s:
-                case ILOpCode.Bne_un:
-                case ILOpCode.Bne_un_s:
-                case ILOpCode.Bge:
-                case ILOpCode.Bge_s:
-                case ILOpCode.Bge_un:
-                case ILOpCode.Bge_un_s:
-                case ILOpCode.Bgt:
-                case ILOpCode.Bgt_s:
-                case ILOpCode.Bgt_un:
-                case ILOpCode.Bgt_un_s:
-                case ILOpCode.Ble:
-                case ILOpCode.Ble_s:
-                case ILOpCode.Ble_un:
-                case ILOpCode.Ble_un_s:
-                case ILOpCode.Blt:
-                case ILOpCode.Blt_s:
-                case ILOpCode.Blt_un:
-                case ILOpCode.Blt_un_s:
-                    return true;
-                    // these are not conditional
-
-                    //case ILOpCode.Br:
-                    //case ILOpCode.Br_s:
-                    //case ILOpCode.Leave:
-                    //case ILOpCode.Leave_s:
-
-                    // this is treated specially. It will not use regular single label
-                    //case ILOpCode.Switch
-            }
-
-            return false;
+                ILOpCode.Brtrue or ILOpCode.Brtrue_s or ILOpCode.Brfalse or ILOpCode.Brfalse_s or ILOpCode.Beq or ILOpCode.Beq_s or ILOpCode.Bne_un or ILOpCode.Bne_un_s or ILOpCode.Bge or ILOpCode.Bge_s or ILOpCode.Bge_un or ILOpCode.Bge_un_s or ILOpCode.Bgt or ILOpCode.Bgt_s or ILOpCode.Bgt_un or ILOpCode.Bgt_un_s or ILOpCode.Ble or ILOpCode.Ble_s or ILOpCode.Ble_un or ILOpCode.Ble_un_s or ILOpCode.Blt or ILOpCode.Blt_s or ILOpCode.Blt_un or ILOpCode.Blt_un_s => true,
+                _ => false,
+            };
         }
 
         public static bool IsRelationalBranch(this ILOpCode opcode)
         {
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Beq:
-                case ILOpCode.Beq_s:
-                case ILOpCode.Bne_un:
-                case ILOpCode.Bne_un_s:
-                case ILOpCode.Bge:
-                case ILOpCode.Bge_s:
-                case ILOpCode.Bge_un:
-                case ILOpCode.Bge_un_s:
-                case ILOpCode.Bgt:
-                case ILOpCode.Bgt_s:
-                case ILOpCode.Bgt_un:
-                case ILOpCode.Bgt_un_s:
-                case ILOpCode.Ble:
-                case ILOpCode.Ble_s:
-                case ILOpCode.Ble_un:
-                case ILOpCode.Ble_un_s:
-                case ILOpCode.Blt:
-                case ILOpCode.Blt_s:
-                case ILOpCode.Blt_un:
-                case ILOpCode.Blt_un_s:
-                    return true;
-            }
-
-            return false;
+                ILOpCode.Beq or ILOpCode.Beq_s or ILOpCode.Bne_un or ILOpCode.Bne_un_s or ILOpCode.Bge or ILOpCode.Bge_s or ILOpCode.Bge_un or ILOpCode.Bge_un_s or ILOpCode.Bgt or ILOpCode.Bgt_s or ILOpCode.Bgt_un or ILOpCode.Bgt_un_s or ILOpCode.Ble or ILOpCode.Ble_s or ILOpCode.Ble_un or ILOpCode.Ble_un_s or ILOpCode.Blt or ILOpCode.Blt_s or ILOpCode.Blt_un or ILOpCode.Blt_un_s => true,
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -159,25 +88,11 @@ namespace Microsoft.CodeAnalysis.CodeGen
         {
             //12.4.2.8.1  Most instructions can allow control to fall through after their execution—only unconditional branches,
             //ret, jmp, leave(.s), endfinally, endfault, endfilter, throw, and rethrow do not.
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Br:
-                case ILOpCode.Br_s:
-                case ILOpCode.Ret:
-                case ILOpCode.Jmp:
-                case ILOpCode.Throw:
-                //NOTE: from the codegen view endfilter is a logical  "brfalse <continueHandlerSearch>" 
-                //      endfilter must be used once at the end of the filter and must be lexically followed by the handler
-                //      to which the control returns if filter result was 1.
-                //case ILOpCode.Endfilter:
-                case ILOpCode.Endfinally:
-                case ILOpCode.Leave:
-                case ILOpCode.Leave_s:
-                case ILOpCode.Rethrow:
-                    return false;
-            }
-
-            return true;
+                ILOpCode.Br or ILOpCode.Br_s or ILOpCode.Ret or ILOpCode.Jmp or ILOpCode.Throw or ILOpCode.Endfinally or ILOpCode.Leave or ILOpCode.Leave_s or ILOpCode.Rethrow => false,
+                _ => true,
+            };
         }
 
         public static int NetStackBehavior(this ILOpCode opcode)
@@ -188,549 +103,111 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public static int StackPopCount(this ILOpCode opcode)
         {
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Nop:
-                case ILOpCode.Break:
-                case ILOpCode.Ldarg_0:
-                case ILOpCode.Ldarg_1:
-                case ILOpCode.Ldarg_2:
-                case ILOpCode.Ldarg_3:
-                case ILOpCode.Ldloc_0:
-                case ILOpCode.Ldloc_1:
-                case ILOpCode.Ldloc_2:
-                case ILOpCode.Ldloc_3:
-                    return 0;
-                case ILOpCode.Stloc_0:
-                case ILOpCode.Stloc_1:
-                case ILOpCode.Stloc_2:
-                case ILOpCode.Stloc_3:
-                    return 1;
-                case ILOpCode.Ldarg_s:
-                case ILOpCode.Ldarga_s:
-                    return 0;
-                case ILOpCode.Starg_s:
-                    return 1;
-                case ILOpCode.Ldloc_s:
-                case ILOpCode.Ldloca_s:
-                    return 0;
-                case ILOpCode.Stloc_s:
-                    return 1;
-                case ILOpCode.Ldnull:
-                case ILOpCode.Ldc_i4_m1:
-                case ILOpCode.Ldc_i4_0:
-                case ILOpCode.Ldc_i4_1:
-                case ILOpCode.Ldc_i4_2:
-                case ILOpCode.Ldc_i4_3:
-                case ILOpCode.Ldc_i4_4:
-                case ILOpCode.Ldc_i4_5:
-                case ILOpCode.Ldc_i4_6:
-                case ILOpCode.Ldc_i4_7:
-                case ILOpCode.Ldc_i4_8:
-                case ILOpCode.Ldc_i4_s:
-                case ILOpCode.Ldc_i4:
-                case ILOpCode.Ldc_i8:
-                case ILOpCode.Ldc_r4:
-                case ILOpCode.Ldc_r8:
-                    return 0;
-                case ILOpCode.Dup:
-                case ILOpCode.Pop:
-                    return 1;
-                case ILOpCode.Jmp:
-                    return 0;
-                case ILOpCode.Call:
-                case ILOpCode.Calli:
-                case ILOpCode.Ret:
-                    return -1; // Variable
-                case ILOpCode.Br_s:
-                    return 0;
-                case ILOpCode.Brfalse_s:
-                case ILOpCode.Brtrue_s:
-                    return 1;
-                case ILOpCode.Beq_s:
-                case ILOpCode.Bge_s:
-                case ILOpCode.Bgt_s:
-                case ILOpCode.Ble_s:
-                case ILOpCode.Blt_s:
-                case ILOpCode.Bne_un_s:
-                case ILOpCode.Bge_un_s:
-                case ILOpCode.Bgt_un_s:
-                case ILOpCode.Ble_un_s:
-                case ILOpCode.Blt_un_s:
-                    return 2;
-                case ILOpCode.Br:
-                    return 0;
-                case ILOpCode.Brfalse:
-                case ILOpCode.Brtrue:
-                    return 1;
-                case ILOpCode.Beq:
-                case ILOpCode.Bge:
-                case ILOpCode.Bgt:
-                case ILOpCode.Ble:
-                case ILOpCode.Blt:
-                case ILOpCode.Bne_un:
-                case ILOpCode.Bge_un:
-                case ILOpCode.Bgt_un:
-                case ILOpCode.Ble_un:
-                case ILOpCode.Blt_un:
-                    return 2;
-                case ILOpCode.Switch:
-                case ILOpCode.Ldind_i1:
-                case ILOpCode.Ldind_u1:
-                case ILOpCode.Ldind_i2:
-                case ILOpCode.Ldind_u2:
-                case ILOpCode.Ldind_i4:
-                case ILOpCode.Ldind_u4:
-                case ILOpCode.Ldind_i8:
-                case ILOpCode.Ldind_i:
-                case ILOpCode.Ldind_r4:
-                case ILOpCode.Ldind_r8:
-                case ILOpCode.Ldind_ref:
-                    return 1;
-                case ILOpCode.Stind_ref:
-                case ILOpCode.Stind_i1:
-                case ILOpCode.Stind_i2:
-                case ILOpCode.Stind_i4:
-                case ILOpCode.Stind_i8:
-                case ILOpCode.Stind_r4:
-                case ILOpCode.Stind_r8:
-                case ILOpCode.Add:
-                case ILOpCode.Sub:
-                case ILOpCode.Mul:
-                case ILOpCode.Div:
-                case ILOpCode.Div_un:
-                case ILOpCode.Rem:
-                case ILOpCode.Rem_un:
-                case ILOpCode.And:
-                case ILOpCode.Or:
-                case ILOpCode.Xor:
-                case ILOpCode.Shl:
-                case ILOpCode.Shr:
-                case ILOpCode.Shr_un:
-                    return 2;
-                case ILOpCode.Neg:
-                case ILOpCode.Not:
-                case ILOpCode.Conv_i1:
-                case ILOpCode.Conv_i2:
-                case ILOpCode.Conv_i4:
-                case ILOpCode.Conv_i8:
-                case ILOpCode.Conv_r4:
-                case ILOpCode.Conv_r8:
-                case ILOpCode.Conv_u4:
-                case ILOpCode.Conv_u8:
-                    return 1;
-                case ILOpCode.Callvirt:
-                    return -1; // Variable
-                case ILOpCode.Cpobj:
-                    return 2;
-                case ILOpCode.Ldobj:
-                    return 1;
-                case ILOpCode.Ldstr:
-                    return 0;
-                case ILOpCode.Newobj:
-                    return -1; // Variable
-                case ILOpCode.Castclass:
-                case ILOpCode.Isinst:
-                case ILOpCode.Conv_r_un:
-                case ILOpCode.Unbox:
-                case ILOpCode.Throw:
-                case ILOpCode.Ldfld:
-                case ILOpCode.Ldflda:
-                    return 1;
-                case ILOpCode.Stfld:
-                    return 2;
-                case ILOpCode.Ldsfld:
-                case ILOpCode.Ldsflda:
-                    return 0;
-                case ILOpCode.Stsfld:
-                    return 1;
-                case ILOpCode.Stobj:
-                    return 2;
-                case ILOpCode.Conv_ovf_i1_un:
-                case ILOpCode.Conv_ovf_i2_un:
-                case ILOpCode.Conv_ovf_i4_un:
-                case ILOpCode.Conv_ovf_i8_un:
-                case ILOpCode.Conv_ovf_u1_un:
-                case ILOpCode.Conv_ovf_u2_un:
-                case ILOpCode.Conv_ovf_u4_un:
-                case ILOpCode.Conv_ovf_u8_un:
-                case ILOpCode.Conv_ovf_i_un:
-                case ILOpCode.Conv_ovf_u_un:
-                case ILOpCode.Box:
-                case ILOpCode.Newarr:
-                case ILOpCode.Ldlen:
-                    return 1;
-                case ILOpCode.Ldelema:
-                case ILOpCode.Ldelem_i1:
-                case ILOpCode.Ldelem_u1:
-                case ILOpCode.Ldelem_i2:
-                case ILOpCode.Ldelem_u2:
-                case ILOpCode.Ldelem_i4:
-                case ILOpCode.Ldelem_u4:
-                case ILOpCode.Ldelem_i8:
-                case ILOpCode.Ldelem_i:
-                case ILOpCode.Ldelem_r4:
-                case ILOpCode.Ldelem_r8:
-                case ILOpCode.Ldelem_ref:
-                    return 2;
-                case ILOpCode.Stelem_i:
-                case ILOpCode.Stelem_i1:
-                case ILOpCode.Stelem_i2:
-                case ILOpCode.Stelem_i4:
-                case ILOpCode.Stelem_i8:
-                case ILOpCode.Stelem_r4:
-                case ILOpCode.Stelem_r8:
-                case ILOpCode.Stelem_ref:
-                    return 3;
-                case ILOpCode.Ldelem:
-                    return 2;
-                case ILOpCode.Stelem:
-                    return 3;
-                case ILOpCode.Unbox_any:
-                case ILOpCode.Conv_ovf_i1:
-                case ILOpCode.Conv_ovf_u1:
-                case ILOpCode.Conv_ovf_i2:
-                case ILOpCode.Conv_ovf_u2:
-                case ILOpCode.Conv_ovf_i4:
-                case ILOpCode.Conv_ovf_u4:
-                case ILOpCode.Conv_ovf_i8:
-                case ILOpCode.Conv_ovf_u8:
-                case ILOpCode.Refanyval:
-                case ILOpCode.Ckfinite:
-                case ILOpCode.Mkrefany:
-                    return 1;
-                case ILOpCode.Ldtoken:
-                    return 0;
-                case ILOpCode.Conv_u2:
-                case ILOpCode.Conv_u1:
-                case ILOpCode.Conv_i:
-                case ILOpCode.Conv_ovf_i:
-                case ILOpCode.Conv_ovf_u:
-                    return 1;
-                case ILOpCode.Add_ovf:
-                case ILOpCode.Add_ovf_un:
-                case ILOpCode.Mul_ovf:
-                case ILOpCode.Mul_ovf_un:
-                case ILOpCode.Sub_ovf:
-                case ILOpCode.Sub_ovf_un:
-                    return 2;
-                case ILOpCode.Endfinally:
-                case ILOpCode.Leave:
-                case ILOpCode.Leave_s:
-                    return 0;
-                case ILOpCode.Stind_i:
-                    return 2;
-                case ILOpCode.Conv_u:
-                    return 1;
-                case ILOpCode.Arglist:
-                    return 0;
-                case ILOpCode.Ceq:
-                case ILOpCode.Cgt:
-                case ILOpCode.Cgt_un:
-                case ILOpCode.Clt:
-                case ILOpCode.Clt_un:
-                    return 2;
-                case ILOpCode.Ldftn:
-                    return 0;
-                case ILOpCode.Ldvirtftn:
-                    return 1;
-                case ILOpCode.Ldarg:
-                case ILOpCode.Ldarga:
-                    return 0;
-                case ILOpCode.Starg:
-                    return 1;
-                case ILOpCode.Ldloc:
-                case ILOpCode.Ldloca:
-                    return 0;
-                case ILOpCode.Stloc:
-                case ILOpCode.Localloc:
-                case ILOpCode.Endfilter:
-                    return 1;
-                case ILOpCode.Unaligned:
-                case ILOpCode.Volatile:
-                case ILOpCode.Tail:
-                    return 0;
-                case ILOpCode.Initobj:
-                    return 1;
-                case ILOpCode.Constrained:
-                    return 0;
-                case ILOpCode.Cpblk:
-                case ILOpCode.Initblk:
-                    return 3;
-                case ILOpCode.Rethrow:
-                case ILOpCode.Sizeof:
-                    return 0;
-                case ILOpCode.Refanytype:
-                    return 1;
-                case ILOpCode.Readonly:
-                    return 0;
-            }
-
-            throw ExceptionUtilities.UnexpectedValue(opcode);
+                ILOpCode.Nop or ILOpCode.Break or ILOpCode.Ldarg_0 or ILOpCode.Ldarg_1 or ILOpCode.Ldarg_2 or ILOpCode.Ldarg_3 or ILOpCode.Ldloc_0 or ILOpCode.Ldloc_1 or ILOpCode.Ldloc_2 or ILOpCode.Ldloc_3 => 0,
+                ILOpCode.Stloc_0 or ILOpCode.Stloc_1 or ILOpCode.Stloc_2 or ILOpCode.Stloc_3 => 1,
+                ILOpCode.Ldarg_s or ILOpCode.Ldarga_s => 0,
+                ILOpCode.Starg_s => 1,
+                ILOpCode.Ldloc_s or ILOpCode.Ldloca_s => 0,
+                ILOpCode.Stloc_s => 1,
+                ILOpCode.Ldnull or ILOpCode.Ldc_i4_m1 or ILOpCode.Ldc_i4_0 or ILOpCode.Ldc_i4_1 or ILOpCode.Ldc_i4_2 or ILOpCode.Ldc_i4_3 or ILOpCode.Ldc_i4_4 or ILOpCode.Ldc_i4_5 or ILOpCode.Ldc_i4_6 or ILOpCode.Ldc_i4_7 or ILOpCode.Ldc_i4_8 or ILOpCode.Ldc_i4_s or ILOpCode.Ldc_i4 or ILOpCode.Ldc_i8 or ILOpCode.Ldc_r4 or ILOpCode.Ldc_r8 => 0,
+                ILOpCode.Dup or ILOpCode.Pop => 1,
+                ILOpCode.Jmp => 0,
+                ILOpCode.Call or ILOpCode.Calli or ILOpCode.Ret => -1,// Variable
+                ILOpCode.Br_s => 0,
+                ILOpCode.Brfalse_s or ILOpCode.Brtrue_s => 1,
+                ILOpCode.Beq_s or ILOpCode.Bge_s or ILOpCode.Bgt_s or ILOpCode.Ble_s or ILOpCode.Blt_s or ILOpCode.Bne_un_s or ILOpCode.Bge_un_s or ILOpCode.Bgt_un_s or ILOpCode.Ble_un_s or ILOpCode.Blt_un_s => 2,
+                ILOpCode.Br => 0,
+                ILOpCode.Brfalse or ILOpCode.Brtrue => 1,
+                ILOpCode.Beq or ILOpCode.Bge or ILOpCode.Bgt or ILOpCode.Ble or ILOpCode.Blt or ILOpCode.Bne_un or ILOpCode.Bge_un or ILOpCode.Bgt_un or ILOpCode.Ble_un or ILOpCode.Blt_un => 2,
+                ILOpCode.Switch or ILOpCode.Ldind_i1 or ILOpCode.Ldind_u1 or ILOpCode.Ldind_i2 or ILOpCode.Ldind_u2 or ILOpCode.Ldind_i4 or ILOpCode.Ldind_u4 or ILOpCode.Ldind_i8 or ILOpCode.Ldind_i or ILOpCode.Ldind_r4 or ILOpCode.Ldind_r8 or ILOpCode.Ldind_ref => 1,
+                ILOpCode.Stind_ref or ILOpCode.Stind_i1 or ILOpCode.Stind_i2 or ILOpCode.Stind_i4 or ILOpCode.Stind_i8 or ILOpCode.Stind_r4 or ILOpCode.Stind_r8 or ILOpCode.Add or ILOpCode.Sub or ILOpCode.Mul or ILOpCode.Div or ILOpCode.Div_un or ILOpCode.Rem or ILOpCode.Rem_un or ILOpCode.And or ILOpCode.Or or ILOpCode.Xor or ILOpCode.Shl or ILOpCode.Shr or ILOpCode.Shr_un => 2,
+                ILOpCode.Neg or ILOpCode.Not or ILOpCode.Conv_i1 or ILOpCode.Conv_i2 or ILOpCode.Conv_i4 or ILOpCode.Conv_i8 or ILOpCode.Conv_r4 or ILOpCode.Conv_r8 or ILOpCode.Conv_u4 or ILOpCode.Conv_u8 => 1,
+                ILOpCode.Callvirt => -1,// Variable
+                ILOpCode.Cpobj => 2,
+                ILOpCode.Ldobj => 1,
+                ILOpCode.Ldstr => 0,
+                ILOpCode.Newobj => -1,// Variable
+                ILOpCode.Castclass or ILOpCode.Isinst or ILOpCode.Conv_r_un or ILOpCode.Unbox or ILOpCode.Throw or ILOpCode.Ldfld or ILOpCode.Ldflda => 1,
+                ILOpCode.Stfld => 2,
+                ILOpCode.Ldsfld or ILOpCode.Ldsflda => 0,
+                ILOpCode.Stsfld => 1,
+                ILOpCode.Stobj => 2,
+                ILOpCode.Conv_ovf_i1_un or ILOpCode.Conv_ovf_i2_un or ILOpCode.Conv_ovf_i4_un or ILOpCode.Conv_ovf_i8_un or ILOpCode.Conv_ovf_u1_un or ILOpCode.Conv_ovf_u2_un or ILOpCode.Conv_ovf_u4_un or ILOpCode.Conv_ovf_u8_un or ILOpCode.Conv_ovf_i_un or ILOpCode.Conv_ovf_u_un or ILOpCode.Box or ILOpCode.Newarr or ILOpCode.Ldlen => 1,
+                ILOpCode.Ldelema or ILOpCode.Ldelem_i1 or ILOpCode.Ldelem_u1 or ILOpCode.Ldelem_i2 or ILOpCode.Ldelem_u2 or ILOpCode.Ldelem_i4 or ILOpCode.Ldelem_u4 or ILOpCode.Ldelem_i8 or ILOpCode.Ldelem_i or ILOpCode.Ldelem_r4 or ILOpCode.Ldelem_r8 or ILOpCode.Ldelem_ref => 2,
+                ILOpCode.Stelem_i or ILOpCode.Stelem_i1 or ILOpCode.Stelem_i2 or ILOpCode.Stelem_i4 or ILOpCode.Stelem_i8 or ILOpCode.Stelem_r4 or ILOpCode.Stelem_r8 or ILOpCode.Stelem_ref => 3,
+                ILOpCode.Ldelem => 2,
+                ILOpCode.Stelem => 3,
+                ILOpCode.Unbox_any or ILOpCode.Conv_ovf_i1 or ILOpCode.Conv_ovf_u1 or ILOpCode.Conv_ovf_i2 or ILOpCode.Conv_ovf_u2 or ILOpCode.Conv_ovf_i4 or ILOpCode.Conv_ovf_u4 or ILOpCode.Conv_ovf_i8 or ILOpCode.Conv_ovf_u8 or ILOpCode.Refanyval or ILOpCode.Ckfinite or ILOpCode.Mkrefany => 1,
+                ILOpCode.Ldtoken => 0,
+                ILOpCode.Conv_u2 or ILOpCode.Conv_u1 or ILOpCode.Conv_i or ILOpCode.Conv_ovf_i or ILOpCode.Conv_ovf_u => 1,
+                ILOpCode.Add_ovf or ILOpCode.Add_ovf_un or ILOpCode.Mul_ovf or ILOpCode.Mul_ovf_un or ILOpCode.Sub_ovf or ILOpCode.Sub_ovf_un => 2,
+                ILOpCode.Endfinally or ILOpCode.Leave or ILOpCode.Leave_s => 0,
+                ILOpCode.Stind_i => 2,
+                ILOpCode.Conv_u => 1,
+                ILOpCode.Arglist => 0,
+                ILOpCode.Ceq or ILOpCode.Cgt or ILOpCode.Cgt_un or ILOpCode.Clt or ILOpCode.Clt_un => 2,
+                ILOpCode.Ldftn => 0,
+                ILOpCode.Ldvirtftn => 1,
+                ILOpCode.Ldarg or ILOpCode.Ldarga => 0,
+                ILOpCode.Starg => 1,
+                ILOpCode.Ldloc or ILOpCode.Ldloca => 0,
+                ILOpCode.Stloc or ILOpCode.Localloc or ILOpCode.Endfilter => 1,
+                ILOpCode.Unaligned or ILOpCode.Volatile or ILOpCode.Tail => 0,
+                ILOpCode.Initobj => 1,
+                ILOpCode.Constrained => 0,
+                ILOpCode.Cpblk or ILOpCode.Initblk => 3,
+                ILOpCode.Rethrow or ILOpCode.Sizeof => 0,
+                ILOpCode.Refanytype => 1,
+                ILOpCode.Readonly => 0,
+                _ => throw ExceptionUtilities.UnexpectedValue(opcode),
+            };
         }
 
         public static int StackPushCount(this ILOpCode opcode)
         {
-            switch (opcode)
+            return opcode switch
             {
-                case ILOpCode.Nop:
-                case ILOpCode.Break:
-                    return 0;
-                case ILOpCode.Ldarg_0:
-                case ILOpCode.Ldarg_1:
-                case ILOpCode.Ldarg_2:
-                case ILOpCode.Ldarg_3:
-                case ILOpCode.Ldloc_0:
-                case ILOpCode.Ldloc_1:
-                case ILOpCode.Ldloc_2:
-                case ILOpCode.Ldloc_3:
-                    return 1;
-                case ILOpCode.Stloc_0:
-                case ILOpCode.Stloc_1:
-                case ILOpCode.Stloc_2:
-                case ILOpCode.Stloc_3:
-                    return 0;
-                case ILOpCode.Ldarg_s:
-                case ILOpCode.Ldarga_s:
-                    return 1;
-                case ILOpCode.Starg_s:
-                    return 0;
-                case ILOpCode.Ldloc_s:
-                case ILOpCode.Ldloca_s:
-                    return 1;
-                case ILOpCode.Stloc_s:
-                    return 0;
-                case ILOpCode.Ldnull:
-                case ILOpCode.Ldc_i4_m1:
-                case ILOpCode.Ldc_i4_0:
-                case ILOpCode.Ldc_i4_1:
-                case ILOpCode.Ldc_i4_2:
-                case ILOpCode.Ldc_i4_3:
-                case ILOpCode.Ldc_i4_4:
-                case ILOpCode.Ldc_i4_5:
-                case ILOpCode.Ldc_i4_6:
-                case ILOpCode.Ldc_i4_7:
-                case ILOpCode.Ldc_i4_8:
-                case ILOpCode.Ldc_i4_s:
-                case ILOpCode.Ldc_i4:
-                case ILOpCode.Ldc_i8:
-                case ILOpCode.Ldc_r4:
-                case ILOpCode.Ldc_r8:
-                    return 1;
-                case ILOpCode.Dup:
-                    return 2;
-                case ILOpCode.Pop:
-                case ILOpCode.Jmp:
-                    return 0;
-                case ILOpCode.Call:
-                case ILOpCode.Calli:
-                    return -1; // Variable
-                case ILOpCode.Ret:
-                case ILOpCode.Br_s:
-                case ILOpCode.Brfalse_s:
-                case ILOpCode.Brtrue_s:
-                case ILOpCode.Beq_s:
-                case ILOpCode.Bge_s:
-                case ILOpCode.Bgt_s:
-                case ILOpCode.Ble_s:
-                case ILOpCode.Blt_s:
-                case ILOpCode.Bne_un_s:
-                case ILOpCode.Bge_un_s:
-                case ILOpCode.Bgt_un_s:
-                case ILOpCode.Ble_un_s:
-                case ILOpCode.Blt_un_s:
-                case ILOpCode.Br:
-                case ILOpCode.Brfalse:
-                case ILOpCode.Brtrue:
-                case ILOpCode.Beq:
-                case ILOpCode.Bge:
-                case ILOpCode.Bgt:
-                case ILOpCode.Ble:
-                case ILOpCode.Blt:
-                case ILOpCode.Bne_un:
-                case ILOpCode.Bge_un:
-                case ILOpCode.Bgt_un:
-                case ILOpCode.Ble_un:
-                case ILOpCode.Blt_un:
-                case ILOpCode.Switch:
-                    return 0;
-                case ILOpCode.Ldind_i1:
-                case ILOpCode.Ldind_u1:
-                case ILOpCode.Ldind_i2:
-                case ILOpCode.Ldind_u2:
-                case ILOpCode.Ldind_i4:
-                case ILOpCode.Ldind_u4:
-                case ILOpCode.Ldind_i8:
-                case ILOpCode.Ldind_i:
-                case ILOpCode.Ldind_r4:
-                case ILOpCode.Ldind_r8:
-                case ILOpCode.Ldind_ref:
-                    return 1;
-                case ILOpCode.Stind_ref:
-                case ILOpCode.Stind_i1:
-                case ILOpCode.Stind_i2:
-                case ILOpCode.Stind_i4:
-                case ILOpCode.Stind_i8:
-                case ILOpCode.Stind_r4:
-                case ILOpCode.Stind_r8:
-                    return 0;
-                case ILOpCode.Add:
-                case ILOpCode.Sub:
-                case ILOpCode.Mul:
-                case ILOpCode.Div:
-                case ILOpCode.Div_un:
-                case ILOpCode.Rem:
-                case ILOpCode.Rem_un:
-                case ILOpCode.And:
-                case ILOpCode.Or:
-                case ILOpCode.Xor:
-                case ILOpCode.Shl:
-                case ILOpCode.Shr:
-                case ILOpCode.Shr_un:
-                case ILOpCode.Neg:
-                case ILOpCode.Not:
-                case ILOpCode.Conv_i1:
-                case ILOpCode.Conv_i2:
-                case ILOpCode.Conv_i4:
-                case ILOpCode.Conv_i8:
-                case ILOpCode.Conv_r4:
-                case ILOpCode.Conv_r8:
-                case ILOpCode.Conv_u4:
-                case ILOpCode.Conv_u8:
-                    return 1;
-                case ILOpCode.Callvirt:
-                    return -1; // Variable
-                case ILOpCode.Cpobj:
-                    return 0;
-                case ILOpCode.Ldobj:
-                case ILOpCode.Ldstr:
-                case ILOpCode.Newobj:
-                case ILOpCode.Castclass:
-                case ILOpCode.Isinst:
-                case ILOpCode.Conv_r_un:
-                case ILOpCode.Unbox:
-                    return 1;
-                case ILOpCode.Throw:
-                    return 0;
-                case ILOpCode.Ldfld:
-                case ILOpCode.Ldflda:
-                    return 1;
-                case ILOpCode.Stfld:
-                    return 0;
-                case ILOpCode.Ldsfld:
-                case ILOpCode.Ldsflda:
-                    return 1;
-                case ILOpCode.Stsfld:
-                case ILOpCode.Stobj:
-                    return 0;
-                case ILOpCode.Conv_ovf_i1_un:
-                case ILOpCode.Conv_ovf_i2_un:
-                case ILOpCode.Conv_ovf_i4_un:
-                case ILOpCode.Conv_ovf_i8_un:
-                case ILOpCode.Conv_ovf_u1_un:
-                case ILOpCode.Conv_ovf_u2_un:
-                case ILOpCode.Conv_ovf_u4_un:
-                case ILOpCode.Conv_ovf_u8_un:
-                case ILOpCode.Conv_ovf_i_un:
-                case ILOpCode.Conv_ovf_u_un:
-                case ILOpCode.Box:
-                case ILOpCode.Newarr:
-                case ILOpCode.Ldlen:
-                case ILOpCode.Ldelema:
-                case ILOpCode.Ldelem_i1:
-                case ILOpCode.Ldelem_u1:
-                case ILOpCode.Ldelem_i2:
-                case ILOpCode.Ldelem_u2:
-                case ILOpCode.Ldelem_i4:
-                case ILOpCode.Ldelem_u4:
-                case ILOpCode.Ldelem_i8:
-                case ILOpCode.Ldelem_i:
-                case ILOpCode.Ldelem_r4:
-                case ILOpCode.Ldelem_r8:
-                case ILOpCode.Ldelem_ref:
-                    return 1;
-                case ILOpCode.Stelem_i:
-                case ILOpCode.Stelem_i1:
-                case ILOpCode.Stelem_i2:
-                case ILOpCode.Stelem_i4:
-                case ILOpCode.Stelem_i8:
-                case ILOpCode.Stelem_r4:
-                case ILOpCode.Stelem_r8:
-                case ILOpCode.Stelem_ref:
-                    return 0;
-                case ILOpCode.Ldelem:
-                    return 1;
-                case ILOpCode.Stelem:
-                    return 0;
-                case ILOpCode.Unbox_any:
-                case ILOpCode.Conv_ovf_i1:
-                case ILOpCode.Conv_ovf_u1:
-                case ILOpCode.Conv_ovf_i2:
-                case ILOpCode.Conv_ovf_u2:
-                case ILOpCode.Conv_ovf_i4:
-                case ILOpCode.Conv_ovf_u4:
-                case ILOpCode.Conv_ovf_i8:
-                case ILOpCode.Conv_ovf_u8:
-                case ILOpCode.Refanyval:
-                case ILOpCode.Ckfinite:
-                case ILOpCode.Mkrefany:
-                case ILOpCode.Ldtoken:
-                case ILOpCode.Conv_u2:
-                case ILOpCode.Conv_u1:
-                case ILOpCode.Conv_i:
-                case ILOpCode.Conv_ovf_i:
-                case ILOpCode.Conv_ovf_u:
-                case ILOpCode.Add_ovf:
-                case ILOpCode.Add_ovf_un:
-                case ILOpCode.Mul_ovf:
-                case ILOpCode.Mul_ovf_un:
-                case ILOpCode.Sub_ovf:
-                case ILOpCode.Sub_ovf_un:
-                    return 1;
-                case ILOpCode.Endfinally:
-                case ILOpCode.Leave:
-                case ILOpCode.Leave_s:
-                case ILOpCode.Stind_i:
-                    return 0;
-                case ILOpCode.Conv_u:
-                case ILOpCode.Arglist:
-                case ILOpCode.Ceq:
-                case ILOpCode.Cgt:
-                case ILOpCode.Cgt_un:
-                case ILOpCode.Clt:
-                case ILOpCode.Clt_un:
-                case ILOpCode.Ldftn:
-                case ILOpCode.Ldvirtftn:
-                case ILOpCode.Ldarg:
-                case ILOpCode.Ldarga:
-                    return 1;
-                case ILOpCode.Starg:
-                    return 0;
-                case ILOpCode.Ldloc:
-                case ILOpCode.Ldloca:
-                    return 1;
-                case ILOpCode.Stloc:
-                    return 0;
-                case ILOpCode.Localloc:
-                    return 1;
-                case ILOpCode.Endfilter:
-                case ILOpCode.Unaligned:
-                case ILOpCode.Volatile:
-                case ILOpCode.Tail:
-                case ILOpCode.Initobj:
-                case ILOpCode.Constrained:
-                case ILOpCode.Cpblk:
-                case ILOpCode.Initblk:
-                case ILOpCode.Rethrow:
-                    return 0;
-                case ILOpCode.Sizeof:
-                case ILOpCode.Refanytype:
-                    return 1;
-                case ILOpCode.Readonly:
-                    return 0;
-            }
-
-            throw ExceptionUtilities.UnexpectedValue(opcode);
+                ILOpCode.Nop or ILOpCode.Break => 0,
+                ILOpCode.Ldarg_0 or ILOpCode.Ldarg_1 or ILOpCode.Ldarg_2 or ILOpCode.Ldarg_3 or ILOpCode.Ldloc_0 or ILOpCode.Ldloc_1 or ILOpCode.Ldloc_2 or ILOpCode.Ldloc_3 => 1,
+                ILOpCode.Stloc_0 or ILOpCode.Stloc_1 or ILOpCode.Stloc_2 or ILOpCode.Stloc_3 => 0,
+                ILOpCode.Ldarg_s or ILOpCode.Ldarga_s => 1,
+                ILOpCode.Starg_s => 0,
+                ILOpCode.Ldloc_s or ILOpCode.Ldloca_s => 1,
+                ILOpCode.Stloc_s => 0,
+                ILOpCode.Ldnull or ILOpCode.Ldc_i4_m1 or ILOpCode.Ldc_i4_0 or ILOpCode.Ldc_i4_1 or ILOpCode.Ldc_i4_2 or ILOpCode.Ldc_i4_3 or ILOpCode.Ldc_i4_4 or ILOpCode.Ldc_i4_5 or ILOpCode.Ldc_i4_6 or ILOpCode.Ldc_i4_7 or ILOpCode.Ldc_i4_8 or ILOpCode.Ldc_i4_s or ILOpCode.Ldc_i4 or ILOpCode.Ldc_i8 or ILOpCode.Ldc_r4 or ILOpCode.Ldc_r8 => 1,
+                ILOpCode.Dup => 2,
+                ILOpCode.Pop or ILOpCode.Jmp => 0,
+                ILOpCode.Call or ILOpCode.Calli => -1,// Variable
+                ILOpCode.Ret or ILOpCode.Br_s or ILOpCode.Brfalse_s or ILOpCode.Brtrue_s or ILOpCode.Beq_s or ILOpCode.Bge_s or ILOpCode.Bgt_s or ILOpCode.Ble_s or ILOpCode.Blt_s or ILOpCode.Bne_un_s or ILOpCode.Bge_un_s or ILOpCode.Bgt_un_s or ILOpCode.Ble_un_s or ILOpCode.Blt_un_s or ILOpCode.Br or ILOpCode.Brfalse or ILOpCode.Brtrue or ILOpCode.Beq or ILOpCode.Bge or ILOpCode.Bgt or ILOpCode.Ble or ILOpCode.Blt or ILOpCode.Bne_un or ILOpCode.Bge_un or ILOpCode.Bgt_un or ILOpCode.Ble_un or ILOpCode.Blt_un or ILOpCode.Switch => 0,
+                ILOpCode.Ldind_i1 or ILOpCode.Ldind_u1 or ILOpCode.Ldind_i2 or ILOpCode.Ldind_u2 or ILOpCode.Ldind_i4 or ILOpCode.Ldind_u4 or ILOpCode.Ldind_i8 or ILOpCode.Ldind_i or ILOpCode.Ldind_r4 or ILOpCode.Ldind_r8 or ILOpCode.Ldind_ref => 1,
+                ILOpCode.Stind_ref or ILOpCode.Stind_i1 or ILOpCode.Stind_i2 or ILOpCode.Stind_i4 or ILOpCode.Stind_i8 or ILOpCode.Stind_r4 or ILOpCode.Stind_r8 => 0,
+                ILOpCode.Add or ILOpCode.Sub or ILOpCode.Mul or ILOpCode.Div or ILOpCode.Div_un or ILOpCode.Rem or ILOpCode.Rem_un or ILOpCode.And or ILOpCode.Or or ILOpCode.Xor or ILOpCode.Shl or ILOpCode.Shr or ILOpCode.Shr_un or ILOpCode.Neg or ILOpCode.Not or ILOpCode.Conv_i1 or ILOpCode.Conv_i2 or ILOpCode.Conv_i4 or ILOpCode.Conv_i8 or ILOpCode.Conv_r4 or ILOpCode.Conv_r8 or ILOpCode.Conv_u4 or ILOpCode.Conv_u8 => 1,
+                ILOpCode.Callvirt => -1,// Variable
+                ILOpCode.Cpobj => 0,
+                ILOpCode.Ldobj or ILOpCode.Ldstr or ILOpCode.Newobj or ILOpCode.Castclass or ILOpCode.Isinst or ILOpCode.Conv_r_un or ILOpCode.Unbox => 1,
+                ILOpCode.Throw => 0,
+                ILOpCode.Ldfld or ILOpCode.Ldflda => 1,
+                ILOpCode.Stfld => 0,
+                ILOpCode.Ldsfld or ILOpCode.Ldsflda => 1,
+                ILOpCode.Stsfld or ILOpCode.Stobj => 0,
+                ILOpCode.Conv_ovf_i1_un or ILOpCode.Conv_ovf_i2_un or ILOpCode.Conv_ovf_i4_un or ILOpCode.Conv_ovf_i8_un or ILOpCode.Conv_ovf_u1_un or ILOpCode.Conv_ovf_u2_un or ILOpCode.Conv_ovf_u4_un or ILOpCode.Conv_ovf_u8_un or ILOpCode.Conv_ovf_i_un or ILOpCode.Conv_ovf_u_un or ILOpCode.Box or ILOpCode.Newarr or ILOpCode.Ldlen or ILOpCode.Ldelema or ILOpCode.Ldelem_i1 or ILOpCode.Ldelem_u1 or ILOpCode.Ldelem_i2 or ILOpCode.Ldelem_u2 or ILOpCode.Ldelem_i4 or ILOpCode.Ldelem_u4 or ILOpCode.Ldelem_i8 or ILOpCode.Ldelem_i or ILOpCode.Ldelem_r4 or ILOpCode.Ldelem_r8 or ILOpCode.Ldelem_ref => 1,
+                ILOpCode.Stelem_i or ILOpCode.Stelem_i1 or ILOpCode.Stelem_i2 or ILOpCode.Stelem_i4 or ILOpCode.Stelem_i8 or ILOpCode.Stelem_r4 or ILOpCode.Stelem_r8 or ILOpCode.Stelem_ref => 0,
+                ILOpCode.Ldelem => 1,
+                ILOpCode.Stelem => 0,
+                ILOpCode.Unbox_any or ILOpCode.Conv_ovf_i1 or ILOpCode.Conv_ovf_u1 or ILOpCode.Conv_ovf_i2 or ILOpCode.Conv_ovf_u2 or ILOpCode.Conv_ovf_i4 or ILOpCode.Conv_ovf_u4 or ILOpCode.Conv_ovf_i8 or ILOpCode.Conv_ovf_u8 or ILOpCode.Refanyval or ILOpCode.Ckfinite or ILOpCode.Mkrefany or ILOpCode.Ldtoken or ILOpCode.Conv_u2 or ILOpCode.Conv_u1 or ILOpCode.Conv_i or ILOpCode.Conv_ovf_i or ILOpCode.Conv_ovf_u or ILOpCode.Add_ovf or ILOpCode.Add_ovf_un or ILOpCode.Mul_ovf or ILOpCode.Mul_ovf_un or ILOpCode.Sub_ovf or ILOpCode.Sub_ovf_un => 1,
+                ILOpCode.Endfinally or ILOpCode.Leave or ILOpCode.Leave_s or ILOpCode.Stind_i => 0,
+                ILOpCode.Conv_u or ILOpCode.Arglist or ILOpCode.Ceq or ILOpCode.Cgt or ILOpCode.Cgt_un or ILOpCode.Clt or ILOpCode.Clt_un or ILOpCode.Ldftn or ILOpCode.Ldvirtftn or ILOpCode.Ldarg or ILOpCode.Ldarga => 1,
+                ILOpCode.Starg => 0,
+                ILOpCode.Ldloc or ILOpCode.Ldloca => 1,
+                ILOpCode.Stloc => 0,
+                ILOpCode.Localloc => 1,
+                ILOpCode.Endfilter or ILOpCode.Unaligned or ILOpCode.Volatile or ILOpCode.Tail or ILOpCode.Initobj or ILOpCode.Constrained or ILOpCode.Cpblk or ILOpCode.Initblk or ILOpCode.Rethrow => 0,
+                ILOpCode.Sizeof or ILOpCode.Refanytype => 1,
+                ILOpCode.Readonly => 0,
+                _ => throw ExceptionUtilities.UnexpectedValue(opcode),
+            };
         }
     }
 }

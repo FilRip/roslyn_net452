@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var useSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.DiscardedDependencies;
 
             method = InferExtensionMethodTypeArguments(method, receiverType, compilation, ref useSiteInfo);
-            if ((object)method == null)
+            if (method is null)
             {
                 return null;
             }
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override TypeSymbol GetTypeInferredDuringReduction(TypeParameterSymbol reducedFromTypeParameter)
         {
-            if ((object)reducedFromTypeParameter == null)
+            if (reducedFromTypeParameter is null)
             {
                 throw new System.ArgumentNullException();
             }
@@ -565,8 +565,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             if ((object)this == obj) return true;
 
-            ReducedExtensionMethodSymbol other = obj as ReducedExtensionMethodSymbol;
-            return (object)other != null && _reducedFrom.Equals(other._reducedFrom, compareKind);
+            return obj is ReducedExtensionMethodSymbol other && _reducedFrom.Equals(other._reducedFrom, compareKind);
         }
 
         public override int GetHashCode()
@@ -619,8 +618,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // define it on the base type because most can simply use
                 // ReferenceEquals.
 
-                var other = obj as ReducedExtensionMethodParameterSymbol;
-                return (object)other != null &&
+                return obj is ReducedExtensionMethodParameterSymbol other &&
                     this.Ordinal == other.Ordinal &&
                     this.ContainingSymbol.Equals(other.ContainingSymbol, compareKind);
             }

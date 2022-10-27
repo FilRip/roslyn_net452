@@ -198,18 +198,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 throw new ArgumentNullException(nameof(text));
             }
 
-            switch (kind)
+            return kind switch
             {
-                case SyntaxKind.DisabledTextTrivia:
-                case SyntaxKind.DocumentationCommentExteriorTrivia:
-                case SyntaxKind.EndOfLineTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.WhitespaceTrivia:
-                    return new SyntaxTrivia(default, new Syntax.InternalSyntax.SyntaxTrivia(kind, text, null, null), 0, 0);
-                default:
-                    throw new ArgumentException("kind");
-            }
+                SyntaxKind.DisabledTextTrivia or SyntaxKind.DocumentationCommentExteriorTrivia or SyntaxKind.EndOfLineTrivia or SyntaxKind.MultiLineCommentTrivia or SyntaxKind.SingleLineCommentTrivia or SyntaxKind.WhitespaceTrivia => new SyntaxTrivia(default, new Syntax.InternalSyntax.SyntaxTrivia(kind, text, null, null), 0, 0),
+                _ => throw new ArgumentException("kind"),
+            };
         }
 
         /// <summary>
@@ -1368,35 +1361,33 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return default;
             }
 
-            using (var enumerator = nodes.GetEnumerator())
+            using var enumerator = nodes.GetEnumerator();
+            if (!enumerator.MoveNext())
             {
-                if (!enumerator.MoveNext())
-                {
-                    return default;
-                }
-
-                var firstNode = enumerator.Current;
-
-                if (!enumerator.MoveNext())
-                {
-                    return SingletonSeparatedList<TNode>(firstNode);
-                }
-
-                var builder = new SeparatedSyntaxListBuilder<TNode>(collection != null ? collection.Count : 3);
-
-                builder.Add(firstNode);
-
-                var commaToken = Token(SyntaxKind.CommaToken);
-
-                do
-                {
-                    builder.AddSeparator(commaToken);
-                    builder.Add(enumerator.Current);
-                }
-                while (enumerator.MoveNext());
-
-                return builder.ToList();
+                return default;
             }
+
+            var firstNode = enumerator.Current;
+
+            if (!enumerator.MoveNext())
+            {
+                return SingletonSeparatedList<TNode>(firstNode);
+            }
+
+            var builder = new SeparatedSyntaxListBuilder<TNode>(collection != null ? collection.Count : 3);
+
+            builder.Add(firstNode);
+
+            var commaToken = Token(SyntaxKind.CommaToken);
+
+            do
+            {
+                builder.AddSeparator(commaToken);
+                builder.Add(enumerator.Current);
+            }
+            while (enumerator.MoveNext());
+
+            return builder.ToList();
         }
 
         /// <summary>
@@ -1593,10 +1584,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal static SyntaxTriviaList ParseLeadingTrivia(string text, CSharpParseOptions? options, int offset = 0)
         {
-            using (var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), options))
-            {
-                return lexer.LexSyntaxLeadingTrivia();
-            }
+            using var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), options);
+            return lexer.LexSyntaxLeadingTrivia();
         }
 
         /// <summary>
@@ -1604,10 +1593,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static SyntaxTriviaList ParseTrailingTrivia(string text, int offset = 0)
         {
-            using (var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), CSharpParseOptions.Default))
-            {
-                return lexer.LexSyntaxTrailingTrivia();
-            }
+            using var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), CSharpParseOptions.Default);
+            return lexer.LexSyntaxTrailingTrivia();
         }
 
         // TODO: If this becomes a real API, we'll need to add an offset parameter to
@@ -1638,10 +1625,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="offset">Optional offset into text.</param>
         public static SyntaxToken ParseToken(string text, int offset = 0)
         {
-            using (var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), CSharpParseOptions.Default))
-            {
-                return new SyntaxToken(lexer.Lex(InternalSyntax.LexerMode.Syntax));
-            }
+            using var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), CSharpParseOptions.Default);
+            return new SyntaxToken(lexer.Lex(InternalSyntax.LexerMode.Syntax));
         }
 
         /// <summary>
@@ -1653,20 +1638,18 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="options">Parse options.</param>
         public static IEnumerable<SyntaxToken> ParseTokens(string text, int offset = 0, int initialTokenPosition = 0, CSharpParseOptions? options = null)
         {
-            using (var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), options ?? CSharpParseOptions.Default))
+            using var lexer = new InternalSyntax.Lexer(MakeSourceText(text, offset), options ?? CSharpParseOptions.Default);
+            var position = initialTokenPosition;
+            while (true)
             {
-                var position = initialTokenPosition;
-                while (true)
+                var token = lexer.Lex(InternalSyntax.LexerMode.Syntax);
+                yield return new SyntaxToken(parent: null, token: token, position: position, index: 0);
+
+                position += token.FullWidth;
+
+                if (token.Kind == SyntaxKind.EndOfFileToken)
                 {
-                    var token = lexer.Lex(InternalSyntax.LexerMode.Syntax);
-                    yield return new SyntaxToken(parent: null, token: token, position: position, index: 0);
-
-                    position += token.FullWidth;
-
-                    if (token.Kind == SyntaxKind.EndOfFileToken)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -1676,13 +1659,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static NameSyntax ParseName(string text, int offset = 0, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseName();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (NameSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseName();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (NameSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1700,13 +1681,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static TypeSyntax ParseTypeName(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseTypeName();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (TypeSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseTypeName();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (TypeSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1719,13 +1698,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static ExpressionSyntax ParseExpression(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseExpression();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (ExpressionSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseExpression();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (ExpressionSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1738,13 +1715,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static StatementSyntax ParseStatement(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseStatement();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (StatementSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseStatement();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (StatementSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1758,17 +1733,15 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input following a declaration should be treated as an error</param>
         public static MemberDeclarationSyntax? ParseMemberDeclaration(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseMemberDeclaration();
+            if (node == null)
             {
-                var node = parser.ParseMemberDeclaration();
-                if (node == null)
-                {
-                    return null;
-                }
-
-                return (MemberDeclarationSyntax)(consumeFullText ? parser.ConsumeUnexpectedTokens(node) : node).CreateRed();
+                return null;
             }
+
+            return (MemberDeclarationSyntax)(consumeFullText ? parser.ConsumeUnexpectedTokens(node) : node).CreateRed();
         }
 
         /// <summary>
@@ -1783,12 +1756,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             // note that we do not need a "consumeFullText" parameter, because parsing a compilation unit always must
             // consume input until the end-of-file
-            using (var lexer = MakeLexer(text, offset, options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseCompilationUnit();
-                return (CompilationUnitSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseCompilationUnit();
+            return (CompilationUnitSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1801,13 +1772,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static ParameterListSyntax ParseParameterList(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseParenthesizedParameterList();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (ParameterListSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseParenthesizedParameterList();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (ParameterListSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1820,13 +1789,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static BracketedParameterListSyntax ParseBracketedParameterList(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseBracketedParameterList();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (BracketedParameterListSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseBracketedParameterList();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (BracketedParameterListSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1839,13 +1806,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static ArgumentListSyntax ParseArgumentList(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseParenthesizedArgumentList();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (ArgumentListSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseParenthesizedArgumentList();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (ArgumentListSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1858,13 +1823,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static BracketedArgumentListSyntax ParseBracketedArgumentList(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseBracketedArgumentList();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (BracketedArgumentListSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseBracketedArgumentList();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (BracketedArgumentListSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -1877,13 +1840,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="consumeFullText">True if extra tokens in the input should be treated as an error</param>
         public static AttributeArgumentListSyntax ParseAttributeArgumentList(string text, int offset = 0, ParseOptions? options = null, bool consumeFullText = true)
         {
-            using (var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options))
-            using (var parser = MakeParser(lexer))
-            {
-                var node = parser.ParseAttributeArgumentList();
-                if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
-                return (AttributeArgumentListSyntax)node.CreateRed();
-            }
+            using var lexer = MakeLexer(text, offset, (CSharpParseOptions?)options);
+            using var parser = MakeParser(lexer);
+            var node = parser.ParseAttributeArgumentList();
+            if (consumeFullText) node = parser.ConsumeUnexpectedTokens(node);
+            return (AttributeArgumentListSyntax)node.CreateRed();
         }
 
         /// <summary>
@@ -2046,8 +2007,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node != null)
             {
-                var parent = node.Parent as ExpressionSyntax;
-                if (parent != null && (node.Kind() == SyntaxKind.IdentifierName || node.Kind() == SyntaxKind.GenericName))
+                if (node.Parent is ExpressionSyntax parent && (node.Kind() == SyntaxKind.IdentifierName || node.Kind() == SyntaxKind.GenericName))
                 {
                     switch (parent.Kind())
                     {

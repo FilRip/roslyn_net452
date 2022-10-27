@@ -77,32 +77,15 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal override BoundNode GetBoundRoot()
         {
             CSharpSyntaxNode rootSyntax = this.Root;
-            switch (rootSyntax.Kind())
+            rootSyntax = rootSyntax.Kind() switch
             {
-                case SyntaxKind.VariableDeclarator:
-                    rootSyntax = ((VariableDeclaratorSyntax)rootSyntax).Initializer;
-                    break;
-
-                case SyntaxKind.Parameter:
-                    rootSyntax = ((ParameterSyntax)rootSyntax).Default;
-                    break;
-
-                case SyntaxKind.EqualsValueClause:
-                    rootSyntax = ((EqualsValueClauseSyntax)rootSyntax);
-                    break;
-
-                case SyntaxKind.EnumMemberDeclaration:
-                    rootSyntax = ((EnumMemberDeclarationSyntax)rootSyntax).EqualsValue;
-                    break;
-
-                case SyntaxKind.PropertyDeclaration:
-                    rootSyntax = ((PropertyDeclarationSyntax)rootSyntax).Initializer;
-                    break;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(rootSyntax.Kind());
-            }
-
+                SyntaxKind.VariableDeclarator => ((VariableDeclaratorSyntax)rootSyntax).Initializer,
+                SyntaxKind.Parameter => ((ParameterSyntax)rootSyntax).Default,
+                SyntaxKind.EqualsValueClause => ((EqualsValueClauseSyntax)rootSyntax),
+                SyntaxKind.EnumMemberDeclaration => ((EnumMemberDeclarationSyntax)rootSyntax).EqualsValue,
+                SyntaxKind.PropertyDeclaration => ((PropertyDeclarationSyntax)rootSyntax).Initializer,
+                _ => throw ExceptionUtilities.UnexpectedValue(rootSyntax.Kind()),
+            };
             return GetUpperBoundNode(GetBindableSyntaxNode(rootSyntax));
         }
 
@@ -148,8 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SymbolKind.Field:
                     {
                         var field = (FieldSymbol)this.MemberSymbol;
-                        var enumField = field as SourceEnumConstantSymbol;
-                        if ((object)enumField != null)
+                        if (field is SourceEnumConstantSymbol enumField)
                         {
                             return binder.BindEnumConstantInitializer(enumField, equalsValue, diagnostics);
                         }
@@ -187,15 +169,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             // that's our root and we know how to bind that thing even if it is not an 
             // expression or a statement.
 
-            switch (node.Kind())
+            return node.Kind() switch
             {
-                case SyntaxKind.EqualsValueClause:
-                    return this.Root == node ||     /*enum or parameter initializer*/
-                           this.Root == node.Parent /*field initializer*/;
-
-                default:
-                    return false;
-            }
+                SyntaxKind.EqualsValueClause => this.Root == node ||     /*enum or parameter initializer*/
+                                          this.Root == node.Parent /*field initializer*/,
+                _ => false,
+            };
         }
 
         internal override bool TryGetSpeculativeSemanticModelCore(SyntaxTreeSemanticModel parentModel, int position, EqualsValueClauseSyntax initializer, out SemanticModel speculativeModel)
@@ -270,18 +249,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override bool IsNullableAnalysisEnabled()
         {
-            switch (MemberSymbol.Kind)
+            return MemberSymbol.Kind switch
             {
-                case SymbolKind.Field:
-                case SymbolKind.Property:
-                    return MemberSymbol.ContainingType is SourceMemberContainerTypeSymbol type &&
-                        type.IsNullableEnabledForConstructorsAndInitializers(useStatic: MemberSymbol.IsStatic);
-                case SymbolKind.Parameter:
-                    return SourceComplexParameterSymbol.GetDefaultValueSyntaxForIsNullableAnalysisEnabled(Root as ParameterSyntax) is { } value &&
-                        Compilation.IsNullableAnalysisEnabledIn(value);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(MemberSymbol.Kind);
-            }
+                SymbolKind.Field or SymbolKind.Property => MemberSymbol.ContainingType is SourceMemberContainerTypeSymbol type &&
+                                       type.IsNullableEnabledForConstructorsAndInitializers(useStatic: MemberSymbol.IsStatic),
+                SymbolKind.Parameter => SourceComplexParameterSymbol.GetDefaultValueSyntaxForIsNullableAnalysisEnabled(Root as ParameterSyntax) is { } value &&
+Compilation.IsNullableAnalysisEnabledIn(value),
+                _ => throw ExceptionUtilities.UnexpectedValue(MemberSymbol.Kind),
+            };
         }
     }
 }

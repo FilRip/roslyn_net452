@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return _cache ?? (_cache = new SmallDictionary<NamedTypeSymbol, bool>(Symbols.SymbolEqualityComparer.ConsiderEverything));
+                return _cache ??= new SmallDictionary<NamedTypeSymbol, bool>(Symbols.SymbolEqualityComparer.ConsiderEverything);
             }
         }
 
@@ -87,8 +87,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private bool IsEmptyStructType(TypeSymbol type, ConsList<NamedTypeSymbol> typesWithMembersOfThisType)
         {
-            var nts = type as NamedTypeSymbol;
-            if ((object)nts == null || !IsTrackableStructType(nts))
+            if (type is not NamedTypeSymbol nts || !IsTrackableStructType(nts))
             {
                 return false;
             }
@@ -120,9 +119,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static bool IsTrackableStructType(TypeSymbol type)
         {
-            if ((object)type == null) return false;
-            var nts = type.OriginalDefinition as NamedTypeSymbol;
-            if ((object)nts == null) return false;
+            if (type is null) return false;
+            if (type.OriginalDefinition is not NamedTypeSymbol nts) return false;
             return nts.IsStructType() && nts.SpecialType == SpecialType.None && !nts.KnownCircularStruct;
         }
 
@@ -140,7 +138,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
                 var field = GetActualField(member, type);
-                if ((object)field != null)
+                if (field is object)
                 {
                     var actualFieldType = field.Type;
                     if (!IsEmptyStructType(actualFieldType, typesWithMembersOfThisType))
@@ -159,8 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         ///
         public IEnumerable<FieldSymbol> GetStructInstanceFields(TypeSymbol type)
         {
-            var nts = type as NamedTypeSymbol;
-            if ((object)nts == null)
+            if (type is not NamedTypeSymbol nts)
             {
                 return SpecializedCollections.EmptyEnumerable<FieldSymbol>();
             }
@@ -179,7 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
                 var field = GetActualField(member, type);
-                if ((object)field != null)
+                if (field is object)
                 {
                     yield return field;
                 }

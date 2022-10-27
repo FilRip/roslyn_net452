@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var data = GetSourceDecodedWellKnownAttributeData() ?? GetNetModuleDecodedWellKnownAttributeData();
 
                 // By default WrapNonExceptionThrows is considered to be true.
-                return (data != null) ? data.RuntimeCompatibilityWrapNonExceptionThrows : CommonAssemblyWellKnownAttributeData.WrapNonExceptionThrowsDefault;
+                return data == null || data.RuntimeCompatibilityWrapNonExceptionThrows;
             }
         }
 
@@ -400,7 +400,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var attributeValue = AssemblyVersionAttributeSetting;
-                return (object)attributeValue == null || (attributeValue.Build != ushort.MaxValue && attributeValue.Revision != ushort.MaxValue) ? null : attributeValue;
+                return attributeValue is null || (attributeValue.Build != ushort.MaxValue && attributeValue.Revision != ushort.MaxValue) ? null : attributeValue;
             }
         }
 
@@ -947,9 +947,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (var pair in _compilation.GetBoundReferenceManager().ReferencedModuleIndexMap)
             {
-                var fileRef = pair.Key as PortableExecutableReference;
-
-                if (fileRef != null && (object)fileRef.FilePath != null)
+                if (pair.Key is PortableExecutableReference fileRef && fileRef.FilePath is object)
                 {
                     string fileName = FileNameUtilities.GetFileName(fileRef.FilePath);
                     string moduleName = _modules[pair.Value].Name;
@@ -1030,9 +1028,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private void ReportNameCollisionDiagnosticsForAddedModules(NamespaceSymbol ns, BindingDiagnosticBag diagnostics)
         {
-            var mergedNs = ns as MergedNamespaceSymbol;
-
-            if ((object)mergedNs == null)
+            if (ns is not MergedNamespaceSymbol mergedNs)
             {
                 return;
             }
@@ -1295,10 +1291,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // Get unique source assembly attributes.
             HashSet<CSharpAttributeData> uniqueAttributes = GetUniqueSourceAssemblyAttributes();
 
-            var arguments = new DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation>();
-            arguments.AttributesCount = netModuleAttributesCount;
-            arguments.Diagnostics = diagnostics;
-            arguments.SymbolPart = AttributeLocation.None;
+            var arguments = new DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation>()
+            {
+                AttributesCount = netModuleAttributesCount,
+                Diagnostics = diagnostics,
+                SymbolPart = AttributeLocation.None
+            };
 
             // Attributes from the second added module should override attributes from the first added module, etc. 
             // Attributes from source should override attributes from added modules.
@@ -1721,7 +1719,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         var fieldRequestMinimum = (FieldSymbol)_compilation.GetWellKnownTypeMember(WellKnownMember.System_Security_Permissions_SecurityAction__RequestMinimum);
 
                         // NOTE: Dev10 handles missing enum value.
-                        object constantValue = (object)fieldRequestMinimum == null || fieldRequestMinimum.HasUseSiteError ? 0 : fieldRequestMinimum.ConstantValue;
+                        object constantValue = fieldRequestMinimum is null || fieldRequestMinimum.HasUseSiteError ? 0 : fieldRequestMinimum.ConstantValue;
                         var typedConstantRequestMinimum = new TypedConstant(securityActionType, TypedConstantKind.Enum, constantValue);
 
                         var boolType = _compilation.GetSpecialType(SpecialType.System_Boolean);
@@ -2026,7 +2024,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (_lazyStrongNameKeys == null)
             {
                 var assemblyWhoseKeysAreBeingComputed = t_assemblyForWhichCurrentThreadIsComputingKeys;
-                if ((object)assemblyWhoseKeysAreBeingComputed != null)
+                if (assemblyWhoseKeysAreBeingComputed is object)
                 {
                     //ThrowIfFalse(assemblyWhoseKeysAreBeingComputed Is Me);
                     if (!potentialGiverOfAccess.GetInternalsVisibleToPublicKeys(this.Name).IsEmpty())
@@ -2077,7 +2075,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             TypeSymbol forwardedType = (TypeSymbol)arguments.Attribute.CommonConstructorArguments[0].ValueInternal;
 
             // This can happen if the argument is the null literal.
-            if ((object)forwardedType == null)
+            if (forwardedType is null)
             {
                 diagnostics.Add(ErrorCode.ERR_InvalidFwdType, GetAssemblyAttributeLocationForDiagnostic(arguments.AttributeSyntaxOpt));
                 return;
@@ -2097,7 +2095,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            if ((object)forwardedType.ContainingType != null)
+            if (forwardedType.ContainingType is object)
             {
                 diagnostics.Add(ErrorCode.ERR_ForwardedTypeIsNested, GetAssemblyAttributeLocationForDiagnostic(arguments.AttributeSyntaxOpt), forwardedType, forwardedType.ContainingType);
                 return;
@@ -2449,8 +2447,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal void NoteFieldAccess(FieldSymbol field, bool read, bool write)
         {
-            var container = field.ContainingType as SourceMemberContainerTypeSymbol;
-            if ((object)container == null)
+            if (field.ContainingType is not SourceMemberContainerTypeSymbol container)
             {
                 // field is not in source.
                 return;
@@ -2524,8 +2521,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         continue;
                     }
 
-                    var containingType = field.ContainingType as SourceNamedTypeSymbol;
-                    if ((object)containingType == null)
+                    if (field.ContainingType is not SourceNamedTypeSymbol containingType)
                     {
                         continue;
                     }
@@ -2551,7 +2547,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
 
                     Symbol associatedPropertyOrEvent = field.AssociatedSymbol;
-                    if ((object)associatedPropertyOrEvent != null && associatedPropertyOrEvent.Kind == SymbolKind.Event)
+                    if (associatedPropertyOrEvent is object && associatedPropertyOrEvent.Kind == SymbolKind.Event)
                     {
                         if (unread)
                         {
@@ -2581,8 +2577,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         continue;
                     }
 
-                    var containingType = field.ContainingType as SourceNamedTypeSymbol;
-                    if ((object)containingType != null && !containingType.HasStructLayoutAttribute)
+                    if (field.ContainingType is SourceNamedTypeSymbol containingType && !containingType.HasStructLayoutAttribute)
                     {
                         diagnostics.Add(ErrorCode.WRN_UnreferencedFieldAssg, field.Locations.FirstOrNone(), field);
                     }
@@ -2598,25 +2593,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             // TODO: localize these strings
             if (type.IsReferenceType) return "null";
-            switch (type.SpecialType)
+            return type.SpecialType switch
             {
-                case SpecialType.System_Boolean:
-                    return "false";
-                case SpecialType.System_Byte:
-                case SpecialType.System_Decimal:
-                case SpecialType.System_Double:
-                case SpecialType.System_Int16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Single:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_UInt64:
-                    return "0";
-                default:
-                    return "";
-            }
+                SpecialType.System_Boolean => "false",
+                SpecialType.System_Byte or SpecialType.System_Decimal or SpecialType.System_Double or SpecialType.System_Int16 or SpecialType.System_Int32 or SpecialType.System_Int64 or SpecialType.System_SByte or SpecialType.System_Single or SpecialType.System_UInt16 or SpecialType.System_UInt32 or SpecialType.System_UInt64 => "0",
+                _ => "",
+            };
         }
 
         internal override NamedTypeSymbol TryLookupForwardedMetadataTypeWithCycleDetection(ref MetadataTypeName emittedName, ConsList<AssemblySymbol> visitedAssemblies)
@@ -2685,9 +2667,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     (AssemblySymbol firstSymbol, AssemblySymbol secondSymbol) = peModuleSymbol.GetAssembliesForForwardedType(ref emittedName);
 
-                    if ((object)firstSymbol != null)
+                    if (firstSymbol is object)
                     {
-                        if ((object)secondSymbol != null)
+                        if (secondSymbol is object)
                         {
                             return CreateMultipleForwardingErrorTypeSymbol(ref emittedName, peModuleSymbol, firstSymbol, secondSymbol);
                         }

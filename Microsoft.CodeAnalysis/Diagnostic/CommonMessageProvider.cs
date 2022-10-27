@@ -134,21 +134,15 @@ namespace Microsoft.CodeAnalysis
         public DiagnosticInfo? FilterDiagnosticInfo(DiagnosticInfo diagnosticInfo, CompilationOptions options)
         {
             var report = this.GetDiagnosticReport(diagnosticInfo, options);
-            switch (report)
+            return report switch
             {
-                case ReportDiagnostic.Error:
-                    return diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Error);
-                case ReportDiagnostic.Warn:
-                    return diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Warning);
-                case ReportDiagnostic.Info:
-                    return diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Info);
-                case ReportDiagnostic.Hidden:
-                    return diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Hidden);
-                case ReportDiagnostic.Suppress:
-                    return null;
-                default:
-                    return diagnosticInfo;
-            }
+                ReportDiagnostic.Error => diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Error),
+                ReportDiagnostic.Warn => diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Warning),
+                ReportDiagnostic.Info => diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Info),
+                ReportDiagnostic.Hidden => diagnosticInfo.GetInstanceWithSeverity(DiagnosticSeverity.Hidden),
+                ReportDiagnostic.Suppress => null,
+                _ => diagnosticInfo,
+            };
         }
 
         // Common error messages 

@@ -64,13 +64,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.IsOverride)
                 {
                     EventSymbol? overriddenEvent = this.OverriddenEvent;
-                    if ((object?)overriddenEvent != null)
+                    if (overriddenEvent is object)
                     {
                         CopyEventCustomModifiers(overriddenEvent, ref _type, ContainingAssembly);
                     }
                 }
             }
-            else if ((object)explicitlyImplementedEvent != null)
+            else if (explicitlyImplementedEvent is object)
             {
                 CopyEventCustomModifiers(explicitlyImplementedEvent, ref _type, ContainingAssembly);
             }
@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             _explicitInterfaceImplementations =
-                (object?)explicitlyImplementedEvent == null ?
+                explicitlyImplementedEvent is null ?
                     ImmutableArray<EventSymbol>.Empty :
                     ImmutableArray.Create<EventSymbol>(explicitlyImplementedEvent);
         }
@@ -215,7 +215,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             base.AfterAddingTypeMembersChecks(conversions, diagnostics);
 
-            if ((object)_explicitInterfaceType != null)
+            if (_explicitInterfaceType is object)
             {
 #nullable restore
                 var explicitInterfaceSpecifier = this.ExplicitInterfaceSpecifier;

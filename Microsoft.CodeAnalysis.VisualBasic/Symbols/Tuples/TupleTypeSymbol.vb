@@ -471,9 +471,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Return definition.Construct(subst)
         End Function
 
-        Private Shared Function GetModifiers(modifiers As ImmutableArray(Of ImmutableArray(Of CustomModifier)), i As Integer) As ImmutableArray(Of CustomModifier)
-            Return If(modifiers.IsDefaultOrEmpty, Nothing, modifiers(i))
-        End Function
+        'Private Shared Function GetModifiers(modifiers As ImmutableArray(Of ImmutableArray(Of CustomModifier)), i As Integer) As ImmutableArray(Of CustomModifier)
+        '    Return If(modifiers.IsDefaultOrEmpty, Nothing, modifiers(i))
+        'End Function
 
         Friend Function WithUnderlyingType(newUnderlyingType As NamedTypeSymbol) As TupleTypeSymbol
             Debug.Assert(Not newUnderlyingType.IsTupleType AndAlso newUnderlyingType.IsTupleOrCompatibleWithTupleOfCardinality(Me._elementTypes.Length))
@@ -606,7 +606,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Return "Item" & position
         End Function
 
-        Private Shared ReadOnly ForbiddenNames As HashSet(Of String) = New HashSet(Of String)(
+        Private Shared ReadOnly ForbiddenNames As New HashSet(Of String)(
             {"CompareTo", "Deconstruct", "Equals", "GetHashCode", "Rest", "ToString"},
             CaseInsensitiveComparison.Comparer)
 
@@ -761,7 +761,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                 members.Add(defaultTupleField)
 
                                 If defaultImplicitlyDeclared AndAlso Not String.IsNullOrEmpty(providedName) Then
-                                    Dim isError = If(_errorPositions.IsDefault, False, _errorPositions(tupleFieldIndex))
+                                    Dim isError = Not _errorPositions.IsDefault AndAlso _errorPositions(tupleFieldIndex)
 
                                     ' The name given doesn't match the default name Item8, etc.
                                     ' Add a virtual field with the given name
@@ -842,7 +842,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     Dim defaultImplicitlyDeclared = Not CaseInsensitiveComparison.Equals(providedName, defaultName)
 
                     ' Add default element field. 
-                    Dim defaultTupleField As TupleErrorFieldSymbol = New TupleErrorFieldSymbol(Me,
+                    Dim defaultTupleField As New TupleErrorFieldSymbol(Me,
                                                                                                defaultName,
                                                                                                i,
                                                                                                If(defaultImplicitlyDeclared, Nothing, location),
@@ -881,7 +881,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Sub
 
         Private Function ComputeDefinitionToMemberMap() As SmallDictionary(Of Symbol, Symbol)
-            Dim smallDictionary As SmallDictionary(Of Symbol, Symbol) = New SmallDictionary(Of Symbol, Symbol)(ReferenceEqualityComparer.Instance)
+            Dim smallDictionary As New SmallDictionary(Of Symbol, Symbol)(ReferenceEqualityComparer.Instance)
             Dim originalDefinition As NamedTypeSymbol = Me._underlyingType.OriginalDefinition
             Dim members As ImmutableArray(Of Symbol) = Me.GetMembers()
             Dim i As Integer = members.Length - 1
@@ -1119,7 +1119,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             For i = 0 To sourceLength - 1
                 Dim sourceName = sourceNames(i)
-                Dim wasInferred = If(noInferredNames, False, inferredNames(i))
+                Dim wasInferred = Not noInferredNames AndAlso inferredNames(i)
 
                 If sourceName IsNot Nothing AndAlso Not wasInferred AndAlso (allMissing OrElse String.CompareOrdinal(destinationNames(i), sourceName) <> 0) Then
                     diagnostics.Add(ERRID.WRN_TupleLiteralNameMismatch, literal.Arguments(i).Syntax.Parent.Location, sourceName, destination)

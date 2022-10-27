@@ -167,26 +167,13 @@ namespace Microsoft.DiaSymReader
 
         unsafe void IUnsafeComStream.Seek(long dlibMove, int origin, long* plibNewPosition)
         {
-            int newPosition;
-
-            switch (origin)
+            var newPosition = origin switch
             {
-                case STREAM_SEEK_SET:
-                    newPosition = SetPosition((int)dlibMove);
-                    break;
-
-                case STREAM_SEEK_CUR:
-                    newPosition = SetPosition(_position + (int)dlibMove);
-                    break;
-
-                case STREAM_SEEK_END:
-                    newPosition = SetPosition(_length + (int)dlibMove);
-                    break;
-
-                default:
-                    throw new ArgumentException($"{nameof(origin)} ({origin}) is invalid.", nameof(origin));
-            }
-
+                STREAM_SEEK_SET => SetPosition((int)dlibMove),
+                STREAM_SEEK_CUR => SetPosition(_position + (int)dlibMove),
+                STREAM_SEEK_END => SetPosition(_length + (int)dlibMove),
+                _ => throw new ArgumentException($"{nameof(origin)} ({origin}) is invalid.", nameof(origin)),
+            };
             if (plibNewPosition != null)
             {
                 *plibNewPosition = newPosition;

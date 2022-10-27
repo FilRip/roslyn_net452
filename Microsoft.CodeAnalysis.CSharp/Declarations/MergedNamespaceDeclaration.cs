@@ -99,8 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var child in decl.Children)
                 {
                     // it is either a type (more likely)
-                    var asType = child as SingleTypeDeclaration;
-                    if (asType != null)
+                    if (child is SingleTypeDeclaration asType)
                     {
                         // handle types
                         if (types == null)
@@ -117,8 +116,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     // or it is a namespace
-                    var asNamespace = child as SingleNamespaceDeclaration;
-                    if (asNamespace != null)
+                    if (child is SingleNamespaceDeclaration asNamespace)
                     {
                         // handle namespace
                         if (namespaces == null)

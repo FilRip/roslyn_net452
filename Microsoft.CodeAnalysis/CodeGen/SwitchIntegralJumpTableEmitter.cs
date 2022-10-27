@@ -476,12 +476,12 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     // ConstantValue does not correctly convert byte and ushort values to int.
                     // It sign extends them rather than padding them. We compensate for that here.
                     // See also https://github.com/dotnet/roslyn/issues/18579
-                    switch (value.Discriminator)
+                    return value.Discriminator switch
                     {
-                        case ConstantValueTypeDiscriminator.Byte: return value.ByteValue;
-                        case ConstantValueTypeDiscriminator.UInt16: return value.UInt16Value;
-                        default: return value.Int32Value;
-                    }
+                        ConstantValueTypeDiscriminator.Byte => value.ByteValue,
+                        ConstantValueTypeDiscriminator.UInt16 => value.UInt16Value,
+                        _ => value.Int32Value,
+                    };
                 }
 
                 _builder.EmitIntConstant(Int32Value(endConstant) - Int32Value(startConstant));
@@ -492,26 +492,15 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         private static ILOpCode GetReverseBranchCode(ILOpCode branchCode)
         {
-            switch (branchCode)
+            return branchCode switch
             {
-                case ILOpCode.Beq:
-                    return ILOpCode.Bne_un;
-
-                case ILOpCode.Blt:
-                    return ILOpCode.Bge;
-
-                case ILOpCode.Blt_un:
-                    return ILOpCode.Bge_un;
-
-                case ILOpCode.Bgt:
-                    return ILOpCode.Ble;
-
-                case ILOpCode.Bgt_un:
-                    return ILOpCode.Ble_un;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(branchCode);
-            }
+                ILOpCode.Beq => ILOpCode.Bne_un,
+                ILOpCode.Blt => ILOpCode.Bge,
+                ILOpCode.Blt_un => ILOpCode.Bge_un,
+                ILOpCode.Bgt => ILOpCode.Ble,
+                ILOpCode.Bgt_un => ILOpCode.Ble_un,
+                _ => throw ExceptionUtilities.UnexpectedValue(branchCode),
+            };
         }
 
         private void EmitNormalizedSwitchKey(ConstantValue startConstant, ConstantValue endConstant, object bucketFallThroughLabel)

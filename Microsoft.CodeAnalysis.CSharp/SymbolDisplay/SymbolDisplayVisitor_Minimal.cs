@@ -34,8 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (boundSymbols.Length == 1)
                 {
-                    var boundAlias = boundSymbols[0] as IAliasSymbol;
-                    if (boundAlias != null && alias.Target.Equals(symbol))
+                    if (boundSymbols[0] is IAliasSymbol boundAlias && alias.Target.Equals(symbol))
                     {
                         builder.Add(CreatePart(SymbolDisplayPartKind.AliasName, alias, aliasName));
                         return true;
@@ -232,8 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             queryBody.SelectOrGroup.Span.End - 1, identifierName, SpeculativeBindingOption.BindAsExpression).Type;
                     }
 
-                    var identifier = token.Parent as IdentifierNameSyntax;
-                    if (identifier != null)
+                    if (token.Parent is IdentifierNameSyntax identifier)
                     {
                         type = semanticModelOpt.GetTypeInfo(identifier).Type;
                     }

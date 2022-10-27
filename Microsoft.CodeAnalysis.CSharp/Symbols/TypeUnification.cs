@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             MutableTypeMap? substitution = null;
             bool result = CanUnifyHelper(t1, t2, ref substitution);
 #if DEBUG
-            if (result && ((object)t1 != null && (object)t2 != null))
+            if (result && (t1 is object && t2 is object))
             {
                 var substituted1 = SubstituteAllTypeParameters(substitution, TypeWithAnnotations.Create(t1));
                 var substituted2 = SubstituteAllTypeParameters(substitution, TypeWithAnnotations.Create(t2));
@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         // Note: Dev10 folds this into the loop since GetTypeArgsAll includes type args for containing types
                         // TODO: Calling CanUnifyHelper for the containing type is an overkill, we simply need to go through type arguments for all containers.
-                        return (object)nt1.ContainingType == null || CanUnifyHelper(nt1.ContainingType, nt2.ContainingType, ref substitution);
+                        return nt1.ContainingType is null || CanUnifyHelper(nt1.ContainingType, nt2.ContainingType, ref substitution);
                     }
                 case SymbolKind.TypeParameter:
                     {
@@ -272,7 +272,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SymbolKind.ErrorType:
                     {
                         NamedTypeSymbol namedType = (NamedTypeSymbol)type;
-                        while ((object)namedType != null)
+                        while (namedType is object)
                         {
                             var typeParts = namedType.IsTupleType ? namedType.TupleElementTypesWithAnnotations : namedType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics;
                             foreach (TypeWithAnnotations typePart in typeParts)

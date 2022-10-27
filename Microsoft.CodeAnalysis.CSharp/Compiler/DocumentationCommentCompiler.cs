@@ -244,7 +244,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (isPartialMethodDefinitionPart)
             {
                 MethodSymbol implementationPart = ((MethodSymbol)symbol).PartialImplementationPart;
-                if ((object)implementationPart != null)
+                if (implementationPart is object)
                 {
                     Visit(implementationPart);
                 }
@@ -499,7 +499,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 case SymbolKind.NamedType:
                     MethodSymbol delegateInvoke = ((NamedTypeSymbol)symbol).DelegateInvokeMethod;
-                    if ((object)delegateInvoke != null)
+                    if (delegateInvoke is object)
                     {
                         return delegateInvoke.Parameters;
                     }
@@ -518,15 +518,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private static ImmutableArray<TypeParameterSymbol> GetTypeParameters(Symbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Method:
-                case SymbolKind.NamedType:
-                case SymbolKind.ErrorType:
-                    return symbol.GetMemberTypeParameters();
-            }
-
-            return ImmutableArray<TypeParameterSymbol>.Empty;
+                SymbolKind.Method or SymbolKind.NamedType or SymbolKind.ErrorType => symbol.GetMemberTypeParameters(),
+                _ => ImmutableArray<TypeParameterSymbol>.Empty,
+            };
         }
 
         /// <summary>
@@ -542,7 +538,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            while ((object)symbol != null)
+            while (symbol is object)
             {
                 switch (symbol.DeclaredAccessibility)
                 {
@@ -964,11 +960,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static string ToBadCrefString(CrefSyntax cref)
         {
-            using (StringWriter tmp = new(CultureInfo.InvariantCulture))
-            {
-                cref.WriteTo(tmp);
-                return "!:" + tmp.ToString().Replace("{", "&lt;").Replace("}", "&gt;");
-            }
+            using StringWriter tmp = new(CultureInfo.InvariantCulture);
+            cref.WriteTo(tmp);
+            return "!:" + tmp.ToString().Replace("{", "&lt;").Replace("}", "&gt;");
         }
 
         /// <summary>
@@ -1162,19 +1156,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Since we know a lot about the structure of the output,
             // we should be able to do this without constructing any
             // new string objects.
-            switch (depth)
+            return depth switch
             {
-                case 0:
-                    return "";
-                case 1:
-                    return "    ";
-                case 2:
-                    return "        ";
-                case 3:
-                    return "            ";
-                default:
-                    return new string(' ', depth * 4);
-            }
+                0 => "",
+                1 => "    ",
+                2 => "        ",
+                3 => "            ",
+                _ => new string(' ', depth * 4),
+            };
         }
 
         /// <remarks>

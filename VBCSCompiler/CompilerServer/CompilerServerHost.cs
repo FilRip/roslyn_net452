@@ -9,8 +9,8 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.CommandLine;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal sealed class CompilerServerHost : ICompilerServerHost
@@ -28,9 +28,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         public ICompilerServerLogger Logger { get; }
 
         internal CompilerServerHost(
-          string clientDirectory,
-          string sdkDirectory,
-          ICompilerServerLogger logger)
+            string clientDirectory,
+            string sdkDirectory,
+            ICompilerServerLogger logger)
         {
             this.ClientDirectory = clientDirectory;
             this.SdkDirectory = sdkDirectory;
@@ -38,17 +38,17 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         private bool CheckAnalyzers(
-          string baseDirectory,
-          ImmutableArray<CommandLineAnalyzerReference> analyzers,
-          [NotNullWhen(false)] out List<string>? errorMessages)
+            string baseDirectory,
+            ImmutableArray<CommandLineAnalyzerReference> analyzers,
+            [NotNullWhen(false)] out List<string>? errorMessages)
         {
             return AnalyzerConsistencyChecker.Check(baseDirectory, analyzers, this.AnalyzerAssemblyLoader, this.Logger, out errorMessages);
         }
 
         public bool TryCreateCompiler(
-          in RunRequest request,
-          BuildPaths buildPaths,
-          [NotNullWhen(true)] out CommonCompiler? compiler)
+            in RunRequest request,
+            BuildPaths buildPaths,
+            [NotNullWhen(true)] out CommonCompiler? compiler)
         {
             string language = request.Language;
             if (!(language == "C#"))
@@ -66,8 +66,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         public BuildResponse RunCompilation(
-          in RunRequest request,
-          CancellationToken cancellationToken)
+            in RunRequest request,
+            CancellationToken cancellationToken)
         {
             this.Logger.Log(string.Format("\r\nRun Compilation for {0}\r\n  Language = {1}\r\n  CurrentDirectory = '{2}\r\n  LIB = '{3}'", request.RequestId, request.Language, request.WorkingDirectory, request.LibDirectory));
             if (string.IsNullOrEmpty(request.WorkingDirectory))
@@ -113,8 +113,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         BuildResponse ICompilerServerHost.RunCompilation(
-          in RunRequest request,
-          CancellationToken cancellationToken)
+            in RunRequest request,
+            CancellationToken cancellationToken)
         {
             return this.RunCompilation(in request, cancellationToken);
         }

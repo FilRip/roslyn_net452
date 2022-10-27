@@ -39,17 +39,11 @@ namespace Microsoft.Cci
             {
                 return false;
             }
-
-            var xf = x as IFieldReference;
-            var yf = y as IFieldReference;
-            if (xf != null && yf != null)
+            if (x is IFieldReference xf && y is IFieldReference yf)
             {
                 return _metadataWriter.GetFieldSignatureIndex(xf) == _metadataWriter.GetFieldSignatureIndex(yf);
             }
-
-            var xm = x as IMethodReference;
-            var ym = y as IMethodReference;
-            if (xm != null && ym != null)
+            if (x is IMethodReference xm && y is IMethodReference ym)
             {
                 return _metadataWriter.GetMethodSignatureHandle(xm) == _metadataWriter.GetMethodSignatureHandle(ym);
             }
@@ -61,15 +55,13 @@ namespace Microsoft.Cci
         {
             int hash = Hash.Combine(memberRef.Name, _metadataWriter.GetMemberReferenceParent(memberRef).GetHashCode());
 
-            var fieldRef = memberRef as IFieldReference;
-            if (fieldRef != null)
+            if (memberRef is IFieldReference fieldRef)
             {
                 hash = Hash.Combine(hash, _metadataWriter.GetFieldSignatureIndex(fieldRef).GetHashCode());
             }
             else
             {
-                var methodRef = memberRef as IMethodReference;
-                if (methodRef != null)
+                if (memberRef is IMethodReference methodRef)
                 {
                     hash = Hash.Combine(hash, _metadataWriter.GetMethodSignatureHandle(methodRef).GetHashCode());
                 }

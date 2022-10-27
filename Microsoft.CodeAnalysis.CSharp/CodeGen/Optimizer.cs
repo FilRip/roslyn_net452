@@ -148,7 +148,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             var ordered = from i in info
                           from d in i.Value.LocalDefs
                           orderby d.End - d.Start, d.End ascending
-                          select new { i = i.Key, d = d };
+                          select new { i = i.Key, d };
 
             // collect non-intersecting def-use spans. 
             // if span intersects with something already stored, reject corresponding variable.
@@ -441,8 +441,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         {
             BoundNode result;
 
-            BoundExpression expr = node as BoundExpression;
-            if (expr != null)
+            if (node is BoundExpression expr)
             {
                 result = VisitExpression(expr, ExprContext.Value);
             }
@@ -466,7 +465,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 node;
 
             _context = prevContext;
-            _counter += 1;
+            _counter++;
 
             switch (context)
             {
@@ -581,7 +580,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
             _context = prevContext;
             SetStackDepth(origStack);
-            _counter += 1;
+            _counter++;
 
             return result;
         }
@@ -876,8 +875,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         public override BoundNode VisitAssignmentOperator(BoundAssignmentOperator node)
         {
-            var sequence = node.Left as BoundSequence;
-            if (sequence != null)
+            if (node.Left is BoundSequence sequence)
             {
                 // assigning to a sequence is uncommon, but could happen in a
                 // case if LHS was a declaration expression.
@@ -1080,7 +1078,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             {
                 // TODO: for some reason receiver could be not null even if method is static...
                 //       it seems wrong, ignore for now.
-                _counter += 1;
+                _counter++;
                 receiver = null;
             }
 
@@ -1233,7 +1231,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             {
                 // for some reason it could be not null even if field is static...
                 //       it seems wrong
-                _counter += 1;
+                _counter++;
                 receiver = null;
             }
 
@@ -1390,7 +1388,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 }
 
                 _context = prevContext;
-                _counter += 1;
+                _counter++;
                 SetStackDepth(prevStack);
                 PushEvalStack(binary, ExprContext.Value);
             }
@@ -1462,7 +1460,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             else
             {
                 // compensate for the whenNull that we are not visiting.
-                _counter += 1;
+                _counter++;
             }
 
             return node.Update(receiver, node.HasValueMethodOpt, whenNotNull, whenNull, node.Id, node.Type);
@@ -1830,7 +1828,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         private void DeclareLocal(LocalSymbol local, int stack)
         {
-            if ((object)local != null)
+            if (local is object)
             {
                 if (CanScheduleToStack(local))
                 {
@@ -1881,8 +1879,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // rewriting constants may undo constant folding and make thing worse.
             // so we will not go into constant nodes. 
             // CodeGen will not do that either.
-            var asExpression = node as BoundExpression;
-            if (asExpression != null && asExpression.ConstantValue != null)
+            if (node is BoundExpression asExpression && asExpression.ConstantValue != null)
             {
                 result = node;
             }
@@ -1891,7 +1888,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 result = base.Visit(node);
             }
 
-            _nodeCounter += 1;
+            _nodeCounter++;
 
             return result;
         }
@@ -1938,7 +1935,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     break;
                 }
 
-                _nodeCounter += 1;
+                _nodeCounter++;
             }
 
             stack.Free();
@@ -1977,10 +1974,8 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         public override BoundNode VisitAssignmentOperator(BoundAssignmentOperator node)
         {
-            var left = node.Left as BoundLocal;
-
             // store to something that is not special. (operands still could be rewritten) 
-            if (left == null || !_info.TryGetValue(left.LocalSymbol, out LocalDefUseInfo locInfo))
+            if (node.Left is not BoundLocal left || !_info.TryGetValue(left.LocalSymbol, out LocalDefUseInfo locInfo))
             {
                 return base.VisitAssignmentOperator(node);
             }
@@ -2002,7 +1997,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // otherwise record a store.
 
             // fake visiting of left
-            _nodeCounter += 1;
+            _nodeCounter++;
 
             // visit right
             var right = (BoundExpression)Visit(node.Right);

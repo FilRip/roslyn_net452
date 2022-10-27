@@ -146,18 +146,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                switch (NullableAnnotation)
+                return NullableAnnotation switch
                 {
-                    case NullableAnnotation.Oblivious:
-                    case NullableAnnotation.Annotated:
-                        return true;
-
-                    case NullableAnnotation.NotAnnotated:
-                        return Type.IsNullableTypeOrTypeParameter();
-
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(NullableAnnotation);
-                }
+                    NullableAnnotation.Oblivious or NullableAnnotation.Annotated => true,
+                    NullableAnnotation.NotAnnotated => Type.IsNullableTypeOrTypeParameter(),
+                    _ => throw ExceptionUtilities.UnexpectedValue(NullableAnnotation),
+                };
             }
         }
 
@@ -307,8 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private bool IsSafeToResolve()
         {
-            var declaringMethod = (DefaultType as TypeParameterSymbol)?.DeclaringMethod as SourceOrdinaryMethodSymbol;
-            return !((object)declaringMethod != null && !declaringMethod.HasComplete(CompletionPart.FinishMethodChecks) &&
+            return !((DefaultType as TypeParameterSymbol)?.DeclaringMethod is SourceOrdinaryMethodSymbol declaringMethod && !declaringMethod.HasComplete(CompletionPart.FinishMethodChecks) &&
                    (declaringMethod.IsOverride || declaringMethod.IsExplicitInterfaceImplementation));
         }
 
@@ -556,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 typeWithAnnotationsPredicate: (t, a, b) => t.NullableAnnotation != NullableAnnotation.Oblivious && !t.Type.IsErrorType() && !t.Type.IsValueType,
                 typePredicate: null,
                 arg: (object)null);
-            return (object)type != null;
+            return type is object;
         }
 
         /// <summary>
@@ -565,8 +558,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         private static bool IsNonGenericValueType(TypeSymbol type)
         {
-            var namedType = type as NamedTypeSymbol;
-            if (namedType is null)
+            if (type is not NamedTypeSymbol namedType)
             {
                 return false;
             }
@@ -925,7 +917,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             private TypeSymbol GetResolvedType()
             {
-                if ((object)_resolved == null)
+                if (_resolved is null)
                 {
                     TryForceResolve(asValueType: _underlying.Type.IsValueType);
                 }
@@ -949,7 +941,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return resolvedType;
             }
 
-            internal override bool IsResolved => (object)_resolved != null;
+            internal override bool IsResolved => _resolved is object;
             internal override TypeSymbol GetResolvedType(TypeSymbol defaultType) => GetResolvedType();
             internal override ImmutableArray<CustomModifier> CustomModifiers => ImmutableArray<CustomModifier>.Empty;
 
@@ -995,7 +987,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             internal override TypeWithAnnotations SubstituteType(TypeWithAnnotations type, AbstractTypeMap typeMap)
             {
-                if ((object)_resolved != null)
+                if (_resolved is object)
                 {
                     return type.SubstituteTypeCore(typeMap);
                 }
@@ -1019,7 +1011,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             internal override void ReportDiagnosticsIfObsolete(TypeWithAnnotations type, Binder binder, SyntaxNode syntax, BindingDiagnosticBag diagnostics)
             {
-                if ((object)_resolved != null)
+                if (_resolved is object)
                 {
                     type.ReportDiagnosticsIfObsoleteCore(binder, syntax, diagnostics);
                 }
@@ -1031,9 +1023,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             internal override bool TypeSymbolEquals(TypeWithAnnotations type, TypeWithAnnotations other, TypeCompareKind comparison)
             {
-                var otherLazy = other._extensions as LazyNullableTypeParameter;
-
-                if (otherLazy != null)
+                if (other._extensions is LazyNullableTypeParameter otherLazy)
                 {
                     return _underlying.TypeSymbolEquals(otherLazy._underlying, comparison);
                 }

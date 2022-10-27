@@ -24,18 +24,13 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// <param name="additionalLanguages">Additional languages to which the analyzer applies. See <see cref="LanguageNames"/>.</param>
         public DiagnosticAnalyzerAttribute(string firstLanguage, params string[] additionalLanguages)
         {
-            if (firstLanguage == null)
-            {
-                throw new ArgumentNullException(nameof(firstLanguage));
-            }
-
             if (additionalLanguages == null)
             {
                 throw new ArgumentNullException(nameof(additionalLanguages));
             }
 
             var languages = new string[additionalLanguages.Length + 1];
-            languages[0] = firstLanguage;
+            languages[0] = firstLanguage ?? throw new ArgumentNullException(nameof(firstLanguage));
             for (int index = 0; index < additionalLanguages.Length; index++)
             {
                 languages[index + 1] = additionalLanguages[index];

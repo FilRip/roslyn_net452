@@ -793,7 +793,7 @@ namespace Microsoft.CodeAnalysis
                             if (cmp > 0)
                             {
                                 // The sort order is violated for child namespace names. Obfuscation is the likely reason for this. 
-                                Debug.Assert((object)lastChildNamespaceName != null);
+                                Debug.Assert(lastChildNamespaceName is object);
                                 possiblyHavePairsWithDuplicateKey = true;
                             }
 
@@ -808,7 +808,7 @@ namespace Microsoft.CodeAnalysis
 
                             typesInLastChildNamespace = new List<IGrouping<string, TypeDefinitionHandle>>();
                             lastChildNamespaceName = childNamespaceName;
-                            Debug.Assert((object)lastChildNamespaceName != null);
+                            Debug.Assert(lastChildNamespaceName is object);
 
                             typesInLastChildNamespace.Add(pair);
                         }
@@ -857,7 +857,7 @@ namespace Microsoft.CodeAnalysis
                         }
                     }
 
-                    int removed = nestedNamespaces.RemoveAll(pair => (object)pair.Key == null);
+                    int removed = nestedNamespaces.RemoveAll(pair => pair.Key is null);
                     Debug.Assert(removed > 0);
                 }
             }

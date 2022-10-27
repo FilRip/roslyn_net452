@@ -14,14 +14,12 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         internal static ImmutableArray<BoundExpression> GetChildInitializers(BoundExpression? objectOrCollectionInitializer)
         {
-            var objectInitializerExpression = objectOrCollectionInitializer as BoundObjectInitializerExpression;
-            if (objectInitializerExpression != null)
+            if (objectOrCollectionInitializer is BoundObjectInitializerExpression objectInitializerExpression)
             {
                 return objectInitializerExpression.Initializers;
             }
 
-            var collectionInitializerExpression = objectOrCollectionInitializer as BoundCollectionInitializerExpression;
-            if (collectionInitializerExpression != null)
+            if (objectOrCollectionInitializer is BoundCollectionInitializerExpression collectionInitializerExpression)
             {
                 return collectionInitializerExpression.Initializers;
             }

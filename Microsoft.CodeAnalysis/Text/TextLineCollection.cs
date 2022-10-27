@@ -89,7 +89,6 @@ namespace Microsoft.CodeAnalysis.Text
             return this.GetEnumerator();
         }
 
-        [SuppressMessage("Performance", "CA1067", Justification = "Equality not actually implemented")]
         public struct Enumerator : IEnumerator<TextLine>, IEnumerator
         {
             private readonly TextLineCollection _lines;

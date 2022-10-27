@@ -54,12 +54,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             EqualsValueClauseSyntax initializer,
             BindingDiagnosticBag diagnostics)
         {
-            var enumConstant = fieldSymbol as SourceEnumConstantSymbol;
             Binder collisionDetector = new LocalScopeBinder(binder);
             collisionDetector = new ExecutableCodeBinder(initializer, fieldSymbol, collisionDetector);
             BoundFieldEqualsValue result;
 
-            if ((object)enumConstant != null)
+            if (fieldSymbol is SourceEnumConstantSymbol enumConstant)
             {
                 result = collisionDetector.BindEnumConstantInitializer(enumConstant, initializer, diagnostics);
             }
@@ -140,7 +139,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         // by changing the value to "null", but by updating the type of the constant.  Consequently,
                         // we retain the unconverted constant value so that it can propagate through the rest of
                         // constant folding.
-                        constantValue = constantValue ?? unconvertedConstantValue;
+                        constantValue ??= unconvertedConstantValue;
                     }
 
                     if (constantValue != null && !hasDynamicConversion)

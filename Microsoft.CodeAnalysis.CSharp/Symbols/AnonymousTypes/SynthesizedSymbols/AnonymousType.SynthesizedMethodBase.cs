@@ -179,8 +179,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 get
                 {
-                    AnonymousTypeTemplateSymbol template = _containingType as AnonymousTypeTemplateSymbol;
-                    return ((object)template != null) ? template.Manager : ((AnonymousTypePublicSymbol)_containingType).Manager;
+                    return (_containingType is AnonymousTypeTemplateSymbol template) ? template.Manager : ((AnonymousTypePublicSymbol)_containingType).Manager;
                 }
             }
 
@@ -224,8 +223,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             protected SyntheticBoundNodeFactory CreateBoundNodeFactory(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
             {
-                var F = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-                F.CurrentFunction = this;
+                var F = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics)
+                {
+                    CurrentFunction = this
+                };
                 return F;
             }
 

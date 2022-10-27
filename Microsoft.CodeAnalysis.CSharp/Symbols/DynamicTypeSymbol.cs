@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override bool Equals(TypeSymbol? t2, TypeCompareKind comparison)
         {
-            if ((object?)t2 == null)
+            if (t2 is null)
             {
                 return false;
             }
@@ -209,8 +209,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if ((comparison & TypeCompareKind.IgnoreDynamic) != 0)
             {
-                var other = t2 as NamedTypeSymbol;
-                return (object?)other != null && other.SpecialType == Microsoft.CodeAnalysis.SpecialType.System_Object;
+                return t2 is NamedTypeSymbol other && other.SpecialType == Microsoft.CodeAnalysis.SpecialType.System_Object;
             }
 
             return false;

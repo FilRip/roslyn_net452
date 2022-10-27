@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // if we're substituting to create a new unconstructed type as a member of a constructed type,
             // then we must alpha rename the type parameters.
-            if ((object)constructedFrom != null)
+            if (constructedFrom is object)
             {
                 _lazyTypeParameters = constructedFrom.TypeParameters;
                 _lazyMap = map;
@@ -304,8 +304,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // cache of size 8 seems reasonable here.
                 // considering that substituted methods have about 10 reference fields,
                 // reusing just one may make the cache profitable.
-                var cache = _lazyMembersByNameCache ??
-                            (_lazyMembersByNameCache = new ConcurrentCache<string, ImmutableArray<Symbol>>(8));
+                var cache = _lazyMembersByNameCache ??= new ConcurrentCache<string, ImmutableArray<Symbol>>(8);
 
                 cache.TryAdd(name, result);
             }

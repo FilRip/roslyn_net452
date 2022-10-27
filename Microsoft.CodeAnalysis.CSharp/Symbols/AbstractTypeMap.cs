@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
 
             NamedTypeSymbol newContainingType = SubstituteNamedType(previous.ContainingType);
-            if ((object)newContainingType == null)
+            if (newContainingType is null)
             {
                 return previous;
             }
@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal NamedTypeSymbol SubstituteNamedType(NamedTypeSymbol previous)
         {
-            if (ReferenceEquals(previous, null))
+            if (previous is null)
                 return null;
 
             if (previous.IsUnboundGenericType)
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <returns>The type with type parameters replaced with the type arguments.</returns>
         internal TypeWithAnnotations SubstituteType(TypeSymbol previous)
         {
-            if (ReferenceEquals(previous, null))
+            if (previous is null)
                 return default;
 
             TypeSymbol result;

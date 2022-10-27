@@ -66,26 +66,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private TypeSymbol TransformType(TypeSymbol type)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Array:
-                    return TransformArrayType((ArrayTypeSymbol)type);
-                case TypeKind.Pointer:
-                    return TransformPointerType((PointerTypeSymbol)type);
-                case TypeKind.FunctionPointer:
-                    return TransformFunctionPointerType((FunctionPointerTypeSymbol)type);
-                case TypeKind.TypeParameter:
-                case TypeKind.Dynamic:
-                    return type;
-                case TypeKind.Class:
-                case TypeKind.Struct:
-                case TypeKind.Interface:
-                case TypeKind.Delegate:
-                case TypeKind.Enum:
-                    return TransformNamedType((NamedTypeSymbol)type);
-                default:
-                    throw new ErrorTypeException();
-            }
+                TypeKind.Array => TransformArrayType((ArrayTypeSymbol)type),
+                TypeKind.Pointer => TransformPointerType((PointerTypeSymbol)type),
+                TypeKind.FunctionPointer => TransformFunctionPointerType((FunctionPointerTypeSymbol)type),
+                TypeKind.TypeParameter or TypeKind.Dynamic => type,
+                TypeKind.Class or TypeKind.Struct or TypeKind.Interface or TypeKind.Delegate or TypeKind.Enum => TransformNamedType((NamedTypeSymbol)type),
+                _ => throw new ErrorTypeException(),
+            };
         }
 
         private NamedTypeSymbol TransformNamedType(NamedTypeSymbol type)

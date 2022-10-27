@@ -16,26 +16,12 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
     {
         private static bool IsNumeric(TypeSymbol type)
         {
-            switch (type.PrimitiveTypeCode)
+            return type.PrimitiveTypeCode switch
             {
-                case Cci.PrimitiveTypeCode.Int8:
-                case Cci.PrimitiveTypeCode.UInt8:
-                case Cci.PrimitiveTypeCode.Int16:
-                case Cci.PrimitiveTypeCode.UInt16:
-                case Cci.PrimitiveTypeCode.Int32:
-                case Cci.PrimitiveTypeCode.UInt32:
-                case Cci.PrimitiveTypeCode.Int64:
-                case Cci.PrimitiveTypeCode.UInt64:
-                case Cci.PrimitiveTypeCode.Char:
-                case Cci.PrimitiveTypeCode.Float32:
-                case Cci.PrimitiveTypeCode.Float64:
-                    return true;
-                case Cci.PrimitiveTypeCode.IntPtr:
-                case Cci.PrimitiveTypeCode.UIntPtr:
-                    return type.IsNativeIntegerType;
-                default:
-                    return false;
-            }
+                Cci.PrimitiveTypeCode.Int8 or Cci.PrimitiveTypeCode.UInt8 or Cci.PrimitiveTypeCode.Int16 or Cci.PrimitiveTypeCode.UInt16 or Cci.PrimitiveTypeCode.Int32 or Cci.PrimitiveTypeCode.UInt32 or Cci.PrimitiveTypeCode.Int64 or Cci.PrimitiveTypeCode.UInt64 or Cci.PrimitiveTypeCode.Char or Cci.PrimitiveTypeCode.Float32 or Cci.PrimitiveTypeCode.Float64 => true,
+                Cci.PrimitiveTypeCode.IntPtr or Cci.PrimitiveTypeCode.UIntPtr => type.IsNativeIntegerType,
+                _ => false,
+            };
         }
 
         private void EmitConversionExpression(BoundConversion conversion, bool used)
@@ -345,15 +331,14 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             _builder.EmitOpCode(ILOpCode.Newobj, -1); // pop 2 args and push delegate object
 
             var ctor = DelegateConstructor(node.Syntax, delegateType);
-            if ((object)ctor != null) EmitSymbolToken(ctor, node.Syntax, null);
+            if (ctor is object) EmitSymbolToken(ctor, node.Syntax, null);
         }
 
         private MethodSymbol DelegateConstructor(SyntaxNode syntax, TypeSymbol delegateType)
         {
             foreach (var possibleCtor in delegateType.GetMembers(WellKnownMemberNames.InstanceConstructorName))
             {
-                var m = possibleCtor as MethodSymbol;
-                if ((object)m == null) continue;
+                if (possibleCtor is not MethodSymbol m) continue;
                 var parameters = m.Parameters;
                 if (parameters.Length != 2) continue;
                 if (parameters[0].Type.SpecialType != SpecialType.System_Object) continue;

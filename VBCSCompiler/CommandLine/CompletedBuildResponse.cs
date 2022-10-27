@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class CompletedBuildResponse : BuildResponse

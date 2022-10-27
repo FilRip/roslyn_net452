@@ -171,7 +171,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             {
                 var newTypeSymbol = Retarget(underlyingType.Type, options);
 
-                if ((object)asDynamicIfNoPiaContainingType != null)
+                if (asDynamicIfNoPiaContainingType is object)
                 {
                     newTypeSymbol = newTypeSymbol.AsDynamicIfNoPia(asDynamicIfNoPiaContainingType);
                 }
@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 {
                     var container = type.ContainingType;
 
-                    while ((object)container != null)
+                    while (container is object)
                     {
                         if (container.IsExplicitDefinitionOfNoPiaLocalType)
                         {
@@ -387,7 +387,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 NamedTypeSymbol containingType = type.ContainingType;
                 MetadataTypeName mdName;
 
-                if ((object)containingType != null)
+                if (containingType is object)
                 {
                     // Nested type.  We need to retarget 
                     // the enclosing type and then go back and get the type we are interested in.
@@ -420,7 +420,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     NamedTypeSymbol result1;
                     MetadataTypeName mdName;
 
-                    if ((object)containingType != null)
+                    if (containingType is object)
                     {
                         // This happens if type is a nested class.  We need to retarget 
                         // the enclosing class and then go back and get the type we are interested in.
@@ -477,7 +477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 int startOfNonInterfaceArguments = int.MaxValue;
 
                 // Collect generic arguments for the type and its containers.
-                while ((object)genericType != null)
+                while (genericType is object)
                 {
                     if (startOfNonInterfaceArguments == int.MaxValue &&
                         !genericType.IsInterface)
@@ -526,7 +526,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     ArrayBuilder<TypeParameterSymbol> newParameters = ArrayBuilder<TypeParameterSymbol>.GetInstance(newArguments.Count);
 
                     // Collect generic arguments for the type and its containers.
-                    while ((object)genericType != null)
+                    while (genericType is object)
                     {
                         if (genericType.Arity > 0)
                         {
@@ -638,7 +638,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
                             namedType = namedType.ContainingType;
                         }
-                        while ((object)namedType != null);
+                        while (namedType is object);
 
                         return false;
 
@@ -1099,17 +1099,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 SourceAttributeData oldAttribute = (SourceAttributeData)oldAttributeData;
 
                 MethodSymbol oldAttributeCtor = oldAttribute.AttributeConstructor;
-                MethodSymbol newAttributeCtor = (object)oldAttributeCtor == null ?
+                MethodSymbol newAttributeCtor = oldAttributeCtor is null ?
                     null :
                     Retarget(oldAttributeCtor, MemberSignatureComparer.RetargetedExplicitImplementationComparer);
 
                 NamedTypeSymbol oldAttributeType = oldAttribute.AttributeClass;
                 NamedTypeSymbol newAttributeType;
-                if ((object)newAttributeCtor != null)
+                if (newAttributeCtor is object)
                 {
                     newAttributeType = newAttributeCtor.ContainingType;
                 }
-                else if ((object)oldAttributeType != null)
+                else if (oldAttributeType is object)
                 {
                     newAttributeType = Retarget(oldAttributeType, RetargetOptions.RetargetPrimitiveTypesByTypeCode);
                 }
@@ -1167,7 +1167,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             private TypedConstant RetargetTypedConstant(TypedConstant oldConstant, ref bool typedConstantChanged)
             {
                 TypeSymbol oldConstantType = (TypeSymbol)oldConstant.TypeInternal;
-                TypeSymbol newConstantType = (object)oldConstantType == null ?
+                TypeSymbol newConstantType = oldConstantType is null ?
                     null :
                     Retarget(oldConstantType, RetargetOptions.RetargetPrimitiveTypesByTypeCode);
 

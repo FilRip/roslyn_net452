@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             int n = original.Arity;
             NamedTypeSymbol originalContainingType = original.ContainingType;
 
-            var constructedFrom = ((object)originalContainingType == null) ?
+            var constructedFrom = (originalContainingType is null) ?
                 original :
                 original.AsMember(originalContainingType.IsGenericType ? originalContainingType.AsUnboundGenericType() : originalContainingType);
             if (n == 0)

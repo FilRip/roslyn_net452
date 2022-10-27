@@ -352,7 +352,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if ((object)member1 == null || (object)member2 == null || member1.Kind != member2.Kind)
+            if (member1 is null || member2 is null || member1.Kind != member2.Kind)
             {
                 return false;
             }
@@ -457,7 +457,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public int GetHashCode(Symbol member)
         {
             int hash = 1;
-            if ((object)member != null)
+            if (member is object)
             {
                 hash = Hash.Combine((int)member.Kind, hash);
 
@@ -738,16 +738,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static Cci.CallingConvention GetCallingConvention(Symbol member)
         {
-            switch (member.Kind)
+            return member.Kind switch
             {
-                case SymbolKind.Method:
-                    return ((MethodSymbol)member).CallingConvention;
-                case SymbolKind.Property: //NOTE: Not using PropertySymbol.CallingConvention
-                case SymbolKind.Event:
-                    return member.IsStatic ? 0 : Cci.CallingConvention.HasThis;
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(member.Kind);
-            }
+                SymbolKind.Method => ((MethodSymbol)member).CallingConvention,
+                //NOTE: Not using PropertySymbol.CallingConvention
+                SymbolKind.Property or SymbolKind.Event => member.IsStatic ? 0 : Cci.CallingConvention.HasThis,
+                _ => throw ExceptionUtilities.UnexpectedValue(member.Kind),
+            };
         }
 
         private static bool IsVarargMethod(Symbol member)

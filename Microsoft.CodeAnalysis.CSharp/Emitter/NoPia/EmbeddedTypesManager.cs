@@ -122,33 +122,26 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         public override CSharpAttributeData CreateSynthesizedAttribute(WellKnownMember constructor, CSharpAttributeData attrData, SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
         {
             var ctor = GetWellKnownMethod(constructor, syntaxNodeOpt, diagnostics);
-            if ((object)ctor == null)
+            if (ctor is null)
             {
                 return null;
             }
 
-            switch (constructor)
+            return constructor switch
             {
-                case WellKnownMember.System_Runtime_InteropServices_ComEventInterfaceAttribute__ctor:
-                    // When emitting a com event interface, we have to tweak the parameters: the spec requires that we use
-                    // the original source interface as both source interface and event provider. Otherwise, we'd have to embed
-                    // the event provider class too.
-                    return new SynthesizedAttributeData(ctor,
-                        ImmutableArray.Create<TypedConstant>(attrData.CommonConstructorArguments[0], attrData.CommonConstructorArguments[0]),
-                        ImmutableArray<KeyValuePair<string, TypedConstant>>.Empty);
-
-                case WellKnownMember.System_Runtime_InteropServices_CoClassAttribute__ctor:
-                    // The interface needs to have a coclass attribute so that we can tell at runtime that it should be
-                    // instantiatable. The attribute cannot refer directly to the coclass, however, because we can't embed
-                    // classes, and we can't emit a reference to the PIA. We don't actually need
-                    // the class name at runtime: we will instead emit a reference to System.Object, as a placeholder.
-                    return new SynthesizedAttributeData(ctor,
-                        ImmutableArray.Create(new TypedConstant(ctor.Parameters[0].Type, TypedConstantKind.Type, ctor.ContainingAssembly.GetSpecialType(SpecialType.System_Object))),
-                        ImmutableArray<KeyValuePair<string, TypedConstant>>.Empty);
-
-                default:
-                    return new SynthesizedAttributeData(ctor, attrData.CommonConstructorArguments, attrData.CommonNamedArguments);
-            }
+                WellKnownMember.System_Runtime_InteropServices_ComEventInterfaceAttribute__ctor => new SynthesizedAttributeData(ctor,
+                                       ImmutableArray.Create<TypedConstant>(attrData.CommonConstructorArguments[0], attrData.CommonConstructorArguments[0]),
+                                       ImmutableArray<KeyValuePair<string, TypedConstant>>.Empty),// When emitting a com event interface, we have to tweak the parameters: the spec requires that we use
+                                                                                                  // the original source interface as both source interface and event provider. Otherwise, we'd have to embed
+                                                                                                  // the event provider class too.
+                WellKnownMember.System_Runtime_InteropServices_CoClassAttribute__ctor => new SynthesizedAttributeData(ctor,
+                                        ImmutableArray.Create(new TypedConstant(ctor.Parameters[0].Type, TypedConstantKind.Type, ctor.ContainingAssembly.GetSpecialType(SpecialType.System_Object))),
+                                        ImmutableArray<KeyValuePair<string, TypedConstant>>.Empty),// The interface needs to have a coclass attribute so that we can tell at runtime that it should be
+                                                                                                   // instantiatable. The attribute cannot refer directly to the coclass, however, because we can't embed
+                                                                                                   // classes, and we can't emit a reference to the PIA. We don't actually need
+                                                                                                   // the class name at runtime: we will instead emit a reference to System.Object, as a placeholder.
+                _ => new SynthesizedAttributeData(ctor, attrData.CommonConstructorArguments, attrData.CommonNamedArguments),
+            };
         }
 
         internal string GetAssemblyGuidString(AssemblySymbol assembly)
@@ -274,7 +267,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
                     // We do not support nesting for embedded types.
                     // ERRID.ERR_InvalidInteropType/ERR_NoPIANestedType
-                    if ((object)namedType.ContainingType != null)
+                    if (namedType.ContainingType is object)
                     {
                         error = ErrorCode.ERR_NoPIANestedType;
                         break;
@@ -388,7 +381,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
                 foreach (MethodSymbol m in namedType.GetMethodsToEmit())
                 {
-                    if ((object)m != null)
+                    if (m is object)
                     {
                         EmbedMethod(embedded, m.GetCciAdapter(), syntaxNodeOpt, diagnostics);
                     }
@@ -475,7 +468,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
             // If this proc happens to belong to a property/event, we should include the property/event as well.
             Symbol propertyOrEvent = method.AdaptedMethodSymbol.AssociatedSymbol;
-            if ((object)propertyOrEvent != null)
+            if (propertyOrEvent is object)
             {
                 switch (propertyOrEvent.Kind)
                 {

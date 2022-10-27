@@ -52,22 +52,12 @@ namespace Microsoft.Cci
             CancellationToken cancellationToken)
         {
             var builder = new MetadataBuilder();
-            MetadataBuilder? debugBuilderOpt;
-            switch (context.Module.DebugInformationFormat)
+            MetadataBuilder? debugBuilderOpt = context.Module.DebugInformationFormat switch
             {
-                case DebugInformationFormat.PortablePdb:
-                    debugBuilderOpt = hasPdbStream ? new MetadataBuilder() : null;
-                    break;
-
-                case DebugInformationFormat.Embedded:
-                    debugBuilderOpt = metadataOnly ? null : new MetadataBuilder();
-                    break;
-
-                default:
-                    debugBuilderOpt = null;
-                    break;
-            }
-
+                DebugInformationFormat.PortablePdb => hasPdbStream ? new MetadataBuilder() : null,
+                DebugInformationFormat.Embedded => metadataOnly ? null : new MetadataBuilder(),
+                _ => null,
+            };
             var dynamicAnalysisDataWriterOpt = emitTestCoverageData ?
                 new DynamicAnalysisDataWriter(context.Module.DebugDocumentCount, context.Module.HintNumberOfMethodDefinitions) :
                 null;

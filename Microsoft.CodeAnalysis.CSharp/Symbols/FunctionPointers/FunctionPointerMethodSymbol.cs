@@ -680,7 +680,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override bool Equals(Symbol other, TypeCompareKind compareKind)
         {
-            if (!(other is FunctionPointerMethodSymbol method))
+            if (other is not FunctionPointerMethodSymbol method)
             {
                 return false;
             }

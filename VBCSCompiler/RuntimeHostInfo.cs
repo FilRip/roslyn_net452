@@ -4,28 +4,28 @@ using System.IO.Pipes;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     internal static class RuntimeHostInfo
     {
-        internal static bool IsCoreClrRuntime => !RuntimeHostInfo.IsDesktopRuntime;
+        internal static bool IsCoreClrRuntime => !IsDesktopRuntime;
 
-        internal static string ToolExtension => !RuntimeHostInfo.IsCoreClrRuntime ? "exe" : "dll";
+        internal static string ToolExtension => !IsCoreClrRuntime ? "exe" : "dll";
 
         private static string NativeToolSuffix => !PlatformInformation.IsWindows ? "" : ".exe";
 
         internal static (string processFilePath, string commandLineArguments, string toolFilePath) GetProcessInfo(
-          string toolFilePathWithoutExtension,
-          string commandLineArguments)
+            string toolFilePathWithoutExtension,
+            string commandLineArguments)
         {
-            string path = toolFilePathWithoutExtension + RuntimeHostInfo.NativeToolSuffix;
-            if (RuntimeHostInfo.IsCoreClrRuntime && File.Exists(path))
+            string path = toolFilePathWithoutExtension + NativeToolSuffix;
+            if (IsCoreClrRuntime && File.Exists(path))
                 return (path, commandLineArguments, path);
-            string str = toolFilePathWithoutExtension + "." + RuntimeHostInfo.ToolExtension;
+            string str = toolFilePathWithoutExtension + "." + ToolExtension;
 #nullable restore
-            if (!RuntimeHostInfo.IsDotNetHost(out string pathToDotNet))
+            if (!IsDotNetHost(out string pathToDotNet))
                 return (str, commandLineArguments, str);
 #nullable enable
             commandLineArguments = "exec \"" + str + "\" " + commandLineArguments;
@@ -41,10 +41,10 @@ namespace Microsoft.CodeAnalysis
         }
 
         internal static NamedPipeClientStream CreateNamedPipeClient(
-          string serverName,
-          string pipeName,
-          PipeDirection direction,
-          PipeOptions options)
+            string serverName,
+            string pipeName,
+            PipeDirection direction,
+            PipeOptions options)
         {
             return new NamedPipeClientStream(serverName, pipeName, direction, options);
         }

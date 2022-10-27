@@ -70,21 +70,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                 TFloatingTC tc = default;
                 if (tc.Related(Equal, tc.NaN, value))
                 {
-                    switch (relation)
+                    return relation switch
                     {
-                        case BinaryOperatorKind.Equal:
-                        case BinaryOperatorKind.LessThanOrEqual:
-                        case BinaryOperatorKind.GreaterThanOrEqual:
-                            return new FloatingValueSet<TFloating, TFloatingTC>(
-                                hasNaN: true,
-                                numbers: NumericValueSet<TFloating, TFloatingTC>.NoValues
-                                );
-                        case BinaryOperatorKind.LessThan:
-                        case BinaryOperatorKind.GreaterThan:
-                            return NoValues;
-                        default:
-                            throw ExceptionUtilities.UnexpectedValue(relation);
-                    }
+                        BinaryOperatorKind.Equal or BinaryOperatorKind.LessThanOrEqual or BinaryOperatorKind.GreaterThanOrEqual => new FloatingValueSet<TFloating, TFloatingTC>(
+                                                       hasNaN: true,
+                                                       numbers: NumericValueSet<TFloating, TFloatingTC>.NoValues
+                                                       ),
+                        BinaryOperatorKind.LessThan or BinaryOperatorKind.GreaterThan => NoValues,
+                        _ => throw ExceptionUtilities.UnexpectedValue(relation),
+                    };
                 }
                 return new FloatingValueSet<TFloating, TFloatingTC>(
                     numbers: NumericValueSetFactory<TFloating, TFloatingTC>.Instance.Related(relation, value),

@@ -81,12 +81,7 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="ArgumentNullException"><paramref name="path"/> is null.</exception>
         public FileLinePositionSpan(string path, LinePositionSpan span)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-
-            _path = path;
+            _path = path ?? throw new ArgumentNullException(nameof(path));
             _span = span;
             _hasMappedPath = false;
         }
@@ -128,7 +123,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public override bool Equals(object? other)
         {
-            return other is FileLinePositionSpan && Equals((FileLinePositionSpan)other);
+            return other is FileLinePositionSpan span && Equals(span);
         }
 
         /// <summary>

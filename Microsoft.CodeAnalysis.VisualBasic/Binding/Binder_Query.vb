@@ -4420,7 +4420,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             additionalDiagnostics.Free()
 
             Debug.Assert((result Is Nothing) = (controlVariableType Is Nothing))
-            Return If(result Is Nothing, source, result)
+            Return If(result, source)
         End Function
 
 

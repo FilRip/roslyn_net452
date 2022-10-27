@@ -19,10 +19,10 @@ namespace Microsoft.CodeAnalysis
         private static string GetPipeNameOrPath(string pipeName) => PlatformInformation.IsUnix ? Path.Combine("/tmp", pipeName) : pipeName;
 
         internal static NamedPipeClientStream CreateClient(
-          string serverName,
-          string pipeName,
-          PipeDirection direction,
-          PipeOptions options)
+            string serverName,
+            string pipeName,
+            PipeDirection direction,
+            PipeOptions options)
         {
             return new NamedPipeClientStream(serverName, GetPipeNameOrPath(pipeName), direction, options | NamedPipeUtil.CurrentUserOption);
         }

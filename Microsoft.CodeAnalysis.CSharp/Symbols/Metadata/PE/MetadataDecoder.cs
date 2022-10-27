@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         protected override TypeSymbol GetGenericMethodTypeParamSymbol(int position)
         {
-            if ((object)_methodContextOpt == null)
+            if (_methodContextOpt is null)
             {
                 return new UnsupportedMetadataTypeSymbol(); // type parameter not associated with a method
             }
@@ -85,12 +85,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             PENamedTypeSymbol type = _typeContextOpt;
 
-            while ((object)type != null && (type.MetadataArity - type.Arity) > position)
+            while (type is object && (type.MetadataArity - type.Arity) > position)
             {
                 type = type.ContainingSymbol as PENamedTypeSymbol;
             }
 
-            if ((object)type == null || type.MetadataArity <= position)
+            if (type is null || type.MetadataArity <= position)
             {
                 return new UnsupportedMetadataTypeSymbol(); // position of type parameter too large
             }
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             ref MetadataTypeName emittedName)
         {
             var assembly = moduleSymbol.GetReferencedAssemblySymbol(referencedAssemblyIndex);
-            if ((object)assembly == null)
+            if (assembly is null)
             {
                 return new UnsupportedMetadataTypeSymbol();
             }
@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     AssemblySymbol containingAssembly = symbol.OriginalDefinition.ContainingAssembly;
                     int i;
 
-                    if ((object)containingAssembly != null)
+                    if (containingAssembly is object)
                     {
                         for (i = 0; i < assemblies.Length; i++)
                         {
@@ -248,7 +248,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                         namedType = namedType.ContainingType;
                     }
-                    while ((object)namedType != null);
+                    while (namedType is object);
 
                     return false;
 
@@ -438,7 +438,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 }
 
                 // OK. It looks like we found canonical type definition.
-                if ((object)result != null)
+                if (result is object)
                 {
                     // Ambiguity 
                     result = new NoPiaAmbiguousCanonicalTypeSymbol(referringAssembly, result, candidate);
@@ -448,7 +448,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 result = candidate;
             }
 
-            if ((object)result == null)
+            if (result is null)
             {
                 result = new NoPiaMissingCanonicalTypeSymbol(
                                 referringAssembly,
@@ -466,8 +466,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             foreach (Symbol member in typeSymbol.GetMembersUnordered())
             {
-                PEMethodSymbol method = member as PEMethodSymbol;
-                if ((object)method != null && method.Handle == targetMethodDef)
+                if (member is PEMethodSymbol method && method.Handle == targetMethodDef)
                 {
                     return method;
                 }
@@ -481,8 +480,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             foreach (Symbol member in typeSymbol.GetMembersUnordered())
             {
-                PEFieldSymbol field = member as PEFieldSymbol;
-                if ((object)field != null && field.Handle == fieldDef)
+                if (member is PEFieldSymbol field && field.Handle == fieldDef)
                 {
                     return field;
                 }
@@ -501,7 +499,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
 
 
-            if ((object)scope != null)
+            if (scope is object)
             {
 
                 // We only want to consider members that are at or above "scope" in the type hierarchy.
@@ -539,10 +537,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         protected override void EnqueueTypeSymbol(Queue<TypeDefinitionHandle> typeDefsToSearch, Queue<TypeSymbol> typeSymbolsToSearch, TypeSymbol typeSymbol)
         {
-            if ((object)typeSymbol != null)
+            if (typeSymbol is object)
             {
-                PENamedTypeSymbol peTypeSymbol = typeSymbol as PENamedTypeSymbol;
-                if ((object)peTypeSymbol != null && ReferenceEquals(peTypeSymbol.ContainingPEModule, moduleSymbol))
+                if (typeSymbol is PENamedTypeSymbol peTypeSymbol && ReferenceEquals(peTypeSymbol.ContainingPEModule, moduleSymbol))
                 {
                     typeDefsToSearch.Enqueue(peTypeSymbol.Handle);
                 }
@@ -555,8 +552,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         protected override MethodDefinitionHandle GetMethodHandle(MethodSymbol method)
         {
-            PEMethodSymbol peMethod = method as PEMethodSymbol;
-            if ((object)peMethod != null && ReferenceEquals(peMethod.ContainingModule, moduleSymbol))
+            if (method is PEMethodSymbol peMethod && ReferenceEquals(peMethod.ContainingModule, moduleSymbol))
             {
                 return peMethod.Handle;
             }

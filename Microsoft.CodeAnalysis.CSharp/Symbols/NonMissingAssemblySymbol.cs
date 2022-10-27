@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                if ((object)_globalNamespace == null)
+                if (_globalNamespace is null)
                 {
                     // Get the root namespace from each module, and merge them all together. If there is only one, 
                     // then MergedNamespaceSymbol.Create will just return that one.
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // 4) Multitargeting - retargeting the type to a different version of assembly
             result = LookupTopLevelMetadataTypeInCache(ref emittedName);
 
-            if ((object)result != null)
+            if (result is object)
             {
                 // We only cache result equivalent to digging through type forwarders, which
                 // might produce a forwarder specific ErrorTypeSymbol. We don't want to 
@@ -154,13 +154,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     System.Diagnostics.Debug.Assert(result is MissingMetadataTypeSymbol);
 
                     NamedTypeSymbol forwarded = TryLookupForwardedMetadataTypeWithCycleDetection(ref emittedName, visitedAssemblies);
-                    if ((object)forwarded != null)
+                    if (forwarded is object)
                     {
                         result = forwarded;
                     }
                 }
 
-                System.Diagnostics.Debug.Assert((object)result != null);
+                System.Diagnostics.Debug.Assert(result is object);
 
                 // Add result of the lookup into the cache
                 if (digThroughForwardedTypes || foundMatchInThisAssembly)

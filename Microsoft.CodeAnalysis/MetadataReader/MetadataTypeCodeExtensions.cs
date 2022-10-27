@@ -14,65 +14,28 @@ namespace Microsoft.CodeAnalysis
     {
         internal static SpecialType ToSpecialType(this SignatureTypeCode typeCode)
         {
-            switch (typeCode)
+            return typeCode switch
             {
-                case SignatureTypeCode.TypedReference:
-                    return SpecialType.System_TypedReference;
-
-                case SignatureTypeCode.Void:
-                    return SpecialType.System_Void;
-
-                case SignatureTypeCode.Boolean:
-                    return SpecialType.System_Boolean;
-
-                case SignatureTypeCode.SByte:
-                    return SpecialType.System_SByte;
-
-                case SignatureTypeCode.Byte:
-                    return SpecialType.System_Byte;
-
-                case SignatureTypeCode.Int16:
-                    return SpecialType.System_Int16;
-
-                case SignatureTypeCode.UInt16:
-                    return SpecialType.System_UInt16;
-
-                case SignatureTypeCode.Int32:
-                    return SpecialType.System_Int32;
-
-                case SignatureTypeCode.UInt32:
-                    return SpecialType.System_UInt32;
-
-                case SignatureTypeCode.Int64:
-                    return SpecialType.System_Int64;
-
-                case SignatureTypeCode.UInt64:
-                    return SpecialType.System_UInt64;
-
-                case SignatureTypeCode.Single:
-                    return SpecialType.System_Single;
-
-                case SignatureTypeCode.Double:
-                    return SpecialType.System_Double;
-
-                case SignatureTypeCode.Char:
-                    return SpecialType.System_Char;
-
-                case SignatureTypeCode.String:
-                    return SpecialType.System_String;
-
-                case SignatureTypeCode.IntPtr:
-                    return SpecialType.System_IntPtr;
-
-                case SignatureTypeCode.UIntPtr:
-                    return SpecialType.System_UIntPtr;
-
-                case SignatureTypeCode.Object:
-                    return SpecialType.System_Object;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(typeCode);
-            }
+                SignatureTypeCode.TypedReference => SpecialType.System_TypedReference,
+                SignatureTypeCode.Void => SpecialType.System_Void,
+                SignatureTypeCode.Boolean => SpecialType.System_Boolean,
+                SignatureTypeCode.SByte => SpecialType.System_SByte,
+                SignatureTypeCode.Byte => SpecialType.System_Byte,
+                SignatureTypeCode.Int16 => SpecialType.System_Int16,
+                SignatureTypeCode.UInt16 => SpecialType.System_UInt16,
+                SignatureTypeCode.Int32 => SpecialType.System_Int32,
+                SignatureTypeCode.UInt32 => SpecialType.System_UInt32,
+                SignatureTypeCode.Int64 => SpecialType.System_Int64,
+                SignatureTypeCode.UInt64 => SpecialType.System_UInt64,
+                SignatureTypeCode.Single => SpecialType.System_Single,
+                SignatureTypeCode.Double => SpecialType.System_Double,
+                SignatureTypeCode.Char => SpecialType.System_Char,
+                SignatureTypeCode.String => SpecialType.System_String,
+                SignatureTypeCode.IntPtr => SpecialType.System_IntPtr,
+                SignatureTypeCode.UIntPtr => SpecialType.System_UIntPtr,
+                SignatureTypeCode.Object => SpecialType.System_Object,
+                _ => throw ExceptionUtilities.UnexpectedValue(typeCode),
+            };
         }
 
         internal static bool HasShortFormSignatureEncoding(this SpecialType type)
@@ -101,81 +64,33 @@ namespace Microsoft.CodeAnalysis
             //   VALUETYPE System.Single               ELEMENT_TYPE_R4
             //   VALUETYPE System.Double               ELEMENT_TYPE_R8
 
-            switch (type)
+            return type switch
             {
-                case SpecialType.System_String:
-                case SpecialType.System_Object:
-                case SpecialType.System_Void:
-                case SpecialType.System_Boolean:
-                case SpecialType.System_Char:
-                case SpecialType.System_Byte:
-                case SpecialType.System_SByte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_IntPtr:
-                case SpecialType.System_UIntPtr:
-                case SpecialType.System_TypedReference:
-                case SpecialType.System_Single:
-                case SpecialType.System_Double:
-                    return true;
-            }
-
-            return false;
+                SpecialType.System_String or SpecialType.System_Object or SpecialType.System_Void or SpecialType.System_Boolean or SpecialType.System_Char or SpecialType.System_Byte or SpecialType.System_SByte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_IntPtr or SpecialType.System_UIntPtr or SpecialType.System_TypedReference or SpecialType.System_Single or SpecialType.System_Double => true,
+                _ => false,
+            };
         }
 
         internal static SerializationTypeCode ToSerializationType(this SpecialType specialType)
         {
-            switch (specialType)
+            return specialType switch
             {
-                case SpecialType.System_Boolean:
-                    return SerializationTypeCode.Boolean;
-
-                case SpecialType.System_SByte:
-                    return SerializationTypeCode.SByte;
-
-                case SpecialType.System_Byte:
-                    return SerializationTypeCode.Byte;
-
-                case SpecialType.System_Int16:
-                    return SerializationTypeCode.Int16;
-
-                case SpecialType.System_Int32:
-                    return SerializationTypeCode.Int32;
-
-                case SpecialType.System_Int64:
-                    return SerializationTypeCode.Int64;
-
-                case SpecialType.System_UInt16:
-                    return SerializationTypeCode.UInt16;
-
-                case SpecialType.System_UInt32:
-                    return SerializationTypeCode.UInt32;
-
-                case SpecialType.System_UInt64:
-                    return SerializationTypeCode.UInt64;
-
-                case SpecialType.System_Single:
-                    return SerializationTypeCode.Single;
-
-                case SpecialType.System_Double:
-                    return SerializationTypeCode.Double;
-
-                case SpecialType.System_Char:
-                    return SerializationTypeCode.Char;
-
-                case SpecialType.System_String:
-                    return SerializationTypeCode.String;
-
-                case SpecialType.System_Object:
-                    return SerializationTypeCode.TaggedObject;
-
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(specialType);
-            }
+                SpecialType.System_Boolean => SerializationTypeCode.Boolean,
+                SpecialType.System_SByte => SerializationTypeCode.SByte,
+                SpecialType.System_Byte => SerializationTypeCode.Byte,
+                SpecialType.System_Int16 => SerializationTypeCode.Int16,
+                SpecialType.System_Int32 => SerializationTypeCode.Int32,
+                SpecialType.System_Int64 => SerializationTypeCode.Int64,
+                SpecialType.System_UInt16 => SerializationTypeCode.UInt16,
+                SpecialType.System_UInt32 => SerializationTypeCode.UInt32,
+                SpecialType.System_UInt64 => SerializationTypeCode.UInt64,
+                SpecialType.System_Single => SerializationTypeCode.Single,
+                SpecialType.System_Double => SerializationTypeCode.Double,
+                SpecialType.System_Char => SerializationTypeCode.Char,
+                SpecialType.System_String => SerializationTypeCode.String,
+                SpecialType.System_Object => SerializationTypeCode.TaggedObject,
+                _ => throw ExceptionUtilities.UnexpectedValue(specialType),
+            };
         }
     }
 }

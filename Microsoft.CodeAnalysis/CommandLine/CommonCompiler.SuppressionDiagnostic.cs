@@ -81,8 +81,7 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                var other = obj as SuppressionDiagnostic;
-                if (other == null)
+                if (obj is not SuppressionDiagnostic other)
                 {
                     return false;
                 }

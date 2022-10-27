@@ -197,7 +197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 ' Do this by accumulating a set of all the methods that have been overridden, if we encounter a MustOverride
                 ' method that is not in the set, then report it. We can do this in a single pass up the base chain.
 
-                Dim overriddenMembers As HashSet(Of Symbol) = New HashSet(Of Symbol)()
+                Dim overriddenMembers As New HashSet(Of Symbol)()
                 Dim unimplementedMembers As ArrayBuilder(Of Symbol) = ArrayBuilder(Of Symbol).GetInstance()
 
                 Dim currType = container

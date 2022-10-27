@@ -199,7 +199,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private static readonly ObjectPool<Queue<IOperation>> s_queuePool =
-            new(() => new Queue<IOperation>(), 10);
+        /*private static readonly ObjectPool<Queue<IOperation>> s_queuePool =
+            new(() => new Queue<IOperation>(), 10);*/
     }
 }

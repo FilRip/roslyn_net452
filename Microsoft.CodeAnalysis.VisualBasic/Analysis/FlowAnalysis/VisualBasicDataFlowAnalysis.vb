@@ -266,7 +266,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Friend ReadOnly Property InvalidRegionDetectedInternal As Boolean
             Get
-                Return If(Me.Succeeded, False, Me._invalidRegionDetected)
+                Return Not Me.Succeeded AndAlso Me._invalidRegionDetected
             End Get
         End Property
 

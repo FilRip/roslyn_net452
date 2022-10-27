@@ -210,26 +210,25 @@ namespace Microsoft.CodeAnalysis
 
         private static string GetErrorDisplayNameResourceId(AttributeTargets target)
         {
-            switch (target)
+            return target switch
             {
-                case AttributeTargets.Assembly: return nameof(Properties.Resources.Assembly);
-                case AttributeTargets.Class: return nameof(Properties.Resources.Class1);
-                case AttributeTargets.Constructor: return nameof(Properties.Resources.Constructor);
-                case AttributeTargets.Delegate: return nameof(Properties.Resources.Delegate1);
-                case AttributeTargets.Enum: return nameof(Properties.Resources.Enum1);
-                case AttributeTargets.Event: return nameof(Properties.Resources.Event1);
-                case AttributeTargets.Field: return nameof(Properties.Resources.Field);
-                case AttributeTargets.GenericParameter: return nameof(Properties.Resources.TypeParameter);
-                case AttributeTargets.Interface: return nameof(Properties.Resources.Interface1);
-                case AttributeTargets.Method: return nameof(Properties.Resources.Method);
-                case AttributeTargets.Module: return nameof(Properties.Resources.Module);
-                case AttributeTargets.Parameter: return nameof(Properties.Resources.Parameter);
-                case AttributeTargets.Property: return nameof(Properties.Resources.Property);
-                case AttributeTargets.ReturnValue: return nameof(Properties.Resources.Return1);
-                case AttributeTargets.Struct: return nameof(Properties.Resources.Struct1);
-                default:
-                    throw ExceptionUtilities.UnexpectedValue(target);
-            }
+                AttributeTargets.Assembly => nameof(Properties.Resources.Assembly),
+                AttributeTargets.Class => nameof(Properties.Resources.Class1),
+                AttributeTargets.Constructor => nameof(Properties.Resources.Constructor),
+                AttributeTargets.Delegate => nameof(Properties.Resources.Delegate1),
+                AttributeTargets.Enum => nameof(Properties.Resources.Enum1),
+                AttributeTargets.Event => nameof(Properties.Resources.Event1),
+                AttributeTargets.Field => nameof(Properties.Resources.Field),
+                AttributeTargets.GenericParameter => nameof(Properties.Resources.TypeParameter),
+                AttributeTargets.Interface => nameof(Properties.Resources.Interface1),
+                AttributeTargets.Method => nameof(Properties.Resources.Method),
+                AttributeTargets.Module => nameof(Properties.Resources.Module),
+                AttributeTargets.Parameter => nameof(Properties.Resources.Parameter),
+                AttributeTargets.Property => nameof(Properties.Resources.Property),
+                AttributeTargets.ReturnValue => nameof(Properties.Resources.Return1),
+                AttributeTargets.Struct => nameof(Properties.Resources.Struct1),
+                _ => throw ExceptionUtilities.UnexpectedValue(target),
+            };
         }
     }
 }

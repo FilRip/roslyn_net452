@@ -86,7 +86,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
                 }
 
-                (nodes ?? (nodes = ArrayBuilder<CSharpSyntaxNode>.GetInstance())).Add(node);
+                (nodes ??= ArrayBuilder<CSharpSyntaxNode>.GetInstance()).Add(node);
                 node = parent;
             }
 

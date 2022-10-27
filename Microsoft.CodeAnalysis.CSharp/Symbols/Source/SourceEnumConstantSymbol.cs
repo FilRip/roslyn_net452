@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             int otherConstantOffset,
             BindingDiagnosticBag diagnostics)
         {
-            if ((object)otherConstant == null)
+            if (otherConstant is null)
             {
                 return new ZeroValuedEnumConstantSymbol(containingEnum, syntax, diagnostics);
             }

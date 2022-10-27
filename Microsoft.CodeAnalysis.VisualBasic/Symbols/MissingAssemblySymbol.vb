@@ -163,7 +163,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     Friend NotInheritable Class MissingCorLibrarySymbol
         Inherits MissingAssemblySymbol
 
-        Friend Shared ReadOnly Instance As MissingCorLibrarySymbol = New MissingCorLibrarySymbol()
+        Friend Shared ReadOnly Instance As New MissingCorLibrarySymbol()
 
         ''' <summary>
         ''' An array of cached Cor types defined in this assembly.

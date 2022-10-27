@@ -20,23 +20,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static RefKind GetRefKind(this BoundExpression node)
         {
-            switch (node.Kind)
+            return node.Kind switch
             {
-                case BoundKind.Local:
-                    return ((BoundLocal)node).LocalSymbol.RefKind;
-
-                case BoundKind.Parameter:
-                    return ((BoundParameter)node).ParameterSymbol.RefKind;
-
-                case BoundKind.Call:
-                    return ((BoundCall)node).Method.RefKind;
-
-                case BoundKind.PropertyAccess:
-                    return ((BoundPropertyAccess)node).PropertySymbol.RefKind;
-
-                default:
-                    return RefKind.None;
-            }
+                BoundKind.Local => ((BoundLocal)node).LocalSymbol.RefKind,
+                BoundKind.Parameter => ((BoundParameter)node).ParameterSymbol.RefKind,
+                BoundKind.Call => ((BoundCall)node).Method.RefKind,
+                BoundKind.PropertyAccess => ((BoundPropertyAccess)node).PropertySymbol.RefKind,
+                _ => RefKind.None,
+            };
         }
 
         public static bool IsLiteralNull(this BoundExpression node)
@@ -100,24 +91,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static bool HasExpressionSymbols(this BoundExpression node)
         {
-            switch (node.Kind)
+            return node.Kind switch
             {
-                case BoundKind.Call:
-                case BoundKind.Local:
-                case BoundKind.FieldAccess:
-                case BoundKind.PropertyAccess:
-                case BoundKind.IndexerAccess:
-                case BoundKind.EventAccess:
-                case BoundKind.MethodGroup:
-                case BoundKind.ObjectCreationExpression:
-                case BoundKind.TypeExpression:
-                case BoundKind.NamespaceExpression:
-                    return true;
-                case BoundKind.BadExpression:
-                    return ((BoundBadExpression)node).Symbols.Length > 0;
-                default:
-                    return false;
-            }
+                BoundKind.Call or BoundKind.Local or BoundKind.FieldAccess or BoundKind.PropertyAccess or BoundKind.IndexerAccess or BoundKind.EventAccess or BoundKind.MethodGroup or BoundKind.ObjectCreationExpression or BoundKind.TypeExpression or BoundKind.NamespaceExpression => true,
+                BoundKind.BadExpression => ((BoundBadExpression)node).Symbols.Length > 0,
+                _ => false,
+            };
         }
 
         public static void GetExpressionSymbols(this BoundExpression node, ArrayBuilder<Symbol> symbols, BoundNode parent, Binder binder)
@@ -127,8 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundKind.MethodGroup:
                     // Special case: if we are looking for info on "M" in "new Action(M)" in the context of a parent 
                     // then we want to get the symbol that overload resolution chose for M, not on the whole method group M.
-                    var delegateCreation = parent as BoundDelegateCreationExpression;
-                    if (delegateCreation != null && delegateCreation.MethodOpt is { })
+                    if (parent is BoundDelegateCreationExpression delegateCreation && delegateCreation.MethodOpt is { })
                     {
                         symbols.Add(delegateCreation.MethodOpt);
                     }

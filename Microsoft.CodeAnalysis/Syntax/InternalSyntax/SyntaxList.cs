@@ -117,9 +117,8 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                 return left;
             }
 
-            var leftList = left as SyntaxList;
             var rightList = right as SyntaxList;
-            if (leftList != null)
+            if (left is SyntaxList leftList)
             {
                 if (rightList != null)
                 {

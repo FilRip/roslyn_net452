@@ -297,8 +297,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                         Continue While
                     End If
                 Else
-                    node = New DependencyInfo()
-                    node.DependedOnBy = ImmutableHashSet(Of SourceFieldSymbol).Empty
+                    node = New DependencyInfo() With {
+                        .DependedOnBy = ImmutableHashSet(Of SourceFieldSymbol).Empty
+                    }
                 End If
 
                 Dim dependencies As ImmutableHashSet(Of SourceFieldSymbol) = field.GetConstantValueDependencies()
@@ -315,8 +316,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     pending.Push(dependency)
 
                     If Not graph.TryGetValue(dependency, node) Then
-                        node = New DependencyInfo()
-                        node.DependedOnBy = ImmutableHashSet(Of SourceFieldSymbol).Empty
+                        node = New DependencyInfo() With {
+                            .DependedOnBy = ImmutableHashSet(Of SourceFieldSymbol).Empty
+                        }
                     End If
 
                     node.DependedOnBy = node.DependedOnBy.Add(field)
@@ -809,14 +811,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend NotOverridable Overrides ReadOnly Property MarshallingInformation As MarshalPseudoCustomAttributeData
             Get
                 Dim data = GetDecodedWellKnownAttributeData()
-                Return If(data IsNot Nothing, data.MarshallingInformation, Nothing)
+                Return data?.MarshallingInformation
             End Get
         End Property
 
         Friend NotOverridable Overrides ReadOnly Property TypeLayoutOffset As Integer?
             Get
                 Dim data = GetDecodedWellKnownAttributeData()
-                Return If(data IsNot Nothing, data.Offset, Nothing)
+                Return data?.Offset
             End Get
         End Property
 
@@ -830,7 +832,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim lazyCustomAttributesBag = Me._lazyCustomAttributesBag
                 If (lazyCustomAttributesBag IsNot Nothing AndAlso lazyCustomAttributesBag.IsEarlyDecodedWellKnownAttributeDataComputed) Then
                     Dim data = DirectCast(_lazyCustomAttributesBag.EarlyDecodedWellKnownAttributeData, CommonFieldEarlyWellKnownAttributeData)
-                    Return If(data IsNot Nothing, data.ObsoleteAttributeData, Nothing)
+                    Return data?.ObsoleteAttributeData
                 End If
 
                 Return ObsoleteAttributeData.Uninitialized

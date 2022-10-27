@@ -182,7 +182,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     analyzedArguments.Arguments[i] = ((OutVariablePendingInference)argument).FailInference(this, diagnostics);
                 }
-                else if ((object)argument.Type == null && !argument.HasAnyErrors)
+                else if (argument.Type is null && !argument.HasAnyErrors)
                 {
                     // We are going to need every argument in here to have a type. If we don't have one,
                     // try converting it to object. We'll either succeed (if it is a null literal)
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression result;
             NamedTypeSymbol delegateType;
 
-            if ((object)boundExpression.Type != null && boundExpression.Type.IsDynamic())
+            if (boundExpression.Type is object && boundExpression.Type.IsDynamic())
             {
                 // Either we have a dynamic method group invocation "dyn.M(...)" or 
                 // a dynamic delegate invocation "dyn(...)" -- either way, bind it as a dynamic
@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     node, expression, methodName, (BoundMethodGroup)boundExpression, analyzedArguments,
                     diagnostics, queryClause, allowUnexpandedForm: allowUnexpandedForm, anyApplicableCandidates: out _);
             }
-            else if ((object)(delegateType = GetDelegateType(boundExpression)) != null)
+            else if ((delegateType = GetDelegateType(boundExpression)) is object)
             {
                 if (ReportDelegateInvokeUseSiteDiagnostic(diagnostics, delegateType, node: node))
                 {
@@ -848,7 +848,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundKind.Call:
                     {
                         var call = (BoundCall)expression;
-                        if (!call.HasAnyErrors && call.ReceiverOpt != null && (object)call.ReceiverOpt.Type != null)
+                        if (!call.HasAnyErrors && call.ReceiverOpt != null && call.ReceiverOpt.Type is object)
                         {
                             // error CS0029: Cannot implicitly convert type 'A' to 'B'
 
@@ -871,7 +871,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var dynInvoke = (BoundDynamicInvocation)expression;
                         if (!dynInvoke.HasAnyErrors &&
-                            (object)dynInvoke.Expression.Type != null &&
+                            dynInvoke.Expression.Type is object &&
                             dynInvoke.Expression.Type.IsRestrictedType())
                         {
                             // eg: b = typedReference.Equals(dyn);
@@ -959,7 +959,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 else
                 {
                     // Since there were no argument errors to report, we report an error on the invocation itself.
-                    string name = (object)delegateTypeOpt == null ? methodName : null;
+                    string name = delegateTypeOpt is null ? methodName : null;
                     result.ReportDiagnostics(
                         binder: this, location: GetLocationForOverloadResolutionDiagnostic(node, expression), nodeOpt: node, diagnostics: diagnostics, name: name,
                         receiver: methodGroup.Receiver, invokedExpression: expression, arguments: analyzedArguments, memberGroup: methodGroup.Methods.ToImmutable(),
@@ -967,7 +967,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 return CreateBadCall(node, methodGroup.Name, invokedAsExtensionMethod && analyzedArguments.Arguments.Count > 0 && methodGroup.Receiver == analyzedArguments.Arguments[0] ? null : methodGroup.Receiver,
-                    GetOriginalMethods(result), methodGroup.ResultKind, methodGroup.TypeArguments.ToImmutable(), analyzedArguments, invokedAsExtensionMethod: invokedAsExtensionMethod, isDelegate: ((object)delegateTypeOpt != null));
+                    GetOriginalMethods(result), methodGroup.ResultKind, methodGroup.TypeArguments.ToImmutable(), analyzedArguments, invokedAsExtensionMethod: invokedAsExtensionMethod, isDelegate: (delegateTypeOpt is object));
             }
 
             // Otherwise, there were no dynamic arguments and overload resolution found a unique best candidate. 
@@ -1098,7 +1098,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     diagnostics);
             }
 
-            bool isDelegateCall = (object)delegateTypeOpt != null;
+            bool isDelegateCall = delegateTypeOpt is object;
             if (!isDelegateCall)
             {
                 if (method.RequiresInstanceReceiver)
@@ -1525,7 +1525,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 var returnType = GetCommonTypeOrReturnType(methods) ?? new ExtendedErrorTypeSymbol(this.Compilation, string.Empty, arity: 0, errorInfo: null);
-                var methodContainer = receiver != null && (object)receiver.Type != null
+                var methodContainer = receiver != null && receiver.Type is object
                     ? receiver.Type
                     : this.ContainingType;
                 method = new ErrorMethodSymbol(methodContainer, returnType, name);
@@ -1607,7 +1607,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             {
                                 var parameterType = GetCorrespondingParameterType(analyzedArguments, i, parameterList);
                                 if (parameterType?.Kind == SymbolKind.NamedType &&
-                                    (object)parameterType.GetDelegateType() != null)
+                                    parameterType.GetDelegateType() is object)
                                 {
                                     var discarded = unboundArgument.Bind((NamedTypeSymbol)parameterType);
                                 }
@@ -1628,7 +1628,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             var candidateType = getCorrespondingParameterType(i);
                             if (argument.Kind == BoundKind.OutVariablePendingInference)
                             {
-                                if ((object)candidateType == null)
+                                if (candidateType is null)
                                 {
                                     newArguments[i] = ((OutVariablePendingInference)argument).FailInference(this, null);
                                 }
@@ -1639,7 +1639,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             }
                             else if (argument.Kind == BoundKind.DiscardExpression)
                             {
-                                if ((object)candidateType == null)
+                                if (candidateType is null)
                                 {
                                     newArguments[i] = ((BoundDiscardExpression)argument).FailInference(this, null);
                                 }
@@ -1680,9 +1680,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var parameterList in parameterListList)
                 {
                     var parameterType = GetCorrespondingParameterType(analyzedArguments, i, parameterList);
-                    if ((object)parameterType != null)
+                    if (parameterType is object)
                     {
-                        if ((object)candidateType == null)
+                        if (candidateType is null)
                         {
                             candidateType = parameterType;
                         }
@@ -1758,7 +1758,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0, n = members.Length; i < n; i++)
             {
                 TypeSymbol returnType = members[i].GetTypeOrReturnType().Type;
-                if ((object)type == null)
+                if (type is null)
                 {
                     type = returnType;
                 }

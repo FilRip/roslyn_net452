@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _containingType = containingSymbol;
             _underlyingMethod = originalDefinition;
             _inputMap = map;
-            if ((object)constructedFrom != null)
+            if (constructedFrom is object)
             {
                 _constructedFrom = constructedFrom;
                 _lazyTypeParameters = constructedFrom.TypeParameters;
@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var method = OriginalDefinition.ReducedFrom;
-                return ((object)method == null) ? null : method.Construct(this.TypeArgumentsWithAnnotations);
+                return method?.Construct(this.TypeArgumentsWithAnnotations);
             }
         }
 
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var reduced = this.CallsiteReducedFromMethod;
-                if ((object)reduced == null)
+                if (reduced is null)
                 {
                     return this.ContainingType;
                 }
@@ -212,7 +212,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 Symbol underlying = OriginalDefinition.AssociatedSymbol;
-                return ((object)underlying == null) ? null : underlying.SymbolAsMember(ContainingType);
+                return underlying?.SymbolAsMember(ContainingType);
             }
         }
 
@@ -314,7 +314,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return false;
             }
 
-            thisParameter = (object)originalThisParameter != null
+            thisParameter = originalThisParameter is object
                 ? new ThisParameterSymbol(this)
                 : null;
             return true;
@@ -415,8 +415,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public sealed override bool Equals(Symbol obj, TypeCompareKind compareKind)
         {
-            MethodSymbol other = obj as MethodSymbol;
-            if ((object)other == null) return false;
+            if (obj is not MethodSymbol other) return false;
 
             if (OriginalDefinition != (object)other.OriginalDefinition &&
                 this.OriginalDefinition != other.OriginalDefinition)

@@ -29,8 +29,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
         protected abstract void AddResponseBody(BinaryWriter writer);
 
         public static async Task<BuildResponse> ReadAsync(
-          Stream stream,
-          CancellationToken cancellationToken = default)
+            Stream stream,
+            CancellationToken cancellationToken = default)
         {
             byte[] lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(stream, lengthBuffer, 4, cancellationToken).ConfigureAwait(false);

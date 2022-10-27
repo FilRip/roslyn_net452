@@ -155,19 +155,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         private Cci.ITypeReference GetStorageStruct(uint size)
         {
-            switch (size)
+            return size switch
             {
-                case 1:
-                    return _systemInt8Type ?? new ExplicitSizeStruct(1, this, _systemValueType);
-                case 2:
-                    return _systemInt16Type ?? new ExplicitSizeStruct(2, this, _systemValueType);
-                case 4:
-                    return _systemInt32Type ?? new ExplicitSizeStruct(4, this, _systemValueType);
-                case 8:
-                    return _systemInt64Type ?? new ExplicitSizeStruct(8, this, _systemValueType);
-            }
-
-            return new ExplicitSizeStruct(size, this, _systemValueType);
+                1 => _systemInt8Type ?? new ExplicitSizeStruct(1, this, _systemValueType),
+                2 => _systemInt16Type ?? new ExplicitSizeStruct(2, this, _systemValueType),
+                4 => _systemInt32Type ?? new ExplicitSizeStruct(4, this, _systemValueType),
+                8 => _systemInt64Type ?? new ExplicitSizeStruct(8, this, _systemValueType),
+                _ => new ExplicitSizeStruct(size, this, _systemValueType),
+            };
         }
 
         internal Cci.IFieldReference GetModuleVersionId(Cci.ITypeReference mvidType)

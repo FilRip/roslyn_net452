@@ -612,8 +612,7 @@ namespace Microsoft.Cci
                 return;
             }
 
-            IArrayTypeReference? arrayTypeReference = typeReference as IArrayTypeReference;
-            if (arrayTypeReference != null)
+            if (typeReference is IArrayTypeReference arrayTypeReference)
             {
                 this.Visit(arrayTypeReference);
                 return;
@@ -633,22 +632,19 @@ namespace Microsoft.Cci
                 return;
             }
 
-            IPointerTypeReference? pointerTypeReference = typeReference as IPointerTypeReference;
-            if (pointerTypeReference != null)
+            if (typeReference is IPointerTypeReference pointerTypeReference)
             {
                 this.Visit(pointerTypeReference);
                 return;
             }
 
-            IFunctionPointerTypeReference? functionPointerTypeReference = typeReference as IFunctionPointerTypeReference;
-            if (functionPointerTypeReference != null)
+            if (typeReference is IFunctionPointerTypeReference functionPointerTypeReference)
             {
                 this.Visit(functionPointerTypeReference);
                 return;
             }
 
-            IModifiedTypeReference? modifiedTypeReference = typeReference as IModifiedTypeReference;
-            if (modifiedTypeReference != null)
+            if (typeReference is IModifiedTypeReference modifiedTypeReference)
             {
                 this.Visit(modifiedTypeReference);
                 return;
@@ -676,15 +672,13 @@ namespace Microsoft.Cci
         /// <param name="unitReference">A reference to a unit. Note that a unit can serve as a reference to itself.</param>
         private void DispatchAsReference(IUnitReference unitReference)
         {
-            IAssemblyReference? assemblyReference = unitReference as IAssemblyReference;
-            if (assemblyReference != null)
+            if (unitReference is IAssemblyReference assemblyReference)
             {
                 this.Visit(assemblyReference);
                 return;
             }
 
-            IModuleReference? moduleReference = unitReference as IModuleReference;
-            if (moduleReference != null)
+            if (unitReference is IModuleReference moduleReference)
             {
                 this.Visit(moduleReference);
                 return;
