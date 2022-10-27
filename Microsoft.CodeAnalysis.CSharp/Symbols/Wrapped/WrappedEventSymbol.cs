@@ -6,6 +6,8 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Threading;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>

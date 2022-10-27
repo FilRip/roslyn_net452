@@ -311,12 +311,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private bool GetGetAwaiterMethod(BoundExpression expression, SyntaxNode node, BindingDiagnosticBag diagnostics, [NotNullWhen(true)] out BoundExpression? getAwaiterCall)
         {
+#nullable restore
             if (expression.Type.IsVoidType())
             {
                 Error(diagnostics, ErrorCode.ERR_BadAwaitArgVoidCall, node);
                 getAwaiterCall = null;
                 return false;
             }
+#nullable enable
 
             getAwaiterCall = MakeInvocationExpression(node, expression, WellKnownMemberNames.GetAwaiter, ImmutableArray<BoundExpression>.Empty, diagnostics);
             if (getAwaiterCall.HasAnyErrors) // && !expression.HasAnyErrors?

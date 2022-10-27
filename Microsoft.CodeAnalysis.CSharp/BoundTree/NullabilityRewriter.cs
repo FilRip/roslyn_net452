@@ -100,7 +100,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
             }
 
+#nullable restore
             return (T)updatedSymbol;
+#nullable enable
 
             Symbol remapLambda(BoundLambda boundLambda, LambdaSymbol lambda)
             {
@@ -114,7 +116,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 LambdaSymbol updatedLambda;
                 if (updatedDelegateType is null)
                 {
+#nullable restore
                     updatedLambda = boundLambda.CreateLambdaSymbol(updatedContaining, lambda.ReturnTypeWithAnnotations, lambda.ParameterTypesWithAnnotations, lambda.ParameterRefKinds, lambda.RefKind);
+#nullable enable
                 }
                 else
                 {

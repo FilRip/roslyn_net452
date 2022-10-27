@@ -65,11 +65,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             // TODO (tomat): we might be able to use SiteInvocation.Type instead of resultType once we stop using GetLoweredType
             if (_temps.IsDefaultOrEmpty)
             {
+#nullable restore
                 return _factory.Sequence(new[] { SiteInitialization }, SiteInvocation, _resultType);
             }
             else
             {
-#nullable restore
                 return new BoundSequence(_factory.Syntax, _temps, ImmutableArray.Create(SiteInitialization), SiteInvocation, _resultType) { WasCompilerGenerated = true };
             }
         }

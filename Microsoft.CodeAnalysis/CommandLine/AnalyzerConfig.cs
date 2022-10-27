@@ -227,6 +227,7 @@ namespace Microsoft.CodeAnalysis
                     Debug.Assert(value == value?.Trim());
 
                     key = CaseInsensitiveComparison.ToLower(key);
+#nullable restore
                     if (ReservedKeys.Contains(key) || ReservedValues.Contains(value))
                     {
                         value = CaseInsensitiveComparison.ToLower(value);

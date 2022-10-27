@@ -135,7 +135,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     withExpr.Type,
                     _factory.Call(
                         VisitExpression(withExpr.Receiver),
+#nullable restore
                         withExpr.CloneMethod));
+#nullable enable
             }
 
             return MakeExpressionWithInitializer(

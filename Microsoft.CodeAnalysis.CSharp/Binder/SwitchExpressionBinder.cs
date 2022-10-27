@@ -183,7 +183,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal (TypeSymbol GoverningType, uint GoverningValEscape) GetInputTypeAndValEscape(BoundExpression? inputExpression = null)
         {
             inputExpression ??= BindSwitchGoverningExpression(BindingDiagnosticBag.Discarded);
+#nullable restore
             return (inputExpression.Type, GetValEscape(inputExpression, LocalScopeDepth));
+#nullable enable
         }
 
         private BoundExpression BindSwitchGoverningExpression(BindingDiagnosticBag diagnostics)

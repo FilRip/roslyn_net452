@@ -99,8 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public ForEachEnumeratorInfo Build(BinderFlags location)
             {
-
-
+#nullable restore
                 return new ForEachEnumeratorInfo(
                     CollectionType,
                     ElementTypeWithAnnotations,

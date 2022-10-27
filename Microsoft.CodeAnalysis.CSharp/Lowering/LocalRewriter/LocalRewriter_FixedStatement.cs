@@ -419,11 +419,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             // intervening parens may have been skipped by the binder; find the declarator
             VariableDeclaratorSyntax? declarator = fixedInitializer.Syntax.FirstAncestorOrSelf<VariableDeclaratorSyntax>();
 
+#nullable restore
             pinnedTemp = factory.SynthesizedLocal(
                 initializerType,
                 syntax: declarator,
                 isPinned: true,
                 kind: SynthesizedLocalKind.FixedReference);
+#nullable enable
 
             // NOTE: we pin the string, not the pointer.
 
@@ -483,7 +485,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression initializerExpr = VisitExpression(fixedInitializer.Expression);
             TypeSymbol? initializerType = initializerExpr.Type;
 
+#nullable restore
             pinnedTemp = factory.SynthesizedLocal(initializerType, isPinned: true);
+#nullable enable
             ArrayTypeSymbol arrayType = (ArrayTypeSymbol)pinnedTemp.Type;
             TypeWithAnnotations arrayElementType = arrayType.ElementTypeWithAnnotations;
 

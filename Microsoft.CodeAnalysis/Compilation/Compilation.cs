@@ -3018,7 +3018,7 @@ namespace Microsoft.CodeAnalysis
         {
             bool emitSecondaryAssembly = getMetadataPeStreamOpt != null;
 
-            bool includePrivateMembersOnPrimaryOutput = metadataOnly ? includePrivateMembers : true;
+            bool includePrivateMembersOnPrimaryOutput = !metadataOnly || includePrivateMembers;
             bool deterministicPrimaryOutput = (metadataOnly && !includePrivateMembers) || isDeterministic;
             if (!Cci.PeWriter.WritePeToStream(
                 new EmitContext(moduleBeingBuilt, metadataDiagnostics, metadataOnly, includePrivateMembersOnPrimaryOutput, rebuildData: rebuildData),

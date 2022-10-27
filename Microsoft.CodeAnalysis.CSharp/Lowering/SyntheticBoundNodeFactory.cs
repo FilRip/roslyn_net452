@@ -1227,12 +1227,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             if (conversion.Kind == ConversionKind.ExplicitNullable &&
+#nullable restore
                 arg.Type.IsNullableType() &&
                 arg.Type.GetNullableUnderlyingType().Equals(type, TypeCompareKind.AllIgnoreOptions))
             {
                 // A conversion to unbox a nullable value is produced when binding a pattern-matching
                 // operation from an operand of type T? to a pattern of type T.
-#nullable restore
                 return this.Call(arg, this.SpecialMethod(CodeAnalysis.SpecialMember.System_Nullable_T_get_Value).AsMember((NamedTypeSymbol)arg.Type));
 #nullable enable
             }

@@ -35,6 +35,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
 
+#nullable restore
             BoundBlock tryBlock = rewrittenBody.Kind == BoundKind.Block
                 ? (BoundBlock)rewrittenBody
                 : BoundBlock.SynthesizedNoLocals(node.Syntax, rewrittenBody);
@@ -56,6 +57,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                                                      awaitKeyword);
             }
         }
+
+#nullable enable
 
         private BoundStatement MakeDeclarationUsingStatement(SyntaxNode syntax,
                                                        BoundBlock body,
@@ -120,6 +123,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // the expression to be null.
             //
             // If expr is the constant null then we can elide the whole thing and simply generate the statement. 
+
+#nullable restore
 
             BoundExpression rewrittenExpression = VisitExpression(node.ExpressionOpt);
             if (rewrittenExpression.ConstantValue == ConstantValue.Null)
@@ -197,6 +202,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Assumes that the local symbol will be declared (i.e. in the LocalsOpt array) of an enclosing block.
         /// Assumes that using statements with multiple locals have already been split up into multiple using statements.
         /// </remarks>
+#nullable enable
+
         private BoundBlock RewriteDeclarationUsingStatement(
             SyntaxNode usingSyntax,
             BoundLocalDeclaration localDeclaration,
@@ -211,8 +218,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             LocalSymbol localSymbol = localDeclaration.LocalSymbol;
             TypeSymbol localType = localSymbol.Type;
 
+#nullable restore
             BoundLocal boundLocal = new(declarationSyntax, localSymbol, localDeclaration.InitializerOpt.ConstantValue, localType);
 
+#nullable enable
             BoundStatement? rewrittenDeclaration = VisitStatement(localDeclaration);
 
             // If we know that the expression is null, then we know that the null check in the finally block
@@ -222,6 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (boundLocal.ConstantValue == ConstantValue.Null)
             {
                 //localSymbol will be declared by an enclosing block
+#nullable restore
                 return BoundBlock.SynthesizedNoLocals(usingSyntax, rewrittenDeclaration, tryBlock);
             }
 
@@ -260,6 +270,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return BoundBlock.SynthesizedNoLocals(usingSyntax, rewrittenDeclaration, tryFinally);
             }
         }
+
+#nullable enable
 
         private BoundStatement RewriteUsingStatementTryFinally(
             SyntaxNode syntax,

@@ -373,10 +373,8 @@ namespace Microsoft.CodeAnalysis
             try
             {
                 var data = OpenFileForReadWithSmallBufferOptimization(filePath, out normalizedPath);
-                using (var reader = new StreamReader(data, Encoding.UTF8))
-                {
-                    return reader.ReadToEnd();
-                }
+                using var reader = new StreamReader(data, Encoding.UTF8);
+                return reader.ReadToEnd();
             }
             catch (Exception e)
             {
@@ -403,20 +401,18 @@ namespace Microsoft.CodeAnalysis
         {
             try
             {
-                using (var stream = OpenFileForReadWithSmallBufferOptimization(filePath, out _))
+                using var stream = OpenFileForReadWithSmallBufferOptimization(filePath, out _);
+                const int LargeObjectHeapLimit = 80 * 1024;
+                if (stream.Length < LargeObjectHeapLimit)
                 {
-                    const int LargeObjectHeapLimit = 80 * 1024;
-                    if (stream.Length < LargeObjectHeapLimit)
+                    // FilRip modified
+                    if (EncodedStringText.TryGetByteArrayFromFileStream(stream, out byte[] bytes))
                     {
-                        // FilRip modified
-                        if (EncodedStringText.TryGetByteArrayFromFileStream(stream, out byte[] bytes))
-                        {
-                            return EmbeddedText.FromBytes(filePath, new ArraySegment<byte>(bytes), Arguments.ChecksumAlgorithm);
-                        }
+                        return EmbeddedText.FromBytes(filePath, new ArraySegment<byte>(bytes), Arguments.ChecksumAlgorithm);
                     }
-
-                    return EmbeddedText.FromStream(filePath, stream, Arguments.ChecksumAlgorithm);
                 }
+
+                return EmbeddedText.FromStream(filePath, stream, Arguments.ChecksumAlgorithm);
             }
             catch (Exception e)
             {
@@ -1215,22 +1211,20 @@ namespace Microsoft.CodeAnalysis
 
                             using (xmlStreamDisposerOpt)
                             {
-                                using (var win32ResourceStreamOpt = GetWin32Resources(FileSystem, MessageProvider, Arguments, compilation, diagnostics))
+                                using var win32ResourceStreamOpt = GetWin32Resources(FileSystem, MessageProvider, Arguments, compilation, diagnostics);
+                                if (HasUnsuppressableErrors(diagnostics))
                                 {
-                                    if (HasUnsuppressableErrors(diagnostics))
-                                    {
-                                        return;
-                                    }
-
-                                    success = compilation.GenerateResourcesAndDocumentationComments(
-                                        moduleBeingBuilt,
-                                        xmlStreamDisposerOpt?.Stream,
-                                        win32ResourceStreamOpt,
-                                        useRawWin32Resources: false,
-                                        emitOptions.OutputNameOverride,
-                                        diagnostics,
-                                        cancellationToken);
+                                    return;
                                 }
+
+                                success = compilation.GenerateResourcesAndDocumentationComments(
+                                    moduleBeingBuilt,
+                                    xmlStreamDisposerOpt?.Stream,
+                                    win32ResourceStreamOpt,
+                                    useRawWin32Resources: false,
+                                    emitOptions.OutputNameOverride,
+                                    diagnostics,
+                                    cancellationToken);
                             }
 
                             if (xmlStreamDisposerOpt?.HasFailedToDispose == true)
@@ -1544,16 +1538,14 @@ namespace Microsoft.CodeAnalysis
 
             using (Stream? manifestStream = OpenManifestStream(fileSystem, messageProvider, compilation.Options.OutputKind, arguments, diagnostics))
             {
-                using (Stream? iconStream = OpenStream(fileSystem, messageProvider, arguments.Win32Icon, arguments.BaseDirectory, messageProvider.ERR_CantOpenWin32Icon, diagnostics))
+                using Stream? iconStream = OpenStream(fileSystem, messageProvider, arguments.Win32Icon, arguments.BaseDirectory, messageProvider.ERR_CantOpenWin32Icon, diagnostics);
+                try
                 {
-                    try
-                    {
-                        return compilation.CreateDefaultWin32Resources(true, arguments.NoWin32Manifest, manifestStream, iconStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        diagnostics.Add(messageProvider.CreateDiagnostic(messageProvider.ERR_ErrorBuildingWin32Resource, Location.None, ex.Message));
-                    }
+                    return compilation.CreateDefaultWin32Resources(true, arguments.NoWin32Manifest, manifestStream, iconStream);
+                }
+                catch (Exception ex)
+                {
+                    diagnostics.Add(messageProvider.CreateDiagnostic(messageProvider.ERR_ErrorBuildingWin32Resource, Location.None, ex.Message));
                 }
             }
 
@@ -1625,11 +1617,9 @@ namespace Microsoft.CodeAnalysis
         {
             var key = CreateDeterminismKey(args, rawArgs, baseDirectory, parser);
             var filePath = Path.Combine(args.OutputDirectory, args.OutputFileName + ".key");
-            using (var stream = File.Create(filePath))
-            {
-                var bytes = Encoding.UTF8.GetBytes(key);
-                stream.Write(bytes, 0, bytes.Length);
-            }
+            using var stream = File.Create(filePath);
+            var bytes = Encoding.UTF8.GetBytes(key);
+            stream.Write(bytes, 0, bytes.Length);
         }
 
         /// <summary>
@@ -1651,7 +1641,7 @@ namespace Microsoft.CodeAnalysis
             var builder = new StringBuilder();
             var name = !string.IsNullOrEmpty(args.OutputFileName)
                 ? Path.GetFileNameWithoutExtension(Path.GetFileName(args.OutputFileName))
-                : $"no-output-name-{Guid.NewGuid().ToString()}";
+                : $"no-output-name-{Guid.NewGuid()}";
 
             builder.AppendLine($"{name}");
             builder.AppendLine($"Command Line:");

@@ -232,6 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var memberInit = (BoundObjectInitializerMember?)rewrittenLeft;
 
+#nullable restore
                         if (!memberInit.Arguments.IsDefaultOrEmpty)
                         {
                             var args = EvaluateSideEffectingArgumentsToTemps(
@@ -382,6 +383,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             AddObjectOrCollectionInitializers(ref dynamicSiteInitializers, ref temps, result, rewrittenAccess, assignment.Right);
         }
 
+#nullable enable
+
         private ImmutableArray<BoundExpression> EvaluateSideEffectingArgumentsToTemps(
                                                  ImmutableArray<BoundExpression> args,
                                                  ImmutableArray<RefKind> paramRefKindsOpt,
@@ -435,6 +438,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // It is possible there are use site diagnostics from the above, but none that we need report as we aren't generating code for the conversion
 #endif
 
+#nullable restore
             switch (memberSymbol.Kind)
             {
                 case SymbolKind.Field:

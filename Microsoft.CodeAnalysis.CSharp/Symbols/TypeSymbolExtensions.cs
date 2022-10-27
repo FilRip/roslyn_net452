@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal static partial class TypeSymbolExtensions
@@ -225,7 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // or named parameter in an attribute specification.
 
             TypedConstantKind kind = TypedConstantKind.Error;
-            if ((object)type == null)
+            if (type is null)
             {
                 return TypedConstantKind.Error;
             }
@@ -278,15 +280,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsValidExtensionParameterType(this TypeSymbol type)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Pointer:
-                case TypeKind.Dynamic:
-                case TypeKind.FunctionPointer:
-                    return false;
-                default:
-                    return true;
-            }
+                TypeKind.Pointer or TypeKind.Dynamic or TypeKind.FunctionPointer => false,
+                _ => true,
+            };
         }
 
         public static bool IsInterfaceType(this TypeSymbol type)
@@ -341,15 +339,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsPointerOrFunctionPointer(this TypeSymbol type)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Pointer:
-                case TypeKind.FunctionPointer:
-                    return true;
-
-                default:
-                    return false;
-            }
+                TypeKind.Pointer or TypeKind.FunctionPointer => true,
+                _ => false,
+            };
         }
 
         // If the type is a delegate type, it returns it. If the type is an
@@ -412,7 +406,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         public static bool IsPossibleArrayGenericInterface(this TypeSymbol type)
         {
-            if (!(type is NamedTypeSymbol t))
+            if (type is not NamedTypeSymbol t)
             {
                 return false;
             }
@@ -439,7 +433,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             for (int i = 0; i < names.Length; i++)
             {
-                if ((object)symbol == null || symbol.Name != names[i]) return false;
+                if (symbol is null || symbol.Name != names[i]) return false;
                 symbol = symbol.ContainingSymbol;
             }
 
@@ -454,7 +448,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public static ImmutableArray<ParameterSymbol> DelegateParameters(this TypeSymbol type)
         {
             var invokeMethod = type.DelegateInvokeMethod();
-            if ((object)invokeMethod == null)
+            if (invokeMethod is null)
             {
                 return default;
             }
@@ -558,19 +552,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static bool IsTypeLessVisibleThan(TypeSymbol type, Symbol sym, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Class:
-                case TypeKind.Struct:
-                case TypeKind.Interface:
-                case TypeKind.Enum:
-                case TypeKind.Delegate:
-                case TypeKind.Submission:
-                    return !IsAsRestrictive((NamedTypeSymbol)type, sym, ref useSiteInfo);
-
-                default:
-                    return false;
-            }
+                TypeKind.Class or TypeKind.Struct or TypeKind.Interface or TypeKind.Enum or TypeKind.Delegate or TypeKind.Submission => !IsAsRestrictive((NamedTypeSymbol)type, sym, ref useSiteInfo),
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -635,7 +621,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case TypeKind.Delegate:
                         {
                             var containingType = current.ContainingType;
-                            if ((object)containingType != null)
+                            if (containingType is object)
                             {
                                 isNestedNamedType = true;
                                 var result = VisitType(default, containingType, typeWithAnnotationsPredicate, typePredicate, arg, canDigThroughNullable, useDefaultType);
@@ -830,7 +816,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         {
                             var parent1 = s1.ContainingType;
 
-                            if ((object)parent1 == null)
+                            if (parent1 is null)
                             {
                                 // not helpful
                             }
@@ -838,7 +824,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 // if s2 is private and within s1's parent or within a subclass of s1's parent,
                                 // then this is at least as restrictive as s1's protected.
-                                for (var parent2 = s2.ContainingType; (object)parent2 != null; parent2 = parent2.ContainingType)
+                                for (var parent2 = s2.ContainingType; parent2 is object; parent2 = parent2.ContainingType)
                                 {
                                     if (parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
                                     {
@@ -851,7 +837,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 // if s2 is protected, and it's parent is a subclass (or the same as) s1's parent
                                 // then this is at least as restrictive as s1's protected
                                 var parent2 = s2.ContainingType;
-                                if ((object)parent2 != null && parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
+                                if (parent2 is object && parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
                                 {
                                     return true;
                                 }
@@ -864,7 +850,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         {
                             var parent1 = s1.ContainingType;
 
-                            if ((object)parent1 == null)
+                            if (parent1 is null)
                             {
                                 break;
                             }
@@ -880,7 +866,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                         return true;
                                     }
 
-                                    for (var parent2 = s2.ContainingType; (object)parent2 != null; parent2 = parent2.ContainingType)
+                                    for (var parent2 = s2.ContainingType; parent2 is object; parent2 = parent2.ContainingType)
                                     {
                                         if (parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
                                         {
@@ -942,13 +928,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             // least as restrictive as s1's private.
                             NamedTypeSymbol parent1 = s1.ContainingType;
 
-                            if ((object)parent1 == null)
+                            if (parent1 is null)
                             {
                                 break;
                             }
 
                             var parent1OriginalDefinition = parent1.OriginalDefinition;
-                            for (var parent2 = s2.ContainingType; (object)parent2 != null; parent2 = parent2.ContainingType)
+                            for (var parent2 = s2.ContainingType; parent2 is object; parent2 = parent2.ContainingType)
                             {
                                 if (ReferenceEquals(parent2.OriginalDefinition, parent1OriginalDefinition) || parent1OriginalDefinition.TypeKind == TypeKind.Submission && parent2.TypeKind == TypeKind.Submission)
                                 {
@@ -974,7 +960,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsTopLevelType(this NamedTypeSymbol type)
         {
-            return (object)type.ContainingType == null;
+            return type.ContainingType is null;
         }
 
         /// <summary>
@@ -1114,26 +1100,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 type = type.EnumUnderlyingTypeOrSelf();
             }
 
-            switch (type.SpecialType)
+            return type.SpecialType switch
             {
-                case SpecialType.System_SByte:
-                case SpecialType.System_Byte:
-                case SpecialType.System_Int16:
-                case SpecialType.System_UInt16:
-                case SpecialType.System_Int32:
-                case SpecialType.System_UInt32:
-                case SpecialType.System_Int64:
-                case SpecialType.System_UInt64:
-                case SpecialType.System_Char:
-                case SpecialType.System_String:
-                    return true;
-
-                case SpecialType.System_Boolean:
-                    // User-defined implicit conversion with target type as bool type is not valid.
-                    return !isTargetTypeOfUserDefinedOp;
-            }
-
-            return false;
+                SpecialType.System_SByte or SpecialType.System_Byte or SpecialType.System_Int16 or SpecialType.System_UInt16 or SpecialType.System_Int32 or SpecialType.System_UInt32 or SpecialType.System_Int64 or SpecialType.System_UInt64 or SpecialType.System_Char or SpecialType.System_String => true,
+                SpecialType.System_Boolean => !isTargetTypeOfUserDefinedOp,// User-defined implicit conversion with target type as bool type is not valid.
+                _ => false,
+            };
         }
 
 #pragma warning disable CA1200 // Avoid using cref tags with a prefix
@@ -1147,17 +1119,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                                 bool ignoreSpanLikeTypes = false)
         {
             // See Dev10 C# compiler, "type.cpp", bool Type::isSpecialByRefType() const
-            switch (type.SpecialType)
+            return type.SpecialType switch
             {
-                case SpecialType.System_TypedReference:
-                case SpecialType.System_ArgIterator:
-                case SpecialType.System_RuntimeArgumentHandle:
-                    return true;
-            }
-
-            return ignoreSpanLikeTypes ?
-                        false :
-                        type.IsRefLikeType;
+                SpecialType.System_TypedReference or SpecialType.System_ArgIterator or SpecialType.System_RuntimeArgumentHandle => true,
+                _ => !ignoreSpanLikeTypes && type.IsRefLikeType,
+            };
         }
 
         public static bool IsIntrinsicType(this TypeSymbol type)
@@ -1205,32 +1171,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // check that its type is allowed for Volatile
         internal static bool IsValidVolatileFieldType(this TypeSymbol type)
         {
-            switch (type.TypeKind)
+            return type.TypeKind switch
             {
-                case TypeKind.Struct:
-                    return type.SpecialType.IsValidVolatileFieldType();
-
-                case TypeKind.Array:
-                case TypeKind.Class:
-                case TypeKind.Delegate:
-                case TypeKind.Dynamic:
-                case TypeKind.Error:
-                case TypeKind.Interface:
-                case TypeKind.Pointer:
-                case TypeKind.FunctionPointer:
-                    return true;
-
-                case TypeKind.Enum:
-                    return ((NamedTypeSymbol)type).EnumUnderlyingType.SpecialType.IsValidVolatileFieldType();
-
-                case TypeKind.TypeParameter:
-                    return type.IsReferenceType;
-
-                case TypeKind.Submission:
-                    throw ExceptionUtilities.UnexpectedValue(type.TypeKind);
-            }
-
-            return false;
+                TypeKind.Struct => type.SpecialType.IsValidVolatileFieldType(),
+                TypeKind.Array or TypeKind.Class or TypeKind.Delegate or TypeKind.Dynamic or TypeKind.Error or TypeKind.Interface or TypeKind.Pointer or TypeKind.FunctionPointer => true,
+                TypeKind.Enum => ((NamedTypeSymbol)type).EnumUnderlyingType.SpecialType.IsValidVolatileFieldType(),
+                TypeKind.TypeParameter => type.IsReferenceType,
+                TypeKind.Submission => throw ExceptionUtilities.UnexpectedValue(type.TypeKind),
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -1370,7 +1319,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (type.SpecialType == SpecialType.System_Object)
             {
                 AssemblySymbol assembly = containingType.ContainingAssembly;
-                if ((object)assembly != null &&
+                if (assembly is object &&
                     assembly.IsLinked &&
                     containingType.IsComImport)
                 {
@@ -1405,7 +1354,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static ImmutableArray<TypeParameterSymbol> GetAllTypeParameters(this NamedTypeSymbol type)
         {
             // Avoid allocating a builder in the common case.
-            if ((object)type.ContainingType == null)
+            if (type.ContainingType is null)
             {
                 return type.TypeParameters;
             }
@@ -1422,7 +1371,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static void GetAllTypeParameters(this NamedTypeSymbol type, ArrayBuilder<TypeParameterSymbol> result)
         {
             var containingType = type.ContainingType;
-            if ((object)containingType != null)
+            if (containingType is object)
             {
                 containingType.GetAllTypeParameters(result);
             }
@@ -1548,8 +1497,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static bool IsNonGenericTaskType(this TypeSymbol type, CSharpCompilation compilation)
         {
-            var namedType = type as NamedTypeSymbol;
-            if (namedType is null || namedType.Arity != 0)
+            if (type is not NamedTypeSymbol namedType || namedType.Arity != 0)
             {
                 return false;
             }
@@ -1936,7 +1884,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case SpecialType.System_Decimal: return 16;
 
                 case SpecialType.None:
-                    if ((object)type != null && type.IsNullableType())
+                    if (type is object && type.IsNullableType())
                     {
                         TypeSymbol underlyingType = type.GetNullableUnderlyingType();
 

@@ -248,6 +248,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             break;
                         case BoundTestDecisionDagNode testNode:
                             {
+#nullable enable
                                 if (testNode.WhenTrue is BoundEvaluationDecisionDagNode e &&
                                     TryLowerTypeTestAndCast(testNode.Test, e.Evaluation, out BoundExpression? sideEffect, out BoundExpression? testExpression))
                                 {

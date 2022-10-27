@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.RuntimeMembers;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     public abstract partial class NamedTypeSymbol
@@ -64,8 +66,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var constructedType = CreateTuple(underlyingType, elementNames, errorPositions, elementLocations, locations);
             if (shouldCheckConstraints && diagnostics != null)
             {
+#nullable restore
                 constructedType.CheckConstraints(new ConstraintsHelper.CheckConstraintsArgs(compilation, compilation.Conversions, includeNullability, syntax.Location, diagnostics),
                                                  syntax, elementLocations, nullabilityDiagnosticsOpt: includeNullability ? diagnostics : null);
+#nullable enable
             }
 
             return constructedType;
@@ -282,7 +286,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             for (int i = 0; i < sourceLength; i++)
             {
                 var sourceName = sourceNames[i];
-                var wasInferred = noInferredNames ? false : inferredNames[i];
+                var wasInferred = !noInferredNames && inferredNames[i];
 
                 if (sourceName != null && !wasInferred && (allMissing || string.CompareOrdinal(destinationNames[i], sourceName) != 0))
                 {
@@ -435,19 +439,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             static bool isElementNameForbidden(string name)
             {
-                switch (name)
+                return name switch
                 {
-                    case "CompareTo":
-                    case WellKnownMemberNames.DeconstructMethodName:
-                    case "Equals":
-                    case "GetHashCode":
-                    case "Rest":
-                    case "ToString":
-                        return true;
-
-                    default:
-                        return false;
-                }
+                    "CompareTo" or WellKnownMemberNames.DeconstructMethodName or "Equals" or "GetHashCode" or "Rest" or "ToString" => true,
+                    _ => false,
+                };
             }
 
             // Returns 3 for "Item3".
@@ -681,10 +677,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 if (defaultImplicitlyDeclared && !string.IsNullOrEmpty(providedName))
                                 {
                                     var errorPositions = TupleErrorPositions;
-                                    var isError = errorPositions.IsDefault ? false : errorPositions[tupleFieldIndex];
+                                    var isError = !errorPositions.IsDefault && errorPositions[tupleFieldIndex];
 
                                     // The name given doesn't match the default name Item8, etc.
                                     // Add a virtual field with the given name
+#nullable restore
                                     members.Add(new TupleVirtualElementFieldSymbol(this,
                                         fieldSymbol,
                                         providedName,
@@ -693,6 +690,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                         cannotUse: isError,
                                         isImplicitlyDeclared: false,
                                         correspondingDefaultFieldOpt: defaultTupleField));
+#nullable enable
                                 }
 
                                 elementsMatchedByFields[tupleFieldIndex] = true; // mark as handled
@@ -1074,7 +1072,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     tuple.InitializeTupleFieldDefinitionsToIndexMap();
                 }
 
+#nullable restore
                 return _lazyFieldDefinitionsToIndexMap;
+#nullable enable
             }
 
             internal void SetFieldDefinitionsToIndexMap(SmallDictionary<FieldSymbol, int> map)

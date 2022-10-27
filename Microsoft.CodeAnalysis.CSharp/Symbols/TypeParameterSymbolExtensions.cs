@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal static class TypeParameterSymbolExtensions

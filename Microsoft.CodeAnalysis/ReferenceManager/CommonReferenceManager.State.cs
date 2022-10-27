@@ -382,6 +382,7 @@ namespace Microsoft.CodeAnalysis
 
         [Conditional("DEBUG")]
         [MemberNotNull(nameof(_lazyReferencedAssembliesMap), nameof(_lazyReferencedModuleIndexMap), nameof(_lazyReferenceDirectiveMap), nameof(_lazyImplicitReferenceResolutions))]
+#nullable restore
         public void AssertBound()
         {
             Debug.Assert(_isBound != 0);
@@ -402,6 +403,7 @@ namespace Microsoft.CodeAnalysis
             // lazyCorLibrary is null if the compilation is corlib
             Debug.Assert(_lazyReferencedAssemblies.Length == 0 || _lazyCorLibraryOpt != null);
         }
+#nullable enable
 
         [Conditional("DEBUG")]
         public void AssertCanReuseForCompilation(TCompilation compilation)

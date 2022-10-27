@@ -123,6 +123,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
     }
 
+#nullable enable
+
     public partial class BoundDiscardExpression
     {
         public override object Display

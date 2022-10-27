@@ -37,7 +37,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             internal NumericValueSet(ImmutableArray<(T first, T last)> intervals)
             {
 #if DEBUG
-                TTC tc = default;
                 for (int i = 0, n = intervals.Length; i < n; i++)
                 {
                     if (i != 0)

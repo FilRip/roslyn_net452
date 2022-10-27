@@ -116,7 +116,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
                     var nestedType = type.AsNestedTypeDefinition(_sourceContext);
 
-                    var otherContainer = (Cci.ITypeDefinition?)VisitDef(nestedType.ContainingTypeDefinition);
+                    var otherContainer = (Cci.ITypeDefinition?)VisitDef(
+#nullable restore
+                        nestedType.ContainingTypeDefinition);
+#nullable enable
                     if (otherContainer == null)
                     {
                         return null;
@@ -159,6 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 }
 
                 var topLevelTypes = GetTopLevelTypesByName();
+#nullable restore
                 topLevelTypes.TryGetValue(def.Name, out var otherDef);
                 return otherDef;
             }
@@ -269,6 +273,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 return def.GetFields(_otherContext);
             }
         }
+
+#nullable enable
 
         private sealed class MatchSymbols : CSharpSymbolVisitor<Symbol?>
         {
@@ -439,12 +445,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             {
                 var otherContainer = Visit(@namespace.ContainingSymbol);
 
+#nullable restore
                 return otherContainer.Kind switch
                 {
                     SymbolKind.NetModule => ((ModuleSymbol)otherContainer).GlobalNamespace,
                     SymbolKind.Namespace => FindMatchingMember(otherContainer, @namespace, AreNamespacesEqual),
                     _ => throw ExceptionUtilities.UnexpectedValue(otherContainer.Kind),
                 };
+#nullable enable
             }
 
             public override Symbol VisitDynamicType(DynamicTypeSymbol symbol)
@@ -600,12 +608,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
                 var otherContainer = Visit(symbol.ContainingSymbol);
 
+#nullable restore
                 var otherTypeParameters = otherContainer.Kind switch
                 {
                     SymbolKind.NamedType or SymbolKind.ErrorType => ((NamedTypeSymbol)otherContainer).TypeParameters,
                     SymbolKind.Method => ((MethodSymbol)otherContainer).TypeParameters,
                     _ => throw ExceptionUtilities.UnexpectedValue(otherContainer.Kind),
                 };
+#nullable enable
 
                 return otherTypeParameters[symbol.Ordinal];
             }
@@ -761,8 +771,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             [Conditional("DEBUG")]
             private static void ValidateFunctionPointerParamOrReturn(TypeWithAnnotations type, RefKind refKind, ImmutableArray<CustomModifier> refCustomModifiers, bool allowOut)
             {
-
-                static bool verifyRefModifiers(ImmutableArray<CustomModifier> modifiers, RefKind refKind, bool allowOut)
+                /*static bool verifyRefModifiers(ImmutableArray<CustomModifier> modifiers, RefKind refKind, bool allowOut)
                 {
                     switch (refKind)
                     {
@@ -772,7 +781,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                         default:
                             return modifiers.IsEmpty;
                     }
-                }
+                }*/
             }
 
             private bool ArePropertiesEqual(PropertySymbol property, PropertySymbol other)

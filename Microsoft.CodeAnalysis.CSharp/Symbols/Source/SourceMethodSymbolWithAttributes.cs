@@ -700,7 +700,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
-#nullable enable
         private void DecodeDllImportAttribute(ref DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation> arguments)
         {
 
@@ -714,6 +713,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 diagnostics.Add(ErrorCode.ERR_DllImportOnInvalidMethod, arguments.AttributeSyntaxOpt.Name.Location);
                 hasErrors = true;
             }
+#nullable enable
 
             var isAnyNestedMethodGeneric = false;
             for (MethodSymbol? current = this; current is object; current = current.ContainingSymbol as MethodSymbol)
@@ -727,19 +727,25 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (isAnyNestedMethodGeneric || ContainingType?.IsGenericType == true)
             {
+#nullable restore
                 diagnostics.Add(ErrorCode.ERR_DllImportOnGenericMethod, arguments.AttributeSyntaxOpt.Name.Location);
                 hasErrors = true;
             }
+
+#nullable enable
 
             string? moduleName = attribute.GetConstructorArgument<string>(0, SpecialType.System_String);
             if (!MetadataHelpers.IsValidMetadataIdentifier(moduleName))
             {
                 // Dev10 reports CS0647: "Error emitting attribute ..."
+#nullable restore
                 CSharpSyntaxNode attributeArgumentSyntax = attribute.GetAttributeArgumentSyntax(0, arguments.AttributeSyntaxOpt);
                 diagnostics.Add(ErrorCode.ERR_InvalidAttributeArgument, attributeArgumentSyntax.Location, arguments.AttributeSyntaxOpt.GetErrorDisplayName());
                 hasErrors = true;
                 moduleName = null;
             }
+
+#nullable enable
 
             // Default value of charset is inherited from the module (only if specified).
             // This might be different from ContainingType.DefaultMarshallingCharSet. If the charset is not specified on module
@@ -765,6 +771,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         if (!MetadataHelpers.IsValidMetadataIdentifier(importName))
                         {
                             // Dev10 reports CS0647: "Error emitting attribute ..."
+#nullable restore
                             diagnostics.Add(ErrorCode.ERR_InvalidNamedArgument, arguments.AttributeSyntaxOpt.ArgumentList.Arguments[position].Location, namedArg.Key);
                             hasErrors = true;
                             importName = null;
@@ -921,6 +928,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
+#nullable enable
+
             static UnmanagedCallersOnlyAttributeData DecodeUnmanagedCallersOnlyAttributeData(SourceMethodSymbolWithAttributes @this, CSharpAttributeData attribute, Location location, BindingDiagnosticBag diagnostics)
             {
                 ImmutableHashSet<CodeAnalysis.Symbols.INamedTypeSymbolInternal>? callingConventionTypes = null;
@@ -933,6 +942,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         // Technically, CIL can define a field and a property with the same name. However, such a
                         // member results in an Ambiguous Member error, and we never get to this piece of code at all.
                         // See UnmanagedCallersOnly_PropertyAndFieldNamedCallConvs for an example
+#nullable restore
                         bool isField = attribute.AttributeClass.GetMembers(key).Any(
                             static (m, systemType) => m is FieldSymbol { Type: ArrayTypeSymbol { ElementType: NamedTypeSymbol elementType } } && elementType.Equals(systemType, TypeCompareKind.ConsiderEverything),
                             systemType);

@@ -1000,7 +1000,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // Validate Statement 1) of the spec comment above.
 
+#nullable restore
                 var typedConstantKind = node.Type.GetAttributeParameterTypedConstantKind(_binder.Compilation);
+#nullable enable
 
                 return VisitExpression(node, typedConstantKind, diagnostics, ref attrHasErrors, curArgumentHasErrors || typedConstantKind == TypedConstantKind.Error);
             }
@@ -1146,6 +1148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var type = node.Type;
 
+#nullable restore
                 if (typedConstantKind != TypedConstantKind.Error && type.ContainsTypeParameter())
                 {
                     // Devdiv Bug #12636: Constant values of open types should not be allowed in attributes
@@ -1197,6 +1200,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private struct AnalyzedAttributeArguments
         {
+#nullable enable
             internal readonly AnalyzedArguments ConstructorArguments;
             internal readonly ArrayBuilder<BoundAssignmentOperator>? NamedArguments;
 

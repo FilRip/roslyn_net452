@@ -34,7 +34,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref ProcessedFieldInitializers processedInitializers)
         {
             var diagsForInstanceInitializers = BindingDiagnosticBag.GetInstance(withDiagnostics: true, diagnostics.AccumulatesDependencies);
+#nullable restore
             processedInitializers.BoundInitializers = BindFieldInitializers(compilation, scriptInitializerOpt, fieldInitializers, diagsForInstanceInitializers, out ImportChain firstImportChain);
+#nullable enable
             processedInitializers.HasErrors = diagsForInstanceInitializers.HasAnyErrors();
             processedInitializers.FirstImportChain = firstImportChain;
             diagnostics.AddRange(diagsForInstanceInitializers);

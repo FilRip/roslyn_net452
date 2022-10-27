@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             again:
                 hashCode = unchecked((text[i] ^ hashCode) * 16777619);
-                i = i + 1;
+                i++;
 
             start:
                 if (i < text.Length)
@@ -338,6 +338,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     ? nextEquals
                     : F.LogicalAnd(retExpression, nextEquals);
             }
+
+#nullable restore
 
             return retExpression;
         }

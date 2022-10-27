@@ -51,7 +51,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     else if (hasImplicitReceiver && _factory.TopLevelMethod is { RequiresInstanceReceiver: false })
                     {
                         // Calling a static method defined on the current class via its simple name.
+#nullable restore
                         loweredReceiver = new BoundTypeExpression(node.Syntax, null, _factory.CurrentType);
+#nullable enable
                     }
                     else
                     {
@@ -1031,7 +1033,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                                         ImmutableArray<LocalSymbol>.Empty,
                                         sideeffects.AsImmutableOrNull(),
                                         value,
+#nullable restore
                                         value.Type);
+#nullable enable
                         }
 
                         firstUnclaimedStore = correspondingStore + 1;

@@ -193,10 +193,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim localOtherFieldBoxed As LocalSymbol = New SynthesizedLocal(Me, objectType, SynthesizedLocalKind.LoweringTemp)
 
                 ' 'Me' reference
-                Dim boundMeReference As BoundMeReference = New BoundMeReference(syntax, AnonymousType)
+                Dim boundMeReference As New BoundMeReference(syntax, AnonymousType)
 
                 ' Argument 'val' reference
-                Dim boundValReference As BoundParameter = New BoundParameter(syntax, Me._parameters(0), isLValue:=False, type:=AnonymousType)
+                Dim boundValReference As New BoundParameter(syntax, Me._parameters(0), isLValue:=False, type:=AnonymousType)
 
                 ' 'Nothing' Literal to be reused 
                 Dim nothingLiteral = New BoundLiteral(syntax, ConstantValue.Nothing, objectType).MakeCompilerGenerated()

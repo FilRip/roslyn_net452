@@ -64,6 +64,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
+#nullable enable
                     constructorCall = new BoundBadExpression(
                         syntax: stackAllocNode.Syntax,
                         resultKind: LookupResultKind.NotInvocable,

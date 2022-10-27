@@ -1174,7 +1174,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                                         data.blockEndActions?.AddAll(data.scope.OperationBlockEndActions);
                                         data.operationActions?.AddRange(data.scope.OperationActions);
                                     },
-                                    (action: operationBlockStartAction.Action, context: operationStartContext, scope: operationBlockScope, blockEndActions: operationBlockEndActions, operationActions: operationActions),
+                                    (action: operationBlockStartAction.Action, context: operationStartContext, scope: operationBlockScope, blockEndActions: operationBlockEndActions, operationActions),
                                     new AnalysisContextInfo(Compilation, declaredSymbol));
                             }
                         }
@@ -1242,21 +1242,19 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 if (ShouldExecuteAction(analyzerState, blockAction))
                 {
-                    var codeBlockAction = blockAction as CodeBlockAnalyzerAction;
-                    if (codeBlockAction != null)
+                    if (blockAction is CodeBlockAnalyzerAction codeBlockAction)
                     {
                         var context = new CodeBlockAnalysisContext(declaredNode, declaredSymbol, semanticModel, AnalyzerOptions, addDiagnostic, isSupportedDiagnostic, _cancellationToken);
 
                         ExecuteAndCatchIfThrows(
                             codeBlockAction.Analyzer,
                             data => data.action(data.context),
-                            (action: codeBlockAction.Action, context: context),
+                            (action: codeBlockAction.Action, context),
                             new AnalysisContextInfo(Compilation, declaredSymbol, declaredNode));
                     }
                     else
                     {
-                        var operationBlockAction = blockAction as OperationBlockAnalyzerAction;
-                        if (operationBlockAction != null)
+                        if (blockAction is OperationBlockAnalyzerAction operationBlockAction)
                         {
                             var context = new OperationBlockAnalysisContext(operationBlocks, declaredSymbol, semanticModel.Compilation,
                                 AnalyzerOptions, addDiagnostic, isSupportedDiagnostic, GetControlFlowGraph, _cancellationToken);

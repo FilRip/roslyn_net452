@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal static partial class TypeSymbolExtensions
@@ -102,8 +104,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            UnboundArgumentErrorTypeSymbol? other = t2 as UnboundArgumentErrorTypeSymbol;
-            return (object?)other != null && string.Equals(other._name, _name, StringComparison.Ordinal) && object.Equals(other._errorInfo, _errorInfo);
+            return t2 is UnboundArgumentErrorTypeSymbol other && string.Equals(other._name, _name, StringComparison.Ordinal) && object.Equals(other._errorInfo, _errorInfo);
         }
 
         public override int GetHashCode()

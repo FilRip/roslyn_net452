@@ -82,6 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return MakeIndexerAccess(
                 node.Syntax,
+#nullable restore
                 rewrittenReceiver,
                 indexer,
                 rewrittenArguments,
@@ -94,6 +95,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 node,
                 isLeftOfAssignment);
         }
+
+#nullable enable
 
         private BoundExpression MakeIndexerAccess(
             SyntaxNode syntax,
@@ -203,6 +206,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 VisitExpression(receiver),
                 out var receiverStore,
                 // Store the receiver as a ref local if it's a value type to ensure side effects are propagated
+#nullable restore
                 receiver.Type.IsReferenceType ? RefKind.None : RefKind.Ref);
             var lengthLocal = F.StoreToTemp(F.Property(receiverLocal, lengthOrCountProperty), out var lengthStore);
             var indexLocal = F.StoreToTemp(

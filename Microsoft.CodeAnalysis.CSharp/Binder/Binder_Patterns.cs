@@ -525,9 +525,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             ConstantValue result = Binder.GetIsOperatorConstantResult(expressionType, patternType, conversion.Kind, operandConstantValue, operandCouldBeNull);
             return
                 (result == null) ? null :
-                (result == ConstantValue.True) ? true :
-                (result == ConstantValue.False) ? false :
-                throw ExceptionUtilities.UnexpectedValue(result);
+                (result == ConstantValue.True) || ((result == ConstantValue.False) ? false :
+                throw ExceptionUtilities.UnexpectedValue(result));
         }
 
         private BoundPattern BindDeclarationPattern(
@@ -1298,6 +1297,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 hasErrors = true;
             }
 
+#nullable restore
             BinaryOperatorKind opType = RelationalOperatorType(value.Type.EnumUnderlyingTypeOrSelf());
             switch (opType)
             {

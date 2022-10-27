@@ -150,6 +150,7 @@ namespace Microsoft.CodeAnalysis.Operations
                     // We don't check HasErrors on the conversion here because if we actually have a MethodGroup conversion,
                     // overload resolution succeeded. The resulting method could be invalid for other reasons, but we don't
                     // hide the resolved method.
+#nullable restore
                     return CreateBoundMethodGroupSingleMethodOperation((BoundMethodGroup)boundConversion.Operand,
                                                                        boundConversion.SymbolOpt,
                                                                        boundConversion.SuppressVirtualCalls);
@@ -200,8 +201,10 @@ namespace Microsoft.CodeAnalysis.Operations
                 case BoundKind.ObjectInitializerMember:
                     {
                         var boundObjectInitializerMember = (BoundObjectInitializerMember)containingExpression;
+#nullable enable
                         var property = (PropertySymbol?)boundObjectInitializerMember.MemberSymbol;
                         return DeriveArguments(
+#nullable restore
                                     property,
                                     boundObjectInitializerMember.Arguments,
                                     boundObjectInitializerMember.ArgsToParamsOpt,
@@ -295,6 +298,8 @@ namespace Microsoft.CodeAnalysis.Operations
                  defaultArguments: defaultArguments,
                  invokedAsExtensionMethod: invokedAsExtensionMethod);
         }
+
+#nullable enable
 
         internal static ImmutableArray<BoundNode> CreateInvalidChildrenFromArgumentsExpression(BoundNode? receiverOpt, ImmutableArray<BoundExpression> arguments, BoundExpression? additionalNodeOpt = null)
         {

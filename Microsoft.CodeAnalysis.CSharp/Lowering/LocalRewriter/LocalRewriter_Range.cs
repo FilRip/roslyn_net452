@@ -39,6 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
+#nullable restore
                 BoundExpression rangeCreation = MakeRangeExpression(node.MethodOpt, left, right);
 
                 if (node.Type.IsNullableType())
@@ -76,6 +77,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
+
         private BoundExpression LiftRangeExpression(BoundRangeExpression node, BoundExpression? left, BoundExpression? right)
         {
 
@@ -86,8 +89,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression? condition = null;
             left = getIndexFromPossibleNullable(left);
             right = getIndexFromPossibleNullable(right);
+#nullable restore
             var rangeExpr = MakeRangeExpression(node.MethodOpt, left, right);
-
 
             if (!TryGetNullableMethod(node.Syntax, node.Type, SpecialMember.System_Nullable_T__ctor, out MethodSymbol nullableCtor))
             {
@@ -119,6 +122,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 value: conditionalExpression,
                 type: node.Type);
 
+#nullable enable
+
             BoundExpression? getIndexFromPossibleNullable(BoundExpression? arg)
             {
                 if (arg is null)
@@ -126,6 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 BoundExpression tempOperand = CaptureExpressionInTempIfNeeded(arg, sideeffects, locals);
 
+#nullable restore
                 if (tempOperand.Type.IsNullableType())
                 {
                     BoundExpression operandHasValue = MakeOptimizedHasValue(tempOperand.Syntax, tempOperand);
@@ -148,6 +154,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
         }
+
+#nullable enable
 
         private BoundExpression MakeRangeExpression(
             MethodSymbol constructionMethod,
@@ -175,6 +183,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // means that the `..` expression is missing an argument on
                     // either the left or the right (i.e., `x..` or `..x`)
                     var arg = left ?? right;
+#nullable restore
                     return F.StaticCall(constructionMethod, ImmutableArray.Create(arg));
 
                 case MethodKind.PropertyGet:

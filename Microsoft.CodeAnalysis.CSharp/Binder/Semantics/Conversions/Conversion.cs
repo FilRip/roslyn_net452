@@ -166,6 +166,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     nestedConversions: default));
         }
 
+#pragma warning disable CS0219, IDE0059
         [Conditional("DEBUG")]
         private static void AssertTrivialConversion(ConversionKind kind)
         {
@@ -204,8 +205,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     isTrivial = false;
                     break;
             }
-
         }
+#pragma warning restore CS0219, IDE0059
 
         internal static Conversion GetTrivialConversion(ConversionKind kind)
         {

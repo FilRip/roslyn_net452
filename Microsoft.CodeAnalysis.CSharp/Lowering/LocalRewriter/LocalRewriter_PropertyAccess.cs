@@ -89,6 +89,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var getMethod = getMethodOpt ?? property.GetOwnOrInheritedGetMethod();
 
 
+#nullable restore
+
                 return BoundCall.Synthesized(
                     syntax,
                     rewrittenReceiver,

@@ -363,10 +363,10 @@ namespace Microsoft.CodeAnalysis.Emit
         {
             var result = ArrayBuilder<Cci.AssemblyReferenceAlias>.GetInstance();
 
-            foreach (var assemblyAndAliases in CommonCompilation.GetBoundReferenceManager().GetReferencedAssemblyAliases())
+            foreach (var (AssemblySymbol, Aliases) in CommonCompilation.GetBoundReferenceManager().GetReferencedAssemblyAliases())
             {
-                var assembly = assemblyAndAliases.Item1;
-                var aliases = assemblyAndAliases.Item2;
+                var assembly = AssemblySymbol;
+                var aliases = Aliases;
 
                 for (int i = 0; i < aliases.Length; i++)
                 {
@@ -960,14 +960,11 @@ namespace Microsoft.CodeAnalysis.Emit
         {
             Debug.Assert(this == context.Module);
 
-            switch (platformType)
+            return platformType switch
             {
-                case Cci.PlatformType.SystemType:
-                    throw ExceptionUtilities.UnexpectedValue(platformType);
-
-                default:
-                    return GetSpecialType((SpecialType)platformType, (TSyntaxNode)context.SyntaxNode, context.Diagnostics);
-            }
+                Cci.PlatformType.SystemType => throw ExceptionUtilities.UnexpectedValue(platformType),
+                _ => GetSpecialType((SpecialType)platformType, (TSyntaxNode)context.SyntaxNode, context.Diagnostics),
+            };
         }
     }
 }

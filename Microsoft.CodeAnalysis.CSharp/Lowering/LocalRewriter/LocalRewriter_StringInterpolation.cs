@@ -69,6 +69,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (fillin == null)
                 {
                     // this is one of the literal parts
+#nullable restore
                     stringBuilder.Append(part.ConstantValue.StringValue);
                 }
                 else
@@ -99,8 +100,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitInterpolatedString(BoundInterpolatedString node)
         {
-
+#nullable enable
             BoundExpression? result;
+#nullable restore
 
             if (CanLowerToStringConcatenation(node))
             {

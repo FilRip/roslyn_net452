@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -316,6 +318,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // assignment can be used as an embedded expression.
                 TypeSymbol? exprType = rewrittenRight.Type;
 
+#nullable restore
                 LocalSymbol rhsTemp = _factory.SynthesizedLocal(exprType);
 
                 BoundExpression boundRhs = new BoundLocal(syntax, rhsTemp, null, exprType);

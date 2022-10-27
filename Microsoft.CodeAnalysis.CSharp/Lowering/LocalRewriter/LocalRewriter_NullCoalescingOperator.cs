@@ -34,6 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // Because of Error CS0845 (An expression tree lambda may not contain a coalescing operator with a null or default literal left-hand side)
                 // we know that the left-hand-side has a type.
+#nullable restore
                 TypeSymbol strippedLeftType = rewrittenLeft.Type.StrippedType();
                 Conversion rewrittenConversion = TryMakeConversion(syntax, leftConversion, strippedLeftType, rewrittenResultType);
                 if (!rewrittenConversion.Exists)
@@ -94,8 +95,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var notNullAccess = NullableAlwaysHasValue(conditionalAccess.WhenNotNull);
                     if (notNullAccess != null)
                     {
+#nullable enable
                         BoundExpression? whenNullOpt = rewrittenRight;
 
+#nullable restore
                         if (whenNullOpt.Type.IsNullableType())
                         {
                             notNullAccess = conditionalAccess.WhenNotNull;

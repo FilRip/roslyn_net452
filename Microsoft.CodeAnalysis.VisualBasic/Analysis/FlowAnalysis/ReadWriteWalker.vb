@@ -44,13 +44,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Try
         End Sub
 
-        Private ReadOnly _readInside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
-        Private ReadOnly _writtenInside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
-        Private ReadOnly _readOutside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
-        Private ReadOnly _writtenOutside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
-        Private ReadOnly _captured As HashSet(Of Symbol) = New HashSet(Of Symbol)()
-        Private ReadOnly _capturedInside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
-        Private ReadOnly _capturedOutside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
+        Private ReadOnly _readInside As New HashSet(Of Symbol)()
+        Private ReadOnly _writtenInside As New HashSet(Of Symbol)()
+        Private ReadOnly _readOutside As New HashSet(Of Symbol)()
+        Private ReadOnly _writtenOutside As New HashSet(Of Symbol)()
+        Private ReadOnly _captured As New HashSet(Of Symbol)()
+        Private ReadOnly _capturedInside As New HashSet(Of Symbol)()
+        Private ReadOnly _capturedOutside As New HashSet(Of Symbol)()
 
         Private _currentMethodOrLambda As Symbol
         Private _currentQueryLambda As BoundQueryLambda

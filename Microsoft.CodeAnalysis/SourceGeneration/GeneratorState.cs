@@ -18,7 +18,9 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Gets an uninitialized generator state
         /// </summary>
+#pragma warning disable CS0649
         internal static GeneratorState Uninitialized;
+#pragma warning disable CS0649
 
         /// <summary>
         /// Creates a new generator state that just contains information

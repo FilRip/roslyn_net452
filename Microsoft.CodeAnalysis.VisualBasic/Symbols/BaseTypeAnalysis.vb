@@ -307,8 +307,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Return Nothing
             End If
 
-            Dim derived As New HashSet(Of TypeSymbol)
-            derived.Add(base)
+            Dim derived As New HashSet(Of TypeSymbol) From {
+                base
+            }
 
             ' interface inheritance trees often contain joins so we record all verified nodes 
             ' so that we do not check them again and go exponential.

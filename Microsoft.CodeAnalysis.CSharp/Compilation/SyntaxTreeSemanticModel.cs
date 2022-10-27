@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// The root node of the syntax tree that this object is associated with.
         /// </summary>
-        internal override CSharpSyntaxNode Root
+        public override CSharpSyntaxNode Root
         {
             get
             {

@@ -103,6 +103,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var normalizedFilePath = normalizedFilePaths[i];
 
+#nullable restore
+
                 if (!uniqueFilePaths.Add(normalizedFilePath))
                 {
                     // warning CS2002: Source file '{0}' specified multiple times
@@ -120,6 +122,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     touchedFilesLogger.AddRead(path);
                 }
             }
+
+#nullable enable
 
             var assemblyIdentityComparer = DesktopAssemblyIdentityComparer.Default;
             var appConfigPath = this.Arguments.AppConfigPath;

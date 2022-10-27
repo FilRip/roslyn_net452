@@ -46,7 +46,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         private Dictionary<FieldSymbol, NamedTypeSymbol> _fixedImplementationTypes;
 
         private int _needsGeneratedAttributes;
+#pragma warning disable CS0414
         private bool _needsGeneratedAttributes_IsFrozen;
+#pragma warning restore CS0414
 
         /// <summary>
         /// Returns a value indicating which embedded attributes should be generated during emit phase.

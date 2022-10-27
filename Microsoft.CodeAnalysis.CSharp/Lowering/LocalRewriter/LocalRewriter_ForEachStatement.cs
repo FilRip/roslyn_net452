@@ -370,10 +370,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // and the loop isn't async, then we include a runtime check.
 
                 // IDisposable d
+#nullable restore
                 LocalSymbol disposableVar = _factory.SynthesizedLocal(idisposableTypeSymbol);
 
                 // Reference to d.
-#nullable restore
                 BoundLocal boundDisposableVar = MakeBoundLocal(forEachSyntax, disposableVar, idisposableTypeSymbol);
 
                 BoundTypeExpression boundIDisposableTypeExpr = new(forEachSyntax,
@@ -543,6 +543,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
 
             // Collection a
+#nullable restore
             LocalSymbol collectionTemp = _factory.SynthesizedLocal(collectionType, forEachSyntax, kind: SynthesizedLocalKind.ForEachArray);
 
             // Collection a = /*node.Expression*/;
@@ -551,7 +552,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             InstrumentForEachStatementCollectionVarDeclaration(node, ref arrayVarDecl);
 
             // Reference to a.
-#nullable restore
             BoundLocal boundArrayVar = MakeBoundLocal(forEachSyntax, collectionTemp, collectionType);
 #nullable enable
 
@@ -752,6 +752,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundStatement? rewrittenBody = VisitStatement(node.Body);
 
             // A[] a
+#nullable restore
             LocalSymbol arrayVar = _factory.SynthesizedLocal(arrayType, syntax: forEachSyntax, kind: SynthesizedLocalKind.ForEachArray);
 
             // A[] a = /*node.Expression*/;
@@ -760,7 +761,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             InstrumentForEachStatementCollectionVarDeclaration(node, ref arrayVarDecl);
 
             // Reference to a.
-#nullable restore
             BoundLocal boundArrayVar = MakeBoundLocal(forEachSyntax, arrayVar, arrayType);
 
             // int p

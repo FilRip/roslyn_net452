@@ -888,7 +888,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Root of this semantic model
         /// </summary>
-        internal SyntaxNode Root => RootCore;
+        public SyntaxNode Root => RootCore;
 
         /// <summary>
         /// Root of this semantic model

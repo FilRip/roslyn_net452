@@ -53,6 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ImmutableArray<BoundExpression> smallestCtorArguments = ImmutableArray.Create(rewrittenArguments,
                                                                                               underlyingTupleTypeChain.Count * (NamedTypeSymbol.ValueTupleRestPosition - 1),
                                                                                               smallestType.Arity);
+#nullable enable
                 var smallestCtor = (MethodSymbol?)NamedTypeSymbol.GetWellKnownMemberInType(smallestType.OriginalDefinition,
                                                                                             NamedTypeSymbol.GetTupleCtor(smallestType.Arity),
                                                                                             _diagnostics,

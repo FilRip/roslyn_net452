@@ -117,6 +117,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var diagnostics = DiagnosticBag.GetInstance();
                 var delegateType = Type.GetDelegateType();
                 var compilation = Binder.Compilation;
+#nullable restore
                 NullableWalker.Analyze(compilation,
                                        lambda: this,
                                        (Conversions)conversions,
@@ -124,6 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                        delegateInvokeMethodOpt: delegateType?.DelegateInvokeMethod,
                                        initialState: nullableState,
                                        returnTypes);
+#nullable enable
                 diagnostics.Free();
                 var inferredReturnType = InferReturnType(returnTypes, node: this, Binder, delegateType, Symbol.IsAsync, conversions);
                 returnTypes.Free();
@@ -496,11 +498,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Returns the inferred return type, or null if none can be inferred.
         public BoundLambda Bind(NamedTypeSymbol delegateType)
         {
+#nullable restore
             if (!_bindingCache!.TryGetValue(delegateType, out BoundLambda result))
             {
                 result = ReallyBind(delegateType);
                 result = ImmutableInterlocked.GetOrAdd(ref _bindingCache, delegateType, result);
             }
+#nullable enable
 
             return result;
         }
@@ -573,6 +577,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var parameterRefKinds = parameterRefKindsBuilder.ToImmutableAndFree();
             var parameterTypes = parameterTypesBuilder.ToImmutableAndFree();
 
+#nullable restore
             var lambdaSymbol = new LambdaSymbol(
                 Binder,
                 compilation,
@@ -626,6 +631,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // For simplicity, reuse is limited to expression-bodied lambdas. In those cases,
             // we reuse the bound expression and apply any conversion to the return value
             // since the inferred return type was not used when binding for return inference.
+#nullable enable
             if (refKind == CodeAnalysis.RefKind.None &&
                 _returnInferenceCache!.TryGetValue(cacheKey, out BoundLambda? returnInferenceLambda) &&
                 GetLambdaExpressionBody(returnInferenceLambda.Body) is BoundExpression expression &&
@@ -639,7 +645,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
+#nullable restore
                 lambdaSymbol = CreateLambdaSymbol(Binder.ContainingMemberOrLambda, returnType, cacheKey.ParameterTypes, cacheKey.ParameterRefKinds, refKind);
+#nullable enable
                 lambdaBodyBinder = new ExecutableCodeBinder(_unboundLambda.Syntax, lambdaSymbol, ParameterBinder(lambdaSymbol, Binder));
                 block = BindLambdaBody(lambdaSymbol, lambdaBodyBinder, diagnostics);
             }
@@ -816,11 +824,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var cacheKey = ReturnInferenceCacheKey.Create(delegateType, IsAsync);
 
+#nullable restore
             if (!_returnInferenceCache!.TryGetValue(cacheKey, out BoundLambda result))
             {
                 result = ReallyInferReturnType(delegateType, cacheKey.ParameterTypes, cacheKey.ParameterRefKinds);
                 result = ImmutableInterlocked.GetOrAdd(ref _returnInferenceCache, cacheKey, result);
             }
+#nullable enable
 
             return result;
         }

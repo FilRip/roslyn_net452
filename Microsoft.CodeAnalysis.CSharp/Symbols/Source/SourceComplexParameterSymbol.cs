@@ -215,6 +215,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         if (binder is not null &&
                             GetDefaultValueSyntaxForIsNullableAnalysisEnabled(CSharpSyntaxNode) is { } valueSyntax)
                         {
+#nullable restore
                             NullableWalker.AnalyzeIfNeeded(binder, parameterEqualsValue, valueSyntax, diagnostics.DiagnosticBag);
                         }
                         if (!_lazyDefaultSyntaxValue.IsBad)
@@ -298,6 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         // This method *must not* depend on attributes on the parameter symbol.
         // Otherwise we will have cycles when binding usage of attributes whose constructors have optional parameters
+#nullable enable
         private ConstantValue MakeDefaultExpression(BindingDiagnosticBag diagnostics, out Binder? binder, out BoundParameterEqualsValue? parameterEqualsValue)
         {
             binder = null;

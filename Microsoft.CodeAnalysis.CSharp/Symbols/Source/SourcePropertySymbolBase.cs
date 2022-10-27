@@ -704,6 +704,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     if (_refKind != RefKind.None)
                     {
+#nullable restore
                         diagnostics.Add(ErrorCode.ERR_RefPropertyCannotHaveSetAccessor, _setMethod.Locations[0], _setMethod);
                     }
                     else if ((_getMethod.LocalAccessibility != Accessibility.NotApplicable) &&
@@ -765,6 +766,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 CheckAccessibilityMoreRestrictive(_getMethod, diagnostics);
                 CheckAccessibilityMoreRestrictive(_setMethod, diagnostics);
             }
+
+#nullable enable
 
             PropertySymbol? explicitlyImplementedProperty = ExplicitInterfaceImplementations.FirstOrDefault();
 

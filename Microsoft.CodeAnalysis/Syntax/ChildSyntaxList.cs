@@ -348,6 +348,7 @@ namespace Microsoft.CodeAnalysis
         public Reversed Reverse()
         {
             Debug.Assert(_node is object);
+#nullable restore
             return new Reversed(_node, _count);
         }
 
@@ -386,6 +387,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>Determines whether the specified object is equal to the current instance.</summary>
         /// <returns>true if the specified object is a <see cref="ChildSyntaxList" /> structure and is equal to the current instance; otherwise, false.</returns>
         /// <param name="obj">The object to be compared with the current instance.</param>
+#nullable enable
         public override bool Equals(object? obj)
         {
             return obj is ChildSyntaxList list && Equals(list);

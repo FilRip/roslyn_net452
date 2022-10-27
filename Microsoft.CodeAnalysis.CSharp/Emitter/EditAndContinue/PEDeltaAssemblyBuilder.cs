@@ -52,6 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             CSharpSymbolMatcher? matchToPrevious = null;
             if (previousGeneration.Ordinal > 0)
             {
+#nullable restore
                 var previousAssembly = ((CSharpCompilation)previousGeneration.Compilation).SourceAssembly;
                 var previousContext = new EmitContext((PEModuleBuilder)previousGeneration.PEModuleBuilder, null, new DiagnosticBag(), metadataOnly: false, includePrivateMembers: true);
 
@@ -210,6 +211,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         {
             return _changes.GetTopLevelSourceTypeDefinitions(context);
         }
+
+#nullable enable
 
         internal override VariableSlotAllocator? TryCreateVariableSlotAllocator(MethodSymbol method, MethodSymbol topLevelMethod, DiagnosticBag diagnostics)
         {

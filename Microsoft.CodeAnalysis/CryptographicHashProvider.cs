@@ -31,35 +31,33 @@ namespace Microsoft.CodeAnalysis
 
         internal ImmutableArray<byte> GetHash(AssemblyHashAlgorithm algorithmId)
         {
-            using (HashAlgorithm? algorithm = TryGetAlgorithm(algorithmId))
+            using HashAlgorithm? algorithm = TryGetAlgorithm(algorithmId);
+            // ERR_CryptoHashFailed has already been reported:
+            if (algorithm == null)
             {
-                // ERR_CryptoHashFailed has already been reported:
-                if (algorithm == null)
-                {
-                    return ImmutableArray.Create<byte>();
-                }
+                return ImmutableArray.Create<byte>();
+            }
 
-                switch (algorithmId)
-                {
-                    case AssemblyHashAlgorithm.None:
-                    case AssemblyHashAlgorithm.Sha1:
-                        return GetHash(ref _lazySHA1Hash, algorithm);
+            switch (algorithmId)
+            {
+                case AssemblyHashAlgorithm.None:
+                case AssemblyHashAlgorithm.Sha1:
+                    return GetHash(ref _lazySHA1Hash, algorithm);
 
-                    case AssemblyHashAlgorithm.Sha256:
-                        return GetHash(ref _lazySHA256Hash, algorithm);
+                case AssemblyHashAlgorithm.Sha256:
+                    return GetHash(ref _lazySHA256Hash, algorithm);
 
-                    case AssemblyHashAlgorithm.Sha384:
-                        return GetHash(ref _lazySHA384Hash, algorithm);
+                case AssemblyHashAlgorithm.Sha384:
+                    return GetHash(ref _lazySHA384Hash, algorithm);
 
-                    case AssemblyHashAlgorithm.Sha512:
-                        return GetHash(ref _lazySHA512Hash, algorithm);
+                case AssemblyHashAlgorithm.Sha512:
+                    return GetHash(ref _lazySHA512Hash, algorithm);
 
-                    case AssemblyHashAlgorithm.MD5:
-                        return GetHash(ref _lazyMD5Hash, algorithm);
+                case AssemblyHashAlgorithm.MD5:
+                    return GetHash(ref _lazyMD5Hash, algorithm);
 
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(algorithmId);
-                }
+                default:
+                    throw ExceptionUtilities.UnexpectedValue(algorithmId);
             }
         }
 
@@ -168,10 +166,8 @@ namespace Microsoft.CodeAnalysis
             if (stream != null)
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                using (var hashProvider = SHA1.Create())
-                {
-                    return ImmutableArray.Create(hashProvider.ComputeHash(stream));
-                }
+                using var hashProvider = SHA1.Create();
+                return ImmutableArray.Create(hashProvider.ComputeHash(stream));
             }
 
             return ImmutableArray<byte>.Empty;
@@ -184,10 +180,8 @@ namespace Microsoft.CodeAnalysis
 
         internal static ImmutableArray<byte> ComputeSha1(byte[] bytes)
         {
-            using (var hashProvider = SHA1.Create())
-            {
-                return ImmutableArray.Create(hashProvider.ComputeHash(bytes));
-            }
+            using var hashProvider = SHA1.Create();
+            return ImmutableArray.Create(hashProvider.ComputeHash(bytes));
         }
 
         /*internal static ImmutableArray<byte> ComputeHash(HashAlgorithmName algorithmName, IEnumerable<Blob> bytes)

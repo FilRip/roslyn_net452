@@ -9,8 +9,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 using Roslyn.Utilities;
 
-#nullable enable
-
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -57,6 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return MakeUnaryOperator(node, node.OperatorKind, node.Syntax, node.MethodOpt, loweredOperand, node.Type);
         }
 
+#nullable enable
         private BoundExpression MakeUnaryOperator(
             UnaryOperatorKind kind,
             SyntaxNode syntax,
@@ -75,6 +74,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression loweredOperand,
             TypeSymbol type)
         {
+#nullable restore
             if (kind.IsDynamic())
             {
                 // Logical operators on boxed Boolean constants:
@@ -157,6 +157,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 oldNode.Update(kind, loweredOperand, oldNode.ConstantValueOpt, method, oldNode.ResultKind, type) :
                 new BoundUnaryOperator(syntax, kind, loweredOperand, null, method, LookupResultKind.Viable, type);
         }
+
+#nullable enable
 
         private BoundExpression LowerLiftedUnaryOperator(
             UnaryOperatorKind kind,
@@ -254,6 +256,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var result = LowerLiftedUnaryOperator(operatorKind, syntax, method, conditionalLeft!.WhenNotNull, type);
 
+#nullable restore
+
                 return conditionalLeft.Update(
                     conditionalLeft.Receiver,
                     conditionalLeft.HasValueMethodOpt,
@@ -324,6 +328,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return null;
         }
+
+#nullable enable
 
         private BoundExpression GetLiftedUnaryOperatorConsequence(UnaryOperatorKind kind, SyntaxNode syntax, MethodSymbol? method, TypeSymbol type, BoundExpression nonNullOperand)
         {
@@ -411,6 +417,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // double-evaluation of side effects.
             BoundExpression transformedLHS = TransformCompoundAssignmentLHS(node.Operand, tempInitializers, tempSymbols, isDynamic);
             TypeSymbol? operandType = transformedLHS.Type; //type of the variable being incremented
+
+#nullable restore
 
             LocalSymbol tempSymbol = _factory.SynthesizedLocal(operandType);
             tempSymbols.Add(tempSymbol);
@@ -950,6 +958,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
                 case UnaryOperatorKind.Enum:
                     {
+#nullable enable
                         TypeSymbol? underlyingType = node.Type;
                         if (underlyingType.IsNullableType())
                         {
@@ -959,6 +968,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         // Operator overload resolution will not have chosen the enumerated type
                         // unless the operand actually is of the enumerated type (or nullable enum type.)
+
+#nullable restore
 
                         switch (underlyingType.SpecialType)
                         {

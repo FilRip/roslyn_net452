@@ -177,7 +177,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     Debug.Assert(diag != null);
                     d = diag;
+#nullable restore
                     return true;
+#nullable enable
                 }
 
                 d = null;

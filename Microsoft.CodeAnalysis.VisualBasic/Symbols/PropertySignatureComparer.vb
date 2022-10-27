@@ -15,8 +15,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' This instance is intended to reflect the definition of signature equality used by the runtime (ECMA 335 Section 8.6.1.6).
         ''' It considers type, name, parameters, and custom modifiers.
         ''' </summary>
-        Public Shared ReadOnly RuntimePropertySignatureComparer As PropertySignatureComparer =
-            New PropertySignatureComparer(considerName:=True,
+        Public Shared ReadOnly RuntimePropertySignatureComparer As New PropertySignatureComparer(considerName:=True,
                                           considerType:=True,
                                           considerReadWriteModifiers:=False,
                                           considerOptionalParameters:=True,
@@ -26,8 +25,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' <summary>
         ''' This instance is used to search for properties that have identical signatures in every regard.
         ''' </summary>
-        Public Shared ReadOnly RetargetedExplicitPropertyImplementationComparer As PropertySignatureComparer =
-            New PropertySignatureComparer(considerName:=True,
+        Public Shared ReadOnly RetargetedExplicitPropertyImplementationComparer As New PropertySignatureComparer(considerName:=True,
                                           considerType:=True,
                                           considerReadWriteModifiers:=True,
                                           considerOptionalParameters:=True,
@@ -44,8 +42,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' The real fix here is to establish a spec for how WinRT conflict comparison should be
         ''' performed. Once this is done we should remove these comments.
         ''' </summary>
-        Public Shared ReadOnly WinRTConflictComparer As PropertySignatureComparer =
-            New PropertySignatureComparer(considerName:=True,
+        Public Shared ReadOnly WinRTConflictComparer As New PropertySignatureComparer(considerName:=True,
                                           considerType:=False,
                                           considerReadWriteModifiers:=False,
                                           considerOptionalParameters:=False,

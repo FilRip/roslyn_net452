@@ -99,11 +99,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             try
             {
-                using (Stream stream = resolver.OpenReadChecked(_resolvedPermissionSetFilePath))
-                {
-                    // Convert the byte array contents into a string in hexadecimal format.
-                    hexFileContent = ConvertToHex(stream);
-                }
+                using Stream stream = resolver.OpenReadChecked(_resolvedPermissionSetFilePath);
+                // Convert the byte array contents into a string in hexadecimal format.
+                hexFileContent = ConvertToHex(stream);
             }
             catch (IOException e)
             {

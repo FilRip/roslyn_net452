@@ -7,6 +7,8 @@ using System.Text;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     public abstract partial class BoundNode

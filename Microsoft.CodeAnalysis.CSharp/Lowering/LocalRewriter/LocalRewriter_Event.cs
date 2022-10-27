@@ -41,7 +41,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             var rewrittenArguments = ImmutableArray.Create<BoundExpression>(rewrittenArgument);
 
             MethodSymbol? method = node.IsAddition ? node.Event.AddMethod : node.Event.RemoveMethod;
+#nullable restore
             return MakeCall(node.Syntax, rewrittenReceiverOpt, method, rewrittenArguments, node.Type);
+#nullable enable
         }
 
         private enum EventAssignmentKind
@@ -208,10 +210,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!eventSymbol.IsWindowsRuntimeEvent)
             {
+#nullable restore
                 return MakeFieldAccess(syntax, rewrittenReceiver, fieldSymbol, constantValueOpt, resultKind, type);
             }
 
             NamedTypeSymbol fieldType = (NamedTypeSymbol)fieldSymbol.Type;
+
+#nullable enable
 
             // _tokenTable
             BoundFieldAccess fieldAccess = new(

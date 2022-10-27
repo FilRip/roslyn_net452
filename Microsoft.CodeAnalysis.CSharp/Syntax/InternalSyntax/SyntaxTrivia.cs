@@ -4,6 +4,8 @@
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
     internal class SyntaxTrivia : CSharpSyntaxNode

@@ -5,6 +5,8 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     /// <summary>
@@ -53,12 +55,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
                 else if (ContainingType.BaseTypeNoUseSiteDiagnostics.IsObjectType())
                 {
+#nullable restore
                     if (_equalityContract.GetMethod is null)
                     {
                         // The equality contract isn't usable, an error was reported elsewhere
                         F.CloseMethod(F.ThrowNull());
                         return;
                     }
+#nullable enable
 
                     if (_equalityContract.IsStatic)
                     {

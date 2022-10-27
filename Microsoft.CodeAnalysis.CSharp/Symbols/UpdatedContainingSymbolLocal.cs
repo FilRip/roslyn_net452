@@ -6,6 +6,8 @@ using System.Collections.Immutable;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal sealed class UpdatedContainingSymbolAndNullableAnnotationLocal : LocalSymbol
@@ -16,19 +18,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static UpdatedContainingSymbolAndNullableAnnotationLocal CreateForTest(SourceLocalSymbol underlyingLocal, Symbol updatedContainingSymbol, TypeWithAnnotations updatedType)
         {
-            return new UpdatedContainingSymbolAndNullableAnnotationLocal(underlyingLocal, updatedContainingSymbol, updatedType, assertContaining: false);
+            return new UpdatedContainingSymbolAndNullableAnnotationLocal(underlyingLocal, updatedContainingSymbol, updatedType);
         }
 
-        private UpdatedContainingSymbolAndNullableAnnotationLocal(SourceLocalSymbol underlyingLocal, Symbol updatedContainingSymbol, TypeWithAnnotations updatedType, bool assertContaining)
+        internal UpdatedContainingSymbolAndNullableAnnotationLocal(SourceLocalSymbol underlyingLocal, Symbol updatedContainingSymbol, TypeWithAnnotations updatedType)
         {
             ContainingSymbol = updatedContainingSymbol;
             TypeWithAnnotations = updatedType;
             _underlyingLocal = underlyingLocal;
-        }
-
-        internal UpdatedContainingSymbolAndNullableAnnotationLocal(SourceLocalSymbol underlyingLocal, Symbol updatedContainingSymbol, TypeWithAnnotations updatedType)
-            : this(underlyingLocal, updatedContainingSymbol, updatedType, assertContaining: true)
-        {
         }
 
         private readonly SourceLocalSymbol _underlyingLocal;
@@ -42,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            if (!(other is LocalSymbol otherLocal))
+            if (other is not LocalSymbol otherLocal)
             {
                 return false;
             }

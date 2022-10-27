@@ -23,7 +23,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return node.Update(node.Locals, node.LocalFunctions, builder.ToImmutableAndFree());
             }
 
-            BoundStatement? prologue = _instrumenter.CreateBlockPrologue(node, out LocalSymbol synthesizedLocal);
+            BoundStatement? prologue = _instrumenter.CreateBlockPrologue(node,
+#nullable restore
+                                                                         out LocalSymbol synthesizedLocal);
             if (prologue != null)
             {
                 builder.Insert(0, prologue);
@@ -32,6 +34,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 builder.Insert(0, _factory.HiddenSequencePoint());
             }
+
+#nullable enable
 
             BoundStatement? epilogue = _instrumenter.CreateBlockEpilogue(node);
             if (epilogue != null)

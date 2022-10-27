@@ -230,37 +230,33 @@ namespace Microsoft.CodeAnalysis
 
             if (length < CompressionThreshold)
             {
-                using (var builder = Cci.PooledBlobBuilder.GetInstance())
+                using var builder = Cci.PooledBlobBuilder.GetInstance();
+                builder.WriteInt32(0);
+                int bytesWritten = builder.TryWriteBytes(stream, length);
+
+                if (length != bytesWritten)
                 {
-                    builder.WriteInt32(0);
-                    int bytesWritten = builder.TryWriteBytes(stream, length);
-
-                    if (length != bytesWritten)
-                    {
-                        throw new EndOfStreamException();
-                    }
-
-                    return builder.ToImmutableArray();
+                    throw new EndOfStreamException();
                 }
+
+                return builder.ToImmutableArray();
             }
             else
             {
-                using (var builder = BlobBuildingStream.GetInstance())
+                using var builder = BlobBuildingStream.GetInstance();
+                builder.WriteInt32(length);
+
+                using (var deflater = new CountingDeflateStream(builder, CompressionLevel.Optimal, leaveOpen: true))
                 {
-                    builder.WriteInt32(length);
+                    stream.CopyTo(deflater);
 
-                    using (var deflater = new CountingDeflateStream(builder, CompressionLevel.Optimal, leaveOpen: true))
+                    if (length != deflater.BytesWritten)
                     {
-                        stream.CopyTo(deflater);
-
-                        if (length != deflater.BytesWritten)
-                        {
-                            throw new EndOfStreamException();
-                        }
+                        throw new EndOfStreamException();
                     }
-
-                    return builder.ToImmutableArray();
                 }
+
+                return builder.ToImmutableArray();
             }
         }
 
@@ -270,26 +266,22 @@ namespace Microsoft.CodeAnalysis
 
             if (bytes.Count < CompressionThreshold)
             {
-                using (var builder = Cci.PooledBlobBuilder.GetInstance())
-                {
-                    builder.WriteInt32(0);
-                    builder.WriteBytes(bytes.Array, bytes.Offset, bytes.Count);
-                    return builder.ToImmutableArray();
-                }
+                using var builder = Cci.PooledBlobBuilder.GetInstance();
+                builder.WriteInt32(0);
+                builder.WriteBytes(bytes.Array, bytes.Offset, bytes.Count);
+                return builder.ToImmutableArray();
             }
             else
             {
-                using (var builder = BlobBuildingStream.GetInstance())
+                using var builder = BlobBuildingStream.GetInstance();
+                builder.WriteInt32(bytes.Count);
+
+                using (var deflater = new CountingDeflateStream(builder, CompressionLevel.Optimal, leaveOpen: true))
                 {
-                    builder.WriteInt32(bytes.Count);
-
-                    using (var deflater = new CountingDeflateStream(builder, CompressionLevel.Optimal, leaveOpen: true))
-                    {
-                        deflater.Write(bytes.Array, bytes.Offset, bytes.Count);
-                    }
-
-                    return builder.ToImmutableArray();
+                    deflater.Write(bytes.Array, bytes.Offset, bytes.Count);
                 }
+
+                return builder.ToImmutableArray();
             }
         }
 
@@ -313,34 +305,28 @@ namespace Microsoft.CodeAnalysis
                 maxByteCount = int.MaxValue;
             }
 
-            using (var builder = BlobBuildingStream.GetInstance())
+            using var builder = BlobBuildingStream.GetInstance();
+            if (maxByteCount < CompressionThreshold)
             {
-                if (maxByteCount < CompressionThreshold)
-                {
-                    builder.WriteInt32(0);
+                builder.WriteInt32(0);
 
-                    using (var writer = new StreamWriter(builder, text.Encoding, bufferSize: Math.Max(1, text.Length), leaveOpen: true))
-                    {
-                        text.Write(writer);
-                    }
-                }
-                else
-                {
-                    Blob reserved = builder.ReserveBytes(4);
-
-                    using (var deflater = new CountingDeflateStream(builder, CompressionLevel.Optimal, leaveOpen: true))
-                    {
-                        using (var writer = new StreamWriter(deflater, text.Encoding, bufferSize: 1024, leaveOpen: true))
-                        {
-                            text.Write(writer);
-                        }
-
-                        new BlobWriter(reserved).WriteInt32(deflater.BytesWritten);
-                    }
-                }
-
-                return builder.ToImmutableArray();
+                using var writer = new StreamWriter(builder, text.Encoding, bufferSize: Math.Max(1, text.Length), leaveOpen: true);
+                text.Write(writer);
             }
+            else
+            {
+                Blob reserved = builder.ReserveBytes(4);
+
+                using var deflater = new CountingDeflateStream(builder, CompressionLevel.Optimal, leaveOpen: true);
+                using (var writer = new StreamWriter(deflater, text.Encoding, bufferSize: 1024, leaveOpen: true))
+                {
+                    text.Write(writer);
+                }
+
+                new BlobWriter(reserved).WriteInt32(deflater.BytesWritten);
+            }
+
+            return builder.ToImmutableArray();
         }
 
         internal Cci.DebugSourceInfo GetDebugSourceInfo()

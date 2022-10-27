@@ -598,9 +598,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             If Not foundInList Then
-                Dim typeData As New DominantTypeData()
-                typeData.ResultType = type
-                typeData.InferenceRestrictions = conversion
+                Dim typeData As New DominantTypeData() With {
+                    .ResultType = type,
+                    .InferenceRestrictions = conversion
+                }
 
                 Me.GetTypeDataList().Add(typeData)
             End If

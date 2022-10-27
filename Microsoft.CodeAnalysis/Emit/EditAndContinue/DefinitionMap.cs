@@ -42,7 +42,9 @@ namespace Microsoft.CodeAnalysis.Emit
         {
             Debug.Assert(edits != null);
 
+#nullable restore
             this.mappedMethods = GetMappedMethods(edits);
+#nullable enable
         }
 
         private IReadOnlyDictionary<IMethodSymbolInternal, MappedMethod> GetMappedMethods(IEnumerable<SemanticEdit> edits)

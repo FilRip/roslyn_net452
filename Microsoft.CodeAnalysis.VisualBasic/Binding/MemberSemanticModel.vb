@@ -1207,7 +1207,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Get
         End Property
 
-        Private ReadOnly _rwLock As ReaderWriterLockSlim = New ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion)
+        Private ReadOnly _rwLock As New ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion)
 
         '' This class manages a cache of bound nodes and binders for all the executable code under the root SyntaxNode
         '' of this SemanticModel.

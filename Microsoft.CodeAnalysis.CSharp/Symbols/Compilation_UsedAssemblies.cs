@@ -73,6 +73,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 bool seenErrors = diagnostics.HasAnyErrors();
                 if (!seenErrors)
                 {
+#nullable restore
                     diagnostics.DiagnosticBag.Clear();
                     GetDiagnosticsForAllMethodBodies(diagnostics, doLowering: true, cancellationToken);
                     seenErrors = diagnostics.HasAnyErrors();
@@ -157,6 +158,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             while (stack.Count != 0)
                             {
                                 AssemblySymbol current = stack.Pop();
+#nullable enable
                                 ConcurrentSet<AssemblySymbol>? usedAssemblies;
 
                                 switch (current)

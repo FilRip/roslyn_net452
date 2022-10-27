@@ -32,6 +32,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _name = declaratorSyntax.Identifier.ValueText;
 
             var declaratorDiagnostics = BindingDiagnosticBag.GetInstance();
+#nullable restore
             var declarationSyntax = (VariableDeclarationSyntax)declaratorSyntax.Parent;
             _type = BindEventType(binder, declarationSyntax.Type, declaratorDiagnostics);
 
@@ -51,6 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // return type without losing the appearance of immutability.
             if (this.IsOverride)
             {
+#nullable enable
                 EventSymbol? overriddenEvent = this.OverriddenEvent;
                 if ((object?)overriddenEvent != null)
                 {

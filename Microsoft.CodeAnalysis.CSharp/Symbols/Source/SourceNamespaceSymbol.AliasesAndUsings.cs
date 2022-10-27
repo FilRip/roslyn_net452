@@ -734,7 +734,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                     else
                                     {
                                         declarationBinder.ReportDiagnosticsIfObsolete(diagnostics, importedType, usingDirective.Name, hasBaseReceiver: false);
-
+#nullable restore
                                         getOrCreateUsingsBuilder(ref usings, globalUsingNamespacesOrTypes).Add(new NamespaceOrTypeAndUsingDirective(importedType, usingDirective, directiveDiagnostics.DependenciesBag.ToImmutableArray()));
                                     }
                                 }
@@ -761,6 +761,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         diagnostics = null;
                     }
+
+#nullable enable
 
                     return new UsingsAndDiagnostics()
                     {
@@ -886,6 +888,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                         alias.Alias.CheckConstraints(diagnostics);
 
+#nullable restore
                         semanticDiagnostics.AddRange(diagnostics.DiagnosticBag);
                         recordImportDependencies(alias.UsingDirective!, target);
                     }
@@ -981,6 +984,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 public ImmutableArray<AliasAndExternAliasDirective> ExternAliases { get; init; }
                 public ImmutableArray<Diagnostic> Diagnostics { get; init; }
             }
+
+#nullable enable
 
             private class UsingsAndDiagnostics
             {

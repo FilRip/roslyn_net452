@@ -2622,6 +2622,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         return ImmutableArray.Create(InstanceInitializersForPositionalMembers.ToImmutableAndFree());
                     }
 
+#nullable restore
+
                     var compilation = declaredMembers.RecordPrimaryConstructor.DeclaringCompilation;
                     var sortKey = new LexicalSortKey(InstanceInitializersForPositionalMembers.First().Syntax, compilation);
 
@@ -2706,6 +2708,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 return ref useStatic ? ref IsNullableEnabledForStaticConstructorsAndFields : ref IsNullableEnabledForInstanceConstructorsAndFields;
             }
+
+#nullable enable
 
             internal static ImmutableArray<ImmutableArray<FieldOrPropertyInitializer>> ToReadOnlyAndFree(ArrayBuilder<ArrayBuilder<FieldOrPropertyInitializer>> initializers)
             {
@@ -3416,7 +3420,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // primary ctor
                 var ctor = declaredMembersAndInitializers.RecordPrimaryConstructor;
+#nullable restore
                 members.Add(ctor);
+#nullable enable
 
                 if (ctor.ParameterCount != 0)
                 {

@@ -7044,7 +7044,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
 #nullable restore
             var parameter = method.Parameters[0];
-#nullable enable
             var parameterAnnotations = GetParameterAnnotations(parameter);
             var parameterType = ApplyLValueAnnotations(parameter.TypeWithAnnotations, parameterAnnotations);
             TypeWithState underlyingOperandType = default;
@@ -7092,6 +7091,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     operandType = ApplyUnconditionalAnnotations(operandType, GetRValueAnnotations(method));
                 }
             }
+
+#nullable enable
 
             // method return type -> conversion "to" type
             // May be distinct from method return type for Nullable<T>.

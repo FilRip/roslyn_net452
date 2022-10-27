@@ -133,7 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static Cci.IAssemblyReference TryGetAssemblyScope(NamespaceSymbol @namespace, Emit.PEModuleBuilder moduleBuilder, DiagnosticBag diagnostics)
         {
             AssemblySymbol containingAssembly = @namespace.ContainingAssembly;
-            if ((object)containingAssembly != null && containingAssembly != moduleBuilder.CommonCompilation.Assembly)
+            if (containingAssembly is object && containingAssembly != (Symbol)moduleBuilder.CommonCompilation.Assembly)
             {
                 var referenceManager = ((CSharpCompilation)moduleBuilder.CommonCompilation).GetBoundReferenceManager();
 

@@ -24,13 +24,11 @@ namespace Microsoft.CodeAnalysis
 
             public void CopyTo(string[] array, int arrayIndex)
             {
-                using (var enumerator = this.GetEnumerator())
+                using var enumerator = this.GetEnumerator();
+                while (arrayIndex < array.Length && enumerator.MoveNext())
                 {
-                    while (arrayIndex < array.Length && enumerator.MoveNext())
-                    {
-                        array[arrayIndex] = enumerator.Current;
-                        arrayIndex++;
-                    }
+                    array[arrayIndex] = enumerator.Current;
+                    arrayIndex++;
                 }
             }
 
@@ -53,8 +51,7 @@ namespace Microsoft.CodeAnalysis
             {
                 foreach (var obj in this.IdentifierCollection._map.Values)
                 {
-                    var strs = obj as HashSet<string>;
-                    if (strs != null)
+                    if (obj is HashSet<string> strs)
                     {
                         foreach (var s in strs)
                         {

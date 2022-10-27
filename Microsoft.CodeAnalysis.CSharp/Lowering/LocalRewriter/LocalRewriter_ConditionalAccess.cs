@@ -43,6 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var loweredReceiver = this.VisitExpression(node.Receiver);
             var receiverType = loweredReceiver.Type;
 
+#nullable restore
             // Check trivial case
             if (loweredReceiver.IsDefaultValue() && receiverType.IsReferenceType)
             {
@@ -76,7 +77,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             var previousConditionalAccessTarget = _currentConditionalAccessTarget;
             var currentConditionalAccessID = ++_currentConditionalAccessID;
 
+#nullable enable
+
             LocalSymbol? temp = null;
+
+#nullable restore
 
             switch (loweringKind)
             {
@@ -101,6 +106,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     throw ExceptionUtilities.UnexpectedValue(loweringKind);
             }
 
+#nullable enable
+
             BoundExpression? loweredAccessExpression;
 
             if (used)
@@ -121,6 +128,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol type = this.VisitType(node.Type);
 
             TypeSymbol nodeType = node.Type;
+#nullable restore
             TypeSymbol accessExpressionType = loweredAccessExpression.Type;
 
             if (accessExpressionType.IsVoidType())

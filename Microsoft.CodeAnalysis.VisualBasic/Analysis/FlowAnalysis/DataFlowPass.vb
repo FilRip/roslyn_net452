@@ -69,19 +69,19 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <summary>
         ''' Variables that were used anywhere, in the sense required to suppress warnings about unused variables.
         ''' </summary>
-        Private ReadOnly _unusedVariables As HashSet(Of LocalSymbol) = New HashSet(Of LocalSymbol)()
+        Private ReadOnly _unusedVariables As New HashSet(Of LocalSymbol)()
 
         ''' <summary>
         ''' Variables that were initialized or written anywhere.
         ''' </summary>
-        Private ReadOnly _writtenVariables As HashSet(Of Symbol) = New HashSet(Of Symbol)()
+        Private ReadOnly _writtenVariables As New HashSet(Of Symbol)()
 
         ''' <summary> 
         ''' A mapping from local variables to the index of their slot in a flow analysis local state. 
         ''' WARNING: if variable identifier maps into SlotKind.NotTracked, it may mean that VariableIdentifier 
         '''          is a structure without traceable fields. This mapping is created in MakeSlotImpl(...)
         ''' </summary>
-        Private ReadOnly _variableSlot As Dictionary(Of VariableIdentifier, Integer) = New Dictionary(Of VariableIdentifier, Integer)()
+        Private ReadOnly _variableSlot As New Dictionary(Of VariableIdentifier, Integer)()
 
         ''' <summary>
         ''' A mapping from the local variable slot to the symbol for the local variable itself.  This is used in the
@@ -1235,7 +1235,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Sub ReportUnassignedFunctionValue(local As LocalSymbol, node As SyntaxNode)
             If Not _alreadyReported(SlotKind.FunctionValue) Then
 
-                Dim type As TypeSymbol = Nothing
+                Dim type As TypeSymbol
                 Dim method = Me.MethodSymbol
 
                 type = method.ReturnType

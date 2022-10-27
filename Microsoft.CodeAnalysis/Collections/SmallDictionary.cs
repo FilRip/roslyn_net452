@@ -483,10 +483,12 @@ namespace Microsoft.CodeAnalysis
                 return;
             }
 
-            var newHead = new AvlNodeHead(node.HashCode, key, value, node);
-            newHead.Balance = node.Balance;
-            newHead.Left = node.Left;
-            newHead.Right = node.Right;
+            var newHead = new AvlNodeHead(node.HashCode, key, value, node)
+            {
+                Balance = node.Balance,
+                Left = node.Left,
+                Right = node.Right
+            };
 
             if (parent == null)
             {

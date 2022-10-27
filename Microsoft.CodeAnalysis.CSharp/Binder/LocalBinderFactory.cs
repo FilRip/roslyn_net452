@@ -73,13 +73,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var builder = new LocalBinderFactory(containingMemberOrLambda, syntax, enclosing);
 
-            StatementSyntax statement;
-            var expressionSyntax = syntax as ExpressionSyntax;
-            if (expressionSyntax != null)
+            if (syntax is ExpressionSyntax expressionSyntax)
             {
                 enclosing = new ExpressionVariableBinder(syntax, enclosing);
 
-                if ((object)binderUpdatedHandler != null)
+                if (binderUpdatedHandler is object)
                 {
                     binderUpdatedHandler(enclosing, syntax);
                 }
@@ -87,11 +85,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 builder.AddToMap(syntax, enclosing);
                 builder.Visit(expressionSyntax, enclosing);
             }
-            else if (syntax.Kind() != SyntaxKind.Block && (statement = syntax as StatementSyntax) != null)
+            else if (syntax.Kind() != SyntaxKind.Block && syntax is StatementSyntax statement)
             {
                 enclosing = builder.GetBinderForPossibleEmbeddedStatement(statement, enclosing, out CSharpSyntaxNode embeddedScopeDesignator);
 
-                if ((object)binderUpdatedHandler != null)
+                if (binderUpdatedHandler is object)
                 {
                     binderUpdatedHandler(enclosing, embeddedScopeDesignator);
                 }
@@ -105,7 +103,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                if ((object)binderUpdatedHandler != null)
+                if (binderUpdatedHandler is object)
                 {
                     binderUpdatedHandler(enclosing, null);
                 }
@@ -230,7 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Binder binder = _enclosing;
             LocalFunctionSymbol match = FindLocalFunction(node, _enclosing);
 
-            if ((object)match != null)
+            if (match is object)
             {
                 _containingMemberOrLambda = match;
 
@@ -677,7 +675,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             Visit(node.Block, _enclosing.WithAdditionalFlags(additionalFlags));
 
-            Binder finallyBinder;
+            //Binder finallyBinder;
         }
 
         public override void VisitYieldStatement(YieldStatementSyntax node)
@@ -736,8 +734,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             while (true)
             {
                 Visit(node.Right);
-                var binOp = node.Left as BinaryExpressionSyntax;
-                if (binOp == null)
+                if (node.Left is not BinaryExpressionSyntax binOp)
                 {
                     Visit(node.Left);
                     break;
@@ -767,7 +764,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // the embedded statement immediately, and then overwriting it with one constructed
             // in the usual way, if there is such a binder.  That's why we're using update,
             // rather than add, semantics.
-            Binder existing;
+            //Binder existing;
             // Note that a lock statement has two outer binders (a second one for pattern variable scope)
 
             _map[node] = binder;

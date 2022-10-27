@@ -640,7 +640,9 @@ namespace Microsoft.CodeAnalysis.Operations
             SyntaxNode syntax = boundAnonymousObjectCreationExpression.Syntax;
             ITypeSymbol? type = boundAnonymousObjectCreationExpression.GetPublicTypeSymbol();
             bool isImplicit = boundAnonymousObjectCreationExpression.WasCompilerGenerated;
+#nullable restore
             ImmutableArray<IOperation> initializers = GetAnonymousObjectCreationInitializers(boundAnonymousObjectCreationExpression.Arguments, boundAnonymousObjectCreationExpression.Declarations, syntax, type, isImplicit);
+#nullable enable
             return new AnonymousObjectCreationOperation(initializers, _semanticModel, syntax, type, isImplicit);
         }
 
@@ -664,7 +666,9 @@ namespace Microsoft.CodeAnalysis.Operations
                     boundObjectCreationExpression.Arguments,
                     declarations: ImmutableArray<BoundAnonymousPropertyDeclaration>.Empty,
                     syntax,
+#nullable restore
                     type,
+#nullable enable
                     isImplicit);
                 return new AnonymousObjectCreationOperation(initializers, _semanticModel, syntax, type, isImplicit);
             }

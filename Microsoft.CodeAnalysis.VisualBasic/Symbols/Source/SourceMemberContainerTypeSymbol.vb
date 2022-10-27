@@ -2978,9 +2978,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             If members.TryGetValue(memberSymbol.Name, symbols) Then
                 symbols.Add(memberSymbol)
             Else
-                symbols = New ArrayBuilder(Of Symbol)
-
-                symbols.Add(memberSymbol)
+                symbols = New ArrayBuilder(Of Symbol) From {
+                    memberSymbol
+                }
                 members(memberSymbol.Name) = symbols
             End If
         End Sub

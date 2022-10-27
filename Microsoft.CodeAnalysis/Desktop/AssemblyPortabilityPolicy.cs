@@ -62,51 +62,49 @@ namespace Microsoft.CodeAnalysis
 
             const string ns = "urn:schemas-microsoft-com:asm.v1";
 
-            using (XmlReader xml = XmlReader.Create(input, s_xmlSettings))
+            using XmlReader xml = XmlReader.Create(input, s_xmlSettings);
+            if (!ReadToChild(xml, 0, "configuration") ||
+                !ReadToChild(xml, 1, "runtime") ||
+                !ReadToChild(xml, 2, "assemblyBinding", ns) ||
+                !ReadToChild(xml, 3, "supportPortability", ns))
             {
-                if (!ReadToChild(xml, 0, "configuration") ||
-                    !ReadToChild(xml, 1, "runtime") ||
-                    !ReadToChild(xml, 2, "assemblyBinding", ns) ||
-                    !ReadToChild(xml, 3, "supportPortability", ns))
-                {
-                    return default;
-                }
-
-                // 31bf3856ad364e35
-                bool suppressLibrary = false;
-
-                // 7cec85d7bea7798e
-                bool suppressPlatform = false;
-
-                do
-                {
-                    // see CNodeFactory::ProcessSupportPortabilityTag in fusion\inc\nodefact.cpp for details
-                    //  - unrecognized attributes ignored.
-                    //  - syntax errors within tags causes this tag to be ignored (but not reject entire app.config)
-                    //  - multiple <supportPortability> tags ok (if two specify same PKT, all but (implementation defined) one ignored.)
-                    string pkt = xml.GetAttribute("PKT");
-                    string enableAttribute = xml.GetAttribute("enable");
-
-                    bool? enable =
-                        string.Equals(enableAttribute, "false", StringComparison.OrdinalIgnoreCase) ? false :
-                        string.Equals(enableAttribute, "true", StringComparison.OrdinalIgnoreCase) ? true :
-                        null;
-
-                    if (enable != null)
-                    {
-                        if (string.Equals(pkt, "31bf3856ad364e35", StringComparison.OrdinalIgnoreCase))
-                        {
-                            suppressLibrary = !enable.Value;
-                        }
-                        else if (string.Equals(pkt, "7cec85d7bea7798e", StringComparison.OrdinalIgnoreCase))
-                        {
-                            suppressPlatform = !enable.Value;
-                        }
-                    }
-                } while (xml.ReadToNextSibling("supportPortability", ns));
-
-                return new AssemblyPortabilityPolicy(suppressPlatform, suppressLibrary);
+                return default;
             }
+
+            // 31bf3856ad364e35
+            bool suppressLibrary = false;
+
+            // 7cec85d7bea7798e
+            bool suppressPlatform = false;
+
+            do
+            {
+                // see CNodeFactory::ProcessSupportPortabilityTag in fusion\inc\nodefact.cpp for details
+                //  - unrecognized attributes ignored.
+                //  - syntax errors within tags causes this tag to be ignored (but not reject entire app.config)
+                //  - multiple <supportPortability> tags ok (if two specify same PKT, all but (implementation defined) one ignored.)
+                string pkt = xml.GetAttribute("PKT");
+                string enableAttribute = xml.GetAttribute("enable");
+
+                bool? enable =
+                    string.Equals(enableAttribute, "false", StringComparison.OrdinalIgnoreCase) ? false :
+                    string.Equals(enableAttribute, "true", StringComparison.OrdinalIgnoreCase) ? true :
+                    null;
+
+                if (enable != null)
+                {
+                    if (string.Equals(pkt, "31bf3856ad364e35", StringComparison.OrdinalIgnoreCase))
+                    {
+                        suppressLibrary = !enable.Value;
+                    }
+                    else if (string.Equals(pkt, "7cec85d7bea7798e", StringComparison.OrdinalIgnoreCase))
+                    {
+                        suppressPlatform = !enable.Value;
+                    }
+                }
+            } while (xml.ReadToNextSibling("supportPortability", ns));
+
+            return new AssemblyPortabilityPolicy(suppressPlatform, suppressLibrary);
         }
     }
 }

@@ -66,6 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// See SyntaxNode.GetCorrespondingLambdaBody.
         /// </summary>
+#nullable enable
         internal static SyntaxNode? TryGetCorrespondingLambdaBody(SyntaxNode oldBody, SyntaxNode newLambda)
         {
 
@@ -96,6 +97,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // however to avoid complexity we allow it to be passed in and just return null.
                     return IsReducedSelectOrGroupByClause(selectClause, selectClause.Expression) ? null : selectClause.Expression;
 
+#nullable restore
+
                 case SyntaxKind.JoinClause:
                     var oldJoin = (JoinClauseSyntax)oldBody.Parent;
                     var newJoin = (JoinClauseSyntax)newLambda;
@@ -114,6 +117,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     throw ExceptionUtilities.UnexpectedValue(newLambda.Kind());
             }
         }
+
+#nullable enable
 
         public static SyntaxNode GetNestedFunctionBody(SyntaxNode nestedFunction)
             => nestedFunction switch
@@ -220,6 +225,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             SyntaxToken sourceIdentifier;
             QueryBodySyntax containingBody;
 
+#nullable restore
+
             var containingQueryOrContinuation = selectOrGroupClause.Parent.Parent;
             if (containingQueryOrContinuation.IsKind(SyntaxKind.QueryExpression))
             {
@@ -274,6 +281,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// If the specified node represents a lambda returns a node (or nodes) that represent its body (bodies).
         /// </summary>
+#nullable enable
         public static bool TryGetLambdaBodies(SyntaxNode node, [NotNullWhen(true)] out SyntaxNode? lambdaBody1, out SyntaxNode? lambdaBody2)
         {
             lambdaBody1 = null;

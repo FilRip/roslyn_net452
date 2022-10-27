@@ -94,8 +94,10 @@ namespace Roslyn.Utilities
                                 item.tcs.TrySetException(ex);
                             }
                         }
-                    });
-                    t.IsBackground = true;
+                    })
+                    {
+                        IsBackground = true
+                    };
                     t.Start();
                 }
 

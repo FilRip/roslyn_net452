@@ -62,6 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case SyntaxKind.BaseConstructorInitializer:
                     case SyntaxKind.ThisConstructorInitializer:
                         var init = (ConstructorInitializerSyntax)original.Syntax;
+#nullable restore
                         return new BoundSequencePointWithSpan(init, rewritten, CreateSpanForConstructorInitializer((ConstructorDeclarationSyntax)init.Parent));
                 }
             }
@@ -134,6 +135,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return AddSequencePoint(base.InstrumentYieldReturnStatement(original, rewritten));
         }
+
+#nullable enable
 
         public override BoundStatement? CreateBlockPrologue(BoundBlock original, out Symbols.LocalSymbol? synthesizedLocal)
         {
@@ -377,9 +380,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                 hasErrors: false);
         }
 
+#nullable restore
+
         public override BoundStatement InstrumentSwitchWhenClauseConditionalGotoBody(BoundExpression original, BoundStatement ifConditionGotoBody)
         {
+#nullable enable
+
             WhenClauseSyntax? whenClause = original.Syntax.FirstAncestorOrSelf<WhenClauseSyntax>();
+
+#nullable restore
 
             return new BoundSequencePointWithSpan(
                 syntax: whenClause,
@@ -399,7 +408,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // EnC: We need to insert a hidden sequence point to handle function remapping in case 
             // the containing method is edited while methods invoked in the condition are being executed.
+#nullable enable
             CatchFilterClauseSyntax? filterClause = ((CatchClauseSyntax)original.Syntax).Filter;
+#nullable restore
             return AddConditionSequencePoint(new BoundSequencePointExpression(filterClause, rewrittenFilter, rewrittenFilter.Type), filterClause, factory);
         }
 

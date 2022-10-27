@@ -142,6 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 binary = stack.Pop();
                 var right = (BoundExpression?)this.Visit(binary.Right);
                 var type = this.VisitType(binary.Type);
+#nullable restore
                 left = binary.Update(binary.OperatorKind, binary.ConstantValueOpt, binary.MethodOpt, binary.ResultKind, binary.OriginalUserDefinedOperatorsOpt, left, right, type);
             }
             while (stack.Count > 0);

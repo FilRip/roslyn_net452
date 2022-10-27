@@ -48,11 +48,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 result |= DeclarationModifiers.Abstract;
             }
 
-#if DEBUG
-#endif 
             return result;
 
-#if DEBUG
+/*#if DEBUG
             static bool modifiersAreValid(DeclarationModifiers modifiers)
             {
                 if ((modifiers & DeclarationModifiers.AccessibilityMask) != DeclarationModifiers.Public)
@@ -78,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         return false;
                 }
             }
-#endif 
+#endif */
         }
 
         private MethodSymbol? VirtualCloneInBase()

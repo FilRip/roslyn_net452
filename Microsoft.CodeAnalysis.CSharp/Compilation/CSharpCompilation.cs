@@ -148,7 +148,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// The key is a symbol for methods or parameters, and syntax for attributes.
         /// The data is collected during testing only.
         /// </summary>
+#pragma warning disable CS0649
         internal NullableData? NullableAnalysisData;
+#pragma warning restore CS0649
 
         internal sealed class NullableData
         {
@@ -2544,8 +2546,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#pragma warning disable CS0414
         private DiagnosticBag? _lazyDeclarationDiagnostics;
         private bool _declarationDiagnosticsFrozen;
+#pragma warning restore CS0414
 
         /// <summary>
         /// A bag in which diagnostics that should be reported after code gen can be deposited.

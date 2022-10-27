@@ -2231,6 +2231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 currentNode = currentNode.Parent;
 
+#nullable restore
                 if (currentNode.Kind() == SyntaxKind.ConditionalAccessExpression)
                 {
                     var condAccess = (ConditionalAccessExpressionSyntax)currentNode;
@@ -2239,6 +2240,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         return condAccess;
                     }
                 }
+#nullable enable
             }
 
             return null;

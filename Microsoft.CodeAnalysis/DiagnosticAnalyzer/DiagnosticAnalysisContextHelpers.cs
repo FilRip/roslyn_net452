@@ -95,6 +95,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
 
             Debug.Assert(location.SourceTree != null);
+#nullable restore
             if (!compilation.ContainsSyntaxTree(location.SourceTree))
             {
                 // Disallow diagnostics with source locations outside this compilation.
@@ -169,6 +170,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 throw new ArgumentNullException(nameof(valueProvider));
             }
         }
+
+#nullable enable
 
         internal static ControlFlowGraph GetControlFlowGraph(IOperation operation, Func<IOperation, ControlFlowGraph>? getControlFlowGraph, CancellationToken cancellationToken)
         {

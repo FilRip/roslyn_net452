@@ -346,7 +346,7 @@ Namespace Microsoft.CodeAnalysis.Operations
                 Else
                     Debug.Assert(i = expression.Declarations(currentDeclarationIndex).PropertyIndex)
                     target = CreateBoundAnonymousTypePropertyAccessOperation(expression.Declarations(currentDeclarationIndex))
-                    currentDeclarationIndex = currentDeclarationIndex + 1
+                    currentDeclarationIndex += 1
                     isImplicitAssignment = expression.WasCompilerGenerated
                 End If
 

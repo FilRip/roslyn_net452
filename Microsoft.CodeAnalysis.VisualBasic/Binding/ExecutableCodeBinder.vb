@@ -77,7 +77,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Get
         End Property
 
-        Private Shared ReadOnly s_emptyLabelMap As MultiDictionary(Of String, SourceLabelSymbol) = New MultiDictionary(Of String, SourceLabelSymbol)(0, CaseInsensitiveComparison.Comparer)
+        Private Shared ReadOnly s_emptyLabelMap As New MultiDictionary(Of String, SourceLabelSymbol)(0, CaseInsensitiveComparison.Comparer)
 
         Private Shared Function BuildLabelsMap(labels As ImmutableArray(Of SourceLabelSymbol)) As MultiDictionary(Of String, SourceLabelSymbol)
             If Not labels.IsEmpty Then

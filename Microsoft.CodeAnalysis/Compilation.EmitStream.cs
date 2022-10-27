@@ -179,10 +179,8 @@ namespace Microsoft.CodeAnalysis
 
                             _strongNameProvider.SignFile(strongNameKeys, tempFilePath);
 
-                            using (var tempFileStream = new FileStream(tempFilePath, FileMode.Open))
-                            {
-                                tempFileStream.CopyTo(_stream);
-                            }
+                            using var tempFileStream = new FileStream(tempFilePath, FileMode.Open);
+                            tempFileStream.CopyTo(_stream);
                         }
                         catch (DesktopStrongNameProvider.ClrStrongNameMissingException)
                         {

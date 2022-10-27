@@ -23,7 +23,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private ReadOnly _dataFlowsOut As New HashSet(Of Symbol)()
 #If DEBUG Then
         ' we'd like to ensure that only variables get returned in DataFlowsOut that were assigned to inside the region.
-        Private ReadOnly _assignedInside As HashSet(Of Symbol) = New HashSet(Of Symbol)()
+        Private ReadOnly _assignedInside As New HashSet(Of Symbol)()
 #End If
 
         Private Sub New(info As FlowAnalysisInfo, region As FlowAnalysisRegionInfo,
@@ -150,7 +150,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     ' Unreachable for AmbiguousLocalsPseudoSymbol: ambiguous implicit 
                     ' receiver should not ever be considered unassigned
-                    Debug.Assert(Not TypeOf sym Is AmbiguousLocalsPseudoSymbol)
+                    Debug.Assert(TypeOf sym IsNot AmbiguousLocalsPseudoSymbol)
 
                     If sym IsNot Nothing Then
                         _dataFlowsOut.Add(sym)

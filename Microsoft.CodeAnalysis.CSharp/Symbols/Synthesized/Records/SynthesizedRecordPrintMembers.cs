@@ -43,11 +43,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 result |= ContainingType.IsSealed ? DeclarationModifiers.None : DeclarationModifiers.Virtual;
             }
 
-#if DEBUG
-#endif
             return result;
 
-#if DEBUG
+/*#if DEBUG
             bool modifiersAreValid(DeclarationModifiers modifiers)
             {
                 if (ContainingType.IsRecordStruct)
@@ -73,7 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         return false;
                 }
             }
-#endif
+#endif*/
         }
 
         protected override (TypeWithAnnotations ReturnType, ImmutableArray<ParameterSymbol> Parameters, bool IsVararg, ImmutableArray<TypeParameterConstraintClause> DeclaredConstraintsForOverrideOrImplementation) MakeParametersAndBindReturnType(BindingDiagnosticBag diagnostics)
@@ -133,6 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
                 else
                 {
+#nullable enable
                     MethodSymbol? basePrintMethod = OverriddenMethod;
                     if (basePrintMethod is null ||
                         basePrintMethod.ReturnType.SpecialType != SpecialType.System_Boolean)
@@ -176,6 +175,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         _ => throw ExceptionUtilities.UnexpectedValue(member.Kind)
                     };
 
+#nullable restore
                     if (value.Type.IsValueType)
                     {
                         block.Add(F.ExpressionStatement(

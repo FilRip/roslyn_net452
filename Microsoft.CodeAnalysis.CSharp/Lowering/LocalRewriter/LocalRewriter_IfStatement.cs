@@ -26,7 +26,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 rewrittenCondition = _instrumenter.InstrumentIfStatementCondition(node, rewrittenCondition, _factory);
             }
 
+#nullable restore
             var result = RewriteIfStatement(syntax, rewrittenCondition, rewrittenConsequence, rewrittenAlternative, node.HasErrors);
+#nullable enable
 
             // add sequence point before the whole statement
             if (this.Instrument && !node.WasCompilerGenerated)

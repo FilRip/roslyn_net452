@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// The root node of the syntax tree that this binding is based on.
         /// </summary>
-        internal new abstract CSharpSyntaxNode Root { get; }
+        public new abstract CSharpSyntaxNode Root { get; }
 
 
         // Is this node one that could be successfully interrogated by GetSymbolInfo/GetTypeInfo/GetMemberGroup/GetConstantValue?

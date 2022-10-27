@@ -93,7 +93,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // NOTE: currently it can be null if only private implementation type methods are compiled.
                 // There should be no caller of this method in that case.
+#nullable restore
                 return _typeOpt;
+#nullable enable
             }
         }
 
@@ -209,8 +211,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (_constructorInitializers == null)
             {
-                _constructorInitializers = new SmallDictionary<MethodSymbol, MethodSymbol>();
-                _constructorInitializers.Add(method1, method2);
+                _constructorInitializers = new SmallDictionary<MethodSymbol, MethodSymbol>()
+                {
+                    { method1, method2 }
+                };
                 return;
             }
 

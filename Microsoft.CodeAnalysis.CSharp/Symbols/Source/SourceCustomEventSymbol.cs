@@ -217,8 +217,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if ((object)_explicitInterfaceType != null)
             {
+#nullable restore
                 var explicitInterfaceSpecifier = this.ExplicitInterfaceSpecifier;
                 _explicitInterfaceType.CheckAllConstraints(DeclaringCompilation, conversions, new SourceLocation(explicitInterfaceSpecifier.Name), diagnostics);
+#nullable enable
             }
 
             if (!_explicitInterfaceImplementations.IsEmpty)

@@ -71,6 +71,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             public bool HasGlobalSymbolSuppression(ISymbol symbol, string id, bool isImmediatelyContainingSymbol, out SuppressMessageInfo info)
             {
                 Debug.Assert(symbol != null);
+#nullable restore
                 if (_globalSymbolSuppressions.TryGetValue(symbol, out Dictionary<string, SuppressMessageInfo> suppressions) &&
                     suppressions.TryGetValue(id, out info))
                 {
@@ -122,6 +123,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             return diagnostic;
         }
 
+#nullable enable
         public bool IsDiagnosticSuppressed(Diagnostic diagnostic, [NotNullWhen(true)] out AttributeData? suppressingAttribute)
         {
             if (IsDiagnosticSuppressed(diagnostic, out SuppressMessageInfo info))

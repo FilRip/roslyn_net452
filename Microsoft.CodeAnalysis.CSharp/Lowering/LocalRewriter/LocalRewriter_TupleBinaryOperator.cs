@@ -353,6 +353,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 hasValue = MakeBooleanConstant(expr.Syntax, false);
                 // Since there is no value in this nullable expression, we don't need to construct a `.GetValueOrDefault()`, `default(T)` will suffice
+#nullable restore
                 value = new BoundDefaultExpression(expr.Syntax, expr.Type.StrippedType());
                 return;
             }

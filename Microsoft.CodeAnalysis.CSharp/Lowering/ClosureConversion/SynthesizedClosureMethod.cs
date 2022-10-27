@@ -55,6 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 case ClosureKind.Singleton: // all type parameters on method (except the top level method's)
                 case ClosureKind.General: // only lambda's type parameters on method (rest on class)
+#nullable restore
                     typeMap = lambdaFrame.TypeMap.WithConcatAlphaRename(
                         originalMethod,
                         this,
@@ -178,6 +179,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The offset is thus relative to the top-level method body start.
             return TopLevelMethod.CalculateLocalSyntaxOffset(localPosition, localTree);
         }
+
+#nullable enable
 
         IMethodSymbolInternal? ISynthesizedMethodBodyImplementationSymbol.Method => TopLevelMethod;
 

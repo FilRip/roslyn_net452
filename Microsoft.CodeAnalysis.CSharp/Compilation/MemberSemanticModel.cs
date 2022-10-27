@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal override CSharpSyntaxNode Root
+        public override CSharpSyntaxNode Root
         {
             get
             {

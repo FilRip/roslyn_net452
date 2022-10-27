@@ -59,6 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var directiveDiagnostics = BindingDiagnosticBag.GetInstance();
 
                     var imported = usingsBinder.BindNamespaceOrTypeSymbol(qualifiedName, directiveDiagnostics).NamespaceOrTypeSymbol;
+#nullable restore
                     if (uniqueUsings.Add(imported))
                     {
                         boundUsings.Add(new NamespaceOrTypeAndUsingDirective(imported, null, dependencies: directiveDiagnostics.DependenciesBag.ToImmutableArray()));

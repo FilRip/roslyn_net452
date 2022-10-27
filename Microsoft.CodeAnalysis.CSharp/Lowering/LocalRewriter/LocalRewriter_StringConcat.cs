@@ -258,6 +258,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!leftConst.IsDefaultValue && !rightConst.IsDefaultValue)
             {
+#nullable restore
                 if (leftVal.Length + rightVal.Length < 0)
                 {
                     return null;
@@ -383,6 +384,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // If it's a struct which has overridden ToString, find that method. Note that we might fail to
             // find it, e.g. if object.ToString is missing
+#nullable enable
             MethodSymbol? structToStringMethod = null;
             if (expr.Type.IsValueType && !expr.Type.IsTypeParameter())
             {

@@ -70,6 +70,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ulong curValue = 0;
 
             // Initialize the value string to empty
+#nullable enable
             PooledStringBuilder? pooledBuilder = null;
             StringBuilder? valueStringBuilder = null;
 
@@ -132,6 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Unable to decode the enum constant, just display the integral value
+#nullable restore
             var result = constant.ValueInternal.ToString();
             return result;
         }
@@ -146,6 +148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             long curValue = 0;
 
             // Initialize the value string to empty
+#nullable enable
             PooledStringBuilder? pooledBuilder = null;
             StringBuilder? valueStringBuilder = null;
 
@@ -207,6 +210,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Unable to decode the enum constant, just display the integral value
+#nullable restore
             var result = constant.ValueInternal.ToString();
             return result;
         }

@@ -104,6 +104,7 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(manifestModule != null);
             Debug.Assert(moduleFactory != null);
 
+#nullable restore
             _initialModules = ImmutableArray.Create(manifestModule);
             _moduleFactoryOpt = moduleFactory;
         }
@@ -302,6 +303,8 @@ namespace Microsoft.CodeAnalysis
 
             return _lazyPublishedModules;
         }
+
+#nullable enable
 
         /// <exception cref="BadImageFormatException">The PE image format is invalid.</exception>
         /// <exception cref="IOException">IO error while reading the metadata. See <see cref="Exception.InnerException"/> for details.</exception>

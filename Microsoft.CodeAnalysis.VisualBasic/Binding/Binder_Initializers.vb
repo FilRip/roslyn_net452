@@ -39,7 +39,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End Set
             End Property
 
-            Friend Shared ReadOnly Empty As ProcessedFieldOrPropertyInitializers = New ProcessedFieldOrPropertyInitializers()
+            Friend Shared ReadOnly Empty As New ProcessedFieldOrPropertyInitializers()
 
             Private Sub New()
                 Me.BoundInitializers = ImmutableArray(Of BoundInitializer).Empty

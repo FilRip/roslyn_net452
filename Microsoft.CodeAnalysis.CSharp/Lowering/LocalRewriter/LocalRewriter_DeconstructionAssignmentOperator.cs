@@ -149,7 +149,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 #nullable restore
                     resultPart = EvaluateConversionToTemp(rightPart, underlyingConversions[i], leftTarget.Type, temps,
                         effects.conversions);
-#nullable enable
 
                     if (leftTarget.Kind != BoundKind.DiscardExpression)
                     {

@@ -24,7 +24,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Try
         End Function
 
-        Private ReadOnly _entryPoints As HashSet(Of LabelStatementSyntax) = New HashSet(Of LabelStatementSyntax)()
+        Private ReadOnly _entryPoints As New HashSet(Of LabelStatementSyntax)()
 
         Private Overloads Function Analyze() As Boolean
             '  We only need to scan in a single pass.

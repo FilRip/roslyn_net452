@@ -531,6 +531,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (expectedConvention.CallKind.IsCallingConvention(Cci.CallingConvention.Unmanaged))
                     {
+#nullable restore
                         if (expectedConvention.UnmanagedCallingConventionTypes.Count != actualUnmanagedCallingConventionTypes.Count)
                         {
                             results[i] = makeWrongCallingConvention(result);

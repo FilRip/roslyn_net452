@@ -7,6 +7,8 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal sealed partial class LocalRewriter
@@ -30,6 +32,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 argumentType = _compilation.GetSpecialType(SpecialType.System_Object);
                 rewrittenArgument = MakeLiteral(
                     rewrittenArgument.Syntax,
+#nullable restore
                     rewrittenArgument.ConstantValue,
                     argumentType); //need to have a non-null type here for TempHelpers.StoreToTemp.
             }
@@ -64,6 +67,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
+#nullable enable
                 exitCallExpr = new BoundBadExpression(lockSyntax, LookupResultKind.NotInvocable, ImmutableArray<Symbol?>.Empty, ImmutableArray.Create<BoundExpression>(boundLockTemp), ErrorTypeSymbol.UnknownResultType);
             }
 
@@ -123,6 +127,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             lockSyntax,
                             BoundBlock.SynthesizedNoLocals(lockSyntax, ImmutableArray.Create<BoundStatement>(
                                 enterCall,
+#nullable restore
                                 rewrittenBody)),
                             ImmutableArray<BoundCatchBlock>.Empty,
                             BoundBlock.SynthesizedNoLocals(lockSyntax,
@@ -155,6 +160,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
+#nullable enable
                     enterCallExpr = new BoundBadExpression(lockSyntax, LookupResultKind.NotInvocable, ImmutableArray<Symbol?>.Empty, ImmutableArray.Create<BoundExpression>(boundLockTemp), ErrorTypeSymbol.UnknownResultType);
                 }
 
@@ -170,6 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         enterCall,
                         new BoundTryStatement(
                             lockSyntax,
+#nullable restore
                             BoundBlock.SynthesizedNoLocals(lockSyntax, rewrittenBody),
                             ImmutableArray<BoundCatchBlock>.Empty,
                             BoundBlock.SynthesizedNoLocals(lockSyntax, exitCall))));

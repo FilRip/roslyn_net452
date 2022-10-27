@@ -35,10 +35,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 finallyBlockOpt = null;
             }
 
+#nullable restore
+
             return (catchBlocks.IsDefaultOrEmpty && finallyBlockOpt == null)
                 ? tryBlock
                 : node.Update(tryBlock, catchBlocks, finallyBlockOpt, node.FinallyLabelOpt, node.PreferFaultHandler);
         }
+#nullable enable
 
         /// <summary>
         /// Is there any code to execute in the given statement that could have side-effects,
@@ -100,6 +103,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 rewrittenFilter = _instrumenter.InstrumentCatchClauseFilter(node, rewrittenFilter, _factory);
             }
+
+#nullable restore
 
             return node.Update(
                 node.Locals,

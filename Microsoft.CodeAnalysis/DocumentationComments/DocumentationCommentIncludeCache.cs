@@ -51,14 +51,10 @@ namespace Microsoft.CodeAnalysis
         {
             CacheMissCount++;
 
-            using (Stream stream = resolver.OpenReadChecked(resolvedPath))
-            {
-                using (XmlReader reader = XmlReader.Create(stream, s_xmlSettings))
-                {
-                    var document = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
-                    return KeyValuePairUtil.Create(resolvedPath, document);
-                }
-            }
+            using Stream stream = resolver.OpenReadChecked(resolvedPath);
+            using XmlReader reader = XmlReader.Create(stream, s_xmlSettings);
+            var document = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo);
+            return KeyValuePairUtil.Create(resolvedPath, document);
         }
 
         private static int KeyHashCode(string resolvedPath)

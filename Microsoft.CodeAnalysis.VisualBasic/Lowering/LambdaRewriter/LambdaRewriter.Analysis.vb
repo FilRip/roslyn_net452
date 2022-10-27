@@ -43,31 +43,31 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' <summary>
             ''' For each statement with captured variables, identifies the nearest enclosing statement with captured variables.
             ''' </summary>
-            Friend blockParent As Dictionary(Of BoundNode, BoundNode) = New Dictionary(Of BoundNode, BoundNode)()
-            Friend lambdaParent As Dictionary(Of LambdaSymbol, MethodSymbol) = New Dictionary(Of LambdaSymbol, MethodSymbol)(ReferenceEqualityComparer.Instance)
+            Friend blockParent As New Dictionary(Of BoundNode, BoundNode)()
+            Friend lambdaParent As New Dictionary(Of LambdaSymbol, MethodSymbol)(ReferenceEqualityComparer.Instance)
 
             ''' <summary>
             ''' For each captured variable, identifies the statement in which it will be moved to a frame class.  This is
             ''' normally the block where the variable is introduced, but method parameters are moved
             ''' to a frame class within the body of the method.
             ''' </summary>
-            Friend variableScope As Dictionary(Of Symbol, BoundNode) = New Dictionary(Of Symbol, BoundNode)(ReferenceEqualityComparer.Instance)
+            Friend variableScope As New Dictionary(Of Symbol, BoundNode)(ReferenceEqualityComparer.Instance)
 
             ''' <summary>
             ''' For a given label, the nearest enclosing block that captures variables
             ''' </summary>
-            Friend labelBlock As Dictionary(Of LabelSymbol, BoundNode) = New Dictionary(Of LabelSymbol, BoundNode)(ReferenceEqualityComparer.Instance)
+            Friend labelBlock As New Dictionary(Of LabelSymbol, BoundNode)(ReferenceEqualityComparer.Instance)
 
             ''' <summary>
             ''' For a given goto, the nearest enclosing block that captures variables
             ''' </summary>
-            Friend gotoBlock As Dictionary(Of BoundGotoStatement, BoundNode) = New Dictionary(Of BoundGotoStatement, BoundNode)()
+            Friend gotoBlock As New Dictionary(Of BoundGotoStatement, BoundNode)()
 
             ''' <summary>
             ''' Blocks that contain (recursively) a lambda that is lifting. 
             ''' Such blocks are considered as potentially needing closure initialization when doing jump verification.
             ''' </summary>
-            Friend containsLiftingLambda As HashSet(Of BoundNode) = New HashSet(Of BoundNode)()
+            Friend containsLiftingLambda As New HashSet(Of BoundNode)()
 
             ''' <summary>
             ''' Blocks that are positioned between a block declaring some lifted variables
@@ -97,12 +97,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' <summary>
             ''' The set of captured variables seen in the method body.
             ''' </summary>
-            Friend capturedVariables As HashSet(Of Symbol) = New HashSet(Of Symbol)(ReferenceEqualityComparer.Instance)
+            Friend capturedVariables As New HashSet(Of Symbol)(ReferenceEqualityComparer.Instance)
 
             ''' <summary>
             ''' For each lambda in the code, the set of variables that it captures.
             ''' </summary>
-            Friend capturedVariablesByLambda As MultiDictionary(Of LambdaSymbol, Symbol) = New MultiDictionary(Of LambdaSymbol, Symbol)(ReferenceEqualityComparer.Instance)
+            Friend capturedVariablesByLambda As New MultiDictionary(Of LambdaSymbol, Symbol)(ReferenceEqualityComparer.Instance)
 
             ''' <summary>
             ''' The set of variables that were declared anywhere inside an expression lambda.
@@ -225,7 +225,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' TODO: this could be precomputed and stored by analysis phase
                 Dim result As Integer = -1
                 While node IsNot Nothing
-                    result = result + 1
+                    result += 1
                     If Not blockParent.TryGetValue(node, node) Then
                         Exit While
                     End If

@@ -1643,6 +1643,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var modifiersList = (SyntaxList<SyntaxToken>)modifiers.ToList();
                 var membersList = (SyntaxList<MemberDeclarationSyntax>)members;
                 var constraintsList = (SyntaxList<TypeParameterConstraintClauseSyntax>)constraints;
+#nullable restore
                 switch (keyword.Kind)
                 {
                     case SyntaxKind.ClassKeyword:

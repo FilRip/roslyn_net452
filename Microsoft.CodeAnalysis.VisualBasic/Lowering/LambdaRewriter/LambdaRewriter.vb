@@ -62,11 +62,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private _lazyStaticLambdaFrame As LambdaFrame
 
         ' for each block with lifted (captured) variables, the corresponding frame type
-        Private ReadOnly _frames As Dictionary(Of BoundNode, LambdaFrame) = New Dictionary(Of BoundNode, LambdaFrame)()
+        Private ReadOnly _frames As New Dictionary(Of BoundNode, LambdaFrame)()
 
         ' the current set of frame pointers in scope.  Each is either a local variable (where introduced),
         ' or the "this" parameter when at the top level. Keys in this map are never constructed types.
-        Private ReadOnly _framePointers As Dictionary(Of NamedTypeSymbol, Symbol) = New Dictionary(Of NamedTypeSymbol, Symbol)()
+        Private ReadOnly _framePointers As New Dictionary(Of NamedTypeSymbol, Symbol)()
 
         ' The method/lambda which is currently being rewritten.
         ' if we are rewriting a lambda, currentMethod is the new generated method.
@@ -1257,9 +1257,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Private Function LowestCommonAncestor(gotoBlock As BoundNode, labelBlock As BoundNode) As BoundNode
-            Dim gotoPath As New HashSet(Of BoundNode)
-
-            gotoPath.Add(gotoBlock)
+            Dim gotoPath As New HashSet(Of BoundNode) From {
+                gotoBlock
+            }
             While _analysis.blockParent.TryGetValue(gotoBlock, gotoBlock)
                 gotoPath.Add(gotoBlock)
             End While

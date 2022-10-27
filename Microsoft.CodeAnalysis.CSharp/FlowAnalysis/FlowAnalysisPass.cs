@@ -65,7 +65,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #if DEBUG
                     // It should not be necessary to repeat analysis after adding this node, because adding a trailing
                     // return in cases where one was missing should never produce different Diagnostics.
-                    IEnumerable<Diagnostic> GetErrorsOnly(IEnumerable<Diagnostic> diags) => diags.Where(d => d.Severity == DiagnosticSeverity.Error);
+                    //IEnumerable<Diagnostic> GetErrorsOnly(IEnumerable<Diagnostic> diags) => diags.Where(d => d.Severity == DiagnosticSeverity.Error);
                     var flowAnalysisDiagnostics = DiagnosticBag.GetInstance();
                     // Ignore warnings since flow analysis reports nullability mismatches.
                     flowAnalysisDiagnostics.Free();

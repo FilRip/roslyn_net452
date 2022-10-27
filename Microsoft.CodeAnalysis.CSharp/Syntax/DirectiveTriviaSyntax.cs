@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Syntax
 {
     public partial class DirectiveTriviaSyntax

@@ -132,6 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static XmlNameAttributeElementKind GetElementKind(this XmlNameAttributeSyntax attributeSyntax)
         {
+#nullable restore
             CSharpSyntaxNode parentSyntax = attributeSyntax.Parent;
             SyntaxKind parentKind = parentSyntax.Kind();
 
@@ -337,6 +338,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// If found, returns either an assignment expression or a foreach variable statement.
         /// Returns null otherwise.
         /// </summary>
+#nullable enable
         internal static CSharpSyntaxNode? GetContainingDeconstruction(this ExpressionSyntax expr)
         {
             var kind = expr.Kind();

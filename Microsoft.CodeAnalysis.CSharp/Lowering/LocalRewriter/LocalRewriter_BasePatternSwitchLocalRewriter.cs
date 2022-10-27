@@ -8,6 +8,8 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.PooledObjects;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp
 {
     internal partial class LocalRewriter
@@ -28,7 +30,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // We need the section syntax to get the section builder from the map. Unfortunately this is a bit awkward
                 SyntaxNode? sectionSyntax = whenClauseSyntax is SwitchLabelSyntax l ? l.Parent : whenClauseSyntax;
-                bool found = _switchArms.TryGetValue(sectionSyntax, out ArrayBuilder<BoundStatement>? result);
+#nullable restore
+                bool found = _switchArms.TryGetValue(sectionSyntax,
+#nullable enable
+                                                     out ArrayBuilder<BoundStatement>? result);
                 if (!found || result == null)
                     throw new InvalidOperationException();
 

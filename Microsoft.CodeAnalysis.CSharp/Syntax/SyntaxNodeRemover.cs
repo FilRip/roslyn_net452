@@ -344,6 +344,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 {
                     var span = TextSpan.FromBounds(token.Span.Start, node.Span.End);
                     var fullSpan = TextSpan.FromBounds(token.FullSpan.Start, node.FullSpan.End);
+#nullable restore
                     this.AddDirectives(node.Parent, GetRemovedSpan(span, fullSpan));
                 }
 

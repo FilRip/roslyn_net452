@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis.Text;
 
 using Roslyn.Utilities;
 
+#nullable enable
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal sealed class SynthesizedSimpleProgramEntryPointSymbol : SourceMemberMethodSymbol

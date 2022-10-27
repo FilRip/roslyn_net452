@@ -91,6 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 rewrittenAssignment = rewriteAssignment(lhsRead);
 
                 // Final conditional
+#nullable restore
                 var condition = _factory.Conditional(isEvent, invokeEventAccessor.ToExpression(), rewrittenAssignment, rewrittenAssignment.Type);
 
                 rewrittenAssignment = new BoundSequence(node.Syntax, eventTemps.ToImmutableAndFree(), sequence.ToImmutableAndFree(), condition, condition.Type!);
@@ -147,6 +148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+#nullable enable
         private BoundExpression? TransformPropertyOrEventReceiver(Symbol propertyOrEvent, BoundExpression? receiverOpt, ArrayBuilder<BoundExpression> stores, ArrayBuilder<LocalSymbol> temps)
         {
 
@@ -185,6 +187,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC VIOLATION: in a case of unconstrained generic type parameter a runtime test (default(T) == null) would be needed
             // SPEC VIOLATION: However, for compatibility with Dev12 we will continue treating all generic type parameters, constrained or not,
             // SPEC VIOLATION: as value types.
+#nullable restore
             var variableRepresentsLocation = rewrittenReceiver.Type.IsValueType || rewrittenReceiver.Type.Kind == SymbolKind.TypeParameter;
 
             var receiverTemp = _factory.StoreToTemp(rewrittenReceiver, out BoundAssignmentOperator assignmentToTemp, refKind: variableRepresentsLocation ? RefKind.Ref : RefKind.None);
@@ -381,6 +384,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Returns true if the <paramref name="receiver"/> was lowered and transformed.
         /// The <paramref name="receiver"/> is not changed if this function returns false. 
         /// </summary>
+#nullable enable
         private bool TransformCompoundAssignmentFieldOrEventAccessReceiver(Symbol fieldOrEvent, ref BoundExpression? receiver, ArrayBuilder<BoundExpression> stores, ArrayBuilder<LocalSymbol> temps)
         {
 
@@ -390,6 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
+#nullable restore
             if (!CanChangeValueBetweenReads(receiver))
             {
                 return true;
@@ -556,6 +561,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //   general variable case below.
 
                         var fieldAccess = (BoundFieldAccess)originalLHS;
+#nullable enable
                         BoundExpression? receiverOpt = fieldAccess.ReceiverOpt;
 
                         if (TransformCompoundAssignmentFieldOrEventAccessReceiver(fieldAccess.FieldSymbol, ref receiverOpt, stores, temps))
@@ -797,6 +803,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundKind.ObjectCreationExpression:
                     // common production of lowered conversions to nullable
                     // new S?(arg)
+#nullable restore
                     if (expression.Type.IsNullableType())
                     {
                         var objCreation = (BoundObjectCreationExpression)expression;
@@ -836,6 +843,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // nontrivial literals do not change between reads
         // but may require re-constructing, so it is better 
         // to treat them as potentially changing.
+#nullable enable
         private static bool ConstantValueIsTrivial(TypeSymbol? type)
         {
             return type is null ||

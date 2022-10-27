@@ -238,8 +238,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim numberOfAssertions As Integer = 0
                 Dim incomingFromObject As Boolean = False
 
-                Dim list As ArrayBuilder(Of InferenceNode) = IncomingEdges
-
                 For Each currentGraphNode As InferenceNode In IncomingEdges
                     Debug.Assert(currentGraphNode.NodeType = InferenceNodeType.ArgumentNode, "Should only have named nodes as incoming edges.")
                     Dim currentNamedNode = DirectCast(currentGraphNode, ArgumentNode)
@@ -393,16 +391,15 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
 
                 If Not foundInList Then
-                    Dim typeData As DominantTypeDataTypeInference = New DominantTypeDataTypeInference()
-
-                    typeData.ResultType = type
-                    typeData.ByAssumption = typeByAssumption
-                    typeData.InferenceRestrictions = inferenceRestrictions
-
-                    typeData.ArgumentLocation = argumentLocation
-                    typeData.Parameter = parameter
-                    typeData.InferredFromObject = inferredFromObject
-                    typeData.TypeParameter = DeclaredTypeParam
+                    Dim typeData As New DominantTypeDataTypeInference() With {
+                        .ResultType = type,
+                        .ByAssumption = typeByAssumption,
+                        .InferenceRestrictions = inferenceRestrictions,
+                        .ArgumentLocation = argumentLocation,
+                        .Parameter = parameter,
+                        .InferredFromObject = inferredFromObject,
+                        .TypeParameter = DeclaredTypeParam
+                    }
 
                     InferenceTypeCollection.GetTypeDataList().Add(typeData)
                 End If
@@ -629,7 +626,7 @@ HandleAsAGeneralExpression:
             Private _asyncLambdaSubToFunctionMismatch As HashSet(Of BoundExpression)
 
             Private ReadOnly _typeParameterNodes As ImmutableArray(Of TypeParameterNode)
-            Private ReadOnly _verifyingAssertions As Boolean
+            'Private ReadOnly _verifyingAssertions As Boolean
 
             Private Sub New(
                 diagnostic As BindingDiagnosticBag,
@@ -1760,7 +1757,7 @@ HandleAsAGeneralExpression:
                 ' Otherwise, MatchArgumentToBaseOfGenericParameter, used for contravariant situations,
                 ' e.g. when matching argument "Action(Of IEnumerable(Of _))" to parameter "ByVal x as Action(Of List(Of _))".
 
-                Dim fContinue As Boolean = False
+                Dim fContinue As Boolean
 
                 If digThroughToBasesAndImplements = MatchGenericArgumentToParameter.MatchBaseOfGenericArgumentToParameter Then
                     fContinue = FindMatchingBase(argumentType, parameterType)
@@ -1950,8 +1947,8 @@ HandleAsAGeneralExpression:
                     End If
 
                     Dim addrOf = DirectCast(argument, BoundAddressOfOperator)
-                    Dim fromMethod As MethodSymbol = Nothing
-                    Dim methodConversions As MethodConversionKind = MethodConversionKind.Identity
+                    Dim fromMethod As MethodSymbol
+                    Dim methodConversions As MethodConversionKind
 
                     Dim matchingMethod As KeyValuePair(Of MethodSymbol, MethodConversionKind) = Binder.ResolveMethodForDelegateInvokeFullAndRelaxed(
                         addrOf,

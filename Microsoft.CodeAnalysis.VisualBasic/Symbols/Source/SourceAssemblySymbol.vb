@@ -87,9 +87,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             _compilation = compilation
             _assemblySimpleName = assemblySimpleName
 
-            Dim moduleBuilder As New ArrayBuilder(Of ModuleSymbol)(1 + netModules.Length)
-
-            moduleBuilder.Add(New SourceModuleSymbol(Me, compilation.Declarations, compilation.Options, moduleName))
+            Dim moduleBuilder As New ArrayBuilder(Of ModuleSymbol)(1 + netModules.Length) From {
+                New SourceModuleSymbol(Me, compilation.Declarations, compilation.Options, moduleName)
+            }
 
             Dim importOptions = If(compilation.Options.MetadataImportOptions = MetadataImportOptions.All,
                                    MetadataImportOptions.All,
@@ -321,10 +321,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' Get unique source assembly attributes.
             Dim uniqueAttributes As HashSet(Of VisualBasicAttributeData) = GetUniqueSourceAssemblyAttributes(attributeIndicesToSkip)
 
-            Dim arguments = New DecodeWellKnownAttributeArguments(Of AttributeSyntax, VisualBasicAttributeData, AttributeLocation)()
-            arguments.AttributesCount = netModuleAttributesCount
-            arguments.Diagnostics = diagnostics
-            arguments.SymbolPart = AttributeLocation.None
+            Dim arguments = New DecodeWellKnownAttributeArguments(Of AttributeSyntax, VisualBasicAttributeData, AttributeLocation) With {
+                .AttributesCount = netModuleAttributesCount,
+                .Diagnostics = diagnostics,
+                .SymbolPart = AttributeLocation.None
+            }
 
             ' Attributes from the second added module should override attributes from the first added module, etc. 
             ' Attributes from source should override attributes from added modules.
@@ -604,7 +605,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 End If
             End If
 
-            Dim securityAttributes As IEnumerable(Of Cci.SecurityAttribute) = Nothing
+            Dim securityAttributes As IEnumerable(Of Cci.SecurityAttribute)
             If sourceSecurityAttributes IsNot Nothing Then
                 If netmoduleSecurityAttributes IsNot Nothing Then
                     securityAttributes = sourceSecurityAttributes.Concat(netmoduleSecurityAttributes)

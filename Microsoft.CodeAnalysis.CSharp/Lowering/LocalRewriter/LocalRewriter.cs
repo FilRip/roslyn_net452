@@ -521,11 +521,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode VisitTypeOfOperator(BoundTypeOfOperator node)
         {
-#nullable restore
             var sourceType = (BoundTypeExpression?)this.Visit(node.SourceType);
             var type = this.VisitType(node.Type);
 
             // Emit needs this helper
+#nullable restore
             if (!TryGetWellKnownTypeMember(node.Syntax, WellKnownMember.System_Type__GetTypeFromHandle, out MethodSymbol getTypeFromHandle))
             {
                 return new BoundTypeOfOperator(node.Syntax, sourceType, null, type, hasErrors: true);
