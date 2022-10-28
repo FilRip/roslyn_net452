@@ -353,7 +353,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                       arrayBoundsOpt As ArgumentListSyntax,
                                       diagnostics As BindingDiagnosticBag) As TypeSymbol
 
-            Dim currentType As TypeSymbol = elementType
+            Dim currentType As TypeSymbol
 
             ' Array modifiers must be handled in reverse order, that's the language syntax.
             currentType = ApplyArrayRankSpecifiersToType(elementType, arrayModifierSyntax, diagnostics)

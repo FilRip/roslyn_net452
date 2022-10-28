@@ -744,23 +744,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return New BoundNameOfOperator(node, argument, ConstantValue.Create(value), GetSpecialType(SpecialType.System_String, node, diagnostics))
         End Function
 
-        Private Shared Sub VerifyNameOfLookupResult(container As NamespaceOrTypeSymbol, member As SimpleNameSyntax, lookupResult As LookupResult, diagnostics As BindingDiagnosticBag)
-            If lookupResult.HasDiagnostic Then
+        'Private Shared Sub VerifyNameOfLookupResult(container As NamespaceOrTypeSymbol, member As SimpleNameSyntax, lookupResult As LookupResult, diagnostics As BindingDiagnosticBag)
+        '    If lookupResult.HasDiagnostic Then
 
-                ' Ambiguous result is Ok
-                If Not lookupResult.IsAmbiguous Then
-                    ReportDiagnostic(diagnostics, member, lookupResult.Diagnostic)
-                End If
+        '        ' Ambiguous result is Ok
+        '        If Not lookupResult.IsAmbiguous Then
+        '            ReportDiagnostic(diagnostics, member, lookupResult.Diagnostic)
+        '        End If
 
-            ElseIf lookupResult.HasSymbol Then
-                Debug.Assert(lookupResult.IsGood)
+        '    ElseIf lookupResult.HasSymbol Then
+        '        Debug.Assert(lookupResult.IsGood)
 
-            ElseIf container IsNot Nothing Then
-                ReportDiagnostic(diagnostics, member, ErrorFactory.ErrorInfo(ERRID.ERR_NameNotMember2, member.Identifier.ValueText, container))
-            Else
-                ReportDiagnostic(diagnostics, member, ErrorFactory.ErrorInfo(ERRID.ERR_NameNotDeclared1, member.Identifier.ValueText))
-            End If
-        End Sub
+        '    ElseIf container IsNot Nothing Then
+        '        ReportDiagnostic(diagnostics, member, ErrorFactory.ErrorInfo(ERRID.ERR_NameNotMember2, member.Identifier.ValueText, container))
+        '    Else
+        '        ReportDiagnostic(diagnostics, member, ErrorFactory.ErrorInfo(ERRID.ERR_NameNotDeclared1, member.Identifier.ValueText))
+        '    End If
+        'End Sub
 
         Private Function BindTypeOfExpression(node As TypeOfExpressionSyntax, diagnostics As BindingDiagnosticBag) As BoundExpression
 
@@ -1099,7 +1099,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' It looks like Dev11 ignores project level conditional compilation here, which makes sense since expression cannot contain #If directives.
             Dim tree = VisualBasicSyntaxTree.ParseText(codeToParse)
             Dim root As CompilationUnitSyntax = tree.GetCompilationUnitRoot()
-            Dim hasErrors As Boolean = False
+            'Dim hasErrors As Boolean = False
 
             For Each diag As Diagnostic In tree.GetDiagnostics(root)
                 Dim cdiag = TryCast(diag, DiagnosticWithInfo)
@@ -1522,7 +1522,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim targetType = TryCast(destination, NamedTypeSymbol)
             Dim originalTargetType = targetType?.OriginalDefinition
             Dim targetArrayType As ArrayTypeSymbol = TryCast(destination, ArrayTypeSymbol)
-            Dim targetElementType As TypeSymbol = Nothing
+            Dim targetElementType As TypeSymbol
 
             If targetArrayType IsNot Nothing AndAlso (sourceType.Rank = targetArrayType.Rank OrElse arrayLiteral.IsEmptyArrayLiteral) Then
                 targetElementType = targetArrayType.ElementType
@@ -2100,7 +2100,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Type of the first expression should be set by now
             Debug.Assert(hasErrors OrElse boundFirstArg.IsNothingLiteral OrElse boundFirstArg.Type IsNot Nothing)
 
-            Dim boundSecondArgWithConversions As BoundExpression = boundSecondArg
+            Dim boundSecondArgWithConversions As BoundExpression
             If Not hasErrors Then
                 boundSecondArgWithConversions = Me.ApplyImplicitConversion(node.SecondExpression, dominantType, boundSecondArg, diagnostics)
                 hasErrors = boundSecondArgWithConversions.HasErrors
@@ -2614,7 +2614,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private Function BindMemberAccess(node As MemberAccessExpressionSyntax, eventContext As Boolean, diagnostics As BindingDiagnosticBag) As BoundExpression
             Dim leftOpt = node.Expression
-            Dim boundLeft As BoundExpression = Nothing
+            Dim boundLeft As BoundExpression
             Dim rightName As SimpleNameSyntax = node.Name
 
             If leftOpt Is Nothing Then
@@ -3099,8 +3099,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
 
                     If di.Severity = DiagnosticSeverity.Error Then
+#Disable Warning IDE0059
                         hasError = True
                         reportedLookupError = True
+#Enable Warning IDE0059
                     End If
                 End If
 
@@ -4068,7 +4070,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Dim arrayBoundsOpt = node.ArrayBounds
 
-            Dim boundArguments As ImmutableArray(Of BoundExpression) = Nothing
+            Dim boundArguments As ImmutableArray(Of BoundExpression)
 
             ' Get the resulting array type by applying the array rank specifiers and the array bounds
             Dim arrayType = CreateArrayOf(baseType, node.RankSpecifiers, arrayBoundsOpt, diagnostics)
@@ -4269,7 +4271,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Else
                     ' Inductive case; we'd better have another array initializer
                     For Each expr In node.Initializers
-                        Dim init As BoundArrayInitialization = Nothing
+                        Dim init As BoundArrayInitialization
 
                         If expr.Kind = SyntaxKind.CollectionInitializer Then
                             init = Me.BindArrayInitializerList(DirectCast(expr, CollectionInitializerSyntax), type, knownSizes, dimension + 1, allInitializers, diagnostics)
@@ -4495,8 +4497,9 @@ lElseClause:
             ' then pick Object() and report a warning "Object assumed"
             ' (4) Otherwise, if every element converts to Object, then pick Object and report a warning "Object assumed".
             ' (5) Otherwise, there is no dominant type; return Nothing and report an error.
-
+#Disable Warning IDE0059
             numCandidates = 0
+#Enable Warning IDE0059
             Dim count As Integer = 0
             Dim countOfEmptyArrays As Integer = 0 ' To detect case (3)
             Dim anEmptyArray As BoundArrayLiteral = Nothing ' Used for case (3), so we'll return one of them
@@ -4729,7 +4732,7 @@ lElseClause:
                 '1.	C contains an accessible instance or extension method named GetAwaiter which has no arguments and which returns some type E;
                 LookupMember(lookupResult, awaitableInstancePlaceholder.Type, WellKnownMemberNames.GetAwaiter, 0, LookupOptions.AllMethodsOfAnyArity, useSiteInfo)
 
-                Dim methodGroup As BoundMethodGroup = Nothing
+                Dim methodGroup As BoundMethodGroup
 
                 If lookupResult.Kind = LookupResultKind.Good AndAlso lookupResult.Symbols(0).Kind = SymbolKind.Method Then
                     methodGroup = CreateBoundMethodGroup(

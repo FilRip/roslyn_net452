@@ -1401,8 +1401,8 @@ Namespace Microsoft.CodeAnalysis.Operations
 
         Private Function CreateBoundNoOpStatementOperation(boundNoOpStatement As BoundNoOpStatement) As IEmptyOperation
             Dim syntax As SyntaxNode = boundNoOpStatement.Syntax
-            Dim type As ITypeSymbol = Nothing
-            Dim constantValue As ConstantValue = Nothing
+            'Dim type As ITypeSymbol = Nothing
+            'Dim constantValue As ConstantValue = Nothing
             Dim isImplicit As Boolean = boundNoOpStatement.WasCompilerGenerated
             Return New EmptyOperation(_semanticModel, syntax, isImplicit)
         End Function
@@ -1510,8 +1510,8 @@ Namespace Microsoft.CodeAnalysis.Operations
         Private Function CreateBoundRemoveHandlerStatementOperation(boundRemoveHandlerStatement As BoundRemoveHandlerStatement) As IExpressionStatementOperation
             Dim expression As IOperation = GetAddRemoveHandlerStatementExpression(boundRemoveHandlerStatement)
             Dim syntax As SyntaxNode = boundRemoveHandlerStatement.Syntax
-            Dim type As ITypeSymbol = Nothing
-            Dim constantValue As ConstantValue = Nothing
+            'Dim type As ITypeSymbol = Nothing
+            'Dim constantValue As ConstantValue = Nothing
             Dim isImplicit As Boolean = boundRemoveHandlerStatement.WasCompilerGenerated
             Return New ExpressionStatementOperation(expression, _semanticModel, syntax, isImplicit)
         End Function

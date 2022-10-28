@@ -57,7 +57,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' Values are false if the node should result in an error and true otherwise.
             ''' </param>
             ''' <param name="isOpenType">True if no constructed generic type was encountered.</param>
-            Public Overloads Shared Sub Visit(typeSyntax As ExpressionSyntax, <Out()> ByRef allowedMap As Dictionary(Of GenericNameSyntax, Boolean), <Out()> isOpenType As Boolean)
+            Public Overloads Shared Sub Visit(typeSyntax As ExpressionSyntax, <Out()> ByRef allowedMap As Dictionary(Of GenericNameSyntax, Boolean), <Out()> ByRef isOpenType As Boolean)
                 Dim visitor = New OpenTypeVisitor()
                 visitor.Visit(typeSyntax)
                 allowedMap = visitor._allowedMap

@@ -1334,7 +1334,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' Compute the result in 64-bit arithmetic, and determine if the
                 ' operation overflows the result type.
 
-                Dim resultValue As Double = 0
+                Dim resultValue As Double
 
                 Select Case op
 
@@ -1424,7 +1424,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim rightValue As Decimal = right.DecimalValue
 
             If resultType.IsBooleanType() Then
-                Dim resultValue As Boolean = False
+                Dim resultValue As Boolean
                 Dim comparisonResult As Integer = leftValue.CompareTo(rightValue)
 
                 Select Case op
@@ -1579,7 +1579,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim leftValue As Boolean = left.BooleanValue
             Dim rightValue As Boolean = right.BooleanValue
 
-            Dim operationSucceeds As Boolean = False
+            Dim operationSucceeds As Boolean
 
             Select Case op
 
@@ -3193,11 +3193,12 @@ Next_i:
                     Dim canLift1 As Boolean = Not isNullable1 AndAlso type1.IsValueType() AndAlso Not type1.IsRestrictedType()
 
                     Dim param2 As ParameterSymbol = Nothing
-                    Dim type2 As TypeSymbol = Nothing
                     Dim isNullable2 As Boolean = False
                     Dim canLift2 As Boolean = False
 
                     If argument2 IsNot Nothing AndAlso Not isNullable1 Then
+                        Dim type2 As TypeSymbol
+
                         param2 = method.Parameters(1)
                         type2 = param2.Type
                         isNullable2 = type2.IsNullableType()

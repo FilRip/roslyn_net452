@@ -774,9 +774,9 @@ namespace Microsoft.CodeAnalysis
         /// Given a position in the SyntaxTree for this SemanticModel returns the innermost Symbol
         /// that the position is considered inside of.
         /// </summary>
-        public ISymbol? GetEnclosingSymbol(int position, CancellationToken cancellationToken = default)
+        public ISymbol? GetEnclosingSymbol(int position)
         {
-            return GetEnclosingSymbolCore(position, cancellationToken);
+            return GetEnclosingSymbolCore(position);
         }
 
         /// <summary>

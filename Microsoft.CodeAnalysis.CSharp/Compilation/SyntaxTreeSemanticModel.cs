@@ -188,8 +188,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal override SymbolInfo GetSymbolInfoWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            ValidateSymbolInfoOptions(options);
-
             // in case this is right side of a qualified name or member access (or part of a cref)
             node = SyntaxFactory.GetStandaloneNode(node);
 

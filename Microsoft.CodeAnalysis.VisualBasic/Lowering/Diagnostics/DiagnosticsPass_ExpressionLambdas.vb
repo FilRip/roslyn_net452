@@ -302,7 +302,7 @@ lSelect:
             Debug.Assert(Me.IsInExpressionLambda)
             Debug.Assert(lambda IsNot Nothing)
 
-            Dim hasByRefParameters As Boolean = False
+            'Dim hasByRefParameters As Boolean = False
             For Each p In lambda.LambdaSymbol.Parameters
                 If p.IsByRef Then
                     GenerateDiagnostic(ERRID.ERR_ByRefParamInExpressionTree, lambda)

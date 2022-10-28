@@ -517,7 +517,7 @@ ScanChars:
                             If CanGet(Here + 2) Then
 
                                 c = Peek(Here + 2)
-                                Here += 2
+                                'Here += 2
                                 ' // if > is not found then this is an error.  Return the -- string
 
                                 If c <> ">"c Then

@@ -9,12 +9,12 @@ Imports Microsoft.CodeAnalysis.PooledObjects
 
 Namespace Microsoft.CodeAnalysis.VisualBasic.ObjectDisplay
 
-#Disable Warning CA1200 ' Avoid using cref tags with a prefix
+#Disable Warning CA1200, IDE0079 ' Avoid using cref tags with a prefix
     ''' <summary>
     ''' Displays a value in the VisualBasic style.
     ''' </summary>
     ''' <seealso cref="T:Microsoft.CodeAnalysis.CSharp.ObjectDisplay"/>
-#Enable Warning CA1200 ' Avoid using cref tags with a prefix
+#Enable Warning CA1200, IDE0079 ' Avoid using cref tags with a prefix
     Friend Module ObjectDisplay
 
         Private Const s_nullChar As Char = ChrW(0)

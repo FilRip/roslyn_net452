@@ -140,7 +140,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Next
 
                 orderedList.Free()
-                orderedList = Nothing
+                'orderedList = Nothing
 
                 ' Step 4: Link incoming and outgoing edges.
                 For Each sccNode As StronglyConnectedComponent(Of TGraphNode) In sccGraph.Vertices

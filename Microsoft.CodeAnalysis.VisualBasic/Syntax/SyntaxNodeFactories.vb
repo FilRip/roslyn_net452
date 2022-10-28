@@ -64,9 +64,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return VisualBasicSyntaxTree.ParseText(text, DirectCast(options, VisualBasicParseOptions), path, cancellationToken)
         End Function
 
-#Disable Warning RS0026 ' Do not add multiple public overloads with optional parameters.
-#Disable Warning RS0027 ' Public API with optional parameter(s) should have the most parameters amongst its public overloads.
-
         ''' <summary>
         ''' Produces a syntax tree by parsing the source text.
         ''' </summary>
@@ -93,9 +90,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Return VisualBasicSyntaxTree.ParseText(text, DirectCast(options, VisualBasicParseOptions), path, diagnosticOptions, cancellationToken)
         End Function
-
-#Enable Warning RS0026 ' Do not add multiple public overloads with optional parameters.
-#Enable Warning RS0027 ' Public API with optional parameter(s) should have the most parameters amongst its public overloads.
 
         ''' <summary>
         '''Parse the input for leading trivia.

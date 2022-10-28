@@ -386,7 +386,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             asNewVariablePlaceholderOpt As BoundWithLValueExpressionPlaceholder,
             diagnostics As BindingDiagnosticBag
         ) As BoundExpression
-            Dim boundInitExpression As BoundExpression = Nothing
+            Dim boundInitExpression As BoundExpression
 
             Dim fieldInitializerSyntax As VisualBasicSyntaxNode
 
@@ -410,7 +410,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         Throw ExceptionUtilities.UnexpectedValue(asNew.NewExpression.Kind)
                 End Select
 
-                fieldInitializerSyntax = asNew
+                'fieldInitializerSyntax = asNew
             Else
                 Dim valueSyntax = DirectCast(equalsValueOrAsNewSyntax, EqualsValueSyntax)
                 fieldInitializerSyntax = valueSyntax.Value
@@ -451,10 +451,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Const fields of type Date or Decimal will get initialized in the synthesized shared constructor
             ' because their value is not regarded as compile time constant by the CLR.
             ' This will produce sequence points in the shared constructor which is exactly what Dev10 does.
-            Dim constantValue = fieldSymbol.GetConstantValue(VisualBasic.ConstantFieldsInProgress.Empty)
+            Dim constantValue = fieldSymbol.GetConstantValue(ConstantFieldsInProgress.Empty)
 
             If constantValue IsNot Nothing Then
-                Dim meSymbol As ParameterSymbol = Nothing
+                'Dim meSymbol As ParameterSymbol = Nothing
                 Dim boundFieldAccessExpr = New BoundFieldAccess(equalsValueOrAsNewSyntax,
                                                                 Nothing,
                                                                 fieldSymbol,
@@ -487,7 +487,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             <Out> ByRef constValue As ConstantValue
         ) As BoundExpression
             constValue = Nothing
-            Dim boundInitValue As BoundExpression = Nothing
+            Dim boundInitValue As BoundExpression
             Dim initValueDiagnostics = BindingDiagnosticBag.GetInstance(withDiagnostics:=True, withDependencies:=diagnostics.AccumulatesDependencies)
 
             If equalsValueOrAsNewSyntax.Kind = SyntaxKind.EqualsValue Then

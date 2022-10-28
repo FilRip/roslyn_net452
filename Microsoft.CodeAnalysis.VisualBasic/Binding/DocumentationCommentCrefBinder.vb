@@ -219,7 +219,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Function BindInsideCrefSignatureOrReturnType(crefReference As CrefReferenceSyntax, name As TypeSyntax, preserveAliases As Boolean, diagnosticBag As BindingDiagnosticBag) As ImmutableArray(Of Symbol)
             Dim typeParameterAwareBinder As Binder = Me.GetOrCreateTypeParametersAwareBinder(crefReference)
 
-            Dim result As Symbol = typeParameterAwareBinder.BindNamespaceOrTypeOrAliasSyntax(name, If(diagnosticBag, BindingDiagnosticBag.Discarded))
+            Dim result As Symbol
+            typeParameterAwareBinder.BindNamespaceOrTypeOrAliasSyntax(name, If(diagnosticBag, BindingDiagnosticBag.Discarded))
             result = typeParameterAwareBinder.BindNamespaceOrTypeOrAliasSyntax(name, If(diagnosticBag, BindingDiagnosticBag.Discarded))
 
             If result IsNot Nothing AndAlso result.Kind = SymbolKind.Alias AndAlso Not preserveAliases Then
@@ -649,7 +650,7 @@ lAgain:
                 Return
             End If
 
-            Dim allowColorColor As Boolean = True
+            'Dim allowColorColor As Boolean = True
 
             Dim left As NameSyntax = node.Left
             Select Case left.Kind
@@ -661,7 +662,7 @@ lAgain:
 
                 Case SyntaxKind.QualifiedName
                     CollectQualifiedNameSymbolsStrict(DirectCast(left, QualifiedNameSyntax), typeParameters, symbols, preserveAlias:=False, useSiteInfo:=useSiteInfo)
-                    allowColorColor = False
+                    'allowColorColor = False
 
                 Case Else
                     Throw ExceptionUtilities.UnexpectedValue(left.Kind)
@@ -826,7 +827,7 @@ lAgain:
 
             For i = 0 To arguments.Count - 1
                 Dim typeSyntax As TypeSyntax = arguments(i)
-                Dim created As CrefTypeParameterSymbol = Nothing
+                Dim created As CrefTypeParameterSymbol
 
                 Select Case typeSyntax.Kind
                     Case SyntaxKind.IdentifierName

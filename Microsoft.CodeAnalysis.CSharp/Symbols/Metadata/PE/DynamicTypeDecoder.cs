@@ -203,7 +203,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             // Native compiler encodes a bool for the given namedType, but none for its containing types.
             if (!isContaining)
             {
-                var flag = ConsumeFlag();
+                ConsumeFlag();
             }
 
             NamedTypeSymbol containingType = namedType.ContainingType;
@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private ArrayTypeSymbol TransformArrayType(ArrayTypeSymbol arrayType)
         {
-            var flag = ConsumeFlag();
+            ConsumeFlag();
 
             if (!HandleCustomModifiers(arrayType.ElementTypeWithAnnotations.CustomModifiers.Length))
             {
@@ -307,7 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private PointerTypeSymbol TransformPointerType(PointerTypeSymbol pointerType)
         {
-            var flag = ConsumeFlag();
+            ConsumeFlag();
 
             if (!HandleCustomModifiers(pointerType.PointedAtTypeWithAnnotations.CustomModifiers.Length))
             {
@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 #nullable enable
         private FunctionPointerTypeSymbol? TransformFunctionPointerType(FunctionPointerTypeSymbol type)
         {
-            var flag = ConsumeFlag();
+            ConsumeFlag();
 
             var sig = type.Signature;
 

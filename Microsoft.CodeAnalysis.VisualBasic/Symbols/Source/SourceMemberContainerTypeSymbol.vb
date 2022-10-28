@@ -143,7 +143,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Next
 
             Dim modifiers = mergedModifiers
-            Dim flags As SourceTypeFlags = 0
+            Dim flags As SourceTypeFlags
 
             ' compute type kind, inheritability
             Select Case declaration.Kind

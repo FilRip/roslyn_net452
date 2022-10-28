@@ -38,7 +38,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             Dim isOverride As Boolean = propertySymbol.IsWithEvents AndAlso propertySymbol.IsOverrides
 
-            Dim field As FieldSymbol = Nothing
+            Dim field As FieldSymbol
             Dim fieldAccess As BoundFieldAccess = Nothing
 
             Dim myBaseReference As BoundExpression = Nothing

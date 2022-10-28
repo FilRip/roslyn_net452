@@ -121,10 +121,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 ThreadSafeFlagOperations.Set(ref _flags, (FlattenedMembersIsSortedBit));
             }
 
-            private static bool BitsAreUnsetOrSame(int bits, int mask)
+            /*private static bool BitsAreUnsetOrSame(int bits, int mask)
             {
                 return (bits & mask) == 0 || (bits & mask) == mask;
-            }
+            }*/
 
             public void SetManagedKind(ManagedKind managedKind)
             {
@@ -508,13 +508,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
 
                     case CompletionPart.EnumUnderlyingType:
-                        var discarded = this.EnumUnderlyingType;
+                        var _ = this.EnumUnderlyingType;
                         break;
 
                     case CompletionPart.TypeArguments:
-                        {
-                            var tmp = this.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics; // force type arguments
-                        }
+#pragma warning disable IDE0059
+                        var tmp = this.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics; // force type arguments
+#pragma warning restore IDE0059
                         break;
 
                     case CompletionPart.TypeParameters:
@@ -549,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             // We may produce a SymbolDeclaredEvent for the enclosing type before events for its contained members
                             DeclaringCompilation.SymbolDeclaredEvent(this);
-                            var thisThreadCompleted = state.NotePartComplete(CompletionPart.FinishMemberChecks);
+                            state.NotePartComplete(CompletionPart.FinishMemberChecks);
                             diagnostics.Free();
                         }
                         break;
@@ -1945,7 +1945,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            if (indexersBySignature.TryGetValue(indexer, out var prevIndexerBySignature))
+            if (indexersBySignature.TryGetValue(indexer, out var _))
             {
                 // Type '{1}' already defines a member called '{0}' with the same parameter types
                 // NOTE: Dev10 prints "this" as the name of the indexer.
@@ -2554,7 +2554,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return;
                 }
 
-                foreach (ImmutableArray<FieldOrPropertyInitializer> group in initializers)
+                foreach (ImmutableArray<FieldOrPropertyInitializer> _ in initializers)
                 {
                 }
 

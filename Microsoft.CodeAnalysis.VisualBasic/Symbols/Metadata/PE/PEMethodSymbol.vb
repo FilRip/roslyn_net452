@@ -566,7 +566,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
         Public Overrides ReadOnly Property DeclaredAccessibility As Accessibility
             Get
-                Dim access As Accessibility = Accessibility.Private
+                Dim access As Accessibility
 
                 Select Case _flags And MethodAttributes.MemberAccessMask
                     Case MethodAttributes.Assembly

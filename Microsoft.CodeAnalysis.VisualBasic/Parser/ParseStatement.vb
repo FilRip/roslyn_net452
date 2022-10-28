@@ -600,7 +600,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             Dim controlVariable = ParseForLoopControlVariable()
 
-            Dim expression As ExpressionSyntax = Nothing
+            Dim expression As ExpressionSyntax
 
             If controlVariable.ContainsDiagnostics Then
                 controlVariable = ResyncAt(controlVariable, SyntaxKind.InKeyword)
@@ -633,8 +633,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             Dim controlVariable = ParseForLoopControlVariable()
 
-            Dim fromValue As ExpressionSyntax = Nothing
-            Dim toValue As ExpressionSyntax = Nothing
+            Dim fromValue As ExpressionSyntax
+            Dim toValue As ExpressionSyntax
 
             If controlVariable.ContainsDiagnostics Then
                 controlVariable = ResyncAt(controlVariable, SyntaxKind.EqualsToken, SyntaxKind.ToKeyword)
@@ -686,9 +686,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             Dim optionalStepClause As ForStepClauseSyntax = Nothing
             Dim stepKeyword As KeywordSyntax = Nothing
-            Dim stepValue As ExpressionSyntax = Nothing
 
             If TryGetToken(SyntaxKind.StepKeyword, stepKeyword) Then
+                Dim stepValue As ExpressionSyntax
 
                 stepValue = ParseExpressionCore()
 
@@ -838,8 +838,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 End If
             End If
 
-            Dim [As] As KeywordSyntax = Nothing
-            Dim Type As TypeSyntax = Nothing
+            Dim [As] As KeywordSyntax
+            Dim Type As TypeSyntax
             Dim optionalAsClause As AsClauseSyntax = Nothing
 
             If CurrentToken.Kind = SyntaxKind.AsKeyword Then
@@ -1056,7 +1056,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Debug.Assert(CurrentToken.Kind = SyntaxKind.ResumeKeyword, "ParseResumeStatement called on wrong token.")
 
             Dim resumeKeyword As KeywordSyntax = DirectCast(CurrentToken, KeywordSyntax)
-            Dim optionalLabel As SyntaxToken = Nothing
             Dim statement As ResumeStatementSyntax
 
             GetNextToken()
@@ -1071,6 +1070,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                     statement = SyntaxFactory.ResumeNextStatement(resumeKeyword, SyntaxFactory.NextLabel(nextKeyword))
 
                 Else
+                    Dim optionalLabel As SyntaxToken
+
                     optionalLabel = ParseLabelReference()
 
                     statement = SyntaxFactory.ResumeLabelStatement(resumeKeyword, GetLabelSyntaxForIdentifierOrLineNumber(optionalLabel))
@@ -1467,9 +1468,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 End If
 
                 Dim asKeyword As KeywordSyntax = Nothing
-                Dim typeName As TypeSyntax = Nothing
 
                 If TryGetToken(SyntaxKind.AsKeyword, asKeyword) Then
+                    Dim typeName As TypeSyntax
 
                     typeName = ParseTypeName()
 
@@ -1483,11 +1484,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             Dim optionalWhenClause As CatchFilterClauseSyntax = Nothing
             Dim whenKeyword As KeywordSyntax = Nothing
-            Dim filter As ExpressionSyntax = Nothing
             If TryGetToken(SyntaxKind.WhenKeyword, whenKeyword) Then
+                Dim filter As ExpressionSyntax
+
                 filter = ParseExpressionCore()
 
-                optionalWhenClause = SyntaxFactory.CatchFilterClause(whenKeyword, filter)
+                optionalWhenClause = SyntaxFactory.CatchFilterClause(whenKeyword, Filter)
             End If
 
             Dim statement = SyntaxFactory.CatchStatement(catchKeyword, optionalName, optionalAsClause, optionalWhenClause)

@@ -1665,7 +1665,7 @@ FullWidthRepeat:
                 ElseIf IsNewLine([Next]) Then
                     Exit While
                 ElseIf Not IsIdentifierPartCharacter([Next]) Then
-                    invalidIdentifier = True
+                    'invalidIdentifier = True
                     Exit While
                 End If
 
@@ -2206,7 +2206,6 @@ FullWidthRepeat2:
             Dim havePM As Boolean = False
             Dim dateIsInvalid As Boolean = False
             Dim YearIsTwoDigits As Boolean = False
-            Dim daysToMonth As Integer() = Nothing
             Dim yearIsFirst As Boolean = False
 
             ' // Unfortunately, we can't fall back on OLE Automation's date parsing because
@@ -2383,6 +2382,8 @@ FullWidthRepeat2:
 
             here += 1
 
+            Dim daysToMonth As Integer()
+
             ' // OK, now we've got all the values, let's see if we've got a valid date
             If haveDateValue Then
                 If MonthValue < 1 OrElse MonthValue > 12 Then
@@ -2422,7 +2423,7 @@ FullWidthRepeat2:
                 MonthValue = 1
                 DayValue = 1
                 YearValue = 1
-                daysToMonth = DaysToMonth365
+                'daysToMonth = DaysToMonth365
             End If
 
             If haveTimeValue Then

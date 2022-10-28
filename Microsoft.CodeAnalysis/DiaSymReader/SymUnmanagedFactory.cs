@@ -156,7 +156,7 @@ namespace Microsoft.DiaSymReader
 
         internal static object CreateObject(bool createReader, bool useAlternativeLoadPath, bool useComRegistry, out string moduleName, out Exception loadException)
         {
-            object instance = null;
+            object instance;
             loadException = null;
             moduleName = null;
 

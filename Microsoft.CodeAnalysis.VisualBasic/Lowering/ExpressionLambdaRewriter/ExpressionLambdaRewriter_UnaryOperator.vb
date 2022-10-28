@@ -21,7 +21,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Dim opKind As UnaryOperatorKind = node.OperatorKind And UnaryOperatorKind.OpMask
             Dim isChecked As Boolean = node.Checked AndAlso origArgUnderlyingType.IsIntegralType
-            Dim helperName As String = Nothing
+            Dim helperName As String
 
             Debug.Assert((node.OperatorKind And UnaryOperatorKind.UserDefined) = 0)
 

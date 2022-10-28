@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             if (_containingType is NamedTypeSymbol namedType)
             {
-                GetGenericTypeArgumentSymbol(position, namedType, out int cumulativeArity, out TypeSymbol typeArgument);
+                GetGenericTypeArgumentSymbol(position, namedType, out int _, out TypeSymbol typeArgument);
                 if (typeArgument is object)
                 {
                     return typeArgument;

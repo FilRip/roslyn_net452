@@ -1872,7 +1872,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 return null;
             }
 
-            bool found = methodHandleToSymbol.TryGetValue(methodDef, out PEMethodSymbol method);
+            methodHandleToSymbol.TryGetValue(methodDef, out PEMethodSymbol method);
             return method;
         }
 

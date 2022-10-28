@@ -825,7 +825,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                             filterOutParamArrayAttribute ? AttributeDescription.ParamArrayAttribute : default,
                             out CustomAttributeHandle constantAttribute,
                             filterOutConstantAttributeDescription,
-                            out CustomAttributeHandle isReadOnlyAttribute,
+                            out CustomAttributeHandle _,
                             filterIsReadOnlyAttribute ? AttributeDescription.IsReadOnlyAttribute : default,
                             out _,
                             default);

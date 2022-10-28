@@ -122,9 +122,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             internal void VerifyUpdatedSymbols()
             {
-                foreach (var ((expr, originalSymbol), updatedSymbol) in _updatedSymbolsMap)
+                foreach (var ((expr, originalSymbol), _) in _updatedSymbolsMap)
                 {
-                    var debugText = expr?.Syntax.ToFullString() ?? originalSymbol.ToDisplayString();
+                    var _ = expr?.Syntax.ToFullString() ?? originalSymbol.ToDisplayString();
                 }
             }
 #endif

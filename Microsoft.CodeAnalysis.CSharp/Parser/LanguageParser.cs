@@ -5477,7 +5477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                 do
                 {
-                    lastTokenOfList = this.EatToken();
+                    this.EatToken();
 
                     // Type arguments cannot contain attributes, so if this is an open square, we early out and assume it is not a type argument
                     if (this.CurrentToken.Kind == SyntaxKind.OpenBracketToken)
@@ -5492,7 +5492,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         return result;
                     }
 
-                    switch (this.ScanType(out lastTokenOfList))
+                    switch (this.ScanType(out _))
                     {
                         case ScanTypeFlags.NotType:
                             lastTokenOfList = null;
@@ -6091,7 +6091,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         private void ScanNamedTypePart()
         {
-            ScanNamedTypePart(out SyntaxToken lastTokenOfType);
+            ScanNamedTypePart(out SyntaxToken _);
         }
 
         private ScanTypeFlags ScanNamedTypePart(out SyntaxToken lastTokenOfType)
@@ -6191,7 +6191,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
             else if (this.CurrentToken.Kind == SyntaxKind.OpenParenToken)
             {
-                lastTokenOfType = this.EatToken();
+                this.EatToken();
 
                 result = this.ScanTupleType(out lastTokenOfType);
                 if (result == ScanTypeFlags.NotType || mode == ParseTypeMode.DefinitePattern && this.CurrentToken.Kind != SyntaxKind.OpenBracketToken)

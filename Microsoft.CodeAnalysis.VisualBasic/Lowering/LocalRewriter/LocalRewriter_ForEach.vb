@@ -251,7 +251,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Array.Length(collectionCopy)
             ' or
             ' collectionCopy.Length
-            Dim boundLimit As BoundExpression = Nothing
+            Dim boundLimit As BoundExpression
             If isArray Then
                 ' in case of an array, the upper limit is Array.Length. This will be the ldlen opcode later on
                 boundLimit = New BoundArrayLength(syntaxNode, boundCollectionLocal, integerType)

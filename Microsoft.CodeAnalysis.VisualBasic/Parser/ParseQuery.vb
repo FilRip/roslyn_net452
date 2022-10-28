@@ -22,7 +22,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 (PeekToken(1).Kind = SyntaxKind.QuestionToken AndAlso PeekToken(2).Kind = SyntaxKind.EqualsToken)) Then
 
                 Dim varName As ModifiedIdentifierSyntax = Nothing
-                Dim Equals As PunctuationSyntax = Nothing
+                Dim Equals As PunctuationSyntax
 
                 ' // Parse form: <IdentifierOrKeyword> '=' <Expression>
                 varName = ParseSimpleIdentifierAsModifiedIdentifier()
@@ -99,7 +99,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             Dim aggName = ParseIdentifier()
 
-            Dim aggregateFunc As FunctionAggregationSyntax = Nothing
+            Dim aggregateFunc As FunctionAggregationSyntax
 
             If Not aggName.ContainsDiagnostics AndAlso CurrentToken.Kind = SyntaxKind.OpenParenToken Then
                 Dim lParen = DirectCast(CurrentToken, PunctuationSyntax)
@@ -644,7 +644,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 elements = ParseSelectList()
             End If
 
-            Dim keys As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of ExpressionRangeVariableSyntax) = Nothing
+            Dim keys As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of ExpressionRangeVariableSyntax)
             If byKw IsNot Nothing OrElse TryEatNewLineAndGetContextualKeyword(SyntaxKind.ByKeyword, byKw, createIfMissing:=True) Then
                 TryEatNewLine()
                 ' // parse key selector
@@ -657,7 +657,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End If
 
             Dim intoKw As KeywordSyntax = Nothing
-            Dim Aggregation As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of AggregationRangeVariableSyntax) = Nothing
+            Dim Aggregation As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of AggregationRangeVariableSyntax)
             If TryEatNewLineAndGetContextualKeyword(SyntaxKind.IntoKeyword, intoKw, createIfMissing:=True) Then
                 TryEatNewLine()
                 ' // parse result selector
@@ -722,7 +722,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 Return SyntaxFactory.SimpleJoinClause(joinKw, joinVarList, moreJoins, onKw, Predicate)
             Else
                 Dim intoKw As KeywordSyntax = Nothing
-                Dim Aggregation As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of AggregationRangeVariableSyntax) = Nothing
+                Dim Aggregation As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of AggregationRangeVariableSyntax)
                 If TryEatNewLineAndGetContextualKeyword(SyntaxKind.IntoKeyword, intoKw, createIfMissing:=True) Then
                     TryEatNewLine()
 
@@ -862,7 +862,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Dim AndTk As KeywordSyntax = Nothing
 
             Do
-                Dim element As JoinConditionSyntax = Nothing
+                Dim element As JoinConditionSyntax
 
                 If CurrentToken.Kind <> SyntaxKind.StatementTerminatorToken Then
                     Dim Left = ParseExpressionCore(OperatorPrecedence.PrecedenceRelational)
@@ -982,7 +982,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                                                SyntaxKind.IntoKeyword, SyntaxKind.SkipKeyword, SyntaxKind.TakeKeyword, SyntaxKind.LetKeyword)
                 End If
 
-                Dim element As OrderingSyntax = Nothing
+                Dim element As OrderingSyntax
                 Dim directionKw As KeywordSyntax = Nothing
                 If TryEatNewLineAndGetContextualKeyword(SyntaxKind.DescendingKeyword, directionKw) Then
                     element = SyntaxFactory.DescendingOrdering(OrderExpression, directionKw)

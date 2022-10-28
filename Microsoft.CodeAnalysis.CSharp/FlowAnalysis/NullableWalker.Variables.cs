@@ -275,7 +275,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     while (slot > 0)
                     {
                         depth++;
-                        var (id, index) = DeconstructSlot(slot);
+                        var (_, index) = DeconstructSlot(slot);
                         slot = _variableBySlot[index].ContainingSlot;
                     }
                     return depth;

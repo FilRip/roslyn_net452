@@ -401,7 +401,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                             ByRef modifiers As SyntaxTokenList,
                                             ByRef id As SyntaxToken) As DeclarationModifiers
             Dim allowableModifiers = SourceMemberFlags.AllAccessibilityModifiers Or SourceMemberFlags.Shadows
-            Dim err = ERRID.ERR_None
+            Dim err As ERRID
             Dim typeBlock As TypeBlockSyntax
 
             Select Case node.Kind
@@ -1102,7 +1102,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End If
 
             ' Check to make sure the base class is valid.
-            Dim diagInfo As DiagnosticInfo = Nothing
+            'Dim diagInfo As DiagnosticInfo = Nothing
             Select Case baseClassType.TypeKind
                 Case TypeKind.TypeParameter
                     Binder.ReportDiagnostic(diagBag, baseClassSyntax, ERRID.ERR_GenericParamBase2, "Class", Me.Name)

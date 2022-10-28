@@ -99,9 +99,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             locals.Add(local.LocalSymbol)
             AddPlaceholderReplacement(rewriterInfo.Placeholder, local)
 
-            Dim attributes As BoundLocal = Nothing
 
             If rewriterInfo.XmlnsAttributesPlaceholder IsNot Nothing Then
+                Dim attributes As BoundLocal
+
                 attributes = CreateTempLocal(syntax, rewriterInfo.XmlnsAttributesPlaceholder.Type, VisitExpressionNode(rewriterInfo.XmlnsAttributes), sideEffects)
                 locals.Add(attributes.LocalSymbol)
                 AddPlaceholderReplacement(rewriterInfo.XmlnsAttributesPlaceholder, attributes)
@@ -182,7 +183,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' NOTE: if we are here, original bound node does not have errors, thus we 
             '       can assume the symbols used in this node are OK
-            Dim constructor As MethodSymbol = Nothing
+            Dim constructor As MethodSymbol
             If objCreation.Arguments.Length = 1 Then
                 ' This is a branch where XElement::.ctor(XName) lands, we need to get XElement::.ctor(XName, Object()) 
                 Debug.Assert(TypeSymbol.Equals(objCreation.ConstructorOpt.ContainingType, Me.Compilation.GetWellKnownType(WellKnownType.System_Xml_Linq_XElement), TypeCompareKind.ConsiderEverything))
@@ -209,11 +210,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             '       to be on the receiver side of side-effect calls and we never rewrite those
             'AddPlaceholderReplacement(rewriterInfo.Placeholder, local)
 
-            Dim attributes As BoundLocal = Nothing
-
             If rewriterInfo.XmlnsAttributesPlaceholder IsNot Nothing Then
+                Dim attributes As BoundLocal
+
                 attributes = CreateTempLocalInExpressionLambda(syntax, rewriterInfo.XmlnsAttributesPlaceholder.Type, VisitExpressionNode(rewriterInfo.XmlnsAttributes))
-                AddPlaceholderReplacement(rewriterInfo.XmlnsAttributesPlaceholder, attributes)
+                AddPlaceholderReplacement(rewriterInfo.XmlnsAttributesPlaceholder, Attributes)
             End If
 
             If rewriterInfo.PrefixesPlaceholder IsNot Nothing Then

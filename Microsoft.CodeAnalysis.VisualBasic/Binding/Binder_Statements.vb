@@ -463,7 +463,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Debug.Assert(Not walker._isInCatchFinallyOrSyncLock)
                 Catch ex As CancelledByStackGuardException
                     ex.AddAnError(diagnostics)
-                    reportedAnError = True
+                    'reportedAnError = True
                 End Try
 
                 containsAwait = walker._containsAwait
@@ -476,7 +476,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 If (containsOnError OrElse containsResume) AndAlso walker._containsTry Then
                     For Each node In walker._tryOnErrorResume
-                        Binder.ReportDiagnostic(diagnostics, node.Syntax, ERRID.ERR_TryAndOnErrorDoNotMix)
+                        ReportDiagnostic(diagnostics, node.Syntax, ERRID.ERR_TryAndOnErrorDoNotMix)
                     Next
 
                     reportedAnError = True
@@ -796,12 +796,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Private Function BindGoToStatement(node As GoToStatementSyntax, diagnostics As BindingDiagnosticBag) As BoundStatement
-            Dim symbol As LabelSymbol = Nothing
-
             Dim boundLabelExpression As BoundExpression = BindExpression(node.Label, diagnostics)
 
             If boundLabelExpression.Kind = BoundKind.Label Then
+                Dim symbol As LabelSymbol
                 Dim boundLabel = DirectCast(boundLabelExpression, BoundLabel)
+
                 symbol = boundLabel.Label
 
                 Dim hasErrors As Boolean = boundLabel.HasErrors
@@ -1359,7 +1359,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         inferFrom = inferFrom.GetMostEnclosedParenthesizedExpression()
                     End If
 
-                    Dim inferredType As TypeSymbol = Nothing
+                    Dim inferredType As TypeSymbol
                     Dim arrayLiteral As BoundArrayLiteral = Nothing
 
                     Select Case inferFrom.Kind
@@ -2012,7 +2012,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim rValue As BoundExpression
 
             If isError Then
-                rValue = MakeRValueAndIgnoreDiagnostics(left)
+                MakeRValueAndIgnoreDiagnostics(left)
             Else
                 rValue = MakeRValue(left, diagnostics)
                 isError = rValue.HasErrors
@@ -2021,7 +2021,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim targetType As TypeSymbol = assignmentTarget.Type
             Debug.Assert(targetType IsNot Nothing OrElse isError)
 
-            Dim placeholder As BoundCompoundAssignmentTargetPlaceholder = Nothing
+            Dim placeholder As BoundCompoundAssignmentTargetPlaceholder
 
             If isError Then
                 ' Suppress all additional diagnostics. This ensures that we still generate the appropriate tree shape
@@ -2849,7 +2849,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim declaredOrInferredLocalOpt As LocalSymbol = Nothing
             Dim isInferredLocal As Boolean = False
             Dim controlVariable As BoundExpression = Nothing
-            Dim hasErrors As Boolean = False
+            Dim hasErrors As Boolean
 
             ' bind common parts of a for block
             hasErrors = loopBinder.BindForBlockParts(node,
@@ -2879,9 +2879,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim declaredOrInferredLocalOpt As LocalSymbol = Nothing
             Dim isInferredLocal As Boolean = False
             Dim controlVariable As BoundExpression = Nothing
-            Dim loopBody As BoundBlock = Nothing
-            Dim nextVariables As ImmutableArray(Of BoundExpression) = Nothing
-            Dim hasErrors As Boolean = False
+            'Dim loopBody As BoundBlock = Nothing
+            'Dim nextVariables As ImmutableArray(Of BoundExpression) = Nothing
+            Dim hasErrors As Boolean
 
             ' bind common parts of a for block
             hasErrors = loopBinder.BindForBlockParts(node,
@@ -3056,7 +3056,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             currentBinder = currentBinder.ContainingBinder
                         End If
 
-                        If Not TypeOf currentBinder Is ForOrForEachBlockBinder Then
+                        If TypeOf currentBinder IsNot ForOrForEachBlockBinder Then
                             ' this happens for broken code, e.g.
                             ' for each a in arr1
                             '   if goo() then
@@ -5229,12 +5229,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return New BoundResumeStatement(node, isNext:=True)
 
                 Case SyntaxKind.ResumeLabelStatement
-                    Dim symbol As LabelSymbol = Nothing
-
                     Dim boundLabelExpression As BoundExpression = BindExpression(node.Label, diagnostics)
 
                     If boundLabelExpression.Kind = BoundKind.Label Then
                         Dim boundLabel = DirectCast(boundLabelExpression, BoundLabel)
+                        Dim symbol As LabelSymbol
+
                         symbol = boundLabel.Label
 
                         Return New BoundResumeStatement(node, symbol, boundLabel, hasErrors:=Not IsValidLabelForGoto(symbol, node.Label, diagnostics))
@@ -5268,7 +5268,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Case SyntaxKind.OnErrorGoToLabelStatement
                     Dim onError = DirectCast(node, OnErrorGoToStatementSyntax)
-                    Dim symbol As LabelSymbol = Nothing
+                    Dim symbol As LabelSymbol
 
                     Dim boundLabelExpression As BoundExpression = BindExpression(onError.Label, diagnostics)
 

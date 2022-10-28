@@ -4694,17 +4694,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             DefaultOptions = PreferConstructorsToType | ResolveAliases
         }
 
-        internal static void ValidateSymbolInfoOptions(SymbolInfoOptions options)
-        {
-            // TODO : What to do with this method ??? And what SymbolInfoOptions serve ?
-        }
-
         /// <summary>
         /// Given a position in the SyntaxTree for this SemanticModel returns the innermost
         /// NamedType that the position is considered inside of.
         /// </summary>
         public new ISymbol GetEnclosingSymbol(
-            int position, CancellationToken cancellationToken)
+            int position)
         {
             position = CheckAndAdjustPosition(position);
             var binder = GetEnclosingBinder(position);
@@ -5094,7 +5089,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected sealed override ISymbol GetEnclosingSymbolCore(int position, CancellationToken cancellationToken)
         {
-            return this.GetEnclosingSymbol(position, cancellationToken);
+            return this.GetEnclosingSymbol(position);
         }
 
         protected sealed override bool IsAccessibleCore(int position, ISymbol symbol)

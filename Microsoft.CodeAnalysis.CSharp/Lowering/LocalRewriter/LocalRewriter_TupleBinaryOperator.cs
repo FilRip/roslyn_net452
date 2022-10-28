@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // The compiler produces the implicit tuple literal conversion as an identity conversion for
                     // the benefit of the semantic model only.
                     return IsLikeTupleExpression(o, out tuple);
-                case BoundConversion { Conversion: { Kind: var kind } c, Operand: var o } conversion when
+                case BoundConversion { Conversion: { Kind: var _ } c, Operand: var o } conversion when
                         c.IsTupleConversion || c.IsTupleLiteralConversion:
                     {
                         // Push tuple conversions down to the elements.

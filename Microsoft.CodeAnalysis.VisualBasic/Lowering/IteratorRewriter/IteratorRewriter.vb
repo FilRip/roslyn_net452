@@ -310,7 +310,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 bodyBuilder.Add(F.Return())
                 F.CloseMethod(F.Block(bodyBuilder.ToImmutableAndFree()))
-                bodyBuilder = Nothing
+                'bodyBuilder = Nothing
             End If
 
         End Sub

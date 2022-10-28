@@ -155,7 +155,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Friend Function BindUnboundLambda(source As UnboundLambda, target As UnboundLambda.TargetSignature) As BoundLambda
             Debug.Assert(Me Is source.Binder)
 
-            Dim maxRelaxationLevel As ConversionKind = ConversionKind.DelegateRelaxationLevelNone
+            'Dim maxRelaxationLevel As ConversionKind = ConversionKind.DelegateRelaxationLevelNone
             Dim diagnostics = BindingDiagnosticBag.GetInstance(withDiagnostics:=True, source.WithDependencies)
             Dim targetReturnType As TypeSymbol
 
@@ -164,7 +164,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 If source.IsFunctionLambda Then
                     If targetReturnType.IsVoidType() Then
-                        targetReturnType = Microsoft.CodeAnalysis.VisualBasic.Symbols.LambdaSymbol.ReturnTypeVoidReplacement
+                        targetReturnType = Symbols.LambdaSymbol.ReturnTypeVoidReplacement
                     End If
                 End If
             Else
@@ -220,7 +220,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim parameters As ImmutableArray(Of BoundLambdaParameterSymbol) = BuildBoundLambdaParameters(source, target, diagnostics)
             Dim lambdaSymbol As New SourceLambdaSymbol(source.Syntax, source, parameters, targetReturnType, Me)
 
-            Dim delegateRelaxation As ConversionKind = Nothing
+            Dim delegateRelaxation As ConversionKind
             Dim lambdaBinder As LambdaBodyBinder = Nothing
 
             Dim block As BoundBlock = BindLambdaBody(lambdaSymbol, diagnostics, lambdaBinder)
@@ -721,7 +721,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             If containingMember.IsLambdaMethod Then
 
-                Dim binderForExpressionContainingLambda As Binder = Nothing
+                Dim binderForExpressionContainingLambda As Binder
 
                 ' Ok, we are inside a lambda. 
                 ' Bubble up to the containing method or initializer.

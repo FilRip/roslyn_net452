@@ -285,7 +285,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim beginTerminator As SyntaxToken = Nothing
 
             If IsBlockStatement(possibleBlock, beginStatement, beginTerminator, body, endStatement) Then
-                Dim afterBegin As Boolean = True
+                Dim afterBegin As Boolean
                 Dim beforeEnd As Boolean = True
 
                 If beginTerminator.Kind <> SyntaxKind.None AndAlso beginTerminator.Width > 0 Then
@@ -970,7 +970,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     ' An implicit line continuation is allowed only if the token is not the end of
                     ' the xml literal. Walk up the parent chain and see if there is a parent node
                     ' whose end extends beyond this token.
-                    Dim p As XmlNodeSyntax = Nothing
+                    Dim p As XmlNodeSyntax
                     Dim n = TryCast(token.Parent.Parent, XmlNodeSyntax)
                     While n IsNot Nothing
                         p = n

@@ -295,7 +295,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         if (attrData.IsTargetAttribute(a, AttributeDescription.GuidAttribute))
                         {
-                            if (attrData.TryGetGuidAttributeValue(out string guidString))
+                            if (attrData.TryGetGuidAttributeValue(out string _))
                             {
                                 hasGuidAttribute = true;
                             }
@@ -448,7 +448,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var mergedAttributes = ((SourceAssemblySymbol)this.ContainingAssembly).GetAttributeDeclarations();
                 if (LoadAndValidateAttributes(OneOrMany.Create(mergedAttributes), ref _lazyCustomAttributesBag))
                 {
-                    var completed = _state.NotePartComplete(CompletionPart.Attributes);
+                    _state.NotePartComplete(CompletionPart.Attributes);
                 }
             }
 

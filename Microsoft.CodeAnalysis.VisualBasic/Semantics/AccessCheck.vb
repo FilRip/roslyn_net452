@@ -857,7 +857,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             <[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol)
         ) As Boolean
             seenThroughInheritance = False
-            Dim exposingType As NamedTypeSymbol = Nothing
+            Dim exposingType As NamedTypeSymbol
             Dim membersAccessibilityInAssemblyContext As Accessibility = GetAccessInAssemblyContext(exposingMember, isOutsideAssembly)
 
             If membersAccessibilityInAssemblyContext = Accessibility.Private Then

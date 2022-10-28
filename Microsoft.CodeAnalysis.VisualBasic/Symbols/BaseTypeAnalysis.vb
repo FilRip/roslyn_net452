@@ -210,7 +210,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Return Nothing
             End If
 
-            Dim chain As ConsList(Of DependencyDesc) = Nothing
+            Dim chain As ConsList(Of DependencyDesc)
 
             ' try getting to the root via containing type
             chain = GetDependenceChain(visited, root, currentNamedType.ContainingType)

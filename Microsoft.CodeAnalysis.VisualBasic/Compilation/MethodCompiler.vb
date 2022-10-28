@@ -2017,7 +2017,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim thisRef As New BoundMeReference(syntaxNode, constructor.ContainingType)
             thisRef.SetWasCompilerGenerated()
 
-            Dim baseInvocation As BoundExpression = Nothing
+            Dim baseInvocation As BoundExpression
             If constructorToCall.ParameterCount = 0 Then
 
                 ' If this is parameterless constructor, we can build a call directly

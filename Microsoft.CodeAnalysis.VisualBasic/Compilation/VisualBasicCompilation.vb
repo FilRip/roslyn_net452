@@ -2971,7 +2971,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Return New NameSymbolSearcher(Me, filter, name, cancellationToken).GetSymbolsWithName()
         End Function
-#Enable Warning RS0026 ' Do not add multiple public overloads with optional parameters
 
         Protected Overrides Function IsUnreferencedAssemblyIdentityDiagnosticCode(code As Integer) As Boolean
             Select Case code

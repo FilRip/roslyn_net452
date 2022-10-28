@@ -424,7 +424,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Next
 
                 lastUpdated?.Free()
-                lastUpdated = Nothing
+                'lastUpdated = Nothing
                 If [set].Count > 0 Then
                     Dim updated = PooledHashSet(Of SourceFieldSymbol).GetInstance()
 

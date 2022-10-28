@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             DelegateDeclarationSyntax syntax,
             BindingDiagnosticBag diagnostics)
         {
-            var compilation = delegateType.DeclaringCompilation;
+            var _ = delegateType.DeclaringCompilation;
             Binder binder = delegateType.GetBinder(syntax.ParameterList);
             TypeSyntax returnTypeSyntax = syntax.ReturnType.SkipRef(out RefKind refKind);
             var returnType = binder.BindType(returnTypeSyntax, diagnostics);

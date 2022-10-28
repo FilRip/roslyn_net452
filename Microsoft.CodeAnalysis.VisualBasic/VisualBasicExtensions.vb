@@ -1197,7 +1197,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Public Function GetDeclaredSymbol(semanticModel As SemanticModel, declarationSyntax As CatchStatementSyntax, Optional cancellationToken As CancellationToken = Nothing) As ILocalSymbol
             Dim vbmodel = TryCast(semanticModel, VBSemanticModel)
             If vbmodel IsNot Nothing Then
-                Return vbmodel.GetDeclaredSymbol(declarationSyntax, cancellationToken)
+                Return vbmodel.GetDeclaredSymbol(declarationSyntax)
             Else
                 Return Nothing
             End If

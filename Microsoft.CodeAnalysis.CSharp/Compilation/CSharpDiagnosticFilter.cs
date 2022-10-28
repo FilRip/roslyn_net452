@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         if (severity == DiagnosticSeverity.Warning || severity == DiagnosticSeverity.Info)
                         {
                             report = ReportDiagnostic.Suppress;
-                            isSpecified = true;
+                            //isSpecified = true;
                         }
                         break;
                 }

@@ -108,7 +108,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' scale As Byte _
             ')
 
-            Dim decCtor As MethodSymbol = Nothing
+            Dim decCtor As MethodSymbol
 
             Const memberId As SpecialMember = SpecialMember.System_Decimal__CtorInt32Int32Int32BooleanByte
             decCtor = DirectCast(assembly.GetSpecialTypeMember(memberId), MethodSymbol)

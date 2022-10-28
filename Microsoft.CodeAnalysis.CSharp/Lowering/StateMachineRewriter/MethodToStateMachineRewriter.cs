@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Spilled local temps do not appear here in a sequence expression, because any temps in a
             // sequence expression that need to be spilled would have been moved up to the
             // statement level by the AwaitLiftingRewriter.
-            foreach (var local in node.Locals)
+            foreach (var _ in node.Locals)
             {
             }
 
@@ -558,7 +558,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     goto default;
 
                 case BoundKind.ConditionalOperator:
-                    var conditional = (BoundConditionalOperator)expr;
+                    //var conditional = (BoundConditionalOperator)expr;
                     // NOTE: There are two kinds of 'In' arguments that we may see at this point:
                     //       - `RefKindExtensions.StrictIn`     (originally specified with 'In' modifier)
                     //       - `RefKind.In`                     (specified with no modifiers and matched an 'In' parameter)

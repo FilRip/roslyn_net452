@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             bool needLifting = false;
-            var F = _factory;
+            //var F = _factory;
 
             var left = node.LeftOperandOpt;
             if (left != null)

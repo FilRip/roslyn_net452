@@ -513,7 +513,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         labelName += ":";
 
                         diagnostics.Add(ErrorCode.ERR_LabelNotFound, node.Location, labelName);
-                        hasErrors = true;
+                        //hasErrors = true;
                     }
                 }
                 else

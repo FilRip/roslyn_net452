@@ -2682,7 +2682,7 @@ _Default:
         ''' </summary>
         ''' <param name="declarationSyntax">The catch statement syntax node.</param>
         ''' <returns>The local symbol that was declared by the Catch statement or Nothing if statement does not declare a local variable.</returns>
-        Public Overloads Function GetDeclaredSymbol(declarationSyntax As CatchStatementSyntax, Optional cancellationToken As CancellationToken = Nothing) As ILocalSymbol
+        Public Overloads Function GetDeclaredSymbol(declarationSyntax As CatchStatementSyntax) As ILocalSymbol
             Dim enclosingBinder = StripSemanticModelBinder(Me.GetEnclosingBinder(declarationSyntax.SpanStart))
             Dim catchBinder = TryCast(enclosingBinder, CatchBlockBinder)
 
@@ -2954,7 +2954,7 @@ _Default:
         ''' Given a position in the SyntaxTree for this SemanticModel returns the innermost Symbol
         ''' that the position is considered inside of. 
         ''' </summary>
-        Public Shadows Function GetEnclosingSymbol(position As Integer, Optional cancellationToken As CancellationToken = Nothing) As ISymbol
+        Public Shadows Function GetEnclosingSymbol(position As Integer) As ISymbol
             CheckPosition(position)
             Dim binder = Me.GetEnclosingBinder(position)
             Return binder?.ContainingMember
@@ -3308,7 +3308,7 @@ _Default:
                     Return Me.GetDeclaredSymbol(DirectCast(node, AggregationRangeVariableSyntax), cancellationToken)
 
                 Case SyntaxKind.CatchStatement
-                    Return Me.GetDeclaredSymbol(DirectCast(node, CatchStatementSyntax), cancellationToken)
+                    Return Me.GetDeclaredSymbol(DirectCast(node, CatchStatementSyntax))
 
                 Case SyntaxKind.InferredFieldInitializer, SyntaxKind.NamedFieldInitializer
                     Return Me.GetDeclaredSymbol(DirectCast(node, FieldInitializerSyntax), cancellationToken)
@@ -3405,8 +3405,8 @@ _Default:
             Return Nothing
         End Function
 
-        Protected NotOverridable Overrides Function GetEnclosingSymbolCore(position As Integer, Optional cancellationToken As System.Threading.CancellationToken = Nothing) As ISymbol
-            Return GetEnclosingSymbol(position, cancellationToken)
+        Protected NotOverridable Overrides Function GetEnclosingSymbolCore(position As Integer, Optional cancellationToken As CancellationToken = Nothing) As ISymbol
+            Return GetEnclosingSymbol(position)
         End Function
 
         Protected NotOverridable Overrides Function IsAccessibleCore(position As Integer, symbol As ISymbol) As Boolean

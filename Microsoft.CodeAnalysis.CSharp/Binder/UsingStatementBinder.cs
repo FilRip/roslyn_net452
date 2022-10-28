@@ -76,8 +76,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             ExpressionSyntax expressionSyntax = TargetExpressionSyntax;
             VariableDeclarationSyntax declarationSyntax = _syntax.Declaration;
-            bool hasAwait = _syntax.AwaitKeyword.Kind() != default;
-
+            _syntax.AwaitKeyword.Kind();
 
             var boundUsingStatement = BindUsingStatementOrDeclarationFromParts((CSharpSyntaxNode)expressionSyntax ?? declarationSyntax, _syntax.UsingKeyword, _syntax.AwaitKeyword, originalBinder, this, diagnostics);
             return boundUsingStatement;

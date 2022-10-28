@@ -2265,7 +2265,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 t2,
                 Conversions.ClassifyImplicitConversionFromExpression(node, t2, ref useSiteInfo),
                 ref useSiteInfo,
-                out bool ignore);
+                out bool _);
         }
 
         // Determine whether t1 or t2 is a better conversion target from node, possibly considering parameter ref kinds.
@@ -2562,13 +2562,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private const int BetterConversionTargetRecursionLimit = 100;
 
-        private BetterResult BetterConversionTarget(
+        /*private BetterResult BetterConversionTarget(
             TypeSymbol type1,
             TypeSymbol type2,
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out bool okToDowngradeToNeither, BetterConversionTargetRecursionLimit);
-        }
+            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out bool _, BetterConversionTargetRecursionLimit);
+        }*/
 
         private BetterResult BetterConversionTargetCore(
             TypeSymbol type1,
@@ -2581,7 +2581,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return BetterResult.Neither;
             }
 
-            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out bool okToDowngradeToNeither, betterConversionTargetRecursionLimit - 1);
+            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out bool _, betterConversionTargetRecursionLimit - 1);
         }
 
         private BetterResult BetterConversionTarget(
@@ -2920,8 +2920,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             out ImmutableArray<RefKind> parameterRefKinds)
         {
             EffectiveParameters effectiveParameters = expanded ?
-                GetEffectiveParametersInExpandedForm(method, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, binder, out bool hasAnyRefOmittedArgument) :
-                GetEffectiveParametersInNormalForm(method, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, binder, out hasAnyRefOmittedArgument);
+                GetEffectiveParametersInExpandedForm(method, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, binder, out bool _) :
+                GetEffectiveParametersInNormalForm(method, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, binder, out _);
             parameterTypes = effectiveParameters.ParameterTypes;
             parameterRefKinds = effectiveParameters.ParameterRefKinds;
         }
@@ -2947,7 +2947,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool allowRefOmittedArguments)
             where TMember : Symbol
         {
-            return GetEffectiveParametersInNormalForm(member, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, _binder, hasAnyRefOmittedArgument: out bool discarded);
+            return GetEffectiveParametersInNormalForm(member, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, _binder, hasAnyRefOmittedArgument: out bool _);
         }
 
         private static EffectiveParameters GetEffectiveParametersInNormalForm<TMember>(
@@ -3049,7 +3049,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool isMethodGroupConversion,
             bool allowRefOmittedArguments) where TMember : Symbol
         {
-            return GetEffectiveParametersInExpandedForm(member, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, _binder, hasAnyRefOmittedArgument: out bool discarded);
+            return GetEffectiveParametersInExpandedForm(member, argumentCount, argToParamMap, argumentRefKinds, isMethodGroupConversion, allowRefOmittedArguments, _binder, hasAnyRefOmittedArgument: out bool _);
         }
 
         private static EffectiveParameters GetEffectiveParametersInExpandedForm<TMember>(

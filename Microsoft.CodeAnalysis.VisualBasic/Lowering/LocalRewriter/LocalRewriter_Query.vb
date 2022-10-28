@@ -129,7 +129,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim anonymousType = DirectCast(anonymousTypeInstance.Type, AnonymousTypeManager.AnonymousTypePublicSymbol)
 
             For Each propertyDef As PropertySymbol In anonymousType.Properties
-                Dim getCallOrPropertyAccess As BoundExpression = Nothing
+                Dim getCallOrPropertyAccess As BoundExpression
                 If inExpressionLambda Then
                     ' NOTE: If we are in context of a lambda to be converted to an expression tree we need to use PropertyAccess.
                     getCallOrPropertyAccess = New BoundPropertyAccess(syntax,

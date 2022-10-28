@@ -908,7 +908,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(source IsNot Nothing)
             Debug.Assert(destination IsNot Nothing)
             Debug.Assert(source.Kind <> SymbolKind.ErrorType)
-            Debug.Assert(Not TypeOf source Is ArrayLiteralTypeSymbol)
+            Debug.Assert(TypeOf source IsNot ArrayLiteralTypeSymbol)
             Debug.Assert(destination.Kind <> SymbolKind.ErrorType)
 
             Dim predefinedConversion As ConversionKind = ClassifyPredefinedConversion(source, destination, useSiteInfo)
@@ -947,7 +947,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' The check for source.IsConstant is still necessary because the node might still 
             ' be considered as a non-constant in some error conditions (a reference before declaration,
             ' for example).
-            Dim sourceIsConstant As Boolean = False
+            Dim sourceIsConstant As Boolean
             If source.Kind = BoundKind.FieldAccess Then
                 sourceIsConstant = DirectCast(source, BoundFieldAccess).FieldSymbol.GetConstantValue(binder.ConstantFieldsInProgress) IsNot Nothing AndAlso source.IsConstant
             ElseIf source.Kind = BoundKind.Local Then
@@ -1065,7 +1065,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return ClassifyArrayLiteralConversion(DirectCast(source, BoundArrayLiteral), destination, binder, useSiteInfo)
 
                 Case BoundKind.InterpolatedStringExpression
-                    Return ClassifyInterpolatedStringConversion(DirectCast(source, BoundInterpolatedStringExpression), destination, binder)
+                    Return ClassifyInterpolatedStringConversion(destination, binder)
 
                 Case BoundKind.TupleLiteral
                     Return ClassifyTupleConversion(DirectCast(source, BoundTupleLiteral), destination, binder, useSiteInfo)
@@ -1077,7 +1077,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Shared Function ClassifyUnboundLambdaConversion(source As UnboundLambda, destination As TypeSymbol) As ConversionKind
             Dim leastRelaxationLevel As ConversionKind = ConversionKind.DelegateRelaxationLevelNone
             Dim conversionKindExpressionTree As ConversionKind = Nothing ' Set to ConversionKind.ConvertedToExpressionTree if expression tree involved.
-            Dim delegateInvoke As MethodSymbol = Nothing
+            Dim delegateInvoke As MethodSymbol
 
             ' Dev10#626389, Dev10#693976: If you convert a lambda to Object/Delegate/MulticastDelegate, then
             ' the best it can ever be is DelegateRelaxationWideningToNonLambda.
@@ -1168,7 +1168,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim sourceType = source.InferredType
             Dim targetType = TryCast(destination, NamedTypeSymbol)
             Dim originalTargetType = targetType?.OriginalDefinition
-            Dim targetElementType As TypeSymbol = Nothing
+            Dim targetElementType As TypeSymbol
             Dim targetArrayType As ArrayTypeSymbol = TryCast(destination, ArrayTypeSymbol)
 
             If targetArrayType IsNot Nothing AndAlso (sourceType.Rank = targetArrayType.Rank OrElse source.IsEmptyArrayLiteral) Then
@@ -1218,7 +1218,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return ClassifyArrayInitialization(source.Initializer, targetElementType, binder, useSiteInfo)
         End Function
 
-        Public Shared Function ClassifyInterpolatedStringConversion(source As BoundInterpolatedStringExpression, destination As TypeSymbol, binder As Binder) As ConversionKind
+        Public Shared Function ClassifyInterpolatedStringConversion(destination As TypeSymbol, binder As Binder) As ConversionKind
 
             ' A special conversion exist from an interpolated string expression to System.IFormattable or System.FormattableString.
             If destination.Equals(binder.Compilation.GetWellKnownType(WellKnownType.System_FormattableString)) OrElse
@@ -1455,7 +1455,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim conv As KeyValuePair(Of ConversionKind, MethodSymbol) = Conversions.ClassifyConversion(operand, booleanType, binder, useSiteInfo)
 
             ' See if we need to use IsTrue operator.
-            If Conversions.IsWideningConversion(conv.Key) Then
+            If IsWideningConversion(conv.Key) Then
                 '  - T is Boolean 
                 '  - T has a widening conversion to Boolean
                 Return conv
@@ -1465,13 +1465,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             If sourceType IsNot Nothing AndAlso Not sourceType.IsErrorType() AndAlso Not sourceType.IsObjectType() Then
 
-                Dim nullableOfBoolean As TypeSymbol = Nothing
+                Dim nullableOfBoolean As TypeSymbol
                 Dim convToNullableOfBoolean As KeyValuePair(Of ConversionKind, MethodSymbol) = Nothing
 
                 If sourceType.IsNullableOfBoolean() Then
                     ' The source is Boolean?
                     convToNullableOfBoolean = Conversions.Identity
-                    nullableOfBoolean = sourceType
+                    'nullableOfBoolean = sourceType
                 Else
                     Dim nullableOfT As NamedTypeSymbol = booleanType.ContainingAssembly.GetSpecialType(SpecialType.System_Nullable_T)
 
@@ -1483,7 +1483,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
                 End If
 
-                If Conversions.IsWideningConversion(convToNullableOfBoolean.Key) Then
+                If IsWideningConversion(convToNullableOfBoolean.Key) Then
                     '  - T is Boolean?
                     '  - T has a widening conversion to Boolean?
                     applyNullableIsTrueOperator = True
@@ -1506,7 +1506,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                         Debug.Assert(Not results.BestResult.Value.RequiresNarrowingConversion)
                         Return New KeyValuePair(Of ConversionKind, MethodSymbol)(ConversionKind.Widening, Nothing)
-                    ElseIf Conversions.IsNarrowingConversion(convToNullableOfBoolean.Key) AndAlso
+                    ElseIf IsNarrowingConversion(convToNullableOfBoolean.Key) AndAlso
                            Not ((convToNullableOfBoolean.Key And (ConversionKind.UserDefined Or ConversionKind.Nullable)) =
                                         ConversionKind.UserDefined AndAlso
                                 convToNullableOfBoolean.Value.ReturnType.IsBooleanType()) Then
@@ -1823,7 +1823,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(source IsNot Nothing)
             Debug.Assert(destination IsNot Nothing)
             Debug.Assert(source.Kind <> SymbolKind.ErrorType)
-            Debug.Assert(Not TypeOf source Is ArrayLiteralTypeSymbol)
+            Debug.Assert(TypeOf source IsNot ArrayLiteralTypeSymbol)
             Debug.Assert(destination.Kind <> SymbolKind.ErrorType)
 
             Dim result As ConversionKind
@@ -2189,7 +2189,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(source IsNot Nothing)
             Debug.Assert(destination IsNot Nothing)
             Debug.Assert(source.Kind <> SymbolKind.ErrorType)
-            Debug.Assert(Not TypeOf source Is ArrayLiteralTypeSymbol)
+            Debug.Assert(TypeOf source IsNot ArrayLiteralTypeSymbol)
             Debug.Assert(destination.Kind <> SymbolKind.ErrorType)
 
             ' Try using the short-circuit "fast-conversion" path.
@@ -2780,7 +2780,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
 
                     identity = False
-                    Dim conv As ConversionKind = Nothing
+                    Dim conv As ConversionKind
 
                     Select Case typeParameters(i).Variance
                         Case VarianceKind.Out

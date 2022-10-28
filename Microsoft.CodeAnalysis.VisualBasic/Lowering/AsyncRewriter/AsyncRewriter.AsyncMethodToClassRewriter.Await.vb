@@ -81,7 +81,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             thenClause:=awaitForIncompleteTask))
                 End If
 
-                Dim onAwaitFinished As BoundExpression = Nothing
+                Dim onAwaitFinished As BoundExpression
                 Dim clearAwaiterTemp As BoundExpression =
                     Me.F.AssignmentExpression(Me.F.Local(awaiterTemp, True), Me.F.Null(awaiterTemp.Type))
 

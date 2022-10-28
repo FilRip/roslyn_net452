@@ -1183,8 +1183,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal override SymbolInfo GetSymbolInfoWorker(CSharpSyntaxNode node, SymbolInfoOptions options, CancellationToken cancellationToken = default)
         {
-            ValidateSymbolInfoOptions(options);
-
             GetBoundNodes(node, out CSharpSyntaxNode _, out BoundNode lowestBoundNode, out BoundNode highestBoundNode, out BoundNode boundParent);
 
             return base.GetSymbolInfoForNode(options, lowestBoundNode, highestBoundNode, boundParent, binderOpt: null);

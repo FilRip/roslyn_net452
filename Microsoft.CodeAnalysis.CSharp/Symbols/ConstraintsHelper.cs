@@ -1314,14 +1314,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return conversions.HasIdentityOrImplicitReferenceConversion(a, b, ref useSiteInfo) || conversions.HasBoxingConversion(a, b, ref useSiteInfo);
         }
 
-        private static bool IsValidEncompassedByArgument(TypeSymbol type)
+        /*private static bool IsValidEncompassedByArgument(TypeSymbol type)
         {
             return type.TypeKind switch
             {
                 TypeKind.Array or TypeKind.Class or TypeKind.Delegate or TypeKind.Enum or TypeKind.Struct => true,
                 _ => false,
             };
-        }
+        }*/
 
         public static bool RequiresChecking(NamedTypeSymbol type)
         {
@@ -1368,7 +1368,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         [Conditional("DEBUG")]
         private static void CheckEffectiveAndDeducedBaseTypes(ConversionsBase conversions, TypeSymbol effectiveBase, TypeSymbol deducedBase)
         {
-            var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
+            var _ = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
         }
 
         internal static TypeWithAnnotations ConstraintWithMostSignificantNullability(TypeWithAnnotations type1, TypeWithAnnotations type2)

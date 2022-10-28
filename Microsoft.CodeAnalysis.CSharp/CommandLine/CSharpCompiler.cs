@@ -213,7 +213,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // prepopulate line tables.
             // we will need line tables anyways and it is better to not wait until we are in emit
             // where things run sequentially.
-            tree.GetMappedLineSpanAndVisibility(default, out bool isHiddenDummy);
+            tree.GetMappedLineSpanAndVisibility(default, out bool _);
 
             return tree;
         }

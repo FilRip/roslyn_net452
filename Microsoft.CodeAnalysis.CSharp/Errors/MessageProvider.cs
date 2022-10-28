@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                                               options.SpecificDiagnosticOptions,
                                                               options.SyntaxTreeOptionsProvider,
                                                               CancellationToken.None, // We don't have a tree so there's no need to pass cancellation to the SyntaxTreeOptionsProvider
-                                                              out bool hasPragmaSuppression);
+                                                              out bool _);
         }
 
         public override int ERR_FailedToCreateTempFile => (int)ErrorCode.ERR_CantMakeTempFile;

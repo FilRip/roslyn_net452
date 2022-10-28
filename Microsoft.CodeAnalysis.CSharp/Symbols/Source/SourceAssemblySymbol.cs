@@ -2269,7 +2269,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else if (attribute.IsTargetAttribute(this, AttributeDescription.AssemblyFileVersionAttribute))
             {
                 string verString = (string)attribute.CommonConstructorArguments[0].ValueInternal;
-                if (!VersionHelper.TryParse(verString, version: out Version dummy))
+                if (!VersionHelper.TryParse(verString, version: out Version _))
                 {
                     Location attributeArgumentSyntaxLocation = attribute.GetAttributeArgumentSyntaxLocation(0, arguments.AttributeSyntaxOpt);
                     diagnostics.Add(ErrorCode.WRN_InvalidVersionFormat, attributeArgumentSyntaxLocation);
@@ -2320,7 +2320,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 //just check the format of this one, don't do anything else with it.
                 string verString = (string)attribute.CommonConstructorArguments[0].ValueInternal;
 
-                if (!VersionHelper.TryParseAssemblyVersion(verString, allowWildcard: false, version: out Version dummy))
+                if (!VersionHelper.TryParseAssemblyVersion(verString, allowWildcard: false, version: out Version _))
                 {
                     Location attributeArgumentSyntaxLocation = attribute.GetAttributeArgumentSyntaxLocation(0, arguments.AttributeSyntaxOpt);
                     diagnostics.Add(ErrorCode.ERR_InvalidVersionFormat2, attributeArgumentSyntaxLocation);

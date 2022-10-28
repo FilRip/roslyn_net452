@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (this.Instrument)
             {
-                if (node.Syntax is LabeledStatementSyntax labeledSyntax)
+                if (node.Syntax is LabeledStatementSyntax)
                 {
                     labelStatement = _instrumenter.InstrumentLabelStatement(node, labelStatement);
                 }

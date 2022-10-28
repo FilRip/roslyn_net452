@@ -554,7 +554,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Dim formattedXml As String = FormatComment(substitutedText)
 
-                Dim formattedAfterIncludes As String = Nothing
+                Dim formattedAfterIncludes As String
                 If Me._processIncludes Then
 
                     Dim includeNodes As ArrayBuilder(Of XmlNodeSyntax) = Nothing

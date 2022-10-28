@@ -377,7 +377,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 ' create new initializers
                 Dim newInitializers(initializerCount - 1) As BoundExpression
-                Dim errors As Boolean = False
+                'Dim errors As Boolean = False
                 For index = 0 To initializerCount - 1
                     newInitializers(index) = sequenceExpressions(index + 1)
                 Next

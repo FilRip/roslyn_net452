@@ -279,7 +279,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If postIncrementLabel IsNot Nothing Then
                 Dim label As BoundStatement = New BoundLabelStatement(blockSyntax, postIncrementLabel)
                 If instrument Then
-                    gotoPostIncrement = SyntheticBoundNodeFactory.HiddenSequencePoint(label)
+                    SyntheticBoundNodeFactory.HiddenSequencePoint(label)
                 End If
                 statements.Add(label)
             End If

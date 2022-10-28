@@ -1430,10 +1430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (compilation.NullableAnalysisData?.Data is { } state)
             {
                 var key = (object?)symbol ?? methodMainNode.Syntax;
-                if (state.TryGetValue(key, out var result))
-                {
-                }
-                else
+                if (!state.TryGetValue(key, out var _))
                 {
                     state.TryAdd(key, new Data(_variables.GetTotalVariableCount(), requiredAnalysis));
                 }
@@ -2265,7 +2262,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Clone the state for members that have been set on the value.
             var members = ArrayBuilder<(VariableIdentifier, int)>.GetInstance();
             _variables.GetMembers(members, valueSlot);
-            foreach (var (variable, slot) in members)
+            foreach (var (variable, _) in members)
             {
                 var member = variable.Symbol;
                 InheritNullableStateOfMember(targetSlot, valueSlot, member, isDefaultValue: false, skipSlot);
@@ -2675,7 +2672,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 VisitAlways(lambdaOrFunction.Body);
                 RestorePending(oldPending2); // process any forward branches within the lambda body
-                ImmutableArray<PendingBranch> pendingReturns = RemoveReturns();
+                RemoveReturns();
                 RestorePending(oldPending);
             }
             finally
@@ -2885,7 +2882,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
 #if DEBUG
         // For asserts only.
-        private static bool AreCloseEnough(TypeSymbol? typeA, TypeSymbol? typeB)
+        /*private static bool AreCloseEnough(TypeSymbol? typeA, TypeSymbol? typeB)
         {
             // https://github.com/dotnet/roslyn/issues/34993: We should be able to tighten this to ensure that we're actually always returning the same type,
             // not error if one is null or ignoring certain types
@@ -2913,7 +2910,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return AnonymousTypeManager.GetAnonymousTypePropertyTypesWithAnnotations(type).Any(t => canIgnoreAnyType(t.Type));
             }
-        }
+        }*/
 
         private static bool AreCloseEnough(Symbol original, Symbol updated)
         {
@@ -4160,7 +4157,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return (rightType, NullableFlowState.NotNull);
                 }
 
-                conversion = GenerateConversionForConditionalOperator(node.RightOperand, rightType, leftType, reportMismatch: true);
+                GenerateConversionForConditionalOperator(node.RightOperand, rightType, leftType, reportMismatch: true);
                 return (leftType, NullableFlowState.NotNull);
             }
 
@@ -5410,7 +5407,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case RefKind.In:
                     {
                         // learn from post-conditions [Maybe/NotNull, Maybe/NotNullWhen] without using an assignment
-                        learnFromPostConditions(argument, parameterType, parameterAnnotations);
+                        learnFromPostConditions(argument, parameterAnnotations);
                     }
                     break;
                 case RefKind.Ref:
@@ -5592,7 +5589,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return typeWithState;
             }
 
-            void learnFromPostConditions(BoundExpression argument, TypeWithAnnotations parameterType, FlowAnalysisAnnotations parameterAnnotations)
+            void learnFromPostConditions(BoundExpression argument, FlowAnalysisAnnotations parameterAnnotations)
             {
                 // Note: NotNull = NotNullWhen(true) + NotNullWhen(false)
                 bool notNullWhenTrue = (parameterAnnotations & FlowAnalysisAnnotations.NotNullWhenTrue) != 0;
@@ -7120,7 +7117,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var conversionOpt = conversionExpression as BoundConversion;
-            var conversionGroup = conversionOpt?.ConversionGroupOpt;
+            var _ = conversionOpt?.ConversionGroupOpt;
             while (conversionOpt != null &&
                    conversionOpt != convertedNode &&
                    conversionOpt.Syntax.SpanStart != convertedNode.Syntax.SpanStart)
@@ -7133,7 +7130,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void TrackAnalyzedNullabilityThroughConversionGroup(TypeWithState resultType, BoundConversion? conversionOpt, BoundExpression convertedNode)
         {
             var visitResult = new VisitResult(resultType, resultType.ToTypeWithAnnotations(compilation));
-            var conversionGroup = conversionOpt?.ConversionGroupOpt;
+            var _ = conversionOpt?.ConversionGroupOpt;
             while (conversionOpt != null && conversionOpt != convertedNode)
             {
                 visitResult = withType(visitResult, conversionOpt.Type);
@@ -8410,7 +8407,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // This is case 4. We need to look for the IEnumerable<T> that this reinferred expression implements,
                     // so that we pick up any nested type substitutions that could have occurred.
                     var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                    targetTypeWithAnnotations = TypeWithAnnotations.Create(ForEachLoopBinder.GetIEnumerableOfT(resultType, isAsync, compilation, ref discardedUseSiteInfo, out bool foundMultiple));
+                    targetTypeWithAnnotations = TypeWithAnnotations.Create(ForEachLoopBinder.GetIEnumerableOfT(resultType, isAsync, compilation, ref discardedUseSiteInfo, out bool _));
                 }
                 else
                 {

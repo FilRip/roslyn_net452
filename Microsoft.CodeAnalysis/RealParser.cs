@@ -676,7 +676,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private static uint CountSignificantBits(BigInteger data)
         {
-            return CountSignificantBits(data, out byte[] dataBytes);
+            return CountSignificantBits(data, out byte[] _);
         }
 
         /// <summary>

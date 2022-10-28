@@ -3011,7 +3011,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' Now, deal with aggregate functions.
                 Dim aggregationVariables As SeparatedSyntaxList(Of AggregationRangeVariableSyntax) = aggregate.AggregationVariables
                 Dim letSelector As BoundExpression
-                Dim groupRangeVar As RangeVariableSymbol = Nothing
 
                 Select Case aggregationVariables.Count
                     Case 0
@@ -3094,6 +3093,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         ' INTO Count(),             Select a, Count=Group.Count(), Sum=Group.Sum(b=>b)
                         '      Sum(b)
                         '
+                        Dim groupRangeVar As RangeVariableSymbol
 
                         ' Handle selector for the Let.
                         groupRangeVar = RangeVariableSymbol.CreateCompilerGenerated(Me, aggregate, StringConstants.Group, group.Type)
@@ -3309,7 +3309,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Debug.Assert(joinConditions.Count > 0, "Malformed syntax tree.")
                     outerKey = BadExpression(join, ErrorTypeSymbol.UnknownResultType).MakeCompilerGenerated()
                     innerKey = BadExpression(join, ErrorTypeSymbol.UnknownResultType).MakeCompilerGenerated()
-                    keysAreGood = False
+                    'keysAreGood = False
 
                 ElseIf joinConditions.Count = 1 Then
                     ' Simple case, no need to build an Anonymous Type.

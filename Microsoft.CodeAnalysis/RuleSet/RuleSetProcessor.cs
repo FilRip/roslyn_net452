@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis
         // Strings for the RuleSet node
         private const string RuleSetNodeName = "RuleSet";
         private const string RuleSetNameAttributeName = "Name";
-        private const string RuleSetDescriptionAttributeName = "Description";
+        //private const string RuleSetDescriptionAttributeName = "Description";
         private const string RuleSetToolsVersionAttributeName = "ToolsVersion";
 
         // Strings for the Rules node
@@ -64,7 +64,7 @@ namespace Microsoft.CodeAnalysis
             filePath = FileUtilities.NormalizeAbsolutePath(filePath);
             XmlReaderSettings settings = GetDefaultXmlReaderSettings();
 
-            XDocument? ruleSetDocument = null;
+            XDocument? ruleSetDocument;
             XElement? ruleSetNode = null;
 
             using (Stream stream = FileUtilities.OpenRead(filePath))
@@ -149,8 +149,8 @@ namespace Microsoft.CodeAnalysis
         /// <returns>A list of rule objects with data from the given XML node</returns>
         private static List<KeyValuePair<string, ReportDiagnostic>> ReadRules(XElement rulesNode)
         {
-            string analyzerId = ReadNonEmptyAttribute(rulesNode, RulesAnalyzerIdAttributeName);
-            string ruleNamespace = ReadNonEmptyAttribute(rulesNode, RulesNamespaceAttributeName);
+            ReadNonEmptyAttribute(rulesNode, RulesAnalyzerIdAttributeName);
+            ReadNonEmptyAttribute(rulesNode, RulesNamespaceAttributeName);
 
             var rules = new List<KeyValuePair<string, ReportDiagnostic>>();
 

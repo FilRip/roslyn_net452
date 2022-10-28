@@ -350,7 +350,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             For Each caseBlock In node.CaseBlocks
                 For Each caseClause In caseBlock.CaseStatement.CaseClauses
-                    Dim constant As ConstantValue = Nothing
+                    Dim constant As ConstantValue
                     Select Case caseClause.Kind
                         Case BoundKind.SimpleCaseClause
                             Dim simpleCaseClause = DirectCast(caseClause, BoundSimpleCaseClause)

@@ -520,8 +520,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Dim nameIsFollowedByWhitespace = Name.HasTrailingTrivia
 
             Dim Attributes = ParseXmlAttributes(Not nameIsFollowedByWhitespace, Name)
-            Dim greaterThan As PunctuationSyntax = Nothing
-            Dim endEmptyElementToken As PunctuationSyntax = Nothing
+            Dim greaterThan As PunctuationSyntax
+            Dim endEmptyElementToken As PunctuationSyntax
 
             Select Case (CurrentToken.Kind)
 

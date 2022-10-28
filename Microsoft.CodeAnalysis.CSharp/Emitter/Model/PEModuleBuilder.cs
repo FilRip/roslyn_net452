@@ -1365,7 +1365,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             // Note that this method is called only after ALL fixed buffer types have been placed in the map.
             // At that point the map is all filled in and will not change further.  Therefore it is safe to
             // pull values from the map without locking.
-            var found = _fixedImplementationTypes.TryGetValue(field, out NamedTypeSymbol result);
+            _fixedImplementationTypes.TryGetValue(field, out NamedTypeSymbol result);
             return result;
         }
 

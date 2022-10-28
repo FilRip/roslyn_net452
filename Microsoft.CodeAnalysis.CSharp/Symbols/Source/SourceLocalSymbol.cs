@@ -265,7 +265,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
 #if DEBUG
         // We use this to detect infinite recursion in type inference.
+#pragma warning disable IDE0052
         private int concurrentTypeResolutions = 0;
+#pragma warning restore IDE0052
 #endif
 
         public override TypeWithAnnotations TypeWithAnnotations
@@ -297,7 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 if (_typeSyntax.IsVar)
                 {
-                    TypeWithAnnotations declType = this.TypeSyntaxBinder.BindTypeOrVarKeyword(_typeSyntax, BindingDiagnosticBag.Discarded, out bool isVar);
+                    this.TypeSyntaxBinder.BindTypeOrVarKeyword(_typeSyntax, BindingDiagnosticBag.Discarded, out bool isVar);
                     return isVar;
                 }
 
@@ -362,7 +364,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal void SetTypeWithAnnotations(TypeWithAnnotations newType)
         {
-            TypeWithAnnotations? originalType = _type?.Value;
+            TypeWithAnnotations? _ = _type?.Value;
 
             // In the event that we race to set the type of a local, we should
             // always deduce the same type, or deduce that the type is an error.
@@ -519,11 +521,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             /// </summary>
             /// <param name="inProgress">Null for the initial call, non-null if we are in the process of evaluating a constant.</param>
             /// <param name="boundInitValue">If we already have the bound node for the initial value, pass it in to avoid recomputing it.</param>
-            private void MakeConstantTuple(LocalSymbol inProgress, BoundExpression boundInitValue)
+            private void MakeConstantTuple(BoundExpression boundInitValue)
             {
                 if (this.IsConst && _constantTuple == null)
                 {
-                    var value = Microsoft.CodeAnalysis.ConstantValue.Bad;
                     Location initValueNodeLocation = _initializer.Value.Location;
                     var diagnostics = BindingDiagnosticBag.GetInstance();
                     var type = this.Type;
@@ -533,7 +534,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         boundInitValue = inProgressBinder.BindVariableOrAutoPropInitializerValue(_initializer, this.RefKind, type, diagnostics);
                     }
 
-                    value = ConstantValueUtils.GetAndValidateConstantValue(boundInitValue, this, type, initValueNodeLocation, diagnostics);
+                    var value = ConstantValueUtils.GetAndValidateConstantValue(boundInitValue, this, type, initValueNodeLocation, diagnostics);
                     Interlocked.CompareExchange(ref _constantTuple, new EvaluatedConstant(value, diagnostics.ToReadOnlyAndFree()), null);
                 }
             }
@@ -550,13 +551,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return Microsoft.CodeAnalysis.ConstantValue.Bad;
                 }
 
-                MakeConstantTuple(inProgress, boundInitValue: null);
+                MakeConstantTuple(boundInitValue: null);
                 return _constantTuple?.Value;
             }
 
             internal override ImmutableBindingDiagnostic<AssemblySymbol> GetConstantValueDiagnostics(BoundExpression boundInitValue)
             {
-                MakeConstantTuple(inProgress: null, boundInitValue: boundInitValue);
+                MakeConstantTuple(boundInitValue: boundInitValue);
                 return _constantTuple == null ? ImmutableBindingDiagnostic<AssemblySymbol>.Empty : _constantTuple.Diagnostics;
             }
 

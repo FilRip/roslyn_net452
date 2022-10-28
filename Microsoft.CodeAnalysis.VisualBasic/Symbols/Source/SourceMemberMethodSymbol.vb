@@ -334,7 +334,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Next
 
             ' Add the type parameters to our binder for binding parameters and return values
+            ' TODO : This new instance is never used
+#Disable Warning IDE0059
             binder = New MethodTypeParametersBinder(binder, typeParameters.AsImmutableOrNull)
+#Enable Warning IDE0059
 
             Dim containingSourceType = TryCast(ContainingType, SourceNamedTypeSymbol)
             If containingSourceType IsNot Nothing Then
@@ -774,7 +777,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             ' synthesize delegate creation (may involve relaxation)
 
-            Dim hookupMethod As MethodSymbol = Nothing
+            Dim hookupMethod As MethodSymbol
 
             If handlesKind = HandledEventKind.WithEvents Then
                 hookupMethod = witheventsPropertyInCurrentClass.SetMethod

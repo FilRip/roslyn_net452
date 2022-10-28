@@ -943,7 +943,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
             {
                 SyntaxNode syntax = boundConversion.Syntax;
                 ITypeSymbol? type = boundConversion.GetPublicTypeSymbol();
-                ConstantValue? constantValue = boundConversion.ConstantValue;
+                ConstantValue? _ = boundConversion.ConstantValue;
 
                 if (boundConversion.Type is FunctionPointerTypeSymbol)
                 {
@@ -1063,7 +1063,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
             IOperation? instance = CreateReceiverOperation(boundMethodGroup.ReceiverOpt, methodSymbol);
             SyntaxNode bindingSyntax = boundMethodGroup.Syntax;
             ITypeSymbol? bindingType = null;
-            bool isImplicit = boundMethodGroup.WasCompilerGenerated;
+            bool _ = boundMethodGroup.WasCompilerGenerated;
             return new MethodReferenceOperation(methodSymbol.GetPublicSymbol(), isVirtual, instance, _semanticModel, bindingSyntax, bindingType, boundMethodGroup.WasCompilerGenerated);
         }
 
@@ -1915,7 +1915,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
             // If we're creating the tree for a speculatively-bound constructor initializer, there can be a bound sequence as the child node here
             // that corresponds to the lifetime of any declared variables.
             IOperation expression = Create(boundExpressionStatement.Expression);
-            if (boundExpressionStatement.Expression is BoundSequence sequence)
+            if (boundExpressionStatement.Expression is BoundSequence)
             {
                 isImplicit = true;
             }

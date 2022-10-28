@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         n = e.Next;
                         break;
                     case BoundTestDecisionDagNode t:
-                        (int d, BoundDecisionDagNode next) = dist[t];
+                        (int _, BoundDecisionDagNode next) = dist[t];
                         n = next;
                         break;
                     case BoundWhenDecisionDagNode w:

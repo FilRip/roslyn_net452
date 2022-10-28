@@ -142,9 +142,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 For fieldIndex = 0 To initializersCount - 1
                     Dim fieldSyntax As FieldInitializerSyntax = initializers(fieldIndex)
 
-                    Dim fieldName As String = Nothing
-                    Dim fieldNode As VisualBasicSyntaxNode = Nothing
-                    Dim fieldIsKey As Boolean = False
+                    Dim fieldName As String
+                    Dim fieldNode As VisualBasicSyntaxNode
+                    Dim fieldIsKey As Boolean
 
                     ' get field's name 
                     If fieldSyntax.Kind = SyntaxKind.InferredFieldInitializer Then
@@ -227,7 +227,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     ' to be used if we need to create BoundAnonymousTypePropertyAccess node
                     Dim namedFieldInitializer As NamedFieldInitializerSyntax = Nothing
 
-                    Dim initExpression As ExpressionSyntax = Nothing
+                    Dim initExpression As ExpressionSyntax
                     If initializer.Kind = SyntaxKind.InferredFieldInitializer Then
                         initExpression = DirectCast(initializer, InferredFieldInitializerSyntax).Expression
                     Else

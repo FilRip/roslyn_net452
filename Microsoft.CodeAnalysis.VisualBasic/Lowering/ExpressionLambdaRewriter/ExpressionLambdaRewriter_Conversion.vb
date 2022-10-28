@@ -357,7 +357,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(method.ParameterCount = 1)
 
             ' The argument to be passed to the conversion
-            Dim argument As BoundExpression = Nothing
+            'Dim argument As BoundExpression = Nothing
 
             ' Handle lifted conversions
             If isLifted Then

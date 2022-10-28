@@ -230,7 +230,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             If builder.Count = 0 Then
                 Return Nothing
             End If
-            Dim foundTrivia As CoreInternalSyntax.SyntaxList(Of VisualBasicSyntaxNode) = Nothing
+            'Dim foundTrivia As CoreInternalSyntax.SyntaxList(Of VisualBasicSyntaxNode) = Nothing
             Dim useCache = CanCache(builder)
 
             If useCache Then

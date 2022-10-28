@@ -315,7 +315,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             ' Otherwise, we need to capture parts of the expression in a set of non-ByRef locals 
-            Dim expression As BoundExpression = Nothing
+            Dim expression As BoundExpression
             Select Case value.Kind
                 Case BoundKind.ArrayAccess
                     expression = CaptureArrayAccess(DirectCast(value, BoundArrayAccess), state)

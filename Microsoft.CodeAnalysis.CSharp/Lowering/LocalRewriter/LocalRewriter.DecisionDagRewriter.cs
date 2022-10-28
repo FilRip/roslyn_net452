@@ -540,7 +540,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (loweredNodes.Contains(node))
                 {
-                    bool foundLabel = this._dagNodeLabels.TryGetValue(node, out LabelSymbol label);
+                    this._dagNodeLabels.TryGetValue(node, out LabelSymbol label);
                     return new ValueDispatchNode.LeafDispatchNode(node.Syntax, label);
                 }
                 if (!(node is BoundTestDecisionDagNode testNode && testNode.Test.Input.Equals(input)))

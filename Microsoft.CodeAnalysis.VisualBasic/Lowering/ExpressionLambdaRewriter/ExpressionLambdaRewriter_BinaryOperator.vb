@@ -239,7 +239,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 left = CreateBuiltInConversion(operandActiveType, newType, left, node.Checked, False, ConversionSemantics.[Default])
                 right = CreateBuiltInConversion(operandActiveType, newType, right, node.Checked, False, ConversionSemantics.[Default])
 
-                operandActiveType = newType
+                'operandActiveType = newType
             End If
 
             ' Check if we need to convert the boolean arguments to Int32.
@@ -247,7 +247,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim newType As TypeSymbol = If(operandIsNullable, Me._factory.NullableOf(Me.Int32Type), Me.Int32Type)
                 left = Convert(left, newType, node.Checked)
                 right = Convert(right, newType, node.Checked)
-                operandActiveType = newType
+                'operandActiveType = newType
             End If
 
             Return ConvertRuntimeHelperToExpressionTree(opMethod, left, right, Me._factory.Literal(resultType.IsNullableType), Me._factory.Null)

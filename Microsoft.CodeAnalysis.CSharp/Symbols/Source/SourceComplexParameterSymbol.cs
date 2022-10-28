@@ -203,12 +203,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (state.NotePartComplete(CompletionPart.StartDefaultSyntaxValue))
                 {
                     var diagnostics = BindingDiagnosticBag.GetInstance();
-                    var previousValue = Interlocked.CompareExchange(
+                    Interlocked.CompareExchange(
                         ref _lazyDefaultSyntaxValue,
                         MakeDefaultExpression(diagnostics, out var binder, out var parameterEqualsValue),
                         ConstantValue.Unset);
 
-                    var completedOnThisThread = state.NotePartComplete(CompletionPart.EndDefaultSyntaxValue);
+                    state.NotePartComplete(CompletionPart.EndDefaultSyntaxValue);
 
                     if (parameterEqualsValue is not null)
                     {
@@ -227,7 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     AddDeclarationDiagnostics(diagnostics);
                     diagnostics.Free();
 
-                    completedOnThisThread = state.NotePartComplete(CompletionPart.EndDefaultSyntaxValueDiagnostics);
+                    state.NotePartComplete(CompletionPart.EndDefaultSyntaxValueDiagnostics);
                 }
 
                 state.SpinWaitComplete(CompletionPart.EndDefaultSyntaxValue, default);

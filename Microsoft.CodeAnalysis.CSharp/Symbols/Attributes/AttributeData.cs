@@ -635,7 +635,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var guidString = (string?)this.CommonConstructorArguments[0].ValueInternal;
 
             // Native compiler allows only a specific GUID format: "D" format (32 digits separated by hyphens)
-            if (!Guid.TryParseExact(guidString, "D", out Guid guid))
+            if (!Guid.TryParseExact(guidString, "D", out Guid _))
             {
                 // CS0591: Invalid value for argument to '{0}' attribute
                 Location attributeArgumentSyntaxLocation = this.GetAttributeArgumentSyntaxLocation(0, nodeOpt);

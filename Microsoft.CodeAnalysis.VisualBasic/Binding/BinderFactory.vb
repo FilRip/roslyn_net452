@@ -274,7 +274,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return BuildMethodBinder(containingNamedTypeBinder, methodBase, (usage = NodeUsage.MethodInterior))
 
                 Case NodeUsage.FieldOrPropertyInitializer
-                    Dim fieldOrProperty As Symbol = Nothing
+                    Dim fieldOrProperty As Symbol
                     Dim additionalFieldsOrProperties = ImmutableArray(Of Symbol).Empty
                     Dim containingNamedTypeBinder As NamedTypeBinder
 

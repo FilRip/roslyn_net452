@@ -764,7 +764,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (LoadAndValidateAttributes(OneOrMany.Create(this.GetAttributeDeclarations()), ref _lazyCustomAttributesBag))
             {
-                var completed = state.NotePartComplete(CompletionPart.Attributes);
+                state.NotePartComplete(CompletionPart.Attributes);
             }
 
             return _lazyCustomAttributesBag;
@@ -1064,7 +1064,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (SyntaxList<AttributeListSyntax> list in attributeLists)
             {
-                var syntaxTree = list.Node.SyntaxTree;
+                var _ = list.Node.SyntaxTree;
                 QuickAttributeChecker checker = this.DeclaringCompilation.GetBinderFactory(list.Node.SyntaxTree).GetBinder(list.Node).QuickAttributeChecker;
 
                 foreach (AttributeListSyntax attrList in list)
@@ -1087,8 +1087,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // Process the specified AttributeUsage attribute on the given ownerSymbol
         private AttributeUsageInfo DecodeAttributeUsageAttribute(CSharpAttributeData attribute, AttributeSyntax node, bool diagnose, BindingDiagnosticBag diagnosticsOpt = null)
         {
-
-
             // AttributeUsage can only be specified for attribute classes
             if (!this.DeclaringCompilation.IsAttributeType(this))
             {

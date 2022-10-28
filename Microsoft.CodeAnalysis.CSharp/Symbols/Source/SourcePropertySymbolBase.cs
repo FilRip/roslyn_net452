@@ -1049,7 +1049,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (LoadAndValidateAttributes(OneOrMany.Create(AttributeDeclarationSyntaxList), ref _lazyCustomAttributesBag))
             {
-                var completed = _state.NotePartComplete(CompletionPart.Attributes);
+                _state.NotePartComplete(CompletionPart.Attributes);
             }
 
             return _lazyCustomAttributesBag;
@@ -1403,7 +1403,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 }
 
                                 DeclaringCompilation.SymbolDeclaredEvent(this);
-                                var completedOnThisThread = _state.NotePartComplete(CompletionPart.FinishPropertyParameters);
+                                _state.NotePartComplete(CompletionPart.FinishPropertyParameters);
                             }
                             else
                             {
@@ -1425,7 +1425,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 ValidatePropertyType(diagnostics);
 
                                 this.AddDeclarationDiagnostics(diagnostics);
-                                var completedOnThisThread = _state.NotePartComplete(CompletionPart.FinishPropertyType);
+                                _state.NotePartComplete(CompletionPart.FinishPropertyType);
                                 diagnostics.Free();
                             }
                             else
