@@ -186,7 +186,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
         }
 
-        protected void Release(ref ResetPoint point)
+        protected void Release(/*ref ResetPoint point*/)
         {
             _resetCount--;
             if (_resetCount == 0)
@@ -1097,7 +1097,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         ///     while (IsMakingProgress(ref tokenProgress))
         /// It should be used as a guardrail, not as a crutch, so it asserts if no progress was made.
         /// </summary>
-        protected bool IsMakingProgress(ref int lastTokenPosition, bool assertIfFalse = true)
+        protected bool IsMakingProgress(ref int lastTokenPosition/*, bool assertIfFalse = true*/)
         {
             var pos = CurrentTokenPosition;
             if (pos > lastTokenPosition)

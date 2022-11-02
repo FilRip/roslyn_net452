@@ -43,7 +43,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend Const DelegateConstructorMethodFlags As SourceMemberFlags = SourceMemberFlags.MethodKindConstructor
         Friend Const DelegateCommonMethodFlags As SourceMemberFlags = SourceMemberFlags.Overridable
 
-        Private _lazyLexicalSortKey As LexicalSortKey = LexicalSortKey.NotInitialized
+        'Private _lazyLexicalSortKey As LexicalSortKey = LexicalSortKey.NotInitialized
 
         Private _lazyIsExtensibleInterface As ThreeState = ThreeState.Unknown
         Private _lazyIsExplicitDefinitionOfNoPiaLocalType As ThreeState = ThreeState.Unknown
@@ -140,9 +140,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Public Overrides Function GetDocumentationCommentXml(Optional preferredCulture As CultureInfo = Nothing, Optional expandIncludes As Boolean = False, Optional cancellationToken As CancellationToken = Nothing) As String
             If expandIncludes Then
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyExpandedDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyExpandedDocComment, cancellationToken)
             Else
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyDocComment, cancellationToken)
             End If
         End Function
 
@@ -230,7 +230,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             Debug.Assert(diagBag.AccumulatesDiagnostics)
             ' Check that the node's fully qualified name is not too long and that the type name is unique.
-            CheckDeclarationNameAndTypeParameters(node, binder, diagBag, nodeNameIsAlreadyDefined)
+            CheckDeclarationNameAndTypeParameters(node, diagBag, nodeNameIsAlreadyDefined)
 
             Dim foundModifiers = CheckDeclarationModifiers(node, binder, diagBag.DiagnosticBag, accessModifiers)
 
@@ -464,7 +464,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Function
 
         Private Sub CheckDeclarationNameAndTypeParameters(node As VisualBasicSyntaxNode,
-                                                          binder As Binder,
                                                           diagBag As BindingDiagnosticBag,
                                                           ByRef nodeNameIsAlreadyDeclared As Boolean)
 
@@ -644,7 +643,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' we need to get the modifiers in different ways.
             ' class, interface, struct and module all are all derived from TypeBlockSyntax.
             ' delegate is derived from MethodBase
-            Dim modifiers As SyntaxTokenList = Nothing
+            Dim modifiers As SyntaxTokenList
             Select Case node.Kind
                 Case SyntaxKind.DelegateSubStatement, SyntaxKind.DelegateFunctionStatement
                     modifiers = DirectCast(node, DelegateStatementSyntax).Modifiers
@@ -1259,14 +1258,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End Select
         End Function
 
-        Private Function AsPeOrRetargetingType(potentialBaseType As TypeSymbol) As NamedTypeSymbol
-            Dim peType As NamedTypeSymbol = TryCast(potentialBaseType, Symbols.Metadata.PE.PENamedTypeSymbol)
-            If peType Is Nothing Then
-                peType = TryCast(potentialBaseType, Retargeting.RetargetingNamedTypeSymbol)
-            End If
+        'Private Function AsPeOrRetargetingType(potentialBaseType As TypeSymbol) As NamedTypeSymbol
+        '    Dim peType As NamedTypeSymbol = TryCast(potentialBaseType, Symbols.Metadata.PE.PENamedTypeSymbol)
+        '    If peType Is Nothing Then
+        '        peType = TryCast(potentialBaseType, Retargeting.RetargetingNamedTypeSymbol)
+        '    End If
 
-            Return peType
-        End Function
+        '    Return peType
+        'End Function
 
         Friend Overrides Function MakeDeclaredBase(basesBeingResolved As BasesBeingResolved, diagnostics As BindingDiagnosticBag) As NamedTypeSymbol
             ' For types nested in a source type symbol (not in a script class): 
@@ -2369,7 +2368,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' is missing.
 
             If Me.TypeKind = TypeKind.Module Then
-                Dim useSiteError As DiagnosticInfo = Nothing
+                'Dim useSiteError As DiagnosticInfo = Nothing
 
                 Binder.ReportUseSiteInfoForSynthesizedAttribute(WellKnownMember.Microsoft_VisualBasic_CompilerServices_StandardModuleAttribute__ctor,
                                                                  Me.DeclaringCompilation,

@@ -27,9 +27,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static QuickAttributeChecker _lazyPredefinedQuickAttributeChecker;
 
 #if DEBUG
-#pragma warning disable CS0414
+#pragma warning disable CS0414, IDE0052
         private bool _sealed;
-#pragma warning restore CS0414
+#pragma warning restore CS0414, IDE0052
 #endif
 
         internal static QuickAttributeChecker Predefined

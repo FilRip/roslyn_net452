@@ -142,32 +142,32 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         ' // A FEATUREID_* constant defined in errors.inc
         ' // the string for the version that /LangVersion is targeting
         ' .Parser::ReportSyntaxErrorForLanguageFeature( [ unsigned Errid ] [ _In_ Token* Start ] [ unsigned Feature ] [ _In_opt_z_ const WCHAR* wszVersion ] )
-        Private Sub ReportSyntaxErrorForLanguageFeature(
-            Errid As ERRID,
-            Start As SyntaxToken,
-            Feature As UInteger,
-            wszVersion As String
-        )
-#If UNDONE Then 'davidsch
-            m_ErrorCount += 1
+        '        Private Sub ReportSyntaxErrorForLanguageFeature(
+        '            Errid As ERRID,
+        '            Start As SyntaxToken,
+        '            Feature As UInteger,
+        '            wszVersion As String
+        '        )
+        '#If UNDONE Then 'davidsch
+        '            m_ErrorCount += 1
 
-            '// We want the statement to be marked as having a syntax error so that decompilation will
-            '// work correctly when the issue is fixed (dev10 #647657)
-            m_CurrentStatementInError = True
+        '            '// We want the statement to be marked as having a syntax error so that decompilation will
+        '            '// work correctly when the issue is fixed (dev10 #647657)
+        '            m_CurrentStatementInError = True
 
-            If Not IsErrorDisabled() Then
-                Dim [Error] As New ParseError
+        '            If Not IsErrorDisabled() Then
+        '                Dim [Error] As New ParseError
 
-                [Error].Errid = Errid
-                SetErrorLocation([Error], Start, Start)
+        '                [Error].Errid = Errid
+        '                SetErrorLocation([Error], Start, Start)
 
-                Dim wszLoad As String
-                wszLoad = ResLoadString(Feature)
+        '                Dim wszLoad As String
+        '                wszLoad = ResLoadString(Feature)
 
-                AddError([Error], wszLoad, wszVersion)
-            End If
-#End If
-        End Sub
+        '                AddError([Error], wszLoad, wszVersion)
+        '            End If
+        '#End If
+        '        End Sub
 
     End Class
 

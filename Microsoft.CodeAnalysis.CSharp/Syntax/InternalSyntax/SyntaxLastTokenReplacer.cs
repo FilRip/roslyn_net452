@@ -20,6 +20,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             _newToken = newToken;
         }
 
+        public SyntaxToken OldToken
+        {
+            get { return _oldToken; }
+        }
+
         internal static TRoot Replace<TRoot>(TRoot root, SyntaxToken newToken)
             where TRoot : CSharpSyntaxNode
         {
@@ -41,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 _count--;
                 if (_count == 0)
                 {
-                    if (node is SyntaxToken token)
+                    if (node is SyntaxToken)
                     {
                         _found = true;
                         return _newToken;

@@ -414,7 +414,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private TypeWithAnnotations ComputeType(Binder binder, SyntaxNode syntax, BindingDiagnosticBag diagnostics)
         {
-            var typeSyntax = GetTypeSyntax(syntax).SkipRef(out RefKind refKind);
+            var typeSyntax = GetTypeSyntax(syntax).SkipRef(out RefKind _);
             var type = binder.BindType(typeSyntax, diagnostics);
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = binder.GetNewCompoundUseSiteInfo(diagnostics);
 

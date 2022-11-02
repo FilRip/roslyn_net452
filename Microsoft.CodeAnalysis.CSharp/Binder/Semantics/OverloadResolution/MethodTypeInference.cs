@@ -2811,19 +2811,19 @@ namespace Microsoft.CodeAnalysis.CSharp
                     type = type.SetUnknownNullabilityForReferenceTypes();
                 }
 
-                AddOrMergeCandidate(candidates, type, variance, conversions);
+                AddOrMergeCandidate(candidates, type, variance/*, conversions*/);
             }
         }
 
         private static void AddOrMergeCandidate(
             Dictionary<TypeWithAnnotations, TypeWithAnnotations> candidates,
             TypeWithAnnotations newCandidate,
-            VarianceKind variance,
-            ConversionsBase conversions)
+            VarianceKind variance/*,
+            ConversionsBase conversions*/)
         {
             if (candidates.TryGetValue(newCandidate, out TypeWithAnnotations oldCandidate))
             {
-                MergeAndReplaceIfStillCandidate(candidates, oldCandidate, newCandidate, variance, conversions);
+                MergeAndReplaceIfStillCandidate(candidates, oldCandidate, newCandidate, variance/*, conversions*/);
             }
             else
             {
@@ -2885,7 +2885,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // This rule doesn't have to be implemented explicitly due to special handling of 
                         // conversions from dynamic in ImplicitConversionExists helper.
                         // 
-                        MergeAndReplaceIfStillCandidate(candidates, candidate, bound, variance, conversions);
+                        MergeAndReplaceIfStillCandidate(candidates, candidate, bound, variance/*, conversions*/);
                     }
                 }
             }
@@ -2895,8 +2895,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             Dictionary<TypeWithAnnotations, TypeWithAnnotations> candidates,
             TypeWithAnnotations oldCandidate,
             TypeWithAnnotations newCandidate,
-            VarianceKind variance,
-            ConversionsBase conversions)
+            VarianceKind variance/*,
+            ConversionsBase conversions*/)
         {
             // We make an exception when new candidate is dynamic, for backwards compatibility 
             if (newCandidate.Type.IsDynamic())

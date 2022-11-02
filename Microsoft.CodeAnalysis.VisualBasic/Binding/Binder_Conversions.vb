@@ -1272,7 +1272,7 @@ DoneWithDiagnostics:
 
                 Case BoundKind.InterpolatedStringExpression
 
-                    argument = ReclassifyInterpolatedStringExpression(conversionSemantics, tree, convKind, isExplicit, DirectCast(argument, BoundInterpolatedStringExpression), targetType)
+                    argument = ReclassifyInterpolatedStringExpression(tree, convKind, isExplicit, DirectCast(argument, BoundInterpolatedStringExpression), targetType)
                     Return argument.Kind = BoundKind.Conversion
 
                 Case BoundKind.TupleLiteral
@@ -1600,7 +1600,7 @@ DoneWithDiagnostics:
             Throw ExceptionUtilities.UnexpectedValue(conversionSemantics)
         End Function
 
-        Private Function ReclassifyInterpolatedStringExpression(conversionSemantics As SyntaxKind, tree As SyntaxNode, convKind As ConversionKind, isExplicit As Boolean, node As BoundInterpolatedStringExpression, targetType As TypeSymbol) As BoundExpression
+        Private Function ReclassifyInterpolatedStringExpression(tree As SyntaxNode, convKind As ConversionKind, isExplicit As Boolean, node As BoundInterpolatedStringExpression, targetType As TypeSymbol) As BoundExpression
             If (convKind And ConversionKind.InterpolatedString) = ConversionKind.InterpolatedString Then
                 Debug.Assert(targetType.Equals(Compilation.GetWellKnownType(WellKnownType.System_IFormattable)) OrElse targetType.Equals(Compilation.GetWellKnownType(WellKnownType.System_FormattableString)))
                 Return New BoundConversion(tree, node, ConversionKind.InterpolatedString, False, isExplicit, targetType)

@@ -179,7 +179,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Retargeting
                 ' These are the types that are coming from assemblies linked (/l-ed) 
                 ' by the compilation that created the source module.
                 Dim isLocalType As Boolean
-                Dim useTypeIdentifierAttribute As Boolean = False
+                'Dim useTypeIdentifierAttribute As Boolean = False
 
                 If retargetFrom Is RetargetingAssembly.UnderlyingAssembly Then
                     Debug.Assert(Not retargetFrom.IsLinked)

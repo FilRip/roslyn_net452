@@ -217,7 +217,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 ReportUseSite(rewrittenOperand, useSiteInfo, _diagnostics)
 
-                Dim fieldAccess = MakeTupleFieldAccess(syntax, field, savedTuple, constantValueOpt:=Nothing, isLValue:=False)
+                Dim fieldAccess = MakeTupleFieldAccess(syntax, field, savedTuple, isLValue:=False)
 
                 ' lower the conversion
                 AddPlaceholderReplacement(convertedElements.ElementPlaceholders(i), fieldAccess)

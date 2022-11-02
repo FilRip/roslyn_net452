@@ -36,7 +36,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
 
         // Only when the caller passes allowAlpha=true do we tolerate substituted (alpha-renamed) type parameters as keys
+#pragma warning disable IDE0060
         internal TypeMap(ImmutableArray<TypeParameterSymbol> from, ImmutableArray<TypeWithAnnotations> to, bool allowAlpha = false)
+#pragma warning restore IDE0060
             : base(ConstructMapping(from, to))
         {
             // mapping contents are read-only hereafter

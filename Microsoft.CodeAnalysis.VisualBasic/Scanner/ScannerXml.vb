@@ -45,7 +45,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             If len > 0 Then
                 builder.Add(MakeWhiteSpaceTrivia(GetText(len)))
-                len = 0
+                'len = 0
             End If
             Debug.Assert(builder.Count > 0)
 
@@ -240,7 +240,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
                     If name IsNot Nothing AndAlso Not name.IsMissing Then
                         If name.PossibleKeywordKind <> SyntaxKind.XmlNameToken Then
-                            leadingTrivia = ScanSingleLineTrivia()
+                            ScanSingleLineTrivia()
                             c = Peek()
                             possibleStatement =
                                 c = "("c OrElse c = FULLWIDTH_LEFT_PARENTHESIS

@@ -846,7 +846,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return False
         End Function
 
-        Friend Shared Function IsDefinedInSourceTree(syntaxNode As SyntaxNode, tree As SyntaxTree, definedWithinSpan As TextSpan?, Optional cancellationToken As CancellationToken = Nothing) As Boolean
+        Friend Shared Function IsDefinedInSourceTree(syntaxNode As SyntaxNode, tree As SyntaxTree, definedWithinSpan As TextSpan?) As Boolean
             Return syntaxNode IsNot Nothing AndAlso
                 syntaxNode.SyntaxTree Is tree AndAlso
                 (Not definedWithinSpan.HasValue OrElse definedWithinSpan.Value.IntersectsWith(syntaxNode.FullSpan))

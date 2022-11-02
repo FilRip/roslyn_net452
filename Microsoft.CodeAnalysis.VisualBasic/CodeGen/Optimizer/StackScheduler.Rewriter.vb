@@ -36,7 +36,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             End Function
 
             Public Overrides Function Visit(node As BoundNode) As BoundNode
-                Dim result As BoundNode = Nothing
+                Dim result As BoundNode
 
                 ' rewriting constants may undo constant folding and make thing worse.
                 ' so we will not go into constant nodes. 

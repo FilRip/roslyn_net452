@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    GeneratedNames.MakeStateMachineTypeName(kickoffMethod.Name, kickoffMethodOrdinal, compilationState.ModuleBuilderOpt.CurrentGenerationOrdinal);
         }
 
-        private static int SequenceNumber(MethodSymbol kickoffMethod)
+        /*private static int SequenceNumber(MethodSymbol kickoffMethod)
         {
             // return a unique sequence number for the async implementation class that is independent of the compilation state.
             int count = 0;
@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return count;
-        }
+        }*/
 
         public override Symbol ContainingSymbol
         {

@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             // Keywords can only be IdentifierNameSyntax
             var identifierValueText = identifier.ValueText;
-            Symbol symbol = null;
+            Symbol symbol;
 
             // Perform name lookup without generating diagnostics as it could possibly be a keyword in the current context.
             var lookupResult = LookupResult.GetInstance();
@@ -1659,7 +1659,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (symbol.Kind == SymbolKind.NamedType)
             {
-                CheckRuntimeSupportForSymbolAccess(where, receiverOpt: null, symbol, diagnostics);
+                CheckRuntimeSupportForSymbolAccess(where, /*receiverOpt: null, */symbol, diagnostics);
 
                 if (suppressUseSiteDiagnostics && diagnostics.DependenciesBag is object)
                 {

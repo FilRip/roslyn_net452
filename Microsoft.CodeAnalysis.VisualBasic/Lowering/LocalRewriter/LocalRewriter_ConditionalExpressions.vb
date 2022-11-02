@@ -55,7 +55,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' NOTE: we create a temp variable if only it is really needed; 
             '       locals and parameters don't need it
             Dim tempVariableSymbol As SynthesizedLocal = Nothing
-            Dim placeholderSubstitute As BoundExpression = Nothing
+            Dim placeholderSubstitute As BoundExpression
 
             Select Case rewrittenTestExpression.Kind
                 Case BoundKind.Local,

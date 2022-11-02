@@ -28,6 +28,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             this._switchExpressionBinder = switchExpressionBinder;
         }
 
+        public SwitchExpressionArmSyntax Arm
+        {
+            get { return _arm; }
+        }
+
         internal BoundSwitchExpressionArm BindSwitchExpressionArm(SwitchExpressionArmSyntax node, BindingDiagnosticBag diagnostics)
         {
             (TypeSymbol inputType, uint valEscape) = _switchExpressionBinder.GetInputTypeAndValEscape();

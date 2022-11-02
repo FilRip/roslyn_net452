@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </param>
         internal sealed override NamedTypeSymbol LookupTopLevelMetadataTypeWithCycleDetection(ref MetadataTypeName emittedName, ConsList<AssemblySymbol> visitedAssemblies, bool digThroughForwardedTypes)
         {
-            NamedTypeSymbol result = null;
+            NamedTypeSymbol result;
 
             // This is a cache similar to the one used by MetaImport::GetTypeByName in native
             // compiler. The difference is that native compiler pre-populates the cache when it
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             ref MetadataTypeName emittedName,
             NamedTypeSymbol result)
         {
-            NamedTypeSymbol result1 = null;
+            NamedTypeSymbol result1;
             result1 = _emittedNameToTypeMap.GetOrAdd(emittedName.ToKey(), result);
             System.Diagnostics.Debug.Assert(TypeSymbol.Equals(result1, result, TypeCompareKind.ConsiderEverything2)); // object identity may differ in error cases
         }

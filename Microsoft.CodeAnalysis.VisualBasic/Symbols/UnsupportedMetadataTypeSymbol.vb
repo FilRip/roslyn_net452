@@ -7,7 +7,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
     Friend NotInheritable Class UnsupportedMetadataTypeSymbol
         Inherits ErrorTypeSymbol
 
+#Disable Warning IDE0052
         Private ReadOnly _mrEx As BadImageFormatException
+        Private ReadOnly _explanation As String
+#Enable Warning IDE0052
 
         Public Sub New(Optional mrEx As BadImageFormatException = Nothing)
             _mrEx = mrEx
@@ -18,6 +21,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' TODO: and it seems worth no losing it in cases.
             ' TODO: If so, we need to go back and fill in cases that call the parameterless
             ' TODO: constructor.
+            _explanation = explanation
         End Sub
 
         Friend Overrides ReadOnly Property MangleName As Boolean

@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis
         ///     <see cref="AssemblyData.BindAssemblyReferences(ImmutableArray{AssemblyData}, AssemblyIdentityComparer)"/> method.
         /// </return>
         protected BoundInputAssembly[] Bind(
-            TCompilation compilation,
+            //TCompilation compilation,
             ImmutableArray<AssemblyData> explicitAssemblies,
             ImmutableArray<PEModule> explicitModules,
             ImmutableArray<MetadataReference> explicitReferences,
@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis
                 if (resolverOpt?.ResolveMissingAssemblies == true)
                 {
                     ResolveAndBindMissingAssemblies(
-                        compilation,
+                        //compilation,
                         explicitAssemblies,
                         explicitModules,
                         explicitReferences,
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         private void ResolveAndBindMissingAssemblies(
-            TCompilation compilation,
+            //TCompilation compilation,
             ImmutableArray<AssemblyData> explicitAssemblies,
             ImmutableArray<PEModule> explicitModules,
             ImmutableArray<MetadataReference> explicitReferences,

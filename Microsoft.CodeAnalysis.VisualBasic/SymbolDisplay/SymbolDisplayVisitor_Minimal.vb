@@ -126,7 +126,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             builder As ArrayBuilder(Of SymbolDisplayPart)) As Boolean
 
             Dim [alias] = GetAliasSymbol(symbol)
-            If Not [alias] Is Nothing Then
+            If [alias] IsNot Nothing Then
                 ' We must verify that the alias actually binds back to the thing it's aliasing. It's
                 ' possible there's another symbol with the same name as the alias that binds first
 
@@ -165,7 +165,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim sourceFile = sourceModule.TryGetSourceFile(DirectCast(GetSyntaxTree(semanticModelOpt), VisualBasicSyntaxTree))
             Debug.Assert(sourceFile IsNot Nothing)
 
-            If Not sourceFile.AliasImportsOpt Is Nothing Then
+            If sourceFile.AliasImportsOpt IsNot Nothing Then
                 For Each [alias] In sourceFile.AliasImportsOpt.Values
                     If [alias].Alias.Target = DirectCast(symbol, NamespaceOrTypeSymbol) Then
                         Return [alias].Alias

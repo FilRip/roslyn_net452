@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         //      [return: A2]
         //      public delegate void Goo();
         // attributesToBind will only contain first attribute syntax.
-        internal static void BindAttributeTypes(ImmutableArray<Binder> binders, ImmutableArray<AttributeSyntax> attributesToBind, Symbol ownerSymbol, NamedTypeSymbol[] boundAttributeTypes, BindingDiagnosticBag diagnostics)
+        internal static void BindAttributeTypes(ImmutableArray<Binder> binders, ImmutableArray<AttributeSyntax> attributesToBind, /*Symbol ownerSymbol, */NamedTypeSymbol[] boundAttributeTypes, BindingDiagnosticBag diagnostics)
         {
             for (int i = 0; i < attributesToBind.Length; i++)
             {

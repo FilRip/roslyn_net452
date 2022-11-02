@@ -1154,7 +1154,7 @@ Done:
 
             ' We are dealing with intrinsic operator 
             Dim operandType As TypeSymbol = operand.Type
-            Dim resultType As TypeSymbol = Nothing
+            Dim resultType As TypeSymbol
 
             If intrinsicOperatorType = SpecialType.None Then
                 Debug.Assert(operandType.GetNullableUnderlyingTypeOrSelf().IsEnumType())

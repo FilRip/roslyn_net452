@@ -191,7 +191,9 @@ namespace Microsoft.CodeAnalysis.Operations
             };
         }
 
+#pragma warning disable IDE0060
         internal ImmutableArray<IArgumentOperation> DeriveArguments(BoundNode containingExpression, bool isObjectOrCollectionInitializer)
+#pragma warning restore IDE0060
         {
             switch (containingExpression.Kind)
             {

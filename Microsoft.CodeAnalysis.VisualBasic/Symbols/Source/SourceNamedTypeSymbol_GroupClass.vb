@@ -167,8 +167,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                             End Select
 
                                             If expression IsNot Nothing AndAlso
-                                               Not TypeOf expression Is LiteralExpressionSyntax Then
-                                                binder.ReportDiagnostic(diagnostics, expression, ERRID.ERR_LiteralExpected)
+                                               TypeOf expression IsNot LiteralExpressionSyntax Then
+                                                Binder.ReportDiagnostic(diagnostics, expression, ERRID.ERR_LiteralExpected)
                                                 attributeData = Nothing
                                                 GoTo DoneWithBindingAttributes
                                             End If

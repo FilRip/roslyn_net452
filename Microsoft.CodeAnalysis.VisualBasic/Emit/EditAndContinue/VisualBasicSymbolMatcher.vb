@@ -686,6 +686,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
                 _systemObject = systemObject
             End Sub
 
+            Public ReadOnly Property SystemObject As NamedTypeSymbol
+                Get
+                    Return _systemObject
+                End Get
+            End Property
+
             Public Overrides Function DefaultVisit(symbol As Symbol) As Symbol
                 ' Symbol should have been handled elsewhere.
                 Throw ExceptionUtilities.Unreachable

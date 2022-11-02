@@ -27,8 +27,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 argsToParamsOpt: default,
                 ref argumentRefKindsOpt,
                 out ImmutableArray<LocalSymbol> temps,
-                invokedAsExtensionMethod: false,
-                enableCallerInfo: ThreeState.False);
+                invokedAsExtensionMethod: false/*,
+                enableCallerInfo: ThreeState.False*/);
 
             node = node.Update(rewrittenExpression, rewrittenArgs, argumentRefKindsOpt, node.ResultKind, node.Type);
 

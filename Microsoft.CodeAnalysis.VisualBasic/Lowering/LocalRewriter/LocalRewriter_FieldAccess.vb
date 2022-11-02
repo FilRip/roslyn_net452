@@ -12,7 +12,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim rewrittenReceiver As BoundExpression = If(node.FieldSymbol.IsShared, Nothing, Me.VisitExpressionNode(node.ReceiverOpt))
 
             If node.FieldSymbol.IsTupleField Then
-                Return MakeTupleFieldAccess(node.Syntax, node.FieldSymbol, rewrittenReceiver, node.ConstantValueOpt, node.IsLValue)
+                Return MakeTupleFieldAccess(node.Syntax, node.FieldSymbol, rewrittenReceiver, node.IsLValue)
             End If
 
             Return node.Update(rewrittenReceiver, node.FieldSymbol, node.IsLValue, node.SuppressVirtualCalls, constantsInProgressOpt:=Nothing, node.Type)
@@ -28,7 +28,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             syntax As SyntaxNode,
             tupleField As FieldSymbol,
             rewrittenReceiver As BoundExpression,
-            constantValueOpt As ConstantValue,
             isLValue As Boolean) As BoundExpression
 
             Dim tupleType = tupleField.ContainingType

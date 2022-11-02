@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var resolution = ResolveDelegateOrFunctionPointerMethodGroup(_binder, source, methodSymbol, isFunctionPointer, callingConventionInfo, ref useSiteInfo);
             var conversion = (resolution.IsEmpty || resolution.HasAnyErrors) ?
                 Conversion.NoConversion :
-                ToConversion(resolution.OverloadResolutionResult, resolution.MethodGroup, methodSymbol.ParameterCount);
+                ToConversion(resolution.OverloadResolutionResult, resolution.MethodGroup/*, methodSymbol.ParameterCount*/);
             resolution.Free();
             return conversion;
         }
@@ -71,7 +71,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ref useSiteInfo);
             var conversion = (resolution.IsEmpty || resolution.HasAnyErrors) ?
                 Conversion.NoConversion :
-                ToConversion(resolution.OverloadResolutionResult, resolution.MethodGroup, destination.Signature.ParameterCount);
+                ToConversion(resolution.OverloadResolutionResult, resolution.MethodGroup/*, destination.Signature.ParameterCount*/);
             resolution.Free();
             return conversion;
         }
@@ -236,7 +236,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 isMethodGroupConversion: true,
                 returnRefKind: delegateInvokeMethod.RefKind,
                 returnType: delegateInvokeMethod.ReturnType);
-            var conversion = ToConversion(result, methodGroup, delegateType.DelegateInvokeMethod.ParameterCount);
+            var conversion = ToConversion(result, methodGroup/*, delegateType.DelegateInvokeMethod.ParameterCount*/);
 
             analyzedArguments.Free();
             result.Free();
@@ -267,7 +267,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private static Conversion ToConversion(OverloadResolutionResult<MethodSymbol> result, MethodGroup methodGroup, int parameterCount)
+        private static Conversion ToConversion(OverloadResolutionResult<MethodSymbol> result, MethodGroup methodGroup/*, int parameterCount*/)
         {
             // 6.6 An implicit conversion (6.1) exists from a method group (7.1) to a compatible
             // delegate type. Given a delegate type D and an expression E that is classified as

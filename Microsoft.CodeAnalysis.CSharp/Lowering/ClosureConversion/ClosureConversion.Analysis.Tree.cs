@@ -299,7 +299,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 /// variable to be replaced by closure conversion. Instead, it should be left for
                 /// expression tree conversion.
                 /// </summary>
+#pragma warning disable IDE0052
                 private readonly HashSet<Symbol> _freeVariables = new();
+#pragma warning restore IDE0052
 #endif
 
                 private readonly MethodSymbol _topLevelMethod;

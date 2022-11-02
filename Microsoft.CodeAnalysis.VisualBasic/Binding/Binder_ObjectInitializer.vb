@@ -591,7 +591,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' (we have legacy tests that check this specifically).
             Dim createTemporary = asNewVariablePlaceholderOpt Is Nothing OrElse Not initializedObjectType.IsValueType
 
-            Dim variableOrTempPlaceholder As BoundWithLValueExpressionPlaceholder = Nothing
+            Dim variableOrTempPlaceholder As BoundWithLValueExpressionPlaceholder
             If createTemporary Then
                 variableOrTempPlaceholder = New BoundWithLValueExpressionPlaceholder(objectCreationSyntax, initializedObjectType)
                 variableOrTempPlaceholder.SetWasCompilerGenerated()

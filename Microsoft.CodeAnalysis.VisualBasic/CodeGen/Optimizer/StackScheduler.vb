@@ -73,7 +73,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                                   Order By i.Value.localDefs.Count Descending, i.Value.localDefs(0).Start Descending
                                   Select i
 
-                Debug.Assert(Not TypeOf localInfo.Key Is DummyLocal)
+                Debug.Assert(TypeOf localInfo.Key IsNot DummyLocal)
 
                 If Not info.ContainsKey(localInfo.Key) Then
                     ' this pair belongs to a local that is already rejected

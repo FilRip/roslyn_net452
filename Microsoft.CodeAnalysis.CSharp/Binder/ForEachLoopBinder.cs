@@ -744,7 +744,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     builder.ElementTypeWithAnnotations = ((PropertySymbol)builder.CurrentPropertyGetter.AssociatedSymbol).TypeWithAnnotations;
 
-                    GetDisposalInfoForEnumerator(ref builder, collectionExpr, isAsync, diagnostics);
+                    GetDisposalInfoForEnumerator(ref builder, /*collectionExpr, */isAsync, diagnostics);
 
                     return EnumeratorResult.Succeeded;
                 }
@@ -818,11 +818,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                         extensionReceiverOpt: null,
                         expanded: false,
                         collectionExpr.Syntax,
-                        diagnostics,
+                        diagnostics/*,
                         // C# 8 shipped allowing the CancellationToken of `IAsyncEnumerable.GetAsyncEnumerator` to be non-optional,
                         // filling in a default value in that case. https://github.com/dotnet/roslyn/issues/50182 tracks making
                         // this an error and breaking the scenario.
-                        assertMissingParametersAreOptional: false);
+                        assertMissingParametersAreOptional: false*/);
 
                     MethodSymbol currentPropertyGetter;
                     if (isAsync)
@@ -887,7 +887,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return false;
         }
 
-        private void GetDisposalInfoForEnumerator(ref ForEachEnumeratorInfo.Builder builder, BoundExpression expr, bool isAsync, BindingDiagnosticBag diagnostics)
+        private void GetDisposalInfoForEnumerator(ref ForEachEnumeratorInfo.Builder builder, /*BoundExpression expr, */bool isAsync, BindingDiagnosticBag diagnostics)
         {
             // NOTE: if IDisposable is not available at all, no diagnostics will be reported - we will just assume that
             // the enumerator is not disposable.  If it has IDisposable in its interface list, there will be a diagnostic there.
@@ -1093,7 +1093,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 useSiteInfo: ref useSiteInfo);
             diagnostics.Add(_syntax.Expression, useSiteInfo);
 
-            MethodSymbol result = null;
+            MethodSymbol result;
             MethodArgumentInfo info = null;
 
             if (overloadResolutionResult.Succeeded)
@@ -1107,13 +1107,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                         MessageID patternName = isAsync ? MessageID.IDS_FeatureAsyncStreams : MessageID.IDS_Collection;
                         diagnostics.Add(ErrorCode.WRN_PatternNotPublicOrNotInstance, _syntax.Expression.Location, patternType, patternName.Localize(), result);
                     }
-                    result = null;
+                    //result = null;
                 }
                 else if (result.CallsAreOmitted(_syntax.SyntaxTree))
                 {
                     // Calls to this method are omitted in the current syntax tree, i.e it is either a partial method with no implementation part OR a conditional method whose condition is not true in this source file.
                     // We don't want to allow this case.
-                    result = null;
+                    //result = null;
                 }
                 else
                 {
@@ -1567,7 +1567,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         /// <param name="extensionReceiverOpt">If method is an extension method, this must be non-null.</param>
-        private MethodArgumentInfo BindDefaultArguments(MethodSymbol method, BoundExpression extensionReceiverOpt, bool expanded, SyntaxNode syntax, BindingDiagnosticBag diagnostics, bool assertMissingParametersAreOptional = true)
+        private MethodArgumentInfo BindDefaultArguments(MethodSymbol method, BoundExpression extensionReceiverOpt, bool expanded, SyntaxNode syntax, BindingDiagnosticBag diagnostics/*, bool assertMissingParametersAreOptional = true*/)
         {
 
             if (method.ParameterCount == 0)
@@ -1592,8 +1592,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 defaultArguments: out BitVector defaultArguments,
                 expanded,
                 enableCallerInfo: true,
-                diagnostics,
-                assertMissingParametersAreOptional);
+                diagnostics/*,
+                assertMissingParametersAreOptional*/);
 
             return new MethodArgumentInfo(method, argsBuilder.ToImmutableAndFree(), argsToParams, defaultArguments, expanded);
         }

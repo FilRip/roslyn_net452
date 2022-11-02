@@ -1314,7 +1314,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // if these locals are captured into closures (possibly nested ones).
                     loweredBody = AsyncExceptionHandlerRewriter.Rewrite(
                         method,
-                        method.ContainingType,
+                        //method.ContainingType,
                         loweredBody,
                         compilationState,
                         diagnostics);

@@ -114,9 +114,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Public Overrides Function GetDocumentationCommentXml(Optional preferredCulture As CultureInfo = Nothing, Optional expandIncludes As Boolean = False, Optional cancellationToken As CancellationToken = Nothing) As String
             If expandIncludes Then
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyExpandedDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyExpandedDocComment, cancellationToken)
             Else
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyDocComment, cancellationToken)
             End If
         End Function
 

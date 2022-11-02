@@ -893,6 +893,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Violates the rules for optional parameter overloads detailed at
         // https://github.com/dotnet/roslyn/blob/e8fdb391703dcb5712ff6a5b83d768d784cba4cf/docs/Adding%20Optional%20Parameters%20in%20Public%20API.md
         [EditorBrowsable(EditorBrowsableState.Never)]
+#pragma warning disable IDE0060
         public CSharpCompilationOptions(
             OutputKind outputKind,
             bool reportSuppressedDiagnostics,
@@ -938,5 +939,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                    nullableContextOptions: NullableContextOptions.Disable)
         {
         }
+#pragma warning restore IDE0060
     }
 }

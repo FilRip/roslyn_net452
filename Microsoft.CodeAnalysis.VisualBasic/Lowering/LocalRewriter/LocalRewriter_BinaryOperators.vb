@@ -899,7 +899,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                        leftHasValueExpr,
                                                        temps,
                                                        inits,
-                                                       RightCantChangeLeftLocal(left, right),
+                                                       RightCantChangeLeftLocal(right),
                                                        leftHasValue)
 
             ' left is done when right is running, so right cannot change if it is a local
@@ -910,7 +910,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                         doNotCaptureLocals:=True,
                                                         operandHasValue:=rightHasValue)
 
-            Dim value As BoundExpression = Nothing
+            Dim value As BoundExpression
 
             Dim operatorHasValue As BoundExpression = MakeBooleanBinaryExpression(node.Syntax,
                                                              BinaryOperatorKind.And,
@@ -990,7 +990,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                         ' Right may be a method that takes Left byref - " local AndAlso TakesArgByref(local) "
                         ' So in general we must capture Left even if it is a local.
-                        Dim capturedLeft = CaptureNullableIfNeeded(left, leftTemp, leftInit, RightCantChangeLeftLocal(left, right))
+                        Dim capturedLeft = CaptureNullableIfNeeded(left, leftTemp, leftInit, RightCantChangeLeftLocal(right))
 
                         booleanResult = MakeBooleanBinaryExpression(node.Syntax,
                                             BinaryOperatorKind.AndAlso,
@@ -1176,7 +1176,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If Not leftHasValue Then
                 ' Right may be a method that takes Left byref - " local And TakesArgByref(local) "
                 ' So in general we must capture Left even if it is a local.
-                capturedLeft = CaptureNullableIfNeeded(left, leftTemp, leftInit, RightCantChangeLeftLocal(left, right))
+                capturedLeft = CaptureNullableIfNeeded(left, leftTemp, leftInit, RightCantChangeLeftLocal(right))
             End If
 
             Dim rightTemp As SynthesizedLocal = Nothing

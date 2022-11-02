@@ -229,11 +229,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return _factory.Literal(string.Empty);
                 }
 
-                return RewriteStringConcatenationOneExpr(syntax, loweredRight);
+                return RewriteStringConcatenationOneExpr(/*syntax, */loweredRight);
             }
             else if (IsNullOrEmptyStringConstant(loweredRight))
             {
-                return RewriteStringConcatenationOneExpr(syntax, loweredLeft);
+                return RewriteStringConcatenationOneExpr(/*syntax, */loweredLeft);
             }
 
             return null;
@@ -274,7 +274,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Strangely enough there is such a thing as unary concatenation and it must be rewritten.
         /// </summary>
-        private BoundExpression RewriteStringConcatenationOneExpr(SyntaxNode syntax, BoundExpression loweredOperand)
+        private BoundExpression RewriteStringConcatenationOneExpr(/*SyntaxNode syntax, */BoundExpression loweredOperand)
         {
             // If it's a call to 'string.Concat' (or is something which ends in '?? ""', which this method also extracts),
             // we know the result cannot be null. Otherwise return loweredOperand ?? ""

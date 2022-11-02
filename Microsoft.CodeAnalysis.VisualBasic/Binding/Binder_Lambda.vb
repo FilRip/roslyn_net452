@@ -702,7 +702,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ElseIf argument.Kind = BoundKind.FieldAccess Then
                 Dim fieldAccess = DirectCast(argument, BoundFieldAccess)
+#Disable Warning IDE0059
                 receiverOpt = fieldAccess.ReceiverOpt
+#Enable Warning IDE0059
                 field = fieldAccess.FieldSymbol
                 receiverOpt = fieldAccess.ReceiverOpt
 

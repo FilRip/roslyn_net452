@@ -4,9 +4,6 @@
 
 #nullable disable
 
-
-#pragma warning disable CS0660 // Warning is reported only for Full Solution Analysis
-
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     public partial class TypeSymbol

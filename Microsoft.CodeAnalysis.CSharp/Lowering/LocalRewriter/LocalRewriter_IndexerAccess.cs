@@ -134,8 +134,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     expanded,
                     argsToParamsOpt,
                     ref argumentRefKindsOpt,
-                    out ImmutableArray<LocalSymbol> temps,
-                    enableCallerInfo: ThreeState.True);
+                    out ImmutableArray<LocalSymbol> temps/*,
+                    enableCallerInfo: ThreeState.True*/);
 
                 BoundExpression call = MakePropertyGetAccess(syntax, rewrittenReceiver, indexer, rewrittenArguments, getMethod);
 
@@ -339,7 +339,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 bool usedLength = false;
 
-                if (rangeExpr.LeftOperandOpt is BoundExpression left)
+                if (rangeExpr.LeftOperandOpt is BoundExpression)
                 {
                     var startLocal = F.StoreToTemp(
                         MakePatternIndexOffsetExpression(rangeExpr.LeftOperandOpt, lengthLocal, out usedLength),

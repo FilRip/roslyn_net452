@@ -97,7 +97,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Next
 
             Dim meParameter As ParameterSymbol = wrapperMethod.MeParameter
-            Dim newReceiver As BoundExpression = Nothing
+            Dim newReceiver As BoundExpression
             If isMyBase Then
                 newReceiver = New BoundMyBaseReference(syntax, meParameter.Type)
             Else

@@ -30,7 +30,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
         }
 
+#pragma warning disable IDE0060
         private static BoundStatement InstrumentStatement(BoundStatement original, BoundStatement rewritten)
+#pragma warning restore IDE0060
         {
             return rewritten;
         }

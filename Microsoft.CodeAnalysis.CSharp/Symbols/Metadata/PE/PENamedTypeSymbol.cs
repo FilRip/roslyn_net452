@@ -170,12 +170,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             GetGenericInfo(moduleSymbol, handle, out GenericParameterHandleCollection genericParameterHandles, out ushort arity, out BadImageFormatException mrEx);
 
-            bool mangleName;
+            //bool mangleName;
             PENamedTypeSymbol result;
 
             if (arity == 0)
             {
-                result = new PENamedTypeSymbolNonGeneric(moduleSymbol, containingNamespace, handle, emittedNamespaceName, out mangleName);
+                result = new PENamedTypeSymbolNonGeneric(moduleSymbol, containingNamespace, handle, emittedNamespaceName, out bool _);
             }
             else
             {
@@ -186,7 +186,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     emittedNamespaceName,
                     genericParameterHandles,
                     arity,
-                    out mangleName);
+                    out bool _);
             }
 
             if (mrEx != null)
@@ -229,12 +229,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 arity = (ushort)(metadataArity - containerMetadataArity);
             }
 
-            bool mangleName;
+            //bool mangleName;
             PENamedTypeSymbol result;
 
             if (metadataArity == 0)
             {
-                result = new PENamedTypeSymbolNonGeneric(moduleSymbol, containingType, handle, null, out mangleName);
+                result = new PENamedTypeSymbolNonGeneric(moduleSymbol, containingType, handle, null, out bool _);
             }
             else
             {
@@ -245,7 +245,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     null,
                     genericParameterHandles,
                     arity,
-                    out mangleName);
+                    out bool _);
             }
 
             if (mrEx != null || metadataArity < containerMetadataArity)
@@ -1708,7 +1708,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if (module.ShouldImportNestedType(typeRid))
                 {
-                    yield return PENamedTypeSymbol.Create(moduleSymbol, this, typeRid);
+                    yield return Create(moduleSymbol, this, typeRid);
                 }
             }
         }
@@ -1727,14 +1727,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             if (this.TypeKind == TypeKind.Struct)
             {
-                if (this.SpecialType == Microsoft.CodeAnalysis.SpecialType.None)
+                if (this.SpecialType == SpecialType.None)
                 {
                     isOrdinaryStruct = true;
                     isOrdinaryEmbeddableStruct = this.ContainingAssembly.IsLinked;
                 }
                 else
                 {
-                    isOrdinaryStruct = (this.SpecialType == Microsoft.CodeAnalysis.SpecialType.System_Nullable_T);
+                    isOrdinaryStruct = (this.SpecialType == SpecialType.System_Nullable_T);
                 }
             }
 
@@ -1781,7 +1781,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             var map = PooledDictionary<MethodDefinitionHandle, PEMethodSymbol>.GetInstance();
 
             // for ordinary embeddable struct types we import private members so that we can report appropriate errors if the structure is used 
-            var isOrdinaryEmbeddableStruct = (this.TypeKind == TypeKind.Struct) && (this.SpecialType == Microsoft.CodeAnalysis.SpecialType.None) && this.ContainingAssembly.IsLinked;
+            var isOrdinaryEmbeddableStruct = (this.TypeKind == TypeKind.Struct) && (this.SpecialType == SpecialType.None) && this.ContainingAssembly.IsLinked;
 
             try
             {
@@ -1814,8 +1814,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     {
                         var methods = module.GetPropertyMethodsOrThrow(propertyDef);
 
-                        PEMethodSymbol getMethod = GetAccessorMethod(module, methodHandleToSymbol, methods.Getter);
-                        PEMethodSymbol setMethod = GetAccessorMethod(module, methodHandleToSymbol, methods.Setter);
+                        PEMethodSymbol getMethod = GetAccessorMethod(/*module, */methodHandleToSymbol, methods.Getter);
+                        PEMethodSymbol setMethod = GetAccessorMethod(/*module, */methodHandleToSymbol, methods.Setter);
 
                         if ((getMethod is object) || (setMethod is object))
                         {
@@ -1847,8 +1847,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                         var methods = module.GetEventMethodsOrThrow(eventRid);
 
                         // NOTE: C# ignores all other accessors (most notably, raise/fire).
-                        PEMethodSymbol addMethod = GetAccessorMethod(module, methodHandleToSymbol, methods.Adder);
-                        PEMethodSymbol removeMethod = GetAccessorMethod(module, methodHandleToSymbol, methods.Remover);
+                        PEMethodSymbol addMethod = GetAccessorMethod(/*module, */methodHandleToSymbol, methods.Adder);
+                        PEMethodSymbol removeMethod = GetAccessorMethod(/*module, */methodHandleToSymbol, methods.Remover);
 
                         // NOTE: both accessors are required, but that will be reported separately.
                         // Create the symbol unless both accessors are missing.
@@ -1865,7 +1865,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             { }
         }
 
-        private PEMethodSymbol GetAccessorMethod(PEModule module, Dictionary<MethodDefinitionHandle, PEMethodSymbol> methodHandleToSymbol, MethodDefinitionHandle methodDef)
+        private PEMethodSymbol GetAccessorMethod(/*PEModule module, */Dictionary<MethodDefinitionHandle, PEMethodSymbol> methodHandleToSymbol, MethodDefinitionHandle methodDef)
         {
             if (methodDef.IsNil)
             {
@@ -2080,7 +2080,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             get { return (_flags & TypeAttributes.HasSecurity) != 0; }
         }
 
-        internal override IEnumerable<Microsoft.Cci.SecurityAttribute> GetSecurityInformation()
+        internal override IEnumerable<Cci.SecurityAttribute> GetSecurityInformation()
         {
             throw ExceptionUtilities.Unreachable;
         }

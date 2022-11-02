@@ -89,7 +89,9 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             Console.WriteLine("RateOfCacheable: " + (cacheHits * 100 / (cacheableNodes)) + "%");
         }
 #else
+#pragma warning disable IDE0060
         public static void NoteGreen(GreenNode node)
+#pragma warning restore IDE0060
         {
         }
 

@@ -32,7 +32,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             ' // First parse the conditional line, then interpret it.
 
-            Dim statement As DirectiveTriviaSyntax = Nothing
+            Dim statement As DirectiveTriviaSyntax
             Dim hashToken = DirectCast(CurrentToken, PunctuationSyntax)
             GetNextToken()
 

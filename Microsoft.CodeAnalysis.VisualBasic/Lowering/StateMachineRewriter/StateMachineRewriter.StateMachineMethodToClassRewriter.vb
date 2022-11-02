@@ -68,6 +68,18 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Private ReadOnly _synthesizedLocalOrdinals As SynthesizedLocalOrdinalsDispenser
             Private ReadOnly _nextFreeHoistedLocalSlot As Integer
 
+            Public ReadOnly Property NextFreeHoistedLocalSlot As Integer
+                Get
+                    Return _nextFreeHoistedLocalSlot
+                End Get
+            End Property
+
+            Public ReadOnly Property SynthesizedLocalOrdinals As SynthesizedLocalOrdinalsDispenser
+                Get
+                    Return _synthesizedLocalOrdinals
+                End Get
+            End Property
+
             Public Sub New(F As SyntheticBoundNodeFactory,
                            stateField As FieldSymbol,
                            hoistedVariables As IReadOnlySet(Of Symbol),

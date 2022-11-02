@@ -3499,8 +3499,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Else
                         ' Use dominant type.
                         Dim inferenceCollection = New TypeInferenceCollection()
-                        inferenceCollection.AddType(outerKey.Type, RequiredConversion.Any, outerKey)
-                        inferenceCollection.AddType(innerKey.Type, RequiredConversion.Any, innerKey)
+                        inferenceCollection.AddType(outerKey.Type, RequiredConversion.Any)
+                        inferenceCollection.AddType(innerKey.Type, RequiredConversion.Any)
 
                         Dim resultList = ArrayBuilder(Of DominantTypeData).GetInstance()
                         inferenceCollection.FindDominantType(resultList, Nothing, useSiteInfo)
@@ -3688,7 +3688,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Private Class EqualsOperandIsBadErrorVisitor
                 Inherits BoundTreeWalkerWithStackGuardWithoutRecursionOnTheLeftOfBinaryOperator
 
+#Disable Warning IDE0052
                 Private ReadOnly _binder As Binder
+#Enable Warning IDE0052
                 Private ReadOnly _errorInfo As DiagnosticInfo
                 Private ReadOnly _diagnostics As BindingDiagnosticBag
                 Private ReadOnly _badRangeVariables As ImmutableArray(Of Object) 'ImmutableArray(Of RangeVariableSymbol)

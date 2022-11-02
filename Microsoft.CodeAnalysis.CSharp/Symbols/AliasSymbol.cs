@@ -325,7 +325,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // Note: It's important that we don't call newDiagnosticsToReadOnlyAndFree here. That call
                     // can force the prompt evaluation of lazy initialized diagnostics.  That in turn can 
                     // call back into GetAliasTarget on the same thread resulting in a dead lock scenario.
-                    bool won = Interlocked.Exchange(ref _aliasTargetDiagnostics, newDiagnostics) == null;
+                    Interlocked.Exchange(ref _aliasTargetDiagnostics, newDiagnostics);
 
                     _state.NotePartComplete(CompletionPart.AliasTarget);
                     // we do not clear this.aliasTargetName, as another thread might be about to use it for ResolveAliasTarget(...)

@@ -200,11 +200,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Return If(token Is Nothing, Nothing, token.Kind)
         End Function
 
-        Private Function PeekAheadForToken(ParamArray kinds As SyntaxKind()) As Integer
-            Dim token As SyntaxToken = Nothing
-            Dim index = PeekAheadFor(s_isTokenOrKeywordFunc, kinds, token)
-            Return index
-        End Function
+        'Private Function PeekAheadForToken(ParamArray kinds As SyntaxKind()) As Integer
+        '    Dim token As SyntaxToken = Nothing
+        '    Dim index = PeekAheadFor(s_isTokenOrKeywordFunc, kinds, token)
+        '    Return index
+        'End Function
 
         Private Function PeekAheadFor(Of TArg)(predicate As Func(Of SyntaxToken, TArg, Boolean), arg As TArg, <Out()> ByRef token As SyntaxToken) As Integer
             Dim nextToken = CurrentToken
@@ -313,11 +313,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Return ResyncAt(ScannerState.VB, resyncTokens)
         End Function
 
-        Private Function ResyncAt(Of T As VisualBasicSyntaxNode)(syntax As T, state As ScannerState, ParamArray resyncTokens As SyntaxKind()) As T
-            Debug.Assert(resyncTokens IsNot Nothing)
+        'Private Function ResyncAt(Of T As VisualBasicSyntaxNode)(syntax As T, state As ScannerState, ParamArray resyncTokens As SyntaxKind()) As T
+        '    Debug.Assert(resyncTokens IsNot Nothing)
 
-            Return syntax.AddTrailingSyntax(ResyncAt(state, resyncTokens))
-        End Function
+        '    Return syntax.AddTrailingSyntax(ResyncAt(state, resyncTokens))
+        'End Function
 
         Private Function ResyncAt(Of T As VisualBasicSyntaxNode)(syntax As T) As T
             Return syntax.AddTrailingSyntax(ResyncAt())

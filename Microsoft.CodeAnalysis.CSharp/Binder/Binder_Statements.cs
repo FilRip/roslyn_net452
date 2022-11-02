@@ -746,11 +746,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             CSharpSyntaxNode errorSyntax)
         {
             IsInitializerRefKindValid(initializer, initializer, refKind, diagnostics, out BindValueKind valueKind, out ExpressionSyntax value); // The return value isn't important here; we just want the diagnostics and the BindValueKind
-            return BindInferredVariableInitializer(diagnostics, value, valueKind, refKind, errorSyntax);
+            return BindInferredVariableInitializer(diagnostics, value, valueKind, /*refKind, */errorSyntax);
         }
 
         // The location where the error is reported might not be the initializer.
-        protected BoundExpression BindInferredVariableInitializer(BindingDiagnosticBag diagnostics, ExpressionSyntax initializer, BindValueKind valueKind, RefKind refKind, CSharpSyntaxNode errorSyntax)
+        protected BoundExpression BindInferredVariableInitializer(BindingDiagnosticBag diagnostics, ExpressionSyntax initializer, BindValueKind valueKind, /*RefKind refKind, */CSharpSyntaxNode errorSyntax)
         {
             if (initializer == null)
             {
@@ -887,7 +887,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 aliasOpt = null;
 
-                initializerOpt = BindInferredVariableInitializer(diagnostics, value, valueKind, localSymbol.RefKind, declarator);
+                initializerOpt = BindInferredVariableInitializer(diagnostics, value, valueKind, /*localSymbol.RefKind, */declarator);
 
                 // If we got a good result then swap the inferred type for the "var"
                 TypeSymbol initializerType = initializerOpt?.Type;
@@ -1596,10 +1596,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 boundStatements.Add(boundStatement);
             }
 
-            return FinishBindBlockParts(node, boundStatements.ToImmutableAndFree(), diagnostics);
+            return FinishBindBlockParts(node, boundStatements.ToImmutableAndFree()/*, diagnostics*/);
         }
 
-        private BoundBlock FinishBindBlockParts(CSharpSyntaxNode node, ImmutableArray<BoundStatement> boundStatements, BindingDiagnosticBag diagnostics)
+        private BoundBlock FinishBindBlockParts(CSharpSyntaxNode node, ImmutableArray<BoundStatement> boundStatements/*, BindingDiagnosticBag diagnostics*/)
         {
             ImmutableArray<LocalSymbol> locals = GetDeclaredLocalsForScope(node);
 
@@ -3132,12 +3132,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundNode BindSimpleProgram(CompilationUnitSyntax compilationUnit, BindingDiagnosticBag diagnostics)
         {
-            var simpleProgram = (SynthesizedSimpleProgramEntryPointSymbol)ContainingMemberOrLambda;
+            var _ = (SynthesizedSimpleProgramEntryPointSymbol)ContainingMemberOrLambda;
 
-            return GetBinder(compilationUnit).BindSimpleProgramCompilationUnit(compilationUnit, simpleProgram, diagnostics);
+            return GetBinder(compilationUnit).BindSimpleProgramCompilationUnit(compilationUnit, /*simpleProgram, */diagnostics);
         }
 
-        private BoundNode BindSimpleProgramCompilationUnit(CompilationUnitSyntax compilationUnit, SynthesizedSimpleProgramEntryPointSymbol simpleProgram, BindingDiagnosticBag diagnostics)
+        private BoundNode BindSimpleProgramCompilationUnit(CompilationUnitSyntax compilationUnit, /*SynthesizedSimpleProgramEntryPointSymbol simpleProgram, */BindingDiagnosticBag diagnostics)
         {
             ArrayBuilder<BoundStatement> boundStatements = ArrayBuilder<BoundStatement>.GetInstance();
             foreach (var statement in compilationUnit.Members)
@@ -3150,7 +3150,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return new BoundNonConstructorMethodBody(compilationUnit,
-                                                     FinishBindBlockParts(compilationUnit, boundStatements.ToImmutableAndFree(), diagnostics).MakeCompilerGenerated(),
+                                                     FinishBindBlockParts(compilationUnit, boundStatements.ToImmutableAndFree()/*, diagnostics*/).MakeCompilerGenerated(),
                                                      expressionBody: null);
         }
 

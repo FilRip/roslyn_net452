@@ -51,7 +51,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                        isStatic As Boolean,
                        isDelegateRelaxationFrame As Boolean)
 
-            MyBase.New(topLevelMethod, MakeName(scopeSyntaxOpt, methodId, closureId, isStatic, isDelegateRelaxationFrame), topLevelMethod.ContainingType, ImmutableArray(Of NamedTypeSymbol).Empty)
+            MyBase.New(topLevelMethod, MakeName(methodId, closureId, isStatic, isDelegateRelaxationFrame), topLevelMethod.ContainingType, ImmutableArray(Of NamedTypeSymbol).Empty)
 
             If copyConstructor Then
                 Me._constructor = New SynthesizedLambdaCopyConstructor(scopeSyntaxOpt, Me)
@@ -78,8 +78,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Me._topLevelMethod = topLevelMethod
         End Sub
 
-        Private Shared Function MakeName(scopeSyntaxOpt As SyntaxNode,
-                                         methodId As DebugId,
+        Private Shared Function MakeName(methodId As DebugId,
                                          closureId As DebugId,
                                          isStatic As Boolean,
                                          isDelegateRelaxation As Boolean) As String

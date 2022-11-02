@@ -2457,7 +2457,7 @@ ProduceBoundNode:
                     ' are passed through a temp without copy-back.
                     If isByRef AndAlso Not candidateIsAProperty AndAlso
                        (param.IsExplicitByRef OrElse (argument.Type IsNot Nothing AndAlso argument.Type.IsStringType())) Then
-                        ReportByRefConversionErrors(candidate, param, argument, targetType, reportNarrowingConversions, diagnostics,
+                        ReportByRefConversionErrors(param, argument, targetType, reportNarrowingConversions, diagnostics,
                                                     diagnosticNode:=node, delegateSymbol:=delegateSymbol)
                     Else
                         ReportByValConversionErrors(param, argument, targetType, reportNarrowingConversions, diagnostics,
@@ -2475,7 +2475,6 @@ ProduceBoundNode:
         ''' Should be in sync with OverloadResolution.MatchArgumentToByRefParameter
         ''' </summary>
         Private Sub ReportByRefConversionErrors(
-            candidate As OverloadResolution.Candidate,
             param As ParameterSymbol,
             argument As BoundExpression,
             targetType As TypeSymbol,

@@ -7,9 +7,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
     Partial Friend Class BoundSequencePointExpression
 
 #If DEBUG Then
+#Disable Warning IDE0051
         Private Sub Validate()
             Debug.Assert(Type Is _Expression.Type)
         End Sub
+#Enable Warning IDE0051
 #End If
         Public Overrides ReadOnly Property IsLValue As Boolean
             Get

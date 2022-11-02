@@ -1747,7 +1747,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 ' Nested collection initializer is not an expression from the language point of view.
                                 ' However, third level collection initializer under ObjectCollectionInitializer should
                                 ' be treated as a stand alone expression.
-                                Dim possibleSecondLevelInitializer As VisualBasicSyntaxNode = parent
+                                'Dim possibleSecondLevelInitializer As VisualBasicSyntaxNode = parent
                                 parent = parent.Parent
 
                                 If parent IsNot Nothing AndAlso parent.Kind = SyntaxKind.CollectionInitializer Then
@@ -1789,7 +1789,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Throw New ArgumentException("first statement does not precede last statement")
             End If
 
-            If Not TypeOf firstStatement Is ExecutableStatementSyntax OrElse Not TypeOf lastStatement Is ExecutableStatementSyntax Then
+            If TypeOf firstStatement IsNot ExecutableStatementSyntax OrElse TypeOf lastStatement IsNot ExecutableStatementSyntax Then
                 Return False
             End If
 

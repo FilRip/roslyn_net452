@@ -302,8 +302,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Dim attributes As SyntaxList(Of XmlNodeSyntax) = GetXmlElementAttributes(element)
                 For Each node In attributes
-                    Dim name As String = Nothing
-                    Dim value As String = Nothing
+                    Dim name As String
+                    Dim value As String
 
                     Select Case node.Kind
                         Case SyntaxKind.XmlAttribute

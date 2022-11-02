@@ -574,7 +574,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Sub
 
         Private Function GetScannerToken(state As ScannerState) As SyntaxToken
-            Dim token As SyntaxToken = Nothing
+            Dim token As SyntaxToken
 
             Select Case state
                 Case ScannerState.VB

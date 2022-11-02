@@ -544,7 +544,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         ' Get the accessibility modifier for a symbol to put into an error message.
-        Public Shared Function GetAccessibilityForErrorMessage(sym As Symbol, fromAssembly As AssemblySymbol) As String
+        Public Shared Function GetAccessibilityForErrorMessage(sym As Symbol) As String
             Dim access = sym.DeclaredAccessibility
             Return access.ToDisplay()
         End Function

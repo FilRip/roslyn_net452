@@ -625,7 +625,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             internal BaseMethodWrapperSymbol(NamedTypeSymbol containingType, MethodSymbol methodBeingWrapped, SyntaxNode syntax, string name)
                 : base(containingType, methodBeingWrapped, syntax.SyntaxTree.GetReference(syntax), syntax.GetLocation(), name, DeclarationModifiers.Private)
             {
-                TypeMap typeMap = null;
+                TypeMap typeMap;
                 ImmutableArray<TypeParameterSymbol> typeParameters;
 
                 typeMap = (methodBeingWrapped.ContainingType is not SubstitutedNamedTypeSymbol substitutedType ? TypeMap.Empty : substitutedType.TypeSubstitution);

@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is TypedConstant && Equals((TypedConstant)obj);
+            return obj is TypedConstant constant && Equals(constant);
         }
 
         public bool Equals(TypedConstant other)

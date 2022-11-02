@@ -600,7 +600,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (resolution.MethodGroup != null)
                     {
                         // we want to force any unbound lambda arguments to cache an appropriate conversion if possible; see 9448.
-                        result = BindInvocationExpressionContinued(
+                        BindInvocationExpressionContinued(
                             syntax, expression, methodName, resolution.OverloadResolutionResult, resolution.AnalyzedArguments,
                             resolution.MethodGroup, delegateTypeOpt: null, diagnostics: BindingDiagnosticBag.Discarded, queryClause: queryClause);
                     }
@@ -1233,8 +1233,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             out BitVector defaultArguments,
             bool expanded,
             bool enableCallerInfo,
-            BindingDiagnosticBag diagnostics,
-            bool assertMissingParametersAreOptional = true)
+            BindingDiagnosticBag diagnostics/*,
+            bool assertMissingParametersAreOptional = true*/)
         {
 
             var visitedParameters = BitVector.Create(parameters.Length);
@@ -1864,7 +1864,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SyntaxKind.ThisExpression:
                                 break;
                             default:
-                                ok = CheckSyntaxForNameofArgument(syntax.Expression, out name, diagnostics, false);
+                                ok = CheckSyntaxForNameofArgument(syntax.Expression, out string _, diagnostics, false);
                                 break;
                         }
                         name = syntax.Name.Identifier.ValueText;

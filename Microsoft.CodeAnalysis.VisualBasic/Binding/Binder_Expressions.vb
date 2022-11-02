@@ -4523,12 +4523,12 @@ lElseClause:
 
                 If expressionKind = BoundKind.UnboundLambda Then
                     expressionType = DirectCast(expression, UnboundLambda).InferredAnonymousDelegate.Key
-                    typeList.AddType(expressionType, RequiredConversion.Any, expression)
+                    typeList.AddType(expressionType, RequiredConversion.Any)
 
                 ElseIf expressionKind = BoundKind.TupleLiteral Then
                     expressionType = DirectCast(expression, BoundTupleLiteral).InferredType
                     If expressionType IsNot Nothing Then
-                        typeList.AddType(expressionType, RequiredConversion.Any, expression)
+                        typeList.AddType(expressionType, RequiredConversion.Any)
                     End If
 
                 ElseIf expressionKind = BoundKind.ArrayLiteral Then
@@ -4541,13 +4541,13 @@ lElseClause:
                         anEmptyArray = arrayLiteral
                     ElseIf arrayLiteral.HasDominantType Then
                         expressionType = New ArrayLiteralTypeSymbol(arrayLiteral)
-                        typeList.AddType(expressionType, RequiredConversion.Any, expression)
+                        typeList.AddType(expressionType, RequiredConversion.Any)
                     End If
 
                 ElseIf expressionType IsNot Nothing AndAlso Not expressionType.IsVoidType() AndAlso
                             Not (expressionType.IsArrayType() AndAlso DirectCast(expressionType, ArrayTypeSymbol).ElementType.IsVoidType()) Then
 
-                    typeList.AddType(expressionType, RequiredConversion.Any, expression)
+                    typeList.AddType(expressionType, RequiredConversion.Any)
 
                     If expressionType.IsRestrictedType() Then
                         ' this element is a restricted type; not convertible to object

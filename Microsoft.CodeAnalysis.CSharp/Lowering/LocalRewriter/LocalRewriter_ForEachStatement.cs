@@ -692,7 +692,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 statements: ImmutableArray.Create(iteratorVariableInitialization, rewrittenBody));
         }
 
-        private static BoundBlock CreateBlockDeclaringIterationVariables(
+        /*private static BoundBlock CreateBlockDeclaringIterationVariables(
             ImmutableArray<LocalSymbol> iterationVariables,
             BoundStatement iteratorVariableInitialization,
             BoundStatement checkAndBreak,
@@ -717,7 +717,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     checkAndBreak,
                     rewrittenBody,
                     new BoundLabelStatement(forEachSyntax, continueLabel)));
-        }
+        }*/
 
         /// <summary>
         /// Lower a foreach loop that will enumerate a single-dimensional array.
@@ -1135,7 +1135,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// goto still-true;
         /// ]]> 
         /// </summary>
-        private BoundStatement MakeWhileTrueLoop(BoundForEachStatement loop, BoundBlock body)
+        /*private BoundStatement MakeWhileTrueLoop(BoundForEachStatement loop, BoundBlock body)
         {
             SyntaxNode syntax = loop.Syntax;
             GeneratedLabelSymbol startLabel = new("still-true");
@@ -1148,11 +1148,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // still-true:
             // /* body */
+        /*
             // goto still-true;
             return BoundStatementList.Synthesized(syntax, hasErrors: false,
                  startLabelStatement,
                  body,
                  new BoundGotoStatement(syntax, startLabel));
-        }
+        }*/
     }
 }

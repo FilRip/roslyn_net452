@@ -584,7 +584,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                 <Out> ByRef constValue As ConstantValue) As BoundExpression
             constValue = Nothing
 
-            Dim valueExpression As BoundExpression = Nothing
+            Dim valueExpression As BoundExpression
 
             If equalsValueOpt IsNot Nothing Then
                 Dim valueSyntax = equalsValueOpt.Value

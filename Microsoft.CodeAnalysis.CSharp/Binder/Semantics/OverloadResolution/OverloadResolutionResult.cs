@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // first such method is the best bad method
 
             if (isMethodGroupConversion && returnRefKind != null &&
-                HadReturnMismatch(location, diagnostics, returnRefKind.GetValueOrDefault(), delegateOrFunctionPointerType))
+                HadReturnMismatch(location, diagnostics, /*returnRefKind.GetValueOrDefault(), */delegateOrFunctionPointerType))
             {
                 return;
             }
@@ -662,7 +662,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return true;
         }
 
-        private bool HadReturnMismatch(Location location, BindingDiagnosticBag diagnostics, RefKind refKind, TypeSymbol delegateOrFunctionPointerType)
+        private bool HadReturnMismatch(Location location, BindingDiagnosticBag diagnostics, /*RefKind refKind, */TypeSymbol delegateOrFunctionPointerType)
         {
             var mismatch = GetFirstMemberKind(MemberResolutionKind.WrongRefKind);
             if (!mismatch.IsNull)
@@ -1085,7 +1085,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             foreach (var arg in badArg.Result.BadArgumentsOpt)
             {
-                ReportBadArgumentError(diagnostics, binder, name, arguments, symbols, location, badArg, method, arg);
+                ReportBadArgumentError(diagnostics, binder, name, arguments, symbols, /*location, */badArg, method, arg);
             }
 
             return true;
@@ -1097,7 +1097,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             string name,
             AnalyzedArguments arguments,
             ImmutableArray<Symbol> symbols,
-            Location location,
+            //Location location,
             MemberResolutionResult<TMember> badArg,
             TMember method,
             int arg)

@@ -34,7 +34,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override bool Equals(Symbol obj, TypeCompareKind compareKind)
             => obj is SynthesizedNamespaceSymbol other && Equals(other, compareKind);
 
+#pragma warning disable IDE0060
         public bool Equals(SynthesizedNamespaceSymbol other, TypeCompareKind compareKind)
+#pragma warning restore IDE0060
         {
             if (ReferenceEquals(this, other))
             {

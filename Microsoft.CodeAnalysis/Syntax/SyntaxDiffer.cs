@@ -613,7 +613,7 @@ namespace Microsoft.CodeAnalysis
             _changes.Add(new ChangeRecord(textChangeRange, CreateQueue(removedNode), CreateQueue(insertedNode)));
 
             // Local Functions
-            Queue<SyntaxNodeOrToken> CreateQueue(SyntaxNodeOrToken nodeOrToken)
+            static Queue<SyntaxNodeOrToken> CreateQueue(SyntaxNodeOrToken nodeOrToken)
             {
                 var queue = new Queue<SyntaxNodeOrToken>();
                 queue.Enqueue(nodeOrToken);
@@ -715,7 +715,7 @@ namespace Microsoft.CodeAnalysis
             return queue;
         }
 
-        private static SyntaxNodeOrToken[] ToArray(Stack<SyntaxNodeOrToken> stack, int n)
+        /*private static SyntaxNodeOrToken[] ToArray(Stack<SyntaxNodeOrToken> stack, int n)
         {
             var nodes = new SyntaxNodeOrToken[n];
             int i = n - 1;
@@ -730,7 +730,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             return nodes;
-        }
+        }*/
 
         private static void RemoveFirst(Stack<SyntaxNodeOrToken> stack, int count)
         {

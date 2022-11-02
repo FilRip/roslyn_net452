@@ -21,6 +21,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             _name = name
         End Sub
 
+        Public Overrides ReadOnly Property Name As String
+            Get
+                Return _name
+            End Get
+        End Property
+
         Public Overrides ReadOnly Property Arity As Integer
             Get
                 Return 0

@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
         public override bool Equals(object? obj)
         {
-            return (obj is SyntaxList<TNode>) && Equals((SyntaxList<TNode>)obj);
+            return (obj is SyntaxList<TNode> list) && Equals(list);
         }
 
         public override int GetHashCode()

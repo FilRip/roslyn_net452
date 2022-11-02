@@ -4076,7 +4076,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 targetType = TypeWithAnnotations.Create(node.Type, NullableAnnotation.NotAnnotated);
             }
-            TypeWithState rightResult = VisitOptionalImplicitConversion(rightOperand, targetType, useLegacyWarnings: UseLegacyWarnings(leftOperand, targetType), trackMembers: false, AssignmentKind.Assignment);
+            TypeWithState rightResult = VisitOptionalImplicitConversion(rightOperand, targetType, useLegacyWarnings: UseLegacyWarnings(leftOperand/*, targetType*/), trackMembers: false, AssignmentKind.Assignment);
             TrackNullableStateForAssignment(rightOperand, targetType, leftSlot, rightResult, MakeSlot(rightOperand));
             Join(ref this.State, ref leftState);
             TypeWithState resultType = TypeWithState.Create(targetType.Type, rightResult.State);
@@ -4941,7 +4941,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             (ImmutableArray<BoundExpression> argumentsNoConversions, ImmutableArray<Conversion> conversions) = RemoveArgumentConversions(arguments, refKindsOpt);
 
             // Visit the arguments and collect results
-            ImmutableArray<VisitArgumentResult> results = VisitArgumentsEvaluate(node.Syntax, argumentsNoConversions, refKindsOpt, parametersOpt, argsToParamsOpt, defaultArguments, expanded);
+            ImmutableArray<VisitArgumentResult> results = VisitArgumentsEvaluate(/*node.Syntax, */argumentsNoConversions, refKindsOpt, parametersOpt, argsToParamsOpt, defaultArguments, expanded);
 
             // Re-infer method type parameters
             if (method?.IsGenericMethod == true)
@@ -5170,7 +5170,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         private ImmutableArray<VisitArgumentResult> VisitArgumentsEvaluate(
-            SyntaxNode syntax,
+            //SyntaxNode syntax,
             ImmutableArray<BoundExpression> arguments,
             ImmutableArray<RefKind> refKindsOpt,
             ImmutableArray<ParameterSymbol> parametersOpt,
@@ -5433,7 +5433,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 parameterValue,
                                 targetType: ApplyLValueAnnotations(lValueType, leftAnnotations),
                                 valueType: applyPostConditionsUnconditionally(parameterWithState, parameterAnnotations),
-                                UseLegacyWarnings(argument, result.LValueType));
+                                UseLegacyWarnings(argument/*, result.LValueType*/));
                         }
                     }
                     break;
@@ -5472,7 +5472,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // report warnings if parameter would unsafely let a null out in the worst case
                         if (!argument.IsSuppressed)
                         {
-                            ReportNullableAssignmentIfNecessary(parameterValue, lValueType, worstCaseParameterWithState, UseLegacyWarnings(argument, result.LValueType));
+                            ReportNullableAssignmentIfNecessary(parameterValue, lValueType, worstCaseParameterWithState, UseLegacyWarnings(argument/*, result.LValueType*/));
 
                             var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
                             if (!_conversions.HasIdentityOrImplicitReferenceConversion(parameterType.Type, lValueType.Type, ref discardedUseSiteInfo))
@@ -7465,7 +7465,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (!node.IsRef)
                 {
                     var discarded = left is BoundDiscardExpression;
-                    rightState = VisitOptionalImplicitConversion(right, targetTypeOpt: discarded ? default : leftLValueType, UseLegacyWarnings(left, leftLValueType), trackMembers: true, AssignmentKind.Assignment);
+                    rightState = VisitOptionalImplicitConversion(right, targetTypeOpt: discarded ? default : leftLValueType, UseLegacyWarnings(left/*, leftLValueType*/), trackMembers: true, AssignmentKind.Assignment);
                 }
                 else
                 {
@@ -7574,7 +7574,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return annotations;
         }
 
-        private static bool UseLegacyWarnings(BoundExpression expr, TypeWithAnnotations exprType)
+        private static bool UseLegacyWarnings(BoundExpression expr/*, TypeWithAnnotations exprType*/)
         {
             switch (expr.Kind)
             {
@@ -8854,7 +8854,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ReportArgumentWarnings(right, rightType, logicalOperator.Parameters[1]);
             }
 
-            AfterRightChildOfBinaryLogicalOperatorHasBeenVisited(node, right, isAnd, isBool, ref leftTrue, ref leftFalse);
+            AfterRightChildOfBinaryLogicalOperatorHasBeenVisited(/*node, */right, isAnd, isBool, ref leftTrue, ref leftFalse);
         }
 
         private TypeWithState InferResultNullabilityOfBinaryLogicalOperator(BoundExpression node, TypeWithState leftType, TypeWithState rightType)
@@ -9005,7 +9005,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitArgListOperator(BoundArgListOperator node)
         {
-            VisitArgumentsEvaluate(node.Syntax, node.Arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
+            VisitArgumentsEvaluate(/*node.Syntax, */node.Arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
             SetNotNullResult(node);
             return null;
         }
@@ -9085,7 +9085,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 CheckPossibleNullReceiver(receiverOpt, receiverType, checkNullableValueType: false);
             }
 
-            VisitArgumentsEvaluate(node.Syntax, node.Arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
+            VisitArgumentsEvaluate(/*node.Syntax, */node.Arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
             var result = TypeWithAnnotations.Create(node.Type, NullableAnnotation.Oblivious);
             SetLvalueResultType(node, result);
             return null;
@@ -9120,7 +9120,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override BoundNode? VisitDynamicObjectCreationExpression(BoundDynamicObjectCreationExpression node)
         {
             var arguments = node.Arguments;
-            var argumentResults = VisitArgumentsEvaluate(node.Syntax, arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
+            var argumentResults = VisitArgumentsEvaluate(/*node.Syntax, */arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
             VisitObjectOrDynamicObjectCreation(node, arguments, argumentResults, node.InitializerExpressionOpt);
             return null;
         }
@@ -9200,7 +9200,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // https://github.com/dotnet/roslyn/issues/30598: Mark receiver as not null
             // after indices have been visited, and only if the receiver has not changed.
             _ = CheckPossibleNullReceiver(receiver);
-            VisitArgumentsEvaluate(node.Syntax, node.Arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
+            VisitArgumentsEvaluate(/*node.Syntax, */node.Arguments, node.ArgumentRefKindsOpt, parametersOpt: default, argsToParamsOpt: default, defaultArguments: default, expanded: false);
             var result = TypeWithAnnotations.Create(node.Type, NullableAnnotation.Oblivious);
             SetLvalueResultType(node, result);
             return null;

@@ -294,17 +294,17 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     _containingType.Equals(other._containingType)
             End Function
 
-            Private Function GetDebuggerDisplay() As String
-                Dim fullName As String
+            'Private Function GetDebuggerDisplay() As String
+            '    Dim fullName As String
 
-                fullName = _containingType.ToString() & "." & Me.Name
+            '    fullName = _containingType.ToString() & "." & Me.Name
 
-                If _arity > 0 Then
-                    fullName = fullName & "(Of " & New String(","c, _arity - 1) & ")"
-                End If
+            '    If _arity > 0 Then
+            '        fullName = fullName & "(Of " & New String(","c, _arity - 1) & ")"
+            '    End If
 
-                Return fullName & "[missing]"
-            End Function
+            '    Return fullName & "[missing]"
+            'End Function
 
         End Class
 

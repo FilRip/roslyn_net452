@@ -248,12 +248,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                    ERRID.ERR_InaccessibleMember3,
                                                    sym.ContainingSymbol.Name,
                                                    sym,
-                                                   AccessCheck.GetAccessibilityForErrorMessage(sym, Me.Compilation.Assembly))
+                                                   AccessCheck.GetAccessibilityForErrorMessage(sym))
             Else
                 diagInfo = New BadSymbolDiagnostic(sym,
                                                    ERRID.ERR_InaccessibleSymbol2,
                                                    CustomSymbolDisplayFormatter.QualifiedName(sym),
-                                                   AccessCheck.GetAccessibilityForErrorMessage(sym, sym.ContainingAssembly))
+                                                   AccessCheck.GetAccessibilityForErrorMessage(sym))
             End If
 
             Debug.Assert(diagInfo.Severity = DiagnosticSeverity.Error)
@@ -415,7 +415,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                             ' Intrinsic alias works only if type is available
                             If Not candidate.IsErrorType() Then
-                                lookupResult.MergeMembersOfTheSameNamespace(binder.CheckViability(candidate, arity, options, Nothing, useSiteInfo), sourceModule, options)
+                                lookupResult.MergeMembersOfTheSameNamespace(binder.CheckViability(candidate, arity, options, Nothing, useSiteInfo), sourceModule)
                             End If
                         End If
                     End If
@@ -435,7 +435,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     Dim currentResult As SingleLookupResult = binder.CheckViability(sym, arity, options, Nothing, useSiteInfo)
 
-                    lookupResult.MergeMembersOfTheSameNamespace(currentResult, sourceModule, options)
+                    lookupResult.MergeMembersOfTheSameNamespace(currentResult, sourceModule)
                 Next
             End Sub
 

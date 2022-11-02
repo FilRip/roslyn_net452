@@ -117,9 +117,9 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            if (obj is AttributeUsageInfo)
+            if (obj is AttributeUsageInfo info)
             {
-                return this.Equals((AttributeUsageInfo)obj);
+                return this.Equals(info);
             }
 
             return false;

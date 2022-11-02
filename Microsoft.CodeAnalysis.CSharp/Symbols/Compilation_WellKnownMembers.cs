@@ -37,9 +37,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool _usesNullableAttributes;
         private int _needsGeneratedAttributes;
-#pragma warning disable CS0414
+#pragma warning disable CS0414, IDE0052
         private bool _needsGeneratedAttributes_IsFrozen;
-#pragma warning restore CS0414
+#pragma warning restore CS0414, IDE0052
 
         /// <summary>
         /// Returns a value indicating which embedded attributes should be generated during emit phase.
@@ -373,11 +373,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="isOptionalUse">
         /// Indicates if this particular attribute application should be considered optional.
         /// </param>
+#pragma warning disable IDE0060, IDE0079
         internal SynthesizedAttributeData? TrySynthesizeAttribute(
             WellKnownMember constructor,
             ImmutableArray<TypedConstant> arguments = default,
             ImmutableArray<KeyValuePair<WellKnownMember, TypedConstant>> namedArguments = default,
             bool isOptionalUse = false)
+#pragma warning restore IDE0060, IDE0079
         {
             var ctorSymbol = (MethodSymbol)Binder.GetWellKnownTypeMember(this, constructor, out _, isOptional: true);
 
@@ -420,9 +422,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new SynthesizedAttributeData(ctorSymbol, arguments, namedStringArguments);
         }
 
+#pragma warning disable IDE0060, IDE0079
         internal SynthesizedAttributeData? TrySynthesizeAttribute(
             SpecialMember constructor,
             bool isOptionalUse = false)
+#pragma warning restore IDE0060, IDE0079
         {
             var ctorSymbol = (MethodSymbol)this.GetSpecialTypeMember(constructor);
 

@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     type = TypeWithAnnotations.Create(binder.CreateErrorType("var"));
                 }
 
-                SetType(compilation, diagnostics, type);
+                SetType(/*compilation, */diagnostics, type);
             }
 
             diagnostics.Free();
@@ -117,9 +117,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// Can add some diagnostics into <paramref name="diagnostics"/>. 
         /// Returns the type that it actually locks onto (it's possible that it had already locked onto ErrorType).
         /// </summary>
-        private TypeWithAnnotations SetType(CSharpCompilation compilation, BindingDiagnosticBag diagnostics, TypeWithAnnotations type)
+        private TypeWithAnnotations SetType(/*CSharpCompilation compilation, */BindingDiagnosticBag diagnostics, TypeWithAnnotations type)
         {
-            var originalType = _lazyType?.Value.DefaultType;
+            var _ = _lazyType?.Value.DefaultType;
 
             // In the event that we race to set the type of a field, we should
             // always deduce the same type, unless the cached type is an error.
@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal TypeWithAnnotations SetTypeWithAnnotations(TypeWithAnnotations type, BindingDiagnosticBag diagnostics)
         {
-            return SetType(DeclaringCompilation, diagnostics, type);
+            return SetType(/*DeclaringCompilation, */diagnostics, type);
         }
 
         protected virtual void InferFieldType(ConsList<FieldSymbol> fieldsBeingBound, Binder binder)

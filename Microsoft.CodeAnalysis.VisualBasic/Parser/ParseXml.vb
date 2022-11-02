@@ -31,7 +31,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             ' The < token must be reset because a VB scanned < might following trivia attached to it.
             ResetCurrentToken(ScannerState.Content)
 
-            Dim Result As XmlNodeSyntax = Nothing
+            Dim Result As XmlNodeSyntax
 
             If CurrentToken.Kind = SyntaxKind.LessThanQuestionToken Then
                 Result = ParseXmlDocument()
@@ -62,7 +62,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 ' // Read PI's and comments
 
                 Dim node As VisualBasicSyntaxNode = prologue
-                Dim precedingMisc = ParseXmlMisc(True, whitespaceChecker, node)
+                Dim precedingMisc = ParseXmlMisc(whitespaceChecker, node)
                 prologue = DirectCast(node, XmlDeclarationSyntax)
                 Dim body As XmlNodeSyntax
 
@@ -86,7 +86,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
                 ' // More PI's and comments
                 node = body
-                Dim followingMisc = ParseXmlMisc(False, whitespaceChecker, node)
+                Dim followingMisc = ParseXmlMisc(whitespaceChecker, node)
                 body = DirectCast(node, XmlNodeSyntax)
 
                 Return SyntaxFactory.XmlDocument(prologue, precedingMisc, body, followingMisc)
@@ -264,10 +264,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                                  SyntaxKind.DoubleQuoteToken),
                              "ParseXmlPrologueOption called on wrong token.")
 
-            Dim result As XmlDeclarationOptionSyntax = Nothing
+            Dim result As XmlDeclarationOptionSyntax
             Dim name As XmlNameTokenSyntax = Nothing
             Dim equals As PunctuationSyntax = Nothing
-            Dim value As XmlStringSyntax = Nothing
+            Dim value As XmlStringSyntax
 
             Dim hasPrecedingWhitespace = PrevToken.GetTrailingTrivia.ContainsWhitespaceTrivia() OrElse CurrentToken.GetLeadingTrivia.ContainsWhitespaceTrivia
 
@@ -283,7 +283,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 name = name.AddTrailingSyntax(exp, ERRID.ERR_EmbeddedExpression)
             End If
 
-            Dim skipped As CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of SyntaxToken) = Nothing
+            Dim skipped As CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of SyntaxToken)
             If Not VerifyExpectedToken(SyntaxKind.EqualsToken, equals, ScannerState.Element) Then
                 skipped = ResyncAt(ScannerState.Element,
                                    {SyntaxKind.SingleQuoteToken,
@@ -317,7 +317,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         ' File: Parser.cpp
         ' Lines: 13452 - 13452
         ' ExpressionList** .Parser::ParseXmlMisc( [ _Inout_ ParseTree::ExpressionList** Prev ] [ bool IsProlog ] [ _Inout_ bool& ErrorInConstruct ] )
-        Private Function ParseXmlMisc(IsProlog As Boolean, whitespaceChecker As XmlWhitespaceChecker, ByRef outerNode As VisualBasicSyntaxNode) As CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of XmlNodeSyntax)
+        Private Function ParseXmlMisc(whitespaceChecker As XmlWhitespaceChecker, ByRef outerNode As VisualBasicSyntaxNode) As CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of XmlNodeSyntax)
             Dim Content = Me._pool.Allocate(Of XmlNodeSyntax)()
 
             While True
@@ -418,7 +418,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Sub
 
         Private Sub ParseInternalSubSet(builder As SyntaxListBuilder(Of GreenNode))
-            Dim unexpected As CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of SyntaxToken) = Nothing
+            Dim unexpected As CodeAnalysis.Syntax.InternalSyntax.SyntaxList(Of SyntaxToken)
             If CurrentToken.Kind <> SyntaxKind.BadToken OrElse DirectCast(CurrentToken, BadTokenSyntax).SubKind <> SyntaxSubKind.OpenBracketToken Then
                 unexpected = ResyncAt(ScannerState.DocType, {SyntaxKind.BadToken,
                                                             SyntaxKind.GreaterThanToken,
@@ -982,7 +982,7 @@ LessThanSlashTokenCase:
 
                     GetNextToken(ScannerState.Element)
 
-                    Dim value As XmlNodeSyntax = Nothing
+                    Dim value As XmlNodeSyntax
                     If CurrentToken.Kind = SyntaxKind.LessThanPercentEqualsToken Then
                         ' // <%= expr %>
                         value = ParseXmlEmbedded(ScannerState.Element)
@@ -1285,7 +1285,7 @@ lFailed:
         End Function
 
         Friend Function TryParseCrefOptionallyQualifiedName() As TypeSyntax
-            Dim result As NameSyntax = Nothing
+            Dim result As NameSyntax
 
             ' Parse head: Either a GlobalName or a SimpleName.
             If CurrentToken.Kind = SyntaxKind.GlobalKeyword Then
@@ -1851,7 +1851,7 @@ TryResync:
                 name = ReportSyntaxError(name, ERRID.ERR_IllegalProcessingInstructionName, name.Text)
             End If
 
-            Dim textToken As XmlTextTokenSyntax = Nothing
+            Dim textToken As XmlTextTokenSyntax
             Dim values = _pool.Allocate(Of XmlTextTokenSyntax)()
 
             If CurrentToken.Kind = SyntaxKind.XmlTextLiteralToken OrElse CurrentToken.Kind = SyntaxKind.DocumentationCommentLineBreakToken Then

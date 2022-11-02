@@ -102,6 +102,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
 #If DEBUG Then
+#Disable Warning IDE0051
         Private Function Dump() As String
             Return TreeDumper.DumpCompact(BoundTreeDumperNodeProducer.MakeTree(Me))
         End Function
@@ -109,6 +110,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Public Overloads Function MemberwiseClone(Of T As BoundNode)() As T
             Return DirectCast(Me.MemberwiseClone(), T)
         End Function
+#Enable Warning IDE0051
 #End If
     End Class
 

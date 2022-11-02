@@ -391,17 +391,17 @@ namespace Microsoft.CodeAnalysis
         }
 
         // for debugging
+#pragma warning disable IDE0051
         private TNode[] Nodes
         {
             get { return this.ToArray(); }
         }
+#pragma warning restore IDE0051
 
         /// <summary>
         /// Get's the enumerator for this list.
         /// </summary>
-#pragma warning disable RS0041 // uses oblivious reference types
         public Enumerator GetEnumerator()
-#pragma warning restore RS0041 // uses oblivious reference types
         {
             return new Enumerator(this);
         }
@@ -443,7 +443,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is SyntaxList<TNode> && Equals((SyntaxList<TNode>)obj);
+            return obj is SyntaxList<TNode> list && Equals(list);
         }
 
         public override int GetHashCode()

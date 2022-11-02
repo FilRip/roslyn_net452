@@ -140,10 +140,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 ' no intermediate value in other cases, so no need for the forced convert
             End If
 
-            EmitConvertSimpleNumeric(conversion, underlyingFrom, underlyingTo, conversion.Checked)
+            EmitConvertSimpleNumeric(underlyingFrom, underlyingTo, conversion.Checked)
         End Sub
 
-        Private Sub EmitConvertSimpleNumeric(conversion As BoundConversion, typeFrom As PrimitiveTypeCode, typeTo As PrimitiveTypeCode, checked As Boolean)
+        Private Sub EmitConvertSimpleNumeric(typeFrom As PrimitiveTypeCode, typeTo As PrimitiveTypeCode, checked As Boolean)
             Debug.Assert(IsIntegral(typeFrom) OrElse typeFrom.IsFloatingPoint() OrElse typeFrom = PrimitiveTypeCode.Char)
             Debug.Assert(IsIntegral(typeTo) OrElse typeTo.IsFloatingPoint())
             _builder.EmitNumericConversion(typeFrom, typeTo, checked)
@@ -441,6 +441,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             EmitPopIfUnused(used)
         End Sub
 
+#Disable Warning IDE0060
         Private Function ConversionHasSideEffects(conversion As BoundConversion) As Boolean
             ' only some intrinsic conversions are side-effect free
             ' the only side-effect of an intrinsic conversion is a throw when we fail to convert.
@@ -462,6 +463,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             'TODO: compute this (note: returning true is safe - false would just enable optimizations)
             Return False
         End Function
+#Enable Warning IDE0060
 
         Private Sub EmitTryCastExpression(conversion As BoundTryCast, used As Boolean)
             If Not used AndAlso Not ConversionHasSideEffects(conversion) Then

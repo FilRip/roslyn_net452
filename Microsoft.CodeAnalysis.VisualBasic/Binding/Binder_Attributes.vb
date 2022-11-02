@@ -168,7 +168,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim symbol = UnwrapAlias(lookupResult.SingleSymbol)
             Dim diagInfo As DiagnosticInfo = Nothing
             Dim errorId As ERRID
-            Dim resultKind As LookupResultKind
+            'Dim resultKind As LookupResultKind
 
             If symbol.Kind = SymbolKind.Namespace Then
                 errorId = ERRID.ERR_UnrecognizedType
@@ -178,7 +178,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ElseIf symbol.Kind <> SymbolKind.NamedType Then
                 errorId = ERRID.ERR_UnrecognizedType
-                resultKind = LookupResultKind.NotATypeOrNamespace
+                'resultKind = LookupResultKind.NotATypeOrNamespace
 
             Else
                 Dim namedType = DirectCast(symbol, NamedTypeSymbol)
@@ -439,7 +439,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Validating the expression is done when the bound expression is converted to a TypedConstant
             Dim rValue As BoundExpression = Me.BindValue(namedArg.Expression, diagnostics)
             MarkEmbeddedTypeReferenceIfNeeded(rValue)
-            Dim lValue As BoundExpression = Nothing
+            Dim lValue As BoundExpression
 
             If result.IsGood Then
 
@@ -480,7 +480,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 ReportDiagnostic(diagnostics, identifierName, ERRID.ERR_InaccessibleMember3,
                                                    propertySym.ContainingSymbol,
                                                    propertySym,
-                                                   AccessCheck.GetAccessibilityForErrorMessage(setMethod, Me.Compilation.Assembly))
+                                                   AccessCheck.GetAccessibilityForErrorMessage(setMethod))
                                 hasErrors = True
                             End If
 

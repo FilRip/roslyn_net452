@@ -144,7 +144,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ByRef emittedName As MetadataTypeName
         ) As NamedTypeSymbol
 
-            Dim result As NamedTypeSymbol = Nothing
+            Dim result As NamedTypeSymbol
             Dim scope As NamespaceSymbol
 
             scope = Me.GlobalNamespace.LookupNestedNamespace(emittedName.NamespaceSegments)

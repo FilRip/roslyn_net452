@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             }
 
 #if DEBUG
-#pragma warning disable 618
+#pragma warning disable IDE0051
             [Obsolete("For debugging", error: true)]
             private GreenNode[] Nodes
             {
@@ -41,8 +41,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                     return result.ToArray();
                 }
             }
-
-#pragma warning restore 618
+#pragma warning restore IDE0051
 #endif
         }
     }

@@ -543,7 +543,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var guid = this.EatToken(SyntaxKind.StringLiteralToken, ErrorCode.WRN_IllegalPPChecksum, reportError: isActive && !file.IsMissing);
                 if (isActive && !guid.IsMissing)
                 {
-                    if (!Guid.TryParse(guid.ValueText, out Guid tmp))
+                    if (!Guid.TryParse(guid.ValueText, out Guid _))
                     {
                         guid = this.AddError(guid, ErrorCode.WRN_IllegalPPChecksum);
                     }

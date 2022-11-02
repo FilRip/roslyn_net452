@@ -66,10 +66,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 BoundNode node,
                 MethodSymbol method,
                 int topLevelMethodOrdinal,
-                MethodSymbol substitutedSourceMethod,
+                //MethodSymbol substitutedSourceMethod,
                 VariableSlotAllocator slotAllocatorOpt,
                 TypeCompilationState compilationState,
-                ArrayBuilder<ClosureDebugInfo> closureDebugInfo,
+                //ArrayBuilder<ClosureDebugInfo> closureDebugInfo,
                 DiagnosticBag diagnostics)
             {
                 var methodsConvertedToDelegates = PooledHashSet<MethodSymbol>.GetInstance();
@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return analysis;
             }
 
-            private static BoundNode FindNodeToAnalyze(BoundNode node)
+            /*private static BoundNode FindNodeToAnalyze(BoundNode node)
             {
                 while (true)
                 {
@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             throw ExceptionUtilities.UnexpectedValue(node.Kind);
                     }
                 }
-            }
+            }*/
 
             /// <summary>
             /// Must be called only after <see cref="NestedFunction.CapturedEnvironments"/>

@@ -123,11 +123,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End Get
         End Property
 
-        Private ReadOnly Property NameToMembersMap As Dictionary(Of String, ImmutableArray(Of NamespaceOrTypeSymbol))
-            Get
-                Return GetNameToMembersMap()
-            End Get
-        End Property
+        'Private ReadOnly Property NameToMembersMap As Dictionary(Of String, ImmutableArray(Of NamespaceOrTypeSymbol))
+        '    Get
+        '        Return GetNameToMembersMap()
+        '    End Get
+        'End Property
 
         Private Function GetNameToMembersMap() As Dictionary(Of String, ImmutableArray(Of NamespaceOrTypeSymbol))
             If _nameToMembersMap Is Nothing Then
@@ -429,7 +429,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                 syntax = syntax.Parent
                             End If
 
-                            If IsDefinedInSourceTree(syntax, tree, definedWithinSpan, cancellationToken) Then
+                            If IsDefinedInSourceTree(syntax, tree, definedWithinSpan) Then
                                 Return True
                             End If
                         End If
@@ -455,7 +455,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Sub
 
         ' Force all declaration errors In Tree to be generated
-        Friend Sub GenerateDeclarationErrorsInTree(tree As SyntaxTree, filterSpanWithinTree As TextSpan?, cancellationToken As CancellationToken)
+        Friend Sub GenerateDeclarationErrorsInTree(tree As SyntaxTree, cancellationToken As CancellationToken)
 
             ValidateDeclaration(tree, cancellationToken)
 

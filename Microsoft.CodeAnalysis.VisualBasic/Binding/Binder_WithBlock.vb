@@ -222,7 +222,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                  preserveIdentityOfLValues:=True)
 
                 ' Create a placeholder if needed
-                Dim placeholder As BoundValuePlaceholderBase = Nothing
+                Dim placeholder As BoundValuePlaceholderBase
                 If boundExpression.IsLValue OrElse boundExpression.IsMeReference Then
                     placeholder = New BoundWithLValueExpressionPlaceholder(Me.Expression, boundExpression.Type)
                 Else
@@ -335,7 +335,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
 #End If
 
-        Private Sub PrepareBindingOfOmittedLeft(node As VisualBasicSyntaxNode, diagnostics As BindingDiagnosticBag, accessingBinder As Binder)
+        Private Sub PrepareBindingOfOmittedLeft(node As VisualBasicSyntaxNode, accessingBinder As Binder)
             AssertExpressionIsNotFromStatementExpression(node)
             Debug.Assert((node.Kind = SyntaxKind.SimpleMemberAccessExpression) OrElse
                          (node.Kind = SyntaxKind.DictionaryAccessExpression) OrElse
@@ -361,7 +361,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                               diagnostics As BindingDiagnosticBag,
                                                                               accessingBinder As Binder,
                                                                               <Out> ByRef wholeMemberAccessExpressionBound As Boolean) As BoundExpression
-            PrepareBindingOfOmittedLeft(node, diagnostics, accessingBinder)
+            PrepareBindingOfOmittedLeft(node, accessingBinder)
 
             wholeMemberAccessExpressionBound = False
             Return Me._withBlockInfo.ExpressionPlaceholder
@@ -370,19 +370,19 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Protected Overrides Function TryBindOmittedLeftForDictionaryAccess(node As MemberAccessExpressionSyntax,
                                                                            accessingBinder As Binder,
                                                                            diagnostics As BindingDiagnosticBag) As BoundExpression
-            PrepareBindingOfOmittedLeft(node, diagnostics, accessingBinder)
+            PrepareBindingOfOmittedLeft(node, accessingBinder)
             Return Me._withBlockInfo.ExpressionPlaceholder
         End Function
 
         Protected Overrides Function TryBindOmittedLeftForConditionalAccess(node As ConditionalAccessExpressionSyntax, accessingBinder As Binder, diagnostics As BindingDiagnosticBag) As BoundExpression
-            PrepareBindingOfOmittedLeft(node, diagnostics, accessingBinder)
+            PrepareBindingOfOmittedLeft(node, accessingBinder)
             Return Me._withBlockInfo.ExpressionPlaceholder
         End Function
 
         Protected Friend Overrides Function TryBindOmittedLeftForXmlMemberAccess(node As XmlMemberAccessExpressionSyntax,
                                                                                  diagnostics As BindingDiagnosticBag,
                                                                                  accessingBinder As Binder) As BoundExpression
-            PrepareBindingOfOmittedLeft(node, diagnostics, accessingBinder)
+            PrepareBindingOfOmittedLeft(node, accessingBinder)
             Return Me._withBlockInfo.ExpressionPlaceholder
         End Function
 

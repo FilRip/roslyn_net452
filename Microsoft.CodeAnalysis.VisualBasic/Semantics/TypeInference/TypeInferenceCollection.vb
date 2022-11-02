@@ -558,9 +558,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Public Sub AddType(
             type As TypeSymbol,
-            conversion As RequiredConversion,
-            sourceExpression As BoundExpression
-        )
+            conversion As RequiredConversion)
+
             Debug.Assert(type IsNot Nothing)
 
             If type.IsVoidType() Then

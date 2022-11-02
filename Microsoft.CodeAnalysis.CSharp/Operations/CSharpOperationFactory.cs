@@ -473,7 +473,7 @@ namespace Microsoft.CodeAnalysis.Operations
                 boundUnconvertedAddressOf.WasCompilerGenerated);
         }
 
-        internal ImmutableArray<IOperation> CreateIgnoredDimensions(BoundNode declaration, SyntaxNode declarationSyntax)
+        internal ImmutableArray<IOperation> CreateIgnoredDimensions(BoundNode declaration/*, SyntaxNode declarationSyntax*/)
         {
             switch (declaration.Kind)
             {
@@ -1838,7 +1838,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
 
             bool multiVariableImplicit = boundLocalDeclaration.WasCompilerGenerated;
             ImmutableArray<IVariableDeclaratorOperation> declarators = CreateVariableDeclarator(boundLocalDeclaration, varDeclaration);
-            ImmutableArray<IOperation> ignoredDimensions = CreateIgnoredDimensions(boundLocalDeclaration, varDeclaration);
+            ImmutableArray<IOperation> ignoredDimensions = CreateIgnoredDimensions(boundLocalDeclaration/*, varDeclaration*/);
             IVariableDeclarationOperation multiVariableDeclaration = new VariableDeclarationOperation(declarators, initializer: null, ignoredDimensions, _semanticModel, varDeclaration, multiVariableImplicit);
             // In the case of a for loop, varStatement and varDeclaration will be the same syntax node.
             // We can only have one explicit operation, so make sure this node is implicit in that scenario.
@@ -1858,7 +1858,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
 
             bool declarationIsImplicit = boundMultipleLocalDeclarations.WasCompilerGenerated;
             ImmutableArray<IVariableDeclaratorOperation> declarators = CreateVariableDeclarator(boundMultipleLocalDeclarations, declarationSyntax);
-            ImmutableArray<IOperation> ignoredDimensions = CreateIgnoredDimensions(boundMultipleLocalDeclarations, declarationSyntax);
+            ImmutableArray<IOperation> ignoredDimensions = CreateIgnoredDimensions(boundMultipleLocalDeclarations/*, declarationSyntax*/);
             IVariableDeclarationOperation multiVariableDeclaration = new VariableDeclarationOperation(declarators, initializer: null, ignoredDimensions, _semanticModel, declarationSyntax, declarationIsImplicit);
 
             // If the syntax was the same, we're in a fixed statement or using statement. We make the Group operation implicit in this scenario, as the

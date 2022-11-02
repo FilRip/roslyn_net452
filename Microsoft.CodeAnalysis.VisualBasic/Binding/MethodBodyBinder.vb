@@ -37,7 +37,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Function CreateFunctionValueLocal(methodSymbol As MethodSymbol, root As SyntaxNode) As LocalSymbol
             Dim methodBlock = TryCast(root, MethodBlockBaseSyntax)
 
-            Debug.Assert(Not TypeOf methodSymbol Is SourceMethodSymbol OrElse
+            Debug.Assert(TypeOf methodSymbol IsNot SourceMethodSymbol OrElse
                          Me.IsSemanticModelBinder OrElse
                          (methodBlock Is DirectCast(methodSymbol, SourceMethodSymbol).BlockSyntax AndAlso
                           methodBlock IsNot Nothing))

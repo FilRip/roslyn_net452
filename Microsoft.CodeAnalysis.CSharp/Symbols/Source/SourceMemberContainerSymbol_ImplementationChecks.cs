@@ -506,14 +506,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         {
                             if (member.IsOverride)
                             {
-                                CheckOverrideMember(method, method.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                CheckOverrideMember(method, method.OverriddenOrHiddenMembers, diagnostics, out bool _);
                             }
                             else
                             {
                                 if (method is SourceMemberMethodSymbol sourceMethod) // skip submission initializer
                                 {
                                     var isNew = sourceMethod.IsNew;
-                                    CheckNonOverrideMember(method, isNew, method.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckNonOverrideMember(method, isNew, method.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                             }
                         }
@@ -549,11 +549,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 if (getMethod is object)
                                 {
-                                    CheckOverrideMember(getMethod, getMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckOverrideMember(getMethod, getMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                                 if (setMethod is object)
                                 {
-                                    CheckOverrideMember(setMethod, setMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckOverrideMember(setMethod, setMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                             }
                         }
@@ -566,11 +566,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 if (getMethod is object)
                                 {
-                                    CheckNonOverrideMember(getMethod, isNewProperty, getMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckNonOverrideMember(getMethod, isNewProperty, getMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                                 if (setMethod is object)
                                 {
-                                    CheckNonOverrideMember(setMethod, isNewProperty, setMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckNonOverrideMember(setMethod, isNewProperty, setMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                             }
                         }
@@ -590,11 +590,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 if (addMethod is object)
                                 {
-                                    CheckOverrideMember(addMethod, addMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckOverrideMember(addMethod, addMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                                 if (removeMethod is object)
                                 {
-                                    CheckOverrideMember(removeMethod, removeMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckOverrideMember(removeMethod, removeMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                             }
                         }
@@ -607,11 +607,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 if (addMethod is object)
                                 {
-                                    CheckNonOverrideMember(addMethod, isNewEvent, addMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckNonOverrideMember(addMethod, isNewEvent, addMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                                 if (removeMethod is object)
                                 {
-                                    CheckNonOverrideMember(removeMethod, isNewEvent, removeMethod.OverriddenOrHiddenMembers, diagnostics, out suppressAccessors);
+                                    CheckNonOverrideMember(removeMethod, isNewEvent, removeMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
                             }
                         }

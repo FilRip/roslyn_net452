@@ -17,7 +17,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <param name = "diagnostics">the receiver of the reported diagnostics</param>
         Public Shared Sub Analyze(method As MethodSymbol, block As BoundBlock, diagnostics As DiagnosticBag)
             Dim compilation = method.DeclaringCompilation
-            Dim sourceMethod As SourceMethodSymbol = TryCast(method, SourceMethodSymbol)
+            'Dim sourceMethod As SourceMethodSymbol = TryCast(method, SourceMethodSymbol)
             Analyze(compilation, method, block, diagnostics)
         End Sub
 

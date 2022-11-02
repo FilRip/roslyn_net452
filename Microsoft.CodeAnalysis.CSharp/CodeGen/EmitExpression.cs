@@ -227,7 +227,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     break;
 
                 case BoundKind.ModuleVersionIdString:
-                    EmitModuleVersionIdStringLoad((BoundModuleVersionIdString)expression);
+                    EmitModuleVersionIdStringLoad(/*(BoundModuleVersionIdString)expression*/);
                     break;
 
                 case BoundKind.InstrumentationPayloadRoot:
@@ -239,7 +239,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                     break;
 
                 case BoundKind.MaximumMethodDefIndex:
-                    EmitMaximumMethodDefIndexExpression((BoundMaximumMethodDefIndex)expression);
+                    EmitMaximumMethodDefIndexExpression(/*(BoundMaximumMethodDefIndex)expression*/);
                     break;
 
                 case BoundKind.SourceDocumentIndex:
@@ -827,7 +827,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
             for (int i = 0; i < arguments.Length; i++)
             {
-                RefKind argRefKind = GetArgumentRefKind(arguments, parameters, argRefKindsOpt, i);
+                RefKind argRefKind = GetArgumentRefKind(/*arguments, */parameters, argRefKindsOpt, i);
                 EmitArgument(arguments[i], argRefKind);
             }
         }
@@ -836,7 +836,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
         /// Computes the desired refkind of the argument.
         /// Considers all the cases - where ref kinds are explicit, omitted, vararg cases.
         /// </summary>
-        internal static RefKind GetArgumentRefKind(ImmutableArray<BoundExpression> arguments, ImmutableArray<ParameterSymbol> parameters, ImmutableArray<RefKind> argRefKindsOpt, int i)
+        internal static RefKind GetArgumentRefKind(/*ImmutableArray<BoundExpression> arguments, */ImmutableArray<ParameterSymbol> parameters, ImmutableArray<RefKind> argRefKindsOpt, int i)
         {
             RefKind argRefKind;
             if (i < parameters.Length)
@@ -2871,7 +2871,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             EmitSymbolToken(symbol, node.Syntax, null, encodeAsRawDefinitionToken: true);
         }
 
-        private void EmitMaximumMethodDefIndexExpression(BoundMaximumMethodDefIndex node)
+        private void EmitMaximumMethodDefIndexExpression(/*BoundMaximumMethodDefIndex node*/)
         {
             _builder.EmitOpCode(ILOpCode.Ldtoken);
             _builder.EmitGreatestMethodToken();
@@ -2894,7 +2894,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             _builder.EmitToken(_module.GetModuleVersionId(_module.Translate(node.Type, node.Syntax, _diagnostics), node.Syntax, _diagnostics), node.Syntax, _diagnostics);
         }
 
-        private void EmitModuleVersionIdStringLoad(BoundModuleVersionIdString node)
+        private void EmitModuleVersionIdStringLoad(/*BoundModuleVersionIdString node*/)
         {
             _builder.EmitOpCode(ILOpCode.Ldstr);
             _builder.EmitModuleVersionIdStringToken();

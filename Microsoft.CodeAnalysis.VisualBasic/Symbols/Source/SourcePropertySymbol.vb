@@ -454,7 +454,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Friend Overrides Function IsDefinedInSourceTree(tree As SyntaxTree, definedWithinSpan As TextSpan?, Optional cancellationToken As CancellationToken = Nothing) As Boolean
             Dim propertyStatementSyntax = Me.Syntax
-            Return propertyStatementSyntax IsNot Nothing AndAlso IsDefinedInSourceTree(propertyStatementSyntax.Parent, tree, definedWithinSpan, cancellationToken)
+            Return propertyStatementSyntax IsNot Nothing AndAlso IsDefinedInSourceTree(propertyStatementSyntax.Parent, tree, definedWithinSpan)
         End Function
 
         Public ReadOnly Property DefaultAttributeLocation As AttributeLocation Implements IAttributeTargetSymbol.DefaultAttributeLocation
@@ -1050,9 +1050,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Public Overrides Function GetDocumentationCommentXml(Optional preferredCulture As CultureInfo = Nothing, Optional expandIncludes As Boolean = False, Optional cancellationToken As CancellationToken = Nothing) As String
             If expandIncludes Then
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyExpandedDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyExpandedDocComment, cancellationToken)
             Else
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyDocComment, cancellationToken)
             End If
         End Function
 

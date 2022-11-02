@@ -116,11 +116,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var eventAccess = (BoundEventAccess)rewrittenLeft;
                     if (eventAccess.EventSymbol.IsWindowsRuntimeEvent)
                     {
-                        const bool isDynamic = false;
+                        //const bool isDynamic = false;
                         return RewriteWindowsRuntimeEventAssignmentOperator(eventAccess.Syntax,
                                                                             eventAccess.EventSymbol,
                                                                             EventAssignmentKind.Assignment,
-                                                                            isDynamic,
+                                                                            //isDynamic,
                                                                             eventAccess.ReceiverOpt,
                                                                             rewrittenRight);
                     }
@@ -308,8 +308,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 argsToParamsOpt,
                 ref argumentRefKindsOpt,
                 out ImmutableArray<LocalSymbol> argTemps,
-                invokedAsExtensionMethod: false,
-                enableCallerInfo: ThreeState.True);
+                invokedAsExtensionMethod: false/*,
+                enableCallerInfo: ThreeState.True*/);
 
             if (used)
             {

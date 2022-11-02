@@ -193,26 +193,26 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Next
         End Sub
 
-        Private Function HasAcceptableAttributeConstructor(attributeType As NamedTypeSymbol) As Boolean
-            For Each constructor In attributeType.InstanceConstructors
-                If IsTrue(GetDeclaredOrInheritedCompliance(constructor)) AndAlso IsAccessibleIfContainerIsAccessible(constructor) Then
-                    Debug.Assert(IsAccessibleOutsideAssembly(constructor), "Should be implied by IsAccessibleIfContainerIsAccessible")
-                    Dim hasUnacceptableParameterType As Boolean = False
-                    For Each paramType In GetParameterTypes(constructor)
-                        If paramType.TypeKind = TypeKind.Array OrElse TypedConstant.GetTypedConstantKind(paramType, Me._compilation) = TypedConstantKind.Error Then
-                            hasUnacceptableParameterType = True
-                            Exit For
-                        End If
-                    Next
+        'Private Function HasAcceptableAttributeConstructor(attributeType As NamedTypeSymbol) As Boolean
+        '    For Each constructor In attributeType.InstanceConstructors
+        '        If IsTrue(GetDeclaredOrInheritedCompliance(constructor)) AndAlso IsAccessibleIfContainerIsAccessible(constructor) Then
+        '            Debug.Assert(IsAccessibleOutsideAssembly(constructor), "Should be implied by IsAccessibleIfContainerIsAccessible")
+        '            Dim hasUnacceptableParameterType As Boolean = False
+        '            For Each paramType In GetParameterTypes(constructor)
+        '                If paramType.TypeKind = TypeKind.Array OrElse TypedConstant.GetTypedConstantKind(paramType, Me._compilation) = TypedConstantKind.Error Then
+        '                    hasUnacceptableParameterType = True
+        '                    Exit For
+        '                End If
+        '            Next
 
-                    If Not hasUnacceptableParameterType Then
-                        Return True
-                    End If
-                End If
-            Next
+        '            If Not hasUnacceptableParameterType Then
+        '                Return True
+        '            End If
+        '        End If
+        '    Next
 
-            Return False
-        End Function
+        '    Return False
+        'End Function
 
         Public Overrides Sub VisitMethod(symbol As MethodSymbol)
             Me._cancellationToken.ThrowIfCancellationRequested()
@@ -877,16 +877,16 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Select
         End Function
 
-        Private Shared Function IsDeclared(compliance As Compliance) As Boolean
-            Select Case compliance
-                Case Compliance.DeclaredTrue, Compliance.DeclaredFalse
-                    Return True
-                Case Compliance.InheritedTrue, Compliance.InheritedFalse, Compliance.ImpliedFalse
-                    Return False
-                Case Else
-                    Throw ExceptionUtilities.UnexpectedValue(compliance)
-            End Select
-        End Function
+        'Private Shared Function IsDeclared(compliance As Compliance) As Boolean
+        '    Select Case compliance
+        '        Case Compliance.DeclaredTrue, Compliance.DeclaredFalse
+        '            Return True
+        '        Case Compliance.InheritedTrue, Compliance.InheritedFalse, Compliance.ImpliedFalse
+        '            Return False
+        '        Case Else
+        '            Throw ExceptionUtilities.UnexpectedValue(compliance)
+        '    End Select
+        'End Function
 
         Private Enum Compliance
             DeclaredTrue

@@ -106,7 +106,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' add fields for the captured variables of the method
             Dim variablesToHoist = IteratorAndAsyncCaptureWalker.Analyze(New FlowAnalysisInfo(F.CompilationState.Compilation, Me.Method, Me.Body), Me.Diagnostics.DiagnosticBag)
 
-            CreateNonReusableLocalProxies(variablesToHoist, Me.nextFreeHoistedLocalSlot)
+            CreateNonReusableLocalProxies(variablesToHoist)
 
             Me.hoistedVariables = New OrderedSet(Of Symbol)(variablesToHoist.CapturedLocals)
 
@@ -157,8 +157,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 bodyBuilder.ToImmutableAndFree())
         End Function
 
-        Private Sub CreateNonReusableLocalProxies(captured As IteratorAndAsyncCaptureWalker.Result,
-                                                  ByRef nextFreeHoistedLocalSlot As Integer)
+        Private Sub CreateNonReusableLocalProxies(captured As IteratorAndAsyncCaptureWalker.Result)
 
             Dim typeMap As TypeSubstitution = StateMachineType.TypeSubstitution
             Dim isDebugBuild As Boolean = F.Compilation.Options.OptimizationLevel = OptimizationLevel.Debug

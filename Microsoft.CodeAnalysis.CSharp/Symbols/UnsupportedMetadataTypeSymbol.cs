@@ -10,7 +10,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     internal sealed class UnsupportedMetadataTypeSymbol : ErrorTypeSymbol
     {
+#pragma warning disable IDE0052
         private readonly BadImageFormatException? _mrEx;
+#pragma warning restore IDE0052
 
         internal UnsupportedMetadataTypeSymbol(BadImageFormatException? mrEx = null)
         {

@@ -26,6 +26,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Me._cancellationToken = cancellationToken
         End Sub
 
+        Public ReadOnly Property ModuleBeingBuilt As PEModuleBuilder
+            Get
+                Return _moduleBeingBuilt
+            End Get
+        End Property
+
         ''' <summary>
         ''' Traverse the symbol table and properly add/process synthesized extra metadata if needed.
         ''' </summary>

@@ -67,6 +67,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ' Consider tuple names in parameters and return types (if return is considered).
         Private ReadOnly _considerTupleNames As Boolean
 
+        Public ReadOnly Property ConsiderOptionalParameters As Boolean
+            Get
+                Return _considerOptionalParameters
+            End Get
+        End Property
+
         Private Sub New(considerName As Boolean,
                         considerType As Boolean,
                         considerReadWriteModifiers As Boolean,

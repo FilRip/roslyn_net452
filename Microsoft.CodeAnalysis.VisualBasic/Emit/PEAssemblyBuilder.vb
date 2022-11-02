@@ -110,10 +110,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
             Return lazyFiles
         End Function
 
-        Private Shared Function Free(builder As ArrayBuilder(Of Cci.IFileReference)) As Boolean
-            builder.Free()
-            Return False
-        End Function
+        'Private Shared Function Free(builder As ArrayBuilder(Of Cci.IFileReference)) As Boolean
+        '    builder.Free()
+        '    Return False
+        'End Function
 
         Protected Overrides Sub AddEmbeddedResourcesFromAddedModules(builder As ArrayBuilder(Of Cci.ManagedResource), diagnostics As DiagnosticBag)
             Dim modules = m_SourceAssembly.Modules
@@ -130,7 +130,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
                             file,
                             resource.Offset))
                     Next
+#Disable Warning IDE0059
                 Catch mrEx As BadImageFormatException
+#Enable Warning IDE0059
                     diagnostics.Add(ERRID.ERR_UnsupportedModule1, NoLocation.Singleton, modules(i))
                 End Try
             Next

@@ -298,6 +298,7 @@ namespace Microsoft.CodeAnalysis
         }
 
         // for debugging
+#pragma warning disable IDE0051
         private SyntaxNodeOrToken[] Nodes
         {
             get
@@ -305,6 +306,7 @@ namespace Microsoft.CodeAnalysis
                 return this.ToArray();
             }
         }
+#pragma warning restore IDE0051
 
         public bool Any()
         {

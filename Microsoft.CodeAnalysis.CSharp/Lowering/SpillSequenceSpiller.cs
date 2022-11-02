@@ -1076,8 +1076,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             private readonly int _receiverId;
 
 #if DEBUG
+#pragma warning disable IDE0052
             // we must replace exactly one node
             private int _replaced;
+#pragma warning restore IDE0052
 #endif
 
             private ConditionalReceiverReplacer(BoundExpression receiver, int receiverId, int recursionDepth)

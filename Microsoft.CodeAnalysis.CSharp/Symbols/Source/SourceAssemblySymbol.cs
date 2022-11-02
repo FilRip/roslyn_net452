@@ -902,7 +902,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             var diagnostics = BindingDiagnosticBag.GetInstance();
                             ValidateAttributeSemantics(diagnostics);
                             AddDeclarationDiagnostics(diagnostics);
-                            var thisThreadCompleted = _state.NotePartComplete(CompletionPart.FinishAttributeChecks);
+                            _state.NotePartComplete(CompletionPart.FinishAttributeChecks);
                             diagnostics.Free();
                         }
                         break;
@@ -924,7 +924,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         if (_state.NotePartComplete(CompletionPart.StartValidatingAddedModules))
                         {
                             ReportDiagnosticsForAddedModules();
-                            var thisThreadCompleted = _state.NotePartComplete(CompletionPart.FinishValidatingAddedModules);
+                            _state.NotePartComplete(CompletionPart.FinishValidatingAddedModules);
                         }
                         break;
 
@@ -1346,7 +1346,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 else
                 {
                     // Compute duplicate source assembly attributes, i.e. attributes with same constructor and arguments, that must not be emitted.
-                    var unused = GetUniqueSourceAssemblyAttributes();
+                    GetUniqueSourceAssemblyAttributes();
                 }
 
                 // Load type forwarders from modules
@@ -1356,7 +1356,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // This affects only diagnostics.
                 for (int i = _modules.Length - 1; i > 0; i--)
                 {
-                    var peModuleSymbol = (Metadata.PE.PEModuleSymbol)_modules[i];
+                    var peModuleSymbol = (PEModuleSymbol)_modules[i];
 
                     foreach (NamedTypeSymbol forwarded in peModuleSymbol.GetForwardedTypes())
                     {

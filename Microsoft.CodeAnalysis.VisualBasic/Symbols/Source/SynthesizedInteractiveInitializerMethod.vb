@@ -166,7 +166,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             If submissionReturnType Is Nothing Then
                 resultType = compilation.GetSpecialType(SpecialType.System_Object)
             Else
-                resultType = compilation.GetTypeByReflectionType(submissionReturnType)
+                resultType = compilation.GetTypeByReflectionType()
             End If
             returnType = taskT.Construct(resultType)
         End Sub

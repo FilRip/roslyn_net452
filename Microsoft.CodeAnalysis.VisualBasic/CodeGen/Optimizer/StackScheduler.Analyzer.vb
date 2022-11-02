@@ -165,9 +165,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 SetStackDepth(_evalStack.Count - 1)
             End Sub
 
-            Private Sub ClearEvalStack()
-                _evalStack.Clear()
-            End Sub
+            'Private Sub ClearEvalStack()
+            '    _evalStack.Clear()
+            'End Sub
 
             Private Function VisitExpression(node As BoundExpression, context As ExprContext) As BoundExpression
                 Dim result As BoundExpression
@@ -656,13 +656,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 End Select
             End Function
 
-            Private Shared Function IsVerifierRef(type As TypeSymbol) As Boolean
-                Return Not type.TypeKind = TypeKind.TypeParameter AndAlso type.IsReferenceType
-            End Function
+            'Private Shared Function IsVerifierRef(type As TypeSymbol) As Boolean
+            '    Return Not type.TypeKind = TypeKind.TypeParameter AndAlso type.IsReferenceType
+            'End Function
 
-            Private Shared Function IsVerifierVal(type As TypeSymbol) As Boolean
-                Return Not type.TypeKind = TypeKind.TypeParameter AndAlso type.IsValueType
-            End Function
+            'Private Shared Function IsVerifierVal(type As TypeSymbol) As Boolean
+            '    Return Not type.TypeKind = TypeKind.TypeParameter AndAlso type.IsValueType
+            'End Function
 
             Public Overrides Function VisitCall(node As BoundCall) As BoundNode
                 Dim receiver = node.ReceiverOpt
@@ -1246,7 +1246,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 End If
 
                 ' if accessing real val, check stack
-                If Not TypeOf local Is DummyLocal Then
+                If TypeOf local IsNot DummyLocal Then
                     If locInfo.StackAtDeclaration <> StackDepth() AndAlso
                         Not EvalStackHasLocal(local) Then
                         ' reading at different eval stack.

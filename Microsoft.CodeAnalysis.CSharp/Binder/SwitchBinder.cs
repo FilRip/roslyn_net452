@@ -205,13 +205,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // compute the constant value to place in the label symbol
                         var caseLabel = (CaseSwitchLabelSyntax)labelSyntax;
                         var boundLabelExpression = sectionBinder.BindTypeOrRValue(caseLabel.Value, tempDiagnosticBag);
-                        if (boundLabelExpression is BoundTypeExpression type)
+                        if (boundLabelExpression is not BoundTypeExpression)
                         {
-                            // Nothing to do at this point.  The label will be bound later.
-                        }
-                        else
-                        {
-                            _ = ConvertCaseExpression(labelSyntax, boundLabelExpression, sectionBinder, out boundLabelConstantOpt, tempDiagnosticBag);
+                            _ = ConvertCaseExpression(labelSyntax, boundLabelExpression, /*sectionBinder, */out boundLabelConstantOpt, tempDiagnosticBag);
                         }
                         break;
 
@@ -232,7 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        protected BoundExpression ConvertCaseExpression(CSharpSyntaxNode node, BoundExpression caseExpression, Binder sectionBinder, out ConstantValue constantValueOpt, BindingDiagnosticBag diagnostics, bool isGotoCaseExpr = false)
+        protected BoundExpression ConvertCaseExpression(CSharpSyntaxNode node, BoundExpression caseExpression, /*Binder sectionBinder, */out ConstantValue constantValueOpt, BindingDiagnosticBag diagnostics, bool isGotoCaseExpr = false)
         {
             bool hasErrors = false;
             if (isGotoCaseExpr)
@@ -477,7 +473,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // Bind the goto case expression
                     gotoCaseExpressionOpt = gotoBinder.BindValue(node.Expression, diagnostics, BindValueKind.RValue);
 
-                    gotoCaseExpressionOpt = ConvertCaseExpression(node, gotoCaseExpressionOpt, gotoBinder,
+                    gotoCaseExpressionOpt = ConvertCaseExpression(node, gotoCaseExpressionOpt, /*gotoBinder,*/
                         out gotoCaseExpressionConstant, diagnostics, isGotoCaseExpr: true);
 
                     // Check for bind errors

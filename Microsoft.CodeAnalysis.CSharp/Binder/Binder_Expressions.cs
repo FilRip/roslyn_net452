@@ -520,7 +520,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression BindExpressionInternal(ExpressionSyntax node, BindingDiagnosticBag diagnostics, bool invoked, bool indexed)
         {
-            if (IsEarlyAttributeBinder && !EarlyWellKnownAttributeBinder.CanBeValidAttributeArgument(node, this))
+            if (IsEarlyAttributeBinder && !EarlyWellKnownAttributeBinder.CanBeValidAttributeArgument(node/*, this*/))
             {
                 return BadExpression(node, LookupResultKind.NotAValue);
             }
@@ -6671,7 +6671,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!IsBadBaseAccess(node, receiver, fieldSymbol, diagnostics))
             {
-                CheckRuntimeSupportForSymbolAccess(node, receiver, fieldSymbol, diagnostics);
+                CheckRuntimeSupportForSymbolAccess(node, /*receiver, */fieldSymbol, diagnostics);
             }
 
             TypeSymbol fieldType = fieldSymbol.GetFieldType(this.FieldsBeingBound).Type;
@@ -6746,7 +6746,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new BoundPropertyAccess(node, receiver, propertySymbol, lookupResult, propertySymbol.Type, hasErrors: (hasErrors || hasError));
         }
 
-        private void CheckRuntimeSupportForSymbolAccess(SyntaxNode node, BoundExpression receiverOpt, Symbol symbol, BindingDiagnosticBag diagnostics)
+        private void CheckRuntimeSupportForSymbolAccess(SyntaxNode node, /*BoundExpression receiverOpt, */Symbol symbol, BindingDiagnosticBag diagnostics)
         {
             if (symbol.ContainingType?.IsInterface == true && !Compilation.Assembly.RuntimeSupportsDefaultInterfaceImplementation && Compilation.SourceModule != symbol.ContainingModule)
             {

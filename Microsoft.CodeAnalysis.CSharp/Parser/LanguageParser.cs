@@ -1932,7 +1932,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private TypeParameterConstraintSyntax ParseTypeParameterConstraint()
         {
             SyntaxToken questionToken = null;
-            var syntaxKind = this.CurrentToken.Kind;
+            var _ = this.CurrentToken.Kind;
 
             switch (this.CurrentToken.Kind)
             {
@@ -2419,7 +2419,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 var topLevelStatement = ParseLocalDeclarationStatement(attributes);
                 IsInAsync = wasInAsync;
 
-                if (topLevelStatement is DeclarationSyntax declaration && IsMakingProgress(ref lastTokenPosition, assertIfFalse: false))
+                if (topLevelStatement is DeclarationSyntax declaration && IsMakingProgress(ref lastTokenPosition/*, assertIfFalse: false*/))
                 {
                     result = CheckTopLevelStatementsFeatureAvailability(_syntaxFactory.GlobalStatement(declaration));
                     return true;
@@ -4396,7 +4396,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 allowLocalFunctions: false,
                 attributes: default,
                 mods: default,
-                localFunction: out LocalFunctionStatementSyntax localFunction);
+                localFunction: out LocalFunctionStatementSyntax _);
 
         }
 
@@ -5711,7 +5711,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // or a,... which  means this case should happen less frequently than what we're 
             // trying to solve here so we err on the side of better error messages
             // for the majority of cases.
-            SyntaxKind nextTokenKind = SyntaxKind.None;
+            SyntaxKind nextTokenKind;
 
             if (result.IsMissing &&
                 (this.CurrentToken.Kind != SyntaxKind.CommaToken && this.CurrentToken.Kind != SyntaxKind.GreaterThanToken) &&
@@ -6286,20 +6286,20 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         /// </summary>
         private ScanTypeFlags ScanTupleType(out SyntaxToken lastTokenOfType)
         {
-            var tupleElementType = ScanType(out lastTokenOfType);
+            var tupleElementType = ScanType(out _);
             if (tupleElementType != ScanTypeFlags.NotType)
             {
                 if (IsTrueIdentifier())
                 {
-                    lastTokenOfType = this.EatToken();
+                    this.EatToken();
                 }
 
                 if (this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
                     do
                     {
-                        lastTokenOfType = this.EatToken();
-                        tupleElementType = ScanType(out lastTokenOfType);
+                        this.EatToken();
+                        tupleElementType = ScanType(out _);
 
                         if (tupleElementType == ScanTypeFlags.NotType)
                         {
@@ -6309,7 +6309,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
                         if (IsTrueIdentifier())
                         {
-                            lastTokenOfType = this.EatToken();
+                            this.EatToken();
                         }
                     }
                     while (this.CurrentToken.Kind == SyntaxKind.CommaToken);
@@ -9061,7 +9061,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private VariableDeclarationSyntax ParseVariableDeclaration()
         {
             var variables = _pool.AllocateSeparated<VariableDeclaratorSyntax>();
-            ParseLocalDeclaration(variables, false, attributes: default, mods: default, out TypeSyntax type, out LocalFunctionStatementSyntax localFunction);
+            ParseLocalDeclaration(variables, false, attributes: default, mods: default, out TypeSyntax type, out LocalFunctionStatementSyntax _);
             var result = _syntaxFactory.VariableDeclaration(type, variables);
             _pool.Free(variables);
             return result;
@@ -9540,7 +9540,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         private ExpressionSyntax ParseSubExpressionCore(Precedence precedence)
         {
             ExpressionSyntax leftOperand;
-            Precedence newPrecedence = 0;
+            Precedence newPrecedence;
 
             // all of these are tokens that start statements and are invalid
             // to start a expression with. if we see one, then we must have
@@ -9735,8 +9735,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 else if (isAssignmentOperator)
                 {
                     ExpressionSyntax rhs = opKind == SyntaxKind.SimpleAssignmentExpression && CurrentToken.Kind == SyntaxKind.RefKeyword
-                        ? rhs = CheckFeatureAvailability(ParsePossibleRefExpression(), MessageID.IDS_FeatureRefReassignment)
-                        : rhs = this.ParseSubExpression(newPrecedence);
+                        ? CheckFeatureAvailability(ParsePossibleRefExpression(), MessageID.IDS_FeatureRefReassignment)
+                        : this.ParseSubExpression(newPrecedence);
 
                     if (opKind == SyntaxKind.CoalesceAssignmentExpression)
                     {
@@ -12329,11 +12329,11 @@ this.CreateMissingIdentifierName()),
             return _syntaxFactory.QueryContinuation(@into, name, body);
         }
 
-        [Obsolete("Use IsIncrementalAndFactoryContextMatches")]
+        /*[Obsolete("Use IsIncrementalAndFactoryContextMatches")]
         private new bool IsIncremental
         {
             get { throw new Exception("Use IsIncrementalAndFactoryContextMatches"); }
-        }
+        }*/
 
         private bool IsIncrementalAndFactoryContextMatches
         {
@@ -12403,7 +12403,7 @@ this.CreateMissingIdentifierName()),
 
         private void Release(ref ResetPoint state)
         {
-            base.Release(ref state.BaseResetPoint);
+            base.Release(/*ref state.BaseResetPoint*/);
         }
 
         private new struct ResetPoint

@@ -25,7 +25,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
         Private ReadOnly _metadataName As String
 
         Private _lazyExportedTypes As ImmutableArray(Of Cci.ExportedType)
-        Private ReadOnly _lazyNumberOfTypesFromOtherModules As Integer
+        'Private ReadOnly _lazyNumberOfTypesFromOtherModules As Integer
         Private _lazyTranslatedImports As ImmutableArray(Of Cci.UsedNamespaceOrType)
         Private _lazyDefaultNamespace As String
 
@@ -200,7 +200,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
             Dim namespacesAndTypesToProcess As New Stack(Of NamespaceOrTypeSymbol)()
             namespacesAndTypesToProcess.Push(SourceModule.GlobalNamespace)
 
-            Dim location As Location = Nothing
+            Dim location As Location
 
             While namespacesAndTypesToProcess.Count > 0
                 Dim symbol As NamespaceOrTypeSymbol = namespacesAndTypesToProcess.Pop()
@@ -385,7 +385,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
                 _lazyExportedTypes = CalculateExportedTypes()
 
                 If _lazyExportedTypes.Length > 0 Then
-                    ReportExportedTypeNameCollisions(_lazyExportedTypes, diagnostics)
+                    ReportExportedTypeNameCollisions(diagnostics)
                 End If
             End If
 
@@ -427,7 +427,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
             Return seenTopLevelForwardedTypes
         End Function
 
-        Private Sub ReportExportedTypeNameCollisions(exportedTypes As ImmutableArray(Of Cci.ExportedType), diagnostics As DiagnosticBag)
+        Private Sub ReportExportedTypeNameCollisions(diagnostics As DiagnosticBag)
             Dim sourceAssembly As SourceAssemblySymbol = SourceModule.ContainingSourceAssembly
             Dim exportedNamesMap = New Dictionary(Of String, NamedTypeSymbol)()
 

@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static SyntaxTree ComputeSyntaxTree(CSharpSyntaxNode node)
         {
             ArrayBuilder<CSharpSyntaxNode>? nodes = null;
-            SyntaxTree? tree = null;
+            SyntaxTree? tree;
 
             // Find the nearest parent with a non-null syntax tree
             while (true)

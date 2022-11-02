@@ -1123,7 +1123,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             ArrayBuilder<BoundExpression> rewrittenArguments = null;
             for (int i = 0; i < arguments.Length; i++)
             {
-                RefKind argRefKind = CodeGenerator.GetArgumentRefKind(arguments, parameters, argRefKindsOpt, i);
+                RefKind argRefKind = CodeGenerator.GetArgumentRefKind(/*arguments, */parameters, argRefKindsOpt, i);
                 VisitArgument(arguments, ref rewrittenArguments, i, argRefKind);
             }
 

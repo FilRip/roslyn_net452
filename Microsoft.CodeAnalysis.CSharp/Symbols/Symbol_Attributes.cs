@@ -283,7 +283,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 int totalAttributesCount = attributesToBind.Length;
                 var attributeTypesBuilder = new NamedTypeSymbol[totalAttributesCount];
 
-                Binder.BindAttributeTypes(binders, attributesToBind, this, attributeTypesBuilder, diagnostics);
+                Binder.BindAttributeTypes(binders, attributesToBind, /*this, */attributeTypesBuilder, diagnostics);
                 ImmutableArray<NamedTypeSymbol> boundAttributeTypes = attributeTypesBuilder.AsImmutableOrNull();
 
                 this.EarlyDecodeWellKnownAttributeTypes(boundAttributeTypes, attributesToBind);

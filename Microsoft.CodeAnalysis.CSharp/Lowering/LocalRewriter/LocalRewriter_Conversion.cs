@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         rewrittenType: rewrittenType);
 
                 case ConversionKind.IntPtr:
-                    return RewriteIntPtrConversion(oldNodeOpt, syntax, rewrittenOperand, conversion, @checked,
+                    return RewriteIntPtrConversion(/*oldNodeOpt, */syntax, rewrittenOperand, conversion, @checked,
                         explicitCastInCode, constantValueOpt, rewrittenType);
 
                 case ConversionKind.ImplicitNullable:
@@ -370,7 +370,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case ConversionKind.MethodGroup when oldNodeOpt is { Type: { TypeKind: TypeKind.FunctionPointer } funcPtrType }:
                     {
-                        var mg = (BoundMethodGroup)rewrittenOperand;
+                        var _ = (BoundMethodGroup)rewrittenOperand;
                         return new BoundFunctionPointerLoad(oldNodeOpt.Syntax, oldNodeOpt.SymbolOpt, type: funcPtrType, hasErrors: false);
                     }
 
@@ -488,7 +488,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return conversion;
         }
 
-        private static BoundExpression MakeConversionForIOperation(
+        /*private static BoundExpression MakeConversionForIOperation(
             BoundExpression operand,
             TypeSymbol type,
             SyntaxNode syntax,
@@ -517,7 +517,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             type: type,
                             hasErrors: !conversion.IsValid)
             { WasCompilerGenerated = true };
-        }
+        }*/
 
         /// <summary>
         /// Helper method to generate a lowered conversion from the given <paramref name="rewrittenOperand"/> to the given <paramref name="rewrittenType"/>.
@@ -1142,7 +1142,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #nullable enable
 
         private BoundExpression RewriteIntPtrConversion(
-            BoundConversion? oldNode,
+            //BoundConversion? oldNode,
             SyntaxNode syntax,
             BoundExpression rewrittenOperand,
             Conversion conversion,

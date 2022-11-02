@@ -44,7 +44,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim conversion = DirectCast(convTestExpr, BoundConversion)
                     Dim paramSymbol As ParameterSymbol = CreateCoalesceLambdaParameterSymbol(testExpressionType)
                     Dim lambdaBody As BoundExpression = BuildLambdaBodyForCoalesce(conversion, resultType, paramSymbol, conversion.Checked)
-                    Dim coalesceLambda As BoundExpression = BuildLambdaForCoalesceCall(resultType, paramSymbol, lambdaBody)
+                    Dim coalesceLambda As BoundExpression = BuildLambdaForCoalesceCall(paramSymbol, lambdaBody)
                     Return ConvertRuntimeHelperToExpressionTree("Coalesce", rewrittenTestExpression, rewrittenElseExpression, coalesceLambda)
 
                 Case Else
@@ -60,7 +60,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return Me._factory.Parameter(paramSymbol).MakeRValue()
         End Function
 
-        Private Function BuildLambdaForCoalesceCall(toType As TypeSymbol, lambdaParameter As ParameterSymbol, body As BoundExpression) As BoundExpression
+        Private Function BuildLambdaForCoalesceCall(lambdaParameter As ParameterSymbol, body As BoundExpression) As BoundExpression
             Dim parameterExpressionType As TypeSymbol = _factory.WellKnownType(WellKnownType.System_Linq_Expressions_ParameterExpression)
 
             Dim paramLocalSymbol As LocalSymbol = Me._factory.SynthesizedLocal(parameterExpressionType)

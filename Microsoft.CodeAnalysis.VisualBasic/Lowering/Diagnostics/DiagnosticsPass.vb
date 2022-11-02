@@ -38,6 +38,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Me._inExpressionLambda = False
         End Sub
 
+        Public ReadOnly Property Compilation As VisualBasicCompilation
+            Get
+                Return _compilation
+            End Get
+        End Property
+
         Private ReadOnly Property IsInExpressionLambda As Boolean
             Get
                 Return Me._inExpressionLambda

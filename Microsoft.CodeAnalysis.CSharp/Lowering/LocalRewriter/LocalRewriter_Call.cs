@@ -374,8 +374,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<int> argsToParamsOpt,
             ref ImmutableArray<RefKind> argumentRefKindsOpt,
             out ImmutableArray<LocalSymbol> temps,
-            bool invokedAsExtensionMethod = false,
-            ThreeState enableCallerInfo = ThreeState.Unknown)
+            bool invokedAsExtensionMethod = false/*,
+            ThreeState enableCallerInfo = ThreeState.Unknown*/)
         {
 
             // We need to do a fancy rewrite under the following circumstances:
@@ -475,7 +475,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Step two: If we have a params array, build the array and fill in the argument.
             if (expanded)
             {
-                actualArguments[actualArguments.Length - 1] = BuildParamsArray(syntax, methodOrIndexer, argsToParamsOpt, rewrittenArguments, parameters, actualArguments[actualArguments.Length - 1]);
+                actualArguments[actualArguments.Length - 1] = BuildParamsArray(syntax, /*methodOrIndexer, */argsToParamsOpt, rewrittenArguments, parameters, actualArguments[actualArguments.Length - 1]);
             }
 
             if (isComReceiver)
@@ -830,7 +830,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression BuildParamsArray(
             SyntaxNode syntax,
-            Symbol methodOrIndexer,
+            //Symbol methodOrIndexer,
             ImmutableArray<int> argsToParamsOpt,
             ImmutableArray<BoundExpression> rewrittenArguments,
             ImmutableArray<ParameterSymbol> parameters,

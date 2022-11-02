@@ -217,7 +217,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Return ReportSemanticError(id, node, New Object() {})
         End Function
 
+#Disable Warning IDE0060
         Private Shared Function ReportSemanticError(id As ERRID, node As VisualBasicSyntaxNode, ParamArray args As Object()) As BadCConst
+#Enable Warning IDE0060
             ' TODO: should we use the node?
             Return New BadCConst(id, args)
         End Function

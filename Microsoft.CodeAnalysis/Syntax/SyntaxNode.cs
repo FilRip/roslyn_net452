@@ -19,12 +19,10 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-#pragma warning disable CA1200 // Avoid using cref tags with a prefix
     /// <summary>
     /// Represents a non-terminal node in the syntax tree. This is the language agnostic equivalent of <see
     /// cref="T:Microsoft.CodeAnalysis.CSharp.CSharpSyntaxNode"/> and <see cref="T:Microsoft.CodeAnalysis.VisualBasic.VisualBasicSyntaxNode"/>.
     /// </summary>
-#pragma warning restore CA1200 // Avoid using cref tags with a prefix
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     public abstract partial class SyntaxNode
     {
@@ -745,7 +743,6 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Gets the first node of type TNode that matches the predicate.
         /// </summary>
-        [SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = "Required for consistent API usage patterns.")]
         public TNode? FirstAncestorOrSelf<TNode, TArg>(Func<TNode, TArg, bool> predicate, TArg argument, bool ascendOutOfTrivia = true)
             where TNode : SyntaxNode
         {

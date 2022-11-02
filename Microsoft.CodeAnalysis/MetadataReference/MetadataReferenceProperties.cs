@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is MetadataReferenceProperties && Equals((MetadataReferenceProperties)obj);
+            return obj is MetadataReferenceProperties properties && Equals(properties);
         }
 
         public bool Equals(MetadataReferenceProperties other)

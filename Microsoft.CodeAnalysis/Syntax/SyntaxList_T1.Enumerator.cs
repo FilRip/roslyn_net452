@@ -13,7 +13,6 @@ namespace Microsoft.CodeAnalysis
 {
     public readonly partial struct SyntaxList<TNode>
     {
-        [SuppressMessage("Performance", "CA1067", Justification = "Equality not actually implemented")]
         public struct Enumerator
         {
             private readonly SyntaxList<TNode> _list;

@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _ => throw ExceptionUtilities.UnexpectedValue(binaryOperator),
             };
             BoundExpression comparisonResult = new BoundTupleOperandPlaceholder(node, type);
-            UnaryOperatorAnalysisResult best = this.UnaryOperatorOverloadResolution(boolOpKind, comparisonResult, node, diagnostics, out LookupResultKind resultKind, out ImmutableArray<MethodSymbol> originalUserDefinedOperators);
+            UnaryOperatorAnalysisResult best = this.UnaryOperatorOverloadResolution(boolOpKind, comparisonResult, node, diagnostics, out LookupResultKind _, out ImmutableArray<MethodSymbol> _);
             if (best.HasValue)
             {
                 conversionForBool = best.Conversion;

@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis
 
         public override bool Equals(object? obj)
         {
-            return obj is TypeLayout && Equals((TypeLayout)obj);
+            return obj is TypeLayout layout && Equals(layout);
         }
 
         public override int GetHashCode()

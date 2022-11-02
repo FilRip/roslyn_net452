@@ -1946,7 +1946,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return GetSpecialTypeMember(specialMember)
         End Function
 
-        Friend Function GetTypeByReflectionType(type As Type) As TypeSymbol
+        Friend Function GetTypeByReflectionType() As TypeSymbol
             ' TODO: See CSharpCompilation.GetTypeByReflectionType
             Return GetSpecialType(SpecialType.System_Object)
         End Function
@@ -2355,8 +2355,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 manifestResources,
                 testData,
                 diagnostics,
-                ImmutableArray(Of NamedTypeSymbol).Empty,
-                cancellationToken)
+                ImmutableArray(Of NamedTypeSymbol).Empty)
         End Function
 
         Friend Overloads Function CreateModuleBuilder(
@@ -2367,8 +2366,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             manifestResources As IEnumerable(Of ResourceDescription),
             testData As CompilationTestData,
             diagnostics As DiagnosticBag,
-            additionalTypes As ImmutableArray(Of NamedTypeSymbol),
-            cancellationToken As CancellationToken) As CommonPEModuleBuilder
+            additionalTypes As ImmutableArray(Of NamedTypeSymbol)) As CommonPEModuleBuilder
 
             Debug.Assert(Not IsSubmission OrElse HasCodeToEmit() OrElse
                          (emitOptions = EmitOptions.Default AndAlso debugEntryPoint Is Nothing AndAlso sourceLinkStream Is Nothing AndAlso

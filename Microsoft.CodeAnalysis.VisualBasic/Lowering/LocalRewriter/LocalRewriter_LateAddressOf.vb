@@ -95,7 +95,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             boundInvocationExpression.SetWasCompilerGenerated()
 
             ' In case of a function target that got assigned to a sub delegate, the return value will be dropped
-            Dim statementList As ImmutableArray(Of BoundStatement) = Nothing
+            Dim statementList As ImmutableArray(Of BoundStatement)
             If lambdaSymbol.IsSub Then
 
                 If boundInvocationExpression.IsLateBound() Then

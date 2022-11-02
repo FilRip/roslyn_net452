@@ -49,8 +49,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                        topLevelMethod As MethodSymbol,
                        topLevelMethodId As DebugId,
                        lambdaNode As BoundLambda,
-                       lambdaId As DebugId,
-                       diagnostics As BindingDiagnosticBag)
+                       lambdaId As DebugId)
 
             MyBase.New(lambdaNode.Syntax,
                        containingType,

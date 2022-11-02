@@ -220,8 +220,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         goto default; // no matching if directive !! leave directive alone
                     }
 
-                    bool tmp;
-                    return new DirectiveStack(CompleteIf(_directives, out tmp));
+                    return new DirectiveStack(CompleteIf(_directives, out bool _));
                 case SyntaxKind.EndRegionDirectiveTrivia:
                     var prevRegion = GetPreviousRegion(_directives);
                     if (prevRegion == null || !prevRegion.Any())

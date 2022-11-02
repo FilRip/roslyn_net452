@@ -22,6 +22,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             _foundOldToken = false;
         }
 
+        public SyntaxToken OldToken
+        {
+            get { return _oldToken; }
+        }
+
         internal static TRoot Replace<TRoot>(TRoot root, SyntaxToken oldToken, SyntaxToken newToken, int diagnosticOffsetDelta)
             where TRoot : CSharpSyntaxNode
         {
@@ -36,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             {
                 if (!_foundOldToken)
                 {
-                    if (node is SyntaxToken token)
+                    if (node is SyntaxToken)
                     {
                         _foundOldToken = true;
                         return _newToken; // NB: diagnostic offsets have already been updated (by SyntaxParser.AddSkippedSyntax)

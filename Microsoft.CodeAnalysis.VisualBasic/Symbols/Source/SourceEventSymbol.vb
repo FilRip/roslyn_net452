@@ -453,7 +453,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Friend NotOverridable Overrides Function IsDefinedInSourceTree(tree As SyntaxTree, definedWithinSpan As TextSpan?, Optional cancellationToken As CancellationToken = Nothing) As Boolean
             Dim eventBlock = Me._syntaxRef.GetSyntax(cancellationToken).Parent
-            Return IsDefinedInSourceTree(eventBlock, tree, definedWithinSpan, cancellationToken)
+            Return IsDefinedInSourceTree(eventBlock, tree, definedWithinSpan)
         End Function
 
         Public Overrides ReadOnly Property Type As TypeSymbol
@@ -693,9 +693,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                              Optional expandIncludes As Boolean = False,
                                                              Optional cancellationToken As CancellationToken = Nothing) As String
             If expandIncludes Then
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyExpandedDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyExpandedDocComment, cancellationToken)
             Else
-                Return GetAndCacheDocumentationComment(Me, preferredCulture, expandIncludes, _lazyDocComment, cancellationToken)
+                Return GetAndCacheDocumentationComment(Me, expandIncludes, _lazyDocComment, cancellationToken)
             End If
         End Function
 

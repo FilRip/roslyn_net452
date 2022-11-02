@@ -10,7 +10,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
     Partial Friend NotInheritable Class LocalRewriter
 
         Private Function RewriteConstant(node As BoundExpression, constantValue As ConstantValue) As BoundExpression
-            Dim result As BoundNode = node
+            'Dim result As BoundNode = node
 
             If Not _inExpressionLambda AndAlso Not node.HasErrors Then
                 If constantValue.Discriminator = ConstantValueTypeDiscriminator.Decimal Then

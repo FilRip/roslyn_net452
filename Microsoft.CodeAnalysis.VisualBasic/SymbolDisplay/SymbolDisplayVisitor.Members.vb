@@ -107,7 +107,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If symbol.Parameters.Length > 0 Then
                 If format.MemberOptions.IncludesOption(SymbolDisplayMemberOptions.IncludeParameters) Then
                     AddPunctuation(SyntaxKind.OpenParenToken)
-                    AddParametersIfRequired(isExtensionMethod:=False, parameters:=symbol.Parameters)
+                    AddParametersIfRequired(parameters:=symbol.Parameters)
                     AddPunctuation(SyntaxKind.CloseParenToken)
                 End If
             End If
@@ -144,7 +144,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If sourceSymbol IsNot Nothing AndAlso sourceSymbol.IsTypeInferred Then
                 If format.MemberOptions.IncludesOption(SymbolDisplayMemberOptions.IncludeParameters) Then
                     AddPunctuation(SyntaxKind.OpenParenToken)
-                    AddParametersIfRequired(isExtensionMethod:=False, parameters:=StaticCast(Of IParameterSymbol).From(sourceSymbol.DelegateParameters))
+                    AddParametersIfRequired(parameters:=StaticCast(Of IParameterSymbol).From(sourceSymbol.DelegateParameters))
                     AddPunctuation(SyntaxKind.CloseParenToken)
                 End If
             End If
@@ -161,17 +161,17 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
         End Sub
 
-        Private Sub AddAccessor([property] As ISymbol, method As IMethodSymbol, keyword As SyntaxKind)
-            If method IsNot Nothing Then
-                AddSpace()
-                If method.DeclaredAccessibility <> [property].DeclaredAccessibility Then
-                    AddAccessibilityIfRequired(method)
-                End If
+        'Private Sub AddAccessor([property] As ISymbol, method As IMethodSymbol, keyword As SyntaxKind)
+        '    If method IsNot Nothing Then
+        '        AddSpace()
+        '        If method.DeclaredAccessibility <> [property].DeclaredAccessibility Then
+        '            AddAccessibilityIfRequired(method)
+        '        End If
 
-                AddKeyword(keyword)
-                AddPunctuation(SyntaxKind.SemicolonToken)
-            End If
-        End Sub
+        '        AddKeyword(keyword)
+        '        AddPunctuation(SyntaxKind.SemicolonToken)
+        '    End If
+        'End Sub
 
         Public Overrides Sub VisitMethod(symbol As IMethodSymbol)
             If IsDeclareMethod(symbol) Then
@@ -388,8 +388,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Sub AddMethodParameters(method As IMethodSymbol)
             If format.MemberOptions.IncludesOption(SymbolDisplayMemberOptions.IncludeParameters) Then
                 AddPunctuation(SyntaxKind.OpenParenToken)
-                AddParametersIfRequired(isExtensionMethod:=method.IsExtensionMethod AndAlso method.MethodKind <> MethodKind.ReducedExtension,
-                                        parameters:=method.Parameters)
+                AddParametersIfRequired(parameters:=method.Parameters)
                 AddPunctuation(SyntaxKind.CloseParenToken)
             End If
         End Sub
@@ -619,7 +618,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
         End Sub
 
-        Private Sub AddParametersIfRequired(isExtensionMethod As Boolean, parameters As ImmutableArray(Of IParameterSymbol))
+        Private Sub AddParametersIfRequired(parameters As ImmutableArray(Of IParameterSymbol))
             If format.ParameterOptions = SymbolDisplayParameterOptions.None Then
                 Return
             End If

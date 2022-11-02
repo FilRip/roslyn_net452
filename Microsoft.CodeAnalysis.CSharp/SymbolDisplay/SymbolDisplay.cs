@@ -12,12 +12,10 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-#pragma warning disable CA1200 // Avoid using cref tags with a prefix
     /// <summary>
     /// Displays a symbol in the C# style.
     /// </summary>
     /// <seealso cref="T:Microsoft.CodeAnalysis.VisualBasic.SymbolDisplay"/>
-#pragma warning restore CA1200 // Avoid using cref tags with a prefix
     public static class SymbolDisplay
     {
         /// <summary>
@@ -36,7 +34,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ToDisplayParts(symbol, format).ToDisplayString();
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         public static string ToDisplayString(
             ITypeSymbol symbol,
             CodeAnalysis.NullableFlowState nullableFlowState,
@@ -52,7 +49,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return ToDisplayParts(symbol, nullableAnnotation, format).ToDisplayString();
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         /// <summary>
         /// Displays a symbol in the C# style, based on a <see cref="SymbolDisplayFormat"/>.
@@ -76,7 +72,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ToMinimalDisplayParts(symbol, semanticModel, position, format).ToDisplayString();
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         public static string ToMinimalDisplayString(
             ITypeSymbol symbol,
             CodeAnalysis.NullableFlowState nullableFlowState,
@@ -96,7 +91,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return ToMinimalDisplayParts(symbol, nullableAnnotation, semanticModel, position, format).ToDisplayString();
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         /// <summary>
         /// Convert a symbol to an array of string parts, each of which has a kind. Useful for
@@ -118,7 +112,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 symbol, semanticModelOpt: null, positionOpt: -1, format: format, minimal: false);
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         // https://github.com/dotnet/roslyn/issues/35035: Add tests
         public static ImmutableArray<SymbolDisplayPart> ToDisplayParts(
             ITypeSymbol symbol,
@@ -141,7 +134,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ToDisplayParts(
                 symbol.WithNullableAnnotation(nullableAnnotation), semanticModelOpt: null, positionOpt: -1, format: format, minimal: false);
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         /// <summary>
         /// Convert a symbol to an array of string parts, each of which has a kind. Useful for
@@ -165,7 +157,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ToDisplayParts(symbol, semanticModel, position, format, minimal: true);
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         // https://github.com/dotnet/roslyn/issues/35035: Add tests
         public static ImmutableArray<SymbolDisplayPart> ToMinimalDisplayParts(
             ITypeSymbol symbol,
@@ -188,7 +179,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             format ??= SymbolDisplayFormat.MinimallyQualifiedFormat;
             return ToDisplayParts(symbol.WithNullableAnnotation(nullableAnnotation), semanticModel, position, format, minimal: true);
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         private static ImmutableArray<SymbolDisplayPart> ToDisplayParts(
             ITypeSymbol symbol,

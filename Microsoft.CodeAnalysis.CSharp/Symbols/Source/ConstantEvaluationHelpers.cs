@@ -178,7 +178,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 lastUpdated?.Free();
-                lastUpdated = null;
+                //lastUpdated = null;
                 if (set.Count > 0)
                 {
                     var updated = PooledHashSet<SourceFieldSymbolWithSyntaxReference>.GetInstance();

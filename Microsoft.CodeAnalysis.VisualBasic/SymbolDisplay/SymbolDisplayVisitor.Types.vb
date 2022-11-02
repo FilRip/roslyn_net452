@@ -174,7 +174,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     Dim method = symbol.DelegateInvokeMethod
                     AddPunctuation(SyntaxKind.OpenParenToken)
-                    AddParametersIfRequired(isExtensionMethod:=False, parameters:=method.Parameters)
+                    AddParametersIfRequired(parameters:=method.Parameters)
                     AddPunctuation(SyntaxKind.CloseParenToken)
                 End If
 

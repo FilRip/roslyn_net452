@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var receiver = BindRValueWithoutTargetType(syntax.Expression, diagnostics);
             var receiverType = receiver.Type;
 
-            var lookupResult = LookupResult.GetInstance();
+            LookupResult.GetInstance();
             bool hasErrors = false;
 
             if (receiverType is null || receiverType.IsVoidType())

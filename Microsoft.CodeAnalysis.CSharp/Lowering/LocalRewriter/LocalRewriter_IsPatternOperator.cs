@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // If we can build a linear test sequence `(e1 && e2 && e3)` for the dag, do so.
                 var isPatternRewriter = new IsPatternExpressionLinearLocalRewriter(node, this);
-                result = isPatternRewriter.LowerIsPatternAsLinearTestSequence(node, whenTrueLabel: node.WhenTrueLabel, whenFalseLabel: node.WhenFalseLabel);
+                result = isPatternRewriter.LowerIsPatternAsLinearTestSequence(node, /*whenTrueLabel: node.WhenTrueLabel, */whenFalseLabel: node.WhenFalseLabel);
                 isPatternRewriter.Free();
             }
             else if (canProduceLinearSequence(node.DecisionDag.RootNode, whenTrueLabel: node.WhenFalseLabel, whenFalseLabel: node.WhenTrueLabel))
@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // result.  This would typically arise when the source contains `e is not pattern`.
                 negated = !negated;
                 var isPatternRewriter = new IsPatternExpressionLinearLocalRewriter(node, this);
-                result = isPatternRewriter.LowerIsPatternAsLinearTestSequence(node, whenTrueLabel: node.WhenFalseLabel, whenFalseLabel: node.WhenTrueLabel);
+                result = isPatternRewriter.LowerIsPatternAsLinearTestSequence(node, /*whenTrueLabel: node.WhenFalseLabel, */whenFalseLabel: node.WhenTrueLabel);
                 isPatternRewriter.Free();
             }
             else
@@ -213,7 +213,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             public BoundExpression LowerIsPatternAsLinearTestSequence(
-                BoundIsPatternExpression isPatternExpression, LabelSymbol whenTrueLabel, LabelSymbol whenFalseLabel)
+                BoundIsPatternExpression isPatternExpression, /*LabelSymbol whenTrueLabel, */LabelSymbol whenFalseLabel)
             {
                 BoundDecisionDag decisionDag = isPatternExpression.DecisionDag;
                 BoundExpression loweredInput = _localRewriter.VisitExpression(isPatternExpression.Expression);
@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // the execution of the pattern-matching automaton and change one of those variables.
                 decisionDag = ShareTempsAndEvaluateInput(loweredInput, decisionDag, expr => _sideEffectBuilder.Add(expr), out _);
                 var node = decisionDag.RootNode;
-                return ProduceLinearTestSequence(node, whenTrueLabel, whenFalseLabel);
+                return ProduceLinearTestSequence(node, /*whenTrueLabel, */whenFalseLabel);
             }
 
             /// <summary>
@@ -231,7 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </summary>
             private BoundExpression ProduceLinearTestSequence(
                 BoundDecisionDagNode node,
-                LabelSymbol whenTrueLabel,
+                //LabelSymbol whenTrueLabel,
                 LabelSymbol whenFalseLabel)
             {
                 // We follow the "good" path in the decision dag. We depend on it being nicely linear in structure.
@@ -270,7 +270,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // When we get to "the end", it is a success node.
                 switch (node)
                 {
-                    case BoundLeafDecisionDagNode leafNode:
+                    case BoundLeafDecisionDagNode:
                         break;
 
                     case BoundWhenDecisionDagNode whenNode:

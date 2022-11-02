@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             MetadataHelpers.AssemblyQualifiedTypeName fullName = MetadataHelpers.DecodeTypeName(s);
-            return GetTypeSymbol(fullName, out bool refersToNoPiaLocalType);
+            return GetTypeSymbol(fullName, out bool _);
         }
 
         protected TypeSymbol GetUnsupportedMetadataTypeSymbol(BadImageFormatException exception = null)

@@ -1194,7 +1194,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' Gets the corresponding LocalSymbol for a specified CatchStatementSyntax.
         ''' </summary>
         <Extension>
-        Public Function GetDeclaredSymbol(semanticModel As SemanticModel, declarationSyntax As CatchStatementSyntax, Optional cancellationToken As CancellationToken = Nothing) As ILocalSymbol
+        Public Function GetDeclaredSymbol(semanticModel As SemanticModel, declarationSyntax As CatchStatementSyntax) As ILocalSymbol
             Dim vbmodel = TryCast(semanticModel, VBSemanticModel)
             If vbmodel IsNot Nothing Then
                 Return vbmodel.GetDeclaredSymbol(declarationSyntax)

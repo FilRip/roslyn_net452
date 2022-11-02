@@ -12,7 +12,6 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-#pragma warning disable CA1200 // Avoid using cref tags with a prefix
     /// <summary>
     /// Displays a value in the C# style.
     /// </summary>
@@ -21,7 +20,6 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// the Formatter project and we don't want it to be public there.
     /// </remarks>
     /// <seealso cref="T:Microsoft.CodeAnalysis.VisualBasic.ObjectDisplay.ObjectDisplay"/>
-#pragma warning restore CA1200 // Avoid using cref tags with a prefix
     public static class ObjectDisplay
     {
         /// <summary>

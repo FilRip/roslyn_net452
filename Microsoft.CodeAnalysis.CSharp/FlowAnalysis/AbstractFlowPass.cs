@@ -2148,10 +2148,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected virtual void AfterLeftChildOfBinaryLogicalOperatorHasBeenVisited(BoundExpression binary, BoundExpression right, bool isAnd, bool isBool, ref TLocalState leftTrue, ref TLocalState leftFalse)
         {
             Visit(right); // First part of VisitCondition
-            AfterRightChildOfBinaryLogicalOperatorHasBeenVisited(binary, right, isAnd, isBool, ref leftTrue, ref leftFalse);
+            AfterRightChildOfBinaryLogicalOperatorHasBeenVisited(/*binary, */right, isAnd, isBool, ref leftTrue, ref leftFalse);
         }
 
-        protected void AfterRightChildOfBinaryLogicalOperatorHasBeenVisited(BoundExpression binary, BoundExpression right, bool isAnd, bool isBool, ref TLocalState leftTrue, ref TLocalState leftFalse)
+        protected void AfterRightChildOfBinaryLogicalOperatorHasBeenVisited(/*BoundExpression binary, */BoundExpression right, bool isAnd, bool isBool, ref TLocalState leftTrue, ref TLocalState leftFalse)
         {
             AdjustConditionalState(right); // Second part of VisitCondition
 
@@ -2928,7 +2928,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // whose condition is not true, then the call has no effect and it is ignored for the purposes of
                 // flow analysis.
 
-                TLocalState savedState = savedState = this.State.Clone();
+                TLocalState savedState = this.State.Clone();
                 SetUnreachable();
 
                 VisitArguments(node.Arguments, default, node.AddMethod);

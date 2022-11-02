@@ -75,7 +75,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     ' Do we have an exact matching enum field
                     If memberValue = constantToDecode Then
-                        If Not pooledBuilder Is Nothing Then
+                        If pooledBuilder IsNot Nothing Then
                             pooledBuilder.Free()
                         End If
 
@@ -104,7 +104,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
             Next
 
-            If Not pooledBuilder Is Nothing Then
+            If pooledBuilder IsNot Nothing Then
                 If curValue = constantToDecode Then
                     ' return decoded enum constant
                     Return pooledBuilder.ToStringAndFree()
@@ -140,7 +140,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     ' Do we have an exact matching enum field
                     If memberValue = constantToDecode Then
-                        If Not pooledBuilder Is Nothing Then
+                        If pooledBuilder IsNot Nothing Then
                             pooledBuilder.Free()
                         End If
 
@@ -169,7 +169,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
             Next
 
-            If Not pooledBuilder Is Nothing Then
+            If pooledBuilder IsNot Nothing Then
                 If curValue = constantToDecode Then
                     ' return decoded enum constant
                     Return pooledBuilder.ToStringAndFree()

@@ -131,25 +131,25 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return x \ y
         End Function
 
-        Private Function UncheckedAdd(x As Integer, y As Integer) As Integer
-            Return x + y
-        End Function
+        'Private Function UncheckedAdd(x As Integer, y As Integer) As Integer
+        '    Return x + y
+        'End Function
 
         Private Function UncheckedAdd(x As Long, y As Long) As Long
             Return x + y
         End Function
 
-        Private Function UncheckedAdd(x As ULong, y As ULong) As ULong
-            Return x + y
-        End Function
+        'Private Function UncheckedAdd(x As ULong, y As ULong) As ULong
+        '    Return x + y
+        'End Function
 
-        Private Function UncheckedSub(x As Long, y As Long) As Long
-            Return x - y
-        End Function
+        'Private Function UncheckedSub(x As Long, y As Long) As Long
+        '    Return x - y
+        'End Function
 
-        Private Function UncheckedSub(x As UInteger, y As UInteger) As UInteger
-            Return x - y
-        End Function
+        'Private Function UncheckedSub(x As UInteger, y As UInteger) As UInteger
+        '    Return x - y
+        'End Function
 
         Private Function UncheckedNegate(x As Long) As Long
             Return -x
@@ -201,7 +201,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             resultType As ConstantValueTypeDiscriminator,
             ByRef overflow As Boolean
         ) As Long
-            Dim resultValue As Long = 0
+            Dim resultValue As Long
 
             Select Case (resultType)
 

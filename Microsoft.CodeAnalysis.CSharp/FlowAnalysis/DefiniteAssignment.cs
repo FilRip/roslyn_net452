@@ -143,7 +143,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Check that every rvalue has been converted in the definite assignment pass only (not later passes deriving from it).
         /// </summary>
+#pragma warning disable IDE0052
         private readonly bool _shouldCheckConverted;
+#pragma warning restore IDE0052
 
         internal DefiniteAssignmentPass(
             CSharpCompilation compilation,
@@ -548,7 +550,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected void Analyze(ref bool badRegion, DiagnosticBag diagnostics)
         {
-            ImmutableArray<PendingBranch> returns = Analyze(ref badRegion);
+            Analyze(ref badRegion);
             if (diagnostics != null)
             {
                 foreach (Symbol captured in _capturedVariables)
@@ -2062,7 +2064,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected void CheckAssigned(BoundExpression expr, SyntaxNode node)
         {
             if (!this.State.Reachable) return;
-            int slot = MakeSlot(expr);
+            MakeSlot(expr);
             switch (expr.Kind)
             {
                 case BoundKind.Local:

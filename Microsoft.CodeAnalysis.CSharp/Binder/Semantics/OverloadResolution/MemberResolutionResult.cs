@@ -12,7 +12,6 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// Represents the results of overload resolution for a single member.
     /// </summary>
-    [SuppressMessage("Performance", "CA1067", Justification = "Equality not actually implemented")]
     public struct MemberResolutionResult<TMember> where TMember : Symbol
     {
         private readonly TMember _member;

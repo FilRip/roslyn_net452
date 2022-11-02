@@ -154,7 +154,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
                 set
                 {
-                    var oldValue = Interlocked.CompareExchange(ref _nameAndIndex, value, null);
+                    Interlocked.CompareExchange(ref _nameAndIndex, value, null);
                 }
             }
 

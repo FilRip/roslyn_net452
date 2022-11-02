@@ -295,7 +295,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // The overload that has more parameters is itself obsolete, as an intentional break to allow future
         // expansion
-#pragma warning disable RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
 
         /// <summary>
         /// Creates a new syntax tree from a syntax node.
@@ -306,8 +305,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return Create(root, options, path, encoding, diagnosticOptions: null);
 #pragma warning restore CS0618
         }
-
-#pragma warning restore RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
 
         /// <summary>
         /// Creates a new syntax tree from a syntax node.
@@ -394,7 +391,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // The overload that has more parameters is itself obsolete, as an intentional break to allow future
         // expansion
-#pragma warning disable RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
 
         /// <summary>
         /// Produces a syntax tree by parsing the source text.
@@ -410,8 +406,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ParseText(text, options, path, encoding, diagnosticOptions: null, cancellationToken);
 #pragma warning restore CS0618
         }
-
-#pragma warning restore RS0027
 
         /// <summary>
         /// Produces a syntax tree by parsing the source text.
@@ -434,7 +428,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // The overload that has more parameters is itself obsolete, as an intentional break to allow future
         // expansion
-#pragma warning disable RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
 
         /// <summary>
         /// Produces a syntax tree by parsing the source text.
@@ -449,8 +442,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ParseText(text, options, path, diagnosticOptions: null, cancellationToken);
 #pragma warning restore CS0618
         }
-
-#pragma warning restore RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
 
         /// <summary>
         /// Produces a syntax tree by parsing the source text.

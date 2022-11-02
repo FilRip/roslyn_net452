@@ -185,7 +185,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     Dim diagBag = BindingDiagnosticBag.GetInstance()
                     Dim sourceModule = ContainingSourceModule
                     Dim errorLocation As SyntaxNodeOrToken = Nothing
-                    retType = GetReturnType(sourceModule, errorLocation, diagBag)
+                    retType = GetReturnType(sourceModule, diagBag)
 
                     If Not errorLocation.IsKind(SyntaxKind.None) Then
                         Dim diagnosticsBuilder = ArrayBuilder(Of TypeParameterDiagnosticInfo).GetInstance()
@@ -218,7 +218,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Property
 
         Private Function GetReturnType(sourceModule As SourceModuleSymbol,
-                                       ByRef errorLocation As SyntaxNodeOrToken,
                                        diagBag As BindingDiagnosticBag) As TypeSymbol
             Select Case MethodKind
                 Case MethodKind.PropertyGet

@@ -218,7 +218,7 @@ lSelect:
                     End If
                     Return VisitFieldAccess(fieldAccess)
                 Case BoundKind.Lambda
-                    Return VisitLambda(DirectCast(node, BoundLambda))
+                    Return VisitLambda()
                 Case BoundKind.NewT
                     Return VisitNewT(DirectCast(node, BoundNewT))
                 Case BoundKind.NullableIsTrueOperator
@@ -412,7 +412,7 @@ lSelect:
             Dim propertyIsShared As Boolean = [property].IsShared
             Debug.Assert(origReceiverOpt IsNot Nothing OrElse propertyIsShared)
 
-            Dim rewrittenReceiver As BoundExpression = Nothing
+            Dim rewrittenReceiver As BoundExpression
             If propertyIsShared Then
                 rewrittenReceiver = _factory.Null()
             Else
@@ -425,7 +425,7 @@ lSelect:
             Return ConvertRuntimeHelperToExpressionTree("Property", rewrittenReceiver, _factory.MethodInfo(getMethod))
         End Function
 
-        Private Function VisitLambda(node As BoundLambda) As BoundExpression
+        Private Function VisitLambda() As BoundExpression
             Throw ExceptionUtilities.Unreachable
         End Function
 
@@ -567,7 +567,7 @@ lSelect:
                 Debug.Assert(assignment.LeftOnTheRightOpt Is Nothing)
                 Dim left As BoundExpression = assignment.Left
 
-                Dim leftSymbol As Symbol = Nothing
+                Dim leftSymbol As Symbol
                 Select Case left.Kind
                     Case BoundKind.FieldAccess
                         leftSymbol = DirectCast(assignment.Left, BoundFieldAccess).FieldSymbol

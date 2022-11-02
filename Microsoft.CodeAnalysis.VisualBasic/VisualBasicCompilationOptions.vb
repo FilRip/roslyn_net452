@@ -32,7 +32,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private _ignoreCorLibraryDuplicatedTypes As Boolean
 
-#Disable Warning RS0026 ' Do not add multiple overloads with optional parameters
         ''' <summary>
         ''' Initializes a new instance of the VisualBasicCompilationOptions type with various options.
         ''' </summary>
@@ -139,7 +138,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ignoreCorLibraryDuplicatedTypes:=False)
 
         End Sub
-#Enable Warning RS0026 ' Do not add multiple overloads with optional parameters
 
         '' 15.6 BACKCOMPAT OVERLOAD -- DO NOT TOUCH
         <EditorBrowsable(EditorBrowsableState.Never)>
@@ -1138,6 +1136,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         '' 1.1 BACKCOMPAT OVERLOAD -- DO NOT TOUCH
+#Disable Warning IDE0060
         <EditorBrowsable(EditorBrowsableState.Never)>
         Public Sub New(
             outputKind As OutputKind,
@@ -1168,6 +1167,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             metadataReferenceResolver As MetadataReferenceResolver,
             assemblyIdentityComparer As AssemblyIdentityComparer,
             strongNameProvider As StrongNameProvider)
+#Enable Warning IDE0060
 
             MyClass.New(
                 outputKind,
@@ -1264,7 +1264,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 strongNameProvider:=strongNameProvider)
         End Sub
 
-#Disable Warning RS0027 ' Public API with optional parameter(s) should have the most parameters amongst its public overloads
         '' Bad constructor, do not use!
         '' Violates the rules for optional parameter overloads detailed at
         '' https://github.com/dotnet/roslyn/blob/e8fdb391703dcb5712ff6a5b83d768d784cba4cf/docs/Adding%20Optional%20Parameters%20in%20Public%20API.md
@@ -1340,7 +1339,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ignoreCorLibraryDuplicatedTypes:=False)
 
         End Sub
-#Enable Warning RS0027 ' Public API with optional parameter(s) should have the most parameters amongst its public overloads
 
         Protected Overrides Function CommonWithModuleName(moduleName As String) As CompilationOptions
             Return WithModuleName(moduleName)

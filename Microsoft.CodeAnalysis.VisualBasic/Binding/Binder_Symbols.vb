@@ -266,7 +266,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 ReportDiagnostic(diagBag, typeSyntax, lookupResult.Diagnostic)
                             End If
 
-                            Return ErrorTypeFromLookupResult(diagName, lookupResult, binder)
+                            Return ErrorTypeFromLookupResult(diagName, lookupResult)
                         End If
 
                         ' LookupTypeOrNamespaceSyntax can't return more than one symbol.
@@ -523,7 +523,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 Binder.ReportDiagnostic(diagBag, typeSyntax, lookupResult.Diagnostic)
                             End If
 
-                            Return ErrorTypeFromLookupResult(lookupResult.SingleSymbol.Name, lookupResult, binder)
+                            Return ErrorTypeFromLookupResult(lookupResult.SingleSymbol.Name, lookupResult)
                         End If
 
                         ' LookupTypeOrNamespaceSyntax can't return more than one symbol.
@@ -575,7 +575,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         LookupDottedName(lookupResult, DirectCast(typeSyntax, QualifiedNameSyntax), binder, diagBag, reportedAnError, suppressUseSiteError, resolvingBaseType:=resolvingBaseType)
 
                     Case SyntaxKind.GlobalName
-                        lookupResult.SetFrom(LookupGlobalName(DirectCast(typeSyntax, GlobalNameSyntax), binder))
+                        lookupResult.SetFrom(LookupGlobalName(binder))
 
                     Case SyntaxKind.PredefinedType
                         lookupResult.SetFrom(LookupPredefinedTypeName(DirectCast(typeSyntax, PredefinedTypeSyntax), binder, diagBag, reportedAnError, suppressUseSiteError))
@@ -735,7 +735,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End While
             End Sub
 
-            Private Shared Function ErrorTypeFromLookupResult(name As String, result As LookupResult, binder As Binder) As ErrorTypeSymbol
+            'Private Shared Function ErrorTypeFromLookupResult(name As String, result As LookupResult, binder As Binder) As ErrorTypeSymbol
+            Private Shared Function ErrorTypeFromLookupResult(name As String, result As LookupResult) As ErrorTypeSymbol
                 If result.Kind = LookupResultKind.Ambiguous AndAlso result.HasSingleSymbol AndAlso TypeOf result.Diagnostic Is AmbiguousSymbolDiagnostic Then
                     ' Special case: set of ambiguous symbols is stored in the diagnostics.
                     Return Binder.GetErrorSymbol(name, result.Diagnostic, DirectCast(result.Diagnostic, AmbiguousSymbolDiagnostic).AmbiguousSymbols, result.Kind)
@@ -1120,8 +1121,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' <summary>
             ''' Bind to the global namespace.
             ''' </summary>
-            Private Shared Function LookupGlobalName(syntax As GlobalNameSyntax,
-                                                     binder As Binder) As SingleLookupResult
+            Private Shared Function LookupGlobalName(binder As Binder) As SingleLookupResult
                 Return SingleLookupResult.Good(binder.Compilation.GlobalNamespace)
             End Function
 

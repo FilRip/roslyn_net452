@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public static BoundStatement Rewrite(
             MethodSymbol containingSymbol,
-            NamedTypeSymbol containingType,
+            //NamedTypeSymbol containingType,
             BoundStatement statement,
             TypeCompilationState compilationState,
             BindingDiagnosticBag diagnostics)
@@ -186,8 +186,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 UnpendException(pendingExceptionLocal),
                 UnpendBranches(
                     frame,
-                    pendingBranchVar,
-                    pendingExceptionLocal));
+                    pendingBranchVar/*,
+                    pendingExceptionLocal*/));
 
             BoundStatement syntheticFinally = syntheticFinallyBlock;
             if (_F.CurrentFunction.IsAsync && _F.CurrentFunction.IsIterator)
@@ -274,8 +274,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundStatement UnpendBranches(
             AwaitFinallyFrame frame,
-            SynthesizedLocal pendingBranchVar,
-            SynthesizedLocal pendingException)
+            SynthesizedLocal pendingBranchVar/*,
+            SynthesizedLocal pendingException*/)
         {
             var parent = frame.ParentOpt;
 

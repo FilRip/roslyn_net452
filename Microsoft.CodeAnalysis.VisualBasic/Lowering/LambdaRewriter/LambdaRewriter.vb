@@ -104,10 +104,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private _reported_ERR_CannotUseOnErrorGotoWithClosure As Boolean
 
-#Disable Warning IDE0044, IDE0079 ' Add readonly modifier - The field is assigned in "#If DEBUG"
         ''' <summary> WARNING: used ONLY in DEBUG </summary>
         Private _rewrittenNodes As HashSet(Of BoundNode) = Nothing
-#Enable Warning IDE0044, IDE0079 ' Add readonly modifier
 
         Private Sub New(analysis As Analysis,
                         method As MethodSymbol,
@@ -1068,7 +1066,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             ' Move the body of the lambda to a freshly generated synthetic method on its container.
-            Dim synthesizedMethod = New SynthesizedLambdaMethod(translatedLambdaContainer, closureKind, _topLevelMethod, topLevelMethodId, node, lambdaId, Me.Diagnostics)
+            Dim synthesizedMethod = New SynthesizedLambdaMethod(translatedLambdaContainer, closureKind, _topLevelMethod, topLevelMethodId, node, lambdaId)
 
             CompilationState.ModuleBuilderOpt.AddSynthesizedDefinition(translatedLambdaContainer, synthesizedMethod.GetCciAdapter())
 

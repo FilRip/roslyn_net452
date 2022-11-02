@@ -513,7 +513,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 RecordSyntaxDiagnostics(attrSyntax, sourceLocation); // Respects DocumentationMode.
 
-                MemberDeclarationSyntax memberDeclSyntax = BinderFactory.GetAssociatedMemberForXmlSyntax(originatingSyntax);
+                BinderFactory.GetAssociatedMemberForXmlSyntax(originatingSyntax);
 
                 var nameDiagnostics = BindingDiagnosticBag.GetInstance(_diagnostics);
                 Binder binder = MakeNameBinder(isParameter, isTypeParameterRef, _memberSymbol, _compilation);

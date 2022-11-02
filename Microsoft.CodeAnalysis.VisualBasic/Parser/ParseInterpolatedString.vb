@@ -90,7 +90,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             If Not skipped.IsNull Then
                 doubleQuoteToken = AddLeadingSyntax(doubleQuoteToken, _pool.ToListAndFree(skipped), ERRID.ERR_Syntax)
-                skipped = Nothing
+                'skipped = Nothing
             End If
 
             Dim node = SyntaxFactory.InterpolatedStringExpression(dollarSignDoubleQuoteToken,

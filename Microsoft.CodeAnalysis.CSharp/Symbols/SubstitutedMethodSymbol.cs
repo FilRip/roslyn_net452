@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override TypeSymbol GetTypeInferredDuringReduction(TypeParameterSymbol reducedFromTypeParameter)
         {
             // This will throw if API shouldn't be supported or there is a problem with the argument.
-            var notUsed = OriginalDefinition.GetTypeInferredDuringReduction(reducedFromTypeParameter);
+            OriginalDefinition.GetTypeInferredDuringReduction(reducedFromTypeParameter);
 
             return this.TypeArgumentsWithAnnotations[reducedFromTypeParameter.Ordinal].Type;
         }

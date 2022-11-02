@@ -33,7 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Property
 
         Friend NotOverridable Overrides Function IsDefinedInSourceTree(tree As SyntaxTree, definedWithinSpan As TextSpan?, Optional cancellationToken As CancellationToken = Nothing) As Boolean
-            Return IsDefinedInSourceTree(Me.DeclarationSyntax, tree, definedWithinSpan, cancellationToken)
+            Return IsDefinedInSourceTree(Me.DeclarationSyntax, tree, definedWithinSpan)
         End Function
 
         Friend NotOverridable Overrides ReadOnly Property GetAttributeDeclarations As OneOrMany(Of SyntaxList(Of AttributeListSyntax))

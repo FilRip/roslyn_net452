@@ -94,8 +94,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var flagsBuilder = ArrayBuilder<byte>.GetInstance();
             destinationType.AddNullableTransforms(flagsBuilder);
             int position = 0;
-            int length = flagsBuilder.Count;
-            bool transformResult = resultType.ApplyNullableTransforms(defaultTransformFlag: 0, flagsBuilder.ToImmutableAndFree(), ref position, out resultType);
+            int _ = flagsBuilder.Count;
+            resultType.ApplyNullableTransforms(defaultTransformFlag: 0, flagsBuilder.ToImmutableAndFree(), ref position, out resultType);
 
 
             // Same object/dynamic, nullability, native integers, and tuple names as destination type.

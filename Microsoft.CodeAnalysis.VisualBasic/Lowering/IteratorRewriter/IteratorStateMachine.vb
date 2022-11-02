@@ -42,6 +42,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Me._iteratorMethod = iteratorMethod
         End Sub
 
+        Public ReadOnly Property IteratorMethod As MethodSymbol
+            Get
+                Return _iteratorMethod
+            End Get
+        End Property
+
         Private Shared Function GetIteratorInterfaces(elementType As TypeSymbol,
                                                       isEnumerable As Boolean,
                                                       containingAssembly As AssemblySymbol) As ImmutableArray(Of NamedTypeSymbol)

@@ -332,7 +332,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 ' because we do not create symbols for local types. However, local types defined in source 
                 ' is another story. However, if compilation explicitly defines a local type, it should be
                 ' represented by a retargeting assembly, which is supposed to hide the local type.
-                Debug.Assert((Not TypeOf assembly Is SourceAssemblySymbol) OrElse
+                Debug.Assert((TypeOf assembly IsNot SourceAssemblySymbol) OrElse
                              Not DirectCast(assembly, SourceAssemblySymbol).SourceModule.MightContainNoPiaLocalTypes())
 
                 Dim candidateGuid As String = Nothing

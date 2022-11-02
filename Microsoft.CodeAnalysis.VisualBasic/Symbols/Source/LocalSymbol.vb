@@ -673,7 +673,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' Compute the type of this variable.
             Friend Overrides Function ComputeTypeInternal(localBinder As Binder) As TypeSymbol
 
-                Dim type As TypeSymbol = Nothing
+                Dim type As TypeSymbol
 
                 type = localBinder.InferForEachVariableType(Me,
                                                        _collectionExpressionSyntax,
@@ -745,7 +745,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim toValueExpression As BoundExpression = Nothing
                 Dim stepValueExpression As BoundExpression = Nothing
 
-                Dim type As TypeSymbol = Nothing
+                Dim type As TypeSymbol
                 Dim localBinder = If(containingBinder, _binder)
 
                 type = localBinder.InferForFromToVariableType(Me,
@@ -825,7 +825,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Friend Overrides Function ComputeTypeInternal(localBinder As Binder) As TypeSymbol
 
                 Dim declType As TypeSymbol = Nothing
-                Dim type As TypeSymbol = Nothing
+                Dim type As TypeSymbol
                 Dim valueExpression As BoundExpression = Nothing
 
                 type = localBinder.ComputeVariableType(Me,

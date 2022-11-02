@@ -159,7 +159,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim prefix As String = Nothing
                 Dim localName As String = Nothing
                 Dim [namespace] As String = Nothing
-                argument = BindXmlName(DirectCast(nameSyntax, XmlNameSyntax), forElement:=True, rootInfoOpt:=rootInfo, fromImports:=fromImports, prefix:=prefix, localName:=localName, [namespace]:=[namespace], diagnostics:=diagnostics)
+                argument = BindXmlName(DirectCast(nameSyntax, XmlNameSyntax), forElement:=True, fromImports:=fromImports, prefix:=prefix, localName:=localName, [namespace]:=[namespace], diagnostics:=diagnostics)
 
                 If fromImports Then
                     AddImportedNamespaceIfNecessary(rootInfo.ImportedNamespaces, prefix, [namespace], forElement:=True)
@@ -456,7 +456,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 name = BindXmlName(
                     DirectCast(nameSyntax, XmlNameSyntax),
                     forElement:=False,
-                    rootInfoOpt:=rootInfo,
                     fromImports:=fromImports,
                     prefix:=prefix,
                     localName:=localName,
@@ -767,13 +766,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim prefix As String = Nothing
             Dim localName As String = Nothing
             Dim [namespace] As String = Nothing
-            Return BindXmlName(syntax, forElement, Nothing, fromImports, prefix, localName, [namespace], diagnostics)
+            Return BindXmlName(syntax, forElement, fromImports, prefix, localName, [namespace], diagnostics)
         End Function
 
         Private Function BindXmlName(
                                     syntax As XmlNameSyntax,
                                     forElement As Boolean,
-                                    rootInfoOpt As XmlElementRootInfo,
                                     <Out()> ByRef fromImports As Boolean,
                                     <Out()> ByRef prefix As String,
                                     <Out()> ByRef localName As String,

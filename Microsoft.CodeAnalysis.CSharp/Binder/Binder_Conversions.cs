@@ -779,7 +779,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (!IsBadBaseAccess(node, receiverOpt, methodSymbol, diagnostics))
             {
-                CheckRuntimeSupportForSymbolAccess(node, receiverOpt, methodSymbol, diagnostics);
+                CheckRuntimeSupportForSymbolAccess(node, /*receiverOpt, */methodSymbol, diagnostics);
             }
 
             if (MemberGroupFinalValidationAccessibilityChecks(receiverOpt, methodSymbol, node, diagnostics, invokedAsExtensionMethod))
@@ -995,7 +995,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// This method implements the checks in spec section 15.2.
         /// </summary>
-        internal bool MethodIsCompatibleWithDelegateOrFunctionPointer(BoundExpression? receiverOpt, bool isExtensionMethod, MethodSymbol method, TypeSymbol delegateType, Location errorLocation, BindingDiagnosticBag diagnostics)
+        internal bool MethodIsCompatibleWithDelegateOrFunctionPointer(/*BoundExpression? receiverOpt, */bool isExtensionMethod, MethodSymbol method, TypeSymbol delegateType, Location errorLocation, BindingDiagnosticBag diagnostics)
         {
             MethodSymbol delegateOrFuncPtrMethod = delegateType switch
             {
@@ -1161,7 +1161,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var location = syntax.Location;
             if (delegateOrFuncPtrType.SpecialType != SpecialType.System_Delegate)
             {
-                if (!MethodIsCompatibleWithDelegateOrFunctionPointer(receiverOpt, isExtensionMethod, selectedMethod, delegateOrFuncPtrType, location, diagnostics) ||
+                if (!MethodIsCompatibleWithDelegateOrFunctionPointer(/*receiverOpt, */isExtensionMethod, selectedMethod, delegateOrFuncPtrType, location, diagnostics) ||
                     MemberGroupFinalValidation(receiverOpt, selectedMethod, syntax, diagnostics, isExtensionMethod))
                 {
                     return true;

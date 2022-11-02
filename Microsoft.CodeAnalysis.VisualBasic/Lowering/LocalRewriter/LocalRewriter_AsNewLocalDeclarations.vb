@@ -32,7 +32,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim localDeclaration = localDeclarations(declarationIndex)
                 Debug.Assert(localDeclaration.InitializerOpt Is Nothing)
 
-                Dim rewrittenInitializer As BoundNode = Nothing
+                Dim rewrittenInitializer As BoundNode
 
                 Dim localSymbol = localDeclaration.LocalSymbol
                 Dim staticLocalBackingFields As KeyValuePair(Of SynthesizedStaticLocalBackingField, SynthesizedStaticLocalBackingField) = Nothing

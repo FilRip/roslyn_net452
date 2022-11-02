@@ -32,7 +32,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                     Return New IntegerLiteralTokenSyntax(Of ULong)(SyntaxKind.IntegerLiteralToken, text, leadingTrivia, trailingTrivia, base, typeSuffix, value)
 
                 Case TypeCharacter.None
-                    Dim useIntegerType As Boolean = False
+                    Dim useIntegerType As Boolean
 
                     If base = LiteralBase.Decimal Then
                         useIntegerType = (value <= Integer.MaxValue)

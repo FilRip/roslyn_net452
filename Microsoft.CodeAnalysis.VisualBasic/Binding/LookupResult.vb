@@ -851,9 +851,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
         End Function
 
-        Public Sub MergeMembersOfTheSameNamespace(other As SingleLookupResult, sourceModule As ModuleSymbol, options As LookupOptions)
+        Public Sub MergeMembersOfTheSameNamespace(other As SingleLookupResult, sourceModule As ModuleSymbol)
 
-            Dim resolution As Integer = ResolveAmbiguityInTheSameNamespace(other, sourceModule, options)
+            Dim resolution As Integer = ResolveAmbiguityInTheSameNamespace(other, sourceModule)
 
             If resolution > 0 Then
                 Return
@@ -900,7 +900,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <summary>
         ''' Returns: negative value - when current lost, 0 - when neither lost, > 0 - when other lost.
         ''' </summary>
-        Private Function ResolveAmbiguityInTheSameNamespace(other As SingleLookupResult, sourceModule As ModuleSymbol, options As LookupOptions) As Integer
+        Private Function ResolveAmbiguityInTheSameNamespace(other As SingleLookupResult, sourceModule As ModuleSymbol) As Integer
             Debug.Assert(Not other.IsAmbiguous)
 
             ' Symbols in source take priority over symbols in a referenced assembly.

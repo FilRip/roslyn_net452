@@ -43,6 +43,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
         }
 
         // for debugging
+#pragma warning disable IDE0051
         private GreenNode[] Nodes
         {
             get
@@ -58,6 +59,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                 return result;
             }
         }
+#pragma warning restore IDE0051
 
         public Enumerator GetEnumerator()
         {

@@ -62,7 +62,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             typeName As String,
             Optional ignoreCase As Boolean = False
         ) As Boolean
-            If AttributeClass.IsErrorType() AndAlso Not TypeOf AttributeClass Is MissingMetadataTypeSymbol Then
+            If AttributeClass.IsErrorType() AndAlso TypeOf AttributeClass IsNot MissingMetadataTypeSymbol Then
                 ' Can't guarantee complete name information.
                 Return False
             End If

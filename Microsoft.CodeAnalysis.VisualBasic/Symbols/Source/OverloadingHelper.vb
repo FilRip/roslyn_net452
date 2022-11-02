@@ -146,7 +146,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </summary>
         Private Function GetBaseMemberMetadataName(name As String, kind As SymbolKind, container As NamedTypeSymbol) As String
             Dim metadataName As String = Nothing
-            Dim metadataLocation As Location = Nothing
+            'Dim metadataLocation As Location = Nothing
 
             ' We are creating a binder for the first partial declaration, so we can use member lookup to find accessible & visible
             ' members. For the lookup we are doing, it doesn't matter which partial we use because Imports and Options can't

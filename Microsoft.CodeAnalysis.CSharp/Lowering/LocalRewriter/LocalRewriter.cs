@@ -232,10 +232,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             return visited;
         }
 
-        private static bool IsUnusedDeconstruction(BoundExpression node)
+        /*private static bool IsUnusedDeconstruction(BoundExpression node)
         {
             return node.Kind == BoundKind.DeconstructionAssignmentOperator && !((BoundDeconstructionAssignmentOperator)node).IsUsed;
-        }
+        }*/
 
         public override BoundNode VisitLambda(BoundLambda node)
         {
@@ -425,7 +425,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void RemovePlaceholderReplacement(BoundValuePlaceholderBase placeholder)
         {
 #nullable restore
-            bool removed = _placeholderReplacementMapDoNotUseDirectly.Remove(placeholder);
+            _placeholderReplacementMapDoNotUseDirectly.Remove(placeholder);
 #nullable enable
         }
 
@@ -958,41 +958,41 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override BoundNode? VisitDefaultLiteral(BoundDefaultLiteral node)
             {
-                Fail(node);
+                Fail(/*node*/);
                 return null;
             }
 
             public override BoundNode? VisitUsingStatement(BoundUsingStatement node)
             {
-                Fail(node);
+                Fail(/*node*/);
                 return null;
             }
 
             public override BoundNode? VisitIfStatement(BoundIfStatement node)
             {
-                Fail(node);
+                Fail(/*node*/);
                 return null;
             }
 
             public override BoundNode? VisitDeconstructionVariablePendingInference(DeconstructionVariablePendingInference node)
             {
-                Fail(node);
+                Fail(/*node*/);
                 return null;
             }
 
             public override BoundNode? VisitDeconstructValuePlaceholder(BoundDeconstructValuePlaceholder node)
             {
-                Fail(node);
+                Fail(/*node*/);
                 return null;
             }
 
             public override BoundNode? VisitDisposableValuePlaceholder(BoundDisposableValuePlaceholder node)
             {
-                Fail(node);
+                Fail(/*node*/);
                 return null;
             }
 
-            private void Fail(BoundNode node)
+            private void Fail(/*BoundNode node*/)
             {
             }
         }

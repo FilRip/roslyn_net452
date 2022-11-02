@@ -21,7 +21,9 @@ namespace Microsoft.Cci
         {
         }
 
+#pragma warning disable IDE0060
         public static PooledBlobBuilder GetInstance(int size = ChunkSize)
+#pragma warning restore IDE0060
         {
             // TODO: use size
             return s_chunkPool.Allocate();

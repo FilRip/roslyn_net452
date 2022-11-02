@@ -156,7 +156,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             NamedTypeSymbol thisType,
             ParameterSymbol thisParameterOpt,
             MethodSymbol method,
-            int methodOrdinal,
+            //int methodOrdinal,
             MethodSymbol substitutedSourceMethod,
             ArrayBuilder<LambdaDebugInfo> lambdaDebugInfoBuilder,
             VariableSlotAllocator slotAllocatorOpt,
@@ -232,10 +232,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 loweredBody,
                 method,
                 methodOrdinal,
-                substitutedSourceMethod,
+                //substitutedSourceMethod,
                 slotAllocatorOpt,
                 compilationState,
-                closureDebugInfoBuilder,
+                //closureDebugInfoBuilder,
                 diagnostics.DiagnosticBag);
 
             CheckLocalsDefined(loweredBody);
@@ -244,7 +244,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 thisType,
                 thisParameter,
                 method,
-                methodOrdinal,
+                //methodOrdinal,
                 substitutedSourceMethod,
                 lambdaDebugInfoBuilder,
                 slotAllocatorOpt,
@@ -437,7 +437,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // Move the body of the lambda to a freshly generated synthetic method on its frame.
                 topLevelMethodId = _analysis.GetTopLevelMethodId();
-                lambdaId = GetLambdaId(syntax, closureKind, closureOrdinal);
+                lambdaId = GetLambdaId(syntax, /*closureKind, */closureOrdinal);
 
                 var synthesizedMethod = new SynthesizedClosureMethod(
                     translatedLambdaContainer,
@@ -1337,7 +1337,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new BoundNoOpStatement(node.Syntax, NoOpStatementFlavor.Default);
         }
 
-        private DebugId GetLambdaId(SyntaxNode syntax, ClosureKind closureKind, int closureOrdinal)
+        private DebugId GetLambdaId(SyntaxNode syntax, /*ClosureKind closureKind, */int closureOrdinal)
         {
 
             SyntaxNode lambdaOrLambdaBodySyntax;

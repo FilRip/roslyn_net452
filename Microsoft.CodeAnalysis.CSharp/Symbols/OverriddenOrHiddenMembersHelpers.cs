@@ -163,7 +163,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     knownOverriddenMember,
                     currType,
                     out bestMatch,
-                    out bool unused,
+                    out bool _,
                     out hiddenBuilder);
             }
 

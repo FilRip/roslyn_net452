@@ -83,8 +83,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new ArgumentAnalysisResult(ArgumentAnalysisResultKind.Expanded, 0, 0, argsToParamsOpt);
         }
 
-#if DEBUG        
+#if DEBUG
+#pragma warning disable IDE0051
         private string Dump()
+#pragma warning restore IDE0051
         {
             string s = "";
             switch (Kind)

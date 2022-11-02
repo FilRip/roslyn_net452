@@ -460,7 +460,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                           (midResult.Original.Kind = BoundKind.Parenthesized AndAlso node.LeftOnTheRightOpt Is DirectCast(midResult.Original, BoundParenthesized).Expression)))
             Debug.Assert(midResult.Type.IsStringType())
 
-            Dim memberSymbol As MethodSymbol = Nothing
+            Dim memberSymbol As MethodSymbol
             Const memberId As WellKnownMember = WellKnownMember.Microsoft_VisualBasic_CompilerServices_StringType__MidStmtStr
             memberSymbol = DirectCast(Compilation.GetWellKnownTypeMember(memberId), MethodSymbol)
 

@@ -72,7 +72,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                           argNames,
                                                           useLateCall)
 
-            Dim tempArray As ImmutableArray(Of SynthesizedLocal) = Nothing
+            Dim tempArray As ImmutableArray(Of SynthesizedLocal)
             If temps IsNot Nothing Then
                 tempArray = temps.ToImmutableAndFree
 

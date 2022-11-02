@@ -131,7 +131,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                    True,
                                                                    diagnosticInfo.MessageIdentifier,
                                                                    Location.None,
-                                                                   diagnosticInfo.Category,
                                                                    options.GeneralDiagnosticOption,
                                                                    options.SpecificDiagnosticOptions,
                                                                    options.SyntaxTreeOptionsProvider,

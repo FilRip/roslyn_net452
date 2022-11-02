@@ -9,14 +9,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
     Friend Module SourceDocumentationCommentUtils
         Friend Function GetAndCacheDocumentationComment(
             symbol As Symbol,
-            preferredCulture As CultureInfo,
             expandIncludes As Boolean,
             ByRef lazyXmlText As String,
             cancellationToken As CancellationToken
         ) As String
 
             If lazyXmlText Is Nothing Then
-                Dim xmlText = GetDocumentationCommentForSymbol(symbol, preferredCulture, expandIncludes, cancellationToken)
+                Dim xmlText = GetDocumentationCommentForSymbol(symbol, expandIncludes, cancellationToken)
                 Interlocked.CompareExchange(lazyXmlText, xmlText, Nothing)
             End If
 
@@ -33,12 +32,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' XML string otherwise
         ''' </returns>
         Friend Function GetDocumentationCommentForSymbol(symbol As Symbol,
-                                                         preferredCulture As CultureInfo,
                                                          expandIncludes As Boolean,
                                                          cancellationToken As CancellationToken) As String
 
             Return VisualBasicCompilation.DocumentationCommentCompiler.
-                        GetDocumentationCommentXml(symbol, expandIncludes, preferredCulture, cancellationToken)
+                        GetDocumentationCommentXml(symbol, expandIncludes, cancellationToken)
         End Function
 
     End Module

@@ -90,7 +90,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Private _lazyMembersFlattened As ImmutableArray(Of Symbol)
 
         ' Type parameters (Nothing if not created yet)
-        Private _lazyTypeParameters As ImmutableArray(Of TypeParameterSymbol)
+        'Private _lazyTypeParameters As ImmutableArray(Of TypeParameterSymbol)
 
         Private _lazyEmitExtensionAttribute As ThreeState = ThreeState.Unknown
         Private _lazyContainsExtensionMethods As ThreeState = ThreeState.Unknown
@@ -2959,11 +2959,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Next
         End Sub
 
+#Disable Warning IDE0060
         Friend Sub AddMember(sym As Symbol,
                              binder As Binder,
                              members As MembersAndInitializersBuilder,
                              omitDiagnostics As Boolean)
-
+#Enable Warning IDE0060
             If Not omitDiagnostics Then
                 members.DeferredMemberDiagnostic.Add(sym)
             End If

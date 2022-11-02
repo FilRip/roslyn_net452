@@ -221,7 +221,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var result = DeclarationModifiers.None;
             bool seenNoDuplicates = true;
-            bool seenNoAccessibilityDuplicates = true;
+            //bool seenNoAccessibilityDuplicates = true;
 
             foreach (var modifier in modifiers)
             {
@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 ReportDuplicateModifiers(
                     modifier, one, result,
-                    ref seenNoDuplicates, ref seenNoAccessibilityDuplicates,
+                    ref seenNoDuplicates, /*ref seenNoAccessibilityDuplicates,*/
                     diagnostics);
 
                 result |= one;
@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             DeclarationModifiers modifierKind,
             DeclarationModifiers allModifiers,
             ref bool seenNoDuplicates,
-            ref bool seenNoAccessibilityDuplicates,
+            //ref bool seenNoAccessibilityDuplicates,
             DiagnosticBag diagnostics)
         {
             if ((allModifiers & modifierKind) != 0)

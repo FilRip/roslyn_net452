@@ -352,20 +352,18 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </summary>
         Public MustOverride ReadOnly Property ExplicitInterfaceImplementations As ImmutableArray(Of MethodSymbol)
 
-#Disable Warning CA1200 ' Avoid using cref tags with a prefix
         ''' <summary>
         ''' Returns true if this method is not implemented in IL of the assembly it is defined in.
         ''' </summary>
         ''' <remarks>
         ''' External methods are 
         ''' 1) Declare Subs and Declare Functions, 
-        ''' 2) methods marked by <see cref="System.Runtime.InteropServices.DllImportAttribute"/>, 
+        ''' 2) methods marked by <see cref="DllImportAttribute"/>, 
         ''' 3) methods marked by <see cref="System.Runtime.CompilerServices.MethodImplAttribute"/> 
         '''    with <see cref="T:System.Runtime.CompilerServices.MethodImplOptions.InternalCall"/> or 
         '''    <see cref="T:System.Runtime.CompilerServices.MethodCodeType.Runtime"/> flags.
         ''' 4) Synthesized constructors of ComImport types
         ''' </remarks>
-#Enable Warning CA1200 ' Avoid using cref tags with a prefix
         Public MustOverride ReadOnly Property IsExternalMethod As Boolean
 
         ''' <summary>

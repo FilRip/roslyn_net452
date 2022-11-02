@@ -33,8 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Private Sub New(assemblyName As String, compilation As VisualBasicCompilation, writer As TextWriter,
                 processIncludes As Boolean, isForSingleSymbol As Boolean, diagnostics As BindingDiagnosticBag,
-                filterTree As SyntaxTree, filterSpanWithinTree As TextSpan?,
-                preferredCulture As CultureInfo, cancellationToken As CancellationToken)
+                filterTree As SyntaxTree, filterSpanWithinTree As TextSpan?, cancellationToken As CancellationToken)
 
                 Me._assemblyName = assemblyName
                 Me._compilation = compilation
@@ -74,7 +73,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Using writer
                         ' TODO: get preferred culture from compilation(?)
                         Dim compiler As New DocumentationCommentCompiler(If(assemblyName, compilation.SourceAssembly.Name), compilation, writer, True, False,
-                            diagnostics, filterTree, filterSpanWithinTree, preferredCulture:=Nothing, cancellationToken:=cancellationToken)
+                            diagnostics, filterTree, filterSpanWithinTree, cancellationToken:=cancellationToken)
 
                         compiler.Visit(compilation.SourceAssembly.GlobalNamespace)
                         Debug.Assert(compiler._writer.IndentDepth = 0)
@@ -110,7 +109,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ''' <param name="cancellationToken">To stop traversing the symbol table early.</param>
             Friend Shared Function GetDocumentationCommentXml(symbol As Symbol,
                                                               processIncludes As Boolean,
-                                                              preferredCulture As CultureInfo,
                                                               cancellationToken As CancellationToken) As String
 
                 Debug.Assert(symbol.Kind = SymbolKind.Event OrElse
@@ -126,7 +124,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim writer As New StringWriter(pooled.Builder, CultureInfo.InvariantCulture)
 
                 Dim compiler = New DocumentationCommentCompiler(Nothing, compilation, writer, processIncludes,
-                    True, BindingDiagnosticBag.Discarded, Nothing, Nothing, preferredCulture, cancellationToken)
+                    True, BindingDiagnosticBag.Discarded, Nothing, Nothing, cancellationToken)
                 compiler.Visit(symbol)
                 Debug.Assert(compiler._writer.IndentDepth = 0)
 

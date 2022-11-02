@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // to make base resolution errors more deterministic
                     if (ContainingType is object)
                     {
-                        var tmp = ContainingType.BaseTypeNoUseSiteDiagnostics;
+                        var _ = ContainingType.BaseTypeNoUseSiteDiagnostics;
                     }
 
                     var diagnostics = BindingDiagnosticBag.GetInstance();

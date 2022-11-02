@@ -71,7 +71,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </param>
         Friend NotOverridable Overrides Function LookupTopLevelMetadataTypeWithCycleDetection(ByRef emittedName As MetadataTypeName, visitedAssemblies As ConsList(Of AssemblySymbol), digThroughForwardedTypes As Boolean) As NamedTypeSymbol
 
-            Dim result As NamedTypeSymbol = Nothing
+            Dim result As NamedTypeSymbol
 
             ' This is a cache similar to the one used by MetaImport::GetTypeByName
             ' in native compiler. The difference is that native compiler pre-populates 
@@ -183,7 +183,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ByRef emittedName As MetadataTypeName,
             result As NamedTypeSymbol
         )
-            Dim result1 As NamedTypeSymbol = Nothing
+            Dim result1 As NamedTypeSymbol
             result1 = Me._emittedNameToTypeMap.GetOrAdd(emittedName.ToKey(), result)
             Debug.Assert(result1.Equals(result)) ' object identity may differ in error cases
         End Sub

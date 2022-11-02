@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // NOTE: The CreateSourceAssemblyFullBind is going to replace compilation's reference manager with newManager.
 
                     var newManager = new ReferenceManager(this.SimpleAssemblyName, this.IdentityComparer, this.ObservedMetadata);
-                    var successful = newManager.CreateAndSetSourceAssemblyFullBind(compilation);
+                    newManager.CreateAndSetSourceAssemblyFullBind(compilation);
 
                     // The new manager isn't shared with any other compilation so there is no other 
                     // thread but the current one could have initialized it.
@@ -363,7 +363,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         ImmutableDictionary<AssemblyIdentity, PortableExecutableReference?>.Empty;
 
                     BoundInputAssembly[] bindingResult = Bind(
-                        compilation,
+                        //compilation,
                         explicitAssemblyData,
                         modules,
                         explicitReferences,

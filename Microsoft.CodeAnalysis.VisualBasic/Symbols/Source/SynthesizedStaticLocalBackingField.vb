@@ -37,6 +37,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Me._reportErrorForLongNames = reportErrorForLongNames
         End Sub
 
+        Public ReadOnly Property ReportErrorForLongNames As Boolean
+            Get
+                Return _reportErrorForLongNames
+            End Get
+        End Property
+
         Friend Overloads ReadOnly Property ImplicitlyDefinedBy As LocalSymbol
             Get
                 Return DirectCast(_implicitlyDefinedBy, LocalSymbol)

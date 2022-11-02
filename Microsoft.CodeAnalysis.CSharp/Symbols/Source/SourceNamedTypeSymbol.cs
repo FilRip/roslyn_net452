@@ -416,7 +416,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 results = MergeConstraintKindsForPartialDeclarations(results, otherPartialClauses);
-                results = ConstraintsHelper.AdjustConstraintKindsBasedOnConstraintTypes(this, typeParameters, results);
+                results = ConstraintsHelper.AdjustConstraintKindsBasedOnConstraintTypes(/*this, */typeParameters, results);
 
                 if (results.All(clause => clause.Constraints == TypeParameterConstraintKind.None))
                 {

@@ -220,7 +220,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(targetType IsNot Nothing)
 
             Dim diagnostics = BindingDiagnosticBag.GetInstance(withDiagnostics:=True, addressOfExpression.WithDependencies)
-            Dim result As OverloadResolution.OverloadResolutionResult = Nothing
+            'Dim result As OverloadResolution.OverloadResolutionResult = Nothing
             Dim fromMethod As MethodSymbol = Nothing
 
             Dim syntaxTree = addressOfExpression.Syntax
@@ -1225,7 +1225,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             boundInvocationExpression.SetWasCompilerGenerated()
 
             ' In case of a function target that got assigned to a sub delegate, the return value will be dropped
-            Dim statementList As ImmutableArray(Of BoundStatement) = Nothing
+            Dim statementList As ImmutableArray(Of BoundStatement)
             If lambdaSymbol.IsSub Then
                 Dim statements(1) As BoundStatement
                 Dim boundStatement As BoundStatement = New BoundExpressionStatement(syntaxNode, boundInvocationExpression)

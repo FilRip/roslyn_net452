@@ -945,7 +945,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     IEqualityComparer<MethodSymbol> retargetedMethodComparer
                 )
                 {
-                    bool modifiersHaveChanged_Ignored; //ignored
+                    //bool modifiersHaveChanged_Ignored; //ignored
 
                     var targetParamsBuilder = ArrayBuilder<ParameterSymbol>.GetInstance(method.Parameters.Length);
                     foreach (var param in method.Parameters)
@@ -953,7 +953,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                         targetParamsBuilder.Add(
                             new SignatureOnlyParameterSymbol(
                                 translator.Retarget(param.TypeWithAnnotations, RetargetOptions.RetargetPrimitiveTypesByTypeCode),
-                                translator.RetargetModifiers(param.RefCustomModifiers, out modifiersHaveChanged_Ignored),
+                                translator.RetargetModifiers(param.RefCustomModifiers, out bool _),
                                 param.IsParams,
                                 param.RefKind));
                     }
@@ -972,7 +972,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                         method.RefKind,
                         method.IsInitOnly,
                         translator.Retarget(method.ReturnTypeWithAnnotations, RetargetOptions.RetargetPrimitiveTypesByTypeCode),
-                        translator.RetargetModifiers(method.RefCustomModifiers, out modifiersHaveChanged_Ignored),
+                        translator.RetargetModifiers(method.RefCustomModifiers, out bool _),
                         ImmutableArray<MethodSymbol>.Empty);
 
                     foreach (var retargetedMember in retargetedType.GetMembers(method.Name))
@@ -1006,7 +1006,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
             private PropertySymbol FindPropertyInRetargetedType(PropertySymbol property, NamedTypeSymbol retargetedType, IEqualityComparer<PropertySymbol> retargetedPropertyComparer)
             {
-                bool modifiersHaveChanged_Ignored; //ignored
+                //bool modifiersHaveChanged_Ignored; //ignored
 
                 var targetParamsBuilder = ArrayBuilder<ParameterSymbol>.GetInstance(property.Parameters.Length);
                 foreach (var param in property.Parameters)
@@ -1014,7 +1014,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     targetParamsBuilder.Add(
                         new SignatureOnlyParameterSymbol(
                             Retarget(param.TypeWithAnnotations, RetargetOptions.RetargetPrimitiveTypesByTypeCode),
-                            RetargetModifiers(param.RefCustomModifiers, out modifiersHaveChanged_Ignored),
+                            RetargetModifiers(param.RefCustomModifiers, out bool _),
                             param.IsParams,
                             param.RefKind));
                 }
@@ -1025,7 +1025,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     targetParamsBuilder.ToImmutableAndFree(),
                     property.RefKind,
                     Retarget(property.TypeWithAnnotations, RetargetOptions.RetargetPrimitiveTypesByTypeCode),
-                    RetargetModifiers(property.RefCustomModifiers, out modifiersHaveChanged_Ignored),
+                    RetargetModifiers(property.RefCustomModifiers, out bool _),
                     property.IsStatic,
                     ImmutableArray<PropertySymbol>.Empty);
 
@@ -1069,7 +1069,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             {
                 if (lazyCustomModifiers.IsDefault)
                 {
-                    ImmutableArray<CustomModifier> newModifiers = this.RetargetModifiers(oldModifiers, out bool modifiersHaveChanged);
+                    ImmutableArray<CustomModifier> newModifiers = this.RetargetModifiers(oldModifiers, out bool _);
                     ImmutableInterlocked.InterlockedCompareExchange(ref lazyCustomModifiers, newModifiers, default);
                 }
 

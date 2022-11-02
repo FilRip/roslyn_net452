@@ -28,7 +28,9 @@ namespace Microsoft.Cci
         internal const uint Age = 1;
 
         private readonly SourceHashAlgorithm _hashAlgorithmNameOpt;
+#pragma warning disable IDE0052
         private readonly string _fileName;
+#pragma warning restore IDE0052
         private readonly Func<ISymWriterMetadataProvider, SymUnmanagedWriter> _symWriterFactory;
         private readonly Dictionary<DebugSourceDocument, int> _documentIndex;
         private MetadataWriter _metadataWriter;
@@ -86,7 +88,7 @@ namespace Microsoft.Cci
             var methodHandle = (MethodDefinitionHandle)_metadataWriter.GetMethodHandle(methodBody.MethodDefinition);
             int methodToken = MetadataTokens.GetToken(methodHandle);
 
-            OpenMethod(methodToken, methodBody.MethodDefinition);
+            OpenMethod(methodToken/*, methodBody.MethodDefinition*/);
 
             var localScopes = methodBody.LocalScopes;
 
@@ -616,7 +618,7 @@ namespace Microsoft.Cci
             return documentIndex;
         }
 
-        private void OpenMethod(int methodToken, IMethodDefinition method)
+        private void OpenMethod(int methodToken/*, IMethodDefinition method*/)
         {
             _symWriter.OpenMethod(methodToken);
 

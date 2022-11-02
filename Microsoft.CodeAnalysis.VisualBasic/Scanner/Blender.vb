@@ -449,7 +449,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             ' we cannot use nodes that contain directives since we need to process
             ' directives individually.
             ' We however can use individual directives.
-            If node.ContainsDirectives AndAlso Not TypeOf node Is DirectiveTriviaSyntax Then
+            If node.ContainsDirectives AndAlso TypeOf node IsNot DirectiveTriviaSyntax Then
                 Return _scannerPreprocessorState.IsEquivalentTo(_currentPreprocessorState)
             End If
 

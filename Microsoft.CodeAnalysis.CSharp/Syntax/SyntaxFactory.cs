@@ -1544,9 +1544,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return CSharpSyntaxTree.Create((CSharpSyntaxNode)root, (CSharpParseOptions?)options, path, encoding);
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
-#pragma warning disable RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
-
         /// <inheritdoc cref="CSharpSyntaxTree.ParseText(string, CSharpParseOptions?, string, Encoding?, CancellationToken)"/>
         public static SyntaxTree ParseSyntaxTree(
             string text,
@@ -1567,9 +1564,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return CSharpSyntaxTree.ParseText(text, (CSharpParseOptions?)options, path, cancellationToken);
         }
-
-#pragma warning restore RS0027 // Public API with optional parameter(s) should have the most parameters amongst its public overloads.
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         /// <summary>
         /// Parse a list of trivia rules for leading trivia.

@@ -529,7 +529,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
 
             this.Reset(ref resetPoint);
-            this.Release(ref resetPoint);
+            this.Release(/*ref resetPoint*/);
 
             return isVerbatim;
         }
@@ -1278,11 +1278,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     // If this isn't the first part of a dotted name, then we prefer to represent it
                     // as a MemberCrefSyntax.
                     this.Reset(ref resetPoint);
-                    this.Release(ref resetPoint);
+                    this.Release(/*ref resetPoint*/);
 
                     return null;
                 }
-                this.Release(ref resetPoint);
+                this.Release(/*ref resetPoint*/);
             }
 
             while (CurrentToken.Kind == SyntaxKind.DotToken)
@@ -1297,12 +1297,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 if (checkForMember && (rightName.IsMissing || CurrentToken.Kind != SyntaxKind.DotToken))
                 {
                     this.Reset(ref resetPoint); // Go back to before the dot - it must have been the trailing dot.
-                    this.Release(ref resetPoint);
+                    this.Release(/*ref resetPoint*/);
 
                     return leftName;
                 }
 
-                this.Release(ref resetPoint);
+                this.Release(/*ref resetPoint*/);
 
                 leftName = SyntaxFactory.QualifiedName(leftName, dot, rightName);
             }

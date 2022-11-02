@@ -527,7 +527,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                     Add(node)
 
                 Case Else
-                    If Not TypeOf node Is ExecutableStatementSyntax Then
+                    If TypeOf node IsNot ExecutableStatementSyntax Then
                         Return Nothing
                     End If
 

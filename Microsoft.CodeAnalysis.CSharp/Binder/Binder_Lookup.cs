@@ -69,7 +69,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 result.Clear();
                 // retry to get diagnosis
-                var otherBinder = this.LookupSymbolsInternal(result, name, arity, basesBeingResolved, options, diagnose: true, useSiteInfo: ref useSiteInfo);
+                this.LookupSymbolsInternal(result, name, arity, basesBeingResolved, options, diagnose: true, useSiteInfo: ref useSiteInfo);
             }
 
             return binder;

@@ -25,8 +25,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Private _methodValue As LocalSymbol
             Private _tryNestingLevel As Integer
 
-            Friend Sub New(method As MethodSymbol,
-                           F As SyntheticBoundNodeFactory,
+            Friend Sub New(F As SyntheticBoundNodeFactory,
                            state As FieldSymbol,
                            current As FieldSymbol,
                            hoistedVariables As IReadOnlySet(Of Symbol),

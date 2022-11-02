@@ -592,7 +592,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                  End If
 
                                                  If typeOrNamespace.IsNamespace Then
-                                                     DirectCast(typeOrNamespace, SourceNamespaceSymbol).GenerateDeclarationErrorsInTree(tree, filterSpanWithinTree, cancellationToken)
+                                                     DirectCast(typeOrNamespace, SourceNamespaceSymbol).GenerateDeclarationErrorsInTree(tree, cancellationToken)
                                                  Else
                                                      ' synthetic event delegates are not source types so use NamedTypeSymbol. 
                                                      Dim sourceType = DirectCast(typeOrNamespace, NamedTypeSymbol)

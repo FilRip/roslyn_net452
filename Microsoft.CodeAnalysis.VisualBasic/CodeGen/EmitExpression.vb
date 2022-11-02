@@ -184,7 +184,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
 
                 Case BoundKind.ModuleVersionIdString
                     Debug.Assert(used)
-                    EmitModuleVersionIdStringLoad(DirectCast(expression, BoundModuleVersionIdString))
+                    EmitModuleVersionIdStringLoad()
 
                 Case BoundKind.InstrumentationPayloadRoot
                     Debug.Assert(used)
@@ -1293,7 +1293,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 Dim mergeTypeOfConsequence As TypeSymbol = StackMergeType(expr.WhenTrue)
                 If (IsVarianceCast(expr.Type, mergeTypeOfConsequence)) Then
                     EmitStaticCast(expr.Type, expr.Syntax)
-                    mergeTypeOfConsequence = expr.Type
+                    'mergeTypeOfConsequence = expr.Type
 
                 ElseIf (expr.Type.IsInterfaceType() AndAlso Not TypeSymbol.Equals(expr.Type, mergeTypeOfAlternative, TypeCompareKind.ConsiderEverything) AndAlso Not TypeSymbol.Equals(expr.Type, mergeTypeOfConsequence, TypeCompareKind.ConsiderEverything)) Then
                     EmitStaticCast(expr.Type, expr.Syntax)
@@ -1349,7 +1349,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 Dim mergeTypeOfRightValue As TypeSymbol = StackMergeType(expr.ElseExpression)
                 If (IsVarianceCast(expr.Type, mergeTypeOfRightValue)) Then
                     EmitStaticCast(expr.Type, expr.Syntax)
-                    mergeTypeOfRightValue = expr.Type
+                    'mergeTypeOfRightValue = expr.Type
                 ElseIf (expr.Type.IsInterfaceType() AndAlso Not TypeSymbol.Equals(expr.Type, mergeTypeOfLeftValue, TypeCompareKind.ConsiderEverything) AndAlso Not TypeSymbol.Equals(expr.Type, mergeTypeOfRightValue, TypeCompareKind.ConsiderEverything)) Then
                     EmitStaticCast(expr.Type, expr.Syntax)
                 End If
@@ -1557,45 +1557,45 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             EmitInitObj(type, used, syntaxNode)
         End Sub
 
-        Private Sub EmitStructConstructorCallOnTarget(constructor As MethodSymbol,
-                                                      arguments As ImmutableArray(Of BoundExpression),
-                                                      target As BoundExpression,
-                                                      syntaxNode As VisualBasicSyntaxNode)
+        'Private Sub EmitStructConstructorCallOnTarget(constructor As MethodSymbol,
+        '                                              arguments As ImmutableArray(Of BoundExpression),
+        '                                              target As BoundExpression,
+        '                                              syntaxNode As VisualBasicSyntaxNode)
 
-            Debug.Assert(target.IsLValue OrElse target.Kind = BoundKind.MeReference OrElse
-                         (target.Kind = BoundKind.Local AndAlso DirectCast(target, BoundLocal).LocalSymbol.IsReadOnly))
+        '    Debug.Assert(target.IsLValue OrElse target.Kind = BoundKind.MeReference OrElse
+        '                 (target.Kind = BoundKind.Local AndAlso DirectCast(target, BoundLocal).LocalSymbol.IsReadOnly))
 
-            If target.Kind = BoundKind.Local AndAlso IsStackLocal(DirectCast(target, BoundLocal).LocalSymbol) Then
-                ' A newobj for a struct will create a new object on the stack for stack locals
-                EmitNewObj(constructor, arguments, True, syntaxNode)
-                Return
-            End If
+        '    If target.Kind = BoundKind.Local AndAlso IsStackLocal(DirectCast(target, BoundLocal).LocalSymbol) Then
+        '        ' A newobj for a struct will create a new object on the stack for stack locals
+        '        EmitNewObj(constructor, arguments, True, syntaxNode)
+        '        Return
+        '    End If
 
-            ' NOTE!!!: We are misusing isReadOnly here!!!
-            '
-            ' We are creating a fully modifiable reference to a struct in order to initialize it.
-            ' In fact we are going to pass the reference as a byref arg to a constructor 
-            ' (which can do whatever it wants with it - pass it byref to somebody else, etc...)
-            '
-            ' We are still going to say the reference is immutable. Since we are initializing, there is nothing to mutate.
-            '
-            ' Also note that we will not produce controlled mutability pointers here too.
-            ' since the target is definitely a struct, it cannot be accessed covariantly.
-            '
-            EmitAddress(target, addressKind:=AddressKind.Immutable)
-            ' otherwise instead of 'Initobj' the constructor should be called 
+        '    ' NOTE!!!: We are misusing isReadOnly here!!!
+        '    '
+        '    ' We are creating a fully modifiable reference to a struct in order to initialize it.
+        '    ' In fact we are going to pass the reference as a byref arg to a constructor 
+        '    ' (which can do whatever it wants with it - pass it byref to somebody else, etc...)
+        '    '
+        '    ' We are still going to say the reference is immutable. Since we are initializing, there is nothing to mutate.
+        '    '
+        '    ' Also note that we will not produce controlled mutability pointers here too.
+        '    ' since the target is definitely a struct, it cannot be accessed covariantly.
+        '    '
+        '    EmitAddress(target, addressKind:=AddressKind.Immutable)
+        '    ' otherwise instead of 'Initobj' the constructor should be called 
 
-            ' NOTE: we don't call initobj before calling constructor following Dev10 implementation. This
-            '       may cause errors in some scenarios in case constructor does not initialize all the fields
-            ' TODO: revise?
+        '    ' NOTE: we don't call initobj before calling constructor following Dev10 implementation. This
+        '    '       may cause errors in some scenarios in case constructor does not initialize all the fields
+        '    ' TODO: revise?
 
-            '  emit constructor call
-            Dim stackBehavior = -constructor.ParameterCount - 1
+        '    '  emit constructor call
+        '    Dim stackBehavior = -constructor.ParameterCount - 1
 
-            EmitArguments(arguments, constructor.Parameters)
-            _builder.EmitOpCode(ILOpCode.Call, stackBehavior)
-            EmitSymbolToken(constructor, syntaxNode)
-        End Sub
+        '    EmitArguments(arguments, constructor.Parameters)
+        '    _builder.EmitOpCode(ILOpCode.Call, stackBehavior)
+        '    EmitSymbolToken(constructor, syntaxNode)
+        'End Sub
 
         Private Sub EmitInitObjOnTarget(target As BoundExpression)
             ' NOTE!!!: We are misusing isReadOnly here!!!
@@ -1632,9 +1632,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             End If
         End Sub
 
-        Private Sub EmitConstantExpression(expression As BoundExpression)
-            _builder.EmitConstantValue(expression.ConstantValueOpt)
-        End Sub
+        'Private Sub EmitConstantExpression(expression As BoundExpression)
+        '    _builder.EmitConstantValue(expression.ConstantValueOpt)
+        'End Sub
 
         Private Sub EmitAssignmentExpression(assignmentOperator As BoundAssignmentOperator, used As Boolean)
             If Me.TryEmitAssignmentInPlace(assignmentOperator, used) Then
@@ -2255,7 +2255,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             _builder.EmitToken(_module.GetModuleVersionId(_module.Translate(node.Type, node.Syntax, _diagnostics), node.Syntax, _diagnostics), node.Syntax, _diagnostics)
         End Sub
 
-        Private Sub EmitModuleVersionIdStringLoad(node As BoundModuleVersionIdString)
+        Private Sub EmitModuleVersionIdStringLoad()
             _builder.EmitOpCode(ILOpCode.Ldstr)
             _builder.EmitModuleVersionIdStringToken()
         End Sub

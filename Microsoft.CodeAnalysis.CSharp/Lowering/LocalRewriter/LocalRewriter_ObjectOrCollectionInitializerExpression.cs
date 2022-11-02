@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var placeholder = collectionInitializer.Placeholder;
                         AddPlaceholderReplacement(placeholder, rewrittenReceiver);
-                        AddCollectionInitializers(ref dynamicSiteInitializers, result, rewrittenReceiver, collectionInitializer.Initializers);
+                        AddCollectionInitializers(/*ref dynamicSiteInitializers, */result, rewrittenReceiver, collectionInitializer.Initializers);
                         RemovePlaceholderReplacement(placeholder);
                     }
                     return;
@@ -70,8 +70,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case BoundKind.CollectionInitializerExpression:
                     var result = ArrayBuilder<BoundExpression>.GetInstance();
-                    ArrayBuilder<BoundExpression>? dynamicSiteInitializers = null;
-                    AddCollectionInitializers(ref dynamicSiteInitializers, result, null, ((BoundCollectionInitializerExpression)initializerExpression).Initializers);
+                    //ArrayBuilder<BoundExpression>? dynamicSiteInitializers = null;
+                    AddCollectionInitializers(/*ref dynamicSiteInitializers, */result, null, ((BoundCollectionInitializerExpression)initializerExpression).Initializers);
 
                     // dynamic sites not allowed in ET:
 
@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Rewrite collection initializer add method calls:
         // 2) new List<int> { 1 };
         //                    ~
-        private void AddCollectionInitializers(ref ArrayBuilder<BoundExpression>? dynamicSiteInitializers, ArrayBuilder<BoundExpression> result, BoundExpression? rewrittenReceiver, ImmutableArray<BoundExpression> initializers)
+        private void AddCollectionInitializers(/*ref ArrayBuilder<BoundExpression>? dynamicSiteInitializers, */ArrayBuilder<BoundExpression> result, BoundExpression? rewrittenReceiver, ImmutableArray<BoundExpression> initializers)
         {
 
             foreach (var initializer in initializers)
@@ -166,7 +166,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 argumentRefKindsOpt = builder.ToImmutableAndFree();
             }
 
-            rewrittenArguments = MakeArguments(syntax, rewrittenArguments, addMethod, initializer.Expanded, initializer.ArgsToParamsOpt, ref argumentRefKindsOpt, out ImmutableArray<LocalSymbol> temps, enableCallerInfo: ThreeState.True);
+            rewrittenArguments = MakeArguments(syntax, rewrittenArguments, addMethod, initializer.Expanded, initializer.ArgsToParamsOpt, ref argumentRefKindsOpt, out ImmutableArray<LocalSymbol> temps/*, enableCallerInfo: ThreeState.True*/);
 
             if (initializer.InvokedAsExtensionMethod)
             {

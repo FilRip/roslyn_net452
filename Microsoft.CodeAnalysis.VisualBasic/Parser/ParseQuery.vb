@@ -21,7 +21,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 PeekToken(1).Kind = SyntaxKind.EqualsToken OrElse
                 (PeekToken(1).Kind = SyntaxKind.QuestionToken AndAlso PeekToken(2).Kind = SyntaxKind.EqualsToken)) Then
 
-                Dim varName As ModifiedIdentifierSyntax = Nothing
+                Dim varName As ModifiedIdentifierSyntax
                 Dim Equals As PunctuationSyntax
 
                 ' // Parse form: <IdentifierOrKeyword> '=' <Expression>
@@ -703,7 +703,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Loop
 
             Dim onKw As KeywordSyntax = Nothing
-            Dim Predicate As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of JoinConditionSyntax) = Nothing
+            Dim Predicate As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of JoinConditionSyntax)
             If TryEatNewLineAndGetToken(SyntaxKind.OnKeyword, onKw, createIfMissing:=True) Then
                 TryEatNewLine()
                 Predicate = ParseJoinPredicateExpression()
@@ -878,7 +878,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                     End If
 
                     Dim eqKw As KeywordSyntax = Nothing
-                    Dim Right As ExpressionSyntax = Nothing
+                    Dim Right As ExpressionSyntax
                     If TryGetContextualKeywordAndEatNewLine(SyntaxKind.EqualsKeyword, eqKw, createIfMissing:=True) Then
                         Right = ParseExpressionCore(OperatorPrecedence.PrecedenceRelational)
                     Else
@@ -1211,7 +1211,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Me._pool.Free(moreOperators)
 
             Dim intoKw As KeywordSyntax = Nothing
-            Dim variables As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of AggregationRangeVariableSyntax) = Nothing
+            Dim variables As CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList(Of AggregationRangeVariableSyntax)
             If TryEatNewLineAndGetContextualKeyword(SyntaxKind.IntoKeyword, intoKw, createIfMissing:=True) Then
                 ' //ILC:  I took the liberty of adding implicit line continuations after query keywords in addition to before them...
                 TryEatNewLine()

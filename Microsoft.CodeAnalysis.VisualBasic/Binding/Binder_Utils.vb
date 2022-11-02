@@ -1077,7 +1077,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 If isFromLambda Then
                     newParam = UnboundLambdaParameterSymbol.CreateFromSyntax(paramSyntax, name, flags, ordinal, Me, diagBag)
                 Else
-                    newParam = SourceComplexParameterSymbol.CreateFromSyntax(container, paramSyntax, name, flags, ordinal, Me, checkModifier, diagBag)
+                    newParam = SourceComplexParameterSymbol.CreateFromSyntax(container, paramSyntax, name, flags, ordinal, Me, diagBag)
                 End If
                 ordinal += 1
 

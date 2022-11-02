@@ -28,6 +28,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             _compilation = compilation
         End Sub
 
+        Public ReadOnly Property Compilation As VisualBasicCompilation
+            Get
+                Return _compilation
+            End Get
+        End Property
+
         Friend ReadOnly Property Count As Integer
             Get
                 Return If(_previousSubmissionFieldMap Is Nothing, 0, _previousSubmissionFieldMap.Count)

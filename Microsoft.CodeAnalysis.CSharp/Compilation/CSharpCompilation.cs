@@ -2546,10 +2546,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-#pragma warning disable CS0414
+#pragma warning disable CS0414, IDE0052
         private DiagnosticBag? _lazyDeclarationDiagnostics;
         private bool _declarationDiagnosticsFrozen;
-#pragma warning restore CS0414
+#pragma warning restore CS0414, IDE0052
 
         /// <summary>
         /// A bag in which diagnostics that should be reported after code gen can be deposited.
@@ -3865,7 +3865,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new PredicateSymbolSearcher(this, filter, predicate, cancellationToken).GetSymbolsWithName().GetPublicSymbols()!;
         }
 
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
         /// <summary>
         /// Return true if there is a source declaration symbol name that matches the provided name.
         /// This will be faster than <see cref="ContainsSymbolsWithName(Func{string, bool}, SymbolFilter, CancellationToken)"/>
@@ -3911,7 +3910,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return new NameSymbolSearcher(this, filter, name, cancellationToken).GetSymbolsWithName();
         }
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
 
         #endregion
 

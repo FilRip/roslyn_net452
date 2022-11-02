@@ -202,25 +202,19 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         System_IDisposable = 35,
 
-#pragma warning disable CA1200 // Avoid using cref tags with a prefix
         /// <summary>
         /// Indicates that the type is <see cref="T:System.TypedReference"/>.
         /// </summary>
-#pragma warning restore CA1200 // Avoid using cref tags with a prefix
         System_TypedReference = 36,
 
-#pragma warning disable CA1200 // Avoid using cref tags with a prefix
         /// <summary>
         /// Indicates that the type is <see cref="T:System.ArgIterator"/>.
         /// </summary>
-#pragma warning restore CA1200 // Avoid using cref tags with a prefix
         System_ArgIterator = 37,
 
-#pragma warning disable CA1200 // Avoid using cref tags with a prefix
         /// <summary>
         /// Indicates that the type is <see cref="T:System.RuntimeArgumentHandle"/>.
         /// </summary>
-#pragma warning restore CA1200 // Avoid using cref tags with a prefix
         System_RuntimeArgumentHandle = 38,
 
         /// <summary>

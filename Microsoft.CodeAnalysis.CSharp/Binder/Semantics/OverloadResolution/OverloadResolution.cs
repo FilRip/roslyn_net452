@@ -265,7 +265,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0; i < members.Count; i++)
             {
                 AddMemberToCandidateSet(
-                    members[i], results, members, typeArguments, receiver, arguments, completeResults,
+                    members[i], results, members, typeArguments, /*receiver, */arguments, completeResults,
                     isMethodGroupConversion, allowRefOmittedArguments, containingTypeMapOpt, inferWithDynamic: inferWithDynamic,
                     useSiteInfo: ref useSiteInfo, allowUnexpandedForm: allowUnexpandedForm);
             }
@@ -333,7 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 overloadResolutionResult.ResultsBuilder,
                 funcPtrBuilder,
                 typeArgumentsBuilder,
-                receiverOpt: null,
+                //receiverOpt: null,
                 analyzedArguments,
                 completeResults: true,
                 isMethodGroupConversion: false,
@@ -799,7 +799,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ArrayBuilder<MemberResolutionResult<TMember>> results,
             ArrayBuilder<TMember> members,
             ArrayBuilder<TypeWithAnnotations> typeArguments,
-            BoundExpression receiverOpt,
+            //BoundExpression receiverOpt,
             AnalyzedArguments arguments,
             bool completeResults,
             bool isMethodGroupConversion,
@@ -2706,16 +2706,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // based on a "better", but, in reality, erroneous one.
                         if (node?.Kind == BoundKind.MethodGroup)
                         {
-                            var group = (BoundMethodGroup)node;
+                            var _ = (BoundMethodGroup)node;
 
                             if (delegateResult == BetterResult.Left)
                             {
-                                if (IsMethodGroupConversionIncompatibleWithDelegate(group, d1, conv1))
+                                if (IsMethodGroupConversionIncompatibleWithDelegate(/*group, */d1, conv1))
                                 {
                                     return BetterResult.Neither;
                                 }
                             }
-                            else if (delegateResult == BetterResult.Right && IsMethodGroupConversionIncompatibleWithDelegate(group, d2, conv2))
+                            else if (delegateResult == BetterResult.Right && IsMethodGroupConversionIncompatibleWithDelegate(/*group, */d2, conv2))
                             {
                                 return BetterResult.Neither;
                             }
@@ -2754,11 +2754,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             return BetterResult.Neither;
         }
 
-        private bool IsMethodGroupConversionIncompatibleWithDelegate(BoundMethodGroup node, NamedTypeSymbol delegateType, Conversion conv)
+        private bool IsMethodGroupConversionIncompatibleWithDelegate(/*BoundMethodGroup node, */NamedTypeSymbol delegateType, Conversion conv)
         {
             if (conv.IsMethodGroup)
             {
-                bool result = !_binder.MethodIsCompatibleWithDelegateOrFunctionPointer(node.ReceiverOpt, conv.IsExtensionMethod, conv.Method, delegateType, Location.None, BindingDiagnosticBag.Discarded);
+                bool result = !_binder.MethodIsCompatibleWithDelegateOrFunctionPointer(/*node.ReceiverOpt, */conv.IsExtensionMethod, conv.Method, delegateType, Location.None, BindingDiagnosticBag.Discarded);
                 return result;
             }
 

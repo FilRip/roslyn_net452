@@ -74,7 +74,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private void EnsureClassAndConstructorSymbolsAreLoaded()
         {
-#pragma warning disable 0252
             if ((object?)_lazyAttributeClass == ErrorTypeSymbol.UnknownResultType)
             {
 #nullable restore
@@ -92,7 +91,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 Interlocked.CompareExchange(ref _lazyAttributeConstructor, attributeConstructor, null);
                 Interlocked.CompareExchange(ref _lazyAttributeClass, (NamedTypeSymbol?)attributeClass, ErrorTypeSymbol.UnknownResultType); // Serves as a flag, so do it last.
             }
-#pragma warning restore 0252
         }
 
         private void EnsureAttributeArgumentsAreLoaded()

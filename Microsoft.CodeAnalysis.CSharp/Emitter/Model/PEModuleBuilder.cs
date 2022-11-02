@@ -46,9 +46,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         private Dictionary<FieldSymbol, NamedTypeSymbol> _fixedImplementationTypes;
 
         private int _needsGeneratedAttributes;
-#pragma warning disable CS0414
+#pragma warning disable CS0414, IDE0052
         private bool _needsGeneratedAttributes_IsFrozen;
-#pragma warning restore CS0414
+#pragma warning restore CS0414, IDE0052
 
         /// <summary>
         /// Returns a value indicating which embedded attributes should be generated during emit phase.
@@ -217,7 +217,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             var namespacesAndTypesToProcess = new Stack<NamespaceOrTypeSymbol>();
             namespacesAndTypesToProcess.Push(SourceModule.GlobalNamespace);
 
-            Location location = null;
+            Location location;
 
             while (namespacesAndTypesToProcess.Count > 0)
             {
@@ -1310,10 +1310,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 IsGenericType(container.ContainingType);
         }
 
+#pragma warning disable IDE0060, IDE0079
         internal Cci.ITypeReference Translate(
             DynamicTypeSymbol symbol,
             SyntaxNode syntaxNodeOpt,
             DiagnosticBag diagnostics)
+#pragma warning restore IDE0060, IDE0079
         {
             // Translate the dynamic type to System.Object special type to avoid duplicate entries in TypeRef table. 
             // We don't need to recursively replace the dynamic type with Object since the DynamicTypeSymbol adapter 

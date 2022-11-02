@@ -73,7 +73,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ' Right operand could be a method that takes Left operand byref. Ex: " local And TakesArgByref(local) "
         ' So in general we must capture Left even if it is a local.
         ' however in many case we do not need that.
-        Private Shared Function RightCantChangeLeftLocal(left As BoundExpression, right As BoundExpression) As Boolean
+        Private Shared Function RightCantChangeLeftLocal(right As BoundExpression) As Boolean
             ' TODO: in most cases right operand does not change value of the left one
             '       we could be smarter than this.
             Return right.Kind = BoundKind.Local OrElse

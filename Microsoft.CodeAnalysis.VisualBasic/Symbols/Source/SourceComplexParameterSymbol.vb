@@ -199,7 +199,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Property
 
         Friend NotOverridable Overrides Function IsDefinedInSourceTree(tree As SyntaxTree, definedWithinSpan As TextSpan?, Optional cancellationToken As CancellationToken = Nothing) As Boolean
-            Return IsDefinedInSourceTree(Me.SyntaxNode, tree, definedWithinSpan, cancellationToken)
+            Return IsDefinedInSourceTree(Me.SyntaxNode, tree, definedWithinSpan)
         End Function
 
         Public Overrides ReadOnly Property IsOptional As Boolean
@@ -314,7 +314,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                 flags As SourceParameterFlags,
                                                 ordinal As Integer,
                                                 binder As Binder,
-                                                checkModifier As CheckParameterModifierDelegate,
                                                 diagnostics As BindingDiagnosticBag) As ParameterSymbol
             Dim getErrorInfo As Func(Of DiagnosticInfo) = Nothing
 

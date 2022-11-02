@@ -114,7 +114,7 @@ lNotAndMinus:
 
                     Dim paramSymbol As ParameterSymbol = CreateCoalesceLambdaParameterSymbol(udoOperandType)
                     Dim lambdaBody As BoundExpression = BuildLambdaBodyForCoalesce(userDefinedOperator.OperatorKind, [call], node.Type, paramSymbol)
-                    Dim coalesceLambda As BoundExpression = BuildLambdaForCoalesceCall(node.Type, paramSymbol, lambdaBody)
+                    Dim coalesceLambda As BoundExpression = BuildLambdaForCoalesceCall(paramSymbol, lambdaBody)
                     Return ConvertRuntimeHelperToExpressionTree("Coalesce", Visit(userDefinedOperator.Operand), Visit(Me._factory.Literal(False)), coalesceLambda)
             End Select
 

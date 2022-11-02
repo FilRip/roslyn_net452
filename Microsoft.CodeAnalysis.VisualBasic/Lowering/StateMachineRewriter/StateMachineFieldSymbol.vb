@@ -26,8 +26,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                       name As String,
                       Optional accessibility As Accessibility = Accessibility.Private,
                       Optional isReadOnly As Boolean = False,
-                      Optional isShared As Boolean = False,
-                      Optional isSpecialNameAndRuntimeSpecial As Boolean = False)
+                      Optional isShared As Boolean = False)
             Me.New(stateMachineType,
                    implicitlyDefinedBy,
                    type,
@@ -47,8 +46,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                       slotindex As Integer,
                       Optional accessibility As Accessibility = Accessibility.Private,
                       Optional isReadOnly As Boolean = False,
-                      Optional isShared As Boolean = False,
-                      Optional isSpecialNameAndRuntimeSpecial As Boolean = False)
+                      Optional isShared As Boolean = False)
             Me.New(stateMachineType,
                    implicitlyDefinedBy,
                    type,

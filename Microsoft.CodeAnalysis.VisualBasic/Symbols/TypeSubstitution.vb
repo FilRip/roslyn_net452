@@ -607,7 +607,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim pairs(typeParametersDefinitions.Length - 1) As KeyValuePair(Of TypeParameterSymbol, TypeWithModifiers)
 
             For i As Integer = 0 To typeParametersDefinitions.Length - 1 Step 1
-                Debug.Assert(Not TypeOf typeParametersDefinitions(i) Is SubstitutedTypeParameterSymbol)
+                Debug.Assert(TypeOf typeParametersDefinitions(i) IsNot SubstitutedTypeParameterSymbol)
                 Debug.Assert(alphaRenamedTypeParameters(i).OriginalDefinition Is typeParametersDefinitions(i))
                 pairs(i) = New KeyValuePair(Of TypeParameterSymbol, TypeWithModifiers)(typeParametersDefinitions(i), New TypeWithModifiers(alphaRenamedTypeParameters(i)))
             Next

@@ -94,7 +94,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
         public override bool Equals(object? obj)
         {
-            return (obj is SeparatedSyntaxList<TNode>) && Equals((SeparatedSyntaxList<TNode>)obj);
+            return (obj is SeparatedSyntaxList<TNode> list) && Equals(list);
         }
 
         public override int GetHashCode()
@@ -108,6 +108,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
         }
 
 #if DEBUG
+#pragma warning disable IDE0051
         [Obsolete("For debugging only", true)]
         private TNode[] Nodes
         {
@@ -122,6 +123,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
                 return array;
             }
         }
+#pragma warning restore IDE0051
 #endif
     }
 }

@@ -236,7 +236,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 //  build arguments
                 int fieldCount = anonymousType.Properties.Length;
-                BoundExpression retExpression = null;
+                BoundExpression retExpression;
 
                 if (fieldCount > 0)
                 {

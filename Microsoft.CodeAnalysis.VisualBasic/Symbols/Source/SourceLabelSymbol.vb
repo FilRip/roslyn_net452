@@ -26,6 +26,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             _binder = binder
         End Sub
 
+        Public ReadOnly Property MyBinder As Binder
+            Get
+                Return _binder
+            End Get
+        End Property
+
         ' Get the token that defined this label symbol. This is useful for robustly checking
         ' if a label symbol actually matches a particular definition, even in the presence of duplicates.
         Friend Overrides ReadOnly Property LabelName As SyntaxToken
