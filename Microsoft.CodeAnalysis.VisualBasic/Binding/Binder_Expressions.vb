@@ -350,7 +350,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
 
                 Dim boundArgument As BoundExpression = BindValue(argumentSyntax.Expression, diagnostics)
-                Dim elementType = GetTupleFieldType(boundArgument, argumentSyntax, diagnostics, hasNaturalType)
+                Dim elementType = GetTupleFieldType(boundArgument, diagnostics, hasNaturalType)
 
                 If elementType Is Nothing Then
                     hasInferredType = False
@@ -503,7 +503,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' Returns the type to be used as a field type.
         ''' </summary>
         Private Function GetTupleFieldType(expression As BoundExpression,
-                                                  errorSyntax As VisualBasicSyntaxNode,
                                                   diagnostics As BindingDiagnosticBag,
                                                   ByRef hasNaturalType As Boolean) As TypeSymbol
             Dim expressionType As TypeSymbol = expression.Type
@@ -1797,8 +1796,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
 
         Public Shared Function ExpressionRefersToReadonlyVariable(
-            node As BoundExpression,
-            Optional digThroughProperty As Boolean = True
+            node As BoundExpression
         ) As Boolean
 
             ' TODO: Check base expressions for properties if digThroughProperty==true.
@@ -1814,7 +1812,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 If base IsNot Nothing AndAlso base.IsValue() AndAlso
                    base.Type.IsValueType Then
-                    Return ExpressionRefersToReadonlyVariable(base, False)
+                    Return ExpressionRefersToReadonlyVariable(base)
                 End If
 
             ElseIf node.Kind = BoundKind.Local Then
@@ -2648,13 +2646,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
 
             Else
-                boundLeft = BindLeftOfPotentialColorColorMemberAccess(node, leftOpt, diagnostics)
+                boundLeft = BindLeftOfPotentialColorColorMemberAccess(leftOpt, diagnostics)
             End If
 
             Return Me.BindMemberAccess(node, boundLeft, rightName, eventContext, diagnostics)
         End Function
 
-        Private Function BindLeftOfPotentialColorColorMemberAccess(parentNode As MemberAccessExpressionSyntax, leftOpt As ExpressionSyntax, diagnostics As BindingDiagnosticBag) As BoundExpression
+        Private Function BindLeftOfPotentialColorColorMemberAccess(leftOpt As ExpressionSyntax, diagnostics As BindingDiagnosticBag) As BoundExpression
             ' handle for Color Color case:  
             '
             ' =======  11.6.1 Identical Type and Member Names

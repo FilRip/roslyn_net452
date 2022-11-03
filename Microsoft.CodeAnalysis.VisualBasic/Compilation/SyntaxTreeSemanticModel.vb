@@ -830,6 +830,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return SymbolInfoFactory.Create(symbols, resultKind)
         End Function
 
+#Disable Warning IDE0060
         ' Get the type info of a implemented member in a implements clause.
         Private Function GetImplementedMemberTypeInfo(memberName As QualifiedNameSyntax) As VisualBasicTypeInfo
             ' Implemented members have no type.
@@ -853,6 +854,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Handled events have no type.
             Return VisualBasicTypeInfo.None
         End Function
+#Enable Warning IDE0060
 
         ''' <summary>
         ''' Checks all symbol locations against the syntax provided and return symbol if any of the locations is 

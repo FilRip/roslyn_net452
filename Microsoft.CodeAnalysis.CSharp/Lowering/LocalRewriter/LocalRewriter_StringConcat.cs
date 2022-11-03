@@ -46,7 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
 
             // try fold two args without flattening.
-            var folded = TryFoldTwoConcatOperands(syntax, loweredLeft, loweredRight);
+            var folded = TryFoldTwoConcatOperands(/*syntax, */loweredLeft, loweredRight);
             if (folded != null)
             {
                 return folded;
@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (leftFlattened.Any() && rightFlattened.Any())
             {
-                folded = TryFoldTwoConcatOperands(syntax, leftFlattened.Last(), rightFlattened.First());
+                folded = TryFoldTwoConcatOperands(/*syntax, */leftFlattened.Last(), rightFlattened.First());
                 if (folded != null)
                 {
                     rightFlattened[0] = folded;
@@ -204,7 +204,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// folds two concat operands into one expression if possible
         /// otherwise returns null
         /// </summary>
-        private BoundExpression? TryFoldTwoConcatOperands(SyntaxNode syntax, BoundExpression loweredLeft, BoundExpression loweredRight)
+        private BoundExpression? TryFoldTwoConcatOperands(/*SyntaxNode syntax, */BoundExpression loweredLeft, BoundExpression loweredRight)
         {
             // both left and right are constants
             var leftConst = loweredLeft.ConstantValue;

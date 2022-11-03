@@ -12401,7 +12401,9 @@ this.CreateMissingIdentifierName()),
             base.Reset(ref state.BaseResetPoint);
         }
 
+#pragma warning disable IDE0060
         private void Release(ref ResetPoint state)
+#pragma warning restore IDE0060
         {
             base.Release(/*ref state.BaseResetPoint*/);
         }
