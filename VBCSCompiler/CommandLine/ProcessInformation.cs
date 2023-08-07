@@ -2,7 +2,7 @@
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal struct PROCESS_INFORMATION
+    internal struct ProcessInformation
     {
         public IntPtr hProcess;
         public IntPtr hThread;

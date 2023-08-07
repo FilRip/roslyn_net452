@@ -60,16 +60,16 @@ namespace Microsoft.CodeAnalysis.CommandLine
             Task<NamedPipeClientStream?>? server = tryConnectToServer(pipeName, buildPaths, timeoutOverride, createServerFunc, logger, cancellationToken);
             if (server == null)
                 return new RejectedBuildResponse("Failed to connect to server");
-            using (NamedPipeClientStream? pipe = await server.ConfigureAwait(false))
-                return pipe == null ? new RejectedBuildResponse("Failed to connect to server") : await TryCompileAsync(pipe, BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", new Guid?(requestId), keepAlive, libDirectory), logger, cancellationToken).ConfigureAwait(false);
+            using NamedPipeClientStream? pipe = await server.ConfigureAwait(false);
+            return pipe == null ? new RejectedBuildResponse("Failed to connect to server") : await TryCompileAsync(pipe, BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", new Guid?(requestId), keepAlive, libDirectory), logger, cancellationToken).ConfigureAwait(false);
 
             static Task<NamedPipeClientStream?>? tryConnectToServer(
-              string pipeName,
-              BuildPathsAlt buildPaths,
-              int? timeoutOverride,
-              CreateServerFunc createServerFunc,
-              ICompilerServerLogger logger,
-              CancellationToken cancellationToken)
+                string pipeName,
+                BuildPathsAlt buildPaths,
+                int? timeoutOverride,
+                CreateServerFunc createServerFunc,
+                ICompilerServerLogger logger,
+                CancellationToken cancellationToken)
             {
                 int currentManagedThreadId1 = Environment.CurrentManagedThreadId;
                 string clientDirectory = buildPaths.ClientDirectory;
@@ -97,6 +97,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                         }
                         catch (AbandonedMutexException)
                         {
+                            // Nothing to do
                         }
                     }
                     int num2 = WasServerMutexOpen(GetServerMutexName(pipeName)) ? 1 : 0;
@@ -114,7 +115,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     catch (ApplicationException ex)
                     {
                         int currentManagedThreadId2 = Environment.CurrentManagedThreadId;
-                        throw new Exception(string.Format("ReleaseMutex failed. WaitOne Id: {0} Release Id: {1}", currentManagedThreadId1, currentManagedThreadId2), ex);
+                        throw new VbcException(string.Format("ReleaseMutex failed. WaitOne Id: {0} Release Id: {1}", currentManagedThreadId1, currentManagedThreadId2), ex);
                     }
                 }
             }
@@ -182,10 +183,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     try
                     {
                         await Task.Delay(100, cancellationToken).ConfigureAwait(false);
-                        int num = await pipeStream.ReadAsync(buffer, 0, 0, cancellationToken).ConfigureAwait(false);
+                        await pipeStream.ReadAsync(buffer, 0, 0, cancellationToken).ConfigureAwait(false);
                     }
                     catch (OperationCanceledException)
                     {
+                        // Nothing to do
                     }
                     catch (Exception ex)
                     {
@@ -230,7 +232,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 logger.LogError("Owner of named pipe is incorrect");
                 return null;
             }
-            catch (Exception ex) when (!(ex is TaskCanceledException) && !(ex is OperationCanceledException))
+            catch (Exception ex) when (ex is not TaskCanceledException && ex is not OperationCanceledException)
             {
                 logger.LogException(ex, "Exception while connecting to process");
                 pipeStream?.Dispose();
@@ -255,15 +257,15 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 return false;
             if (PlatformInformation.IsWindows)
             {
-                STARTUPINFO lpStartupInfo = new();
-                lpStartupInfo.cb = Marshal.SizeOf<STARTUPINFO>(lpStartupInfo);
+                StartupInfo lpStartupInfo = new();
+                lpStartupInfo.cb = Marshal.SizeOf<StartupInfo>(lpStartupInfo);
                 lpStartupInfo.hStdError = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.hStdInput = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.hStdOutput = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.dwFlags = 256;
                 uint dwCreationFlags = 134217760;
                 logger.Log("Attempting to create process '{0}'", (object)processFilePath);
-                bool process = NativeMethods.CreateProcess(null, new StringBuilder("\"" + processFilePath + "\" " + commandLineArguments), NativeMethods.NullPtr, NativeMethods.NullPtr, false, dwCreationFlags, NativeMethods.NullPtr, clientDir, ref lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
+                bool process = NativeMethods.CreateProcess(null, new StringBuilder("\"" + processFilePath + "\" " + commandLineArguments), NativeMethods.NullPtr, NativeMethods.NullPtr, false, dwCreationFlags, NativeMethods.NullPtr, clientDir, ref lpStartupInfo, out ProcessInformation lpProcessInformation);
                 if (process)
                 {
                     logger.Log("Successfully created process with process id {0}", (object)lpProcessInformation.dwProcessId);

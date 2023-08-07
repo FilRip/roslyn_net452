@@ -432,7 +432,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             if (ReferenceEquals(_lazyDeclaredBaseType, ErrorTypeSymbol.UnknownResultType))
             {
                 var baseType = MakeDeclaredBaseType();
-                if (baseType is object)
+                if (baseType is not null)
                 {
                     if (skipTransformsIfNecessary)
                     {
@@ -841,7 +841,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             else
             {
                 // If there are any non-event fields, they are at the very beginning.
-                IEnumerable<FieldSymbol> nonEventFields = GetMembers<FieldSymbol>(this.GetMembers().WhereAsArray(m => !(m is TupleErrorFieldSymbol)), SymbolKind.Field, offset: 0);
+                IEnumerable<FieldSymbol> nonEventFields = GetMembers<FieldSymbol>(this.GetMembers().WhereAsArray(m => m is not TupleErrorFieldSymbol), SymbolKind.Field, offset: 0);
 
                 // Event backing fields are not part of the set returned by GetMembers. Let's add them manually.
                 ArrayBuilder<FieldSymbol> eventFields = null;
@@ -849,13 +849,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 foreach (var eventSymbol in GetEventsToEmit())
                 {
                     FieldSymbol associatedField = eventSymbol.AssociatedField;
-                    if (associatedField is object)
+                    if (associatedField is not null)
                     {
 
-                        if (eventFields == null)
-                        {
-                            eventFields = ArrayBuilder<FieldSymbol>.GetInstance();
-                        }
+                        eventFields ??= ArrayBuilder<FieldSymbol>.GetInstance();
 
                         eventFields.Add(associatedField);
                     }
@@ -1087,17 +1084,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                         }
                     }
 
-                    if (underlyingType is null)
-                    {
-                        underlyingType = new UnsupportedMetadataTypeSymbol(); // undefined underlying type
-                    }
+                    underlyingType ??= new UnsupportedMetadataTypeSymbol(); // undefined underlying type
                 }
                 catch (BadImageFormatException mrEx)
                 {
-                    if (underlyingType is null)
-                    {
-                        underlyingType = new UnsupportedMetadataTypeSymbol(mrEx);
-                    }
+                    underlyingType ??= new UnsupportedMetadataTypeSymbol(mrEx);
                 }
 
                 Interlocked.CompareExchange(ref uncommon.lazyEnumUnderlyingType, underlyingType, null);
@@ -1319,10 +1310,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 }
             }
 
-            if (members != null)
-            {
-                members.Free();
-            }
+            members?.Free();
         }
 
         internal override ImmutableArray<Symbol> GetSimpleNonTypeMembers(string name)
@@ -1602,7 +1590,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                         result = TypeKind.Class;
 
-                        if (@base is object)
+                        if (@base is not null)
                         {
                             SpecialType baseCorTypeId = @base.SpecialType;
 
@@ -1817,7 +1805,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                         PEMethodSymbol getMethod = GetAccessorMethod(/*module, */methodHandleToSymbol, methods.Getter);
                         PEMethodSymbol setMethod = GetAccessorMethod(/*module, */methodHandleToSymbol, methods.Setter);
 
-                        if ((getMethod is object) || (setMethod is object))
+                        if ((getMethod is not null) || (setMethod is not null))
                         {
                             members.Add(PEPropertySymbol.Create(moduleSymbol, this, propertyDef, getMethod, setMethod));
                         }
@@ -1852,7 +1840,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                         // NOTE: both accessors are required, but that will be reported separately.
                         // Create the symbol unless both accessors are missing.
-                        if ((addMethod is object) || (removeMethod is object))
+                        if ((addMethod is not null) || (removeMethod is not null))
                         {
                             members.Add(new PEEventSymbol(moduleSymbol, this, eventRid, addMethod, removeMethod, privateFieldNameToSymbols));
                         }
@@ -2103,7 +2091,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 if (ReferenceEquals(uncommon.lazyComImportCoClassType, ErrorTypeSymbol.UnknownResultType))
                 {
                     var type = this.ContainingPEModule.TryDecodeAttributeWithTypeArgument(this.Handle, AttributeDescription.CoClassAttribute);
-                    var coClassType = (type is object && (type.TypeKind == TypeKind.Class || type.IsErrorType())) ? (NamedTypeSymbol)type : null;
+                    var coClassType = (type is not null && (type.TypeKind == TypeKind.Class || type.IsErrorType())) ? (NamedTypeSymbol)type : null;
 
                     Interlocked.CompareExchange(ref uncommon.lazyComImportCoClassType, coClassType, ErrorTypeSymbol.UnknownResultType);
                 }
@@ -2150,7 +2138,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             var uncommon = GetUncommonProperties();
             if (uncommon == s_noUncommonProperties)
             {
-                return (this.BaseTypeNoUseSiteDiagnostics is object) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
+                return (this.BaseTypeNoUseSiteDiagnostics is not null) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
             }
 
             if (uncommon.lazyAttributeUsageInfo.IsNull)
@@ -2175,7 +2163,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 }
             }
 
-            return (this.BaseTypeNoUseSiteDiagnostics is object) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
+            return (this.BaseTypeNoUseSiteDiagnostics is not null) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
         }
 
         internal sealed override CSharpCompilation DeclaringCompilation // perf, not correctness

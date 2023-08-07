@@ -837,7 +837,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // effective base class of the type parameter is used to determine the conversion
             // to the other argument type. (See ExpressionBinder::GetRefEqualSigs.)
 
-            if ((leftType is object) && leftType.IsTypeParameter())
+            if ((leftType is not null) && leftType.IsTypeParameter())
             {
                 if (leftType.IsValueType || (!leftType.IsReferenceType && !rightIsNull))
                 {
@@ -847,7 +847,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 leftType = ((TypeParameterSymbol)leftType).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            if ((rightType is object) && rightType.IsTypeParameter())
+            if ((rightType is not null) && rightType.IsTypeParameter())
             {
                 if (rightType.IsValueType || (!rightType.IsReferenceType && !leftIsNull))
                 {
@@ -857,13 +857,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 rightType = ((TypeParameterSymbol)rightType).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            var leftIsReferenceType = (leftType is object) && leftType.IsReferenceType;
+            var leftIsReferenceType = (leftType is not null) && leftType.IsReferenceType;
             if (!leftIsReferenceType && !leftIsNull && !leftIsDefault)
             {
                 return false;
             }
 
-            var rightIsReferenceType = (rightType is object) && rightType.IsReferenceType;
+            var rightIsReferenceType = (rightType is not null) && rightType.IsReferenceType;
             if (!rightIsReferenceType && !rightIsNull && !rightIsDefault)
             {
                 return false;

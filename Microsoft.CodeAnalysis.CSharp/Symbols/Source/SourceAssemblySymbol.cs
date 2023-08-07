@@ -120,9 +120,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _compilation = compilation;
             _assemblySimpleName = assemblySimpleName;
 
-            ArrayBuilder<ModuleSymbol> moduleBuilder = new(1 + netModules.Length);
-
-            moduleBuilder.Add(new SourceModuleSymbol(this, compilation.Declarations, moduleName));
+            ArrayBuilder<ModuleSymbol> moduleBuilder = new(1 + netModules.Length)
+            {
+                new SourceModuleSymbol(this, compilation.Declarations, moduleName)
+            };
 
             var importOptions = (compilation.Options.MetadataImportOptions == MetadataImportOptions.All) ?
                 MetadataImportOptions.All : MetadataImportOptions.Internal;
@@ -635,7 +636,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (!compilationOptions.OutputKind.IsNetModule())
             {
                 TypeSymbol compilationRelaxationsAttribute = compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_CompilationRelaxationsAttribute);
-                if (!(compilationRelaxationsAttribute is MissingMetadataTypeSymbol))
+                if (compilationRelaxationsAttribute is not MissingMetadataTypeSymbol)
                 {
                     // As in Dev10 (see GlobalAttrBind::EmitCompilerGeneratedAttrs), we only synthesize this attribute if CompilationRelaxationsAttribute is found.
                     Binder.ReportUseSiteDiagnosticForSynthesizedAttribute(compilation,
@@ -643,7 +644,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 TypeSymbol runtimeCompatibilityAttribute = compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_RuntimeCompatibilityAttribute);
-                if (!(runtimeCompatibilityAttribute is MissingMetadataTypeSymbol))
+                if (runtimeCompatibilityAttribute is not MissingMetadataTypeSymbol)
                 {
                     // As in Dev10 (see GlobalAttrBind::EmitCompilerGeneratedAttrs), we only synthesize this attribute if RuntimeCompatibilityAttribute is found.
                     Binder.ReportUseSiteDiagnosticForSynthesizedAttribute(compilation,
@@ -947,7 +948,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (var pair in _compilation.GetBoundReferenceManager().ReferencedModuleIndexMap)
             {
-                if (pair.Key is PortableExecutableReference fileRef && fileRef.FilePath is object)
+                if (pair.Key is PortableExecutableReference fileRef && fileRef.FilePath is not null)
                 {
                     string fileName = FileNameUtilities.GetFileName(fileRef.FilePath);
                     string moduleName = _modules[pair.Value].Name;
@@ -1182,10 +1183,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static bool AddUniqueAssemblyAttribute(CSharpAttributeData attribute, ref HashSet<CSharpAttributeData> uniqueAttributes)
         {
 
-            if (uniqueAttributes == null)
-            {
-                uniqueAttributes = new HashSet<CSharpAttributeData>(comparer: CommonAttributeDataComparer.Instance);
-            }
+            uniqueAttributes ??= new HashSet<CSharpAttributeData>(comparer: CommonAttributeDataComparer.Instance);
 
             return uniqueAttributes.Add(attribute);
         }
@@ -1362,10 +1360,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         if (forwardedTypes == null)
                         {
-                            if (wellKnownData == null)
-                            {
-                                wellKnownData = new CommonAssemblyWellKnownAttributeData();
-                            }
+                            wellKnownData ??= new CommonAssemblyWellKnownAttributeData();
 
                             forwardedTypes = ((CommonAssemblyWellKnownAttributeData)wellKnownData).ForwardedTypes;
                             if (forwardedTypes == null)
@@ -1710,11 +1705,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (_compilation.Options.AllowUnsafe)
             {
                 // NOTE: GlobalAttrBind::EmitCompilerGeneratedAttrs skips attribute if the well-known types aren't available.
-                if (!(_compilation.GetWellKnownType(WellKnownType.System_Security_UnverifiableCodeAttribute) is MissingMetadataTypeSymbol) &&
-                    !(_compilation.GetWellKnownType(WellKnownType.System_Security_Permissions_SecurityPermissionAttribute) is MissingMetadataTypeSymbol))
+                if (_compilation.GetWellKnownType(WellKnownType.System_Security_UnverifiableCodeAttribute) is not MissingMetadataTypeSymbol &&
+                    _compilation.GetWellKnownType(WellKnownType.System_Security_Permissions_SecurityPermissionAttribute) is not MissingMetadataTypeSymbol)
                 {
                     var securityActionType = _compilation.GetWellKnownType(WellKnownType.System_Security_Permissions_SecurityAction);
-                    if (!(securityActionType is MissingMetadataTypeSymbol))
+                    if (securityActionType is not MissingMetadataTypeSymbol)
                     {
                         var fieldRequestMinimum = (FieldSymbol)_compilation.GetWellKnownTypeMember(WellKnownMember.System_Security_Permissions_SecurityAction__RequestMinimum);
 
@@ -1850,7 +1845,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Synthesize attribute: [CompilationRelaxationsAttribute(CompilationRelaxations.NoStringInterning)]
 
                 // NOTE: GlobalAttrBind::EmitCompilerGeneratedAttrs skips attribute if the well-known types aren't available.
-                if (!(_compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_CompilationRelaxationsAttribute) is MissingMetadataTypeSymbol))
+                if (_compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_CompilationRelaxationsAttribute) is not MissingMetadataTypeSymbol)
                 {
                     var int32Type = _compilation.GetSpecialType(SpecialType.System_Int32);
 
@@ -1868,7 +1863,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Synthesize attribute: [RuntimeCompatibilityAttribute(WrapNonExceptionThrows = true)]
 
                 // NOTE: GlobalAttrBind::EmitCompilerGeneratedAttrs skips attribute if the well-known types aren't available.
-                if (!(_compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_RuntimeCompatibilityAttribute) is MissingMetadataTypeSymbol))
+                if (_compilation.GetWellKnownType(WellKnownType.System_Runtime_CompilerServices_RuntimeCompatibilityAttribute) is not MissingMetadataTypeSymbol)
                 {
                     var boolType = _compilation.GetSpecialType(SpecialType.System_Boolean);
 
@@ -2024,7 +2019,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (_lazyStrongNameKeys == null)
             {
                 var assemblyWhoseKeysAreBeingComputed = t_assemblyForWhichCurrentThreadIsComputingKeys;
-                if (assemblyWhoseKeysAreBeingComputed is object)
+                if (assemblyWhoseKeysAreBeingComputed is not null)
                 {
                     //ThrowIfFalse(assemblyWhoseKeysAreBeingComputed Is Me);
                     if (!potentialGiverOfAccess.GetInternalsVisibleToPublicKeys(this.Name).IsEmpty())
@@ -2083,7 +2078,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             UseSiteInfo<AssemblySymbol> useSiteInfo = forwardedType.GetUseSiteInfo();
             if (useSiteInfo.DiagnosticInfo?.Code != (int)ErrorCode.ERR_UnexpectedUnboundGenericName &&
-                diagnostics.Add(useSiteInfo, useSiteInfo.DiagnosticInfo is object ? GetAssemblyAttributeLocationForDiagnostic(arguments.AttributeSyntaxOpt) : Location.None))
+                diagnostics.Add(useSiteInfo, useSiteInfo.DiagnosticInfo is not null ? GetAssemblyAttributeLocationForDiagnostic(arguments.AttributeSyntaxOpt) : Location.None))
             {
                 return;
             }
@@ -2095,7 +2090,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            if (forwardedType.ContainingType is object)
+            if (forwardedType.ContainingType is not null)
             {
                 diagnostics.Add(ErrorCode.ERR_ForwardedTypeIsNested, GetAssemblyAttributeLocationForDiagnostic(arguments.AttributeSyntaxOpt), forwardedType, forwardedType.ContainingType);
                 return;
@@ -2534,10 +2529,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     bool unread = _unreadFields.Contains(field);
                     if (unread)
                     {
-                        if (handledUnreadFields == null)
-                        {
-                            handledUnreadFields = new HashSet<FieldSymbol>();
-                        }
+                        handledUnreadFields ??= new HashSet<FieldSymbol>();
                         handledUnreadFields.Add(field);
                     }
 
@@ -2547,7 +2539,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
 
                     Symbol associatedPropertyOrEvent = field.AssociatedSymbol;
-                    if (associatedPropertyOrEvent is object && associatedPropertyOrEvent.Kind == SymbolKind.Event)
+                    if (associatedPropertyOrEvent is not null && associatedPropertyOrEvent.Kind == SymbolKind.Event)
                     {
                         if (unread)
                         {
@@ -2667,9 +2659,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     (AssemblySymbol firstSymbol, AssemblySymbol secondSymbol) = peModuleSymbol.GetAssembliesForForwardedType(ref emittedName);
 
-                    if (firstSymbol is object)
+                    if (firstSymbol is not null)
                     {
-                        if (secondSymbol is object)
+                        if (secondSymbol is not null)
                         {
                             return CreateMultipleForwardingErrorTypeSymbol(ref emittedName, peModuleSymbol, firstSymbol, secondSymbol);
                         }

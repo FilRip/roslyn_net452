@@ -1005,7 +1005,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                             {
                                 var filter = semanticModel.GetSyntaxNodesToAnalyzeFilter(cb, declaredSymbol);
 
-                                if (filter is object)
+                                if (filter is not null)
                                 {
                                     return cb.DescendantNodesAndSelf(descendIntoChildren: filter).Where(filter);
                                 }

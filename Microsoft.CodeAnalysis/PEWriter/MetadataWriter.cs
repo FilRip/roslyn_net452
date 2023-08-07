@@ -625,10 +625,7 @@ namespace Microsoft.Cci
                     parDef.HasDefaultValue || parDef.IsOptional || parDef.IsOut || parDef.IsMarshalledExplicitly ||
                     IteratorHelper.EnumerableIsNotEmpty(parDef.GetAttributes(Context)))
                 {
-                    if (builder != null)
-                    {
-                        builder.Add(parDef);
-                    }
+                    builder?.Add(parDef);
                 }
                 else
                 {
@@ -1194,7 +1191,7 @@ namespace Microsoft.Cci
 
         internal EntityHandle GetStandaloneSignatureHandle(ISignature signature)
         {
-            Debug.Assert(!(signature is IMethodReference));
+            Debug.Assert(signature is not IMethodReference);
             var builder = PooledBlobBuilder.GetInstance();
             var signatureEncoder = new BlobEncoder(builder).MethodSignature(convention: signature.CallingConvention.ToSignatureConvention(), genericParameterCount: 0, isInstanceMethod: false);
             SerializeReturnValueAndParameters(signatureEncoder, signature, varargParameters: ImmutableArray<IParameterTypeInformation>.Empty);
@@ -1737,7 +1734,7 @@ namespace Microsoft.Cci
                 ilBuilder.WriteContentTo(ilStream);
                 metadataBuilder.WriteContentTo(metadataStream);
             }
-            catch (Exception e) when (!(e is OperationCanceledException))
+            catch (Exception e) when (e is not OperationCanceledException)
             {
                 throw new PeWritingException(e);
             }
@@ -1756,7 +1753,7 @@ namespace Microsoft.Cci
                 {
                     portablePdbBlob.WriteContentTo(portablePdbStreamOpt);
                 }
-                catch (Exception e) when (!(e is OperationCanceledException))
+                catch (Exception e) when (e is not OperationCanceledException)
                 {
                     throw new SymUnmanagedWriterException(e.Message, e);
                 }
@@ -2801,12 +2798,7 @@ namespace Microsoft.Cci
                 }
                 else
                 {
-                    INamespaceTypeReference namespaceTypeRef = typeRef.AsNamespaceTypeReference;
-                    if (namespaceTypeRef == null)
-                    {
-                        throw ExceptionUtilities.UnexpectedValue(typeRef);
-                    }
-
+                    INamespaceTypeReference namespaceTypeRef = typeRef.AsNamespaceTypeReference ?? throw ExceptionUtilities.UnexpectedValue(typeRef);
                     resolutionScope = this.GetResolutionScopeHandle(namespaceTypeRef.GetUnit(Context));
                     string mangledTypeName = GetMangledName(namespaceTypeRef);
                     name = this.GetStringHandleForNameAndCheckLength(mangledTypeName, namespaceTypeRef);
@@ -3890,7 +3882,7 @@ namespace Microsoft.Cci
             Debug.Assert(arrayTypeReference.IsSZArray);
 
             var elementType = arrayTypeReference.GetElementType(Context);
-            Debug.Assert(!(elementType is IModifiedTypeReference));
+            Debug.Assert(elementType is not IModifiedTypeReference);
 
             if (module.IsPlatformType(elementType, PlatformType.SystemObject))
             {

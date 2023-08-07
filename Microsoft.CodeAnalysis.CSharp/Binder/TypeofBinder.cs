@@ -72,10 +72,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 SeparatedSyntaxList<TypeSyntax> typeArguments = node.TypeArgumentList.Arguments;
                 if (node.IsUnboundGenericName)
                 {
-                    if (_allowedMap == null)
-                    {
-                        _allowedMap = new Dictionary<GenericNameSyntax, bool>();
-                    }
+                    _allowedMap ??= new Dictionary<GenericNameSyntax, bool>();
                     _allowedMap[node] = !_seenConstructed;
                 }
                 else

@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal class BuildRequest
     {
-        //private const int MaximumRequestSize = 5242880;
+        private const int MaximumRequestSize = 5242880;
         public readonly Guid RequestId;
         public readonly RequestLanguage Language;
         public readonly ReadOnlyCollection<BuildRequest.Argument> Arguments;
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             byte[]? lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(inStream, lengthBuffer, 4, cancellationToken).ConfigureAwait(false);
             int int32 = BitConverter.ToInt32(lengthBuffer, 0);
-            if (int32 > 5242880)
+            if (int32 > MaximumRequestSize)
                 throw new ArgumentException(string.Format("Request is over {0}MB in length", 5));
             cancellationToken.ThrowIfCancellationRequested();
             byte[]? requestBuffer = new byte[int32];
@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 writer.Flush();
                 cancellationToken.ThrowIfCancellationRequested();
                 int length = checked((int)memoryStream.Length);
-                if (memoryStream.Length > 5242880L)
+                if (memoryStream.Length > MaximumRequestSize)
                     throw new ArgumentOutOfRangeException(string.Format("Request is over {0}MB in length", 5));
                 await outStream.WriteAsync(BitConverter.GetBytes(length), 0, 4, cancellationToken).ConfigureAwait(false);
                 memoryStream.Position = 0L;

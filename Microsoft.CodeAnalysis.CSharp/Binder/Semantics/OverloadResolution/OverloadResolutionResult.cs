@@ -693,7 +693,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             foreach (var pair in constraintFailure.Result.ConstraintFailureDiagnostics)
             {
-                if (pair.UseSiteInfo.DiagnosticInfo is object)
+                if (pair.UseSiteInfo.DiagnosticInfo is not null)
                 {
                     diagnostics.Add(new CSDiagnostic(pair.UseSiteInfo.DiagnosticInfo, location));
                 }
@@ -823,7 +823,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             Location location = new SourceLocation(badName);
 
-            ErrorCode code = delegateTypeBeingInvoked is object ?
+            ErrorCode code = delegateTypeBeingInvoked is not null ?
                 ErrorCode.ERR_BadNamedArgumentForDelegateInvoke :
                 ErrorCode.ERR_BadNamedArgument;
 

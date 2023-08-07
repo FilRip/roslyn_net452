@@ -444,7 +444,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal bool IsTupleElement()
         {
-            return this.CorrespondingTupleField is object;
+            return this.CorrespondingTupleField is not null;
         }
 
         /// <summary>
@@ -459,7 +459,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // wrapped tuple fields already have this information and override this property
 
                 var map = ContainingType.TupleFieldDefinitionsToIndexMap;
-                if (map is object && map.TryGetValue(this.OriginalDefinition, out int index))
+                if (map is not null && map.TryGetValue(this.OriginalDefinition, out int index))
                 {
                     return index;
                 }

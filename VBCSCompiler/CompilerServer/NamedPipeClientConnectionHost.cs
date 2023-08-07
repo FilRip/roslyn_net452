@@ -81,16 +81,16 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         {
             if (!this.IsListening)
                 throw new InvalidOperationException();
-            NamedPipeClientConnectionHost.ListenResult listenResult = await this._queue.DequeueAsync(this._cancellationTokenSource.Token).ConfigureAwait(false);
+            ListenResult listenResult = await this._queue.DequeueAsync(this._cancellationTokenSource.Token).ConfigureAwait(false);
             if (listenResult.Exception != null)
-                throw new Exception("Error occurred listening for connections", listenResult.Exception);
+                throw new VbCsCompilerException("Error occurred listening for connections", listenResult.Exception);
             return listenResult.NamedPipeClientConnection ?? throw new OperationCanceledException();
         }
 
         private static async Task ListenCoreAsync(
             string pipeName,
             ICompilerServerLogger logger,
-            AsyncQueue<NamedPipeClientConnectionHost.ListenResult> queue,
+            AsyncQueue<ListenResult> queue,
             CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
@@ -106,10 +106,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                         Task cancelTask = Task.Delay(TimeSpan.FromMilliseconds(-1.0), cancellationToken);
                         cancelTask = await Task.WhenAny(cancelTask).ConfigureAwait(false) != cancelTask ? null : throw new OperationCanceledException();
                     }
-                    //await connectTask.ConfigureAwait(false);
                     logger.Log("Pipe connection established.");
-                    queue.Enqueue(new NamedPipeClientConnectionHost.ListenResult(new NamedPipeClientConnection(pipeStream, logger)));
-                    //connectTask = (Task) null;
+                    queue.Enqueue(new ListenResult(new NamedPipeClientConnection(pipeStream, logger)));
                 }
                 catch (OperationCanceledException)
                 {
@@ -119,7 +117,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 catch (Exception ex)
                 {
                     logger.LogException(ex, "Pipe connection error");
-                    queue.Enqueue(new NamedPipeClientConnectionHost.ListenResult(exception: ex));
+                    queue.Enqueue(new ListenResult(exception: ex));
                     pipeStream?.Dispose();
                 }
             }

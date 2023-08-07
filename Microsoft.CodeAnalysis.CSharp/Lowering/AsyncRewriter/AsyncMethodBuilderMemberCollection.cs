@@ -187,7 +187,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (customBuilder)
                 {
                     builderType = ValidateBuilderType(F, builderArgument, returnType.DeclaredAccessibility, isGeneric: false);
-                    if (builderType is object)
+                    if (builderType is not null)
                     {
                         taskProperty = GetCustomTaskProperty(F, builderType, returnType);
                         createBuilderMethod = GetCustomCreateMethod(F, builderType);
@@ -253,7 +253,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (customBuilder)
                 {
                     builderType = ValidateBuilderType(F, builderArgument, returnType.DeclaredAccessibility, isGeneric: true);
-                    if (builderType is object)
+                    if (builderType is not null)
                     {
                         builderType = builderType.ConstructedFrom.Construct(resultType);
                         taskProperty = GetCustomTaskProperty(F, builderType, returnType);
@@ -389,7 +389,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     descriptor,
                     F.Compilation.WellKnownMemberSignatureComparer,
                     accessWithinOpt: null);
-                if (sym is object)
+                if (sym is not null)
                 {
                     sym = sym.SymbolAsMember(builderType);
                 }

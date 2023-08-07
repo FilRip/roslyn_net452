@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
         public GreenNode? ItemUntyped(int index)
         {
-            RoslynDebug.Assert(_node is object);
+            RoslynDebug.Assert(_node is not null);
             var node = this._node;
             if (node.IsList)
             {
@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
         {
             get
             {
-                RoslynDebug.Assert(_node is object);
+                RoslynDebug.Assert(_node is not null);
                 var node = this._node;
                 if (node.IsList)
                 {

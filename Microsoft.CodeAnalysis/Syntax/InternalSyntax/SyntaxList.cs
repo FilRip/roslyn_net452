@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
             for (int i = 0; i < count; i++)
             {
                 var node = nodes[i];
-                Debug.Assert(node is object);
+                Debug.Assert(node is not null);
 #nullable restore
                 array[i].Value = node;
 #nullable enable

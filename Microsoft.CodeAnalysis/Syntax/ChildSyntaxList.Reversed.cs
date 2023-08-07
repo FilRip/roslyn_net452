@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis
 
             public Enumerator GetEnumerator()
             {
-                Debug.Assert(_node is object);
+                Debug.Assert(_node is not null);
 #nullable restore
                 return new Enumerator(_node, _count);
 #nullable enable
@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     get
                     {
-                        Debug.Assert(_node is object);
+                        Debug.Assert(_node is not null);
 #nullable restore
                         return ItemInternal(_node, _childIndex);
 #nullable enable

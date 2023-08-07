@@ -504,7 +504,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             _syntaxAndDeclarations = syntaxAndDeclarations;
 
-            if (EventQueue != null) EventQueue.TryEnqueue(new CompilationStartedEvent(this));
+            EventQueue?.TryEnqueue(new CompilationStartedEvent(this));
         }
 
         protected override void ValidateDebugEntryPoint(IMethodSymbol debugEntryPoint, DiagnosticBag diagnostics)
@@ -1336,7 +1336,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var current = GetCompilationNamespace(containingNamespace);
-            if (current is object)
+            if (current is not null)
             {
                 return current.GetNestedNamespace(namespaceSymbol.Name);
             }
@@ -1359,7 +1359,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var current = GetCompilationNamespace(containingNamespace);
-            if (current is object)
+            if (current is not null)
             {
                 return current.GetNestedNamespace(namespaceSymbol.Name);
             }
@@ -1378,7 +1378,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else if (_externAliasTargets.TryGetValue(aliasName, out var cached))
             {
                 @namespace = cached;
-                return !(@namespace is MissingNamespaceSymbol);
+                return @namespace is not MissingNamespaceSymbol;
             }
 
             ArrayBuilder<NamespaceSymbol>? builder = null;
@@ -1440,7 +1440,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var usingsFromoptions = UsingsFromOptions;
             var previousSubmission = PreviousSubmission;
-            var previousSubmissionImports = previousSubmission is object ? Imports.ExpandPreviousSubmissionImports(previousSubmission.GlobalImports, this) : ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty;
+            var previousSubmissionImports = previousSubmission is not null ? Imports.ExpandPreviousSubmissionImports(previousSubmission.GlobalImports, this) : ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty;
 
             if (usingsFromoptions.UsingNamespacesOrTypes.IsEmpty)
             {
@@ -1610,7 +1610,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal SynthesizedInteractiveInitializerMethod? GetSubmissionInitializer()
         {
-            return (IsSubmission && ScriptClass is object) ?
+            return (IsSubmission && ScriptClass is not null) ?
                 ScriptClass.GetScriptInitializer() :
                 null;
         }
@@ -1670,7 +1670,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!this.Options.OutputKind.IsApplication() && (this.ScriptClass is null))
                 {
-                    if (simpleProgramEntryPointSymbol is object)
+                    if (simpleProgramEntryPointSymbol is not null)
                     {
                         var diagnostics = BindingDiagnosticBag.GetInstance();
                         diagnostics.Add(ErrorCode.ERR_SimpleProgramNotAnExecutable, simpleProgramEntryPointSymbol.ReturnTypeSyntax.Location);
@@ -1696,7 +1696,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         entryPoint = new EntryPoint(entryPointMethod, diagnostics);
                     }
 
-                    if (this.Options.MainTypeName != null && simpleProgramEntryPointSymbol is object)
+                    if (this.Options.MainTypeName != null && simpleProgramEntryPointSymbol is not null)
                     {
                         var diagnostics = DiagnosticBag.GetInstance();
                         diagnostics.Add(ErrorCode.ERR_SimpleProgramDisallowsMainType, NoLocation.Singleton);
@@ -1728,7 +1728,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (mainTypeName != null)
                 {
                     // Global code is the entry point, ignore all other Mains.
-                    if (scriptClass is object)
+                    if (scriptClass is not null)
                     {
                         // CONSIDER: we could use the symbol instead of just the name.
                         diagnostics.Add(ErrorCode.WRN_MainIgnored, NoLocation.Singleton, mainTypeName);
@@ -1760,14 +1760,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                         this.GetSymbolsWithNameCore(WellKnownMemberNames.EntryPointMethodName, SymbolFilter.Member, cancellationToken));
 
                     // Global code is the entry point, ignore all other Mains.
-                    if (scriptClass is object || simpleProgramEntryPointSymbol is object)
+                    if (scriptClass is not null || simpleProgramEntryPointSymbol is not null)
                     {
                         foreach (var main in entryPointCandidates)
                         {
                             diagnostics.Add(ErrorCode.WRN_MainIgnored, main.Locations.First(), main);
                         }
 
-                        if (scriptClass is object)
+                        if (scriptClass is not null)
                         {
                             return scriptClass.GetScriptEntryPoint();
                         }
@@ -2256,7 +2256,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal BinderFactory GetBinderFactory(SyntaxTree syntaxTree, bool ignoreAccessibility = false)
         {
-            if (ignoreAccessibility && SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(this) is object)
+            if (ignoreAccessibility && SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(this) is not null)
             {
                 return GetBinderFactory(syntaxTree, ignoreAccessibility: true, ref _ignoreAccessibilityBinderFactories);
             }
@@ -2381,7 +2381,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 var node = info.Tree.GetRoot(cancellationToken).FindToken(info.Span.Start, findInsideTrivia: false).
                                                Parent!.FirstAncestorOrSelf<ExternAliasDirectiveSyntax>();
 
-                                if (node is object && GetExternAliasTarget(node.Identifier.ValueText, out NamespaceSymbol target))
+                                if (node is not null && GetExternAliasTarget(node.Identifier.ValueText, out NamespaceSymbol target))
                                 {
 #nullable restore
                                     externAliasesToCheck.Add(target);
@@ -2391,7 +2391,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                if (externAliasesToCheck is object)
+                if (externAliasesToCheck is not null)
                 {
                     // We could do this check after we have built the transitive closure
                     // in GetCompleteSetOfUsedAssemblies.completeTheSetOfUsedAssemblies. However,
@@ -2873,7 +2873,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 hasDeclarationErrors: false,
                                 emitMethodBodies: false,
                                 diagnostics: bindingDiagnostics,
-                                filterOpt: filterTree is object ? (s => IsDefinedOrImplementedInSourceTree(s, filterTree, filterSpan)) : null,
+                                filterOpt: filterTree is not null ? (s => IsDefinedOrImplementedInSourceTree(s, filterTree, filterSpan)) : null,
                                 cancellationToken: cancellationToken);
 
                 DocumentationCommentCompiler.WriteDocumentationCommentXml(this, null, null, bindingDiagnostics, cancellationToken, filterTree, filterSpan);
@@ -3102,10 +3102,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var moduleProps = ConstructModuleSerializationProperties(emitOptions, runtimeMDVersion);
 
-            if (manifestResources == null)
-            {
-                manifestResources = SpecializedCollections.EmptyEnumerable<ResourceDescription>();
-            }
+            manifestResources ??= SpecializedCollections.EmptyEnumerable<ResourceDescription>();
 
             PEModuleBuilder moduleBeingBuilt;
             if (_options.OutputKind.IsNetModule())
@@ -3237,7 +3234,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void GenerateModuleInitializer(PEModuleBuilder moduleBeingBuilt, DiagnosticBag methodBodyDiagnosticBag)
         {
 
-            if (_moduleInitializerMethods is object)
+            if (_moduleInitializerMethods is not null)
             {
                 var ilBuilder = new ILBuilder(moduleBeingBuilt, new LocalSlotManager(slotAllocator: null), OptimizationLevel.Release, areLocalsZeroed: false);
 
@@ -3920,12 +3917,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns></returns>
         internal bool HasDynamicEmitAttributes(BindingDiagnosticBag diagnostics, Location location)
         {
-            return Binder.GetWellKnownTypeMember(this, WellKnownMember.System_Runtime_CompilerServices_DynamicAttribute__ctor, diagnostics, location) is object &&
-                   Binder.GetWellKnownTypeMember(this, WellKnownMember.System_Runtime_CompilerServices_DynamicAttribute__ctorTransformFlags, diagnostics, location) is object;
+            return Binder.GetWellKnownTypeMember(this, WellKnownMember.System_Runtime_CompilerServices_DynamicAttribute__ctor, diagnostics, location) is not null &&
+                   Binder.GetWellKnownTypeMember(this, WellKnownMember.System_Runtime_CompilerServices_DynamicAttribute__ctorTransformFlags, diagnostics, location) is not null;
         }
 
         internal bool HasTupleNamesAttributes(BindingDiagnosticBag diagnostics, Location location) =>
-            Binder.GetWellKnownTypeMember(this, WellKnownMember.System_Runtime_CompilerServices_TupleElementNamesAttribute__ctorTransformNames, diagnostics, location) is object;
+            Binder.GetWellKnownTypeMember(this, WellKnownMember.System_Runtime_CompilerServices_TupleElementNamesAttribute__ctorTransformNames, diagnostics, location) is not null;
 
         /// <summary>
         /// Returns whether the compilation has the Boolean type and if it's good.

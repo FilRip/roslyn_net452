@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var assembly = receiver.Type.ContainingAssembly;
 
-                if (assembly is object && assembly.IsLinked)
+                if (assembly is not null && assembly.IsLinked)
                 {
                     foreach (var m in methods)
                     {
@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var assembly = receiver.Type.ContainingAssembly;
 
-                if (assembly is object && assembly.IsLinked)
+                if (assembly is not null && assembly.IsLinked)
                 {
                     foreach (var p in properties)
                     {
@@ -782,7 +782,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Finally, append the missing empty params array if necessary.
             var lastParam = !parameters.IsEmpty ? parameters[parameters.Length - 1] : null;
-            if (expanded && lastParam is object && !visitedLastParam)
+            if (expanded && lastParam is not null && !visitedLastParam)
             {
 
                 // Create an empty array for omitted param array argument.

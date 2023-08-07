@@ -1645,7 +1645,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
                                                                 invokedAsExtensionMethod: true),
                                                             null)
                                                         : default,
-                                                    disposeArguments: enumeratorInfoOpt.PatternDisposeInfo is object
+                                                    disposeArguments: enumeratorInfoOpt.PatternDisposeInfo is not null
                                                         ? CreateDisposeArguments(enumeratorInfoOpt.PatternDisposeInfo, boundForEachStatement.Syntax)
                                                         : default);
             }
@@ -1733,7 +1733,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
             IOperation body = Create(boundUsingStatement.Body);
             ImmutableArray<ILocalSymbol> locals = boundUsingStatement.Locals.GetPublicSymbols();
             bool isAsynchronous = boundUsingStatement.AwaitOpt != null;
-            DisposeOperationInfo disposeOperationInfo = boundUsingStatement.PatternDisposeInfoOpt is object
+            DisposeOperationInfo disposeOperationInfo = boundUsingStatement.PatternDisposeInfoOpt is not null
                                                          ? new DisposeOperationInfo(
                                                                  disposeMethod: boundUsingStatement.PatternDisposeInfoOpt.Method.GetPublicSymbol(),
                                                                  disposeArguments: CreateDisposeArguments(boundUsingStatement.PatternDisposeInfoOpt, boundUsingStatement.Syntax))
@@ -1871,8 +1871,8 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
             {
                 return new UsingDeclarationOperation(
                     variableDeclaration,
-                    isAsynchronous: usingDecl.AwaitOpt is object,
-                    disposeInfo: usingDecl.PatternDisposeInfoOpt is object
+                    isAsynchronous: usingDecl.AwaitOpt is not null,
+                    disposeInfo: usingDecl.PatternDisposeInfoOpt is not null
                                    ? new DisposeOperationInfo(
                                            disposeMethod: usingDecl.PatternDisposeInfoOpt.Method.GetPublicSymbol(),
                                            disposeArguments: CreateDisposeArguments(usingDecl.PatternDisposeInfoOpt, usingDecl.Syntax))

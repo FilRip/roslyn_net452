@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CommandLine;
 
 namespace Microsoft.CodeAnalysis.CSharp.CommandLine
 {
-    public class Program
+    public static class Program
     {
         public static int Main(string[] args)
         {

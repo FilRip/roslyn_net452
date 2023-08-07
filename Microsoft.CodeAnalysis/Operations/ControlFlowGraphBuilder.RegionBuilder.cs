@@ -66,10 +66,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             {
                 Debug.Assert(Kind != ControlFlowRegionKind.Root);
 
-                if (CaptureIds == null)
-                {
-                    CaptureIds = ArrayBuilder<CaptureId>.GetInstance();
-                }
+                CaptureIds ??= ArrayBuilder<CaptureId>.GetInstance();
 
                 CaptureIds.Add(new CaptureId(captureId));
             }
@@ -83,10 +80,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     return;
                 }
 
-                if (CaptureIds == null)
-                {
-                    CaptureIds = ArrayBuilder<CaptureId>.GetInstance();
-                }
+                CaptureIds ??= ArrayBuilder<CaptureId>.GetInstance();
 
                 CaptureIds.AddRange(others);
             }
@@ -98,10 +92,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 Debug.Assert(Kind != ControlFlowRegionKind.Root);
                 Debug.Assert(symbol.MethodKind == MethodKind.LocalFunction);
 
-                if (LocalFunctions == null)
-                {
-                    LocalFunctions = ArrayBuilder<(IMethodSymbol, ILocalFunctionOperation)>.GetInstance();
-                }
+                LocalFunctions ??= ArrayBuilder<(IMethodSymbol, ILocalFunctionOperation)>.GetInstance();
 
                 LocalFunctions.Add((symbol, operation));
             }
@@ -117,10 +108,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                 Debug.Assert(others.All(((IMethodSymbol m, ILocalFunctionOperation _) tuple) => tuple.m.MethodKind == MethodKind.LocalFunction));
 
-                if (LocalFunctions == null)
-                {
-                    LocalFunctions = ArrayBuilder<(IMethodSymbol, ILocalFunctionOperation)>.GetInstance();
-                }
+                LocalFunctions ??= ArrayBuilder<(IMethodSymbol, ILocalFunctionOperation)>.GetInstance();
 
                 LocalFunctions.AddRange(others);
             }
@@ -128,10 +116,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             [MemberNotNull(nameof(Regions))]
             public void Add(RegionBuilder region)
             {
-                if (Regions == null)
-                {
-                    Regions = ArrayBuilder<RegionBuilder>.GetInstance();
-                }
+                Regions ??= ArrayBuilder<RegionBuilder>.GetInstance();
 
 #if DEBUG
                 Debug.Assert(region.Enclosing == null || (region.Enclosing._aboutToFree && region.Enclosing.Enclosing == this));

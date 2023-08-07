@@ -26,8 +26,8 @@ namespace Microsoft.CodeAnalysis
 
         public TypedConstant(ITypeSymbolInternal? type, TypedConstantKind kind, object? value)
         {
-            Debug.Assert(kind == TypedConstantKind.Array || !(value is ImmutableArray<TypedConstant>));
-            Debug.Assert(!(value is ISymbol) || value is ISymbolInternal);
+            Debug.Assert(kind == TypedConstantKind.Array || value is not ImmutableArray<TypedConstant>);
+            Debug.Assert(value is not ISymbol || value is ISymbolInternal);
             Debug.Assert(type is object || kind == TypedConstantKind.Error);
 
             _kind = kind;

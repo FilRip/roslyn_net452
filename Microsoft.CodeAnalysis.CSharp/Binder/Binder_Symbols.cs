@@ -853,7 +853,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var errorResult = CreateErrorIfLookupOnTypeParameter(node.Parent, qualifierOpt, identifierValueText, 0, diagnostics);
-            if (errorResult is object)
+            if (errorResult is not null)
             {
                 return TypeWithAnnotations.Create(errorResult);
             }
@@ -1188,7 +1188,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             LookupOptions options)
         {
             var errorResult = CreateErrorIfLookupOnTypeParameter(node.Parent, qualifierOpt, plainName, arity, diagnostics);
-            if (errorResult is object)
+            if (errorResult is not null)
             {
                 return errorResult;
             }
@@ -1243,7 +1243,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             int arity,
             BindingDiagnosticBag diagnostics)
         {
-            if ((qualifierOpt is object) && (qualifierOpt.Kind == SymbolKind.TypeParameter))
+            if ((qualifierOpt is not null) && (qualifierOpt.Kind == SymbolKind.TypeParameter))
             {
                 var diagnosticInfo = new CSDiagnosticInfo(ErrorCode.ERR_LookupInTypeVariable, qualifierOpt);
                 diagnostics.Add(diagnosticInfo, node.Location);
@@ -1580,7 +1580,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             Symbol memberSymbol = compilation.GetWellKnownTypeMember(member);
 
-            if (memberSymbol is object)
+            if (memberSymbol is not null)
             {
                 useSiteInfo = GetUseSiteInfoForWellKnownMemberOrContainingType(memberSymbol);
                 if (useSiteInfo.DiagnosticInfo != null)
@@ -1664,7 +1664,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (suppressUseSiteDiagnostics && diagnostics.DependenciesBag is object)
                 {
                     AssemblySymbol container = symbol.ContainingAssembly;
-                    if (container is object && container != Compilation.Assembly && container != Compilation.Assembly.CorLibrary)
+                    if (container is not null && container != Compilation.Assembly && container != Compilation.Assembly.CorLibrary)
                     {
                         diagnostics.AddDependency(container);
                     }
@@ -1973,7 +1973,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 ((SourceModuleSymbol)this.Compilation.SourceModule).AnyReferencedAssembliesAreLinked)
                             {
                                 // Complain about unembeddable types from linked assemblies.
-                                if (diagnostics.DiagnosticBag is object)
+                                if (diagnostics.DiagnosticBag is not null)
                                 {
                                     Emit.NoPia.EmbeddedTypesManager.IsValidEmbeddableType((NamedTypeSymbol)singleResult, where, diagnostics.DiagnosticBag);
                                 }
@@ -2251,7 +2251,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 NotFound(where, simpleName, arity, whereText + "Attribute", diagnostics, aliasOpt, qualifierOpt, options | LookupOptions.VerbatimNameAttributeTypeOnly);
             }
 
-            if (qualifierOpt is object)
+            if (qualifierOpt is not null)
             {
                 if (qualifierOpt.IsType)
                 {
@@ -2304,7 +2304,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             forwardedToAssembly = GetForwardedToAssembly(simpleName, arity, ref qualifierOpt, diagnostics, location);
 
-            if (forwardedToAssembly is object)
+            if (forwardedToAssembly is not null)
             {
                 return qualifierOpt == null
                     ? diagnostics.Add(ErrorCode.ERR_SingleTypeNameNotFoundFwd, location, whereText, forwardedToAssembly)
@@ -2327,7 +2327,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var forwardedType =
                     referencedAssembly.TryLookupForwardedMetadataType(ref metadataName);
-                if (forwardedType is object)
+                if (forwardedType is not null)
                 {
                     if (forwardedType.Kind == SymbolKind.ErrorType)
                     {
@@ -2382,7 +2382,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (current is ContextualAttributeBinder contextualAttributeBinder)
                     {
-                        if (contextualAttributeBinder.AttributeTarget is object &&
+                        if (contextualAttributeBinder.AttributeTarget is not null &&
                             contextualAttributeBinder.AttributeTarget.Kind == SymbolKind.Assembly)
                         {
                             return null;
@@ -2401,7 +2401,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var metadataName = MetadataHelpers.ComposeAritySuffixedMetadataName(name, arity);
             var fullMetadataName = MetadataHelpers.BuildQualifiedName(qualifierOpt?.ToDisplayString(SymbolDisplayFormat.QualifiedNameOnlyFormat), metadataName);
             var result = GetForwardedToAssembly(fullMetadataName, diagnostics, location);
-            if (result is object)
+            if (result is not null)
             {
                 return result;
             }

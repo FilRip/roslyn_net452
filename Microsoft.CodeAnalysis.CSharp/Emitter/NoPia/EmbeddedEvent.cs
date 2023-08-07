@@ -87,7 +87,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
                     {
                         sourceInterface = attrData.CommonConstructorArguments[0].ValueInternal as NamedTypeSymbol;
 
-                        if (sourceInterface is object)
+                        if (sourceInterface is not null)
                         {
                             foundMatch = EmbedMatchingInterfaceMethods(sourceInterface, syntaxNodeOpt, diagnostics);
 

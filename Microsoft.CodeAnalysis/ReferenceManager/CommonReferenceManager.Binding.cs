@@ -254,7 +254,7 @@ namespace Microsoft.CodeAnalysis
 
 #nullable restore
 
-                        Debug.Assert(binding.ReferenceIdentity is object);
+                        Debug.Assert(binding.ReferenceIdentity is not null);
                         if (!TryResolveMissingReference(
                             requestingReference,
                             binding.ReferenceIdentity,
@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis
 
                         // We only need to resolve against implicitly resolved assemblies,
                         // since we already resolved against explicitly specified ones.
-                        Debug.Assert(binding.ReferenceIdentity is object);
+                        Debug.Assert(binding.ReferenceIdentity is not null);
                         referenceBinding[i] = ResolveReferencedAssembly(
                             binding.ReferenceIdentity,
                             allAssemblies,
@@ -533,7 +533,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             var resolvedAssembly = resolvedAssemblyMetadata.GetAssembly();
-            Debug.Assert(resolvedAssembly is object);
+            Debug.Assert(resolvedAssembly is not null);
 
             // Allow reference and definition identities to differ in version, but not other properties.
             // Don't need to compare if we are reusing a previously resolved reference.
@@ -555,7 +555,7 @@ namespace Microsoft.CodeAnalysis
             MetadataImportOptions importOptions)
         {
             var assembly = assemblyMetadata.GetAssembly();
-            Debug.Assert(assembly is object);
+            Debug.Assert(assembly is not null);
             return CreateAssemblyDataForFile(
                 assembly,
                 assemblyMetadata.CachedSymbols,
@@ -753,10 +753,7 @@ namespace Microsoft.CodeAnalysis
                                               candidateInputAssemblySymbols[candidateIndex] == null);
 
                         TAssemblySymbol? inputAssembly = boundInputs[candidateIndex].AssemblySymbol;
-                        if (inputAssembly == null)
-                        {
-                            inputAssembly = candidateInputAssemblySymbols[candidateIndex];
-                        }
+                        inputAssembly ??= candidateInputAssemblySymbols[candidateIndex];
 
                         if (inputAssembly != null)
                         {
@@ -795,7 +792,7 @@ namespace Microsoft.CodeAnalysis
                         candidateReferencedSymbols.Clear();
                         GetActualBoundReferencesUsedBy(candidate.AssemblySymbol, candidateReferencedSymbols);
 
-                        Debug.Assert(candidateReferenceBinding is object);
+                        Debug.Assert(candidateReferenceBinding is not null);
                         Debug.Assert(candidateReferenceBinding.Length == candidateReferencedSymbols.Count);
                         int referencesCount = candidateReferencedSymbols.Count;
 
@@ -953,7 +950,7 @@ namespace Microsoft.CodeAnalysis
         private static bool IsSuperseded(AssemblyIdentity identity, IReadOnlyDictionary<string, List<ReferencedAssemblyIdentity>> assemblyReferencesBySimpleName)
         {
             var value = assemblyReferencesBySimpleName[identity.Name][0];
-            Debug.Assert(value.Identity is object);
+            Debug.Assert(value.Identity is not null);
 #nullable restore
             return value.Identity.Version != identity.Version;
         }
@@ -985,10 +982,7 @@ namespace Microsoft.CodeAnalysis
 
                     if (assembly.DeclaresTheObjectClass)
                     {
-                        if (corLibraryCandidates == null)
-                        {
-                            corLibraryCandidates = ArrayBuilder<int>.GetInstance();
-                        }
+                        corLibraryCandidates ??= ArrayBuilder<int>.GetInstance();
 
                         // This could be the COR library.
                         corLibraryCandidates.Add(i);

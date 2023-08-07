@@ -383,7 +383,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //      body;
             //      return;
             // }
-            rewrittenHandler = F.Block(this.cachedThis is object ?
+            rewrittenHandler = F.Block(this.cachedThis is not null ?
                                             ImmutableArray.Create(this.cachedThis) :
                                             ImmutableArray<LocalSymbol>.Empty,
                                 F.Assignment(F.Field(F.This(), stateField), F.Literal(frame.parent.finalizeState)),

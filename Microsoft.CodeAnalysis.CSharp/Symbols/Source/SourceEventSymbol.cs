@@ -658,7 +658,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // If you override an event, then you're a WinRT event if and only if it's a WinRT event.
             EventSymbol? overriddenEvent = this.OverriddenEvent;
-            if (overriddenEvent is object)
+            if (overriddenEvent is not null)
             {
                 return overriddenEvent.IsWindowsRuntimeEvent;
             }

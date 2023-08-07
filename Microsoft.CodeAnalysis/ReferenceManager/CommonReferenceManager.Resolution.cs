@@ -336,7 +336,7 @@ namespace Microsoft.CodeAnalysis
                             if (assemblyMetadata.IsValidAssembly())
                             {
                                 PEAssembly? assembly = assemblyMetadata.GetAssembly();
-                                Debug.Assert(assembly is object);
+                                Debug.Assert(assembly is not null);
 #nullable restore
                                 existingReference = TryAddAssembly(
                                     assembly.Identity,
@@ -452,7 +452,7 @@ namespace Microsoft.CodeAnalysis
                 aliasesOpt = mergedProperties.AliasesOpt?.ToImmutableAndFree() ?? default;
                 recursiveAliasesOpt = mergedProperties.RecursiveAliasesOpt?.ToImmutableAndFree() ?? default;
 
-                if (mergedProperties.MergedReferencesOpt is object)
+                if (mergedProperties.MergedReferencesOpt is not null)
                 {
                     mergedReferences = mergedProperties.MergedReferencesOpt.ToImmutableAndFree();
                 }
@@ -617,10 +617,7 @@ namespace Microsoft.CodeAnalysis
                 return;
             }
 
-            if (lazyAliasMap == null)
-            {
-                lazyAliasMap = new Dictionary<MetadataReference, MergedAliases>();
-            }
+            lazyAliasMap ??= new Dictionary<MetadataReference, MergedAliases>();
 
             if (!lazyAliasMap.TryGetValue(primaryReference, out MergedAliases mergedAliases))
             {
@@ -647,10 +644,7 @@ namespace Microsoft.CodeAnalysis
         /// </remarks>
         private static void AddModule(PEModule module, int referenceIndex, ResolvedReference[] referenceMap, [NotNull] ref ArrayBuilder<PEModule>? modules)
         {
-            if (modules == null)
-            {
-                modules = ArrayBuilder<PEModule>.GetInstance();
-            }
+            modules ??= ArrayBuilder<PEModule>.GetInstance();
 
             referenceMap[referenceIndex] = new ResolvedReference(modules.Count, MetadataImageKind.Module);
             modules.Add(module);
@@ -683,7 +677,7 @@ namespace Microsoft.CodeAnalysis
             {
                 foreach (var other in sameSimpleNameIdentities)
                 {
-                    Debug.Assert(other.Identity is object);
+                    Debug.Assert(other.Identity is not null);
 #nullable restore
                     if (identity.Version == other.Identity.Version)
                     {
@@ -715,7 +709,7 @@ namespace Microsoft.CodeAnalysis
                     // In order to eliminate duplicate references we need to try to match their identities in both directions since 
                     // ReferenceMatchesDefinition is not necessarily symmetric.
                     // (e.g. System.Numerics.Vectors, Version=4.1+ matches System.Numerics.Vectors, Version=4.0, but not the other way around.)
-                    Debug.Assert(other.Identity is object);
+                    Debug.Assert(other.Identity is not null);
 #nullable restore
                     if (other.Identity.IsStrongName &&
                         IdentityComparer.ReferenceMatchesDefinition(identity, other.Identity) &&
@@ -731,7 +725,7 @@ namespace Microsoft.CodeAnalysis
                 foreach (var other in sameSimpleNameIdentities)
                 {
                     // only compare weak with weak
-                    Debug.Assert(other.Identity is object);
+                    Debug.Assert(other.Identity is not null);
                     if (!other.Identity.IsStrongName && WeakIdentityPropertiesEquivalent(identity, other.Identity))
                     {
                         equivalent = other;
@@ -806,7 +800,7 @@ namespace Microsoft.CodeAnalysis
             {
                 foreach (var referenceDirective in compilation.ReferenceDirectives)
                 {
-                    Debug.Assert(referenceDirective.Location is object);
+                    Debug.Assert(referenceDirective.Location is not null);
 
 #nullable restore
                     if (compilation.Options.MetadataReferenceResolver == null)
@@ -816,8 +810,8 @@ namespace Microsoft.CodeAnalysis
                     }
 
                     // we already successfully bound #r with the same value:
-                    Debug.Assert(referenceDirective.File is object);
-                    Debug.Assert(referenceDirective.Location.SourceTree is object);
+                    Debug.Assert(referenceDirective.File is not null);
+                    Debug.Assert(referenceDirective.Location.SourceTree is not null);
                     if (localBoundReferenceDirectives != null && localBoundReferenceDirectives.ContainsKey((referenceDirective.Location.SourceTree.FilePath, referenceDirective.File)))
                     {
                         continue;
@@ -857,11 +851,8 @@ namespace Microsoft.CodeAnalysis
                     referencesBuilder.AddRange(previousScriptCompilation.GetBoundReferenceManager().ExplicitReferences);
                 }
 
-                if (localBoundReferenceDirectives == null)
-                {
-                    // no directive references resolved successfully:
-                    localBoundReferenceDirectives = SpecializedCollections.EmptyDictionary<(string, string), MetadataReference>();
-                }
+                // no directive references resolved successfully:
+                localBoundReferenceDirectives ??= SpecializedCollections.EmptyDictionary<(string, string), MetadataReference>();
 
                 boundReferenceDirectives = localBoundReferenceDirectives;
                 references = referencesBuilder.ToImmutable();

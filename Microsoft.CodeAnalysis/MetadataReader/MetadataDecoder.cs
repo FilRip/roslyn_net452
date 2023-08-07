@@ -282,10 +282,7 @@ namespace Microsoft.CodeAnalysis
                             {
                                 if (lowerBound != 0)
                                 {
-                                    if (builder == null)
-                                    {
-                                        builder = ArrayBuilder<int>.GetInstance(countOfLowerBounds, 0);
-                                    }
+                                    builder ??= ArrayBuilder<int>.GetInstance(countOfLowerBounds, 0);
 
                                     builder[i] = lowerBound;
                                 }
@@ -721,10 +718,7 @@ namespace Microsoft.CodeAnalysis
                 TypeSymbol type = DecodeModifierTypeOrThrow(ref signatureReader);
                 ModifierInfo<TypeSymbol> modifier = new(isOptional, type);
 
-                if (modifiers == null)
-                {
-                    modifiers = ArrayBuilder<ModifierInfo<TypeSymbol>>.GetInstance();
-                }
+                modifiers ??= ArrayBuilder<ModifierInfo<TypeSymbol>>.GetInstance();
 
                 modifiers.Add(modifier);
             }
@@ -1394,11 +1388,7 @@ namespace Microsoft.CodeAnalysis
                     }
 
                     type = GetTypeSymbolForSerializedType(enumTypeName);
-                    var underlyingType = GetEnumUnderlyingType(type);
-                    if (underlyingType == null)
-                    {
-                        throw new UnsupportedSignatureContent();
-                    }
+                    var underlyingType = GetEnumUnderlyingType(type) ?? throw new UnsupportedSignatureContent();
 
                     // GetEnumUnderlyingType always returns a valid enum underlying type
                     typeCode = underlyingType.SpecialType.ToSerializationType();

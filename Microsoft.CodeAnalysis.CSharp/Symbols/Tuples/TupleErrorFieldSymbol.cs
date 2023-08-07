@@ -178,7 +178,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            return other is object &&
+            return other is not null &&
                 _tupleElementIndex == other._tupleElementIndex &&
                 TypeSymbol.Equals(ContainingType, other.ContainingType, compareKind);
         }

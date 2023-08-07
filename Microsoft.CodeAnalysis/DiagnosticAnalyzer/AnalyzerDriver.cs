@@ -649,11 +649,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
             finally
             {
-                if (_lazyPrimaryTask == null)
-                {
-                    // Set primaryTask to be a cancelled task.
-                    _lazyPrimaryTask = new Task(new Action(() => { }), new CancellationToken(true));
-                }
+                // Set primaryTask to be a cancelled task.
+                _lazyPrimaryTask ??= new Task(new Action(() => { }), new CancellationToken(true));
             }
         }
 

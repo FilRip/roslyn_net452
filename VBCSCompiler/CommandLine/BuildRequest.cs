@@ -13,21 +13,21 @@ namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal class BuildRequest
     {
-        //private const int MaximumRequestSize = 5242880;
+        private const int MaximumRequestSize = 5242880;
         public readonly Guid RequestId;
         public readonly RequestLanguage Language;
-        public readonly ReadOnlyCollection<BuildRequest.Argument> Arguments;
+        public readonly ReadOnlyCollection<Argument> Arguments;
         public readonly string CompilerHash;
 
         public BuildRequest(
             RequestLanguage language,
             string compilerHash,
-            IEnumerable<BuildRequest.Argument> arguments,
+            IEnumerable<Argument> arguments,
             Guid? requestId = null)
         {
             this.RequestId = requestId ?? Guid.Empty;
             this.Language = language;
-            this.Arguments = new ReadOnlyCollection<BuildRequest.Argument>(arguments.ToList<BuildRequest.Argument>());
+            this.Arguments = new ReadOnlyCollection<Argument>(arguments.ToList());
             this.CompilerHash = compilerHash;
             if (this.Arguments.Count > ushort.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(arguments), "Too many arguments: maximum of " + ushort.MaxValue.ToString() + " arguments allowed.");
@@ -43,9 +43,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
             string? keepAlive = null,
             string? libDirectory = null)
         {
-            List<Argument> arguments = new(args.Count + 1 + (libDirectory == null ? 0 : 1));
-            arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory));
-            arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory));
+            List<Argument> arguments = new(args.Count + 1 + (libDirectory == null ? 0 : 1))
+            {
+                new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory),
+                new Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory),
+            };
             if (keepAlive != null)
                 arguments.Add(new Argument(BuildProtocolConstants.ArgumentId.KeepAlive, 0, keepAlive));
             if (libDirectory != null)
@@ -60,9 +62,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public static BuildRequest CreateShutdown()
         {
-            Argument[] arguments = new BuildRequest.Argument[1]
+            Argument[] arguments = new Argument[1]
             {
-                new BuildRequest.Argument(BuildProtocolConstants.ArgumentId.Shutdown, 0, "")
+                new Argument(BuildProtocolConstants.ArgumentId.Shutdown, 0, "")
             };
             return new BuildRequest(RequestLanguage.CSharpCompile, BuildProtocolConstants.GetCommitHash() ?? "", arguments);
         }
@@ -74,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             byte[] lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(inStream, lengthBuffer, 4, cancellationToken).ConfigureAwait(false);
             int int32 = BitConverter.ToInt32(lengthBuffer, 0);
-            if (int32 > 5242880)
+            if (int32 > MaximumRequestSize)
                 throw new ArgumentException(string.Format("Request is over {0}MB in length", 5));
             cancellationToken.ThrowIfCancellationRequested();
             byte[] requestBuffer = new byte[int32];
@@ -124,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 writer.Flush();
                 cancellationToken.ThrowIfCancellationRequested();
                 int length = checked((int)memoryStream.Length);
-                if (memoryStream.Length > 5242880L)
+                if (memoryStream.Length > MaximumRequestSize)
                     throw new ArgumentOutOfRangeException(string.Format("Request is over {0}MB in length", 5));
                 await outStream.WriteAsync(BitConverter.GetBytes(length), 0, 4, cancellationToken).ConfigureAwait(false);
                 memoryStream.Position = 0L;
@@ -154,7 +156,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 this.Value = value;
             }
 
-            public static BuildRequest.Argument ReadFromBinaryReader(BinaryReader reader)
+            public static Argument ReadFromBinaryReader(BinaryReader reader)
             {
                 int num1 = reader.ReadInt32();
                 int num2 = reader.ReadInt32();
@@ -162,7 +164,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 string str1 = BuildProtocolConstants.ReadLengthPrefixedString(reader);
                 int argumentIndex = num2;
                 string str2 = str1;
-                return new BuildRequest.Argument((BuildProtocolConstants.ArgumentId)num1, argumentIndex, str2);
+                return new Argument((BuildProtocolConstants.ArgumentId)num1, argumentIndex, str2);
             }
 
             public void WriteToBinaryWriter(BinaryWriter writer)

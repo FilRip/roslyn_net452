@@ -112,7 +112,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // There is a use site diagnostic to report here, but it is not reported
             // just because this member was a candidate - only if it "wins".
             return !SuppressUseSiteDiagnosticsForKind(this.Kind) &&
-                symbol is object && symbol.GetUseSiteInfo().DiagnosticInfo != null;
+                symbol is not null && symbol.GetUseSiteInfo().DiagnosticInfo != null;
         }
 
         private static bool SuppressUseSiteDiagnosticsForKind(MemberResolutionKind kind)

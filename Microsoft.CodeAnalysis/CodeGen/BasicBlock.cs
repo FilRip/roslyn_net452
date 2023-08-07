@@ -83,10 +83,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             {
                 get
                 {
-                    if (_lazyRegularInstructions == null)
-                    {
-                        _lazyRegularInstructions = Cci.PooledBlobBuilder.GetInstance();
-                    }
+                    _lazyRegularInstructions ??= Cci.PooledBlobBuilder.GetInstance();
 
                     return _lazyRegularInstructions;
                 }

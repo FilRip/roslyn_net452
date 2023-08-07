@@ -457,7 +457,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public int GetHashCode(Symbol member)
         {
             int hash = 1;
-            if (member is object)
+            if (member is not null)
             {
                 hash = Hash.Combine((int)member.Kind, hash);
 

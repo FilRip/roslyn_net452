@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static TypeSymbol GetCapturedVariableFieldType(SynthesizedContainer frame, Symbol variable)
         {
             var local = variable as LocalSymbol;
-            if (local is object)
+            if (local is not null)
             {
                 // if we're capturing a generic frame pointer, construct it with the new frame's type parameters
                 if (local.Type.OriginalDefinition is SynthesizedClosureEnvironment lambdaFrame)
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            return frame.TypeMap.SubstituteType((local is object ? local.TypeWithAnnotations : ((ParameterSymbol)variable).TypeWithAnnotations).Type).Type;
+            return frame.TypeMap.SubstituteType((local is not null ? local.TypeWithAnnotations : ((ParameterSymbol)variable).TypeWithAnnotations).Type).Type;
         }
 
         internal override TypeWithAnnotations GetFieldType(ConsList<FieldSymbol> fieldsBeingBound)

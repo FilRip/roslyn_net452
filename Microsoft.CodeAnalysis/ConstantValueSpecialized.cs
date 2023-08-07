@@ -165,8 +165,7 @@ namespace Microsoft.CodeAnalysis
             {
                 get
                 {
-                    string? constantValue = null;
-                    if (_constantValueReference?.TryGetTarget(out constantValue) != true)
+                    if (_constantValueReference?.TryGetTarget(out string? constantValue) != true)
                     {
                         // Note: we could end up realizing the constant value multiple times if there's
                         // a race here. Currently, this isn't believed to be an issue, as the assignment

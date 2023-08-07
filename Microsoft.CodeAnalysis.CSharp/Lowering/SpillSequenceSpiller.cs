@@ -86,8 +86,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public void Free()
             {
-                if (_locals != null) _locals.Free();
-                if (_statements != null) _statements.Free();
+                _locals?.Free();
+                _statements?.Free();
             }
 
             internal void Include(BoundSpillSequenceBuilder other)
@@ -118,10 +118,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public void AddLocal(LocalSymbol local)
             {
-                if (_locals == null)
-                {
-                    _locals = ArrayBuilder<LocalSymbol>.GetInstance();
-                }
+                _locals ??= ArrayBuilder<LocalSymbol>.GetInstance();
 
                 _locals.Add(local);
             }
@@ -136,10 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public void AddStatement(BoundStatement statement)
             {
-                if (_statements == null)
-                {
-                    _statements = ArrayBuilder<BoundStatement>.GetInstance();
-                }
+                _statements ??= ArrayBuilder<BoundStatement>.GetInstance();
 
                 _statements.Add(statement);
             }
@@ -429,10 +423,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return newList;
             }
 
-            if (builder == null)
-            {
-                builder = new BoundSpillSequenceBuilder(lastSpill < newList.Length ? (newList[lastSpill] as BoundSpillSequenceBuilder)?.Syntax : null);
-            }
+            builder ??= new BoundSpillSequenceBuilder(lastSpill < newList.Length ? (newList[lastSpill] as BoundSpillSequenceBuilder)?.Syntax : null);
 
             var result = ArrayBuilder<BoundExpression>.GetInstance(newList.Length);
 
@@ -586,10 +577,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (indicesBuilder != null)
             {
                 // spill the array if there were await expressions in the indices
-                if (builder == null)
-                {
-                    builder = new BoundSpillSequenceBuilder(indicesBuilder.Syntax);
-                }
+                builder ??= new BoundSpillSequenceBuilder(indicesBuilder.Syntax);
 
                 expression = Spill(builder, expression);
             }
@@ -865,9 +853,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return UpdateExpression(conditionBuilder, node.Update(node.IsRef, condition, consequence, alternative, node.ConstantValueOpt, node.NaturalTypeOpt, node.WasTargetTyped, node.Type));
             }
 
-            if (conditionBuilder == null) conditionBuilder = new BoundSpillSequenceBuilder((consequenceBuilder ?? alternativeBuilder).Syntax);
-            if (consequenceBuilder == null) consequenceBuilder = new BoundSpillSequenceBuilder(alternativeBuilder.Syntax);
-            if (alternativeBuilder == null) alternativeBuilder = new BoundSpillSequenceBuilder(consequenceBuilder.Syntax);
+            conditionBuilder ??= new BoundSpillSequenceBuilder((consequenceBuilder ?? alternativeBuilder).Syntax);
+            consequenceBuilder ??= new BoundSpillSequenceBuilder(alternativeBuilder.Syntax);
+            alternativeBuilder ??= new BoundSpillSequenceBuilder(consequenceBuilder.Syntax);
 
             if (node.Type.IsVoidType())
             {
@@ -995,9 +983,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return UpdateExpression(receiverBuilder, node.Update(receiver, node.HasValueMethodOpt, whenNotNull, whenNullOpt, node.Id, node.Type));
             }
 
-            if (receiverBuilder == null) receiverBuilder = new BoundSpillSequenceBuilder((whenNotNullBuilder ?? whenNullBuilder).Syntax);
-            if (whenNotNullBuilder == null) whenNotNullBuilder = new BoundSpillSequenceBuilder(whenNullBuilder.Syntax);
-            if (whenNullBuilder == null) whenNullBuilder = new BoundSpillSequenceBuilder(whenNotNullBuilder.Syntax);
+            receiverBuilder ??= new BoundSpillSequenceBuilder((whenNotNullBuilder ?? whenNullBuilder).Syntax);
+            whenNotNullBuilder ??= new BoundSpillSequenceBuilder(whenNullBuilder.Syntax);
+            whenNullBuilder ??= new BoundSpillSequenceBuilder(whenNotNullBuilder.Syntax);
 
             BoundExpression condition;
             if (receiver.Type.IsReferenceType || receiver.Type.IsValueType || receiverRefKind == RefKind.None)
@@ -1180,10 +1168,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return node.Update(node.Locals, sideEffects, value, node.Type);
             }
 
-            if (builder == null)
-            {
-                builder = new BoundSpillSequenceBuilder(valueBuilder.Syntax);
-            }
+            builder ??= new BoundSpillSequenceBuilder(valueBuilder.Syntax);
 
             PromoteAndAddLocals(builder, node.Locals);
             builder.AddExpressions(sideEffects);

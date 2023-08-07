@@ -118,16 +118,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             CancellationToken cancellationToken)
         {
 
-            if (compilation.PreviousSubmission != null)
-            {
-                // In case there is a previous submission, we should ensure
-                // it has already created anonymous type/delegates templates
+            // In case there is a previous submission, we should ensure
+            // it has already created anonymous type/delegates templates
 
-                // NOTE: if there are any errors, we will pick up what was created anyway
-                compilation.PreviousSubmission.EnsureAnonymousTypeTemplates(cancellationToken);
-
-                // TODO: revise to use a loop instead of a recursion
-            }
+            // NOTE: if there are any errors, we will pick up what was created anyway
+            compilation.PreviousSubmission?.EnsureAnonymousTypeTemplates(cancellationToken);
 
             MethodSymbol entryPoint = null;
             if (filterOpt is null)
@@ -232,14 +227,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     synthesizedEntryPoint = new SynthesizedEntryPointSymbol.AsyncForwardEntryPoint(compilation, entryPoint.ContainingType, entryPoint);
                     entryPoint = synthesizedEntryPoint;
-                    if (moduleBeingBuilt != null)
-                    {
-                        moduleBeingBuilt.AddSynthesizedDefinition(entryPoint.ContainingType, synthesizedEntryPoint.GetCciAdapter());
-                    }
+                    moduleBeingBuilt?.AddSynthesizedDefinition(entryPoint.ContainingType, synthesizedEntryPoint.GetCciAdapter());
                 }
             }
 
-            if ((synthesizedEntryPoint is object) &&
+            if ((synthesizedEntryPoint is not null) &&
                 (moduleBeingBuilt != null) &&
                 !hasDeclarationErrors &&
                 !diagnostics.HasAnyErrors())
@@ -434,7 +426,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var sourceTypeSymbol = containingType as SourceMemberContainerTypeSymbol;
 
-            if (sourceTypeSymbol is object)
+            if (sourceTypeSymbol is not null)
             {
                 _cancellationToken.ThrowIfCancellationRequested();
                 Binder.BindFieldInitializers(_compilation, scriptInitializer, sourceTypeSymbol.StaticInitializers, _diagnostics, ref processedStaticInitializers);
@@ -611,10 +603,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var processedInitializers = new Binder.ProcessedFieldInitializers() { BoundInitializers = ImmutableArray<BoundInitializer>.Empty };
                 CompileMethod(scriptCtor, scriptCtorOrdinal, ref processedInitializers, synthesizedSubmissionFields, compilationState);
-                if (synthesizedSubmissionFields != null)
-                {
-                    synthesizedSubmissionFields.AddToType(containingType, compilationState.ModuleBuilderOpt);
-                }
+                synthesizedSubmissionFields?.AddToType(containingType, compilationState.ModuleBuilderOpt);
             }
 
             // Emit synthesized methods produced during lowering if any
@@ -758,7 +747,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static bool IsFieldLikeEventAccessor(MethodSymbol method)
         {
             Symbol associatedPropertyOrEvent = method.AssociatedSymbol;
-            return associatedPropertyOrEvent is object &&
+            return associatedPropertyOrEvent is not null &&
                 associatedPropertyOrEvent.Kind == SymbolKind.Event &&
                 ((EventSymbol)associatedPropertyOrEvent).HasAssociatedField;
         }
@@ -791,7 +780,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             SynthesizedSealedPropertyAccessor synthesizedAccessor = sourceProperty.SynthesizedSealedAccessorOpt;
 
             // we are not generating any observable diagnostics here so it is ok to short-circuit on global errors.
-            if (synthesizedAccessor is object && !_globalHasErrors)
+            if (synthesizedAccessor is not null && !_globalHasErrors)
             {
                 var discardedDiagnostics = BindingDiagnosticBag.GetInstance(_diagnostics);
                 synthesizedAccessor.GenerateMethodBody(compilationState, discardedDiagnostics);
@@ -880,7 +869,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (methodSymbol.IsAbstract || methodSymbol.ContainingType?.IsDelegateType() == true)
             {
-                if (sourceMethod is object)
+                if (sourceMethod is not null)
                 {
                     sourceMethod.SetDiagnostics(ImmutableArray<Diagnostic>.Empty, out bool diagsWritten);
                     if (diagsWritten && !methodSymbol.IsImplicitlyDeclared && _compilation.EventQueue != null)
@@ -893,7 +882,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // get cached diagnostics if not building and we have 'em
-            if (_moduleBeingBuiltOpt == null && sourceMethod is object)
+            if (_moduleBeingBuiltOpt == null && sourceMethod is not null)
             {
                 var cachedDiagnostics = sourceMethod.Diagnostics;
 
@@ -1325,10 +1314,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return loweredBody;
                 }
 
-                if (lazyVariableSlotAllocator == null)
-                {
-                    lazyVariableSlotAllocator = compilationState.ModuleBuilderOpt.TryCreateVariableSlotAllocator(method, method, diagnostics.DiagnosticBag);
-                }
+                lazyVariableSlotAllocator ??= compilationState.ModuleBuilderOpt.TryCreateVariableSlotAllocator(method, method, diagnostics.DiagnosticBag);
 
                 BoundStatement bodyWithoutLambdas = loweredBody;
                 if (sawLambdas || sawLocalFunctions)
@@ -1461,7 +1447,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     codeGen.Generate(out hasStackalloc);
 
-                    if (kickoffMethod is object)
+                    if (kickoffMethod is not null)
                     {
                         moveNextBodyDebugInfoOpt = new IteratorMoveNextBodyDebugInfo(kickoffMethod.GetCciAdapter());
                     }
@@ -1469,7 +1455,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // Compiler-generated MoveNext methods have hoisted local scopes.
                 // These are built by call to CodeGen.Generate.
-                var stateMachineHoistedLocalScopes = (kickoffMethod is object) ?
+                var stateMachineHoistedLocalScopes = (kickoffMethod is not null) ?
                     builder.GetHoistedLocalScopes() : default;
 
                 // Translate the imports even if we are not writing PDBs. The translation has an impact on generated metadata
@@ -1498,7 +1484,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var stateMachineHoistedLocalSlots = default(ImmutableArray<EncHoistedLocalInfo>);
                 var stateMachineAwaiterSlots = default(ImmutableArray<Cci.ITypeReference>);
-                if (optimizations == OptimizationLevel.Debug && stateMachineTypeOpt is object)
+                if (optimizations == OptimizationLevel.Debug && stateMachineTypeOpt is not null)
                 {
                     GetStateMachineSlotDebugInfo(moduleBuilder, moduleBuilder.GetSynthesizedFields(stateMachineTypeOpt), variableSlotAllocatorOpt, diagnosticsForThisMethod, out stateMachineHoistedLocalSlots, out stateMachineAwaiterSlots);
                 }
@@ -1756,7 +1742,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 body = null;
             }
 
-            if (method.IsConstructor() && method.IsImplicitlyDeclared && nullableInitialState is object)
+            if (method.IsConstructor() && method.IsImplicitlyDeclared && nullableInitialState is not null)
             {
                 NullableWalker.AnalyzeIfNeeded(
                     compilationState.Compilation,
@@ -1856,7 +1842,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // constructor syntax so that we can do unnecessary overload resolution on the non-existing initializer!
             // Simply take the early out: bind directly to the parameterless object ctor rather than attempting
             // overload resolution.
-            if (baseType is object)
+            if (baseType is not null)
             {
                 if (baseType.SpecialType == SpecialType.System_Object)
                 {

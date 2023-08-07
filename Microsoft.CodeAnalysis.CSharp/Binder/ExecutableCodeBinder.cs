@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 // Ensure that the member symbol is a method symbol.
-                if (_memberSymbol is object && _root != null)
+                if (_memberSymbol is not null && _root != null)
                 {
                     map = LocalBinderFactory.BuildMap(_memberSymbol, _root, this, _binderUpdatedHandler);
                 }

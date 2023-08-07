@@ -128,7 +128,7 @@ namespace Microsoft.CodeAnalysis
         private static IReadOnlyList<SyntaxNode> GetCurrentNodeFromTrueRoots(SyntaxNode trueRoot, SyntaxNode node)
         {
             var id = GetId(node);
-            if (id is object)
+            if (id is not null)
             {
                 CurrentNodes tracked = s_rootToCurrentNodesMap.GetValue(trueRoot, r => new CurrentNodes(r));
                 return tracked.GetNodes(id);
@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis
                 else
                 {
                     node = ((IStructuredTriviaSyntax)node).ParentTrivia.Token.Parent!;
-                    Debug.Assert(node is object);
+                    Debug.Assert(node is not null);
                 }
             }
         }
@@ -187,7 +187,7 @@ namespace Microsoft.CodeAnalysis
                 else
                 {
                     node = ((IStructuredTriviaSyntax)node).ParentTrivia.Token.Parent!;
-                    Debug.Assert(node is object);
+                    Debug.Assert(node is not null);
                 }
             }
 
@@ -207,7 +207,7 @@ namespace Microsoft.CodeAnalysis
 
                 foreach (var node in root.GetAnnotatedNodesAndTokens(IdAnnotationKind).Select(n => n.AsNode()!))
                 {
-                    Debug.Assert(node is object);
+                    Debug.Assert(node is not null);
                     foreach (var id in node.GetAnnotations(IdAnnotationKind))
                     {
                         if (!map.TryGetValue(id, out List<SyntaxNode> list))

@@ -110,7 +110,7 @@ namespace Roslyn.Utilities
             get
             {
                 Debug.Assert(this != Empty);
-                RoslynDebug.Assert(_tail is object);
+                RoslynDebug.Assert(_tail is not null);
                 return _tail;
             }
         }

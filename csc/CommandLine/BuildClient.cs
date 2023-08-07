@@ -69,10 +69,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             textWriter ??= Console.Out;
             if (CommandLineParser.TryParseClientArgs(originalArguments.Select((string arg) => arg.Trim()).ToArray(), out var parsedArgs, out var containsShared, out var keepAliveValue, out var pipeName2, out var errorMessage))
             {
-                if (pipeName == null)
-                {
-                    pipeName = pipeName2;
-                }
+                pipeName ??= pipeName2;
                 if (containsShared)
                 {
                     pipeName ??= GetPipeName(buildPaths);
@@ -88,26 +85,6 @@ namespace Microsoft.CodeAnalysis.CommandLine
             textWriter.WriteLine(errorMessage);
             return RunCompilationResult.Failed;
         }
-
-        /*private static bool TryEnableMulticoreJitting(out string errorMessage)
-        {
-            errorMessage = null;
-            try
-            {
-                string text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RoslynCompiler", "ProfileOptimization");
-                AssemblyName name = Assembly.GetExecutingAssembly().GetName();
-                string profile = name.Name + name.Version?.ToString() + ".profile";
-                Directory.CreateDirectory(text);
-                ProfileOptimization.SetProfileRoot(text);
-                ProfileOptimization.StartProfile(profile);
-            }
-            catch (Exception ex)
-            {
-                errorMessage = string.Format(CodeAnalysisResources.ExceptionEnablingMulticoreJit, ex.Message);
-                return false;
-            }
-            return true;
-        }*/
 
         public Task<RunCompilationResult> RunCompilationAsync(IEnumerable<string> originalArguments, BuildPaths buildPaths, TextWriter textWriter = null)
         {
@@ -223,7 +200,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
             {
                 if (disposable != null)
                 {
+#pragma warning disable S3971 // "GC.SuppressFinalize" should not be called
                     GC.SuppressFinalize(disposable);
+#pragma warning restore S3971 // "GC.SuppressFinalize" should not be called
                 }
                 return false;
             }

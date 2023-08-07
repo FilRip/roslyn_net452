@@ -333,10 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var partKind = GetPartKind(symbol);
 
-            if (symbolName == null)
-            {
-                symbolName = symbol.Name;
-            }
+            symbolName ??= symbol.Name;
 
             if (format.MiscellaneousOptions.IncludesOption(SymbolDisplayMiscellaneousOptions.UseErrorTypeSymbolName) &&
                 partKind == SymbolDisplayPartKind.ErrorTypeName &&
@@ -403,7 +400,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (this.format.CompilerInternalOptions.IncludesOption(SymbolDisplayCompilerInternalOptions.IncludeCustomModifiers))
             {
-                if (underlyingTypeSymbol is object)
+                if (underlyingTypeSymbol is not null)
                 {
                     return underlyingTypeSymbol.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics.SelectAsArray(a => a.CustomModifiers);
                 }

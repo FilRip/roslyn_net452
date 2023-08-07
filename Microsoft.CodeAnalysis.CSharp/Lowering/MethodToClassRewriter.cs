@@ -278,7 +278,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             methodBeingWrapped = methodBeingWrapped.ConstructedFrom;
 
             MethodSymbol wrapper = this.CompilationState.GetMethodWrapper(methodBeingWrapped);
-            if (wrapper is object)
+            if (wrapper is not null)
             {
                 return wrapper;
             }
@@ -453,7 +453,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override BoundNode VisitObjectCreationExpression(BoundObjectCreationExpression node)
         {
             var rewritten = (BoundObjectCreationExpression)base.VisitObjectCreationExpression(node);
-            if (!TypeSymbol.Equals(rewritten.Type, node.Type, TypeCompareKind.ConsiderEverything2) && node.Constructor is object)
+            if (!TypeSymbol.Equals(rewritten.Type, node.Type, TypeCompareKind.ConsiderEverything2) && node.Constructor is not null)
             {
                 MethodSymbol ctor = VisitMethodSymbol(node.Constructor);
                 rewritten = rewritten.Update(

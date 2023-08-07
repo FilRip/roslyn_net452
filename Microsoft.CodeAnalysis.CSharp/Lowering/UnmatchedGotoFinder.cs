@@ -97,20 +97,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void AddGoto(LabelSymbol label)
         {
-            if (_gotos == null)
-            {
-                _gotos = new HashSet<LabelSymbol>();
-            }
+            _gotos ??= new HashSet<LabelSymbol>();
 
             _gotos.Add(label);
         }
 
         private void AddTarget(LabelSymbol label)
         {
-            if (_targets == null)
-            {
-                _targets = new HashSet<LabelSymbol>();
-            }
+            _targets ??= new HashSet<LabelSymbol>();
 
             _targets.Add(label);
         }

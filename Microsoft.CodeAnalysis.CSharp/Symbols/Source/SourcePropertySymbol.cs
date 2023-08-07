@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             var explicitInterfaceSpecifier = GetExplicitInterfaceSpecifier(syntax);
             SyntaxTokenList modifiersTokenList = GetModifierTokensSyntax(syntax);
-            bool isExplicitInterfaceImplementation = explicitInterfaceSpecifier is object;
+            bool isExplicitInterfaceImplementation = explicitInterfaceSpecifier is not null;
             var modifiers = MakeModifiers(
                 containingType,
                 modifiersTokenList,
@@ -226,7 +226,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else
             {
                 isAutoProperty = false;
-                accessorsHaveImplementation = GetArrowExpression(syntax) is object;
+                accessorsHaveImplementation = GetArrowExpression(syntax) is not null;
             }
         }
 
@@ -495,7 +495,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     diagnostics.Add(ErrorCode.ERR_BadVisIndexerParam, Location, this, param.Type);
                 }
-                else if (SetMethod is object && param.Name == ParameterSymbol.ValueParameterName)
+                else if (SetMethod is not null && param.Name == ParameterSymbol.ValueParameterName)
                 {
                     diagnostics.Add(ErrorCode.ERR_DuplicateGeneratedName, param.Locations.FirstOrDefault() ?? Location, param.Name);
                 }

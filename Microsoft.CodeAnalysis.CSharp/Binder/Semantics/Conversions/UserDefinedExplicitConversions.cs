@@ -156,7 +156,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // DELIBERATE SPEC VIOLATION: See the comment regarding bug 17021 in 
             // UserDefinedImplicitConversions.cs.
 
-            if (source is object && source.IsInterfaceType() || target.IsInterfaceType())
+            if (source is not null && source.IsInterfaceType() || target.IsInterfaceType())
             {
                 return;
             }
@@ -176,7 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // We accept candidates for which the parameter type encompasses the *underlying* source type.
                 if (!fromConversion.Exists &&
-                    source is object &&
+                    source is not null &&
                     source.IsNullableType() &&
                     EncompassingExplicitConversion(null, source.GetNullableUnderlyingType(), convertsFrom, ref useSiteInfo).Exists)
                 {
@@ -185,7 +185,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // As in dev11 (and the revised spec), we also accept candidates for which the return type is encompassed by the *stripped* target type.
                 if (!toConversion.Exists &&
-                    target is object &&
+                    target is not null &&
                     target.IsNullableType() &&
                     EncompassingExplicitConversion(null, convertsTo, target.GetNullableUnderlyingType(), ref useSiteInfo).Exists)
                 {
@@ -219,7 +219,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (fromConversion.Exists && toConversion.Exists)
                 {
-                    if (source is object && source.IsNullableType() && convertsFrom.IsNonNullableValueType() && target.CanBeAssignedNull())
+                    if (source is not null && source.IsNullableType() && convertsFrom.IsNonNullableValueType() && target.CanBeAssignedNull())
                     {
                         TypeSymbol nullableFrom = MakeNullableType(convertsFrom);
                         TypeSymbol nullableTo = convertsTo.IsNonNullableValueType() ? MakeNullableType(convertsTo) : convertsTo;
@@ -250,7 +250,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             toConversion = EncompassingExplicitConversion(null, convertsTo, target, ref useSiteInfo);
                         }
 
-                        if (source is object && source.IsNullableType() && convertsFrom.IsNonNullableValueType())
+                        if (source is not null && source.IsNullableType() && convertsFrom.IsNonNullableValueType())
                         {
                             convertsFrom = MakeNullableType(convertsFrom);
                             fromConversion = EncompassingExplicitConversion(null, convertsFrom, source, ref useSiteInfo);
@@ -298,7 +298,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // We have already written the "FromType" into the conversion analysis to
             // perpetuate this fiction.
 
-            if (source is object)
+            if (source is not null)
             {
                 if (u.Any(conv => TypeSymbol.Equals(conv.FromType, source, TypeCompareKind.ConsiderEverything2)))
                 {

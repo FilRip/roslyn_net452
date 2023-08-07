@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Location? location = null)
         {
             var diag = GetFeatureAvailabilityDiagnosticInfo(feature, (CSharpParseOptions)syntax.SyntaxTree.Options);
-            if (diag is object)
+            if (diag is not null)
             {
                 diagnostics.Add(diag, location ?? syntax.GetLocation());
                 return false;

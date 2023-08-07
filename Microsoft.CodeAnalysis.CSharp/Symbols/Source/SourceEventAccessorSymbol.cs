@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else
             {
                 MethodSymbol implementedAccessor = isAdder ? explicitlyImplementedEventOpt.AddMethod : explicitlyImplementedEventOpt.RemoveMethod;
-                string accessorName = implementedAccessor is object ? implementedAccessor.Name : SourceEventSymbol.GetAccessorName(explicitlyImplementedEventOpt.Name, isAdder);
+                string accessorName = implementedAccessor is not null ? implementedAccessor.Name : SourceEventSymbol.GetAccessorName(explicitlyImplementedEventOpt.Name, isAdder);
 
                 name = ExplicitInterfaceHelpers.GetMemberName(accessorName, explicitlyImplementedEventOpt.ContainingType, aliasQualifierOpt);
                 explicitInterfaceImplementations = implementedAccessor is null ? ImmutableArray<MethodSymbol>.Empty : ImmutableArray.Create<MethodSymbol>(implementedAccessor);
@@ -226,7 +226,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // overridden event (which does not depend on WinRT-ness) and then grab the corresponding
                 // accessor.
                 EventSymbol overriddenEvent = @event.OverriddenEvent;
-                if (overriddenEvent is object)
+                if (overriddenEvent is not null)
                 {
                     // If this accessor is overriding an accessor from metadata, it is possible that
                     // the name of the overridden accessor doesn't follow the C# add_X/remove_X pattern.

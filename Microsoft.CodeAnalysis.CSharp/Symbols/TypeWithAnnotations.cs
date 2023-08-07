@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <summary>
         /// True if the type is not null.
         /// </summary>
-        internal bool HasType => !(DefaultType is null);
+        internal bool HasType => DefaultType is not null;
 
 #nullable enable
         public TypeWithAnnotations SetIsAnnotated(CSharpCompilation compilation)
@@ -549,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 typeWithAnnotationsPredicate: (t, a, b) => t.NullableAnnotation != NullableAnnotation.Oblivious && !t.Type.IsErrorType() && !t.Type.IsValueType,
                 typePredicate: null,
                 arg: (object)null);
-            return type is object;
+            return type is not null;
         }
 
         /// <summary>
@@ -941,7 +941,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return resolvedType;
             }
 
-            internal override bool IsResolved => _resolved is object;
+            internal override bool IsResolved => _resolved is not null;
             internal override TypeSymbol GetResolvedType(TypeSymbol defaultType) => GetResolvedType();
             internal override ImmutableArray<CustomModifier> CustomModifiers => ImmutableArray<CustomModifier>.Empty;
 
@@ -987,7 +987,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             internal override TypeWithAnnotations SubstituteType(TypeWithAnnotations type, AbstractTypeMap typeMap)
             {
-                if (_resolved is object)
+                if (_resolved is not null)
                 {
                     return type.SubstituteTypeCore(typeMap);
                 }
@@ -1011,7 +1011,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             internal override void ReportDiagnosticsIfObsolete(TypeWithAnnotations type, Binder binder, SyntaxNode syntax, BindingDiagnosticBag diagnostics)
             {
-                if (_resolved is object)
+                if (_resolved is not null)
                 {
                     type.ReportDiagnosticsIfObsoleteCore(binder, syntax, diagnostics);
                 }

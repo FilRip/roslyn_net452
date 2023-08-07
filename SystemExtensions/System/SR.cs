@@ -343,6 +343,7 @@ namespace System
             }
             catch (MissingManifestResourceException)
             {
+                // Nothing to do
             }
             if (defaultString != null && resourceKey.Equals(text, StringComparison.Ordinal))
             {

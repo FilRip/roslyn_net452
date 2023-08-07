@@ -279,12 +279,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var ctor = _factory.WellKnownMethod(WellKnownMember.System_Runtime_InteropServices_ComAwareEventInfo__ctor);
 
-            if (ctor is object)
+            if (ctor is not null)
             {
                 var addRemove = _factory.WellKnownMethod(node.IsAddition ? WellKnownMember.System_Runtime_InteropServices_ComAwareEventInfo__AddEventHandler :
                                                                           WellKnownMember.System_Runtime_InteropServices_ComAwareEventInfo__RemoveEventHandler);
 
-                if (addRemove is object)
+                if (addRemove is not null)
                 {
                     BoundExpression eventInfo = _factory.New(ctor, _factory.Typeof(node.Event.ContainingType), _factory.Literal(node.Event.MetadataName));
                     result = _factory.Call(eventInfo, addRemove,
@@ -299,10 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // but the com event binder needs the event to exist on the local type. We'll poke the pia reference
             // cache directly so that the event is embedded.
             var module = this.EmitModule;
-            if (module != null)
-            {
-                module.EmbeddedTypesManagerOpt.EmbedEventIfNeedTo(node.Event.GetCciAdapter(), node.Syntax, _diagnostics.DiagnosticBag, isUsedForComAwareEventBinding: true);
-            }
+            module?.EmbeddedTypesManagerOpt.EmbedEventIfNeedTo(node.Event.GetCciAdapter(), node.Syntax, _diagnostics.DiagnosticBag, isUsedForComAwareEventBinding: true);
 
             if (result != null)
             {

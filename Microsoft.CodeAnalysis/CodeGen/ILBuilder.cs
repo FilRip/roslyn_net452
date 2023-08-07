@@ -1008,10 +1008,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             //var curBlock = GetCurrentBlock();
             _lastSeqPointTree = syntaxTree;
 
-            if (this.SeqPointsOpt == null)
-            {
-                this.SeqPointsOpt = ArrayBuilder<RawSequencePoint>.GetInstance();
-            }
+            this.SeqPointsOpt ??= ArrayBuilder<RawSequencePoint>.GetInstance();
 
             // Add an initial hidden sequence point if needed.
             if (_initialHiddenSequencePointMarker >= 0)
@@ -1221,10 +1218,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public int AllocateILMarker()
         {
             Debug.Assert(this.RealizedIL.IsDefault, "Too late to allocate a new IL marker");
-            if (_allocatedILMarkers == null)
-            {
-                _allocatedILMarkers = ArrayBuilder<ILMarker>.GetInstance();
-            }
+            _allocatedILMarkers ??= ArrayBuilder<ILMarker>.GetInstance();
 
             BasicBlock curBlock = GetCurrentBlock();
             Debug.Assert(curBlock != null);

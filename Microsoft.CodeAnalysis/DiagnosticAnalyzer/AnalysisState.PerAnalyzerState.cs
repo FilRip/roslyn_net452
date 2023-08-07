@@ -128,10 +128,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 if (pendingEntities.TryGetValue(analysisEntity, out state) &&
                     (state == null || state.StateKind == StateKind.ReadyToProcess))
                 {
-                    if (state == null)
-                    {
-                        state = pool.Allocate();
-                    }
+                    state ??= pool.Allocate();
 
                     state.SetStateKind(StateKind.InProcess);
                     Debug.Assert(state.StateKind == StateKind.InProcess);
@@ -309,7 +306,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             private void FreeDeclarationDataMap_NoLock(Dictionary<int, DeclarationAnalyzerStateData>? declarationDataMap)
             {
-                if (declarationDataMap is object)
+                if (declarationDataMap is not null)
                 {
                     declarationDataMap.Clear();
                     _currentlyAnalyzingDeclarationsMapPool.Free(declarationDataMap);

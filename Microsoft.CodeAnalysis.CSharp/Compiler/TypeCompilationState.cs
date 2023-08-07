@@ -130,10 +130,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public void AddSynthesizedMethod(MethodSymbol method, BoundStatement body)
         {
-            if (_synthesizedMethods == null)
-            {
-                _synthesizedMethods = ArrayBuilder<MethodWithBody>.GetInstance();
-            }
+            _synthesizedMethods ??= ArrayBuilder<MethodWithBody>.GetInstance();
 
             _synthesizedMethods.Add(new MethodWithBody(method, body, CurrentImportChain));
         }
@@ -149,10 +146,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             this.AddSynthesizedMethod(wrapper, body);
 
-            if (_wrappers == null)
-            {
-                _wrappers = new Dictionary<MethodSymbol, MethodSymbol>();
-            }
+            _wrappers ??= new Dictionary<MethodSymbol, MethodSymbol>();
 
             _wrappers.Add(method, wrapper);
         }

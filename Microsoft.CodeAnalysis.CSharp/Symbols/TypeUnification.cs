@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             MutableTypeMap? substitution = null;
             bool result = CanUnifyHelper(t1, t2, ref substitution);
 #if DEBUG
-            if (result && (t1 is object && t2 is object))
+            if (result && (t1 is not null && t2 is not null))
             {
                 var substituted1 = SubstituteAllTypeParameters(substitution, TypeWithAnnotations.Create(t1));
                 var substituted2 = SubstituteAllTypeParameters(substitution, TypeWithAnnotations.Create(t2));
@@ -246,10 +246,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static void AddSubstitution(ref MutableTypeMap? substitution, TypeParameterSymbol tp1, TypeWithAnnotations t2)
         {
-            if (substitution == null)
-            {
-                substitution = new MutableTypeMap();
-            }
+            substitution ??= new MutableTypeMap();
 
             // MutableTypeMap.Add will throw if the key has already been added.  However,
             // if t1 was already in the substitution, it would have been substituted at the
@@ -272,7 +269,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SymbolKind.ErrorType:
                     {
                         NamedTypeSymbol namedType = (NamedTypeSymbol)type;
-                        while (namedType is object)
+                        while (namedType is not null)
                         {
                             var typeParts = namedType.IsTupleType ? namedType.TupleElementTypesWithAnnotations : namedType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics;
                             foreach (TypeWithAnnotations typePart in typeParts)

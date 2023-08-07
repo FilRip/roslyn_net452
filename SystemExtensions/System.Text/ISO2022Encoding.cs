@@ -45,10 +45,7 @@ namespace System.Text
                 currentMode = ISO2022Modes.ModeASCII;
                 shiftInOutMode = ISO2022Modes.ModeASCII;
                 charLeftOver = '\0';
-                if (m_fallbackBuffer != null)
-                {
-                    m_fallbackBuffer.Reset();
-                }
+                m_fallbackBuffer?.Reset();
             }
         }
 
@@ -85,10 +82,7 @@ namespace System.Text
                 bytesLeftOver = new byte[4];
                 currentMode = ISO2022Modes.ModeASCII;
                 shiftInOutMode = ISO2022Modes.ModeASCII;
-                if (m_fallbackBuffer != null)
-                {
-                    m_fallbackBuffer.Reset();
-                }
+                m_fallbackBuffer?.Reset();
             }
         }
 

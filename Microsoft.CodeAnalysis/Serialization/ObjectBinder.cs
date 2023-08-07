@@ -46,10 +46,7 @@ namespace Roslyn.Utilities
         {
             lock (s_gate)
             {
-                if (s_lastSnapshot == null)
-                {
-                    s_lastSnapshot = new ObjectBinderSnapshot(s_typeToIndex, s_types, s_typeReaders);
-                }
+                s_lastSnapshot ??= new ObjectBinderSnapshot(s_typeToIndex, s_types, s_typeReaders);
 
                 return s_lastSnapshot.Value;
             }

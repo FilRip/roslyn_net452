@@ -4,7 +4,7 @@
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal sealed class ServerFileMutexPair : IServerMutex, IDisposable
+    internal sealed class ServerFileMutexPair : IServerMutex
     {
         public readonly FileMutex AliveMutex;
         public readonly FileMutex HeldMutex;
@@ -16,8 +16,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
             this.AliveMutex = new FileMutex(mutexName + "-alive");
             this.HeldMutex = new FileMutex(mutexName + "-held");
             createdNew = this.AliveMutex.TryLock(0);
-            if (initiallyOwned & createdNew && !this.TryLock(0))
-                throw new Exception("Failed to lock mutex after creating it");
+            if (initiallyOwned && createdNew && !this.TryLock(0))
+                throw new VbcException("Failed to lock mutex after creating it");
         }
 
         public bool TryLock(int timeoutMs)

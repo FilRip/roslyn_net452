@@ -331,10 +331,7 @@ namespace Microsoft.CodeAnalysis
                     }
 
                     Debug.Assert(i > 0);
-                    if (builder == null)
-                    {
-                        builder = ArrayBuilder<T>.GetInstance();
-                    }
+                    builder ??= ArrayBuilder<T>.GetInstance();
 
                     builder.Add(a);
                 }

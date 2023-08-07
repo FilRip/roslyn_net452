@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
             DiagnosticBag = diagnosticBag;
         }
 
-        public bool AccumulatesDiagnostics => DiagnosticBag is object;
+        public bool AccumulatesDiagnostics => DiagnosticBag is not null;
 
         public void AddRange<T>(ImmutableArray<T> diagnostics) where T : Diagnostic
         {
@@ -40,13 +40,13 @@ namespace Microsoft.CodeAnalysis
 
         public bool HasAnyResolvedErrors()
         {
-            Debug.Assert(DiagnosticBag is object);
+            Debug.Assert(DiagnosticBag is not null);
             return DiagnosticBag?.HasAnyResolvedErrors() == true;
         }
 
         public bool HasAnyErrors()
         {
-            Debug.Assert(DiagnosticBag is object);
+            Debug.Assert(DiagnosticBag is not null);
             return DiagnosticBag?.HasAnyErrors() == true;
         }
 
@@ -113,7 +113,7 @@ namespace Microsoft.CodeAnalysis
 
         public void AddRange(BindingDiagnosticBag<TAssemblySymbol>? other, bool allowMismatchInDependencyAccumulation = false)
         {
-            if (other is object)
+            if (other is not null)
             {
                 AddRange(other.DiagnosticBag);
                 Debug.Assert(allowMismatchInDependencyAccumulation || !other.AccumulatesDependencies || this.AccumulatesDependencies);
@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis
 
         public void AddRange(DiagnosticBag? bag)
         {
-            if (bag is object)
+            if (bag is not null)
             {
                 DiagnosticBag?.AddRange(bag);
             }
@@ -287,7 +287,7 @@ namespace Microsoft.CodeAnalysis
                 return false;
             }
 
-            if (DiagnosticBag is object)
+            if (DiagnosticBag is not null)
             {
                 return ReportUseSiteDiagnostic(info, DiagnosticBag, location);
             }

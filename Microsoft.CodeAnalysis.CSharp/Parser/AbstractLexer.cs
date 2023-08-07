@@ -103,10 +103,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             if (error != null)
             {
-                if (_errors == null)
-                {
-                    _errors = new List<SyntaxDiagnosticInfo>(8);
-                }
+                _errors ??= new List<SyntaxDiagnosticInfo>(8);
 
                 _errors.Add(error);
             }

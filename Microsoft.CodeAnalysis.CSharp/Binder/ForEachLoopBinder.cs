@@ -540,12 +540,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // If collectionExprType is a nullable type, then use the underlying type and take the value (i.e. .Value) of collectionExpr.
             // This behavior is not spec'd, but it's what Dev10 does.
-            if (collectionExprType is object && collectionExprType.IsNullableType())
+            if (collectionExprType is not null && collectionExprType.IsNullableType())
             {
                 SyntaxNode exprSyntax = collectionExpr.Syntax;
 
                 MethodSymbol nullableValueGetter = (MethodSymbol)GetSpecialTypeMember(SpecialMember.System_Nullable_T_get_Value, diagnostics, exprSyntax);
-                if (nullableValueGetter is object)
+                if (nullableValueGetter is not null)
                 {
                     nullableValueGetter = nullableValueGetter.AsMember((NamedTypeSymbol)collectionExprType);
 
@@ -807,7 +807,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 MethodSymbol moveNextMethod = null;
-                if (getEnumeratorMethod is object)
+                if (getEnumeratorMethod is not null)
                 {
                     MethodSymbol specificGetEnumeratorMethod = getEnumeratorMethod.AsMember(collectionType);
                     TypeSymbol enumeratorType = specificGetEnumeratorMethod.ReturnType;
@@ -831,7 +831,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         MethodSymbol moveNextAsync = (MethodSymbol)GetWellKnownTypeMember(WellKnownMember.System_Collections_Generic_IAsyncEnumerator_T__MoveNextAsync,
                             diagnostics, errorLocationSyntax.Location, isOptional: false);
 
-                        if (moveNextAsync is object)
+                        if (moveNextAsync is not null)
                         {
                             moveNextMethod = moveNextAsync.AsMember((NamedTypeSymbol)enumeratorType);
                         }
@@ -843,7 +843,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         currentPropertyGetter = (MethodSymbol)GetSpecialTypeMember(SpecialMember.System_Collections_Generic_IEnumerator_T__get_Current, diagnostics, errorLocationSyntax);
                     }
 
-                    if (currentPropertyGetter is object)
+                    if (currentPropertyGetter is not null)
                     {
                         builder.CurrentPropertyGetter = currentPropertyGetter.AsMember((NamedTypeSymbol)enumeratorType);
                     }
@@ -912,7 +912,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // again, we throw away any binding diagnostics, and assume it's not disposable if we encounter errors
                 var receiver = new BoundDisposableValuePlaceholder(_syntax, enumeratorType);
                 MethodSymbol disposeMethod = TryFindDisposePatternMethod(receiver, _syntax, isAsync, BindingDiagnosticBag.Discarded);
-                if (disposeMethod is object)
+                if (disposeMethod is not null)
                 {
 
                     var argsBuilder = ArrayBuilder<BoundExpression>.GetInstance(disposeMethod.ParameterCount);
@@ -996,7 +996,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             builder.GetEnumeratorInfo = getEnumeratorInfo;
-            return getEnumeratorInfo is object;
+            return getEnumeratorInfo is not null;
         }
 
         /// <summary>
@@ -1210,9 +1210,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 diagnostics.Add(ErrorCode.WRN_PatternIsAmbiguous, _syntax.Expression.Location, collectionExpr.Type, MessageID.IDS_Collection.Localize(),
                     applicableMembers[0], applicableMembers[1]);
             }
-            else if (overloadResolutionResult != null)
+            else
             {
-                overloadResolutionResult.ReportDiagnostics(
+                overloadResolutionResult?.ReportDiagnostics(
                     binder: this,
                     location: _syntax.Expression.Location,
                     nodeOpt: _syntax.Expression,
@@ -1413,7 +1413,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (!isAsync)
                 {
                     var implementedNonGeneric = this.Compilation.GetSpecialType(SpecialType.System_Collections_IEnumerable);
-                    if (implementedNonGeneric is object)
+                    if (implementedNonGeneric is not null)
                     {
                         var conversion = this.Conversions.ClassifyImplicitConversionFromType(type, implementedNonGeneric, ref useSiteInfo);
                         if (conversion.IsImplicit)
@@ -1427,7 +1427,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             diagnostics.Add(_syntax.Expression, useSiteInfo);
 
             builder.CollectionType = implementedIEnumerable;
-            return implementedIEnumerable is object;
+            return implementedIEnumerable is not null;
         }
 
         internal static NamedTypeSymbol GetIEnumerableOfT(TypeSymbol type, bool isAsync, CSharpCompilation compilation, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, out bool foundMultiple)

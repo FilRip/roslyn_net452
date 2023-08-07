@@ -77,7 +77,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 enclosing = new ExpressionVariableBinder(syntax, enclosing);
 
-                if (binderUpdatedHandler is object)
+                if (binderUpdatedHandler is not null)
                 {
                     binderUpdatedHandler(enclosing, syntax);
                 }
@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 enclosing = builder.GetBinderForPossibleEmbeddedStatement(statement, enclosing, out CSharpSyntaxNode embeddedScopeDesignator);
 
-                if (binderUpdatedHandler is object)
+                if (binderUpdatedHandler is not null)
                 {
                     binderUpdatedHandler(enclosing, embeddedScopeDesignator);
                 }
@@ -103,7 +103,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                if (binderUpdatedHandler is object)
+                if (binderUpdatedHandler is not null)
                 {
                     binderUpdatedHandler(enclosing, null);
                 }
@@ -228,7 +228,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Binder binder = _enclosing;
             LocalFunctionSymbol match = FindLocalFunction(node, _enclosing);
 
-            if (match is object)
+            if (match is not null)
             {
                 _containingMemberOrLambda = match;
 

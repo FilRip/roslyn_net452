@@ -309,7 +309,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var uncommonData = _uncommonData;
                 if (uncommonData != null)
                 {
-                    if (uncommonData._conversionMethod is object)
+                    if (uncommonData._conversionMethod is not null)
                     {
                         return uncommonData._conversionMethod;
                     }
@@ -367,7 +367,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 return !this.IsUserDefined ||
-                    this.Method is object ||
+                    this.Method is not null ||
                     _uncommonData?._conversionResult.Kind == UserDefinedConversionResultKind.Valid;
             }
         }
@@ -965,7 +965,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var sub = new System.Collections.Generic.List<TreeDumperNode>();
 
-                if (self.Method is object)
+                if (self.Method is not null)
                 {
                     sub.Add(new TreeDumperNode("method", self.Method.ToDisplayString(), null));
                 }

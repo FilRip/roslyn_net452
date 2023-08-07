@@ -206,7 +206,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     overriddenOrImplementedProperty = explicitlyImplementedProperty;
                 }
 
-                if (overriddenOrImplementedProperty is object)
+                if (overriddenOrImplementedProperty is not null)
                 {
                     _lazyRefCustomModifiers = _refKind != RefKind.None ? overriddenOrImplementedProperty.RefCustomModifiers : ImmutableArray<CustomModifier>.Empty;
 
@@ -610,7 +610,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
 
         internal bool IsAutoPropertyWithGetAccessor
-            => IsAutoProperty && _getMethod is object;
+            => IsAutoProperty && _getMethod is not null;
 
         protected bool IsAutoProperty
             => (_propertyFlags & Flags.IsAutoProperty) != 0;
@@ -696,8 +696,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             if (!IsExpressionBodied)
             {
-                bool hasGetAccessor = GetMethod is object;
-                bool hasSetAccessor = SetMethod is object;
+                bool hasGetAccessor = GetMethod is not null;
+                bool hasSetAccessor = SetMethod is not null;
 
                 if (hasGetAccessor && hasSetAccessor)
                 {
@@ -745,7 +745,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     if (!this.IsOverride)
                     {
                         var accessor = _getMethod ?? _setMethod;
-                        if (accessor is object)
+                        if (accessor is not null)
                         {
                             // Check accessibility is not set on the one accessor.
                             if (accessor.LocalAccessibility != Accessibility.NotApplicable)
@@ -771,7 +771,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             PropertySymbol? explicitlyImplementedProperty = ExplicitInterfaceImplementations.FirstOrDefault();
 
-            if (explicitlyImplementedProperty is object)
+            if (explicitlyImplementedProperty is not null)
             {
                 CheckExplicitImplementationAccessor(GetMethod, explicitlyImplementedProperty.GetMethod, explicitlyImplementedProperty, diagnostics);
                 CheckExplicitImplementationAccessor(SetMethod, explicitlyImplementedProperty.SetMethod, explicitlyImplementedProperty, diagnostics);
@@ -787,13 +787,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // property name location for any such errors. We'll do the same for return
             // type errors but for parameter errors, we'll use the parameter location.
 
-            if (_explicitInterfaceType is object)
+            if (_explicitInterfaceType is not null)
             {
                 var explicitInterfaceSpecifier = GetExplicitInterfaceSpecifier();
                 _explicitInterfaceType.CheckAllConstraints(compilation, conversions, new SourceLocation(explicitInterfaceSpecifier.Name), diagnostics);
 
                 // Note: we delayed nullable-related checks that could pull on NonNullTypes
-                if (explicitlyImplementedProperty is object)
+                if (explicitlyImplementedProperty is not null)
                 {
                     TypeSymbol.CheckNullableReferenceTypeMismatchOnImplementingMember(this.ContainingType, this, explicitlyImplementedProperty, isExplicit: true, diagnostics);
                 }
@@ -894,7 +894,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private void CheckAccessibilityMoreRestrictive(SourcePropertyAccessorSymbol accessor, BindingDiagnosticBag diagnostics)
         {
-            if ((accessor is object) &&
+            if ((accessor is not null) &&
                 !IsAccessibilityMoreRestrictive(this.DeclaredAccessibility, accessor.LocalAccessibility))
             {
                 diagnostics.Add(ErrorCode.ERR_InvalidPropertyAccessMod, accessor.Locations[0], accessor, this);
@@ -933,7 +933,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         // which depend on the explicitly implemented property
         private void CheckExplicitImplementationAccessor(MethodSymbol thisAccessor, MethodSymbol otherAccessor, PropertySymbol explicitlyImplementedProperty, BindingDiagnosticBag diagnostics)
         {
-            var thisHasAccessor = thisAccessor is object;
+            var thisHasAccessor = thisAccessor is not null;
             var otherHasAccessor = otherAccessor.IsImplementable();
 
             if (otherHasAccessor && !thisHasAccessor)
@@ -970,8 +970,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                bool hasGetter = GetMethod is object;
-                bool hasSetter = SetMethod is object;
+                bool hasGetter = GetMethod is not null;
+                bool hasSetter = SetMethod is not null;
                 if (!this.IsSealed || (hasGetter && hasSetter))
                 {
                     return null;
@@ -994,13 +994,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private SynthesizedSealedPropertyAccessor MakeSynthesizedSealedAccessor()
         {
 
-            if (GetMethod is object)
+            if (GetMethod is not null)
             {
                 // need to synthesize setter
                 MethodSymbol overriddenAccessor = this.GetOwnOrInheritedSetMethod();
                 return overriddenAccessor is null ? null : new SynthesizedSealedPropertyAccessor(this, overriddenAccessor);
             }
-            else if (SetMethod is object)
+            else if (SetMethod is not null)
             {
                 // need to synthesize getter
                 MethodSymbol overriddenAccessor = this.GetOwnOrInheritedGetMethod();

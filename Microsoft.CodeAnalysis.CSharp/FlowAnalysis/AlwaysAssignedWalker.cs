@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     var v = base.variableBySlot[i];
-                    if (v.Exists && !(v.Symbol is FieldSymbol))
+                    if (v.Exists && v.Symbol is not FieldSymbol)
                     {
                         result.Add(v.Symbol);
                     }

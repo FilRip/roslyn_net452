@@ -46,13 +46,7 @@ namespace Roslyn.Utilities
         /// </summary>
         public static Type? GetTypeFromEither(string contractName, string desktopName)
         {
-            var type = TryGetType(contractName);
-
-            if (type == null)
-            {
-                type = TryGetType(desktopName);
-            }
-
+            var type = TryGetType(contractName) ?? TryGetType(desktopName);
             return type;
         }
 
@@ -130,7 +124,7 @@ namespace Roslyn.Utilities
             }
             catch (TargetInvocationException e)
             {
-                Debug.Assert(e.InnerException is object);
+                Debug.Assert(e.InnerException is not null);
                 ExceptionDispatchInfo.Capture(e.InnerException).Throw();
                 Debug.Assert(false, "Unreachable");
                 return default;

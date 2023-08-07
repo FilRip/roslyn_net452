@@ -293,7 +293,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                                         //  event backing fields do not show up in GetMembers
                                         {
                                             FieldSymbol field = ((EventSymbol)member).AssociatedField;
-                                            if (field is object)
+                                            if (field is not null)
                                             {
                                                 AddSymbolLocation(result, field);
                                             }
@@ -598,7 +598,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                 // Hashset enumeration is not guaranteed to be deterministic. Emitting in the order of fully qualified names.
                 IEnumerable<NamedTypeSymbol> orderedForwardedTypes = wellKnownAttributeData.ForwardedTypes;
 
-                if (builder is object)
+                if (builder is not null)
                 {
                     orderedForwardedTypes = orderedForwardedTypes.OrderBy(t => t.OriginalDefinition.ToDisplayString(SymbolDisplayFormat.QualifiedNameArityFormat));
                 }
@@ -611,7 +611,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                     // level, we need to de-dup the original definitions before emitting.
                     if (!seenTopLevelTypes.Add(originalDefinition)) continue;
 
-                    if (builder is object)
+                    if (builder is not null)
                     {
                         // Return all nested types.
                         // Note the order: depth first, children in reverse order (to match dev10, not a requirement).
@@ -775,7 +775,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
         {
             AssemblySymbol container = module.ContainingAssembly;
 
-            if (container is object && ReferenceEquals(container.Modules[0], module))
+            if (container is not null && ReferenceEquals(container.Modules[0], module))
             {
                 Cci.IModuleReference moduleRef = new AssemblyReference(container);
                 Cci.IModuleReference cachedModuleRef = AssemblyOrModuleSymbolToModuleRefMap.GetOrAdd(container, moduleRef);
@@ -864,7 +864,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
                         return (Cci.INamedTypeReference)reference;
                     }
 
-                    if (container is object)
+                    if (container is not null)
                     {
                         if (IsGenericType(container))
                         {
@@ -921,7 +921,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             // but if it does happen we should make it a failure.
             // NOTE: declaredBase could be null for interfaces
             var declaredBase = namedTypeSymbol.BaseTypeNoUseSiteDiagnostics;
-            if (declaredBase is object && declaredBase.SpecialType == SpecialType.System_ValueType)
+            if (declaredBase is not null && declaredBase.SpecialType == SpecialType.System_ValueType)
             {
                 return;
             }
@@ -933,7 +933,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             }
 
             var location = syntaxNodeOpt == null ? NoLocation.Singleton : syntaxNodeOpt.Location;
-            if (declaredBase is object)
+            if (declaredBase is not null)
             {
                 var diagnosticInfo = declaredBase.GetUseSiteInfo().DiagnosticInfo;
                 if (diagnosticInfo != null && diagnosticInfo.Severity == DiagnosticSeverity.Error)
@@ -951,7 +951,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         public static bool IsGenericType(NamedTypeSymbol toCheck)
         {
-            while (toCheck is object)
+            while (toCheck is not null)
             {
                 if (toCheck.Arity > 0)
                 {

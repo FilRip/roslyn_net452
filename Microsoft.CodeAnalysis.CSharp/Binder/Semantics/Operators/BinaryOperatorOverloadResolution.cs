@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // In order to preserve backward compatibility, at first we ignore interface sources.
 
-            if (leftOperatorSourceOpt is object && !leftSourceIsInterface)
+            if (leftOperatorSourceOpt is not null && !leftSourceIsInterface)
             {
                 hadApplicableCandidates = GetUserDefinedOperators(kind, leftOperatorSourceOpt, left, right, result.Results, ref useSiteInfo);
                 if (!hadApplicableCandidates)
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (rightOperatorSourceOpt is object && !rightSourceIsInterface && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
+            if (rightOperatorSourceOpt is not null && !rightSourceIsInterface && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
             {
                 var rightOperators = ArrayBuilder<BinaryOperatorAnalysisResult>.GetInstance();
                 if (GetUserDefinedOperators(kind, rightOperatorSourceOpt, left, right, rightOperators, ref useSiteInfo))
@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     result.Results.Clear();
                 }
 
-                if (rightOperatorSourceOpt is object && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
+                if (rightOperatorSourceOpt is not null && !rightOperatorSourceOpt.Equals(leftOperatorSourceOpt))
                 {
                     var rightOperators = ArrayBuilder<BinaryOperatorAnalysisResult>.GetInstance();
                     if (GetUserDefinedBinaryOperatorsFromInterfaces(kind, name,
@@ -317,9 +317,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var leftType = left.Type;
-            var leftDelegate = leftType is object && leftType.IsDelegateType();
+            var leftDelegate = leftType is not null && leftType.IsDelegateType();
             var rightType = right.Type;
-            var rightDelegate = rightType is object && rightType.IsDelegateType();
+            var rightDelegate = rightType is not null && rightType.IsDelegateType();
 
             // If no operands have delegate types then add nothing.
             if (!leftDelegate && !rightDelegate)
@@ -559,13 +559,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var leftType = left.Type;
-            if (leftType is object)
+            if (leftType is not null)
             {
                 leftType = leftType.StrippedType();
             }
 
             var rightType = right.Type;
-            if (rightType is object)
+            if (rightType is not null)
             {
                 rightType = rightType.StrippedType();
             }
@@ -589,12 +589,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                                                                                                                                                                                                                                         //   Boolean operator op(C<dynamic>.E, C<object>.E)
                                     _ => throw ExceptionUtilities.UnexpectedValue(kind),// Unhandled bin op kind in get enum operations
                                 };
-            if (leftType is object)
+            if (leftType is not null)
             {
                 GetEnumOperation(kind, leftType, right, results);
             }
 
-            if (rightType is object && (leftType is null || !(useIdentityConversion ? Conversions.HasIdentityConversion(rightType, leftType) : rightType.Equals(leftType))))
+            if (rightType is not null && (leftType is null || !(useIdentityConversion ? Conversions.HasIdentityConversion(rightType, leftType) : rightType.Equals(leftType))))
             {
                 GetEnumOperation(kind, rightType, right, results);
             }
@@ -611,7 +611,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var leftType = left.Type as PointerTypeSymbol;
             var rightType = right.Type as PointerTypeSymbol;
 
-            if (leftType is object)
+            if (leftType is not null)
             {
                 GetPointerArithmeticOperators(kind, leftType, results);
             }
@@ -619,12 +619,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The only arithmetic operator that is applicable on two distinct pointer types is
             //   long operator –(T* x, T* y)
             // This operator returns long and so it's not ambiguous to apply it on T1 and T2 that are identity convertible to each other.
-            if (rightType is object && (leftType is null || !Conversions.HasIdentityConversion(rightType, leftType)))
+            if (rightType is not null && (leftType is null || !Conversions.HasIdentityConversion(rightType, leftType)))
             {
                 GetPointerArithmeticOperators(kind, rightType, results);
             }
 
-            if (leftType is object || rightType is object || left.Type is FunctionPointerTypeSymbol || right.Type is FunctionPointerTypeSymbol)
+            if (leftType is not null || rightType is not null || left.Type is FunctionPointerTypeSymbol || right.Type is FunctionPointerTypeSymbol)
             {
                 // The pointer comparison operators are all "void* OP void*".
                 GetPointerComparisonOperators(kind, results);
@@ -783,7 +783,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 current = ((TypeParameterSymbol)type0).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            for (; current is object; current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (; current is not null; current = current.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 operators.Clear();
                 GetUserDefinedBinaryOperatorsFromType(current, kind, name, operators);
@@ -1150,7 +1150,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BetterResult MoreSpecificOperator(BinaryOperatorSignature op1, BinaryOperatorSignature op2, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             TypeSymbol op1Left, op1Right, op2Left, op2Right;
-            if (op1.Method is object)
+            if (op1.Method is not null)
             {
                 var p = op1.Method.OriginalDefinition.GetParameters();
                 op1Left = p[0].Type;
@@ -1167,7 +1167,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 op1Right = op1.RightType;
             }
 
-            if (op2.Method is object)
+            if (op2.Method is not null)
             {
                 var p = op2.Method.OriginalDefinition.GetParameters();
                 op2Left = p[0].Type;

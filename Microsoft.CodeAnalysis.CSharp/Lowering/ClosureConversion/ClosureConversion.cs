@@ -354,7 +354,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 DebugId closureId = _analysis.GetClosureId(syntax, closureDebugInfo);
 
                 var containingMethod = scope.ContainingFunctionOpt?.OriginalMethodSymbol ?? _topLevelMethod;
-                if (_substitutedSourceMethod is object && containingMethod == _topLevelMethod)
+                if (_substitutedSourceMethod is not null && containingMethod == _topLevelMethod)
                 {
                     containingMethod = _substitutedSourceMethod;
                 }
@@ -420,7 +420,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                          // For simplicity we do not perform precise analysis whether this would
                          // definitely be the case. If we are in a variant interface, we always force
                          // creation of a display class.
-                         VarianceSafety.GetEnclosingVariantInterface(_topLevelMethod) is object)
+                         VarianceSafety.GetEnclosingVariantInterface(_topLevelMethod) is not null)
                 {
                     translatedLambdaContainer = containerAsFrame = GetStaticFrame(Diagnostics, syntax);
                     closureKind = ClosureKind.Singleton;
@@ -567,7 +567,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             // If in an instance method of the right type, we can just return the "this" pointer.
-            if (_currentFrameThis is object && TypeSymbol.Equals(_currentFrameThis.Type, frameClass, TypeCompareKind.ConsiderEverything2))
+            if (_currentFrameThis is not null && TypeSymbol.Equals(_currentFrameThis.Type, frameClass, TypeCompareKind.ConsiderEverything2))
             {
                 return new BoundThisReference(syntax, frameClass);
             }
@@ -639,7 +639,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var prologue = ArrayBuilder<BoundExpression>.GetInstance();
 
-            if (frame.Constructor is object)
+            if (frame.Constructor is not null)
             {
                 MethodSymbol constructor = frame.Constructor.AsMember(frameType);
 
@@ -650,7 +650,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             CapturedSymbolReplacement oldInnermostFrameProxy = null;
-            if (_innermostFramePointer is object)
+            if (_innermostFramePointer is not null)
             {
                 proxies.TryGetValue(_innermostFramePointer, out oldInnermostFrameProxy);
                 if (env.CapturesParent)
@@ -692,7 +692,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             _innermostFramePointer = oldInnermostFramePointer;
 
-            if (_innermostFramePointer is object)
+            if (_innermostFramePointer is not null)
             {
                 if (oldInnermostFrameProxy != null)
                 {
@@ -957,7 +957,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 realTypeArguments = realTypeArguments.Concat(typeArgumentsOpt);
             }
 
-            if (containerAsFrame is object && containerAsFrame.Arity != 0)
+            if (containerAsFrame is not null && containerAsFrame.Arity != 0)
             {
                 var containerTypeArguments = ImmutableArray.Create(realTypeArguments, 0, containerAsFrame.Arity);
                 realTypeArguments = ImmutableArray.Create(realTypeArguments, containerAsFrame.Arity, realTypeArguments.Length - containerAsFrame.Arity);
@@ -1486,10 +1486,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void AddSynthesizedMethod(MethodSymbol method, BoundStatement body)
         {
-            if (_synthesizedMethods == null)
-            {
-                _synthesizedMethods = ArrayBuilder<TypeCompilationState.MethodWithBody>.GetInstance();
-            }
+            _synthesizedMethods ??= ArrayBuilder<TypeCompilationState.MethodWithBody>.GetInstance();
 
             _synthesizedMethods.Add(
                 new TypeCompilationState.MethodWithBody(
@@ -1560,7 +1557,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 try
                 {
                     BoundExpression cache;
-                    if (shouldCacheForStaticMethod || shouldCacheInLoop && containerAsFrame is object)
+                    if (shouldCacheForStaticMethod || shouldCacheInLoop && containerAsFrame is not null)
                     {
                         // Since the cache variable will be in a container with possibly alpha-rewritten generic parameters, we need to
                         // substitute the original type according to the type map for that container. That substituted type may be
@@ -1583,9 +1580,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         // the lambda captures at most the "this" of the enclosing method.  We cache its delegate in a local variable.
                         var cacheLocal = F.SynthesizedLocal(type, kind: SynthesizedLocalKind.CachedAnonymousMethodDelegate);
-                        if (_addedLocals == null) _addedLocals = ArrayBuilder<LocalSymbol>.GetInstance();
+                        _addedLocals ??= ArrayBuilder<LocalSymbol>.GetInstance();
                         _addedLocals.Add(cacheLocal);
-                        if (_addedStatements == null) _addedStatements = ArrayBuilder<BoundStatement>.GetInstance();
+                        _addedStatements ??= ArrayBuilder<BoundStatement>.GetInstance();
                         cache = F.Local(cacheLocal);
                         _addedStatements.Add(F.Assignment(cache, F.Null(type)));
                     }

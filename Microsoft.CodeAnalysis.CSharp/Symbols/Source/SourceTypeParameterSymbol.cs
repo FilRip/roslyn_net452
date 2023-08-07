@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.ContainingSymbol is SourceOrdinaryMethodSymbol sourceMethod && sourceMethod.IsPartial)
                 {
                     var implementingPart = sourceMethod.SourcePartialImplementation;
-                    if (implementingPart is object)
+                    if (implementingPart is not null)
                     {
                         var typeParameter = (SourceTypeParameterSymbolBase)implementingPart.TypeParameters[_ordinal];
                         mergedAttributesBuilder.AddRange(typeParameter.MergedAttributeDeclarationSyntaxLists);
@@ -729,7 +729,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public TypeParameterSymbol GetOverriddenTypeParameter(int ordinal)
         {
             var overriddenMethod = this.OverriddenMethod;
-            return (overriddenMethod is object) ? overriddenMethod.TypeParameters[ordinal] : null;
+            return overriddenMethod?.TypeParameters[ordinal];
         }
 
         public TypeMap TypeMap
@@ -739,7 +739,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (_lazyTypeMap == null)
                 {
                     var overriddenMethod = this.OverriddenMethod;
-                    if (overriddenMethod is object)
+                    if (overriddenMethod is not null)
                     {
                         var overriddenTypeParameters = overriddenMethod.TypeParameters;
                         var overridingTypeParameters = _overridingMethod.TypeParameters;
@@ -782,7 +782,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             do
             {
                 method = method.OverriddenMethod;
-            } while ((method is object) && method.IsOverride);
+            } while ((method is not null) && method.IsOverride);
             // OverriddenMethod may be null in error situations.
             return method;
         }
@@ -844,7 +844,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) && typeParameter.HasConstructorConstraint;
+                return (typeParameter is not null) && typeParameter.HasConstructorConstraint;
             }
         }
 
@@ -853,7 +853,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) && typeParameter.HasValueTypeConstraint;
+                return (typeParameter is not null) && typeParameter.HasValueTypeConstraint;
             }
         }
 
@@ -862,7 +862,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) && (typeParameter.IsValueTypeFromConstraintTypes || CalculateIsValueTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
+                return (typeParameter is not null) && (typeParameter.IsValueTypeFromConstraintTypes || CalculateIsValueTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
             }
         }
 
@@ -871,7 +871,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) && typeParameter.HasReferenceTypeConstraint;
+                return (typeParameter is not null) && typeParameter.HasReferenceTypeConstraint;
             }
         }
 
@@ -880,7 +880,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) && (typeParameter.IsReferenceTypeFromConstraintTypes || CalculateIsReferenceTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
+                return (typeParameter is not null) && (typeParameter.IsReferenceTypeFromConstraintTypes || CalculateIsReferenceTypeFromConstraintTypes(ConstraintTypesNoUseSiteDiagnostics));
             }
         }
 
@@ -889,7 +889,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 TypeParameterSymbol typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) ? typeParameter.ReferenceTypeConstraintIsNullable : false;
+                return (typeParameter is not null) ? typeParameter.ReferenceTypeConstraintIsNullable : false;
             }
         }
 
@@ -914,7 +914,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 var typeParameter = this.OverriddenTypeParameter;
-                return (typeParameter is object) && typeParameter.HasUnmanagedTypeConstraint;
+                return (typeParameter is not null) && typeParameter.HasUnmanagedTypeConstraint;
             }
         }
 

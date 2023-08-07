@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.Syntax
 
         public void AddRange(SyntaxTokenList list, int offset, int length)
         {
-            Debug.Assert(list.Node is object);
+            Debug.Assert(list.Node is not null);
 #nullable restore
             this.AddRange(new SyntaxList<SyntaxNode>(list.Node.CreateRed()), offset, length);
 #nullable enable

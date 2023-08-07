@@ -79,10 +79,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (attribute.IsTargetAttribute(kickoffType, AttributeDescription.DebuggerNonUserCodeAttribute) ||
                         attribute.IsTargetAttribute(kickoffType, AttributeDescription.DebuggerStepThroughAttribute))
                     {
-                        if (builder == null)
-                        {
-                            builder = ArrayBuilder<CSharpAttributeData>.GetInstance(2); // only 2 different attributes are inherited at the moment
-                        }
+                        builder ??= ArrayBuilder<CSharpAttributeData>.GetInstance(2); // only 2 different attributes are inherited at the moment
 
                         builder.Add(attribute);
                     }

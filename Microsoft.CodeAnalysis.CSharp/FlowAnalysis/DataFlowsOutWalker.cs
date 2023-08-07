@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
 #if DEBUG
-                if (param is object)
+                if (param is not null)
                 {
                     _assignedInside.Add(param);
                 }
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             var eventAccess = (BoundEventAccess)node;
                             FieldSymbol associatedField = eventAccess.EventSymbol.AssociatedField;
-                            if (associatedField is object)
+                            if (associatedField is not null)
                             {
                                 if (MayRequireTracking(eventAccess.ReceiverOpt, associatedField))
                                 {
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 #if DEBUG
                 {
                     Symbol variable = GetNodeSymbol(node);
-                    if (variable is object)
+                    if (variable is not null)
                     {
                         _assignedInside.Add(variable);
                     }
@@ -232,7 +232,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool FlowsOut(ParameterSymbol param)
         {
-            return param is object && param.RefKind != RefKind.None && !param.IsImplicitlyDeclared && !RegionContains(param.Locations[0].SourceSpan);
+            return param is not null && param.RefKind != RefKind.None && !param.IsImplicitlyDeclared && !RegionContains(param.Locations[0].SourceSpan);
         }
 
         private ParameterSymbol Param(BoundNode node)

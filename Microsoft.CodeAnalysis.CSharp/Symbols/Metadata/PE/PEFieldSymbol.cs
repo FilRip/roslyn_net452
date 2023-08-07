@@ -101,10 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
             catch (BadImageFormatException)
             {
-                if (_name is null)
-                {
-                    _name = String.Empty;
-                }
+                _name ??= String.Empty;
 
                 _lazyCachedUseSiteInfo.Initialize(new CSDiagnosticInfo(ErrorCode.ERR_BindToBogus, this));
             }
@@ -235,13 +232,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             // This should always be true in valid metadata - there should only
             // be one event with a given name in a given type.
-            if (_associatedEventOpt is null)
-            {
-                // No locking required since this method will only be called by the thread that created
-                // the field symbol (and will be called before the field symbol is added to the containing 
-                // type members and available to other threads).
-                _associatedEventOpt = eventSymbol;
-            }
+            // No locking required since this method will only be called by the thread that created
+            // the field symbol (and will be called before the field symbol is added to the containing 
+            // type members and available to other threads).
+            _associatedEventOpt ??= eventSymbol;
         }
 
         private void EnsureSignatureIsLoaded()
@@ -339,7 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             get
             {
                 EnsureSignatureIsLoaded();
-                return _lazyFixedImplementationType is object;
+                return _lazyFixedImplementationType is not null;
             }
         }
 
@@ -492,7 +486,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             ConstantValue value;
             return this.Type.SpecialType == SpecialType.System_Decimal &&
-                   (value = GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false)) is object &&
+                   (value = GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false)) is not null &&
                    value.Discriminator == ConstantValueTypeDiscriminator.Decimal;
         }
 

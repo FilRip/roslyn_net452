@@ -106,15 +106,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 lock (_gate)
                 {
-                    if (_lazyCompilationScopeTask == null)
-                    {
-                        _lazyCompilationScopeTask = Task.Run(() =>
+                    _lazyCompilationScopeTask ??= Task.Run(() =>
                         {
                             var compilationAnalysisScope = new HostCompilationStartAnalysisScope(sessionScope);
                             analyzerExecutor.ExecuteCompilationStartActions(sessionScope.GetAnalyzerActions(_analyzer).CompilationStartActions, compilationAnalysisScope);
                             return compilationAnalysisScope;
                         }, analyzerExecutor.CancellationToken);
-                    }
 
                     return _lazyCompilationScopeTask;
                 }
@@ -194,7 +191,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                                 // Ensure that we include symbols for both parts of partial methods.
                                 if (member is IMethodSymbol method &&
-                                    !(method.PartialImplementationPart is null))
+                                    method.PartialImplementationPart is not null)
                                 {
                                     memberSet.Add(method.PartialImplementationPart);
                                 }

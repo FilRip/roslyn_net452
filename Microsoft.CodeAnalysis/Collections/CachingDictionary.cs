@@ -260,10 +260,7 @@ namespace Microsoft.CodeAnalysis.Collections
             var currentMap = _map;
             while (IsNotFullyPopulatedMap(currentMap))
             {
-                if (fullyPopulatedMap == null)
-                {
-                    fullyPopulatedMap = CreateFullyPopulatedMap(currentMap);
-                }
+                fullyPopulatedMap ??= CreateFullyPopulatedMap(currentMap);
 
                 var replacedMap = Interlocked.CompareExchange(ref _map, fullyPopulatedMap, currentMap);
                 if (replacedMap == currentMap)

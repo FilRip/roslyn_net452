@@ -342,7 +342,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 convertedExpression = expression;
                 // If the expression does not have a constant value, an error will be reported in the caller
-                if (!hasErrors && expression.ConstantValue is object)
+                if (!hasErrors && expression.ConstantValue is not null)
                 {
                     CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
                     if (expression.ConstantValue == ConstantValue.Null)

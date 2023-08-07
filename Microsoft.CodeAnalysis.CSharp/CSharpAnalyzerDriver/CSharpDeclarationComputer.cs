@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         if (associatedSymbol is IMethodSymbol ctor)
                         {
                             var recordDeclaration = (RecordDeclarationSyntax)node;
-                            Debug.Assert(ctor.MethodKind == MethodKind.Constructor && recordDeclaration.ParameterList is object);
+                            Debug.Assert(ctor.MethodKind == MethodKind.Constructor && recordDeclaration.ParameterList is not null);
 
                             var codeBlocks = GetParameterListInitializersAndAttributes(recordDeclaration.ParameterList);
 

@@ -341,7 +341,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (ownerOfTypeParametersInScope != null)
             {
                 LocalFunctionSymbol function = GetDeclaredLocalFunction(binder, ownerOfTypeParametersInScope.Identifier);
-                if (function is object)
+                if (function is not null)
                 {
                     binder = function.SignatureBinder;
                 }
@@ -735,7 +735,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CheckSyntaxNode(declarationSyntax);
 
             var binder = this.GetEnclosingBinder(GetAdjustedNodePosition(declarationSyntax));
-            while (binder != null && !(binder is SwitchBinder))
+            while (binder != null && binder is not SwitchBinder)
             {
                 binder = binder.Next;
             }
@@ -802,7 +802,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else if (paramList.Parent.Kind() == SyntaxKind.LocalFunctionStatement)
             {
                 var localFunction = GetDeclaredSymbol((LocalFunctionStatementSyntax)paramList.Parent, cancellationToken).GetSymbol<MethodSymbol>();
-                if (localFunction is object)
+                if (localFunction is not null)
                 {
                     return GetParameterSymbol(localFunction.Parameters, parameter, cancellationToken);
                 }
@@ -1061,7 +1061,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var tupleLiteralType = GetTypeOfTupleLiteral(tupleLiteral);
 
-            if (tupleLiteralType is object)
+            if (tupleLiteralType is not null)
             {
                 var elements = tupleLiteralType.TupleElements;
 
@@ -1361,10 +1361,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void GuardedAddSynthesizedStatementToMap(StatementSyntax node, BoundStatement statement)
         {
-            if (_lazyGuardedSynthesizedStatementsMap == null)
-            {
-                _lazyGuardedSynthesizedStatementsMap = new Dictionary<SyntaxNode, BoundStatement>();
-            }
+            _lazyGuardedSynthesizedStatementsMap ??= new Dictionary<SyntaxNode, BoundStatement>();
 
             _lazyGuardedSynthesizedStatementsMap.Add(node, statement);
         }
@@ -1449,7 +1446,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // expressions can be added individually.
                     NodeMapBuilder.AddToMap(bound, _guardedBoundNodeMap, SyntaxTree, syntax);
                 }
-                if (manager is object)
+                if (manager is not null)
                 {
                     _lazySnapshotManager = manager;
                     _lazyRemappedSymbols = remappedSymbols;
@@ -1848,7 +1845,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // If we have a snapshot manager, then we've already done
             // all the work necessary and we should avoid taking an
             // unnecessary read lock.
-            if (_lazySnapshotManager is object)
+            if (_lazySnapshotManager is not null)
             {
                 return;
             }
@@ -1963,10 +1960,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             // If this method is called with a null parameter, that implies that the Root should be
             // bound, but make sure that the Root is bindable.
-            if (node == null)
-            {
-                node = GetBindableSyntaxNode(Root);
-            }
+            node ??= GetBindableSyntaxNode(Root);
 
             EnsureNullabilityAnalysisPerformedIfNecessary();
 
@@ -2135,17 +2129,17 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     default:
                         if (node is QueryExpressionSyntax && parent is QueryContinuationSyntax ||
-                            !(node is ExpressionSyntax) &&
-                            !(node is StatementSyntax) &&
-                            !(node is SelectOrGroupClauseSyntax) &&
-                            !(node is QueryClauseSyntax) &&
-                            !(node is OrderingSyntax) &&
-                            !(node is JoinIntoClauseSyntax) &&
-                            !(node is QueryContinuationSyntax) &&
-                            !(node is ConstructorInitializerSyntax) &&
-                            !(node is PrimaryConstructorBaseTypeSyntax) &&
-                            !(node is ArrowExpressionClauseSyntax) &&
-                            !(node is PatternSyntax))
+                            node is not ExpressionSyntax &&
+                            node is not StatementSyntax &&
+                            node is not SelectOrGroupClauseSyntax &&
+                            node is not QueryClauseSyntax &&
+                            node is not OrderingSyntax &&
+                            node is not JoinIntoClauseSyntax &&
+                            node is not QueryContinuationSyntax &&
+                            node is not ConstructorInitializerSyntax &&
+                            node is not PrimaryConstructorBaseTypeSyntax &&
+                            node is not ArrowExpressionClauseSyntax &&
+                            node is not PatternSyntax)
                         {
                             return GetBindableSyntaxNode(parent);
                         }
@@ -2163,7 +2157,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected CSharpSyntaxNode GetBindableParentNode(CSharpSyntaxNode node)
         {
-            if (!(node is ExpressionSyntax))
+            if (node is not ExpressionSyntax)
             {
                 return null;
             }
@@ -2324,7 +2318,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 BoundBlock block = (BoundBlock)TryGetBoundNodeFromMap(node);
 
-                if (block is object)
+                if (block is not null)
                 {
                     return block;
                 }
@@ -2354,7 +2348,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 BoundNode boundNode = TryGetBoundNodeFromMap(node);
 
-                if (boundNode is object)
+                if (boundNode is not null)
                 {
                     return boundNode;
                 }
@@ -2378,7 +2372,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 BoundBlock block = (BoundBlock)TryGetBoundNodeFromMap(node);
 
-                if (block is object)
+                if (block is not null)
                 {
                     return block;
                 }

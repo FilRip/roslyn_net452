@@ -14,7 +14,6 @@ namespace Microsoft.CodeAnalysis.CompilerServer
 {
     internal class MetadataAndSymbolCache
     {
-        //private const int CacheSize = 500;
         private readonly ConcurrentLruCache<FileKey, Metadata> _metadataCache = new(500);
 
         private ModuleMetadata CreateModuleMetadata(string path, bool prefetchEntireImage)

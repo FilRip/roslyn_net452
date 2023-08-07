@@ -118,10 +118,7 @@ namespace Roslyn.Utilities
                         default:
                             if ((current >= 0x1 && current <= 0x1f) || current == '|')
                             {
-                                if (illegalChar == null)
-                                {
-                                    illegalChar = current;
-                                }
+                                illegalChar ??= current;
                             }
                             else
                             {

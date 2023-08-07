@@ -240,10 +240,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 _state.NotePartComplete(CompletionPart.FinishValidatingReferencedAssemblies);
                             }
 
-                            if (diagnostics != null)
-                            {
-                                diagnostics.Free();
-                            }
+                            diagnostics?.Free();
                         }
                         break;
 
@@ -521,7 +518,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (compilation.Options.AllowUnsafe)
             {
                 // NOTE: GlobalAttrBind::EmitCompilerGeneratedAttrs skips attribute if the well-known type isn't available.
-                if (!(compilation.GetWellKnownType(WellKnownType.System_Security_UnverifiableCodeAttribute) is MissingMetadataTypeSymbol))
+                if (compilation.GetWellKnownType(WellKnownType.System_Security_UnverifiableCodeAttribute) is not MissingMetadataTypeSymbol)
                 {
                     AddSynthesizedAttribute(ref attributes, compilation.TrySynthesizeAttribute(
                         WellKnownMember.System_Security_UnverifiableCodeAttribute__ctor));

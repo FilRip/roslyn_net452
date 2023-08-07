@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                     typeToCheck = typeToCheck.ContainingType;
                 }
-                while (typeToCheck is object);
+                while (typeToCheck is not null);
 
                 for (int i = argumentIndex; i >= 0; i--)
                 {

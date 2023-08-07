@@ -263,7 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         if (emittedTypeName.InferredArity == named.Arity && named.MangleName)
                         {
-                            if (namedType is object)
+                            if (namedType is not null)
                             {
                                 namedType = null;
                                 break;
@@ -307,7 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 if (!named.MangleName && (forcedArity == -1 || forcedArity == named.Arity))
                 {
-                    if (namedType is object)
+                    if (namedType is not null)
                     {
                         namedType = null;
                         break;

@@ -589,7 +589,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal void ReportDiagnosticsIfObsolete(BindingDiagnosticBag diagnostics, Symbol symbol, SyntaxNodeOrToken node, bool hasBaseReceiver)
         {
-            if (diagnostics.DiagnosticBag is object)
+            if (diagnostics.DiagnosticBag is not null)
             {
                 ReportDiagnosticsIfObsolete(diagnostics.DiagnosticBag, symbol, node, hasBaseReceiver);
             }
@@ -597,7 +597,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal void ReportDiagnosticsIfObsolete(BindingDiagnosticBag diagnostics, Conversion conversion, SyntaxNodeOrToken node, bool hasBaseReceiver)
         {
-            if (conversion.IsValid && conversion.Method is object)
+            if (conversion.IsValid && conversion.Method is not null)
             {
                 ReportDiagnosticsIfObsolete(diagnostics, conversion.Method, node, hasBaseReceiver);
             }
@@ -669,7 +669,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             NamedTypeSymbol? containingType,
             BinderFlags location)
         {
-            if (diagnostics.DiagnosticBag is object)
+            if (diagnostics.DiagnosticBag is not null)
             {
                 ReportDiagnosticsIfObsolete(diagnostics.DiagnosticBag, symbol, node, hasBaseReceiver, containingMember, containingType, location);
             }
@@ -701,7 +701,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal static void ReportDiagnosticsIfObsoleteInternal(BindingDiagnosticBag diagnostics, Symbol symbol, SyntaxNodeOrToken node, Symbol containingMember, BinderFlags location)
         {
-            if (diagnostics.DiagnosticBag is object)
+            if (diagnostics.DiagnosticBag is not null)
             {
                 ReportDiagnosticsIfObsoleteInternal(diagnostics.DiagnosticBag, symbol, node, containingMember, location);
             }

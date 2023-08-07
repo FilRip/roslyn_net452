@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private ImmutableArray<Symbol> BindMemberCref(MemberCrefSyntax syntax, NamespaceOrTypeSymbol? containerOpt, out Symbol? ambiguityWinner, BindingDiagnosticBag diagnostics)
         {
-            if (containerOpt is object && containerOpt.Kind == SymbolKind.TypeParameter)
+            if (containerOpt is not null && containerOpt.Kind == SymbolKind.TypeParameter)
             {
                 // As in normal lookup (see CreateErrorIfLookupOnTypeParameter), you can't dot into a type parameter
                 // (though you can dot into an expression of type parameter type).
@@ -371,14 +371,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                             // as long as there were parens after the member name.
 
                             NamedTypeSymbol? binderContainingType = this.ContainingType;
-                            if (binderContainingType is object && memberName == binderContainingType.Name)
+                            if (binderContainingType is not null && memberName == binderContainingType.Name)
                             {
                                 constructorType = binderContainingType;
                             }
                         }
                     }
 
-                    if (constructorType is object)
+                    if (constructorType is not null)
                     {
                         ImmutableArray<MethodSymbol> instanceConstructors = constructorType.InstanceConstructors;
                         int numInstanceConstructors = instanceConstructors.Length;
@@ -544,7 +544,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static bool IsNestedTypeOfUnconstructedGenericType(NamedTypeSymbol type)
         {
             NamedTypeSymbol containing = type.ContainingType;
-            while (containing is object)
+            while (containing is not null)
             {
                 if (containing.Arity > 0 && containing.IsDefinition)
                 {

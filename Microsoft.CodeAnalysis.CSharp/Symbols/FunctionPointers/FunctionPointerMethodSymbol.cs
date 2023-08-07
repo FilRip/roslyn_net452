@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     case SyntaxKind.ManagedKeyword:
                         // Possible if we get a node not constructed by the parser
-                        if (callingConventionSyntax.UnmanagedCallingConventionList is object && !callingConventionSyntax.ContainsDiagnostics)
+                        if (callingConventionSyntax.UnmanagedCallingConventionList is not null && !callingConventionSyntax.ContainsDiagnostics)
                         {
                             diagnostics.Add(ErrorCode.ERR_CannotSpecifyManagedWithUnmanagedSpecifiers, callingConventionSyntax.UnmanagedCallingConventionList.GetLocation());
                         }
@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 foreach (FunctionPointerUnmanagedCallingConventionSyntax? specifier in specifiers)
                                 {
                                     CustomModifier? modifier = handleIndividualUnrecognizedSpecifier(specifier, compilation, diagnostics);
-                                    if (modifier is object)
+                                    if (modifier is not null)
                                     {
                                         customModifiers.Add(modifier);
                                     }
@@ -191,7 +191,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     checkUnmanagedSupport(compilation, specifier.GetLocation(), diagnostics);
                     CustomModifier? modifier = handleIndividualUnrecognizedSpecifier(specifier, compilation, diagnostics);
-                    if (modifier is object)
+                    if (modifier is not null)
                     {
                         customModifiers.Add(modifier);
                     }

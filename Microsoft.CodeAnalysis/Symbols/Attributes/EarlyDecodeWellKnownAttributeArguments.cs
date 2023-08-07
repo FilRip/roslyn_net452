@@ -31,10 +31,7 @@ namespace Microsoft.CodeAnalysis
         /// </remarks>
         public T GetOrCreateData<T>() where T : EarlyWellKnownAttributeData, new()
         {
-            if (_lazyDecodeData == null)
-            {
-                _lazyDecodeData = new T();
-            }
+            _lazyDecodeData ??= new T();
 
             return (T)_lazyDecodeData;
         }

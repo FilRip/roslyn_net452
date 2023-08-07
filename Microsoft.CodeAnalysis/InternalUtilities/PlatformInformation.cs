@@ -22,7 +22,7 @@ namespace Roslyn.Utilities
             {
                 try
                 {
-                    return !(Type.GetType("Mono.Runtime") is null);
+                    return Type.GetType("Mono.Runtime") is not null;
                 }
                 catch
                 {

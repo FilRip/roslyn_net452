@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var underlyingType = type.GetEnumUnderlyingType();
             // SpecialType will be None if the underlying type is invalid.
-            return (underlyingType is object) && (underlyingType.SpecialType != SpecialType.None);
+            return (underlyingType is not null) && (underlyingType.SpecialType != SpecialType.None);
         }
 
         /// <summary>
@@ -538,7 +538,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static SpecialType GetSpecialTypeSafe(this TypeSymbol? type)
         {
-            return type is object ? type.SpecialType : SpecialType.None;
+            return type is not null ? type.SpecialType : SpecialType.None;
         }
 
         public static bool IsAtLeastAsVisibleAs(this TypeSymbol type, Symbol sym, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -621,11 +621,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case TypeKind.Delegate:
                         {
                             var containingType = current.ContainingType;
-                            if (containingType is object)
+                            if (containingType is not null)
                             {
                                 isNestedNamedType = true;
                                 var result = VisitType(default, containingType, typeWithAnnotationsPredicate, typePredicate, arg, canDigThroughNullable, useDefaultType);
-                                if (result is object)
+                                if (result is not null)
                                 {
                                     return result;
                                 }
@@ -686,7 +686,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 arg,
                                 canDigThroughNullable,
                                 useDefaultType);
-                            if (result is object)
+                            if (result is not null)
                             {
                                 return result;
                             }
@@ -706,7 +706,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case TypeKind.FunctionPointer:
                         {
                             var result = visitFunctionPointerType((FunctionPointerTypeSymbol)current, typeWithAnnotationsPredicate, typePredicate, arg, useDefaultType, canDigThroughNullable, out next);
-                            if (result is object)
+                            if (result is not null)
                             {
                                 return result;
                             }
@@ -743,7 +743,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     arg,
                     canDigThroughNullable,
                     useDefaultType);
-                if (result is object)
+                if (result is not null)
                 {
                     next = default;
                     return result;
@@ -761,7 +761,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         arg,
                         canDigThroughNullable,
                         useDefaultType);
-                    if (result is object)
+                    if (result is not null)
                     {
                         next = default;
                         return result;
@@ -824,7 +824,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 // if s2 is private and within s1's parent or within a subclass of s1's parent,
                                 // then this is at least as restrictive as s1's protected.
-                                for (var parent2 = s2.ContainingType; parent2 is object; parent2 = parent2.ContainingType)
+                                for (var parent2 = s2.ContainingType; parent2 is not null; parent2 = parent2.ContainingType)
                                 {
                                     if (parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
                                     {
@@ -837,7 +837,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 // if s2 is protected, and it's parent is a subclass (or the same as) s1's parent
                                 // then this is at least as restrictive as s1's protected
                                 var parent2 = s2.ContainingType;
-                                if (parent2 is object && parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
+                                if (parent2 is not null && parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
                                 {
                                     return true;
                                 }
@@ -866,7 +866,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                         return true;
                                     }
 
-                                    for (var parent2 = s2.ContainingType; parent2 is object; parent2 = parent2.ContainingType)
+                                    for (var parent2 = s2.ContainingType; parent2 is not null; parent2 = parent2.ContainingType)
                                     {
                                         if (parent1.IsAccessibleViaInheritance(parent2, ref useSiteInfo))
                                         {
@@ -934,7 +934,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             }
 
                             var parent1OriginalDefinition = parent1.OriginalDefinition;
-                            for (var parent2 = s2.ContainingType; parent2 is object; parent2 = parent2.ContainingType)
+                            for (var parent2 = s2.ContainingType; parent2 is not null; parent2 = parent2.ContainingType)
                             {
                                 if (ReferenceEquals(parent2.OriginalDefinition, parent1OriginalDefinition) || parent1OriginalDefinition.TypeKind == TypeKind.Submission && parent2.TypeKind == TypeKind.Submission)
                                 {
@@ -972,7 +972,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public static bool ContainsTypeParameter(this TypeSymbol type, TypeParameterSymbol? parameter = null)
         {
             var result = type.VisitType(s_containsTypeParameterPredicate, parameter);
-            return result is object;
+            return result is not null;
         }
 
         private static readonly Func<TypeSymbol, TypeParameterSymbol?, bool, bool> s_containsTypeParameterPredicate =
@@ -982,7 +982,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
 
             var result = type.VisitType(s_isTypeParameterWithSpecificContainerPredicate, parameterContainer);
-            return result is object;
+            return result is not null;
         }
 
         private static readonly Func<TypeSymbol, Symbol, bool, bool> s_isTypeParameterWithSpecificContainerPredicate =
@@ -991,7 +991,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public static bool ContainsTypeParameters(this TypeSymbol type, HashSet<TypeParameterSymbol> parameters)
         {
             var result = type.VisitType(s_containsTypeParametersPredicate, parameters);
-            return result is object;
+            return result is not null;
         }
 
         private static readonly Func<TypeSymbol, HashSet<TypeParameterSymbol>, bool, bool> s_containsTypeParametersPredicate =
@@ -1003,7 +1003,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public static bool ContainsDynamic(this TypeSymbol type)
         {
             var result = type.VisitType(s_containsDynamicPredicate, null, canDigThroughNullable: true);
-            return result is object;
+            return result is not null;
         }
 
         private static readonly Func<TypeSymbol, object?, bool, bool> s_containsDynamicPredicate = (type, unused1, unused2) => type.TypeKind == TypeKind.Dynamic;
@@ -1011,7 +1011,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static bool ContainsNativeInteger(this TypeSymbol type)
         {
             var result = type.VisitType((type, unused1, unused2) => type.IsNativeIntegerType, (object?)null, canDigThroughNullable: true);
-            return result is object;
+            return result is not null;
         }
 
         internal static bool ContainsNativeInteger(this TypeWithAnnotations type)
@@ -1022,26 +1022,26 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static bool ContainsErrorType(this TypeSymbol type)
         {
             var result = type.VisitType((type, unused1, unused2) => type.IsErrorType(), (object?)null, canDigThroughNullable: true);
-            return result is object;
+            return result is not null;
         }
 
         /// <summary>
         /// Return true if the type contains any tuples.
         /// </summary>
         internal static bool ContainsTuple(this TypeSymbol type) =>
-            type.VisitType((TypeSymbol t, object? _1, bool _2) => t.IsTupleType, null) is object;
+            type.VisitType((TypeSymbol t, object? _1, bool _2) => t.IsTupleType, null) is not null;
 
         /// <summary>
         /// Return true if the type contains any tuples with element names.
         /// </summary>
         internal static bool ContainsTupleNames(this TypeSymbol type) =>
-            type.VisitType((TypeSymbol t, object? _1, bool _2) => !t.TupleElementNames.IsDefault, null) is object;
+            type.VisitType((TypeSymbol t, object? _1, bool _2) => !t.TupleElementNames.IsDefault, null) is not null;
 
         /// <summary>
         /// Return true if the type contains any function pointer types.
         /// </summary>
         internal static bool ContainsFunctionPointer(this TypeSymbol type) =>
-            type.VisitType((TypeSymbol t, object? _, bool _) => t.IsFunctionPointer(), null) is object;
+            type.VisitType((TypeSymbol t, object? _, bool _) => t.IsFunctionPointer(), null) is not null;
 
         /// <summary>
         /// Guess the non-error type that the given type was intended to represent.
@@ -1186,10 +1186,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         public static bool MarkCheckedIfNecessary(this TypeSymbol type, ref HashSet<TypeSymbol> checkedTypes)
         {
-            if (checkedTypes == null)
-            {
-                checkedTypes = new HashSet<TypeSymbol>();
-            }
+            checkedTypes ??= new HashSet<TypeSymbol>();
 
             return checkedTypes.Add(type);
         }
@@ -1293,7 +1290,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     type = type.ContainingType;
                 }
-                while (type is object && !type.IsDefinition);
+                while (type is not null && !type.IsDefinition);
 
                 return true;
             }
@@ -1317,7 +1314,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (type.SpecialType == SpecialType.System_Object)
             {
                 AssemblySymbol assembly = containingType.ContainingAssembly;
-                if (assembly is object &&
+                if (assembly is not null &&
                     assembly.IsLinked &&
                     containingType.IsComImport)
                 {
@@ -1369,10 +1366,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal static void GetAllTypeParameters(this NamedTypeSymbol type, ArrayBuilder<TypeParameterSymbol> result)
         {
             var containingType = type.ContainingType;
-            if (containingType is object)
-            {
-                containingType.GetAllTypeParameters(result);
-            }
+            containingType?.GetAllTypeParameters(result);
 
             result.AddRange(type.TypeParameters);
         }
@@ -1803,7 +1797,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static bool IsWellKnownInteropServicesTopLevelType(this TypeSymbol typeSymbol, string name)
         {
-            if (typeSymbol.Name != name || typeSymbol.ContainingType is object)
+            if (typeSymbol.Name != name || typeSymbol.ContainingType is not null)
             {
                 return false;
             }
@@ -1882,7 +1876,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case SpecialType.System_Decimal: return 16;
 
                 case SpecialType.None:
-                    if (type is object && type.IsNullableType())
+                    if (type is not null && type.IsNullableType())
                     {
                         TypeSymbol underlyingType = type.GetNullableUnderlyingType();
 

@@ -667,7 +667,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal sealed override bool TryGetThisParameter(out ParameterSymbol thisParameter)
         {
             thisParameter = _lazyThisParameter;
-            if (thisParameter is object || IsStatic)
+            if (thisParameter is not null || IsStatic)
             {
                 return true;
             }
@@ -689,7 +689,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
-        internal override bool IsIterator => _lazyIteratorElementType is object;
+        internal override bool IsIterator => _lazyIteratorElementType is not null;
 
         //overridden appropriately in SourceMemberMethodSymbol
         public override ImmutableArray<MethodSymbol> ExplicitInterfaceImplementations

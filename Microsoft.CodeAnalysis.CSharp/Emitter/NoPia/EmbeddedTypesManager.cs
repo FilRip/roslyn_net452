@@ -267,7 +267,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
                     // We do not support nesting for embedded types.
                     // ERRID.ERR_InvalidInteropType/ERR_NoPIANestedType
-                    if (namedType.ContainingType is object)
+                    if (namedType.ContainingType is not null)
                     {
                         error = ErrorCode.ERR_NoPIANestedType;
                         break;
@@ -381,7 +381,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
                 foreach (MethodSymbol m in namedType.GetMethodsToEmit())
                 {
-                    if (m is object)
+                    if (m is not null)
                     {
                         EmbedMethod(embedded, m.GetCciAdapter(), syntaxNodeOpt, diagnostics);
                     }
@@ -468,7 +468,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
             // If this proc happens to belong to a property/event, we should include the property/event as well.
             Symbol propertyOrEvent = method.AdaptedMethodSymbol.AssociatedSymbol;
-            if (propertyOrEvent is object)
+            if (propertyOrEvent is not null)
             {
                 switch (propertyOrEvent.Kind)
                 {

@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             PENamedTypeSymbol type = _typeContextOpt;
 
-            while (type is object && (type.MetadataArity - type.Arity) > position)
+            while (type is not null && (type.MetadataArity - type.Arity) > position)
             {
                 type = type.ContainingSymbol as PENamedTypeSymbol;
             }
@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     AssemblySymbol containingAssembly = symbol.OriginalDefinition.ContainingAssembly;
                     int i;
 
-                    if (containingAssembly is object)
+                    if (containingAssembly is not null)
                     {
                         for (i = 0; i < assemblies.Length; i++)
                         {
@@ -248,7 +248,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                         namedType = namedType.ContainingType;
                     }
-                    while (namedType is object);
+                    while (namedType is not null);
 
                     return false;
 
@@ -438,7 +438,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 }
 
                 // OK. It looks like we found canonical type definition.
-                if (result is object)
+                if (result is not null)
                 {
                     // Ambiguity 
                     result = new NoPiaAmbiguousCanonicalTypeSymbol(referringAssembly, result, candidate);
@@ -448,15 +448,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 result = candidate;
             }
 
-            if (result is null)
-            {
-                result = new NoPiaMissingCanonicalTypeSymbol(
+            result ??= new NoPiaMissingCanonicalTypeSymbol(
                                 referringAssembly,
                                 name.FullName,
                                 interfaceGuid,
                                 scope,
                                 identifier);
-            }
 
             return result;
         }
@@ -499,7 +496,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
 
 
-            if (scope is object)
+            if (scope is not null)
             {
 
                 // We only want to consider members that are at or above "scope" in the type hierarchy.
@@ -537,7 +534,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         protected override void EnqueueTypeSymbol(Queue<TypeDefinitionHandle> typeDefsToSearch, Queue<TypeSymbol> typeSymbolsToSearch, TypeSymbol typeSymbol)
         {
-            if (typeSymbol is object)
+            if (typeSymbol is not null)
             {
                 if (typeSymbol is PENamedTypeSymbol peTypeSymbol && ReferenceEquals(peTypeSymbol.ContainingPEModule, moduleSymbol))
                 {

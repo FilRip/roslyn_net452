@@ -233,7 +233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Unfortunately, we know of several real programs that rely upon this bug, so we are going
             // to reproduce it here.
 
-            if (source is object && source.IsInterfaceType() || target is object && target.IsInterfaceType())
+            if (source is not null && source.IsInterfaceType() || target is not null && target.IsInterfaceType())
             {
                 return;
             }
@@ -266,7 +266,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //
                         // We perpetuate this fiction here.
 
-                        if (target is object && target.IsNullableType() && convertsTo.IsNonNullableValueType())
+                        if (target is not null && target.IsNullableType() && convertsTo.IsNonNullableValueType())
                         {
                             convertsTo = MakeNullableType(convertsTo);
                             toConversion = allowAnyTarget ? Conversion.Identity :
@@ -275,7 +275,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         u.Add(UserDefinedConversionAnalysis.Normal(op, fromConversion, toConversion, convertsFrom, convertsTo));
                     }
-                    else if (source is object && source.IsNullableType() && convertsFrom.IsNonNullableValueType() &&
+                    else if (source is not null && source.IsNullableType() && convertsFrom.IsNonNullableValueType() &&
                         (allowAnyTarget || target.CanBeAssignedNull()))
                     {
                         // As mentioned above, here we diverge from the specification, in two ways.
@@ -311,7 +311,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeSymbol MostSpecificSourceTypeForImplicitUserDefinedConversion(ImmutableArray<UserDefinedConversionAnalysis> u, TypeSymbol source, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             // SPEC: If any of the operators in U convert from S then SX is S.
-            if (source is object)
+            if (source is not null)
             {
                 if (u.Any(conv => TypeSymbol.Equals(conv.FromType, source, TypeCompareKind.ConsiderEverything2)))
                 {

@@ -149,7 +149,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 BoundExpression enterCallExpr;
 
-                if (enterMethod is object)
+                if (enterMethod is not null)
                 {
 
                     enterCallExpr = BoundCall.Synthesized(

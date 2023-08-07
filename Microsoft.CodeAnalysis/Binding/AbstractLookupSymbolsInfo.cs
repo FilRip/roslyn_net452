@@ -160,7 +160,7 @@ namespace Microsoft.CodeAnalysis
                 AddArity(arity);
             }
 
-            private bool HasUniqueSymbol => _uniqueSymbolOrArities != null && !(_uniqueSymbolOrArities is HashSet<int>);
+            private bool HasUniqueSymbol => _uniqueSymbolOrArities != null && _uniqueSymbolOrArities is not HashSet<int>;
 
             private void AddArity(int arity)
             {

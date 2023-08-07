@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static ImmutableArray<Symbol> UnwrapErrorCandidates(ImmutableArray<Symbol> candidateSymbols)
         {
             var candidate = candidateSymbols.IsEmpty ? null : candidateSymbols[0] as ErrorTypeSymbol;
-            return (candidate is object && !candidate.CandidateSymbols.IsEmpty) ? candidate.CandidateSymbols : candidateSymbols;
+            return (candidate is not null && !candidate.CandidateSymbols.IsEmpty) ? candidate.CandidateSymbols : candidateSymbols;
         }
 
         protected override NamedTypeSymbol WithTupleDataCore(TupleExtraData newData)
@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             return
-                (this.ContainingType is object ? this.ContainingType.Equals(other.ContainingType, comparison) :
+                (this.ContainingType is not null ? this.ContainingType.Equals(other.ContainingType, comparison) :
                  this.ContainingSymbol is null ? other.ContainingSymbol is null : this.ContainingSymbol.Equals(other.ContainingSymbol)) &&
                 this.Name == other.Name && this.Arity == other.Arity;
         }
@@ -288,7 +288,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public override int GetHashCode()
         {
             return Hash.Combine(this.Arity,
-                        Hash.Combine(this.ContainingSymbol is object ? this.ContainingSymbol.GetHashCode() : 0,
+                        Hash.Combine(this.ContainingSymbol is not null ? this.ContainingSymbol.GetHashCode() : 0,
                                      this.Name != null ? this.Name.GetHashCode() : 0));
         }
 

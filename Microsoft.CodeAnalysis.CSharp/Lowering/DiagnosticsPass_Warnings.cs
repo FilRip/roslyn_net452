@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 NamedTypeSymbol marshalByRefType = compilation.GetWellKnownType(WellKnownType.System_MarshalByRefObject);
 
                 TypeSymbol baseType = fieldAccess.FieldSymbol.ContainingType;
-                while (baseType is object)
+                while (baseType is not null)
                 {
                     if (TypeSymbol.Equals(baseType, marshalByRefType, TypeCompareKind.ConsiderEverything))
                     {
@@ -148,7 +148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private bool IsInterlockedAPI(Symbol method)
         {
             var interlocked = _compilation.GetWellKnownType(WellKnownType.System_Threading_Interlocked);
-            if (interlocked is object && TypeSymbol.Equals(interlocked, method.ContainingType, TypeCompareKind.ConsiderEverything2))
+            if (interlocked is not null && TypeSymbol.Equals(interlocked, method.ContainingType, TypeCompareKind.ConsiderEverything2))
                 return true;
 
             return false;
@@ -333,7 +333,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             string opName = (oldOperatorKind == BinaryOperatorKind.ObjectEqual) ? WellKnownMemberNames.EqualityOperatorName : WellKnownMemberNames.InequalityOperatorName;
-            for (var t = nt; t is object; t = t.BaseTypeNoUseSiteDiagnostics)
+            for (var t = nt; t is not null; t = t.BaseTypeNoUseSiteDiagnostics)
             {
                 foreach (var sym in t.GetMembers(opName))
                 {

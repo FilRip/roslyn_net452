@@ -169,7 +169,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private Symbol LookupName(string name)
         {
             var type = this.AttributeClass;
-            while (type is object)
+            while (type is not null)
             {
                 foreach (var member in type.GetMembers(name))
                 {

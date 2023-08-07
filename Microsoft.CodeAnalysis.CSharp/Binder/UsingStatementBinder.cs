@@ -189,7 +189,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If this is a ref struct, or we're in a valid asynchronous using, try binding via pattern.
                 // We won't need to try and bind a second time if it fails, as async dispose can't be pattern based (ref structs are not allowed in async methods)
-                if (type is object && (type.IsRefLikeType || hasAwait))
+                if (type is not null && (type.IsRefLikeType || hasAwait))
                 {
                     BoundExpression? receiver = fromExpression
                                                ? expressionOpt
@@ -199,7 +199,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                                        ? diagnostics
                                                        : BindingDiagnosticBag.Discarded;
                     MethodSymbol disposeMethod = originalBinder.TryFindDisposePatternMethod(receiver, syntax, hasAwait, patternDiagnostics);
-                    if (disposeMethod is object)
+                    if (disposeMethod is not null)
                     {
                         MessageID.IDS_FeatureUsingDeclarations.CheckFeatureAvailability(diagnostics, originalBinder.Compilation, syntax.Location);
 

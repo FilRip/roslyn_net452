@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override ImmutableArray<Location> Locations
         {
-            get { return _containingMethod is object ? _containingMethod.Locations : ImmutableArray<Location>.Empty; }
+            get { return _containingMethod is not null ? _containingMethod.Locations : ImmutableArray<Location>.Empty; }
         }
 
         public override ImmutableArray<SyntaxReference> DeclaringSyntaxReferences

@@ -23,10 +23,7 @@ namespace Microsoft.CodeAnalysis
             {
                 return false;
             }
-            else if (hashSet is null)
-            {
-                hashSet = new HashSet<T>();
-            }
+            else hashSet ??= new HashSet<T>();
 
             return hashSet.Add(item);
         }

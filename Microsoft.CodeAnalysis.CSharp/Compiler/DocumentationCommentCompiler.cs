@@ -244,7 +244,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (isPartialMethodDefinitionPart)
             {
                 MethodSymbol implementationPart = ((MethodSymbol)symbol).PartialImplementationPart;
-                if (implementationPart is object)
+                if (implementationPart is not null)
                 {
                     Visit(implementationPart);
                 }
@@ -499,7 +499,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 case SymbolKind.NamedType:
                     MethodSymbol delegateInvoke = ((NamedTypeSymbol)symbol).DelegateInvokeMethod;
-                    if (delegateInvoke is object)
+                    if (delegateInvoke is not null)
                     {
                         return delegateInvoke.Parameters;
                     }
@@ -538,7 +538,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            while (symbol is object)
+            while (symbol is not null)
             {
                 switch (symbol.DeclaredAccessibility)
                 {
@@ -578,17 +578,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (ContainsXmlParseDiagnostic(trivia))
                     {
-                        if (builder != null)
-                        {
-                            builder.Free();
-                        }
+                        builder?.Free();
                         return false;
                     }
 
-                    if (builder == null)
-                    {
-                        builder = ArrayBuilder<DocumentationCommentTriviaSyntax>.GetInstance();
-                    }
+                    builder ??= ArrayBuilder<DocumentationCommentTriviaSyntax>.GetInstance();
                     builder.Add(trivia);
                 }
             }
@@ -986,17 +980,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             // WRN_MissingParamTag and WRN_MissingTypeParamTag).
             if (elementKind == XmlNameAttributeElementKind.Parameter)
             {
-                if (documentedParameters == null)
-                {
-                    documentedParameters = new HashSet<ParameterSymbol>();
-                }
+                documentedParameters ??= new HashSet<ParameterSymbol>();
             }
             else if (elementKind == XmlNameAttributeElementKind.TypeParameter)
             {
-                if (documentedTypeParameters == null)
-                {
-                    documentedTypeParameters = new HashSet<TypeParameterSymbol>();
-                }
+                documentedTypeParameters ??= new HashSet<TypeParameterSymbol>();
             }
 
             IdentifierNameSyntax identifier = syntax.Identifier;
@@ -1062,20 +1050,14 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (_lazyComparer == null)
-                {
-                    _lazyComparer = new SyntaxNodeLocationComparer(_compilation);
-                }
+                _lazyComparer ??= new SyntaxNodeLocationComparer(_compilation);
                 return _lazyComparer;
             }
         }
 
         private void BeginTemporaryString()
         {
-            if (_temporaryStringBuilders == null)
-            {
-                _temporaryStringBuilders = new Stack<TemporaryStringBuilder>();
-            }
+            _temporaryStringBuilders ??= new Stack<TemporaryStringBuilder>();
 
             _temporaryStringBuilders.Push(new TemporaryStringBuilder(_indentDepth));
         }
@@ -1104,9 +1086,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 StringBuilder builder = _temporaryStringBuilders.Peek().Pooled.Builder;
                 builder.Append(indentedAndWrappedString);
             }
-            else if (_writer != null)
+            else
             {
-                _writer.Write(indentedAndWrappedString);
+                _writer?.Write(indentedAndWrappedString);
             }
         }
 

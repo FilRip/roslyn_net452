@@ -694,7 +694,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         private bool EqualsComplicatedCases(NamedTypeSymbol other, TypeCompareKind comparison)
         {
-            if (this.ContainingType is object &&
+            if (this.ContainingType is not null &&
                 !this.ContainingType.Equals(other.ContainingType, comparison))
             {
                 return false;
@@ -1096,10 +1096,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal void GetAllTypeArguments(ArrayBuilder<TypeSymbol> builder, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             var outer = ContainingType;
-            if (outer is not null)
-            {
-                outer.GetAllTypeArguments(builder, ref useSiteInfo);
-            }
+            outer?.GetAllTypeArguments(builder, ref useSiteInfo);
 
             foreach (var argument in TypeArgumentsWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
@@ -1117,10 +1114,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal void GetAllTypeArguments(ArrayBuilder<TypeWithAnnotations> builder, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             var outer = ContainingType;
-            if (outer is not null)
-            {
-                outer.GetAllTypeArguments(builder, ref useSiteInfo);
-            }
+            outer?.GetAllTypeArguments(builder, ref useSiteInfo);
 
             builder.AddRange(TypeArgumentsWithDefinitionUseSiteDiagnostics(ref useSiteInfo));
         }
@@ -1254,7 +1248,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             NamedTypeSymbol @base = this.BaseTypeNoUseSiteDiagnostics;
 
-            while (@base is object)
+            while (@base is not null)
             {
                 if (@base.IsErrorType() && @base is NoPiaIllegalGenericInstantiationSymbol)
                 {
@@ -1289,7 +1283,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // being reported twice if Goo is bad.
 
             var @base = this.BaseTypeNoUseSiteDiagnostics;
-            if (@base is object && @base.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes))
+            if (@base is not null && @base.GetUnificationUseSiteDiagnosticRecursive(ref result, owner, ref checkedTypes))
             {
                 return true;
             }
@@ -1353,7 +1347,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // Conditional attributes are inherited by derived types.
                 var baseType = this.BaseTypeNoUseSiteDiagnostics;
-                return baseType is object && baseType.IsConditional;
+                return baseType is not null && baseType.IsConditional;
             }
         }
 

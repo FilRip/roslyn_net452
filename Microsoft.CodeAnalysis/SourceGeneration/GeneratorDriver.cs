@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis
                                      : SetGeneratorException(MessageProvider, GeneratorState.Uninitialized, generator, ex, diagnosticsBag, isInit: true);
 
                     // invoke the post init callback if requested
-                    if (generatorState.Info.PostInitCallback is object)
+                    if (generatorState.Info.PostInitCallback is not null)
                     {
                         var sourcesCollection = this.CreateSourcesCollection();
                         var postContext = new GeneratorPostInitializationContext(sourcesCollection, cancellationToken);
@@ -215,7 +215,7 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 // create the syntax receiver if requested
-                if (generatorState.Info.SyntaxContextReceiverCreator is object && generatorState.Exception is null)
+                if (generatorState.Info.SyntaxContextReceiverCreator is not null && generatorState.Exception is null)
                 {
                     ISyntaxContextReceiver? rx = null;
                     try
@@ -263,7 +263,7 @@ namespace Microsoft.CodeAnalysis
                     for (int i = 0; i < walkerBuilder.Count; i++)
                     {
                         var walker = walkerBuilder[i];
-                        if (walker is object)
+                        if (walker is not null)
                         {
                             try
                             {
@@ -287,7 +287,7 @@ namespace Microsoft.CodeAnalysis
                 var generatorState = stateBuilder[i];
 
                 // don't try and generate if initialization or syntax walk failed
-                if (generatorState.Exception is object)
+                if (generatorState.Exception is not null)
                 {
                     continue;
                 }
@@ -375,7 +375,7 @@ namespace Microsoft.CodeAnalysis
             {
                 foreach (var generatedTree in generatorState.GeneratedTrees)
                 {
-                    if (generatedTree.Tree is object && compilation.ContainsSyntaxTree(generatedTree.Tree))
+                    if (generatedTree.Tree is not null && compilation.ContainsSyntaxTree(generatedTree.Tree))
                     {
                         trees.Add(generatedTree.Tree);
                     }
@@ -448,7 +448,7 @@ namespace Microsoft.CodeAnalysis
             foreach (var diag in generatorDiagnostics)
             {
                 var filtered = compilation.Options.FilterDiagnostic(diag, cancellationToken);
-                if (filtered is object)
+                if (filtered is not null)
                 {
                     filteredDiagnostics.Add(filtered);
                     driverDiagnostics?.Add(filtered);

@@ -276,13 +276,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     {
                         // if base was not declared, get it from BaseType that should set it to some default
                         var underlyingBase = _underlyingType.BaseTypeNoUseSiteDiagnostics;
-                        if (underlyingBase is object)
+                        if (underlyingBase is not null)
                         {
                             acyclicBase = this.RetargetingTranslator.Retarget(underlyingBase, RetargetOptions.RetargetPrimitiveTypesByName);
                         }
                     }
 
-                    if (acyclicBase is object && BaseTypeAnalysis.TypeDependsOn(acyclicBase, this))
+                    if (acyclicBase is not null && BaseTypeAnalysis.TypeDependsOn(acyclicBase, this))
                     {
                         return CyclicInheritanceError(this, acyclicBase);
                     }
@@ -324,7 +324,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             if (ReferenceEquals(_lazyDeclaredBaseType, ErrorTypeSymbol.UnknownResultType))
             {
                 var underlyingBase = _underlyingType.GetDeclaredBaseType(basesBeingResolved);
-                var declaredBase = underlyingBase is object ? this.RetargetingTranslator.Retarget(underlyingBase, RetargetOptions.RetargetPrimitiveTypesByName) : null;
+                var declaredBase = underlyingBase is not null ? this.RetargetingTranslator.Retarget(underlyingBase, RetargetOptions.RetargetPrimitiveTypesByName) : null;
                 Interlocked.CompareExchange(ref _lazyDeclaredBaseType, declaredBase, ErrorTypeSymbol.UnknownResultType);
             }
 

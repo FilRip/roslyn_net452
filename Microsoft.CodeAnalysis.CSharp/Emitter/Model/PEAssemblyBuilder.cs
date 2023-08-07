@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNullableAttribute(WellKnownMember member, ImmutableArray<TypedConstant> arguments)
         {
-            if (_lazyNullableAttribute is object)
+            if (_lazyNullableAttribute is not null)
             {
                 var constructorIndex = (member == WellKnownMember.System_Runtime_CompilerServices_NullableAttribute__ctorTransformFlags) ? 1 : 0;
                 return new SynthesizedAttributeData(
@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNullableContextAttribute(ImmutableArray<TypedConstant> arguments)
         {
-            if (_lazyNullableContextAttribute is object)
+            if (_lazyNullableContextAttribute is not null)
             {
                 return new SynthesizedAttributeData(
                     _lazyNullableContextAttribute.Constructors[0],
@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNullablePublicOnlyAttribute(ImmutableArray<TypedConstant> arguments)
         {
-            if (_lazyNullablePublicOnlyAttribute is object)
+            if (_lazyNullablePublicOnlyAttribute is not null)
             {
                 return new SynthesizedAttributeData(
                     _lazyNullablePublicOnlyAttribute.Constructors[0],
@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         internal override SynthesizedAttributeData SynthesizeNativeIntegerAttribute(WellKnownMember member, ImmutableArray<TypedConstant> arguments)
         {
-            if (_lazyNativeIntegerAttribute is object)
+            if (_lazyNativeIntegerAttribute is not null)
             {
                 var constructorIndex = (member == WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctorTransformFlags) ? 1 : 0;
                 return new SynthesizedAttributeData(
@@ -251,7 +251,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override SynthesizedAttributeData TrySynthesizeIsReadOnlyAttribute()
         {
-            if (_lazyIsReadOnlyAttribute is object)
+            if (_lazyIsReadOnlyAttribute is not null)
             {
                 return new SynthesizedAttributeData(
                     _lazyIsReadOnlyAttribute.Constructors[0],
@@ -264,7 +264,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override SynthesizedAttributeData TrySynthesizeIsUnmanagedAttribute()
         {
-            if (_lazyIsUnmanagedAttribute is object)
+            if (_lazyIsUnmanagedAttribute is not null)
             {
                 return new SynthesizedAttributeData(
                     _lazyIsUnmanagedAttribute.Constructors[0],
@@ -277,7 +277,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         protected override SynthesizedAttributeData TrySynthesizeIsByRefLikeAttribute()
         {
-            if (_lazyIsByRefLikeAttribute is object)
+            if (_lazyIsByRefLikeAttribute is not null)
             {
                 return new SynthesizedAttributeData(
                     _lazyIsByRefLikeAttribute.Constructors[0],
@@ -442,7 +442,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             var attributeMetadataName = MetadataTypeName.FromFullName(description.FullName);
             var userDefinedAttribute = _sourceAssembly.SourceModule.LookupTopLevelMetadataType(ref attributeMetadataName);
 
-            if (!(userDefinedAttribute is MissingMetadataTypeSymbol))
+            if (userDefinedAttribute is not MissingMetadataTypeSymbol)
             {
                 diagnostics.Add(ErrorCode.ERR_TypeReserved, userDefinedAttribute.Locations[0], description.FullName);
             }

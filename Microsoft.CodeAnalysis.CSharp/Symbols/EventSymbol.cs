@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return this.AssociatedField is object;
+                return this.AssociatedField is not null;
             }
         }
 
@@ -161,7 +161,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             get
             {
                 MethodSymbol? accessor = AddMethod ?? RemoveMethod;
-                return accessor is object && accessor.HidesBaseMethodsByName;
+                return accessor is not null && accessor.HidesBaseMethodsByName;
             }
         }
 

@@ -224,7 +224,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
         private static bool AreNullableDirectivesEquivalent(GreenNode before, GreenNode after, Func<SyntaxKind, bool>? ignoreChildNode)
         {
             // Fast path for when the caller does not care about nullable directives. This can happen in some IDE refactorings.
-            if (ignoreChildNode is object && ignoreChildNode(SyntaxKind.NullableDirectiveTrivia))
+            if (ignoreChildNode is not null && ignoreChildNode(SyntaxKind.NullableDirectiveTrivia))
             {
                 return true;
             }

@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return true;
             }
 
-            return other is object && _name.Equals(other._name) && _containingSymbol.Equals(other._containingSymbol);
+            return other is not null && _name.Equals(other._name) && _containingSymbol.Equals(other._containingSymbol);
         }
 
         internal override NamespaceExtent Extent

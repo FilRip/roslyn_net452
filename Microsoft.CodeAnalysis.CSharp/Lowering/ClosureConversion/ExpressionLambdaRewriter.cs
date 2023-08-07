@@ -28,10 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (_ExpressionType is null)
-                {
-                    _ExpressionType = _bound.WellKnownType(WellKnownType.System_Linq_Expressions_Expression);
-                }
+                _ExpressionType ??= _bound.WellKnownType(WellKnownType.System_Linq_Expressions_Expression);
                 return _ExpressionType;
             }
         }
@@ -41,10 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (_ParameterExpressionType is null)
-                {
-                    _ParameterExpressionType = _bound.WellKnownType(WellKnownType.System_Linq_Expressions_ParameterExpression);
-                }
+                _ParameterExpressionType ??= _bound.WellKnownType(WellKnownType.System_Linq_Expressions_ParameterExpression);
                 return _ParameterExpressionType;
             }
         }
@@ -54,10 +48,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (_ElementInitType is null)
-                {
-                    _ElementInitType = _bound.WellKnownType(WellKnownType.System_Linq_Expressions_ElementInit);
-                }
+                _ElementInitType ??= _bound.WellKnownType(WellKnownType.System_Linq_Expressions_ElementInit);
                 return _ElementInitType;
             }
         }
@@ -68,10 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (_MemberBindingType is null)
-                {
-                    _MemberBindingType = _bound.WellKnownType(WellKnownType.System_Linq_Expressions_MemberBinding);
-                }
+                _MemberBindingType ??= _bound.WellKnownType(WellKnownType.System_Linq_Expressions_MemberBinding);
                 return _MemberBindingType;
             }
         }
@@ -87,10 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (_MemberInfoType is null)
-                {
-                    _MemberInfoType = _bound.WellKnownType(WellKnownType.System_Reflection_MemberInfo);
-                }
+                _MemberInfoType ??= _bound.WellKnownType(WellKnownType.System_Reflection_MemberInfo);
                 return _MemberInfoType;
             }
         }
@@ -668,7 +653,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var createDelegate = _bound.WellKnownMethod(WellKnownMember.System_Reflection_MethodInfo__CreateDelegate, isOptional: true);
             BoundExpression unquoted;
-            if (createDelegate is object)
+            if (createDelegate is not null)
             {
                 // beginning in 4.5, we do it this way
                 unquoted = _bound.Call(_bound.MethodInfo(method), createDelegate, _bound.Typeof(delegateType), receiver);
@@ -694,7 +679,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 throw ExceptionUtilities.UnexpectedValue(BoundKind.MethodGroup);
             }
 
-            if (node.MethodOpt is object)
+            if (node.MethodOpt is not null)
             {
                 bool staticMember = !node.MethodOpt.RequiresInstanceReceiver && !node.IsExtensionMethod;
                 return DelegateCreation(node.Argument, node.MethodOpt, node.Type, staticMember);

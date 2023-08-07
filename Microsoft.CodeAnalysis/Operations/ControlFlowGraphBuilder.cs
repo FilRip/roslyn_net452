@@ -1212,10 +1212,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             {
                 if (labeled.Ordinal == -1)
                 {
-                    if (unresolved == null)
-                    {
-                        unresolved = PooledHashSet<BasicBlockBuilder>.GetInstance();
-                    }
+                    unresolved ??= PooledHashSet<BasicBlockBuilder>.GetInstance();
 
                     unresolved.Add(labeled);
                 }
@@ -2907,10 +2904,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                 }
             }
 
-            if (convertedTestExpression == null)
-            {
-                convertedTestExpression = MakeInvalidOperation(operation.Type, capturedValue);
-            }
+            convertedTestExpression ??= MakeInvalidOperation(operation.Type, capturedValue);
 
             return convertedTestExpression;
         }
@@ -5440,10 +5434,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                     case CaseKind.Default:
                         var defaultClause = (IDefaultCaseClauseOperation)caseClause;
-                        if (defaultBody == null)
-                        {
-                            defaultBody = labeled;
-                        }
+                        defaultBody ??= labeled;
 
                         // 'default' clause is never entered from the top, we'll jump back to it after all
                         // sections are processed.

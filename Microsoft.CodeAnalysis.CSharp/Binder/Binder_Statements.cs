@@ -891,7 +891,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If we got a good result then swap the inferred type for the "var"
                 TypeSymbol initializerType = initializerOpt?.Type;
-                if (initializerType is object)
+                if (initializerType is not null)
                 {
                     declTypeOpt = TypeWithAnnotations.Create(initializerType);
 
@@ -1091,9 +1091,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // In error scenarios with misplaced code, it is possible we can't bind the local declaration.
             // This occurs through the semantic model.  In that case concoct a plausible result.
-            if (localSymbol is null)
-            {
-                localSymbol = SourceLocalSymbol.MakeLocal(
+            localSymbol ??= SourceLocalSymbol.MakeLocal(
                     ContainingMemberOrLambda,
                     this,
                     false, // do not allow ref
@@ -1101,7 +1099,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                     identifier,
                     kind,
                     equalsValue);
-            }
 
             return localSymbol;
         }
@@ -1179,7 +1176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     additionalDiagnostics.Free();
 
-                    if (fixedPatternMethod is object)
+                    if (fixedPatternMethod is not null)
                     {
                         elementType = fixedPatternMethod.ReturnType;
                         CheckFeatureAvailability(initializerOpt.Syntax, MessageID.IDS_FeatureExtensibleFixedStatement, diagnostics);
@@ -2055,7 +2052,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var sourceType = operand.Type;
-            if (sourceType is object)
+            if (sourceType is not null)
             {
                 GenerateImplicitConversionError(diagnostics, this.Compilation, syntax, conversion, sourceType, targetType, operand.ConstantValue);
                 return;
@@ -2467,7 +2464,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected static bool IsInAsyncMethod(MethodSymbol method)
         {
-            return method is object && method.IsAsync;
+            return method is not null && method.IsAsync;
         }
 
         protected bool IsInAsyncMethod()
@@ -2561,7 +2558,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     hasErrors = true;
                 }
             }
-            else if (retType is object && (refKind != RefKind.None) != (sigRefKind != RefKind.None))
+            else if (retType is not null && (refKind != RefKind.None) != (sigRefKind != RefKind.None))
             {
                 var errorCode = refKind != RefKind.None
                     ? ErrorCode.ERR_MustNotHaveRefReturn
@@ -2572,7 +2569,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (arg != null)
             {
-                hasErrors |= arg.HasErrors || (arg.Type is object && arg.Type.IsErrorType());
+                hasErrors |= arg.HasErrors || (arg.Type is not null && arg.Type.IsErrorType());
             }
 
             if (hasErrors)
@@ -2583,7 +2580,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The return type could be null; we might be attempting to infer the return type either
             // because of method type inference, or because we are attempting to do error analysis
             // on a lambda expression of unknown return type.
-            if (retType is object)
+            if (retType is not null)
             {
                 if (retType.IsVoidType() || IsTaskReturningAsyncMethod())
                 {
@@ -2641,7 +2638,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 // Check that the returned expression is not void.
-                if (arg?.Type is object && arg.Type.IsVoidType())
+                if (arg?.Type is not null && arg.Type.IsVoidType())
                 {
                     Error(diagnostics, ErrorCode.ERR_CantReturnVoid, expressionSyntax);
                     hasErrors = true;
@@ -2815,9 +2812,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // So if the current type is a class-type (or an effective base type of a generic parameter)
                     // that derives from the previous type the current catch is unreachable.
 
-                    if (previousBlock.ExceptionFilterOpt == null && previousType is object && !previousType.IsErrorType())
+                    if (previousBlock.ExceptionFilterOpt == null && previousType is not null && !previousType.IsErrorType())
                     {
-                        if (type is object)
+                        if (type is not null)
                         {
                             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
 
@@ -2969,7 +2966,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 expression = BindToTypeForErrorRecovery(expression);
                 statement = new BoundReturnStatement(syntax, refKind, expression) { WasCompilerGenerated = true };
             }
-            else if (returnType is object)
+            else if (returnType is not null)
             {
                 if ((refKind != RefKind.None) != (returnRefKind != RefKind.None) && expression.Kind != BoundKind.ThrowExpression)
                 {

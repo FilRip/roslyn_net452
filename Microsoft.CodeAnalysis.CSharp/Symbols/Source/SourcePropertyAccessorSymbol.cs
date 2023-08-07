@@ -38,8 +38,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             bool isGetMethod = (syntax.Kind() == SyntaxKind.GetAccessorDeclaration);
             var methodKind = isGetMethod ? MethodKind.PropertyGet : MethodKind.PropertySet;
 
-            bool hasBody = syntax.Body is object;
-            bool hasExpressionBody = syntax.ExpressionBody is object;
+            bool hasBody = syntax.Body is not null;
+            bool hasExpressionBody = syntax.ExpressionBody is not null;
             bool isNullableAnalysisEnabled = containingType.DeclaringCompilation.IsNullableAnalysisEnabledIn(syntax);
             CheckForBlockAndExpressionBody(syntax.Body, syntax.ExpressionBody, syntax, diagnostics);
             return new SourcePropertyAccessorSymbol(
@@ -260,7 +260,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // This will cause another call to SourceMethodSymbol.LazyMethodChecks,
                 // but that method already handles reentrancy for exactly this case.
                 MethodSymbol overriddenMethod = this.OverriddenMethod;
-                if (overriddenMethod is object)
+                if (overriddenMethod is not null)
                 {
                     CustomModifierUtils.CopyMethodCustomModifiers(overriddenMethod, this, out _lazyReturnType,
                                                                   out _lazyRefCustomModifiers,
@@ -648,13 +648,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         PropertySymbol? explicitlyImplementedPropertyOpt = _property.ExplicitInterfaceImplementations.FirstOrDefault();
 
-                        if (explicitlyImplementedPropertyOpt is object)
+                        if (explicitlyImplementedPropertyOpt is not null)
                         {
                             MethodSymbol? implementedAccessor = isGetMethod
                                 ? explicitlyImplementedPropertyOpt.GetMethod
                                 : explicitlyImplementedPropertyOpt.SetMethod;
 
-                            string accessorName = implementedAccessor is object
+                            string accessorName = implementedAccessor is not null
                                 ? implementedAccessor.Name
                                 : GetAccessorName(explicitlyImplementedPropertyOpt.MetadataName,
                                     isGetMethod, isWinMdOutput: _property.IsCompilationOutputWinMdObj()); //Not name - could be indexer placeholder
@@ -666,7 +666,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     else if (IsOverride)
                     {
                         MethodSymbol overriddenMethod = this.OverriddenMethod;
-                        if (overriddenMethod is object)
+                        if (overriddenMethod is not null)
                         {
                             // If this accessor is overriding a method from metadata, it is possible that
                             // the name of the overridden method doesn't follow the C# get_X/set_X pattern.
@@ -675,10 +675,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         }
                     }
 
-                    if (name is null)
-                    {
-                        name = GetAccessorName(_property.SourceName, isGetMethod, isWinMdOutput: _property.IsCompilationOutputWinMdObj());
-                    }
+                    name ??= GetAccessorName(_property.SourceName, isGetMethod, isWinMdOutput: _property.IsCompilationOutputWinMdObj());
 
                     InterlockedOperations.Initialize(ref _lazyName, name);
                 }

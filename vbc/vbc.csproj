@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7B7E820C-EA29-4D89-B183-69988BB302FA}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>vbc</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.CommandLine</RootNamespace>
     <AssemblyName>vbc</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -72,14 +72,15 @@
     <Compile Include="CommandLine\IServerMutex.cs" />
     <Compile Include="CommandLine\MismatchedVersionBuildResponse.cs" />
     <Compile Include="CommandLine\NativeMethods.cs" />
-    <Compile Include="CommandLine\PROCESS_INFORMATION.cs" />
+    <Compile Include="CommandLine\ProcessInformation.cs" />
     <Compile Include="CommandLine\RejectedBuildResponse.cs" />
     <Compile Include="CommandLine\RequestLanguage.cs" />
     <Compile Include="CommandLine\RunCompilationResult.cs" />
     <Compile Include="CommandLine\ServerFileMutexPair.cs" />
     <Compile Include="CommandLine\ServerNamedMutex.cs" />
     <Compile Include="CommandLine\ShutdownBuildResponse.cs" />
-    <Compile Include="CommandLine\STARTUPINFO.cs" />
+    <Compile Include="CommandLine\StartupInfo.cs" />
+    <Compile Include="CommandLine\VbcException.cs" />
     <Compile Include="NamedPipeUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeHostInfo.cs" />

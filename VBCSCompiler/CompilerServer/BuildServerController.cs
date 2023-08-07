@@ -27,11 +27,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         internal int Run(string[] args)
         {
 #nullable restore
-            if (!BuildServerController.ParseCommandLine(args, out string pipeName1, out bool shutdown))
+            if (!ParseCommandLine(args, out string pipeName1, out bool shutdown))
                 return 1;
-            string str = pipeName1 ?? BuildServerController.GetDefaultPipeName();
-            if (str == null)
-                throw new Exception("Cannot calculate pipe name");
+            string str = (pipeName1 ?? GetDefaultPipeName()) ?? throw new VbCsCompilerException("Cannot calculate pipe name");
             CancellationTokenSource cancellationTokenSource = new();
             Console.CancelKeyPress += (sender, e) => cancellationTokenSource.Cancel();
             if (!shutdown)
@@ -65,9 +63,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
         // False warning
-#pragma warning disable IDE0090
         private static bool? WasServerRunning(string pipeName) => new bool?(BuildServerConnection.WasServerMutexOpen(BuildServerConnection.GetServerMutexName(pipeName)));
-#pragma warning restore IDE0090
 
         internal static IClientConnectionHost CreateClientConnectionHost(
             string pipeName,
@@ -98,12 +94,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         {
             if (!keepAlive.HasValue)
                 keepAlive = this.GetKeepAliveTimeout();
-            if (listener == null)
-                listener = new EmptyDiagnosticListener();
-            if (compilerServerHost == null)
-                compilerServerHost = CreateCompilerServerHost(this._logger);
-            if (clientConnectionHost == null)
-                clientConnectionHost = CreateClientConnectionHost(pipeName, this._logger);
+            listener ??= new EmptyDiagnosticListener();
+            compilerServerHost ??= CreateCompilerServerHost(this._logger);
+            clientConnectionHost ??= CreateClientConnectionHost(pipeName, this._logger);
             using (BuildServerConnection.OpenOrCreateMutex(BuildServerConnection.GetServerMutexName(pipeName), out bool createdNew))
             {
                 if (!createdNew)
@@ -125,10 +118,8 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             ICompilerServerLogger? logger = null,
             CancellationToken cancellationToken = default)
         {
-            if (appSettings == null)
-                appSettings = new NameValueCollection();
-            if (logger == null)
-                logger = EmptyCompilerServerLogger.Instance;
+            appSettings ??= new NameValueCollection();
+            logger ??= EmptyCompilerServerLogger.Instance;
             return new BuildServerController(appSettings, logger).RunServer(pipeName, compilerServerHost, clientConnectionHost, listener, keepAlive, cancellationToken);
         }
 
@@ -149,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         {
             bool? nullable1 = WasServerRunning(pipeName);
             bool flag1 = false;
-            if (nullable1.GetValueOrDefault() == flag1 & nullable1.HasValue)
+            if (nullable1.GetValueOrDefault() == flag1 && nullable1.HasValue)
                 return 0;
             try
             {
@@ -168,6 +159,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                         }
                         catch (Exception)
                         {
+                            // Nothing to do
                         }
                     }
                 }
@@ -175,9 +167,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             }
             catch (Exception)
             {
-                bool? nullable2 = BuildServerController.WasServerRunning(pipeName);
+                bool? nullable2 = WasServerRunning(pipeName);
                 bool flag2 = false;
-                return !(nullable2.GetValueOrDefault() == flag2 & nullable2.HasValue) ? 1 : 0;
+                return !(nullable2.GetValueOrDefault() == flag2 && nullable2.HasValue) ? 1 : 0;
             }
         }
 
@@ -195,7 +187,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 }
                 else
                 {
-                    if (!(str == "-shutdown"))
+                    if (str != "-shutdown")
                         return false;
                     shutdown = true;
                 }

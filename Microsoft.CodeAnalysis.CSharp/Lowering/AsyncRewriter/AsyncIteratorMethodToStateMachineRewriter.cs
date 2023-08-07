@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void AddDisposeCombinedTokensIfNeeded(ArrayBuilder<BoundStatement> builder)
         {
             // if (this.combinedTokens != null) { this.combinedTokens.Dispose(); this.combinedTokens = null; } // for enumerables only
-            if (_asyncIteratorInfo.CombinedTokensField is object)
+            if (_asyncIteratorInfo.CombinedTokensField is not null)
             {
                 var combinedTokens = F.Field(F.This(), _asyncIteratorInfo.CombinedTokensField);
                 TypeSymbol combinedTokensType = combinedTokens.Type;
@@ -302,7 +302,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override BoundNode VisitTryStatement(BoundTryStatement node)
         {
             var savedDisposalLabel = _currentDisposalLabel;
-            if (node.FinallyBlockOpt is object)
+            if (node.FinallyBlockOpt is not null)
             {
                 var finallyEntry = F.GenerateLabel("finallyEntry");
                 _currentDisposalLabel = finallyEntry;
@@ -318,7 +318,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     tryBlock: F.Block(node.TryBlock, F.Label(finallyEntry)),
                     node.CatchBlocks, node.FinallyBlockOpt, node.FinallyLabelOpt, node.PreferFaultHandler);
             }
-            else if (node.FinallyLabelOpt is object)
+            else if (node.FinallyLabelOpt is not null)
             {
                 _currentDisposalLabel = node.FinallyLabelOpt;
             }
@@ -327,7 +327,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             _currentDisposalLabel = savedDisposalLabel;
 
-            if (node.FinallyBlockOpt != null && _currentDisposalLabel is object)
+            if (node.FinallyBlockOpt != null && _currentDisposalLabel is not null)
             {
                 // Append:
                 //  if (disposeMode) goto currentDisposalLabel;
@@ -360,7 +360,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundStatement result = VisitFinally(extractedFinally.FinallyBlock);
 
-            if (_currentDisposalLabel is object)
+            if (_currentDisposalLabel is not null)
             {
                 result = AppendJumpToCurrentDisposalLabel(result);
             }

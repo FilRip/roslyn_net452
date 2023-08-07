@@ -298,10 +298,7 @@ namespace Microsoft.Cci
                 }
                 else
                 {
-                    if (name == null)
-                    {
-                        name = string.Empty;
-                    }
+                    name ??= string.Empty;
 
                     writer.WriteUInt32(nameOffset | 0x80000000);
                     dataWriter.WriteUInt16((ushort)name.Length);

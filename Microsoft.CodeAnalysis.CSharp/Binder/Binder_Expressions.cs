@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var containingType = memberOpt?.ContainingType;
-            bool inTopLevelScriptMember = containingType is object && containingType.IsScriptClass;
+            bool inTopLevelScriptMember = containingType is not null && containingType.IsScriptClass;
 
             // "this" is not allowed in field initializers (that are not script variable initializers):
             if (InFieldInitializer && !inTopLevelScriptMember)
@@ -192,7 +192,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol resultType = expr.Type;
             BoundKind exprKind = expr.Kind;
 
-            if (expr.HasAnyErrors && (resultType is object || exprKind == BoundKind.UnboundLambda || exprKind == BoundKind.DefaultLiteral))
+            if (expr.HasAnyErrors && (resultType is not null || exprKind == BoundKind.UnboundLambda || exprKind == BoundKind.DefaultLiteral))
             {
                 return expr;
             }
@@ -510,7 +510,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!expr.HasAnyErrors && !IsInsideNameof)
             {
                 TypeSymbol exprType = expr.Type;
-                if (exprType is object && exprType.IsUnsafe())
+                if (exprType is not null && exprType.IsUnsafe())
                 {
                     ReportUnsafeIfNotAllowed(node, diagnostics);
                     //CONSIDER: Return a bad expression so that HasErrors is true?
@@ -1149,7 +1149,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol typedReferenceType = GetSpecialType(SpecialType.System_TypedReference, diagnostics, node);
 
-            if (argument.Type is object && argument.Type.IsRestrictedType())
+            if (argument.Type is not null && argument.Type.IsRestrictedType())
             {
                 // CS1601: Cannot make reference to variable of type '{0}'
                 Error(diagnostics, ErrorCode.ERR_MethodArgCantBeRefAny, node, argument.Type);
@@ -1725,7 +1725,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             diagnostics.Add(node, useSiteInfo);
                             possibleField = lookupResult.SingleSymbolOrDefault as FieldSymbol;
                             lookupResult.Free();
-                            if (possibleField is object)
+                            if (possibleField is not null)
                             {
                                 Error(diagnostics, ErrorCode.ERR_VariableUsedBeforeDeclarationAndHidesField, node, node, possibleField);
                             }
@@ -1939,7 +1939,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     TypeSymbol hostObjectType = Compilation.GetHostObjectTypeSymbol();
                     var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                    if (hostObjectType is object && hostObjectType.IsEqualToOrDerivedFrom(memberDeclaringType, TypeCompareKind.ConsiderEverything, useSiteInfo: ref discardedUseSiteInfo))
+                    if (hostObjectType is not null && hostObjectType.IsEqualToOrDerivedFrom(memberDeclaringType, TypeCompareKind.ConsiderEverything, useSiteInfo: ref discardedUseSiteInfo))
                     {
                         return new BoundHostObjectMemberReference(syntax, hostObjectType) { WasCompilerGenerated = true };
                     }
@@ -1962,7 +1962,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         break;
                     }
                     containingMember = containingMember.ContainingSymbol;
-                } while (containingMember is object);
+                } while (containingMember is not null);
                 return true;
             }
         }
@@ -2034,7 +2034,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var alias = symbol as AliasSymbol;
 
-            if (alias is object)
+            if (alias is not null)
             {
                 symbol = alias.Target;
             }
@@ -2079,7 +2079,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ParameterSymbol thisSymbol = this.ContainingMemberOrLambda.EnclosingThisSymbol();
             // If there is no this parameter, then it is definitely not captured and 
             // any diagnostic would be cascading.
-            if (thisSymbol is object && thisSymbol.ContainingSymbol != ContainingMemberOrLambda && thisSymbol.RefKind != RefKind.None)
+            if (thisSymbol is not null && thisSymbol.ContainingSymbol != ContainingMemberOrLambda && thisSymbol.RefKind != RefKind.None)
             {
                 Error(diagnostics, ErrorCode.ERR_ThisStructNotInAnonMeth, thisOrBaseToken);
                 return true;
@@ -2126,7 +2126,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (targetType.IsNullableType() &&
                 !operand.HasAnyErrors &&
-                operand.Type is object &&
+                operand.Type is not null &&
                 !operand.Type.IsNullableType() &&
                 !TypeSymbol.Equals(targetType.GetNullableUnderlyingType(), operand.Type, TypeCompareKind.ConsiderEverything2))
             {
@@ -2148,7 +2148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol intType = GetSpecialType(SpecialType.System_Int32, diagnostics, node);
             TypeSymbol indexType = GetWellKnownType(WellKnownType.System_Index, diagnostics, node);
 
-            if (boundOperand.Type is object && boundOperand.Type.IsNullableType())
+            if (boundOperand.Type is not null && boundOperand.Type.IsNullableType())
             {
                 // Used in lowering to construct the nullable
                 GetSpecialTypeMember(SpecialMember.System_Nullable_T__ctor, diagnostics, node);
@@ -2206,7 +2206,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     memberOpt = WellKnownMember.System_Range__StartAt;
                 }
 
-                if (memberOpt is object)
+                if (memberOpt is not null)
                 {
                     symbolOpt = (MethodSymbol)GetWellKnownTypeMember(
                         memberOpt.GetValueOrDefault(),
@@ -2215,13 +2215,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                         isOptional: true);
                 }
 
-                if (symbolOpt is null)
-                {
-                    symbolOpt = (MethodSymbol)GetWellKnownTypeMember(
+                symbolOpt ??= (MethodSymbol)GetWellKnownTypeMember(
                         WellKnownMember.System_Range__ctor,
                         diagnostics,
                         syntax: node);
-                }
             }
 
             BoundExpression left = BindRangeExpressionOperand(node.LeftOperand, diagnostics);
@@ -2710,7 +2707,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Is this a local?
             SourceLocalSymbol localSymbol = this.LookupLocal(designation.Identifier);
-            if (localSymbol is object)
+            if (localSymbol is not null)
             {
                 if ((InConstructorInitializer || InFieldInitializer) && ContainingMemberOrLambda.ContainingSymbol.Kind == SymbolKind.NamedType)
                 {
@@ -2733,14 +2730,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Is this a field?
-            GlobalExpressionVariable expressionVariableField = LookupDeclaredField(designation);
-
-            if (expressionVariableField is null)
-            {
-                // We should have the right binder in the chain, cannot continue otherwise.
-                throw ExceptionUtilities.Unreachable;
-            }
-
+            GlobalExpressionVariable expressionVariableField = LookupDeclaredField(designation) ?? throw ExceptionUtilities.Unreachable;
             BoundExpression receiver = SynthesizeReceiver(designation, expressionVariableField, diagnostics);
 
             if (typeSyntax.IsVar)
@@ -4998,7 +4988,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private bool IsConstructorAccessible(MethodSymbol constructor, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, bool allowProtectedConstructorsOfBaseType = false)
         {
             NamedTypeSymbol containingType = this.ContainingType;
-            if (containingType is object)
+            if (containingType is not null)
             {
                 // SPEC VIOLATION: The specification implies that when considering 
                 // SPEC VIOLATION: instance methods or instance constructors, we first 
@@ -5237,7 +5227,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (!this.InAttributeArgument && type.IsComImport)
             {
                 NamedTypeSymbol coClassType = type.ComImportCoClass;
-                if (coClassType is object)
+                if (coClassType is not null)
                 {
                     return BindComImportCoClassCreationExpression(node, type, coClassType, diagnostics, typeNode, analyzedArguments, initializerOpt, wasTargetTyped);
                 }
@@ -5695,7 +5685,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 leftSymbol = boundValue.ExpressionSymbol;
             }
 
-            if (leftSymbol is object)
+            if (leftSymbol is not null)
             {
                 switch (leftSymbol.Kind)
                 {
@@ -5820,7 +5810,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol leftType = boundLeft.Type;
 
-            if (leftType is object && leftType.IsDynamic())
+            if (leftType is not null && leftType.IsDynamic())
             {
                 // There are some sources of a `dynamic` typed value that can be known before runtime
                 // to be invalid. For example, accessing a set-only property whose type is dynamic:
@@ -5832,7 +5822,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // No member accesses on void
-            if (leftType is object && leftType.IsVoidType())
+            if (leftType is not null && leftType.IsVoidType())
             {
                 diagnostics.Add(ErrorCode.ERR_BadUnaryOp, operatorToken.GetLocation(), SyntaxFacts.GetText(operatorToken.Kind()), leftType);
                 return BadExpression(node, boundLeft);
@@ -5988,7 +5978,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                                 return BadExpression(node, boundLeft);
                             }
-                            else if (leftType is object)
+                            else if (leftType is not null)
                             {
                                 // NB: We don't know if we really only need RValue access, or if we are actually
                                 // passing the receiver implicitly by ref (e.g. in a struct instance method invocation).
@@ -6285,7 +6275,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeSymbol GetNonMethodMemberType(Symbol symbolOpt)
         {
             TypeSymbol resultType = null;
-            if (symbolOpt is object)
+            if (symbolOpt is not null)
             {
                 switch (symbolOpt.Kind)
                 {
@@ -6704,7 +6694,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     enumType = (NamedTypeSymbol)fieldType;
                 }
 
-                if (enumType is object)
+                if (enumType is not null)
                 {
                     NamedTypeSymbol underlyingType = enumType.EnumUnderlyingType;
                     expr = new BoundConversion(
@@ -6725,7 +6715,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private bool InEnumMemberInitializer()
         {
             var containingType = this.ContainingType;
-            return this.InFieldInitializer && containingType is object && containingType.IsEnumType();
+            return this.InFieldInitializer && containingType is not null && containingType.IsEnumType();
         }
 
         private BoundExpression BindPropertyAccess(
@@ -6750,7 +6740,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (symbol.ContainingType?.IsInterface == true && !Compilation.Assembly.RuntimeSupportsDefaultInterfaceImplementation && Compilation.SourceModule != symbol.ContainingModule)
             {
-                if (!symbol.IsStatic && !(symbol is TypeSymbol) &&
+                if (!symbol.IsStatic && symbol is not TypeSymbol &&
                     !symbol.IsImplementableInterfaceMember())
                 {
                     Error(diagnostics, ErrorCode.ERR_RuntimeDoesNotSupportDefaultInterfaceImplementation, node);
@@ -7140,7 +7130,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (result is null)
                 {
                     result = TryImplicitConversionToArrayIndex(index, WellKnownType.System_Range, node, diagnostics);
-                    if (result is object)
+                    if (result is not null)
                     {
                         // This member is needed for lowering and should produce an error if not present
                         _ = GetWellKnownTypeMember(
@@ -7187,7 +7177,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var attemptDiagnostics = BindingDiagnosticBag.GetInstance(diagnostics);
             var result = TryImplicitConversionToArrayIndex(expr, type, node, attemptDiagnostics);
-            if (result is object)
+            if (result is not null)
             {
                 diagnostics.Add(node, useSiteInfo);
                 diagnostics.AddRange(attemptDiagnostics);
@@ -7204,7 +7194,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var result = TryImplicitConversionToArrayIndex(expr, type, node, attemptDiagnostics);
 
-            if (result is object)
+            if (result is not null)
             {
                 diagnostics.AddRange(attemptDiagnostics);
             }
@@ -7674,7 +7664,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // Look for Substring
                 var substring = (MethodSymbol)Compilation.GetSpecialTypeMember(SpecialMember.System_String__Substring);
-                if (substring is object)
+                if (substring is not null)
                 {
                     patternIndexerAccess = new BoundIndexOrRangePatternIndexerAccess(
                         syntax,

@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 TypeSymbol transformedType = decoder.TransformType(metadataType);
 
-                if (transformedType is object && (!checkLength || decoder._index == dynamicTransformFlags.Length))
+                if (transformedType is not null && (!checkLength || decoder._index == dynamicTransformFlags.Length))
                 {
                     // Even when we're not checking the length, there shouldn't be any unconsumed "true"s.
                     return transformedType;
@@ -208,7 +208,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             NamedTypeSymbol containingType = namedType.ContainingType;
             NamedTypeSymbol newContainingType;
-            if (containingType is object && containingType.IsGenericType)
+            if (containingType is not null && containingType.IsGenericType)
             {
                 newContainingType = TransformNamedType(namedType.ContainingType, isContaining: true);
                 if (newContainingType is null)

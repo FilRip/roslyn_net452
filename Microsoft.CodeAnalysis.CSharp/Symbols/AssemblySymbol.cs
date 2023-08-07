@@ -432,7 +432,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private bool RuntimeSupportsFeature(SpecialMember feature)
         {
             return GetSpecialType(SpecialType.System_Runtime_CompilerServices_RuntimeFeature) is { TypeKind: TypeKind.Class, IsStatic: true } &&
-                   GetSpecialTypeMember(feature) is object;
+                   GetSpecialTypeMember(feature) is not null;
         }
 
         internal bool RuntimeSupportsUnmanagedSignatureCallingConvention
@@ -614,7 +614,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 type = GetTopLevelTypeByMetadataName(ref mdName, assemblyOpt: null, includeReferences: includeReferences, isWellKnownType: isWellKnownType,
                     conflicts: out conflicts, warnings: warnings, ignoreCorLibraryDuplicatedTypes: ignoreCorLibraryDuplicatedTypes);
 
-                for (int i = 1; type is object && !type.IsErrorType() && i < parts.Length; i++)
+                for (int i = 1; type is not null && !type.IsErrorType() && i < parts.Length; i++)
                 {
                     mdName = MetadataTypeName.FromTypeName(parts[i]);
                     NamedTypeSymbol temp = type.LookupMetadataType(ref mdName);
@@ -796,7 +796,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             // ignore any types of the same name that might be in referenced assemblies (prefer the current assembly):
-            if (result is object || !includeReferences)
+            if (result is not null || !includeReferences)
             {
                 return result;
             }
@@ -847,7 +847,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
 
-                if (result is object)
+                if (result is not null)
                 {
                     // duplicate
                     if (ignoreCorLibraryDuplicatedTypes)
@@ -926,7 +926,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static bool IsAcceptableMatchForGetTypeByMetadataName(NamedTypeSymbol candidate)
         {
-            return candidate.Kind != SymbolKind.ErrorType || !(candidate is MissingMetadataTypeSymbol);
+            return candidate.Kind != SymbolKind.ErrorType || candidate is not MissingMetadataTypeSymbol;
         }
 
         /// <summary>

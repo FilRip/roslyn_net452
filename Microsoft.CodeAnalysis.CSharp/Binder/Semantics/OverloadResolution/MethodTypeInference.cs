@@ -1910,7 +1910,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 sourceBase = ((TypeParameterSymbol)source).EffectiveBaseClass(ref useSiteInfo);
             }
 
-            while (sourceBase is object)
+            while (sourceBase is not null)
             {
                 if (TypeSymbol.Equals(sourceBase.OriginalDefinition, target.OriginalDefinition, TypeCompareKind.ConsiderEverything2))
                 {
@@ -2269,7 +2269,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC:   inference is made from each Ui to the corresponding Vi.
 
             var targetBase = target.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
-            while (targetBase is object)
+            while (targetBase is not null)
             {
                 if (TypeSymbol.Equals(targetBase.OriginalDefinition, source.OriginalDefinition, TypeCompareKind.ConsiderEverything2))
                 {
@@ -2785,7 +2785,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsReallyAType(TypeSymbol type)
         {
-            return type is object &&
+            return type is not null &&
                 !type.IsErrorType() &&
                 !type.IsVoidType();
         }

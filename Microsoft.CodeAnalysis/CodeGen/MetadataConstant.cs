@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         [Conditional("DEBUG")]
         internal static void AssertValidConstant(object? value)
         {
-            Debug.Assert(value == null || value is string || value is DateTime || value is decimal || value.GetType().GetTypeInfo().IsEnum || (value.GetType().GetTypeInfo().IsPrimitive && !(value is IntPtr) && !(value is UIntPtr)));
+            Debug.Assert(value == null || value is string || value is DateTime || value is decimal || value.GetType().GetTypeInfo().IsEnum || (value.GetType().GetTypeInfo().IsPrimitive && value is not IntPtr && value is not UIntPtr));
         }
     }
 }

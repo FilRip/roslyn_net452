@@ -49,15 +49,13 @@ namespace Microsoft.CodeAnalysis.CommandLine
             {
                 return new RejectedBuildResponse("Failed to connect to server");
             }
-            using (NamedPipeClientStream? pipe = await task.ConfigureAwait(continueOnCapturedContext: false))
+            using NamedPipeClientStream? pipe = await task.ConfigureAwait(continueOnCapturedContext: false);
+            if (pipe == null)
             {
-                if (pipe == null)
-                {
-                    return new RejectedBuildResponse("Failed to connect to server");
-                }
-                BuildRequest request = BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", requestId, keepAlive, libDirectory);
-                return await TryCompileAsync(pipe, request, logger, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+                return new RejectedBuildResponse("Failed to connect to server");
             }
+            BuildRequest request = BuildRequest.Create(language, arguments, buildPaths.WorkingDirectory, buildPaths.TempDirectory, BuildProtocolConstants.GetCommitHash() ?? "", requestId, keepAlive, libDirectory);
+            return await TryCompileAsync(pipe, request, logger, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             static Task<NamedPipeClientStream?>? tryConnectToServer(string pipeName, BuildPathsAlt buildPaths, int? timeoutOverride, CreateServerFunc createServerFunc, ICompilerServerLogger logger, CancellationToken cancellationToken)
             {
                 int currentManagedThreadId = Environment.CurrentManagedThreadId;
@@ -75,7 +73,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     }
                     catch
                     {
-                        return null;
+                        return Task.FromResult<NamedPipeClientStream?>(null);
                     }
                     if (!createdNew)
                     {
@@ -83,12 +81,12 @@ namespace Microsoft.CodeAnalysis.CommandLine
                         {
                             if (!serverMutex.TryLock(num))
                             {
-                                return null;
+                                return Task.FromResult<NamedPipeClientStream?>(null);
                             }
                         }
                         catch (AbandonedMutexException)
                         {
-                            createdNew = true;
+                            // Nothing to do
                         }
                     }
                     bool num3 = WasServerMutexOpen(GetServerMutexName(pipeName));
@@ -108,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     catch (ApplicationException innerException)
                     {
                         int currentManagedThreadId2 = Environment.CurrentManagedThreadId;
-                        throw new Exception($"ReleaseMutex failed. WaitOne Id: {currentManagedThreadId} Release Id: {currentManagedThreadId2}", innerException);
+                        throw new CscException($"ReleaseMutex failed. WaitOne Id: {currentManagedThreadId} Release Id: {currentManagedThreadId2}", innerException);
                     }
                 }
             }
@@ -205,7 +203,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 logger.LogError("Owner of named pipe is incorrect");
                 return null;
             }
-            catch (Exception ex) when (!(ex is TaskCanceledException) && !(ex is OperationCanceledException))
+            catch (Exception ex) when (ex is not TaskCanceledException && ex is not OperationCanceledException)
             {
                 logger.LogException(ex, "Exception while connecting to process");
                 pipeStream?.Dispose();

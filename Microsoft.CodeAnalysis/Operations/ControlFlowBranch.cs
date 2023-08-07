@@ -146,10 +146,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
                     {
                         if (leavingRegions[i].Kind == ControlFlowRegionKind.Try && leavingRegions[i + 1].Kind == ControlFlowRegionKind.TryAndFinally)
                         {
-                            if (builder == null)
-                            {
-                                builder = ArrayBuilder<ControlFlowRegion>.GetInstance();
-                            }
+                            builder ??= ArrayBuilder<ControlFlowRegion>.GetInstance();
 
                             builder.Add(leavingRegions[i + 1].NestedRegions.Last());
                             Debug.Assert(builder.Last().Kind == ControlFlowRegionKind.Finally);

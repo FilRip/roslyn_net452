@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private void CheckIfAssignedDuringLocalFunctionReplay(Symbol symbol, SyntaxNode node, int slot)
         {
-            if (symbol is object)
+            if (symbol is not null)
             {
                 NoteRead(symbol);
 
@@ -146,7 +146,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // local function
             var nearestLocalFunc = GetNearestLocalFunctionOpt(CurrentSymbol);
 
-            return !(nearestLocalFunc is null) && Symbol.IsCaptured(rootSymbol, nearestLocalFunc);
+            return nearestLocalFunc is not null && Symbol.IsCaptured(rootSymbol, nearestLocalFunc);
         }
 
         private static LocalFunctionSymbol GetNearestLocalFunctionOpt(Symbol symbol)

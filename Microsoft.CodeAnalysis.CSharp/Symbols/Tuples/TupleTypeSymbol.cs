@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 _ = GetWellKnownMemberInType(underlyingType.OriginalDefinition, wellKnownTupleRest, diagnostics, syntax);
             }
 
-            if (diagnostics?.DiagnosticBag is object && ((SourceModuleSymbol)compilation.SourceModule).AnyReferencedAssembliesAreLinked)
+            if (diagnostics?.DiagnosticBag is not null && ((SourceModuleSymbol)compilation.SourceModule).AnyReferencedAssembliesAreLinked)
             {
                 // Complain about unembeddable types from linked assemblies.
                 Emit.NoPia.EmbeddedTypesManager.IsValidEmbeddableType(underlyingType, syntax, diagnostics.DiagnosticBag);
@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 int chainLength = NumberOfValueTuples(numElements, out int remainder);
 
                 NamedTypeSymbol firstTupleType = compilation.GetWellKnownType(GetTupleType(remainder));
-                if (diagnostics is object && syntax is object)
+                if (diagnostics is not null && syntax is not null)
                 {
                     ReportUseSiteAndObsoleteDiagnostics(syntax, diagnostics, firstTupleType);
                 }
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (chainLength > 1)
                 {
                     chainedTupleType = compilation.GetWellKnownType(GetTupleType(ValueTupleRestPosition));
-                    if (diagnostics is object && syntax is object)
+                    if (diagnostics is not null && syntax is not null)
                     {
                         ReportUseSiteAndObsoleteDiagnostics(syntax, diagnostics, chainedTupleType);
                     }
@@ -801,7 +801,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             elementsMatchedByFields.Free();
             members.AddRange(nonFieldMembers);
             nonFieldMembers.Free();
-            if (fieldDefinitionsToIndexMap is object)
+            if (fieldDefinitionsToIndexMap is not null)
             {
                 this.TupleData!.SetFieldDefinitionsToIndexMap(fieldDefinitionsToIndexMap);
             }
@@ -971,7 +971,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 }
 
-                return other is object
+                return other is not null
                     && areEqual(this.ElementNames, other.ElementNames)
                     && areEqual(this.ElementLocations, other.ElementLocations)
                     && areEqual(this.ErrorPositions, other.ErrorPositions);
@@ -1108,7 +1108,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                                 case SymbolKind.Field:
                                     var tupleUnderlyingField = ((FieldSymbol)member).TupleUnderlyingField;
-                                    if (tupleUnderlyingField is object)
+                                    if (tupleUnderlyingField is not null)
                                     {
                                         map[tupleUnderlyingField.OriginalDefinition] = member;
                                     }
@@ -1118,7 +1118,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                     var underlyingEvent = (EventSymbol)member;
                                     var underlyingAssociatedField = underlyingEvent.AssociatedField;
                                     // The field is not part of the members list
-                                    if (underlyingAssociatedField is object)
+                                    if (underlyingAssociatedField is not null)
                                     {
                                         map.Add(underlyingAssociatedField.OriginalDefinition, underlyingAssociatedField);
                                     }

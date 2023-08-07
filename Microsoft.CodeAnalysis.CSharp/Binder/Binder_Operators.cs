@@ -474,7 +474,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol leftType = left.Type;
             TypeSymbol rightType = right.Type;
 
-            if (leftType is object && leftType.IsDynamic() || rightType is object && rightType.IsDynamic())
+            if (leftType is not null && leftType.IsDynamic() || rightType is not null && rightType.IsDynamic())
             {
                 return BindDynamicBinaryOperator(node, kind, left, right, diagnostics);
             }
@@ -629,8 +629,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 bool isNullableEquality = signature.Method is null &&
                     (signature.Kind.Operator() == BinaryOperatorKind.Equal || signature.Kind.Operator() == BinaryOperatorKind.NotEqual) &&
-                    (leftNull && rightType is object && rightType.IsNullableType() ||
-                        rightNull && leftType is object && leftType.IsNullableType());
+                    (leftNull && rightType is not null && rightType.IsNullableType() ||
+                        rightNull && leftType is not null && leftType.IsNullableType());
 
                 if (isNullableEquality)
                 {
@@ -670,7 +670,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void ReportAssignmentOperatorError(AssignmentExpressionSyntax node, BindingDiagnosticBag diagnostics, BoundExpression left, BoundExpression right, LookupResultKind resultKind)
         {
             if (((SyntaxKind)node.OperatorToken.RawKind == SyntaxKind.PlusEqualsToken || (SyntaxKind)node.OperatorToken.RawKind == SyntaxKind.MinusEqualsToken) &&
-                left.Type is object && left.Type.TypeKind == TypeKind.Delegate)
+                left.Type is not null && left.Type.TypeKind == TypeKind.Delegate)
             {
                 // Special diagnostic for delegate += and -= about wrong right-hand-side
                 var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
@@ -762,8 +762,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // both be bool. This is the only situation in which the expression can be a
             // constant expression, so do the folding now if we can.
 
-            if (left.Type is object && left.Type.SpecialType == SpecialType.System_Boolean &&
-                right.Type is object && right.Type.SpecialType == SpecialType.System_Boolean)
+            if (left.Type is not null && left.Type.SpecialType == SpecialType.System_Boolean &&
+                right.Type is not null && right.Type.SpecialType == SpecialType.System_Boolean)
             {
                 var constantValue = FoldBinaryOperator(node, kind | BinaryOperatorKind.Bool, left, right, SpecialType.System_Boolean, diagnostics);
 
@@ -1062,7 +1062,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool HasApplicableBooleanOperator(NamedTypeSymbol containingType, string name, TypeSymbol argumentType, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, out MethodSymbol @operator)
         {
-            for (var type = containingType; type is object; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (var type = containingType; type is not null; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 var operators = type.GetOperators(name);
                 for (var i = 0; i < operators.Length; i++)
@@ -1115,7 +1115,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var analysisResult in result.Results)
                 {
                     MethodSymbol method = analysisResult.Signature.Method;
-                    if (method is object)
+                    if (method is not null)
                     {
                         builder.Add(method);
                     }
@@ -1153,7 +1153,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void ReportObsoleteAndFeatureAvailabilityDiagnostics(MethodSymbol operatorMethod, CSharpSyntaxNode node, BindingDiagnosticBag diagnostics)
         {
-            if (operatorMethod is object)
+            if (operatorMethod is not null)
             {
                 ReportDiagnosticsIfObsolete(diagnostics, operatorMethod, node, hasBaseReceiver: false);
 
@@ -1208,7 +1208,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var analysisResult in result.Results)
                 {
                     MethodSymbol method = analysisResult.Signature.Method;
-                    if (method is object)
+                    if (method is not null)
                     {
                         builder.Add(method);
                     }
@@ -1229,7 +1229,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // The same issue applies to unary minus applied to nuint.
 
                     if (kind == UnaryOperatorKind.UnaryMinus &&
-                        operand.Type is object &&
+                        operand.Type is not null &&
                         (operand.Type.SpecialType == SpecialType.System_UInt64 || (operand.Type.SpecialType == SpecialType.System_UIntPtr && operand.Type.IsNativeIntegerType)))
                     {
                         resultKind = LookupResultKind.OverloadResolutionFailure;
@@ -2713,7 +2713,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Error(diagnostics, ErrorCode.WRN_StaticInAsOrIs, node, targetType);
             }
 
-            if (operandType is object && operandType.IsPointerOrFunctionPointer() || targetType.IsPointerOrFunctionPointer())
+            if (operandType is not null && operandType.IsPointerOrFunctionPointer() || targetType.IsPointerOrFunctionPointer())
             {
                 // operand for an is or as expression cannot be of pointer type
                 Error(diagnostics, ErrorCode.ERR_PointerInAsOrIs, node);
@@ -3417,7 +3417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol optLeftType = leftOperand.Type;   // "A"
             TypeSymbol optRightType = rightOperand.Type; // "B"
-            bool isLeftNullable = optLeftType is object && optLeftType.IsNullableType();
+            bool isLeftNullable = optLeftType is not null && optLeftType.IsNullableType();
             TypeSymbol optLeftType0 = isLeftNullable ?  // "A0"
                 optLeftType.GetNullableUnderlyingType() :
                 optLeftType;
@@ -3431,7 +3431,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // SPEC: Otherwise, if A exists and is a non-nullable value type, a compile-time error occurs. First we check for the pre-C# 8.0
             // SPEC: condition, to ensure that we don't allow previously illegal code in old language versions.
-            if (optLeftType is object && !optLeftType.IsReferenceType && !isLeftNullable)
+            if (optLeftType is not null && !optLeftType.IsReferenceType && !isLeftNullable)
             {
                 // Prior to C# 8.0, the spec said that the left type must be either a reference type or a nullable value type. This was relaxed
                 // with C# 8.0, so if the feature is not enabled then issue a diagnostic and return
@@ -3452,7 +3452,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Note that there is no runtime dynamic dispatch since comparison with null is not a dynamic operation.
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
 
-            if (optRightType is object && optRightType.IsDynamic())
+            if (optRightType is not null && optRightType.IsDynamic())
             {
                 var leftConversion = Conversions.ClassifyConversionFromExpression(leftOperand, GetSpecialType(SpecialType.System_Object, diagnostics, node), ref useSiteInfo);
                 rightOperand = BindToNaturalType(rightOperand, diagnostics);
@@ -3483,7 +3483,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC:    At run-time, a is first evaluated. If a is not null, a becomes the result.
             // SPEC:    Otherwise, b is evaluated and converted to type A, and this becomes the result.
 
-            if (optLeftType is object)
+            if (optLeftType is not null)
             {
                 var rightConversion = Conversions.ClassifyImplicitConversionFromExpression(rightOperand, optLeftType, ref useSiteInfo);
                 if (rightConversion.Exists)
@@ -3519,7 +3519,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // See test CodeGenTests.TestNullCoalescingOperatorWithNullableConversions for an example.
 
-            if (optRightType is object)
+            if (optRightType is not null)
             {
                 rightOperand = BindToNaturalType(rightOperand, diagnostics);
                 Conversion leftConversion;

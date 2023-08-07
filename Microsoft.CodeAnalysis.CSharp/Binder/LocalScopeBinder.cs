@@ -299,10 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (innerStatement.Kind() == SyntaxKind.LocalFunctionStatement)
             {
                 var decl = (LocalFunctionStatementSyntax)innerStatement;
-                if (locals == null)
-                {
-                    locals = ArrayBuilder<LocalFunctionSymbol>.GetInstance();
-                }
+                locals ??= ArrayBuilder<LocalFunctionSymbol>.GetInstance();
 
                 var localSymbol = MakeLocalFunction(decl);
                 locals.Add(localSymbol);
@@ -344,10 +341,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             while (statement.Kind() == SyntaxKind.LabeledStatement)
             {
                 var labeledStatement = (LabeledStatementSyntax)statement;
-                if (labels == null)
-                {
-                    labels = ArrayBuilder<LabelSymbol>.GetInstance();
-                }
+                labels ??= ArrayBuilder<LabelSymbol>.GetInstance();
 
                 var labelSymbol = new SourceLabelSymbol(containingMethod, labeledStatement.Identifier);
                 labels.Add(labelSymbol);

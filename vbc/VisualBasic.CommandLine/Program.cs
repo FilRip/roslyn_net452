@@ -5,13 +5,13 @@ using Microsoft.CodeAnalysis.CommandLine;
 
 namespace Microsoft.CodeAnalysis.VisualBasic.CommandLine
 {
-    public class Program
+    public static class Program
     {
         public static int Main(string[] args)
         {
             try
             {
-                return Program.MainCore(args);
+                return MainCore(args);
             }
             catch (FileNotFoundException ex)
             {

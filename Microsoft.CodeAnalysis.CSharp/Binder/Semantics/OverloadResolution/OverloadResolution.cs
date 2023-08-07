@@ -2382,7 +2382,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Given an expression E and a type T, E exactly matches T if one of the following holds:
 
             // - E has a type S, and an identity conversion exists from S to T 
-            if (node.Type is object && Conversions.HasIdentityConversion(node.Type, t))
+            if (node.Type is not null && Conversions.HasIdentityConversion(node.Type, t))
             {
                 return true;
             }
@@ -2404,8 +2404,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol y;
 
             if (node.Kind == BoundKind.UnboundLambda &&
-                (d = t.GetDelegateType()) is object &&
-                (invoke = d.DelegateInvokeMethod) is object &&
+                (d = t.GetDelegateType()) is not null &&
+                (invoke = d.DelegateInvokeMethod) is not null &&
                 !(y = invoke.ReturnType).IsVoidType())
             {
                 BoundLambda lambda = ((UnboundLambda)node).BindForReturnTypeInference(d);
@@ -2430,7 +2430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                if (y is object)
+                if (y is not null)
                 {
                     // - The body of E is an expression that exactly matches Y, or
                     //   has a return statement with expression and all return statements have expression that 
@@ -2534,7 +2534,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override BoundNode Visit(BoundNode node)
             {
-                if (!(node is BoundExpression))
+                if (node is not BoundExpression)
                 {
                     return base.Visit(node);
                 }
@@ -2663,11 +2663,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             NamedTypeSymbol d1;
 
-            if ((d1 = type1.GetDelegateType()) is object)
+            if ((d1 = type1.GetDelegateType()) is not null)
             {
                 NamedTypeSymbol d2;
 
-                if ((d2 = type2.GetDelegateType()) is object)
+                if ((d2 = type2.GetDelegateType()) is not null)
                 {
                     // - T1 is either a delegate type D1 or an expression tree type Expression<D1>,
                     //   T2 is either a delegate type D2 or an expression tree type Expression<D2>,
@@ -2675,7 +2675,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     MethodSymbol invoke1 = d1.DelegateInvokeMethod;
                     MethodSymbol invoke2 = d2.DelegateInvokeMethod;
 
-                    if (invoke1 is object && invoke2 is object)
+                    if (invoke1 is not null && invoke2 is not null)
                     {
                         TypeSymbol r1 = invoke1.ReturnType;
                         TypeSymbol r2 = invoke2.ReturnType;
@@ -2728,7 +2728,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // A shortcut, a delegate or an expression tree cannot satisfy other rules.
                 return BetterResult.Neither;
             }
-            else if (type2.GetDelegateType() is object)
+            else if (type2.GetDelegateType() is not null)
             {
                 // A shortcut, a delegate or an expression tree cannot satisfy other rules.
                 return BetterResult.Neither;
@@ -2778,16 +2778,16 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             NamedTypeSymbol d1;
 
-            if ((d1 = type1.GetDelegateType()) is object)
+            if ((d1 = type1.GetDelegateType()) is not null)
             {
                 NamedTypeSymbol d2;
 
-                if ((d2 = type2.GetDelegateType()) is object)
+                if ((d2 = type2.GetDelegateType()) is not null)
                 {
                     MethodSymbol invoke1 = d1.DelegateInvokeMethod;
                     MethodSymbol invoke2 = d2.DelegateInvokeMethod;
 
-                    if (invoke1 is object && invoke2 is object)
+                    if (invoke1 is not null && invoke2 is not null)
                     {
                         if (!IdenticalParameters(invoke1.Parameters, invoke2.Parameters))
                         {
@@ -2881,7 +2881,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsSignedIntegralType(TypeSymbol type)
         {
-            if (type is object && type.IsNullableType())
+            if (type is not null && type.IsNullableType())
             {
                 type = type.GetNullableUnderlyingType();
             }
@@ -2895,7 +2895,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsUnsignedIntegralType(TypeSymbol type)
         {
-            if (type is object && type.IsNullableType())
+            if (type is not null && type.IsNullableType())
             {
                 type = type.GetNullableUnderlyingType();
             }
@@ -3610,7 +3610,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if (argType is object && Conversions.HasIdentityConversion(argType, parameterType))
+            if (argType is not null && Conversions.HasIdentityConversion(argType, parameterType))
             {
                 return Conversion.Identity;
             }

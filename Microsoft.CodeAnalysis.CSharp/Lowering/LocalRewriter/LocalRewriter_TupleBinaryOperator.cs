@@ -339,7 +339,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void MakeNullableParts(BoundExpression expr, ArrayBuilder<LocalSymbol> temps, ArrayBuilder<BoundExpression> innerEffects,
             ArrayBuilder<BoundExpression> outerEffects, bool saveHasValue, out BoundExpression hasValue, out BoundExpression value, out bool isNullable)
         {
-            isNullable = !(expr is BoundTupleExpression) && expr.Type is { } && expr.Type.IsNullableType();
+            isNullable = expr is not BoundTupleExpression && expr.Type is { } && expr.Type.IsNullableType();
             if (!isNullable)
             {
                 hasValue = MakeBooleanConstant(expr.Syntax, true);

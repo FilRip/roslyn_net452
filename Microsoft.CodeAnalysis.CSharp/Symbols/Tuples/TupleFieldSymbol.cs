@@ -157,7 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // note we have to compare both index and name because
             // in nameless tuple there could be fields that differ only by index
             // and in named tuples there could be fields that differ only by name
-            return other is object &&
+            return other is not null &&
                 _tupleElementIndex == other._tupleElementIndex &&
                 TypeSymbol.Equals(_containingTuple, other._containingTuple, compareKind);
         }

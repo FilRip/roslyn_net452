@@ -410,10 +410,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             AssertPlaceholderReplacement(placeholder, value);
 
-            if (_placeholderReplacementMapDoNotUseDirectly is null)
-            {
-                _placeholderReplacementMapDoNotUseDirectly = new Dictionary<BoundValuePlaceholderBase, BoundExpression>();
-            }
+            _placeholderReplacementMapDoNotUseDirectly ??= new Dictionary<BoundValuePlaceholderBase, BoundExpression>();
 
             _placeholderReplacementMapDoNotUseDirectly.Add(placeholder, value);
         }

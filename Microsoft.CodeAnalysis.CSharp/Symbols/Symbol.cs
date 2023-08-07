@@ -136,7 +136,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                for (var container = this.ContainingSymbol; container is object; container = container.ContainingSymbol)
+                for (var container = this.ContainingSymbol; container is not null; container = container.ContainingSymbol)
                 {
                     if (container is NamespaceSymbol ns)
                     {
@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Default implementation gets the containers assembly.
 
                 var container = this.ContainingSymbol;
-                return container is object ? container.ContainingAssembly : null;
+                return container?.ContainingAssembly;
             }
         }
 
@@ -230,7 +230,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Default implementation gets the containers module.
 
                 var container = this.ContainingSymbol;
-                return container is object ? container.ContainingModule : null;
+                return container?.ContainingModule;
             }
         }
 
@@ -374,7 +374,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                     }
 
-                    if (found is object)
+                    if (found is not null)
                     {
                         builder.Add(found.GetReference());
                     }
@@ -627,7 +627,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // the condition is expected to be folded when inlining "someSymbol != null"
             if (right is null)
             {
-                return left is object;
+                return left is not null;
             }
 
             // this part is expected to disappear when inlining "someSymbol != null"
@@ -707,10 +707,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (attribute != null)
             {
-                if (attributes == null)
-                {
-                    attributes = new ArrayBuilder<SynthesizedAttributeData>(1);
-                }
+                attributes ??= new ArrayBuilder<SynthesizedAttributeData>(1);
 
                 attributes.Add(attribute);
             }
@@ -882,7 +879,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             get
             {
                 AssemblySymbol dependency = this.ContainingAssembly;
-                if (dependency is object && dependency.CorLibrary == dependency)
+                if (dependency is not null && dependency.CorLibrary == dependency)
                 {
                     return null;
                 }
@@ -1534,7 +1531,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // case the variable is not captured by the target function, or null, in which
             // case it is.
             for (var currentFunction = variable.ContainingSymbol;
-                 currentFunction is object;
+                 currentFunction is not null;
                  currentFunction = currentFunction.ContainingSymbol)
             {
                 if (ReferenceEquals(currentFunction, containingSymbol))

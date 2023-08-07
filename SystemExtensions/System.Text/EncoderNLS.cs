@@ -68,10 +68,7 @@ namespace System.Text
         public override void Reset()
         {
             charLeftOver = '\0';
-            if (m_fallbackBuffer != null)
-            {
-                m_fallbackBuffer.Reset();
-            }
+            m_fallbackBuffer?.Reset();
         }
 
         public unsafe override int GetByteCount(char[] chars, int index, int count, bool flush)

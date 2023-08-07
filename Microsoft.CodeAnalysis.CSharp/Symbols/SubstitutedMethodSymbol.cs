@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _containingType = containingSymbol;
             _underlyingMethod = originalDefinition;
             _inputMap = map;
-            if (constructedFrom is object)
+            if (constructedFrom is not null)
             {
                 _constructedFrom = constructedFrom;
                 _lazyTypeParameters = constructedFrom.TypeParameters;
@@ -314,7 +314,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return false;
             }
 
-            thisParameter = originalThisParameter is object
+            thisParameter = originalThisParameter is not null
                 ? new ThisParameterSymbol(this)
                 : null;
             return true;

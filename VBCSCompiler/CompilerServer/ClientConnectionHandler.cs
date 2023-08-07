@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         {
             CancellationTokenSource buildCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             Task<BuildResponse> compilationTask = ProcessCompilationRequestCore(this.CompilerServerHost, request, buildCancellationTokenSource.Token);
-            Task task = await Task.WhenAny(compilationTask, clientConnection.DisconnectTask).ConfigureAwait(false);
+            await Task.WhenAny(compilationTask, clientConnection.DisconnectTask).ConfigureAwait(false);
             try
             {
                 if (!compilationTask.IsCompleted)
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 try
                 {
                     response = await compilationTask.ConfigureAwait(false);
-                    completionData = !(response is AnalyzerInconsistencyBuildResponse) ? new CompletionData(CompletionReason.RequestCompleted, ClientConnectionHandler.CheckForNewKeepAlive(request)) : CompletionData.RequestError;
+                    completionData = (response is not AnalyzerInconsistencyBuildResponse) ? new CompletionData(CompletionReason.RequestCompleted, CheckForNewKeepAlive(request)) : CompletionData.RequestError;
                 }
                 catch (Exception ex)
                 {

@@ -463,10 +463,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public new CSharpCompilationOptions WithSpecificDiagnosticOptions(ImmutableDictionary<string, ReportDiagnostic>? values)
         {
-            if (values == null)
-            {
-                values = ImmutableDictionary<string, ReportDiagnostic>.Empty;
-            }
+            values ??= ImmutableDictionary<string, ReportDiagnostic>.Empty;
 
             if (this.SpecificDiagnosticOptions == values)
             {

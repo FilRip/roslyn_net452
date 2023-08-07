@@ -481,7 +481,7 @@ namespace Microsoft.CodeAnalysis
             void errorHandler(object o, AnalyzerLoadFailureEventArgs e)
             {
                 var analyzerReference = o as AnalyzerFileReference;
-                RoslynDebug.Assert(analyzerReference is object);
+                RoslynDebug.Assert(analyzerReference is not null);
                 DiagnosticInfo? diagnostic;
                 switch (e.ErrorCode)
                 {

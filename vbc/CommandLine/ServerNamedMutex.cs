@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal sealed class ServerNamedMutex : IServerMutex, IDisposable
+    internal sealed class ServerNamedMutex : IServerMutex
     {
         public readonly Mutex Mutex;
 

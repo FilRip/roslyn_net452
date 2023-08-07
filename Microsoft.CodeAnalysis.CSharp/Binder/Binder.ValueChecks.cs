@@ -300,7 +300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (!resolvedToMethodGroup)
                 {
                     var receiver = methodGroup.ReceiverOpt;
-                    if (otherSymbol is object && receiver?.Kind == BoundKind.TypeOrValueExpression)
+                    if (otherSymbol is not null && receiver?.Kind == BoundKind.TypeOrValueExpression)
                     {
                         // Since we're not accessing a method, this can't be a Color Color case, so TypeOrValueExpression should not have been used.
                         // CAVEAT: otherSymbol could be invalid in some way (e.g. inaccessible), in which case we would have fallen back on a
@@ -772,7 +772,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var canModifyReadonly = false;
 
                     Symbol containing = this.ContainingMemberOrLambda;
-                    if (containing is object &&
+                    if (containing is not null &&
                         fieldIsStatic == containing.IsStatic &&
                         (fieldIsStatic || fieldAccess.ReceiverOpt.Kind == BoundKind.ThisReference) &&
                         (Compilation.FeatureStrictEnabled
@@ -826,7 +826,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // bad: other.readonlyField = ...
                 // bad: base.readonlyField = ...
-                if (!(receiver is BoundThisReference))
+                if (receiver is not BoundThisReference)
                 {
                     return false;
                 }

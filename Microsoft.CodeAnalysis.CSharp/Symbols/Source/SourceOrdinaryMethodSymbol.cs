@@ -225,7 +225,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     diagnostics.Add(ErrorCode.ERR_InExtensionMustBeValueType, location, Name);
                 }
-                else if (ContainingType.ContainingType is object)
+                else if (ContainingType.ContainingType is not null)
                 {
                     diagnostics.Add(ErrorCode.ERR_ExtensionMethodsDecl, location, ContainingType.Name);
                 }
@@ -470,7 +470,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override OneOrMany<SyntaxList<AttributeListSyntax>> GetAttributeDeclarations()
         {
-            if (this.SourcePartialImplementation is object)
+            if (this.SourcePartialImplementation is not null)
             {
                 return OneOrMany.Create(ImmutableArray.Create(AttributeDeclarationSyntaxList, this.SourcePartialImplementation.AttributeDeclarationSyntaxList));
             }
@@ -546,7 +546,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 SourceMemberContainerTypeSymbol.ReportTypeNamedRecord(identifier.Text, this.DeclaringCompilation, diagnostics.DiagnosticBag, location);
 
                 var tpEnclosing = ContainingType.FindEnclosingTypeParameter(name);
-                if (tpEnclosing is object)
+                if (tpEnclosing is not null)
                 {
                     // Type parameter '{0}' has the same name as the type parameter from outer type '{1}'
                     diagnostics.Add(ErrorCode.WRN_TypeParameterSameAsOuterTypeParameter, location, name, tpEnclosing.ContainingType);
@@ -577,10 +577,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override void ForceComplete(SourceLocation locationOpt, CancellationToken cancellationToken)
         {
             var implementingPart = this.SourcePartialImplementation;
-            if (implementingPart is object)
-            {
-                implementingPart.ForceComplete(locationOpt, cancellationToken);
-            }
+            implementingPart?.ForceComplete(locationOpt, cancellationToken);
 
             base.ForceComplete(locationOpt, cancellationToken);
         }
@@ -599,7 +596,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         protected override void CheckConstraintsForExplicitInterfaceType(ConversionsBase conversions, BindingDiagnosticBag diagnostics)
         {
-            if (_explicitInterfaceType is object)
+            if (_explicitInterfaceType is not null)
             {
                 var syntax = this.GetSyntax();
                 _explicitInterfaceType.CheckAllConstraints(DeclaringCompilation, conversions, new SourceLocation(syntax.ExplicitInterfaceSpecifier.Name), diagnostics);
@@ -609,7 +606,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         protected override void PartialMethodChecks(BindingDiagnosticBag diagnostics)
         {
             var implementingPart = this.SourcePartialImplementation;
-            if (implementingPart is object)
+            if (implementingPart is not null)
             {
                 PartialMethodChecks(this, implementingPart, diagnostics);
             }

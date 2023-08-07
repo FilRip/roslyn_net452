@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal sealed class ServerNamedMutex : IServerMutex, IDisposable
+    internal sealed class ServerNamedMutex : IServerMutex
     {
         public readonly Mutex Mutex;
 
@@ -25,7 +25,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             Mutex result = null;
             try
             {
-                return System.Threading.Mutex.TryOpenExisting(mutexName, out result);
+                return Mutex.TryOpenExisting(mutexName, out result);
             }
             catch
             {

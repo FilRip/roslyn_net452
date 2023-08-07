@@ -346,10 +346,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Environment.CurrentManagedThreadId. If that method is not present (pre 4.5) fall back to the old behavior.
 
             var currentManagedThreadIdProperty = (PropertySymbol)F.WellKnownMember(WellKnownMember.System_Environment__CurrentManagedThreadId, isOptional: true);
-            if (currentManagedThreadIdProperty is object)
+            if (currentManagedThreadIdProperty is not null)
             {
                 MethodSymbol currentManagedThreadIdMethod = currentManagedThreadIdProperty.GetMethod;
-                if (currentManagedThreadIdMethod is object)
+                if (currentManagedThreadIdMethod is not null)
                 {
                     return F.Call(null, currentManagedThreadIdMethod);
                 }
@@ -392,7 +392,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var thisInitialized = F.GenerateLabel("thisInitialized");
 
-            if (initialThreadIdField is object)
+            if (initialThreadIdField is not null)
             {
                 managedThreadId = MakeCurrentThreadId();
 
@@ -480,8 +480,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected bool CanGetThreadId()
         {
-            return F.WellKnownMember(WellKnownMember.System_Threading_Thread__ManagedThreadId, isOptional: true) is object ||
-                F.WellKnownMember(WellKnownMember.System_Environment__CurrentManagedThreadId, isOptional: true) is object;
+            return F.WellKnownMember(WellKnownMember.System_Threading_Thread__ManagedThreadId, isOptional: true) is not null ||
+                F.WellKnownMember(WellKnownMember.System_Environment__CurrentManagedThreadId, isOptional: true) is not null;
         }
     }
 }

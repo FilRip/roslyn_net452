@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ConstructorDeclarationSyntax constructor => (constructor.HasAnyBody() || constructor.Initializer != null) ? GetOrAddModel(node) : null,
                 BaseMethodDeclarationSyntax method => method.HasAnyBody() ? GetOrAddModel(node) : null,
                 AccessorDeclarationSyntax accessor => (accessor.Body != null || accessor.ExpressionBody != null) ? GetOrAddModel(node) : null,
-                RecordDeclarationSyntax { ParameterList: { }, PrimaryConstructorBaseTypeIfClass: { } } recordDeclaration when TryGetSynthesizedRecordConstructor(recordDeclaration) is SynthesizedRecordConstructor => GetOrAddModel(recordDeclaration),
+                RecordDeclarationSyntax { ParameterList: { }, PrimaryConstructorBaseTypeIfClass: { } } recordDeclaration when TryGetSynthesizedRecordConstructor(recordDeclaration) is not null => GetOrAddModel(recordDeclaration),
                 _ => this.GetMemberModel(node),
             };
             if (model != null)
@@ -259,7 +259,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // if expression is not part of a member context then caller may really just have a
                 // reference to a type or namespace name
                 var symbol = GetSemanticInfoSymbolInNonMemberContext(node, bindVarAsAliasFirst: (options & SymbolInfoOptions.PreserveAliases) != 0);
-                result = symbol is object ? GetSymbolInfoForSymbol(symbol, options) : SymbolInfo.None;
+                result = symbol is not null ? GetSymbolInfoForSymbol(symbol, options) : SymbolInfo.None;
             }
 
             return result;
@@ -297,7 +297,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // if expression is not part of a member context then caller may really just have a
                 // reference to a type or namespace name
                 var symbol = GetSemanticInfoSymbolInNonMemberContext(node, bindVarAsAliasFirst: false); // Don't care about aliases here.
-                return symbol is object ? GetTypeInfoForSymbol(symbol) : CSharpTypeInfo.None;
+                return symbol is not null ? GetTypeInfoForSymbol(symbol) : CSharpTypeInfo.None;
             }
         }
 
@@ -349,7 +349,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             if (type.Parent is VariableDeclarationSyntax variableDecl && variableDecl.Variables.Any())
                             {
                                 var fieldSymbol = GetDeclaredFieldSymbol(variableDecl.Variables.First());
-                                if (fieldSymbol is object)
+                                if (fieldSymbol is not null)
                                 {
                                     result = fieldSymbol.Type;
                                 }
@@ -727,7 +727,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 position = CheckAndAdjustPosition(position);
                 var model = GetMemberModel(position);
-                if (model is object)
+                if (model is not null)
                 {
                     return model.GetSpeculativelyBoundExpression(position, expression, bindingOption, out binder, out crefSymbols);
                 }
@@ -849,7 +849,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case SyntaxKind.RecordDeclaration:
                         {
                             var recordDecl = (RecordDeclarationSyntax)memberDecl;
-                            return recordDecl.ParameterList is object &&
+                            return recordDecl.ParameterList is not null &&
                                    recordDecl.PrimaryConstructorBaseTypeIfClass is PrimaryConstructorBaseTypeSyntax baseWithArguments &&
                                    (node == baseWithArguments || baseWithArguments.ArgumentList.FullSpan.Contains(span)) ? GetOrAddModel(memberDecl) : null;
                         }
@@ -919,7 +919,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         return GetOrAddModel(memberDecl);
 
                     case SyntaxKind.CompilationUnit:
-                        if (SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(Compilation, (CompilationUnitSyntax)memberDecl, fallbackToMainEntryPoint: false) is object)
+                        if (SimpleProgramNamedTypeSymbol.GetSimpleProgramEntryPoint(Compilation, (CompilationUnitSyntax)memberDecl, fallbackToMainEntryPoint: false) is not null)
                         {
                             return GetOrAddModel(memberDecl);
                         }
@@ -990,7 +990,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (defaultValueSyntax != null && defaultValueSyntax.FullSpan.Contains(span))
             {
                 var parameterSymbol = containing.GetDeclaredSymbol(paramDecl).GetSymbol<ParameterSymbol>();
-                if (parameterSymbol is object)
+                if (parameterSymbol is not null)
                 {
                     return ImmutableInterlocked.GetOrAdd(ref _memberModels, defaultValueSyntax,
                                                          (equalsValue, tuple) =>
@@ -1185,7 +1185,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // TODO (tomat): handle misplaced global statements
                         if (parent.Kind() == SyntaxKind.CompilationUnit &&
                             !this.IsRegularCSharp &&
-                            _compilation.ScriptClass is object)
+                            _compilation.ScriptClass is not null)
                         {
                             var scriptInitializer = _compilation.ScriptClass.GetScriptInitializer();
                             if (scriptInitializer is null)
@@ -1732,7 +1732,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     // look inside wrapper around illegally placed members in namespaces
                     var result = GetDeclaredMember(namedType, declarationSpan, name);
-                    if (result is object)
+                    if (result is not null)
                     {
                         return result;
                     }
@@ -1758,7 +1758,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var partial = symbol.Kind == SymbolKind.Method
                     ? ((MethodSymbol)symbol).PartialImplementationPart
                     : null;
-                if (partial is object)
+                if (partial is not null)
                 {
                     var loc = partial.Locations[0];
                     if (loc.IsInSource && loc.SourceTree == this.SyntaxTree && declarationSpan.Contains(loc.SourceSpan))

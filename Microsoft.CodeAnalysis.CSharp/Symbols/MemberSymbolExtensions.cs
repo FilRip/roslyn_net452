@@ -126,12 +126,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static bool IsImplementable(this MethodSymbol methodOpt)
         {
-            return methodOpt is object && !methodOpt.IsSealed && (methodOpt.IsAbstract || methodOpt.IsVirtual);
+            return methodOpt is not null && !methodOpt.IsSealed && (methodOpt.IsAbstract || methodOpt.IsVirtual);
         }
 
         public static bool IsAccessor(this MethodSymbol methodSymbol)
         {
-            return methodSymbol.AssociatedSymbol is object;
+            return methodSymbol.AssociatedSymbol is not null;
         }
 
         public static bool IsAccessor(this Symbol symbol)
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         public static bool IsIndexedPropertyAccessor(this MethodSymbol methodSymbol)
         {
             var propertyOrEvent = methodSymbol.AssociatedSymbol;
-            return (propertyOrEvent is object) && propertyOrEvent.IsIndexedProperty();
+            return (propertyOrEvent is not null) && propertyOrEvent.IsIndexedProperty();
         }
 
         public static bool IsOperator(this MethodSymbol methodSymbol)
@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal static bool HasThisConstructorInitializer(this MethodSymbol method)
         {
-            if (method is object && method.MethodKind == MethodKind.Constructor)
+            if (method is not null && method.MethodKind == MethodKind.Constructor)
             {
                 if (method is SourceMemberMethodSymbol sourceMethod)
                 {
@@ -332,7 +332,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             return methodSymbol.IsConstructor()
                 && !methodSymbol.HasThisConstructorInitializer()
-                && !(methodSymbol is SynthesizedRecordCopyCtor) // A record copy constructor is special, regular initializers are not supposed to be executed by it.
+                && methodSymbol is not SynthesizedRecordCopyCtor // A record copy constructor is special, regular initializers are not supposed to be executed by it.
                 && !Binder.IsUserDefinedRecordCopyConstructor(methodSymbol);
         }
 
@@ -391,10 +391,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </remarks>
         internal static MethodSymbol GetOwnOrInheritedAddMethod(this EventSymbol @event)
         {
-            while (@event is object)
+            while (@event is not null)
             {
                 MethodSymbol addMethod = @event.AddMethod;
-                if (addMethod is object)
+                if (addMethod is not null)
                 {
                     return addMethod;
                 }
@@ -415,10 +415,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </remarks>
         internal static MethodSymbol GetOwnOrInheritedRemoveMethod(this EventSymbol @event)
         {
-            while (@event is object)
+            while (@event is not null)
             {
                 MethodSymbol removeMethod = @event.RemoveMethod;
-                if (removeMethod is object)
+                if (removeMethod is not null)
                 {
                     return removeMethod;
                 }
@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return true;
                 case SymbolKind.Event:
                     field = ((EventSymbol)member).AssociatedField;
-                    return field is object;
+                    return field is not null;
                 default:
                     field = null;
                     return false;

@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             NamedTypeSymbol container = GetEnclosingVariantInterface(member);
 
-            if (container is object)
+            if (container is not null)
             {
                 diagnostics.Add(ErrorCode.ERR_VarianceInterfaceNesting, member.Locations[0]);
             }
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static NamedTypeSymbol GetEnclosingVariantInterface(Symbol member)
         {
-            for (var container = member.ContainingType; container is object; container = container.ContainingType)
+            for (var container = member.ContainingType; container is not null; container = container.ContainingType)
             {
                 if (!container.IsInterfaceType())
                 {
@@ -184,8 +184,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return;
             }
 
-            bool hasGetter = property.GetMethod is object;
-            bool hasSetter = property.SetMethod is object;
+            bool hasGetter = property.GetMethod is not null;
+            bool hasSetter = property.SetMethod is not null;
             if (hasGetter || hasSetter)
             {
                 IsVarianceUnsafe(
@@ -371,7 +371,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return false;
             }
 
-            while (namedType is object)
+            while (namedType is not null)
             {
                 for (int i = 0; i < namedType.Arity; i++)
                 {
@@ -456,7 +456,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // "requires output-safe", and "requires input-safe and output-safe".  This would make the error codes much easier to document and
             // much more actionable.
             // UNDONE: related location for use is much more useful
-            if (!(context is TypeSymbol) && context.IsStatic)
+            if (context is not TypeSymbol && context.IsStatic)
             {
                 diagnostics.Add(ErrorCode.ERR_UnexpectedVarianceStaticMember, location, context, unsafeTypeParameter, actualVariance.Localize(), expectedVariance.Localize(),
                                 new CSharpRequiredLanguageVersion(MessageID.IDS_FeatureVarianceSafetyForStaticInterfaceMembers.RequiredVersion()));

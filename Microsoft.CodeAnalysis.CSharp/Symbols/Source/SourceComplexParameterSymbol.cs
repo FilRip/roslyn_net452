@@ -450,7 +450,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // if this is a definition get the implementation and vice versa
             SourceOrdinaryMethodSymbol otherPart = sourceMethod.OtherPartOfPartial;
-            if (otherPart is object)
+            if (otherPart is not null)
             {
                 otherAttributes = ((SourceParameterSymbol)otherPart.Parameters[this.Ordinal]).AttributeDeclarationList;
             }
@@ -520,7 +520,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // prevent infinite recursion:
 
                 bool bagCreatedOnThisThread;
-                if (copyFrom is object)
+                if (copyFrom is not null)
                 {
                     var attributesBag = copyFrom.GetAttributesBag();
                     bagCreatedOnThisThread = Interlocked.CompareExchange(ref _lazyCustomAttributesBag, attributesBag, null) == null;
@@ -1078,7 +1078,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     // prevent infinite recursion:
 
-                    if (copyFrom is object)
+                    if (copyFrom is not null)
                     {
                         // Parameter of partial implementation.
                         // We bind the attributes only on the definition part and copy them over to the implementation.

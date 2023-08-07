@@ -181,10 +181,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (s_resourceManager == null)
-                {
-                    s_resourceManager = new System.Resources.ResourceManager(typeof(Properties.Resources).FullName, typeof(ErrorCode).GetTypeInfo().Assembly);
-                }
+                s_resourceManager ??= new System.Resources.ResourceManager(typeof(Properties.Resources).FullName, typeof(ErrorCode).GetTypeInfo().Assembly);
 
                 return s_resourceManager;
             }

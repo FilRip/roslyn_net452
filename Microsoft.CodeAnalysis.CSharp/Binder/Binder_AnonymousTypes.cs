@@ -226,10 +226,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (expressionType is null)
-            {
-                expressionType = CreateErrorType("error");
-            }
+            expressionType ??= CreateErrorType("error");
 
             if (errorArg != null)
             {

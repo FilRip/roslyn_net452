@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             Encoding outputEncoding = Console.OutputEncoding;
             try
             {
-                Console.OutputEncoding = ConsoleUtil.s_utf8Encoding;
+                Console.OutputEncoding = s_utf8Encoding;
                 return func(Console.Out);
             }
             finally
@@ -26,6 +26,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 }
                 catch
                 {
+                    // Nothing to do
                 }
             }
         }
@@ -35,11 +36,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
             TextWriter textWriter,
             Func<TextWriter, T> func)
         {
-            if (!utf8Output || textWriter.Encoding.CodePage == ConsoleUtil.s_utf8Encoding.CodePage)
+            if (!utf8Output || textWriter.Encoding.CodePage == s_utf8Encoding.CodePage)
                 return func(textWriter);
             if (textWriter != Console.Out)
                 throw new InvalidOperationException("Utf8Output is only supported when writing to Console.Out");
-            return ConsoleUtil.RunWithUtf8Output<T>(func);
+            return RunWithUtf8Output<T>(func);
         }
     }
 }

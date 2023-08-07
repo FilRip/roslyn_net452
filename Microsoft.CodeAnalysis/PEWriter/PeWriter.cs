@@ -184,7 +184,7 @@ namespace Microsoft.Cci
                         {
                             portablePdbBlob.WriteContentTo(portablePdbStream);
                         }
-                        catch (Exception e) when (!(e is OperationCanceledException))
+                        catch (Exception e) when (e is not OperationCanceledException)
                         {
                             throw new SymUnmanagedWriterException(e.Message, e);
                         }
@@ -256,7 +256,7 @@ namespace Microsoft.Cci
             {
                 peBlob.WriteContentTo(peStream);
             }
-            catch (Exception e) when (!(e is OperationCanceledException))
+            catch (Exception e) when (e is not OperationCanceledException)
             {
                 throw new PeWritingException(e);
             }

@@ -1476,7 +1476,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0, n = list.Count; i < n; i++)
             {
                 var element = list[i];
-                if (element.IsNode && !(element.AsNode() is TNode))
+                if (element.IsNode && element.AsNode() is not TNode)
                 {
                     return false;
                 }
@@ -2502,7 +2502,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>Creates a new SwitchStatementSyntax instance.</summary>
         public static SwitchStatementSyntax SwitchStatement(ExpressionSyntax expression, SyntaxList<SwitchSectionSyntax> sections)
         {
-            bool needsParens = !(expression is TupleExpressionSyntax);
+            bool needsParens = expression is not TupleExpressionSyntax;
             var openParen = needsParens ? SyntaxFactory.Token(SyntaxKind.OpenParenToken) : default;
             var closeParen = needsParens ? SyntaxFactory.Token(SyntaxKind.CloseParenToken) : default;
             return SyntaxFactory.SwitchStatement(

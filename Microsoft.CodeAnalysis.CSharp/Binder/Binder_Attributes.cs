@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             diagnostics.Add(node, useSiteInfo);
 
-            if (attributeConstructor is object)
+            if (attributeConstructor is not null)
             {
                 ReportDiagnosticsIfObsolete(diagnostics, attributeConstructor, node, hasBaseReceiver: false);
 
@@ -188,7 +188,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var attributeType = (NamedTypeSymbol)boundAttribute.Type;
             var attributeConstructor = boundAttribute.Constructor;
 
-            if (diagnostics.DiagnosticBag is object)
+            if (diagnostics.DiagnosticBag is not null)
             {
                 NullableWalker.AnalyzeIfNeeded(this, boundAttribute, boundAttribute.Syntax, diagnostics.DiagnosticBag);
             }
@@ -264,7 +264,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var baseType = attributeType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo);
-                if (baseType is object && baseType.IsConditional)
+                if (baseType is not null && baseType.IsConditional)
                 {
                     return IsAttributeConditionallyOmitted(baseType, syntaxTree, ref useSiteInfo);
                 }
@@ -768,7 +768,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 kind = TypedConstantKind.Primitive;
                 defaultValue = syntax.SyntaxTree.GetDisplayPath(syntax.Name.Span, Compilation.Options.SourceReferenceResolver);
             }
-            else if (!IsEarlyAttributeBinder && parameter.IsCallerMemberName && ((ContextualAttributeBinder)this).AttributedMember is object)
+            else if (!IsEarlyAttributeBinder && parameter.IsCallerMemberName && ((ContextualAttributeBinder)this).AttributedMember is not null)
             {
                 parameterType = Compilation.GetSpecialType(SpecialType.System_String);
                 kind = TypedConstantKind.Primitive;
@@ -950,10 +950,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     if (kv.HasValue)
                     {
-                        if (builder == null)
-                        {
-                            builder = ArrayBuilder<KeyValuePair<string, TypedConstant>>.GetInstance();
-                        }
+                        builder ??= ArrayBuilder<KeyValuePair<string, TypedConstant>>.GetInstance();
 
                         builder.Add(kv.Value);
                     }
@@ -1046,7 +1043,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var operand = node.Operand;
                 var operandType = operand.Type;
 
-                if (type is object && operandType is object)
+                if (type is not null && operandType is not null)
                 {
                     if (type.SpecialType == SpecialType.System_Object ||
                         operandType.IsArray() && type.IsArray() &&
@@ -1069,7 +1066,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 //  (b) closed constructed type
                 // typeof argument cannot be an open type
 
-                if (typeOfArgument is object) // skip this if the argument was an alias symbol
+                if (typeOfArgument is not null) // skip this if the argument was an alias symbol
                 {
                     bool isValidArgument;
                     isValidArgument = typeOfArgument.Kind switch

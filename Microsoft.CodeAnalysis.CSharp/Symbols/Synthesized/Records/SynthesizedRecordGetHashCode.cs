@@ -113,10 +113,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
                 }
 
-                if (currentHashValue is null)
-                {
-                    currentHashValue = F.Literal(0);
-                }
+                currentHashValue ??= F.Literal(0);
 
                 F.CloseMethod(F.Block(F.Return(currentHashValue)));
             }

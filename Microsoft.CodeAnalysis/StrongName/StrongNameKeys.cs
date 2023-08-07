@@ -213,7 +213,7 @@ namespace Microsoft.CodeAnalysis
             }
             else
             {
-                Debug.Assert(keyFilePath is object);
+                Debug.Assert(keyFilePath is not null);
 #nullable restore
                 return GetKeyFileError(messageProvider, keyFilePath, message);
             }

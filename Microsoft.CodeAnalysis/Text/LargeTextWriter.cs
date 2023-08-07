@@ -151,10 +151,7 @@ namespace Microsoft.CodeAnalysis.Text
 
         private void EnsureBuffer()
         {
-            if (_buffer == null)
-            {
-                _buffer = new char[_bufferSize];
-            }
+            _buffer ??= new char[_bufferSize];
         }
     }
 }

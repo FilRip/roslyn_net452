@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     internal sealed class EmptyCompilerServerLogger : ICompilerServerLogger
@@ -13,6 +14,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public void Log(string message)
         {
+            // Nothing to do
         }
     }
 }

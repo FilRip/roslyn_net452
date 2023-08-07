@@ -162,10 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var asType = child;
                     if (asType != null)
                     {
-                        if (nestedTypes == null)
-                        {
-                            nestedTypes = ArrayBuilder<SingleTypeDeclaration>.GetInstance();
-                        }
+                        nestedTypes ??= ArrayBuilder<SingleTypeDeclaration>.GetInstance();
                         nestedTypes.Add(asType);
                     }
                 }

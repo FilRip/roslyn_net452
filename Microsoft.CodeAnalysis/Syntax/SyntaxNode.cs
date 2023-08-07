@@ -252,8 +252,7 @@ namespace Microsoft.CodeAnalysis
 
         internal SyntaxNode GetWeakRedElement(ref WeakReference<SyntaxNode>? slot, int index)
         {
-            SyntaxNode? value = null;
-            if (slot?.TryGetTarget(out value) == true)
+            if (slot?.TryGetTarget(out SyntaxNode? value) == true)
             {
                 return value!;
             }
@@ -270,9 +269,8 @@ namespace Microsoft.CodeAnalysis
 
             while (true)
             {
-                SyntaxNode? previousNode = null;
                 WeakReference<SyntaxNode>? previousWeakReference = slot;
-                if (previousWeakReference?.TryGetTarget(out previousNode) == true)
+                if (previousWeakReference?.TryGetTarget(out SyntaxNode? previousNode) == true)
                 {
                     return previousNode!;
                 }
@@ -330,24 +328,6 @@ namespace Microsoft.CodeAnalysis
             var builder = new StringBuilder();
             this.WriteTo(new StringWriter(builder));
             return new StringBuilderText(builder, encoding, checksumAlgorithm);
-        }
-
-        /// <summary>
-        /// Determine whether this node is structurally equivalent to another.
-        /// </summary>
-        public bool IsEquivalentTo([NotNullWhen(true)] SyntaxNode? other)
-        {
-            if (this == other)
-            {
-                return true;
-            }
-
-            if (other == null)
-            {
-                return false;
-            }
-
-            return this.Green.IsEquivalentTo(other.Green);
         }
 
         /// <summary>
@@ -670,7 +650,7 @@ namespace Microsoft.CodeAnalysis
         internal SyntaxNode GetRequiredNodeSlot(int slot)
         {
             var syntaxNode = GetNodeSlot(slot);
-            RoslynDebug.Assert(syntaxNode is object);
+            RoslynDebug.Assert(syntaxNode is not null);
             return syntaxNode;
         }
 
@@ -862,7 +842,7 @@ namespace Microsoft.CodeAnalysis
                 .Parent
                 !.FirstAncestorOrSelf<SyntaxNode, TextSpan>((a, span) => a.FullSpan.Contains(span), span);
 
-            RoslynDebug.Assert(node is object);
+            RoslynDebug.Assert(node is not null);
             SyntaxNode? cuRoot = node.SyntaxTree?.GetRoot();
 
             // Tie-breaking.
@@ -1279,6 +1259,24 @@ namespace Microsoft.CodeAnalysis
         public bool IsEquivalentTo(SyntaxNode node, bool topLevel = false)
         {
             return IsEquivalentToCore(node, topLevel);
+        }
+
+        /// <summary>
+        /// Determine whether this node is structurally equivalent to another.
+        /// </summary>
+        public bool IsEquivalentTo([NotNullWhen(true)] SyntaxNode? other)
+        {
+            if (this == other)
+            {
+                return true;
+            }
+
+            if (other == null)
+            {
+                return false;
+            }
+
+            return this.Green.IsEquivalentTo(other.Green);
         }
 
         /// <summary>

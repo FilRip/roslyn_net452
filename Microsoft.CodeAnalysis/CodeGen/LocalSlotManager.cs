@@ -198,10 +198,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             ImmutableArray<bool> dynamicTransformFlags,
             ImmutableArray<string> tupleElementNames)
         {
-            if (_lazyAllLocals == null)
-            {
-                _lazyAllLocals = new ArrayBuilder<Cci.ILocalDefinition>(1);
-            }
+            _lazyAllLocals ??= new ArrayBuilder<Cci.ILocalDefinition>(1);
 
             LocalDefinition? local;
 

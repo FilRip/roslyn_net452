@@ -110,9 +110,9 @@ namespace Microsoft.CodeAnalysis
                     _index--;
 
 #nullable restore
-                    Debug.Assert(_singleNodeOrList is object);
+                    Debug.Assert(_singleNodeOrList is not null);
                     _current = GetGreenNodeAt(_singleNodeOrList, _index);
-                    Debug.Assert(_current is object);
+                    Debug.Assert(_current is not null);
                     _position -= _current.FullWidth;
 #nullable enable
 

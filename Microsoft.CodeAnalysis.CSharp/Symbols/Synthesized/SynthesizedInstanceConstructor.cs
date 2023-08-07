@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // Synthesized constructors of ComImport type are extern
                 NamedTypeSymbol containingType = this.ContainingType;
-                return containingType is object && containingType.IsComImport;
+                return containingType is not null && containingType.IsComImport;
             }
         }
 

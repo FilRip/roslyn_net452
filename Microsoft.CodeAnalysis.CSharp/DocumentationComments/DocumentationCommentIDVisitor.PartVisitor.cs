@@ -156,7 +156,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // If the containing type is nested within other types, then we need to add their arities.
                     // e.g. A<T>.B<U>.M<V>(T t, U u, V v) should be M(`0, `1, ``0).
-                    for (NamedTypeSymbol curr = containingSymbol.ContainingType; curr is object; curr = curr.ContainingType)
+                    for (NamedTypeSymbol curr = containingSymbol.ContainingType; curr is not null; curr = curr.ContainingType)
                     {
                         ordinalOffset += curr.Arity;
                     }
@@ -170,7 +170,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override object VisitNamedType(NamedTypeSymbol symbol, StringBuilder builder)
             {
-                if (symbol.ContainingSymbol is object && symbol.ContainingSymbol.Name.Length != 0)
+                if (symbol.ContainingSymbol is not null && symbol.ContainingSymbol.Name.Length != 0)
                 {
                     Visit(symbol.ContainingSymbol, builder);
                     builder.Append('.');
@@ -222,7 +222,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override object VisitNamespace(NamespaceSymbol symbol, StringBuilder builder)
             {
-                if (symbol.ContainingNamespace is object && symbol.ContainingNamespace.Name.Length != 0)
+                if (symbol.ContainingNamespace is not null && symbol.ContainingNamespace.Name.Length != 0)
                 {
                     Visit(symbol.ContainingNamespace, builder);
                     builder.Append('.');

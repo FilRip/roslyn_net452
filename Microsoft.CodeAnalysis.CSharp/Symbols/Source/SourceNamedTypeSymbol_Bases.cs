@@ -36,7 +36,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     // force resolution of bases in containing type
                     // to make base resolution errors more deterministic
-                    if (ContainingType is object)
+                    if (ContainingType is not null)
                     {
                         var _ = ContainingType.BaseTypeNoUseSiteDiagnostics;
                     }
@@ -127,7 +127,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         diagnostics.Add(ErrorCode.ERR_BadRecordBase, baseLocation);
                     }
                 }
-                else if (SynthesizedRecordClone.FindValidCloneMethod(localBase, ref useSiteInfo) is object)
+                else if (SynthesizedRecordClone.FindValidCloneMethod(localBase, ref useSiteInfo) is not null)
                 {
                     diagnostics.Add(ErrorCode.ERR_BadInheritanceFromRecord, baseLocation);
                 }
@@ -301,14 +301,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         baseType = partBase;
                         baseTypeLocation = decl.NameLocation;
                     }
-                    else if (baseType.TypeKind == TypeKind.Error && partBase is object)
+                    else if (baseType.TypeKind == TypeKind.Error && partBase is not null)
                     {
                         // if the old base was an error symbol, copy it to the interfaces list so it doesn't get lost
                         partInterfaces = partInterfaces.Add(baseType);
                         baseType = partBase;
                         baseTypeLocation = decl.NameLocation;
                     }
-                    else if (partBase is object && !TypeSymbol.Equals(partBase, baseType, TypeCompareKind.ConsiderEverything2) && partBase.TypeKind != TypeKind.Error)
+                    else if (partBase is not null && !TypeSymbol.Equals(partBase, baseType, TypeCompareKind.ConsiderEverything2) && partBase.TypeKind != TypeKind.Error)
                     {
                         // the parts do not agree
                         var info = diagnostics.Add(ErrorCode.ERR_PartialMultipleBases, Locations[0], this);
@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            if (baseType is object)
+            if (baseType is not null)
             {
                 if (baseType.IsStatic)
                 {
@@ -571,7 +571,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            if (this.SpecialType == SpecialType.System_Object && (localBase is object || localInterfaces.Count != 0))
+            if (this.SpecialType == SpecialType.System_Object && (localBase is not null || localInterfaces.Count != 0))
             {
                 var name = GetName(bases.Parent);
                 diagnostics.Add(ErrorCode.ERR_ObjectCantHaveBases, new SourceLocation(name));
@@ -716,7 +716,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 current.AddUseSiteInfo(ref useSiteInfo);
                 current = current.BaseTypeNoUseSiteDiagnostics;
             }
-            while (current is object);
+            while (current is not null);
 
             diagnostics.Add(useSiteInfo.Diagnostics.IsNullOrEmpty() ? Location.None : (FindBaseRefSyntax(declaredBase) ?? Locations[0]), useSiteInfo);
 

@@ -340,10 +340,7 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                if (_lazyName == null)
-                {
-                    _lazyName = MetadataReader.GetString(MetadataReader.GetModuleDefinition().Name);
-                }
+                _lazyName ??= MetadataReader.GetString(MetadataReader.GetModuleDefinition().Name);
 
                 return _lazyName;
             }
@@ -1333,7 +1330,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     if (TryExtractStringValueFromAttribute(ai.Handle, out string extracted))
                     {
-                        if (extracted is object)
+                        if (extracted is not null)
                         {
                             result.Add(extracted);
                         }
@@ -1343,7 +1340,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     foreach (var value in extracted2)
                     {
-                        if (value is object)
+                        if (value is not null)
                         {
                             result.Add(value);
                         }
@@ -1374,7 +1371,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     if (TryExtractValueFromAttribute(ai.Handle, out BoolAndStringData extracted, s_attributeBoolAndStringValueExtractor))
                     {
-                        if (extracted.String is object)
+                        if (extracted.String is not null)
                         {
                             var whenResult = extracted.Sense ? whenTrue : whenFalse;
                             whenResult.Add(extracted.String);
@@ -1386,7 +1383,7 @@ namespace Microsoft.CodeAnalysis
                     var whenResult = extracted2.Sense ? whenTrue : whenFalse;
                     foreach (var value in extracted2.Strings)
                     {
-                        if (value is object)
+                        if (value is not null)
                         {
                             whenResult.Add(value);
                         }
@@ -2042,10 +2039,7 @@ namespace Microsoft.CodeAnalysis
                     int signatureIndex = GetTargetAttributeSignatureIndex(attributeHandle, description);
                     if (signatureIndex != -1)
                     {
-                        if (result == null)
-                        {
-                            result = new List<AttributeInfo>();
-                        }
+                        result ??= new List<AttributeInfo>();
 
                         // We found a match
                         result.Add(new AttributeInfo(attributeHandle, signatureIndex));

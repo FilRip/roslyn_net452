@@ -462,7 +462,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     expr = s;
                     return true;
                 case QualifiedNameSyntax { Left: var left, dotToken: var dotToken, Right: var right }
-                            when (permitTypeArguments || !(right is GenericNameSyntax)):
+                            when (permitTypeArguments || right is not GenericNameSyntax):
                     var newLeft = ConvertTypeToExpression(left, out var leftExpr, permitTypeArguments: true) ? leftExpr : left;
                     expr = _syntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, newLeft, dotToken, right);
                     return true;

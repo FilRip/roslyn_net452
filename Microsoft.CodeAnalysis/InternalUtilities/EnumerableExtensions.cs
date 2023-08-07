@@ -518,10 +518,7 @@ namespace Roslyn.Utilities
                             yield break;
                         }
 
-                        if (line == null)
-                        {
-                            line = new T[width];
-                        }
+                        line ??= new T[width];
 
                         line[i] = e.Current;
                     }
@@ -628,21 +625,19 @@ namespace System.Linq
                 return false;
             }
 
-            using (var enumerator = first.GetEnumerator())
-            using (var enumerator2 = second.GetEnumerator())
+            using var enumerator = first.GetEnumerator();
+            using var enumerator2 = second.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                while (enumerator.MoveNext())
-                {
-                    if (!enumerator2.MoveNext() || !comparer(enumerator.Current, enumerator2.Current))
-                    {
-                        return false;
-                    }
-                }
-
-                if (enumerator2.MoveNext())
+                if (!enumerator2.MoveNext() || !comparer(enumerator.Current, enumerator2.Current))
                 {
                     return false;
                 }
+            }
+
+            if (enumerator2.MoveNext())
+            {
+                return false;
             }
 
             return true;

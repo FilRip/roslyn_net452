@@ -383,10 +383,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             TypeWithAnnotations substituteConstraintType(TypeWithAnnotations type)
             {
-                if (dynamicEraser == null)
-                {
-                    dynamicEraser = new DynamicTypeEraser(owner.ContainingAssembly.CorLibrary.GetSpecialType(SpecialType.System_Object));
-                }
+                dynamicEraser ??= new DynamicTypeEraser(owner.ContainingAssembly.CorLibrary.GetSpecialType(SpecialType.System_Object));
 
                 TypeWithAnnotations substituted = SubstituteType(type);
 

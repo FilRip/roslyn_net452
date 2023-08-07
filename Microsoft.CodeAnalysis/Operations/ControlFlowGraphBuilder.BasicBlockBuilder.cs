@@ -52,10 +52,7 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
             {
                 Debug.Assert(operation != null);
 
-                if (_statements == null)
-                {
-                    _statements = ArrayBuilder<IOperation>.GetInstance();
-                }
+                _statements ??= ArrayBuilder<IOperation>.GetInstance();
 
 #nullable restore
                 _statements.Add(operation);

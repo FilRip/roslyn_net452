@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 _removeMethod.SetAssociatedEvent(this, MethodKind.EventRemove);
 
                 PEFieldSymbol? associatedField = GetAssociatedField(privateFieldNameToSymbols, isWindowsRuntimeEvent);
-                if (associatedField is object)
+                if (associatedField is not null)
                 {
                     _associatedFieldOpt = associatedField;
                     associatedField.SetAssociatedEvent(this);

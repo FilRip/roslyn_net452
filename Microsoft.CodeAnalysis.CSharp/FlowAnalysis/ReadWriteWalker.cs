@@ -74,7 +74,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override void EnterRegion()
         {
-            for (var m = this.CurrentSymbol as MethodSymbol; m is object; m = m.ContainingSymbol as MethodSymbol)
+            for (var m = this.CurrentSymbol as MethodSymbol; m is not null; m = m.ContainingSymbol as MethodSymbol)
             {
                 foreach (var p in m.Parameters)
                 {
@@ -82,7 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var thisParameter = m.ThisParameter;
-                if (thisParameter is object && thisParameter.RefKind != RefKind.None)
+                if (thisParameter is not null && thisParameter.RefKind != RefKind.None)
                 {
                     _readOutside.Add(thisParameter);
                 }
@@ -197,7 +197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         base.AssignImpl(node, value, isRef, written, read);
                         var symbol = ((BoundQueryClause)node).DefinedSymbol;
-                        if (symbol is object)
+                        if (symbol is not null)
                         {
                             if (written) NoteWrite(symbol, value, read);
                         }

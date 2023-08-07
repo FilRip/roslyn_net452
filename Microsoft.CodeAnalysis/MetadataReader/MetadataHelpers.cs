@@ -291,10 +291,7 @@ namespace Microsoft.CodeAnalysis
                     }
                     else
                     {
-                        if (nestedTypesBuilder == null)
-                        {
-                            nestedTypesBuilder = ArrayBuilder<string>.GetInstance();
-                        }
+                        nestedTypesBuilder ??= ArrayBuilder<string>.GetInstance();
 
                         nestedTypesBuilder.Add(decodedTypeName);
                     }
@@ -432,10 +429,7 @@ namespace Microsoft.CodeAnalysis
                             break;
 
                         case ']':
-                            if (arrayRanksBuilder == null)
-                            {
-                                arrayRanksBuilder = ArrayBuilder<int>.GetInstance();
-                            }
+                            arrayRanksBuilder ??= ArrayBuilder<int>.GetInstance();
 
                             arrayRanksBuilder.Add(rank == 1 && !isMultiDimensionalIfRankOne ? 0 : rank);
                             Advance();
@@ -793,7 +787,7 @@ namespace Microsoft.CodeAnalysis
                             if (cmp > 0)
                             {
                                 // The sort order is violated for child namespace names. Obfuscation is the likely reason for this. 
-                                Debug.Assert(lastChildNamespaceName is object);
+                                Debug.Assert(lastChildNamespaceName is not null);
                                 possiblyHavePairsWithDuplicateKey = true;
                             }
 
@@ -808,7 +802,7 @@ namespace Microsoft.CodeAnalysis
 
                             typesInLastChildNamespace = new List<IGrouping<string, TypeDefinitionHandle>>();
                             lastChildNamespaceName = childNamespaceName;
-                            Debug.Assert(lastChildNamespaceName is object);
+                            Debug.Assert(lastChildNamespaceName is not null);
 
                             typesInLastChildNamespace.Add(pair);
                         }

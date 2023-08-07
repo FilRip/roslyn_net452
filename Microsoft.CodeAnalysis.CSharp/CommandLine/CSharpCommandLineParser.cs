@@ -1417,7 +1417,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // We want to report diagnostics with source suppression in the error log file.
             // However, these diagnostics won't be reported on the command line.
-            var reportSuppressedDiagnostics = errorLogOptions is object;
+            var reportSuppressedDiagnostics = errorLogOptions is not null;
 
             var options = new CSharpCompilationOptions
             (
@@ -1647,10 +1647,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 compilationName = simpleName;
             }
 
-            if (moduleName == null)
-            {
-                moduleName = outputFileName;
-            }
+            moduleName ??= outputFileName;
         }
 
         private ImmutableArray<string> BuildSearchPaths(string? sdkDirectoryOpt, List<string> libPaths, List<string>? responsePathsOpt)

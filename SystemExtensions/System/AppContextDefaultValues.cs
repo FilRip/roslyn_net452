@@ -136,10 +136,7 @@ namespace System
             {
                 text = GetSwitchValueFromRegistry(switchName);
             }
-            if (text == null)
-            {
-                text = CompatibilitySwitch.GetValue(switchName);
-            }
+            text ??= CompatibilitySwitch.GetValue(switchName);
             if (text != null && bool.TryParse(text, out var result))
             {
                 overrideValue = result;

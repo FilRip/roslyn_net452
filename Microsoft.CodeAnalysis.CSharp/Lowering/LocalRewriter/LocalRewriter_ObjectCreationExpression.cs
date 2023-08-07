@@ -291,10 +291,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var getTypeFromCLSID = _factory.WellKnownMethod(WellKnownMember.System_Runtime_InteropServices_Marshal__GetTypeFromCLSID, isOptional: true);
 
-            if (getTypeFromCLSID is null)
-            {
-                getTypeFromCLSID = _factory.WellKnownMethod(WellKnownMember.System_Type__GetTypeFromCLSID);
-            }
+            getTypeFromCLSID ??= _factory.WellKnownMethod(WellKnownMember.System_Type__GetTypeFromCLSID);
 
             BoundExpression callGetTypeFromCLSID;
 
@@ -310,7 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var createInstance = _factory.WellKnownMethod(WellKnownMember.System_Activator__CreateInstance);
             BoundExpression rewrittenObjectCreation;
 
-            if (createInstance is object)
+            if (createInstance is not null)
             {
                 rewrittenObjectCreation = _factory.Convert(node.Type, _factory.Call(null, createInstance, callGetTypeFromCLSID));
             }

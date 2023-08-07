@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             IAnalyzerAssemblyLoader loader,
             ICompilerServerLogger? logger = null)
         {
-            return AnalyzerConsistencyChecker.Check(baseDirectory, analyzerReferences, loader, logger, out List<string> _);
+            return Check(baseDirectory, analyzerReferences, loader, logger, out _);
         }
 
         public static bool Check(
@@ -33,12 +33,11 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             try
             {
                 logger?.Log("Begin Analyzer Consistency Check");
-                return AnalyzerConsistencyChecker.CheckCore(baseDirectory, analyzerReferences, loader, /*logger, */out errorMessages);
+                return CheckCore(baseDirectory, analyzerReferences, loader, /*logger, */out errorMessages);
             }
             catch (Exception ex)
             {
-                if (logger != null)
-                    logger.LogException(ex, "Analyzer Consistency Check");
+                logger?.LogException(ex, "Analyzer Consistency Check");
                 errorMessages = new List<string>()
                 {
                     ex.Message
@@ -55,7 +54,6 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             string baseDirectory,
             IEnumerable<CommandLineAnalyzerReference> analyzerReferences,
             IAnalyzerAssemblyLoader loader,
-            //ICompilerServerLogger? logger,
             [NotNullWhen(false)] out List<string>? errorMessages)
         {
             errorMessages = null;
@@ -86,8 +84,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 if (guid != moduleVersionId)
                 {
                     string str = string.Format("analyzer assembly '{0}' has MVID '{1}' but loaded assembly '{2}' has MVID '{3}'", filePath, guid, assembly.FullName, moduleVersionId);
-                    if (errorMessages == null)
-                        errorMessages = new List<string>();
+                    errorMessages ??= new List<string>();
                     errorMessages.Add(str);
                 }
             }

@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return false;
             }
 
-            while (method is object)
+            while (method is not null)
             {
                 if (!skipFirstMethodKindCheck && method.MethodKind == MethodKind.Destructor)
                 {

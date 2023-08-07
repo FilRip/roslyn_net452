@@ -316,7 +316,7 @@ namespace Microsoft.CodeAnalysis
                     break;
                 }
 
-                Debug.Assert(normalizedPath is object);
+                Debug.Assert(normalizedPath is not null);
                 var directory = Path.GetDirectoryName(normalizedPath) ?? normalizedPath;
                 var editorConfig = AnalyzerConfig.Parse(fileContent, normalizedPath);
 
@@ -423,7 +423,7 @@ namespace Microsoft.CodeAnalysis
 
         private ImmutableArray<EmbeddedText?> AcquireEmbeddedTexts(Compilation compilation, DiagnosticBag diagnostics)
         {
-            Debug.Assert(compilation.Options.SourceReferenceResolver is object);
+            Debug.Assert(compilation.Options.SourceReferenceResolver is not null);
             if (Arguments.EmbeddedFiles.IsEmpty)
             {
                 return ImmutableArray<EmbeddedText?>.Empty;
@@ -842,10 +842,7 @@ namespace Microsoft.CodeAnalysis
             // still running because the compilation failed before all of the compilation events were 
             // raised.  In the latter case the driver, and all its associated state, will be waiting around 
             // for events that are never coming.  Cancel now and let the clean up process begin.
-            if (analyzerCts != null)
-            {
-                analyzerCts.Cancel();
-            }
+            analyzerCts?.Cancel();
 
             var exitCode = ReportDiagnostics(diagnostics, consoleOutput, errorLogger, compilation)
                 ? Failed
@@ -864,7 +861,7 @@ namespace Microsoft.CodeAnalysis
             diagnostics.Free();
             if (reportAnalyzer)
             {
-                Debug.Assert(analyzerDriver is object);
+                Debug.Assert(analyzerDriver is not null);
 #nullable restore
                 ReportAnalyzerExecutionTime(consoleOutput, analyzerDriver, Culture, compilation.Options.ConcurrentBuild);
 #nullable enable
@@ -951,7 +948,7 @@ namespace Microsoft.CodeAnalysis
                 var analyzerConfigProvider = CompilerAnalyzerConfigOptionsProvider.Empty;
                 if (Arguments.AnalyzerConfigPaths.Length > 0)
                 {
-                    Debug.Assert(analyzerConfigSet is object);
+                    Debug.Assert(analyzerConfigSet is not null);
 #nullable restore
                     analyzerConfigProvider = analyzerConfigProvider.WithGlobalOptions(new CompilerAnalyzerConfigOptions(analyzerConfigSet.GetOptionsForSourcePath(string.Empty).AnalyzerOptions));
 #nullable enable
@@ -998,10 +995,7 @@ namespace Microsoft.CodeAnalysis
 
                             // embed the generated text and get analyzer options for it if needed
                             embeddedTextBuilder.Add(EmbeddedText.FromSource(tree.FilePath, sourceText));
-                            if (analyzerOptionsBuilder is object)
-                            {
-                                analyzerOptionsBuilder.Add(analyzerConfigSet!.GetOptionsForSourcePath(tree.FilePath));
-                            }
+                            analyzerOptionsBuilder?.Add(analyzerConfigSet!.GetOptionsForSourcePath(tree.FilePath));
 
                             // write out the file if we have an output path
                             if (hasGeneratedOutputPath)
@@ -1013,9 +1007,9 @@ namespace Microsoft.CodeAnalysis
                                 }
 
                                 var fileStream = OpenFile(path, diagnostics, FileMode.Create, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
-                                if (fileStream is object)
+                                if (fileStream is not null)
                                 {
-                                    Debug.Assert(tree.Encoding is object);
+                                    Debug.Assert(tree.Encoding is not null);
 
                                     using var disposer = new NoThrowStreamDisposer(fileStream, path, diagnostics, MessageProvider);
                                     using var writer = new StreamWriter(fileStream, tree.Encoding);
@@ -1027,7 +1021,7 @@ namespace Microsoft.CodeAnalysis
                         }
 
                         embeddedTexts = embeddedTexts.AddRange(embeddedTextBuilder);
-                        if (analyzerOptionsBuilder is object)
+                        if (analyzerOptionsBuilder is not null)
                         {
                             analyzerConfigProvider = UpdateAnalyzerConfigOptionsProvider(
                                analyzerConfigProvider,
@@ -1536,17 +1530,15 @@ namespace Microsoft.CodeAnalysis
                 return OpenStream(fileSystem, messageProvider, arguments.Win32ResourceFile, arguments.BaseDirectory, messageProvider.ERR_CantOpenWin32Resource, diagnostics);
             }
 
-            using (Stream? manifestStream = OpenManifestStream(fileSystem, messageProvider, compilation.Options.OutputKind, arguments, diagnostics))
+            using Stream? manifestStream = OpenManifestStream(fileSystem, messageProvider, compilation.Options.OutputKind, arguments, diagnostics);
+            using Stream? iconStream = OpenStream(fileSystem, messageProvider, arguments.Win32Icon, arguments.BaseDirectory, messageProvider.ERR_CantOpenWin32Icon, diagnostics);
+            try
             {
-                using Stream? iconStream = OpenStream(fileSystem, messageProvider, arguments.Win32Icon, arguments.BaseDirectory, messageProvider.ERR_CantOpenWin32Icon, diagnostics);
-                try
-                {
-                    return compilation.CreateDefaultWin32Resources(true, arguments.NoWin32Manifest, manifestStream, iconStream);
-                }
-                catch (Exception ex)
-                {
-                    diagnostics.Add(messageProvider.CreateDiagnostic(messageProvider.ERR_ErrorBuildingWin32Resource, Location.None, ex.Message));
-                }
+                return compilation.CreateDefaultWin32Resources(true, arguments.NoWin32Manifest, manifestStream, iconStream);
+            }
+            catch (Exception ex)
+            {
+                diagnostics.Add(messageProvider.CreateDiagnostic(messageProvider.ERR_ErrorBuildingWin32Resource, Location.None, ex.Message));
             }
 
             return null;

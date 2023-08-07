@@ -331,7 +331,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             _builder.EmitOpCode(ILOpCode.Newobj, -1); // pop 2 args and push delegate object
 
             var ctor = DelegateConstructor(node.Syntax, delegateType);
-            if (ctor is object) EmitSymbolToken(ctor, node.Syntax, null);
+            if (ctor is not null) EmitSymbolToken(ctor, node.Syntax, null);
         }
 
         private MethodSymbol DelegateConstructor(SyntaxNode syntax, TypeSymbol delegateType)

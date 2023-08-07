@@ -323,20 +323,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 ExceptionHandlerScope currentExceptionHandler)
             {
                 var scope = base.OpenScope(scopeType, exceptionType, currentExceptionHandler);
-                if (_nestedScopes == null)
-                {
-                    _nestedScopes = ImmutableArray.CreateBuilder<ScopeInfo>(1);
-                }
+                _nestedScopes ??= ImmutableArray.CreateBuilder<ScopeInfo>(1);
                 _nestedScopes.Add(scope);
                 return scope;
             }
 
             internal void AddLocal(LocalDefinition variable)
             {
-                if (_localVariables == null)
-                {
-                    _localVariables = ImmutableArray.CreateBuilder<LocalDefinition>(1);
-                }
+                _localVariables ??= ImmutableArray.CreateBuilder<LocalDefinition>(1);
 
                 Debug.Assert(variable.Name != null);
 
@@ -345,10 +339,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             internal void AddLocalConstant(LocalConstantDefinition constant)
             {
-                if (_localConstants == null)
-                {
-                    _localConstants = ImmutableArray.CreateBuilder<LocalConstantDefinition>(1);
-                }
+                _localConstants ??= ImmutableArray.CreateBuilder<LocalConstantDefinition>(1);
 
                 Debug.Assert(constant.Name != null);
 
@@ -357,10 +348,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             internal void AddUserHoistedLocal(int slotIndex)
             {
-                if (_stateMachineUserHoistedLocalSlotIndices == null)
-                {
-                    _stateMachineUserHoistedLocalSlotIndices = ImmutableArray.CreateBuilder<int>(1);
-                }
+                _stateMachineUserHoistedLocalSlotIndices ??= ImmutableArray.CreateBuilder<int>(1);
 
                 Debug.Assert(slotIndex >= 0);
                 _stateMachineUserHoistedLocalSlotIndices.Add(slotIndex);
@@ -399,10 +387,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             protected void AddBlock(BasicBlock block)
             {
-                if (Blocks == null)
-                {
-                    Blocks = ImmutableArray.CreateBuilder<BasicBlock>(4);
-                }
+                Blocks ??= ImmutableArray.CreateBuilder<BasicBlock>(4);
 
                 Blocks.Add(block);
             }

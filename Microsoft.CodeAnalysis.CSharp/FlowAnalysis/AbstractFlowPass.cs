@@ -1226,7 +1226,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 WriteArgument(receiverOpt, RefKind.Ref, method: null);
             }
             else if (method.TryGetThisParameter(out var thisParameter)
-                && thisParameter is object
+                && thisParameter is not null
                 && !TypeIsImmutable(thisParameter.Type))
             {
                 var thisRefKind = thisParameter.RefKind;
@@ -1257,7 +1257,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var method = GetReadMethod(node.Indexer);
             VisitReceiverBeforeCall(node.ReceiverOpt, method);
             VisitArguments(node.Arguments, node.ArgumentRefKindsOpt, method);
-            if (method is object)
+            if (method is not null)
             {
                 VisitReceiverAfterCall(node.ReceiverOpt, method);
             }
@@ -1387,7 +1387,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node.Argument is BoundMethodGroup methodGroup)
             {
-                if (node.MethodOpt is object && node.MethodOpt.RequiresInstanceReceiver)
+                if (node.MethodOpt is not null && node.MethodOpt.RequiresInstanceReceiver)
                 {
                     if (TrackingRegions)
                     {
@@ -1472,7 +1472,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node.ConversionKind == ConversionKind.MethodGroup)
             {
-                if (node.IsExtensionMethod || (node.SymbolOpt is object && node.SymbolOpt.RequiresInstanceReceiver))
+                if (node.IsExtensionMethod || (node.SymbolOpt is not null && node.SymbolOpt.RequiresInstanceReceiver))
                 {
                     BoundExpression receiver = ((BoundMethodGroup)node.Operand).ReceiverOpt;
                     // A method group's "implicit this" is only used for instance methods.
@@ -1909,13 +1909,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitFieldAccessInternal(BoundExpression receiverOpt, FieldSymbol fieldSymbol)
         {
-            bool asLvalue = fieldSymbol is object &&
+            bool asLvalue = fieldSymbol is not null &&
                 (fieldSymbol.IsFixedSizeBuffer ||
                 !fieldSymbol.IsStatic &&
                 fieldSymbol.ContainingType.TypeKind == TypeKind.Struct &&
                 receiverOpt != null &&
                 receiverOpt.Kind != BoundKind.TypeExpression &&
-                receiverOpt.Type is object &&
+                receiverOpt.Type is not null &&
                 !receiverOpt.Type.IsPrimitiveRecursiveStruct());
             if (asLvalue)
             {

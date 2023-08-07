@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression result;
             NamedTypeSymbol delegateType;
 
-            if (boundExpression.Type is object && boundExpression.Type.IsDynamic())
+            if (boundExpression.Type is not null && boundExpression.Type.IsDynamic())
             {
                 // Either we have a dynamic method group invocation "dyn.M(...)" or 
                 // a dynamic delegate invocation "dyn(...)" -- either way, bind it as a dynamic
@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     node, expression, methodName, (BoundMethodGroup)boundExpression, analyzedArguments,
                     diagnostics, queryClause, allowUnexpandedForm: allowUnexpandedForm, anyApplicableCandidates: out _);
             }
-            else if ((delegateType = GetDelegateType(boundExpression)) is object)
+            else if ((delegateType = GetDelegateType(boundExpression)) is not null)
             {
                 if (ReportDelegateInvokeUseSiteDiagnostic(diagnostics, delegateType, node: node))
                 {
@@ -847,7 +847,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundKind.Call:
                     {
                         var call = (BoundCall)expression;
-                        if (!call.HasAnyErrors && call.ReceiverOpt != null && call.ReceiverOpt.Type is object)
+                        if (!call.HasAnyErrors && call.ReceiverOpt != null && call.ReceiverOpt.Type is not null)
                         {
                             // error CS0029: Cannot implicitly convert type 'A' to 'B'
 
@@ -870,7 +870,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var dynInvoke = (BoundDynamicInvocation)expression;
                         if (!dynInvoke.HasAnyErrors &&
-                            dynInvoke.Expression.Type is object &&
+                            dynInvoke.Expression.Type is not null &&
                             dynInvoke.Expression.Type.IsRestrictedType())
                         {
                             // eg: b = typedReference.Equals(dyn);
@@ -966,7 +966,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 return CreateBadCall(node, methodGroup.Name, invokedAsExtensionMethod && analyzedArguments.Arguments.Count > 0 && methodGroup.Receiver == analyzedArguments.Arguments[0] ? null : methodGroup.Receiver,
-                    GetOriginalMethods(result), methodGroup.ResultKind, methodGroup.TypeArguments.ToImmutable(), analyzedArguments, invokedAsExtensionMethod: invokedAsExtensionMethod, isDelegate: (delegateTypeOpt is object));
+                    GetOriginalMethods(result), methodGroup.ResultKind, methodGroup.TypeArguments.ToImmutable(), analyzedArguments, invokedAsExtensionMethod: invokedAsExtensionMethod, isDelegate: (delegateTypeOpt is not null));
             }
 
             // Otherwise, there were no dynamic arguments and overload resolution found a unique best candidate. 
@@ -1097,7 +1097,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     diagnostics);
             }
 
-            bool isDelegateCall = delegateTypeOpt is object;
+            bool isDelegateCall = delegateTypeOpt is not null;
             if (!isDelegateCall)
             {
                 if (method.RequiresInstanceReceiver)
@@ -1294,7 +1294,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (argsToParamsBuilder is object)
+            if (argsToParamsBuilder is not null)
             {
                 argsToParamsOpt = argsToParamsBuilder.ToImmutableOrNull();
                 argsToParamsBuilder.Free();
@@ -1319,17 +1319,17 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var callerSourceLocation = enableCallerInfo ? GetCallerLocation(syntax) : null;
                 BoundExpression defaultValue;
-                if (callerSourceLocation is object && parameter.IsCallerLineNumber)
+                if (callerSourceLocation is not null && parameter.IsCallerLineNumber)
                 {
                     int line = callerSourceLocation.SourceTree.GetDisplayLineNumber(callerSourceLocation.SourceSpan);
                     defaultValue = new BoundLiteral(syntax, ConstantValue.Create(line), Compilation.GetSpecialType(SpecialType.System_Int32)) { WasCompilerGenerated = true };
                 }
-                else if (callerSourceLocation is object && parameter.IsCallerFilePath)
+                else if (callerSourceLocation is not null && parameter.IsCallerFilePath)
                 {
                     string path = callerSourceLocation.SourceTree.GetDisplayPath(callerSourceLocation.SourceSpan, Compilation.Options.SourceReferenceResolver);
                     defaultValue = new BoundLiteral(syntax, ConstantValue.Create(path), Compilation.GetSpecialType(SpecialType.System_String)) { WasCompilerGenerated = true };
                 }
-                else if (callerSourceLocation is object && parameter.IsCallerMemberName)
+                else if (callerSourceLocation is not null && parameter.IsCallerMemberName)
                 {
                     var memberName = containingMember.GetMemberCallerName();
                     defaultValue = new BoundLiteral(syntax, ConstantValue.Create(memberName), Compilation.GetSpecialType(SpecialType.System_String)) { WasCompilerGenerated = true };
@@ -1524,7 +1524,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 var returnType = GetCommonTypeOrReturnType(methods) ?? new ExtendedErrorTypeSymbol(this.Compilation, string.Empty, arity: 0, errorInfo: null);
-                var methodContainer = receiver != null && receiver.Type is object
+                var methodContainer = receiver != null && receiver.Type is not null
                     ? receiver.Type
                     : this.ContainingType;
                 method = new ErrorMethodSymbol(methodContainer, returnType, name);
@@ -1606,7 +1606,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             {
                                 var parameterType = GetCorrespondingParameterType(analyzedArguments, i, parameterList);
                                 if (parameterType?.Kind == SymbolKind.NamedType &&
-                                    parameterType.GetDelegateType() is object)
+                                    parameterType.GetDelegateType() is not null)
                                 {
                                     var discarded = unboundArgument.Bind((NamedTypeSymbol)parameterType);
                                 }
@@ -1679,7 +1679,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var parameterList in parameterListList)
                 {
                     var parameterType = GetCorrespondingParameterType(analyzedArguments, i, parameterList);
-                    if (parameterType is object)
+                    if (parameterType is not null)
                     {
                         if (candidateType is null)
                         {

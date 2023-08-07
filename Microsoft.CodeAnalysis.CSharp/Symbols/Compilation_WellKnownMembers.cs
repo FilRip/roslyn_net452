@@ -281,7 +281,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 if (member.Kind != targetSymbolKind || member.IsStatic != isStatic ||
-                    !(member.DeclaredAccessibility == Accessibility.Public || (accessWithinOpt is object && Symbol.IsSymbolAccessible(member, accessWithinOpt))))
+                    !(member.DeclaredAccessibility == Accessibility.Public || (accessWithinOpt is not null && Symbol.IsSymbolAccessible(member, accessWithinOpt))))
                 {
                     continue;
                 }
@@ -342,7 +342,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 // ambiguity
-                if (result is object)
+                if (result is not null)
                 {
                     result = null;
                     break;
@@ -998,7 +998,7 @@ WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctorTran
                 {
                     return null;
                 }
-                if (named.ContainingType is object)
+                if (named.ContainingType is not null)
                 {
                     return null;
                 }
@@ -1012,7 +1012,7 @@ WellKnownMember.System_Runtime_CompilerServices_NativeIntegerAttribute__ctorTran
                     return null;
                 }
                 NamedTypeSymbol named = (NamedTypeSymbol)type;
-                if (named.ContainingType is object)
+                if (named.ContainingType is not null)
                 {
                     return null;
                 }

@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.CommandLine;
 
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
-    internal static class VBCSCompiler
+    internal static class VbCsCompiler
     {
         public static int Main(string[] args)
         {
-            using CompilerServerLogger logger = new(nameof(VBCSCompiler));
+            using CompilerServerLogger logger = new(nameof(VbCsCompiler));
             NameValueCollection appSettings;
             try
             {

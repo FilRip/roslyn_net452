@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var boundStatements = ArrayBuilder<BoundStatement>.GetInstance(boundInitializers.Length);
             var submissionResultType = method.ResultType;
-            var hasSubmissionResultType = submissionResultType is object;
+            var hasSubmissionResultType = submissionResultType is not null;
             BoundStatement lastStatement = null;
             BoundExpression trailingExpression = null;
 
@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     lastStatement = ((BoundGlobalStatementInitializer)initializer).Statement;
                     var expression = GetTrailingScriptExpression(lastStatement);
                     if (expression != null &&
-                        expression.Type is object &&
+                        expression.Type is not null &&
                         !expression.Type.IsVoidType())
                     {
                         trailingExpression = expression;

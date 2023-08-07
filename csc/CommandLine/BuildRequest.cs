@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             }
         }
 
-        //private const int MaximumRequestSize = 5242880;
+        private const int MaximumRequestSize = 5242880;
 
         public readonly Guid RequestId;
 
@@ -68,9 +68,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public static BuildRequest Create(RequestLanguage language, IList<string> args, string workingDirectory, string tempDirectory, string compilerHash, Guid? requestId = null, string? keepAlive = null, string? libDirectory = null)
         {
-            List<Argument> list = new(args.Count + 1 + ((libDirectory != null) ? 1 : 0));
-            list.Add(new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory));
-            list.Add(new Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory));
+            List<Argument> list = new(args.Count + 1 + ((libDirectory != null) ? 1 : 0))
+            {
+                new Argument(BuildProtocolConstants.ArgumentId.CurrentDirectory, 0, workingDirectory),
+                new Argument(BuildProtocolConstants.ArgumentId.TempDirectory, 0, tempDirectory),
+            };
             if (keepAlive != null)
             {
                 list.Add(new Argument(BuildProtocolConstants.ArgumentId.KeepAlive, 0, keepAlive));
@@ -101,7 +103,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             byte[] lengthBuffer = new byte[4];
             await BuildProtocolConstants.ReadAllAsync(inStream, lengthBuffer, 4, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             int num = BitConverter.ToInt32(lengthBuffer, 0);
-            if (num > 5242880)
+            if (num > MaximumRequestSize)
             {
                 throw new ArgumentException($"Request is over {5}MB in length");
             }
@@ -109,20 +111,18 @@ namespace Microsoft.CodeAnalysis.CommandLine
             byte[] requestBuffer = new byte[num];
             await BuildProtocolConstants.ReadAllAsync(inStream, requestBuffer, num, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             cancellationToken.ThrowIfCancellationRequested();
-            using (BinaryReader binaryReader = new(new MemoryStream(requestBuffer), Encoding.Unicode))
+            using BinaryReader binaryReader = new(new MemoryStream(requestBuffer), Encoding.Unicode);
+            Guid value = readGuid(binaryReader);
+            RequestLanguage language = (RequestLanguage)binaryReader.ReadUInt32();
+            string compilerHash = binaryReader.ReadString();
+            uint num2 = binaryReader.ReadUInt32();
+            List<Argument> list = new((int)num2);
+            for (int i = 0; i < num2; i++)
             {
-                Guid value = readGuid(binaryReader);
-                RequestLanguage language = (RequestLanguage)binaryReader.ReadUInt32();
-                string compilerHash = binaryReader.ReadString();
-                uint num2 = binaryReader.ReadUInt32();
-                List<Argument> list = new((int)num2);
-                for (int i = 0; i < num2; i++)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    list.Add(Argument.ReadFromBinaryReader(binaryReader));
-                }
-                return new BuildRequest(language, compilerHash, list, value);
+                cancellationToken.ThrowIfCancellationRequested();
+                list.Add(Argument.ReadFromBinaryReader(binaryReader));
             }
+            return new BuildRequest(language, compilerHash, list, value);
             static Guid readGuid(BinaryReader reader)
             {
                 byte[] array = new byte[16];
@@ -149,7 +149,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             writer.Flush();
             cancellationToken.ThrowIfCancellationRequested();
             int length = checked((int)memoryStream.Length);
-            if (memoryStream.Length > 5242880)
+            if (memoryStream.Length > MaximumRequestSize)
             {
                 throw new ArgumentOutOfRangeException($"Request is over {5}MB in length");
             }

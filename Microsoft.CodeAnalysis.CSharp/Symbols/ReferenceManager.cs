@@ -303,10 +303,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     lock (SymbolCacheAndReferenceManagerStateGuard)
                     {
-                        if (compilation._lazyAssemblySymbol is null)
-                        {
-                            compilation._lazyAssemblySymbol = assemblySymbol;
-                        }
+                        compilation._lazyAssemblySymbol ??= assemblySymbol;
                     }
                 }
             }
@@ -808,10 +805,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (referenceBinding.VersionDifference != 0)
                 {
-                    if (unifiedAssemblies == null)
-                    {
-                        unifiedAssemblies = new ArrayBuilder<UnifiedAssembly<AssemblySymbol>>();
-                    }
+                    unifiedAssemblies ??= new ArrayBuilder<UnifiedAssembly<AssemblySymbol>>();
 
 #nullable restore
 
@@ -1154,7 +1148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </summary>
             internal static bool IsSourceAssemblySymbolCreated(CSharpCompilation compilation)
             {
-                return compilation._lazyAssemblySymbol is object;
+                return compilation._lazyAssemblySymbol is not null;
             }
 
             /// <summary>

@@ -82,10 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         attribute.IsTargetAttribute(kickoffMethod, AttributeDescription.DebuggerStepperBoundaryAttribute) ||
                         attribute.IsTargetAttribute(kickoffMethod, AttributeDescription.DebuggerStepThroughAttribute))
                     {
-                        if (builder == null)
-                        {
-                            builder = ArrayBuilder<CSharpAttributeData>.GetInstance(4); // only 4 different attributes are inherited at the moment
-                        }
+                        builder ??= ArrayBuilder<CSharpAttributeData>.GetInstance(4); // only 4 different attributes are inherited at the moment
 
                         builder.Add(attribute);
                     }

@@ -78,10 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
 
         private void Free()
         {
-            if (_indentations != null)
-            {
-                _indentations.Free();
-            }
+            _indentations?.Free();
         }
 
         public override SyntaxToken VisitToken(SyntaxToken token)
@@ -228,7 +225,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                         || nextToken.Kind() == SyntaxKind.WhereKeyword) ? 1 : 0;
 
                 case SyntaxKind.CloseBracketToken:
-                    if (currentToken.Parent is AttributeListSyntax && !(currentToken.Parent.Parent is ParameterSyntax))
+                    if (currentToken.Parent is AttributeListSyntax && currentToken.Parent.Parent is not ParameterSyntax)
                     {
                         return 1;
                     }
@@ -266,7 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 SyntaxKind.OpenBraceToken => LineBreaksBeforeOpenBrace(nextToken),
                 SyntaxKind.CloseBraceToken => LineBreaksBeforeCloseBrace(nextToken),
                 SyntaxKind.ElseKeyword or SyntaxKind.FinallyKeyword => 1,
-                SyntaxKind.OpenBracketToken => (nextToken.Parent is AttributeListSyntax && !(nextToken.Parent.Parent is ParameterSyntax)) ? 1 : 0,
+                SyntaxKind.OpenBracketToken => (nextToken.Parent is AttributeListSyntax && nextToken.Parent.Parent is not ParameterSyntax) ? 1 : 0,
                 SyntaxKind.WhereKeyword => currentToken.Parent is TypeParameterListSyntax ? 1 : 0,
                 _ => 0,
             };
@@ -968,7 +965,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     }
 
                     if (node.Parent is BlockSyntax ||
-                        (node is StatementSyntax && !(node is BlockSyntax)))
+                        (node is StatementSyntax && node is not BlockSyntax))
                     {
                         // all nested statements are indented one level
                         return parentDepth + 1;

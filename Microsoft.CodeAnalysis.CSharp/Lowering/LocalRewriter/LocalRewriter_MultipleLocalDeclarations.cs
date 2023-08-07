@@ -30,10 +30,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (init != null)
                 {
-                    if (inits == null)
-                    {
-                        inits = ArrayBuilder<BoundStatement>.GetInstance();
-                    }
+                    inits ??= ArrayBuilder<BoundStatement>.GetInstance();
 
                     inits.Add((BoundStatement)init);
                 }

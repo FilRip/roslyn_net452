@@ -85,7 +85,7 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
-                Debug.Assert(Node is object);
+                Debug.Assert(Node is not null);
 #nullable restore
                 return Node;
 #nullable enable

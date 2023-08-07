@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             TypeSymbol voidReturnTypeOpt,
             int parameterCount,
             BitVector byRefParameters)
-            : base(name, parameterCount, returnsVoid: voidReturnTypeOpt is object)
+            : base(name, parameterCount, returnsVoid: voidReturnTypeOpt is not null)
         {
             _containingSymbol = containingSymbol;
             _constructor = new DelegateConstructor(this, objectType, intPtrType);
@@ -125,7 +125,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // if we are given Void type the method returns Void, otherwise its return type is the last type parameter of the delegate:
                 _returnType = voidReturnTypeOpt ?? typeParams.Last();
 
-                var parameters = new ParameterSymbol[typeParams.Length - (voidReturnTypeOpt is object ? 0 : 1)];
+                var parameters = new ParameterSymbol[typeParams.Length - (voidReturnTypeOpt is not null ? 0 : 1)];
                 for (int i = 0; i < parameters.Length; i++)
                 {
                     // we don't need to distinguish between out and ref since this is an internal synthesized symbol:

@@ -103,17 +103,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                         switch (syntaxRef.GetSyntax())
                         {
                             case EqualsValueClauseSyntax initializerNode:
-                                if (binderFactory == null)
-                                {
-                                    binderFactory = compilation.GetBinderFactory(syntaxRef.SyntaxTree);
-                                }
+                                binderFactory ??= compilation.GetBinderFactory(syntaxRef.SyntaxTree);
 
                                 Binder parentBinder = binderFactory.GetBinder(initializerNode);
 
-                                if (firstDebugImports == null)
-                                {
-                                    firstDebugImports = parentBinder.ImportChain;
-                                }
+                                firstDebugImports ??= parentBinder.ImportChain;
 
                                 parentBinder = parentBinder.GetFieldInitializerBinder(fieldSymbol);
 
@@ -125,10 +119,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                                 if (firstDebugImports == null)
                                 {
-                                    if (binderFactory == null)
-                                    {
-                                        binderFactory = compilation.GetBinderFactory(syntaxRef.SyntaxTree);
-                                    }
+                                    binderFactory ??= compilation.GetBinderFactory(syntaxRef.SyntaxTree);
 
                                     firstDebugImports = binderFactory.GetBinder(parameterSyntax).ImportChain;
                                 }
@@ -188,7 +179,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var initializer = siblingInitializers[j];
                     var fieldSymbol = initializer.FieldOpt;
 
-                    if (fieldSymbol is object && fieldSymbol.IsConst)
+                    if (fieldSymbol is not null && fieldSymbol.IsConst)
                     {
                         // Constants do not need field initializers.
                         continue;
@@ -208,10 +199,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     Binder scriptClassBinder = binderFactory.GetBinder(syntax);
 
-                    if (firstDebugImports == null)
-                    {
-                        firstDebugImports = scriptClassBinder.ImportChain;
-                    }
+                    firstDebugImports ??= scriptClassBinder.ImportChain;
 
                     Binder parentBinder = new ExecutableCodeBinder(
                         syntaxRoot,
@@ -219,7 +207,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         new ScriptLocalScopeBinder(labels, scriptClassBinder));
 
                     BoundInitializer boundInitializer;
-                    if (fieldSymbol is object)
+                    if (fieldSymbol is not null)
                     {
                         boundInitializer = BindFieldInitializer(
                             parentBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.FieldInitializer, fieldSymbol),

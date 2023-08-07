@@ -253,10 +253,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         if (memberInit.MemberSymbol == null && memberInit.Type.IsDynamic())
                         {
-                            if (dynamicSiteInitializers == null)
-                            {
-                                dynamicSiteInitializers = ArrayBuilder<BoundExpression>.GetInstance();
-                            }
+                            dynamicSiteInitializers ??= ArrayBuilder<BoundExpression>.GetInstance();
 
                             if (!isRhsNestedInitializer)
                             {
@@ -298,10 +295,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case BoundKind.DynamicObjectInitializerMember:
                     {
-                        if (dynamicSiteInitializers == null)
-                        {
-                            dynamicSiteInitializers = ArrayBuilder<BoundExpression>.GetInstance();
-                        }
+                        dynamicSiteInitializers ??= ArrayBuilder<BoundExpression>.GetInstance();
 
                         var initializerMember = (BoundDynamicObjectInitializerMember)rewrittenLeft;
 
@@ -352,10 +346,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             var temp = _factory.StoreToTemp(rewrittenIndex, out BoundAssignmentOperator store);
                             rewrittenIndex = temp;
 
-                            if (temps == null)
-                            {
-                                temps = ArrayBuilder<LocalSymbol>.GetInstance();
-                            }
+                            temps ??= ArrayBuilder<LocalSymbol>.GetInstance();
                             temps.Add(temp.LocalSymbol);
                             result.Add(store);
                         }
@@ -407,16 +398,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var temp = _factory.StoreToTemp(arg, out BoundAssignmentOperator store, refKind);
                     newArgs.Add(temp);
 
-                    if (temps == null)
-                    {
-                        temps = ArrayBuilder<LocalSymbol>.GetInstance();
-                    }
+                    temps ??= ArrayBuilder<LocalSymbol>.GetInstance();
                     temps.Add(temp.LocalSymbol);
                     sideeffects.Add(store);
                 }
-                else if (newArgs != null)
+                else
                 {
-                    newArgs.Add(arg);
+                    newArgs?.Add(arg);
                 }
             }
 

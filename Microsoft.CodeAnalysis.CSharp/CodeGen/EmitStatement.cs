@@ -890,7 +890,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             // converts to what we want.
             if (catchBlock.ExceptionFilterOpt == null)
             {
-                var exceptionType = (catchBlock.ExceptionTypeOpt is object) ?
+                var exceptionType = (catchBlock.ExceptionTypeOpt is not null) ?
                     _module.Translate(catchBlock.ExceptionTypeOpt, catchBlock.Syntax, _diagnostics) :
                     _module.GetSpecialType(SpecialType.System_Object, catchBlock.Syntax, _diagnostics);
 
@@ -935,7 +935,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 var typeCheckPassedLabel = new object();
                 typeCheckFailedLabel = new object();
 
-                if (catchBlock.ExceptionTypeOpt is object)
+                if (catchBlock.ExceptionTypeOpt is not null)
                 {
                     var exceptionType = _module.Translate(catchBlock.ExceptionTypeOpt, catchBlock.Syntax, _diagnostics);
 

@@ -116,7 +116,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            return candidate is object;
+            return candidate is not null;
         }
 
         private bool HasCastToQueryProvider(TypeSymbol instanceType, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)

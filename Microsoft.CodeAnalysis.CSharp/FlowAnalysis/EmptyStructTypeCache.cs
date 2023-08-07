@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
                 var field = GetActualField(member, type);
-                if (field is object)
+                if (field is not null)
                 {
                     var actualFieldType = field.Type;
                     if (!IsEmptyStructType(actualFieldType, typesWithMembersOfThisType))
@@ -176,7 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     continue;
                 }
                 var field = GetActualField(member, type);
-                if (field is object)
+                if (field is not null)
                 {
                     yield return field;
                 }

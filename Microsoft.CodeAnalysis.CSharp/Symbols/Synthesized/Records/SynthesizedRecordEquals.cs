@@ -163,10 +163,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         fields,
                         F);
                 }
-                else if (retExpr is null)
-                {
-                    retExpr = F.Literal(true);
-                }
+                else retExpr ??= F.Literal(true);
 
                 fields.Free();
 

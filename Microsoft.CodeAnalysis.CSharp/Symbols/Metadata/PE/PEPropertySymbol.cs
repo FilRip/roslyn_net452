@@ -106,10 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 mrEx = e;
 
-                if (_name is null)
-                {
-                    _name = string.Empty;
-                }
+                _name ??= string.Empty;
             }
 
             _getMethod = getMethod;
@@ -184,15 +181,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             if (!callMethodsDirectly)
             {
-                if (_getMethod is object)
-                {
-                    _getMethod.SetAssociatedProperty(this, MethodKind.PropertyGet);
-                }
+                _getMethod?.SetAssociatedProperty(this, MethodKind.PropertyGet);
 
-                if (_setMethod is object)
-                {
-                    _setMethod.SetAssociatedProperty(this, MethodKind.PropertySet);
-                }
+                _setMethod?.SetAssociatedProperty(this, MethodKind.PropertySet);
             }
 
             if (callMethodsDirectly)
@@ -326,7 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                             if (getAccessibility == Accessibility.NotApplicable)
                             {
                                 MethodSymbol getMethod = curr.GetMethod;
-                                if (getMethod is object)
+                                if (getMethod is not null)
                                 {
                                     Accessibility overriddenAccessibility = getMethod.DeclaredAccessibility;
                                     getAccessibility = overriddenAccessibility == Accessibility.ProtectedOrInternal && crossedAssemblyBoundaryWithoutInternalsVisibleTo
@@ -338,7 +329,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                             if (setAccessibility == Accessibility.NotApplicable)
                             {
                                 MethodSymbol setMethod = curr.SetMethod;
-                                if (setMethod is object)
+                                if (setMethod is not null)
                                 {
                                     Accessibility overriddenAccessibility = setMethod.DeclaredAccessibility;
                                     setAccessibility = overriddenAccessibility == Accessibility.ProtectedOrInternal && crossedAssemblyBoundaryWithoutInternalsVisibleTo
@@ -387,8 +378,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 // Some accessor extern.
                 return
-                    (_getMethod is object && _getMethod.IsExtern) ||
-                    (_setMethod is object && _setMethod.IsExtern);
+                    (_getMethod is not null && _getMethod.IsExtern) ||
+                    (_setMethod is not null && _setMethod.IsExtern);
             }
         }
 
@@ -398,8 +389,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 // Some accessor abstract.
                 return
-                    (_getMethod is object && _getMethod.IsAbstract) ||
-                    (_setMethod is object && _setMethod.IsAbstract);
+                    (_getMethod is not null && _getMethod.IsAbstract) ||
+                    (_setMethod is not null && _setMethod.IsAbstract);
             }
         }
 
@@ -420,8 +411,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 // Some accessor virtual (as long as another isn't override or abstract).
                 return !IsOverride && !IsAbstract &&
-                    ((_getMethod is object && _getMethod.IsVirtual) ||
-                     (_setMethod is object && _setMethod.IsVirtual));
+                    ((_getMethod is not null && _getMethod.IsVirtual) ||
+                     (_setMethod is not null && _setMethod.IsVirtual));
             }
         }
 
@@ -431,8 +422,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 // Some accessor override.
                 return
-                    (_getMethod is object && _getMethod.IsOverride) ||
-                    (_setMethod is object && _setMethod.IsOverride);
+                    (_getMethod is not null && _getMethod.IsOverride) ||
+                    (_setMethod is not null && _setMethod.IsOverride);
             }
         }
 
@@ -469,8 +460,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 {
                     string defaultMemberName = _containingType.DefaultMemberName;
                     return _name == defaultMemberName || //NB: not Name property (break mutual recursion)
-                        (this.GetMethod is object && this.GetMethod.Name == defaultMemberName) ||
-                        (this.SetMethod is object && this.SetMethod.Name == defaultMemberName);
+                        (this.GetMethod is not null && this.GetMethod.Name == defaultMemberName) ||
+                        (this.SetMethod is not null && this.SetMethod.Name == defaultMemberName);
                 }
                 return false;
             }

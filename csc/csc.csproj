@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B3441E49-C9D4-4BFC-A468-09C0D55EA7E4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>csc</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis.CommandLine</RootNamespace>
     <AssemblyName>csc</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <NoWarn>IDE0251</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -69,6 +70,7 @@
     <Compile Include="CommandLine\CompletedBuildResponse.cs" />
     <Compile Include="CommandLine\ConsoleUtil.cs" />
     <Compile Include="CommandLine\CreateServerFunc.cs" />
+    <Compile Include="CommandLine\CscException.cs" />
     <Compile Include="CommandLine\EmptyCompilerServerLogger.cs" />
     <Compile Include="CommandLine\ExitingTraceListener.cs" />
     <Compile Include="CommandLine\FileMutex.cs" />

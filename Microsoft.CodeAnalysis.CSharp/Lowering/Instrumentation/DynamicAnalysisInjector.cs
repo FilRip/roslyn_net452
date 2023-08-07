@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             _methodPayload = methodBodyFactory.SynthesizedLocal(_payloadType, kind: SynthesizedLocalKind.InstrumentationPayload, syntax: methodBody.Syntax);
             // The first point indicates entry into the method and has the span of the method definition.
             SyntaxNode syntax = MethodDeclarationIfAvailable(methodBody.Syntax);
-            if (!method.IsImplicitlyDeclared && !(method is SynthesizedSimpleProgramEntryPointSymbol))
+            if (!method.IsImplicitlyDeclared && method is not SynthesizedSimpleProgramEntryPointSymbol)
             {
                 _methodEntryInstrumentation = AddAnalysisPoint(syntax, SkipAttributes(syntax), methodBodyFactory);
             }
@@ -132,7 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             var containingType = method.ContainingType;
-            while (containingType is object)
+            while (containingType is not null)
             {
                 if (containingType.IsDirectlyExcludedFromCodeCoverage)
                 {

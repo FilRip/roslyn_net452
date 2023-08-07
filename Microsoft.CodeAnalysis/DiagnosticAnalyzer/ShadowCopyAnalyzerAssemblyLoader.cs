@@ -90,10 +90,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 finally
                 {
-                    if (mutex != null)
-                    {
-                        mutex.Dispose();
-                    }
+                    mutex?.Dispose();
                 }
             }
         }

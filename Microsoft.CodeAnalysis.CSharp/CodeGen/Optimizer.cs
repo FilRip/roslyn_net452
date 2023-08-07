@@ -720,10 +720,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                         rewrittenSideeffects.AddRange(sideeffects, i);
                     }
 
-                    if (rewrittenSideeffects != null)
-                    {
-                        rewrittenSideeffects.Add(rewrittenSideeffect);
-                    }
+                    rewrittenSideeffects?.Add(rewrittenSideeffect);
                 }
             }
 
@@ -1143,10 +1140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 rewrittenArguments.AddRange(arguments, i);
             }
 
-            if (rewrittenArguments != null)
-            {
-                rewrittenArguments.Add(rewrittenArg);
-            }
+            rewrittenArguments?.Add(rewrittenArg);
         }
 
         public override BoundNode VisitArgListOperator(BoundArgListOperator node)
@@ -1614,10 +1608,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                         rewrittenInitializers.AddRange(initializers, i);
                     }
 
-                    if (rewrittenInitializers != null)
-                    {
-                        rewrittenInitializers.Add(rewrittenInitializer);
-                    }
+                    rewrittenInitializers?.Add(rewrittenInitializer);
                 }
             }
 
@@ -1828,7 +1819,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
 
         private void DeclareLocal(LocalSymbol local, int stack)
         {
-            if (local is object)
+            if (local is not null)
             {
                 if (CanScheduleToStack(local))
                 {

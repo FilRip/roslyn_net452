@@ -249,7 +249,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // prevent infinite recursion:
 
             bool bagCreatedOnThisThread;
-            if (copyFrom is object)
+            if (copyFrom is not null)
             {
                 var attributesBag = forReturnType ? copyFrom.GetReturnTypeAttributesBag() : copyFrom.GetAttributesBag();
                 bagCreatedOnThisThread = Interlocked.CompareExchange(ref lazyCustomAttributesBag, attributesBag, null) == null;
@@ -699,7 +699,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 #nullable enable
 
             var isAnyNestedMethodGeneric = false;
-            for (MethodSymbol? current = this; current is object; current = current.ContainingSymbol as MethodSymbol)
+            for (MethodSymbol? current = this; current is not null; current = current.ContainingSymbol as MethodSymbol)
             {
                 if (current.IsGenericMethod)
                 {
@@ -1017,7 +1017,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     hasErrors = true;
                 }
 
-                for (NamedTypeSymbol curr = this.ContainingType; curr is object; curr = curr.ContainingType)
+                for (NamedTypeSymbol curr = this.ContainingType; curr is not null; curr = curr.ContainingType)
                 {
                     if (curr is SourceNamedTypeSymbol sourceNamedTypeSymbol && sourceNamedTypeSymbol.HasSecurityCriticalAttributes)
                     {
@@ -1040,7 +1040,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 var iAsyncEnumerableType = DeclaringCompilation.GetWellKnownType(WellKnownType.System_Collections_Generic_IAsyncEnumerable_T);
                 if (ReturnType.OriginalDefinition.Equals(iAsyncEnumerableType) &&
-                    GetInMethodSyntaxNode() is object)
+                    GetInMethodSyntaxNode() is not null)
                 {
                     var cancellationTokenType = DeclaringCompilation.GetWellKnownType(WellKnownType.System_Threading_CancellationToken);
                     var enumeratorCancellationCount = Parameters.Count(p => p.IsSourceParameterWithEnumeratorCancellationAttribute());

@@ -168,7 +168,7 @@ namespace Microsoft.CodeAnalysis
                     if (_tempInfo.HasValue)
                     {
                         RoslynDebug.Assert(_emitStreamSignKind == EmitStreamSignKind.SignedWithFile);
-                        RoslynDebug.Assert(_strongNameProvider is object);
+                        RoslynDebug.Assert(_strongNameProvider is not null);
                         var (tempStream, tempFilePath) = _tempInfo.GetValueOrDefault();
 
                         try

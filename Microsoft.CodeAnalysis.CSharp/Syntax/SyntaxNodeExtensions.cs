@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return kind switch
             {
                 SyntaxKind.CatchClause or SyntaxKind.ParenthesizedLambdaExpression or SyntaxKind.SimpleLambdaExpression or SyntaxKind.AnonymousMethodExpression or SyntaxKind.CatchFilterClause or SyntaxKind.SwitchSection or SyntaxKind.EqualsValueClause or SyntaxKind.Attribute or SyntaxKind.ArgumentList or SyntaxKind.ArrowExpressionClause or SyntaxKind.SwitchExpression or SyntaxKind.SwitchExpressionArm or SyntaxKind.BaseConstructorInitializer or SyntaxKind.ThisConstructorInitializer or SyntaxKind.ConstructorDeclaration or SyntaxKind.PrimaryConstructorBaseType => true,
-                SyntaxKind.RecordDeclaration => ((RecordDeclarationSyntax)syntax).ParameterList is object,
+                SyntaxKind.RecordDeclaration => ((RecordDeclarationSyntax)syntax).ParameterList is not null,
                 SyntaxKind.RecordStructDeclaration => false,
                 _ => syntax is StatementSyntax || IsValidScopeDesignator(syntax as ExpressionSyntax),
             };

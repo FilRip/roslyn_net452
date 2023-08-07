@@ -202,9 +202,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                             filteredActionsBuilderOpt.AddRange(symbolStartActions, i);
                         }
                     }
-                    else if (filteredActionsBuilderOpt != null)
+                    else
                     {
-                        filteredActionsBuilderOpt.Add(symbolStartAction);
+                        filteredActionsBuilderOpt?.Add(symbolStartAction);
                     }
                 }
 
@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 // Note that "/warnaserror-:DiagnosticId" adds a diagnostic option with value 'ReportDiagnostic.Default',
                 // which should not alter 'isSuppressed'.
                 if ((diagnosticOptions.TryGetValue(diag.Id, out var severity) ||
-                    options.SyntaxTreeOptionsProvider is object && options.SyntaxTreeOptionsProvider.TryGetGlobalDiagnosticValue(diag.Id, analyzerExecutor.CancellationToken, out severity)) &&
+                    options.SyntaxTreeOptionsProvider is not null && options.SyntaxTreeOptionsProvider.TryGetGlobalDiagnosticValue(diag.Id, analyzerExecutor.CancellationToken, out severity)) &&
                     severity != ReportDiagnostic.Default)
                 {
                     isSuppressed = severity == ReportDiagnostic.Suppress;

@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var call = (BoundCall)expression;
 
             // First check if the target method is async.
-            if (call.Method is object && call.Method.IsAsync)
+            if (call.Method is not null && call.Method.IsAsync)
             {
                 return true;
             }
@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             DiagnosticInfo? info = null;
             var containingMemberOrLambda = this.ContainingMemberOrLambda;
-            if (containingMemberOrLambda is object)
+            if (containingMemberOrLambda is not null)
             {
                 switch (containingMemberOrLambda.Kind)
                 {
@@ -176,10 +176,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         break;
                 }
             }
-            if (info == null)
-            {
-                info = new CSDiagnosticInfo(ErrorCode.ERR_BadAwaitWithoutAsync);
-            }
+            info ??= new CSDiagnosticInfo(ErrorCode.ERR_BadAwaitWithoutAsync);
             Error(diagnostics, info, location);
             return true;
         }

@@ -272,7 +272,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                         AssemblySymbol containingAssembly = _containingModule.ContainingAssembly;
 
-                        if ((Arity == 0 || MangleName) && containingAssembly is object && ReferenceEquals(containingAssembly, containingAssembly.CorLibrary) && _containingModule.Ordinal == 0)
+                        if ((Arity == 0 || MangleName) && containingAssembly is not null && ReferenceEquals(containingAssembly, containingAssembly.CorLibrary) && _containingModule.Ordinal == 0)
                         {
                             // Check the name 
                             string emittedName = MetadataHelpers.BuildQualifiedName(_namespaceName, MetadataName);
@@ -351,7 +351,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // if ignoring dynamic, then treat dynamic the same as the type 'object'
                 if ((comparison & TypeCompareKind.IgnoreDynamic) != 0 &&
-                    t2 is object &&
+                    t2 is not null &&
                     t2.TypeKind == TypeKind.Dynamic &&
                     this.SpecialType == Microsoft.CodeAnalysis.SpecialType.System_Object)
                 {

@@ -256,7 +256,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     if (symbol is NamespaceSymbol ns)
                     {
-                        if (nextScope is object)
+                        if (nextScope is not null)
                         {
                             nextScope = null;
                             break;
@@ -301,7 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case SyntaxKind.QualifiedName:
                     var qn = (QualifiedNameSyntax)name;
                     var leftNs = this.GetNestedNamespace(qn.Left);
-                    if (leftNs is object)
+                    if (leftNs is not null)
                     {
                         return leftNs.GetNestedNamespace(qn.Right);
                     }

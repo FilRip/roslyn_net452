@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CommandLine;
 
 namespace Microsoft.CodeAnalysis.CompilerServer
 {
-    internal sealed class NamedPipeClientConnection : IClientConnection, IDisposable
+    internal sealed class NamedPipeClientConnection : IClientConnection
     {
         private CancellationTokenSource DisconnectCancellationTokenSource { get; } = new CancellationTokenSource();
 
@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         {
             BuildRequest request = await BuildRequest.ReadAsync(Stream, cancellationToken).ConfigureAwait(false);
             if (!NamedPipeUtil.CheckClientElevationMatches(this.Stream))
-                throw new Exception("Client identity does not match server identity.");
+                throw new VbCsCompilerException("Client identity does not match server identity.");
             await MonitorDisconnect();
             return request;
 

@@ -446,7 +446,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static void ReportTypeNamedRecord(string? name, CSharpCompilation compilation, DiagnosticBag? diagnostics, Location location)
         {
-            if (diagnostics is object && name == SyntaxFacts.GetText(SyntaxKind.RecordKeyword) &&
+            if (diagnostics is not null && name == SyntaxFacts.GetText(SyntaxKind.RecordKeyword) &&
                 compilation.LanguageVersion >= MessageID.IDS_FeatureRecords.RequiredVersion())
             {
                 diagnostics.Add(ErrorCode.WRN_RecordNamedDisallowed, location, name);
@@ -783,7 +783,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var result = DeclaredAccessibility;
             if (result == Accessibility.Private) return Accessibility.Private;
-            for (Symbol? container = this.ContainingType; !(container is null); container = container.ContainingType)
+            for (Symbol? container = this.ContainingType; container is not null; container = container.ContainingType)
             {
                 switch (container.DeclaredAccessibility)
                 {
@@ -1353,7 +1353,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
                     case SymbolKind.Event:
                         FieldSymbol? associatedField = ((EventSymbol)m).AssociatedField;
-                        if (associatedField is object)
+                        if (associatedField is not null)
                         {
                             yield return associatedField;
                         }
@@ -1485,7 +1485,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             var declared = Volatile.Read(ref _lazyDeclaredMembersAndInitializers);
 
-            if ((declared is object && (declared.NonTypeMembers.Contains(m => m == (object)member) || declared.RecordPrimaryConstructor == (object)member)) ||
+            if ((declared is not null && (declared.NonTypeMembers.Contains(m => m == (object)member) || declared.RecordPrimaryConstructor == (object)member)) ||
                 Volatile.Read(ref _lazyMembersAndInitializers)?.NonTypeMembers.Contains(m => m == (object)member) == true)
             {
                 return;
@@ -1593,7 +1593,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             bool hasBaseTypeOrInterface(Func<NamedTypeSymbol, bool> predicate)
             {
-                return (baseType is object && predicate(baseType)) ||
+                return (baseType is not null && predicate(baseType)) ||
                     interfaces.Any(predicate);
             }
 
@@ -1607,7 +1607,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var resultType = type.VisitType(
                     predicate: (t, a, b) => !t.TupleElementNames.IsDefaultOrEmpty && !t.IsErrorType(),
                     arg: (object?)null);
-                return resultType is object;
+                return resultType is not null;
             }
         }
 
@@ -1729,7 +1729,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     //   following a field of the same name, or a field and a nested type of the same name.
                     //
 
-                    if (lastSym is object)
+                    if (lastSym is not null)
                     {
                         if (symbol.Kind != SymbolKind.Method || lastSym.Kind != SymbolKind.Method)
                         {
@@ -2073,7 +2073,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         continue;
                     }
                     var type = field.NonPointerType();
-                    if ((type is object) &&
+                    if ((type is not null) &&
                         (type.TypeKind == TypeKind.Struct) &&
                         BaseTypeAnalysis.StructDependsOn((NamedTypeSymbol)type, this) &&
                         !type.IsPrimitiveRecursiveStruct()) // allow System.Int32 to contain a field of its own type
@@ -2402,7 +2402,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // Most types don't have indexers.  If this is one of those types,
             // just reuse the dictionary we build for early attribute decoding.
             // For tuples, we also need to take the slow path.
-            if (!membersAndInitializers.HaveIndexers && !this.IsTupleType && _lazyEarlyAttributeDecodingMembersDictionary is object)
+            if (!membersAndInitializers.HaveIndexers && !this.IsTupleType && _lazyEarlyAttributeDecodingMembersDictionary is not null)
             {
                 membersByName = _lazyEarlyAttributeDecodingMembersDictionary;
             }
@@ -2667,10 +2667,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             public void AddInstanceInitializerForPositionalMembers(FieldOrPropertyInitializer initializer)
             {
-                if (InstanceInitializersForPositionalMembers is null)
-                {
-                    InstanceInitializersForPositionalMembers = ArrayBuilder<FieldOrPropertyInitializer>.GetInstance();
-                }
+                InstanceInitializersForPositionalMembers ??= ArrayBuilder<FieldOrPropertyInitializer>.GetInstance();
 
                 InstanceInitializersForPositionalMembers.Add(initializer);
             }
@@ -3070,7 +3067,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             MethodSymbol accessor = getNotSet ? propertySymbol.GetMethod : propertySymbol.SetMethod;
             string accessorName;
-            if (accessor is object)
+            if (accessor is not null)
             {
                 accessorName = accessor.Name;
             }
@@ -3406,7 +3403,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // Positional record
             bool primaryAndCopyCtorAmbiguity = false;
-            if (!(paramList is null))
+            if (paramList is not null)
             {
 
                 // primary ctor
@@ -4170,7 +4167,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             // From the 10/12/11 design notes:
                             //   In addition, we will change autoproperties to behavior in
                             //   a similar manner and make the autoproperty fields private.
-                            if (backingField is object)
+                            if (backingField is not null)
                             {
                                 builder.NonTypeMembers.Add(backingField);
                                 builder.UpdateIsNullableEnabledForConstructorsAndFields(useStatic: backingField.IsStatic, compilation, propertySyntax);
@@ -4226,7 +4223,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                                             associatedField);
                                 }
 
-                                if (associatedField is object)
+                                if (associatedField is not null)
                                 {
                                     // NOTE: specifically don't add the associated field to the members list
                                     // (regard it as an implementation detail).
@@ -4386,7 +4383,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private void AddAccessorIfAvailable(ArrayBuilder<Symbol> symbols, MethodSymbol? accessorOpt)
         {
-            if (!(accessorOpt is null))
+            if (accessorOpt is not null)
             {
                 symbols.Add(accessorOpt);
             }
@@ -4412,7 +4409,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             var builder = new MostCommonNullableValueBuilder();
             var baseType = BaseTypeNoUseSiteDiagnostics;
-            if (baseType is object)
+            if (baseType is not null)
             {
                 builder.AddValue(TypeWithAnnotations.Create(baseType));
             }
@@ -4451,7 +4448,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var compilation = DeclaringCompilation;
             NamedTypeSymbol baseType = this.BaseTypeNoUseSiteDiagnostics;
 
-            if (baseType is object)
+            if (baseType is not null)
             {
                 if (baseType.ContainsDynamic())
                 {
@@ -4476,7 +4473,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     AddSynthesizedAttribute(ref attributes, moduleBuilder.SynthesizeNullableContextAttribute(this, nullableContextValue));
                 }
 
-                if (baseType is object)
+                if (baseType is not null)
                 {
                     AddSynthesizedAttribute(ref attributes, moduleBuilder.SynthesizeNullableAttributeIfNecessary(this, nullableContextValue, TypeWithAnnotations.Create(baseType)));
                 }

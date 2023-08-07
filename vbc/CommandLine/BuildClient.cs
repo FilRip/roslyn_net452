@@ -74,8 +74,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             textWriter ??= Console.Out;
             if (CommandLineParser.TryParseClientArgs(originalArguments.ToList().Select<string, string>(arg => arg.Trim()).ToArray<string>(), out List<string> parsedArgs, out bool containsShared, out string keepAliveValue, out string pipeName1, out string errorMessage))
             {
-                if (pipeName == null)
-                    pipeName = pipeName1;
+                pipeName ??= pipeName1;
                 if (containsShared)
                 {
                     pipeName ??= GetPipeName(buildPaths);
@@ -200,9 +199,11 @@ namespace Microsoft.CodeAnalysis.CommandLine
             }
             catch (PlatformNotSupportedException)
             {
+#pragma warning disable S3971 // "GC.SuppressFinalize" should not be called
                 if (disposable != null)
                     GC.SuppressFinalize(disposable);
                 return false;
+#pragma warning restore S3971 // "GC.SuppressFinalize" should not be called
             }
         }
 

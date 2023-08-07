@@ -350,7 +350,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (namespaceSymbol.NamespaceKind == NamespaceKind.Module)
             {
                 var moduleNs = (namespaceSymbol as PublicModel.NamespaceSymbol)?.UnderlyingNamespaceSymbol;
-                if (moduleNs is object && moduleNs.ContainingModule == this)
+                if (moduleNs is not null && moduleNs.ContainingModule == this)
                 {
                     // this is already the correct module namespace
                     return moduleNs;
@@ -364,7 +364,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else
             {
                 var cns = GetModuleNamespace(namespaceSymbol.ContainingNamespace);
-                if (cns is object)
+                if (cns is not null)
                 {
                     return cns.GetNestedNamespace(namespaceSymbol.Name);
                 }
@@ -395,7 +395,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else
             {
                 var cns = GetModuleNamespace(namespaceSymbol.ContainingNamespace);
-                if (cns is object)
+                if (cns is not null)
                 {
                     return cns.GetNestedNamespace(namespaceSymbol.Name);
                 }

@@ -203,7 +203,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (!parsingFunctionPointer)
             {
                 var methodOwner = owner as MethodSymbol;
-                var typeParameters = methodOwner is object ?
+                var typeParameters = methodOwner is not null ?
                     methodOwner.TypeParameters :
                     default;
 
@@ -554,7 +554,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
             else if (conversion.IsReference &&
                 (parameterType.SpecialType == SpecialType.System_Object || parameterType.Kind == SymbolKind.DynamicType) &&
-                defaultExpression.Type is object &&
+                defaultExpression.Type is not null &&
                 defaultExpression.Type.SpecialType == SpecialType.System_String ||
                 conversion.IsBoxing)
             {
@@ -655,7 +655,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static MethodSymbol FindContainingGenericMethod(Symbol symbol)
         {
-            for (Symbol current = symbol; current is object; current = current.ContainingSymbol)
+            for (Symbol current = symbol; current is not null; current = current.ContainingSymbol)
             {
                 if (current.Kind == SymbolKind.Method)
                 {

@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (symbol is SourcePropertySymbolBase sourceProperty && sourceProperty.IsSealed)
             {
                 var synthesizedAccessor = sourceProperty.SynthesizedSealedAccessorOpt;
-                if (synthesizedAccessor is object)
+                if (synthesizedAccessor is not null)
                 {
                     _moduleBeingBuilt.AddSynthesizedDefinition(sourceProperty.ContainingType, synthesizedAccessor.GetCciAdapter());
                 }

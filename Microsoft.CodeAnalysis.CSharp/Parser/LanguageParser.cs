@@ -328,10 +328,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
             else
             {
-                if (initialBadNodes == null)
-                {
-                    initialBadNodes = _pool.Allocate();
-                }
+                initialBadNodes ??= _pool.Allocate();
 
                 initialBadNodes.AddRange(skippedSyntax);
             }
@@ -1805,7 +1802,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     argumentList = this.ParseParenthesizedArgumentList();
                 }
 
-                list.Add(argumentList is object ? _syntaxFactory.PrimaryConstructorBaseType(firstType, argumentList) : _syntaxFactory.SimpleBaseType(firstType));
+                list.Add(argumentList is not null ? _syntaxFactory.PrimaryConstructorBaseType(firstType, argumentList) : _syntaxFactory.SimpleBaseType(firstType));
 
                 // any additional types
                 while (true)
@@ -2467,7 +2464,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         return false;
 
                     case SyntaxKind.LocalDeclarationStatement:
-                        return !isScript && ((LocalDeclarationStatementSyntax)statement).UsingKeyword is object;
+                        return !isScript && ((LocalDeclarationStatementSyntax)statement).UsingKeyword is not null;
 
                     default:
                         return true;

@@ -174,7 +174,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static void CheckLangVersionForConstantValue(BoundExpression expression, BindingDiagnosticBag diagnostics)
         {
-            if (!(expression.Type is null) && expression.Type.IsStringType())
+            if (expression.Type is not null && expression.Type.IsStringType())
             {
                 var visitor = new CheckConstantInterpolatedStringValidity(diagnostics);
                 visitor.Visit(expression);

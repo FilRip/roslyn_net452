@@ -53,7 +53,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             var namedType = (NamedTypeSymbol)type;
                             int count = 0;
 
-                            while (namedType is object)
+                            while (namedType is not null)
                             {
                                 ImmutableArray<TypeWithAnnotations> typeArgs = namedType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics;
 
@@ -134,7 +134,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         if (!isDefinition)
                         {
                             var namedType = (NamedTypeSymbol)type;
-                            while (namedType is object)
+                            while (namedType is not null)
                             {
                                 ImmutableArray<TypeWithAnnotations> typeArgs = namedType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics;
 

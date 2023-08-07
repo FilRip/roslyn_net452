@@ -124,10 +124,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             _cache.Free();
 
-            if (_xmlParser != null)
-            {
-                _xmlParser.Dispose();
-            }
+            _xmlParser?.Dispose();
 
             base.Dispose();
         }
@@ -2411,10 +2408,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 trivia = trivia.WithDiagnosticsGreen(this.GetErrors(leadingTriviaWidth: 0));
             }
 
-            if (list == null)
-            {
-                list = new SyntaxListBuilder(TriviaListInitialCapacity);
-            }
+            list ??= new SyntaxListBuilder(TriviaListInitialCapacity);
 
             list.Add(trivia);
         }
@@ -2502,10 +2496,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         /// <returns>A trivia node with the whitespace text</returns>
         private SyntaxTrivia ScanWhitespace()
         {
-            if (_createWhitespaceTriviaFunction == null)
-            {
-                _createWhitespaceTriviaFunction = this.CreateWhitespaceTrivia;
-            }
+            _createWhitespaceTriviaFunction ??= this.CreateWhitespaceTrivia;
 
             int hashCode = Hash.FnvOffsetBias;  // FNV base
             bool onlySpaces = true;
@@ -3198,20 +3189,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 }
                 else
                 {
-                    if (error == null)
-                    {
-                        error = XmlParseErrorCode.XML_InvalidUnicodeChar;
-                    }
+                    error ??= XmlParseErrorCode.XML_InvalidUnicodeChar;
                 }
             }
             else
             {
                 if (SyntaxFacts.IsWhitespace(ch) || SyntaxFacts.IsNewLine(ch))
                 {
-                    if (error == null)
-                    {
-                        error = XmlParseErrorCode.XML_InvalidWhitespace;
-                    }
+                    error ??= XmlParseErrorCode.XML_InvalidWhitespace;
                 }
                 else
                 {
@@ -3241,10 +3226,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // case we will simply use the text.
 
             info.Text = TextWindow.GetText(true);
-            if (info.StringValue == null)
-            {
-                info.StringValue = info.Text;
-            }
+            info.StringValue ??= info.Text;
 
             if (error != null)
             {

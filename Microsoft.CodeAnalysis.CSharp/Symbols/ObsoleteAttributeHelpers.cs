@@ -55,13 +55,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </returns>
         private static ThreeState GetObsoleteContextState(Symbol symbol, bool forceComplete)
         {
-            while (symbol is object)
+            while (symbol is not null)
             {
                 if (symbol.Kind == SymbolKind.Field)
                 {
                     // If this is the backing field of an event, look at the event instead.
                     var associatedSymbol = ((FieldSymbol)symbol).AssociatedSymbol;
-                    if (associatedSymbol is object)
+                    if (associatedSymbol is not null)
                     {
                         symbol = associatedSymbol;
                     }

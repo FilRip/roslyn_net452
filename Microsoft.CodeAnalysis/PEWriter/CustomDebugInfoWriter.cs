@@ -151,10 +151,7 @@ namespace Microsoft.Cci
                     Debug.Assert(local.SlotIndex >= 0);
                     if (filter(local))
                     {
-                        if (builder == null)
-                        {
-                            builder = ArrayBuilder<T>.GetInstance();
-                        }
+                        builder ??= ArrayBuilder<T>.GetInstance();
                         builder.Add(getInfo(default, local));
                     }
                 }
@@ -164,10 +161,7 @@ namespace Microsoft.Cci
                     Debug.Assert(localConstant.SlotIndex < 0);
                     if (filter(localConstant))
                     {
-                        if (builder == null)
-                        {
-                            builder = ArrayBuilder<T>.GetInstance();
-                        }
+                        builder ??= ArrayBuilder<T>.GetInstance();
                         builder.Add(getInfo(currentScope, localConstant));
                     }
                 }

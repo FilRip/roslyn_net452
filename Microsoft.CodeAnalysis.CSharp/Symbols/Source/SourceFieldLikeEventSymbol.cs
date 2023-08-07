@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
 #nullable enable
                 EventSymbol? overriddenEvent = this.OverriddenEvent;
-                if (overriddenEvent is object)
+                if (overriddenEvent is not null)
                 {
                     CopyEventCustomModifiers(overriddenEvent, ref _type, ContainingAssembly);
                 }
@@ -157,7 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                return AssociatedEventField is object ?
+                return AssociatedEventField is not null ?
                     AttributeLocation.Event | AttributeLocation.Method | AttributeLocation.Field :
                     AttributeLocation.Event | AttributeLocation.Method;
             }
@@ -177,10 +177,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override void ForceComplete(SourceLocation? locationOpt, CancellationToken cancellationToken)
         {
-            if (this.AssociatedField is object)
-            {
-                this.AssociatedField.ForceComplete(locationOpt, cancellationToken);
-            }
+            this.AssociatedField?.ForceComplete(locationOpt, cancellationToken);
 
             base.ForceComplete(locationOpt, cancellationToken);
         }

@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // 4) Multitargeting - retargeting the type to a different version of assembly
             result = LookupTopLevelMetadataTypeInCache(ref emittedName);
 
-            if (result is object)
+            if (result is not null)
             {
                 // We only cache result equivalent to digging through type forwarders, which
                 // might produce a forwarder specific ErrorTypeSymbol. We don't want to 
@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         var newResult = modules[i].LookupTopLevelMetadataType(ref emittedName);
 
                         // Hold on to the first missing type result, unless we found the type.
-                        if (!(newResult is MissingMetadataTypeSymbol))
+                        if (newResult is not MissingMetadataTypeSymbol)
                         {
                             result = newResult;
                             break;
@@ -154,13 +154,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     System.Diagnostics.Debug.Assert(result is MissingMetadataTypeSymbol);
 
                     NamedTypeSymbol forwarded = TryLookupForwardedMetadataTypeWithCycleDetection(ref emittedName, visitedAssemblies);
-                    if (forwarded is object)
+                    if (forwarded is not null)
                     {
                         result = forwarded;
                     }
                 }
 
-                System.Diagnostics.Debug.Assert(result is object);
+                System.Diagnostics.Debug.Assert(result is not null);
 
                 // Add result of the lookup into the cache
                 if (digThroughForwardedTypes || foundMatchInThisAssembly)

@@ -434,7 +434,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private GreenNode? GetGreenNodeAt(int i)
         {
-            Debug.Assert(Node is object);
+            Debug.Assert(Node is not null);
 #nullable restore
             return GetGreenNodeAt(Node, i);
 #nullable enable

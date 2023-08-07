@@ -114,12 +114,7 @@ namespace Microsoft.CodeAnalysis
             {
                 try
                 {
-                    using var stream = _resource.DataProvider();
-                    if (stream == null)
-                    {
-                        throw new InvalidOperationException(Properties.Resources.ResourceDataProviderShouldReturnNonNullStream);
-                    }
-
+                    using var stream = _resource.DataProvider() ?? throw new InvalidOperationException(Properties.Resources.ResourceDataProviderShouldReturnNonNullStream);
                     return ImmutableArray.CreateRange(algorithm.ComputeHash(stream));
                 }
                 catch (Exception ex)

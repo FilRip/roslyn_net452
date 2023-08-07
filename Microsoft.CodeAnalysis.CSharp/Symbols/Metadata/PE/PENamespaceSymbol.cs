@@ -259,10 +259,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                             {
                                 string typeDefName = moduleSymbol.Module.GetTypeDefNameOrThrow(t);
 
-                                if (noPiaLocalTypes == null)
-                                {
-                                    noPiaLocalTypes = new Dictionary<string, TypeDefinitionHandle>(StringOrdinalComparer.Instance);
-                                }
+                                noPiaLocalTypes ??= new Dictionary<string, TypeDefinitionHandle>(StringOrdinalComparer.Instance);
 
                                 noPiaLocalTypes[typeDefName] = t;
                             }

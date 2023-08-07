@@ -30,8 +30,8 @@ namespace Microsoft.CodeAnalysis.CommandLine
             uint dwCreationFlags,
             IntPtr lpEnvironment,
             string lpCurrentDirectory,
-            [In] ref STARTUPINFO lpStartupInfo,
-            out PROCESS_INFORMATION lpProcessInformation);
+            [In] ref StartupInfo lpStartupInfo,
+            out ProcessInformation lpProcessInformation);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern IntPtr GetCommandLine();

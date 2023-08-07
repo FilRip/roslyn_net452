@@ -55,10 +55,7 @@ namespace Microsoft.CodeAnalysis.SymbolDisplay
         {
             get
             {
-                if (_lazyNotFirstVisitor == null)
-                {
-                    _lazyNotFirstVisitor = MakeNotFirstVisitor();
-                }
+                _lazyNotFirstVisitor ??= MakeNotFirstVisitor();
 
                 return _lazyNotFirstVisitor;
             }
@@ -68,10 +65,7 @@ namespace Microsoft.CodeAnalysis.SymbolDisplay
         {
             get
             {
-                if (_lazyNotFirstVisitorNamespaceOrType == null)
-                {
-                    _lazyNotFirstVisitorNamespaceOrType = MakeNotFirstVisitor(inNamespaceOrType: true);
-                }
+                _lazyNotFirstVisitorNamespaceOrType ??= MakeNotFirstVisitor(inNamespaceOrType: true);
 
                 return _lazyNotFirstVisitorNamespaceOrType;
             }

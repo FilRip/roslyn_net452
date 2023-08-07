@@ -403,10 +403,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             if (leading)
             {
                 var trivia = this.GetLeadingTrivia();
-                if (trivia != null)
-                {
-                    trivia.WriteTo(writer, true, true);
-                }
+                trivia?.WriteTo(writer, true, true);
             }
 
             writer.Write(this.Text);
@@ -414,10 +411,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             if (trailing)
             {
                 var trivia = this.GetTrailingTrivia();
-                if (trivia != null)
-                {
-                    trivia.WriteTo(writer, true, true);
-                }
+                trivia?.WriteTo(writer, true, true);
             }
         }
 

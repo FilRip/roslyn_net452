@@ -180,10 +180,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         private bool HasGotoOut(BoundNode node)
         {
-            if (_lazyUnmatchedLabelCache == null)
-            {
-                _lazyUnmatchedLabelCache = new Dictionary<BoundNode, HashSet<LabelSymbol>>();
-            }
+            _lazyUnmatchedLabelCache ??= new Dictionary<BoundNode, HashSet<LabelSymbol>>();
 
             HashSet<LabelSymbol> unmatched = UnmatchedGotoFinder.Find(node, _lazyUnmatchedLabelCache, RecursionDepth);
 

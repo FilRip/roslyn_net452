@@ -529,7 +529,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.IsOverride)
                 {
                     var overriddenMethod = this.OverriddenMethod;
-                    if (overriddenMethod is object && overriddenMethod.IsConditional)
+                    if (overriddenMethod is not null && overriddenMethod.IsConditional)
                     {
                         return overriddenMethod.CallsAreConditionallyOmitted(syntaxTree);
                     }
@@ -567,7 +567,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.IsOverride)
                 {
                     var overriddenMethod = this.OverriddenMethod;
-                    if (overriddenMethod is object)
+                    if (overriddenMethod is not null)
                     {
                         return overriddenMethod.IsConditional;
                     }

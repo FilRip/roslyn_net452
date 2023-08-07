@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis
             {
                 get
                 {
-                    Debug.Assert(_node is object);
+                    Debug.Assert(_node is not null);
                     return ItemInternal(_node, _childIndex);
                 }
             }

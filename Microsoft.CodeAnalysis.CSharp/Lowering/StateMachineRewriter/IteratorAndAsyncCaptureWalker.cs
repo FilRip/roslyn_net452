@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 foreach (var v in allVariables)
                 {
                     var symbol = v.Symbol;
-                    if (symbol is object && HoistInDebugBuild(symbol))
+                    if (symbol is not null && HoistInDebugBuild(symbol))
                     {
                         variablesToHoist.Add(symbol);
                     }
@@ -137,7 +137,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var symbol = variableBySlot[i].Symbol;
 
-                if (symbol is object)
+                if (symbol is not null)
                 {
                     switch (symbol.Kind)
                     {
@@ -359,7 +359,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private void AddVariable(Symbol local)
             {
-                if (local is object) _localsInScope.Add(local);
+                if (local is not null) _localsInScope.Add(local);
             }
 
             public override BoundNode VisitSequence(BoundSequence node)
@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private void Capture(Symbol s, SyntaxNode syntax)
             {
-                if (s is object && !_localsInScope.Contains(s))
+                if (s is not null && !_localsInScope.Contains(s))
                 {
                     _analyzer.CaptureVariable(s, syntax);
                 }

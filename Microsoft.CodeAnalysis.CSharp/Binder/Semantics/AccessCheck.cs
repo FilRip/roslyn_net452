@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 symbol = symbol.ContainingType;
             }
-            while (symbol is object);
+            while (symbol is not null);
 
             return true;
         }
@@ -337,7 +337,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var originalContainingType = containingType.OriginalDefinition;
             var withinType = within as NamedTypeSymbol;
-            var withinAssembly = withinType is object ? withinType.ContainingAssembly : (AssemblySymbol)within;
+            var withinAssembly = withinType is not null ? withinType.ContainingAssembly : (AssemblySymbol)within;
 
             switch (declaredAccessibility)
             {
@@ -355,7 +355,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     // private members never accessible from outside a type.
-                    return withinType is object && IsPrivateSymbolAccessible(withinType, originalContainingType);
+                    return withinType is not null && IsPrivateSymbolAccessible(withinType, originalContainingType);
 
                 case Accessibility.Internal:
                     // An internal type is accessible if we're in the same assembly or we have
@@ -444,7 +444,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 var current = withinType.OriginalDefinition;
                 var originalThroughTypeOpt = throughTypeOpt?.OriginalDefinition;
-                while (current is object)
+                while (current is not null)
                 {
 
                     if (current.InheritsFromOrImplementsIgnoringConstruction(originalContainingType, compilation, ref useSiteInfo, basesBeingResolved))
@@ -500,7 +500,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Walk up my parent chain and see if I eventually hit the owner.  If so then I'm a
             // nested type of that owner and I'm allowed access to everything inside of it.
             var current = withinType.OriginalDefinition;
-            while (current is object)
+            while (current is not null)
             {
                 if (current == (object)originalContainingType)
                 {
@@ -540,7 +540,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var current = type;
             bool result = false;
 
-            while (current is object)
+            while (current is not null)
             {
                 if (baseTypeIsInterface == current.IsInterfaceType() &&
                     current == (object)baseType)

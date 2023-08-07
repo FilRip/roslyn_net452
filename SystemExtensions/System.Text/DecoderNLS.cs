@@ -63,10 +63,7 @@ namespace System.Text
 
         public override void Reset()
         {
-            if (m_fallbackBuffer != null)
-            {
-                m_fallbackBuffer.Reset();
-            }
+            m_fallbackBuffer?.Reset();
         }
 
         public override int GetCharCount(byte[] bytes, int index, int count)

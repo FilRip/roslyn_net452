@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // We're not handling nopia object creations correctly
                 // https://github.com/dotnet/roslyn/issues/45082
-                if (node.InitializerExpressionOpt is object)
+                if (node.InitializerExpressionOpt is not null)
                 {
                     VerifyExpression(node.InitializerExpressionOpt, overrideSkippedExpression: true);
                 }

@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis
             for (int i = 0; i < tokens.Length; i++)
             {
                 var node = tokens[i].Node;
-                Debug.Assert(node is object);
+                Debug.Assert(node is not null);
                 builder.Add(node);
             }
 
@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis
             var builder = SyntaxTokenListBuilder.Create();
             foreach (var token in tokens)
             {
-                Debug.Assert(token.Node is object);
+                Debug.Assert(token.Node is not null);
                 builder.Add(token.Node);
             }
 
@@ -261,7 +261,7 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private GreenNode? GetGreenNodeAt(int i)
         {
-            Debug.Assert(Node is object);
+            Debug.Assert(Node is not null);
 #nullable restore
             return GetGreenNodeAt(Node, i);
 #nullable enable

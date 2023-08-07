@@ -255,12 +255,7 @@ namespace Microsoft.CodeAnalysis
         /// <returns>The attribute value</returns>
         private static string ReadNonEmptyAttribute(XElement node, string attributeName)
         {
-            XAttribute attribute = node.Attribute(attributeName);
-            if (attribute == null)
-            {
-                throw new InvalidRuleSetException(string.Format(Properties.Resources.RuleSetMissingAttribute, node.Name, attributeName));
-            }
-
+            XAttribute attribute = node.Attribute(attributeName) ?? throw new InvalidRuleSetException(string.Format(Properties.Resources.RuleSetMissingAttribute, node.Name, attributeName));
             if (string.IsNullOrEmpty(attribute.Value))
             {
                 throw new InvalidRuleSetException(string.Format(Properties.Resources.RuleSetBadAttributeValue, attributeName, attribute.Value));

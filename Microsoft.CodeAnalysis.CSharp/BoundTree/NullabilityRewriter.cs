@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 stack.Push(currentBinary);
                 currentBinary = currentBinary.Left as BoundBinaryOperatorBase;
             }
-            while (currentBinary is object);
+            while (currentBinary is not null);
 
             var leftChild = (BoundExpression)Visit(stack.Peek().Left);
 
@@ -78,8 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (sym is null) return sym;
 
-            Symbol? updatedSymbol = null;
-            if (_snapshotManager?.TryGetUpdatedSymbol(expr, sym, out updatedSymbol) != true)
+            if (_snapshotManager?.TryGetUpdatedSymbol(expr, sym, out Symbol? updatedSymbol) != true)
             {
                 updatedSymbol = sym;
             }

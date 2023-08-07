@@ -23,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>IDE0056,IDE0057</NoWarn>
+    <NoWarn>IDE0056,IDE0057,IDE0251</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,6 +59,7 @@
     <Compile Include="GlobalAssemblyCacheHelpers\GlobalAssemblyCache.cs" />
     <Compile Include="GlobalAssemblyCacheHelpers\GlobalAssemblyCacheLocation.cs" />
     <Compile Include="GlobalAssemblyCacheHelpers\MonoGlobalAssemblyCache.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hosting\AssemblyLoader\AssemblyAndLocation.cs" />
     <Compile Include="Hosting\AssemblyLoader\AssemblyLoaderImpl.cs" />
     <Compile Include="Hosting\AssemblyLoader\AssemblyLoadResult.cs" />

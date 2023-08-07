@@ -195,9 +195,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Me.SetState(ReachableState())
             Me.backwardBranchChanged = False
 
-            If Me._nesting IsNot Nothing Then
-                Me._nesting.Free()
-            End If
+            Me._nesting?.Free()
             Me._nesting = ArrayBuilder(Of Integer).GetInstance()
 
             InitForScan()
@@ -224,9 +222,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Protected Overridable Sub Free()
-            If Me._nesting IsNot Nothing Then
-                Me._nesting.Free()
-            End If
+            Me._nesting?.Free()
             Me.diagnostics.Free()
             Me._pendingBranches.Free()
         End Sub
@@ -885,6 +881,7 @@ lUnsplitAndFinish:
                     origExpressionContainsRegion = True
 
                     ' Does any of initializers contain the node or the node contains initializers?
+#Disable Warning S3385 ' "Exit" statements should not be used
                     For Each initializer In node.DraftInitializers
                         Debug.Assert(initializer.Kind = BoundKind.AssignmentOperator)
                         Dim initializerExpr As BoundExpression = DirectCast(initializer, BoundAssignmentOperator).Right
@@ -899,6 +896,7 @@ lUnsplitAndFinish:
                             Exit For
                         End If
                     Next
+#Enable Warning S3385 ' "Exit" statements should not be used
                 End If
             End If
 
@@ -911,6 +909,7 @@ lUnsplitAndFinish:
 #If DEBUG Then
             If origExpressionContainsRegion AndAlso Not regionEnclosesInitializers Then
                 Dim containedByInitializer As Boolean = False
+#Disable Warning S3385 ' "Exit" statements should not be used
                 For Each initializer In node.DraftInitializers
                     Debug.Assert(initializer.Kind = BoundKind.AssignmentOperator)
                     Dim initializerExpr As BoundExpression = DirectCast(initializer, BoundAssignmentOperator).Right
@@ -927,6 +926,7 @@ lUnsplitAndFinish:
                         Exit For
                     End If
                 Next
+#Enable Warning S3385 ' "Exit" statements should not be used
 
                 Debug.Assert(containedByInitializer OrElse IsNotCapturedExpression(Me._firstInRegion))
             End If
@@ -2167,7 +2167,6 @@ EnteredRegion:
                         Dim resultFalse As LocalState = leftFalse
                         IntersectWith(resultFalse, Me.StateWhenFalse)
                         Me.SetConditionalState(resultTrue, resultFalse)
-                        Exit Select
                     Case BinaryOperatorKind.OrElse
                         Dim leftTrue As LocalState = Me.StateWhenTrue
                         Dim leftFalse As LocalState = Me.StateWhenFalse
@@ -2177,7 +2176,6 @@ EnteredRegion:
                         IntersectWith(resultTrue, leftTrue)
                         Dim resultFalse As LocalState = Me.StateWhenFalse
                         Me.SetConditionalState(resultTrue, resultFalse)
-                        Exit Select
                     Case Else
                         VisitRvalue(binary.Right)
                 End Select

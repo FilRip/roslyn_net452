@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (Method is object)
+                if (Method is not null)
                 {
 
                     if (!Method.ParameterRefKinds.IsDefaultOrEmpty)
@@ -99,7 +99,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (Method is object)
+                if (Method is not null)
                 {
 
                     if (!Method.ParameterRefKinds.IsDefaultOrEmpty)

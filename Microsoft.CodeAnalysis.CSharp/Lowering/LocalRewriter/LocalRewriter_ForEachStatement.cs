@@ -237,7 +237,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (enumeratorInfo.IsAsync)
             {
                 disposeMethod = (MethodSymbol)Binder.GetWellKnownTypeMember(_compilation, WellKnownMember.System_IAsyncDisposable__DisposeAsync, _diagnostics, syntax: forEachSyntax);
-                return disposeMethod is object;
+                return disposeMethod is not null;
             }
 
             return Binder.TryGetSpecialTypeMember(_compilation, SpecialMember.System_IDisposable__Dispose, forEachSyntax, _diagnostics, out disposeMethod);
@@ -289,7 +289,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                                location: enumeratorInfo.Location);
 
             BoundBlock finallyBlockOpt;
-            if (isImplicit || !(enumeratorInfo.PatternDisposeInfo is null))
+            if (isImplicit || enumeratorInfo.PatternDisposeInfo is not null)
             {
                 Conversion receiverConversion = enumeratorType.IsStructType() ?
                     Conversion.Boxing :

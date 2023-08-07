@@ -363,10 +363,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
             lock (Guard)
             {
-                if (_lazySuppressedFiles == null)
-                {
-                    _lazySuppressedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                }
+                _lazySuppressedFiles ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
                 _lazySuppressedFiles.Add(originalPath);
             }
@@ -401,10 +398,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             {
                 try
                 {
-                    if (ShadowCopyDirectory == null)
-                    {
-                        ShadowCopyDirectory = CreateUniqueDirectory(_baseDirectory);
-                    }
+                    ShadowCopyDirectory ??= CreateUniqueDirectory(_baseDirectory);
 
                     // Create directory for the assembly.
                     // If the assembly has any modules they have to be copied to the same directory 
@@ -487,10 +481,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             {
                 if (fault)
                 {
-                    if (manifestModule != null)
-                    {
-                        manifestModule.Dispose();
-                    }
+                    manifestModule?.Dispose();
 
                     if (moduleBuilder != null)
                     {

@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             DeclarationModifiers result = DeclarationModifiers.Public;
 
-            if (VirtualCloneInBase() is object)
+            if (VirtualCloneInBase() is not null)
             {
                 result |= DeclarationModifiers.Override;
             }
@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         Arity: 0
                     } method)
                 {
-                    if (candidate is object)
+                    if (candidate is not null)
                     {
                         // An ambiguity case, can come from metadata, treat as an error for simplicity.
                         return null;

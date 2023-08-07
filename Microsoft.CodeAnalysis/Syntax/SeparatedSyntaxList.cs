@@ -415,7 +415,7 @@ namespace Microsoft.CodeAnalysis
             if (insertionIndex < nodesWithSeps.Count && nodesWithSeps[insertionIndex] is { IsNode: true } nodeOrToken)
             {
                 var node = nodesWithSeps[insertionIndex].AsNode();
-                Debug.Assert(node is object);
+                Debug.Assert(node is not null);
                 nodesToInsertWithSeparators.Add(node.Green.CreateSeparator<TNode>(node)); // separator
             }
 
@@ -428,7 +428,7 @@ namespace Microsoft.CodeAnalysis
             // then it should stay associated with previous node
             foreach (var tr in separator.TrailingTrivia)
             {
-                Debug.Assert(tr.UnderlyingNode is object);
+                Debug.Assert(tr.UnderlyingNode is not null);
                 if (tr.UnderlyingNode.IsTriviaWithEndOfLine())
                 {
                     return true;

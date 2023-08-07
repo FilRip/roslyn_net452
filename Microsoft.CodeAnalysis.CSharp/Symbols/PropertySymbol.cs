@@ -249,7 +249,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 MethodSymbol accessor = GetMethod ?? SetMethod;
 
                 // false is a reasonable default if there are no accessors (e.g. not done typing).
-                return accessor is object && accessor.HidesBaseMethodsByName;
+                return accessor is not null && accessor.HidesBaseMethodsByName;
             }
         }
 

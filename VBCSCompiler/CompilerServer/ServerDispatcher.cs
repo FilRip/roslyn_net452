@@ -86,20 +86,21 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 this.WaitForAnyCompletion(cancellationToken);
                 this.CheckCompletedTasks(cancellationToken);
             }
-            while (this._connectionList.Count > 0 || this._state == ServerDispatcher.State.Running);
+            while (this._connectionList.Count > 0 || this._state == State.Running);
         }
 
+#nullable restore
+#pragma warning disable S3358 // Ternary operators should not be nested
         private void CheckCompletedTasks(CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
                 this.ChangeToShuttingDown("Server cancellation");
-#nullable restore
             Task<IClientConnection> listenTask = this._listenTask;
             // ISSUE: explicit non-virtual call
             if ((listenTask != null ? ((listenTask.IsCompleted) ? 1 : 0) : 0) != 0)
             {
                 this._diagnosticListener.ConnectionReceived();
-                this._connectionList.Add(ServerDispatcher.ProcessClientConnectionAsync(this._compilerServerHost, this._listenTask, this._state == ServerDispatcher.State.Running, cancellationToken));
+                this._connectionList.Add(ProcessClientConnectionAsync(this._compilerServerHost, this._listenTask, this._state == State.Running, cancellationToken));
                 this._timeoutTask = null;
                 this._gcTask = null;
                 this._listenTask = null;
@@ -117,6 +118,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 this.RunGC();
             this.HandleCompletedConnections();
         }
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         private void WaitForAnyCompletion(CancellationToken cancellationToken)
         {
@@ -131,6 +133,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             }
             catch (OperationCanceledException)
             {
+                // Nothing to do
             }
 
 #nullable enable
@@ -145,14 +148,15 @@ namespace Microsoft.CodeAnalysis.CompilerServer
 
         private void ChangeToShuttingDown(string reason)
         {
-            if (this._state == ServerDispatcher.State.ShuttingDown)
+            if (this._state == State.ShuttingDown)
                 return;
             this._logger.Log("Shutting down server: " + reason);
-            this._state = ServerDispatcher.State.ShuttingDown;
+            this._state = State.ShuttingDown;
             this._timeoutTask = null;
             this._gcTask = null;
         }
 
+#pragma warning disable S1215 // "GC.Collect" should not be called
         private void RunGC()
         {
             this._gcTask = null;
@@ -164,6 +168,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             GC.Collect();
         }
+#pragma warning restore S1215 // "GC.Collect" should not be called
 
         private void MaybeCreateListenTask()
         {
@@ -238,7 +243,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
 
         private void ChangeKeepAlive(TimeSpan keepAlive)
         {
-            if (!this._keepAliveIsDefault && this._keepAlive.HasValue && !(keepAlive > this._keepAlive.Value))
+            if (!this._keepAliveIsDefault && this._keepAlive.HasValue && (keepAlive <= this._keepAlive.Value))
                 return;
             this._keepAlive = new TimeSpan?(keepAlive);
             this._keepAliveIsDefault = false;

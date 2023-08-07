@@ -217,7 +217,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // If we already have diagnostics at this point, it is not worth collecting likely duplicate diagnostics from making the merged type
                 bool hadErrors = diagnostics.HasAnyErrors();
                 TypeSymbol? mergedTupleType = MakeMergedTupleType(checkedVariables, (BoundTupleLiteral)boundRHS, syntax, hadErrors ? null : diagnostics);
-                if (mergedTupleType is object)
+                if (mergedTupleType is not null)
                 {
                     boundRHS = GenerateConversionForAssignment(mergedTupleType, boundRHS, diagnostics);
                 }
@@ -296,7 +296,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var variable = variables[i];
 
                 Conversion nestedConversion;
-                if (variable.NestedVariables is object)
+                if (variable.NestedVariables is not null)
                 {
                     var elementSyntax = syntax.Kind() == SyntaxKind.TupleExpression ? ((TupleExpressionSyntax)syntax).Arguments[i] : syntax;
 
@@ -337,7 +337,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var variable = variables[i];
                 if (variable.Single is { } pending)
                 {
-                    if (pending.Type is object)
+                    if (pending.Type is not null)
                     {
                         continue;
                     }
@@ -377,7 +377,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0; i < count; i++)
             {
                 var variable = variables[i];
-                if (variable.NestedVariables is object)
+                if (variable.NestedVariables is not null)
                 {
                     FailRemainingInferencesAndSetValEscape(variable.NestedVariables, diagnostics, rhsValEscape);
                 }
@@ -474,14 +474,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (i < leftLength)
                 {
                     var variable = lhsVariables[i];
-                    if (variable.NestedVariables is object)
+                    if (variable.NestedVariables is not null)
                     {
                         if (element.Kind == BoundKind.TupleLiteral)
                         {
                             // (variables) on the left and (elements) on the right
                             mergedType = MakeMergedTupleType(variable.NestedVariables, (BoundTupleLiteral)element, syntax, diagnostics);
                         }
-                        else if (mergedType is null && diagnostics is object)
+                        else if (mergedType is null && diagnostics is not null)
                         {
                             // (variables) on the left and null on the right
                             Error(diagnostics, ErrorCode.ERR_DeconstructRequiresExpression, element.Syntax);
@@ -489,7 +489,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        if (variable?.Single?.Type is object)
+                        if (variable?.Single?.Type is not null)
                         {
                             // typed-variable on the left
                             mergedType = variable.Single.Type;
@@ -498,7 +498,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    if (mergedType is null && diagnostics is object)
+                    if (mergedType is null && diagnostics is not null)
                     {
                         // a typeless element on the right, matching no variable on the left
                         Error(diagnostics, ErrorCode.ERR_DeconstructRequiresExpression, element.Syntax);
@@ -544,7 +544,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             foreach (var variable in variables)
             {
                 BoundExpression value;
-                if (variable.NestedVariables is object)
+                if (variable.NestedVariables is not null)
                 {
                     value = DeconstructionVariablesAsTuple(variable.Syntax, variable.NestedVariables, diagnostics, ignoreDiagnosticsFromTuple);
                     namesBuilder.Add(null);
@@ -723,10 +723,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.DeclarationExpression:
                     {
                         var component = (DeclarationExpressionSyntax)node;
-                        if (declaration == null)
-                        {
-                            declaration = component;
-                        }
+                        declaration ??= component;
 
                         bool isConst = false;
                         var declType = BindVariableTypeWithAnnotations(component.Designation, diagnostics, component.Type, ref isConst, out bool isVar, out _);
@@ -819,7 +816,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             SourceLocalSymbol localSymbol = LookupLocal(designation.Identifier);
 
             // is this a local?
-            if (localSymbol is object)
+            if (localSymbol is not null)
             {
                 // Check for variable declaration errors.
                 // Use the binder that owns the scope for the local because this (the current) binder
@@ -835,14 +832,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Is this a field?
-            GlobalExpressionVariable field = LookupDeclaredField(designation);
-
-            if (field is null)
-            {
-                // We should have the right binder in the chain, cannot continue otherwise.
-                throw ExceptionUtilities.Unreachable;
-            }
-
+            GlobalExpressionVariable field = LookupDeclaredField(designation) ?? throw ExceptionUtilities.Unreachable;
             BoundThisReference receiver = ThisReference(designation, this.ContainingType, hasErrors: false,
                                             wasCompilerGenerated: true);
 

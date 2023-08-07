@@ -351,10 +351,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             }
             catch (BadImageFormatException)
             {
-                if (_name is null)
-                {
-                    _name = string.Empty;
-                }
+                _name ??= string.Empty;
 
                 InitializeUseSiteDiagnostic(new UseSiteInfo<AssemblySymbol>(new CSDiagnosticInfo(ErrorCode.ERR_BindToBogus, this)));
             }
@@ -500,7 +497,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         public override bool IsOverride =>
             !this._containingType.IsInterface &&
             this.IsMetadataVirtual() && !this.IsDestructor &&
-            ((!this.IsMetadataNewSlot() && _containingType.BaseTypeNoUseSiteDiagnostics is object) || this.IsExplicitClassOverride);
+            ((!this.IsMetadataNewSlot() && _containingType.BaseTypeNoUseSiteDiagnostics is not null) || this.IsExplicitClassOverride);
 
         public override bool IsStatic => HasFlag(MethodAttributes.Static);
 
@@ -1246,7 +1243,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
                 var diagnosticInfo = result.DiagnosticInfo;
                 EnsureTypeParametersAreLoaded(ref diagnosticInfo);
-                if (diagnosticInfo == null && GetUnmanagedCallersOnlyAttributeData(forceComplete: true) is UnmanagedCallersOnlyAttributeData)
+                if (diagnosticInfo == null && GetUnmanagedCallersOnlyAttributeData(forceComplete: true) is not null)
                 {
                     if (CheckAndReportValidUnmanagedCallersOnlyTarget(location: null, diagnostics: null))
                     {
@@ -1272,7 +1269,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 return GetCachedUseSiteInfo();
             }
 
-            if (useSiteInfo.DiagnosticInfo is object || !useSiteInfo.SecondaryDependencies.IsNullOrEmpty())
+            if (useSiteInfo.DiagnosticInfo is not null || !useSiteInfo.SecondaryDependencies.IsNullOrEmpty())
             {
                 useSiteInfo = AccessUncommonFields()._lazyCachedUseSiteInfo.InterlockedInitialize(PrimaryDependency, useSiteInfo);
             }

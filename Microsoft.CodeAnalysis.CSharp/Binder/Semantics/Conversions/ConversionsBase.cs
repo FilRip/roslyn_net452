@@ -80,7 +80,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var sourceType = sourceExpression.Type;
 
             //PERF: identity conversion is by far the most common implicit conversion, check for that first
-            if (sourceType is object && HasIdentityConversionInternal(sourceType, destination))
+            if (sourceType is not null && HasIdentityConversionInternal(sourceType, destination))
             {
                 return Conversion.Identity;
             }
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if (sourceType is object)
+            if (sourceType is not null)
             {
                 // Try using the short-circuit "fast-conversion" path.
                 Conversion fastConversion = FastClassifyConversion(sourceType, destination);
@@ -482,7 +482,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if (source is object)
+            if (source is not null)
             {
                 return DeriveStandardExplicitFromOppositeStandardImplicitConversion(source, destination, ref useSiteInfo);
             }
@@ -527,7 +527,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return conversion;
             }
 
-            if (source is object)
+            if (source is not null)
             {
                 return ClassifyStandardImplicitConversion(source, destination, ref useSiteInfo);
             }
@@ -785,7 +785,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            for (TypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); b is object; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (TypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); b is not null; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 if (HasIdentityConversionInternal(b, baseType))
                 {
@@ -1144,7 +1144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (sourceType is object)
+            if (sourceType is not null)
             {
                 // Try using the short-circuit "fast-conversion" path.
                 Conversion fastConversion = FastClassifyConversion(sourceType, destination);
@@ -1185,7 +1185,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var sourceConstantValue = source.ConstantValue;
             return sourceConstantValue != null &&
-                source.Type is object &&
+                source.Type is not null &&
                 IsNumericType(source.Type) &&
                 IsConstantNumericZero(sourceConstantValue);
         }
@@ -1514,7 +1514,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static bool IsPossiblyNullableTypeTypeParameter(in TypeWithAnnotations typeWithAnnotations)
         {
             var type = typeWithAnnotations.Type;
-            return type is object &&
+            return type is not null &&
                 (type.IsPossiblyNullableReferenceTypeTypeParameter() || type.IsNullableTypeOrTypeParameter());
         }
 
@@ -1554,7 +1554,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public Conversion ClassifyImplicitExtensionMethodThisArgConversion(BoundExpression sourceExpressionOpt, TypeSymbol sourceType, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
 
-            if (sourceType is object)
+            if (sourceType is not null)
             {
                 if (HasIdentityConversionInternal(sourceType, destination))
                 {
@@ -1590,7 +1590,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (sourceType is object)
+            if (sourceType is not null)
             {
                 var tupleConversion = ClassifyTupleConversion(
                     sourceType,
@@ -3012,9 +3012,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: If T is not known to be a reference type, the conversions are classified as unboxing conversions.
 
             // SPEC: From the effective base class C of T to T and from any base class of C to T. 
-            if (t is object && t.IsReferenceType)
+            if (t is not null && t.IsReferenceType)
             {
-                for (var type = t.EffectiveBaseClass(ref useSiteInfo); type is object; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+                for (var type = t.EffectiveBaseClass(ref useSiteInfo); type is not null; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
                 {
                     if (HasIdentityConversionInternal(type, source))
                     {
@@ -3024,19 +3024,19 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // SPEC: From any interface type to T. 
-            if (t is object && source.IsInterfaceType() && t.IsReferenceType)
+            if (t is not null && source.IsInterfaceType() && t.IsReferenceType)
             {
                 return true;
             }
 
             // SPEC: From T to any interface-type I provided there is not already an implicit conversion from T to I.
-            if (s is object && s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
+            if (s is not null && s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
             {
                 return true;
             }
 
             // SPEC: From a type parameter U to T, provided T depends on U (Â§10.1.5)
-            if (s is object && t is object && t.IsReferenceType && t.DependsOn(s))
+            if (s is not null && t is not null && t.IsReferenceType && t.DependsOn(s))
             {
                 return true;
             }
@@ -3057,9 +3057,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: If T is not known to be a reference type, the conversions are classified as unboxing conversions.
 
             // SPEC: From the effective base class C of T to T and from any base class of C to T. 
-            if (t is object && !t.IsReferenceType)
+            if (t is not null && !t.IsReferenceType)
             {
-                for (var type = t.EffectiveBaseClass(ref useSiteInfo); type is object; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+                for (var type = t.EffectiveBaseClass(ref useSiteInfo); type is not null; type = type.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
                 {
                     if (TypeSymbol.Equals(type, source, TypeCompareKind.ConsiderEverything2))
                     {
@@ -3069,19 +3069,19 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // SPEC: From any interface type to T. 
-            if (source.IsInterfaceType() && t is object && !t.IsReferenceType)
+            if (source.IsInterfaceType() && t is not null && !t.IsReferenceType)
             {
                 return true;
             }
 
             // SPEC: From T to any interface-type I provided there is not already an implicit conversion from T to I.
-            if (s is object && !s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
+            if (s is not null && !s.IsReferenceType && destination.IsInterfaceType() && !HasImplicitReferenceTypeParameterConversion(s, destination, ref useSiteInfo))
             {
                 return true;
             }
 
             // SPEC: From a type parameter U to T, provided T depends on U (Â§10.1.5)
-            if (s is object && t is object && !t.IsReferenceType && t.DependsOn(s))
+            if (s is not null && t is not null && !t.IsReferenceType && t.DependsOn(s))
             {
                 return true;
             }
@@ -3186,7 +3186,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: S and T differ only in element type. (In other words, S and T have the same number of dimensions.)
             // SPEC: Both SE and TE are reference-types.
             // SPEC: An explicit reference conversion exists from SE to TE.
-            if (sourceArray is object && destinationArray is object)
+            if (sourceArray is not null && destinationArray is not null)
             {
                 // HasExplicitReferenceConversion checks that SE and TE are reference types so
                 // there's no need for that check here. Moreover, it's not as simple as checking
@@ -3199,7 +3199,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // SPEC: From System.Array and the interfaces it implements to any array-type.
-            if (destinationArray is object)
+            if (destinationArray is not null)
             {
                 if (source.SpecialType == SpecialType.System_Array)
                 {
@@ -3221,7 +3221,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The framework now also allows arrays to be converted to IReadOnlyList<T> and IReadOnlyCollection<T>; we 
             // honor that as well.
 
-            if (sourceArray is object && sourceArray.IsSZArray && destination.IsPossibleArrayGenericInterface())
+            if (sourceArray is not null && sourceArray.IsSZArray && destination.IsPossibleArrayGenericInterface())
             {
                 if (HasExplicitReferenceConversion(sourceArray.ElementType, ((NamedTypeSymbol)destination).TypeArgumentWithDefinitionUseSiteDiagnostics(0, ref useSiteInfo).Type, ref useSiteInfo))
                 {
@@ -3233,7 +3233,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // provided that there is an explicit identity or reference conversion from S to T.
 
             // Similarly, we honor IReadOnlyList<S> and IReadOnlyCollection<S> in the same way.
-            if (destinationArray is object && destinationArray.IsSZArray)
+            if (destinationArray is not null && destinationArray.IsSZArray)
             {
                 var specialDefinition = source.OriginalDefinition.SpecialType;
 

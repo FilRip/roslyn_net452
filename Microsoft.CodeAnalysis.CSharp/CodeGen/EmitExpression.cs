@@ -2747,7 +2747,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             {
                 var operandType = operand.Type;
                 var targetType = asOp.Type;
-                if (operandType is object && !operandType.IsVerifierReference())
+                if (operandType is not null && !operandType.IsVerifierReference())
                 {
                     // box the operand for isinst if it is not a verifier reference
                     EmitBox(operandType, operand.Syntax);
@@ -2809,7 +2809,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             if (used)  // unused constant has no side-effects
             {
                 // Null type parameter values must be emitted as 'initobj' rather than 'ldnull'.
-                if ((type is object) && (type.TypeKind == TypeKind.TypeParameter) && constantValue.IsNull)
+                if ((type is not null) && (type.TypeKind == TypeKind.TypeParameter) && constantValue.IsNull)
                 {
                     EmitInitObj(type, used, syntaxNode);
                 }
@@ -3258,7 +3258,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             EmitArguments(ptrInvocation.Arguments, method.Parameters, ptrInvocation.ArgumentRefKindsOpt);
             var stackBehavior = GetCallStackBehavior(ptrInvocation.FunctionPointer.Signature, ptrInvocation.Arguments);
 
-            if (temp is object)
+            if (temp is not null)
             {
                 _builder.EmitLocalLoad(temp);
                 FreeTemp(temp);

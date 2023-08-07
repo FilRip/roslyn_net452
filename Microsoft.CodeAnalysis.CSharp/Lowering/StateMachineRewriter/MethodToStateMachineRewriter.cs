@@ -144,7 +144,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // create cache local for reference type "this" in Release
             var thisParameter = originalMethod.ThisParameter;
-            if (thisParameter is object &&
+            if (thisParameter is not null &&
                 thisParameter.Type.IsReferenceType &&
                 proxies.TryGetValue(thisParameter, out CapturedSymbolReplacement thisProxy) &&
                 F.Compilation.Options.OptimizationLevel == OptimizationLevel.Release)
@@ -206,10 +206,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected void AddState(int stateNumber, out GeneratedLabelSymbol resumeLabel)
         {
-            if (_dispatches == null)
-            {
-                _dispatches = new Dictionary<LabelSymbol, List<int>>();
-            }
+            _dispatches ??= new Dictionary<LabelSymbol, List<int>>();
 
             resumeLabel = F.GenerateLabel("stateMachine");
             var states = new List<int>
@@ -427,10 +424,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (_lazyAvailableReusableHoistedFields == null || !_lazyAvailableReusableHoistedFields.TryGetValue(field.Type, out ArrayBuilder<StateMachineFieldSymbol> fields))
             {
-                if (_lazyAvailableReusableHoistedFields == null)
-                {
-                    _lazyAvailableReusableHoistedFields = new Dictionary<TypeSymbol, ArrayBuilder<StateMachineFieldSymbol>>(Symbols.SymbolEqualityComparer.IgnoringDynamicTupleNamesAndNullability);
-                }
+                _lazyAvailableReusableHoistedFields ??= new Dictionary<TypeSymbol, ArrayBuilder<StateMachineFieldSymbol>>(Symbols.SymbolEqualityComparer.IgnoringDynamicTupleNamesAndNullability);
 
                 _lazyAvailableReusableHoistedFields.Add(field.Type, fields = new ArrayBuilder<StateMachineFieldSymbol>());
             }
@@ -800,10 +794,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         tryBlock);
                 }
 
-                if (oldDispatches == null)
-                {
-                    oldDispatches = new Dictionary<LabelSymbol, List<int>>();
-                }
+                oldDispatches ??= new Dictionary<LabelSymbol, List<int>>();
 
                 oldDispatches.Add(dispatchLabel, new List<int>(from kv in _dispatches.Values from n in kv orderby n select n));
             }
@@ -824,7 +815,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundStatement result = node.Update(tryBlock, catchBlocks, finallyBlockOpt, node.FinallyLabelOpt, node.PreferFaultHandler);
 
-            if (dispatchLabel is object)
+            if (dispatchLabel is not null)
             {
                 result = F.Block(
                     F.HiddenSequencePoint(),
@@ -857,7 +848,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected BoundStatement CacheThisIfNeeded()
         {
             // restore "this" cache, if there is a cache
-            if (this.cachedThis is object)
+            if (this.cachedThis is not null)
             {
                 CapturedSymbolReplacement proxy = proxies[this.OriginalMethod.ThisParameter];
                 var fetchThis = proxy.Replacement(F.Syntax, frameType => F.This());
@@ -871,7 +862,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public sealed override BoundNode VisitThisReference(BoundThisReference node)
         {
             // if "this" is cached, return it.
-            if (this.cachedThis is object)
+            if (this.cachedThis is not null)
             {
                 return F.Local(this.cachedThis);
             }
@@ -903,7 +894,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // TODO: fix up the type of the resulting node to be the base type
 
             // if "this" is cached, return it.
-            if (this.cachedThis is object)
+            if (this.cachedThis is not null)
             {
                 return F.Local(this.cachedThis);
             }

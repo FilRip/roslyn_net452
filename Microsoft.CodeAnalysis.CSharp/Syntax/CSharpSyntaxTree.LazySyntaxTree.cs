@@ -155,10 +155,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             [Obsolete("Obsolete due to performance problems, use CompilationOptions.SyntaxTreeOptionsProvider instead", error: false)]
             public override SyntaxTree WithDiagnosticOptions(ImmutableDictionary<string, ReportDiagnostic> options)
             {
-                if (options is null)
-                {
-                    options = EmptyDiagnosticOptions;
-                }
+                options ??= EmptyDiagnosticOptions;
 
                 if (ReferenceEquals(_diagnosticOptions, options))
                 {

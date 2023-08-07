@@ -323,7 +323,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         }
 
                         // Report a conflict between global using aliases and extern aliases from other compilation units
-                        if (haveExternAliases && mergedAliases is object)
+                        if (haveExternAliases && mergedAliases is not null)
                         {
                             foreach (var singleDeclaration in _mergedDeclaration.Declarations)
                             {
@@ -672,10 +672,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             if (!skipInLookup)
                             {
-                                if (usingAliasesMap == null)
-                                {
-                                    usingAliasesMap = globalUsingAliasesMap.ToBuilder();
-                                }
+                                usingAliasesMap ??= globalUsingAliasesMap.ToBuilder();
 
                                 usingAliasesMap.Add(identifierValueText, aliasAndDirective);
                             }
@@ -858,7 +855,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Check constraints within named aliases.
                 var diagnostics = BindingDiagnosticBag.GetInstance();
 
-                if (usingsAndDiagnostics.UsingAliasesMap is object)
+                if (usingsAndDiagnostics.UsingAliasesMap is not null)
                 {
                     // Force resolution of named aliases.
                     foreach (var (_, alias) in usingsAndDiagnostics.UsingAliasesMap)

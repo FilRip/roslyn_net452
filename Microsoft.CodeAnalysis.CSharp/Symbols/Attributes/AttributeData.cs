@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return false;
             }
 
-            if (this.AttributeClass.IsErrorType() && !(this.AttributeClass is MissingMetadataTypeSymbol))
+            if (this.AttributeClass.IsErrorType() && this.AttributeClass is not MissingMetadataTypeSymbol)
             {
                 // Can't guarantee complete name information.
                 return false;
@@ -155,7 +155,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <returns>A <see cref="System.String"/> that represents the current AttributeData.</returns>
         public override string? ToString()
         {
-            if (this.AttributeClass is object)
+            if (this.AttributeClass is not null)
             {
                 string className = this.AttributeClass.ToDisplayString(SymbolDisplayFormat.QualifiedNameOnlyFormat);
 
@@ -280,7 +280,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (value.Kind != TypedConstantKind.Array)
             {
                 string? memberName = value.DecodeValue<string>(SpecialType.System_String);
-                if (memberName is object)
+                if (memberName is not null)
                 {
                     arguments.GetOrCreateData<T>().AddNotNullMember(memberName);
                     ReportBadNotNullMemberIfNeeded(type, arguments, memberName);
@@ -292,7 +292,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 foreach (var member in value.Values)
                 {
                     var memberName = member.DecodeValue<string>(SpecialType.System_String);
-                    if (memberName is object)
+                    if (memberName is not null)
                     {
                         builder.Add(memberName);
                         ReportBadNotNullMemberIfNeeded(type, arguments, memberName);
@@ -332,7 +332,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (value.Kind != TypedConstantKind.Array)
             {
                 var memberName = value.DecodeValue<string>(SpecialType.System_String);
-                if (memberName is object)
+                if (memberName is not null)
                 {
                     arguments.GetOrCreateData<T>().AddNotNullWhenMember(sense, memberName);
                     ReportBadNotNullMemberIfNeeded(type, arguments, memberName);
@@ -344,7 +344,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 foreach (var member in value.Values)
                 {
                     var memberName = member.DecodeValue<string>(SpecialType.System_String);
-                    if (memberName is object)
+                    if (memberName is not null)
                     {
                         builder.Add(memberName);
                         ReportBadNotNullMemberIfNeeded(type, arguments, memberName);
@@ -384,7 +384,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 TypedConstant firstArg = ctorArgs.First();
                 var firstArgType = (TypeSymbol?)firstArg.TypeInternal;
-                if (firstArgType is object && firstArgType.Equals(compilation.GetWellKnownType(WellKnownType.System_Security_Permissions_SecurityAction)))
+                if (firstArgType is not null && firstArgType.Equals(compilation.GetWellKnownType(WellKnownType.System_Security_Permissions_SecurityAction)))
                 {
                     return DecodeSecurityAction(firstArg, targetSymbol, nodeOpt, diagnostics, out hasErrors);
                 }
@@ -571,7 +571,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var property = (PropertySymbol)members[0];
                 if (property.TypeWithAnnotations.HasType && property.Type.SpecialType == SpecialType.System_String &&
                     property.DeclaredAccessibility == Accessibility.Public && property.GetMemberArity() == 0 &&
-                    property.SetMethod is object && property.SetMethod.DeclaredAccessibility == Accessibility.Public)
+                    property.SetMethod is not null && property.SetMethod.DeclaredAccessibility == Accessibility.Public)
                 {
                     return true;
                 }
@@ -648,7 +648,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         protected sealed override bool IsStringProperty(string memberName)
         {
-            if (AttributeClass is object)
+            if (AttributeClass is not null)
             {
                 foreach (var member in AttributeClass.GetMembers(memberName))
                 {

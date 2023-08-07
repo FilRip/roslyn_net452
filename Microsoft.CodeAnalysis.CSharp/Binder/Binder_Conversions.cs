@@ -930,7 +930,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var containingType = this.ContainingType;
-            if (containingType is object)
+            if (containingType is not null)
             {
                 CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
                 bool isAccessible = this.IsSymbolAccessibleConditional(memberSymbol.GetTypeOrReturnType().Type, containingType, ref useSiteInfo);
@@ -1339,7 +1339,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BindingDiagnosticBag diagnostics)
         {
             SpecialType destinationType;
-            if (destination is object && destination.IsEnumType())
+            if (destination is not null && destination.IsEnumType())
             {
                 var underlyingType = ((NamedTypeSymbol)destination).EnumUnderlyingType;
                 destinationType = underlyingType.SpecialType;

@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // if we're substituting to create a new unconstructed type as a member of a constructed type,
             // then we must alpha rename the type parameters.
-            if (constructedFrom is object)
+            if (constructedFrom is not null)
             {
                 _lazyTypeParameters = constructedFrom.TypeParameters;
                 _lazyMap = map;

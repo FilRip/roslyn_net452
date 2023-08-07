@@ -61,10 +61,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var baseBinder = this.DeclaringCompilation.GetBinder(bases);
                 baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
 
-                if (backupLocation is null)
-                {
-                    backupLocation = inheritedTypeDecls[0].Type.GetLocation();
-                }
+                backupLocation ??= inheritedTypeDecls[0].Type.GetLocation();
 
                 foreach (BaseTypeSyntax baseTypeSyntax in inheritedTypeDecls)
                 {
@@ -191,7 +188,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         if (ContainingType is not null)
                         {
                             var tpEnclosing = ContainingType.FindEnclosingTypeParameter(name);
-                            if (tpEnclosing is object)
+                            if (tpEnclosing is not null)
                             {
                                 // Type parameter '{0}' has the same name as the type parameter from outer type '{1}'
                                 diagnostics.Add(ErrorCode.WRN_TypeParameterSameAsOuterTypeParameter, location, name, tpEnclosing.ContainingType);
@@ -910,7 +907,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return data.AttributeUsageInfo;
             }
 
-            return (this.BaseTypeNoUseSiteDiagnostics is object) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
+            return (this.BaseTypeNoUseSiteDiagnostics is not null) ? this.BaseTypeNoUseSiteDiagnostics.GetAttributeUsageInfo() : AttributeUsageInfo.Default;
         }
 
         /// <summary>
@@ -1339,7 +1336,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 if (this.TypeKind == TypeKind.Class)
                 {
                     var baseType = this.BaseTypeNoUseSiteDiagnostics;
-                    if (baseType is object && baseType.SpecialType != SpecialType.System_Object)
+                    if (baseType is not null && baseType.SpecialType != SpecialType.System_Object)
                     {
                         // CS0424: '{0}': a class with the ComImport attribute cannot specify a base class
                         diagnostics.Add(ErrorCode.ERR_ComImportWithBase, this.Locations[0], this.Name);
@@ -1375,7 +1372,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
                 }
             }
-            else if (this.ComImportCoClass is object)
+            else if (this.ComImportCoClass is not null)
             {
 
                 // Symbol with CoClassAttribute must have a ComImportAttribute

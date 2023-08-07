@@ -140,7 +140,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             get
             {
-                if (AdaptedNamedTypeSymbol.ContainingType is object)
+                if (AdaptedNamedTypeSymbol.ContainingType is not null)
                 {
                     return this;
                 }
@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private Cci.INestedTypeDefinition AsNestedTypeDefinitionImpl(PEModuleBuilder moduleBeingBuilt)
         {
 
-            if (AdaptedNamedTypeSymbol.ContainingType is object &&
+            if (AdaptedNamedTypeSymbol.ContainingType is not null &&
                 AdaptedNamedTypeSymbol.IsDefinition &&
                 AdaptedNamedTypeSymbol.ContainingModule == moduleBeingBuilt.SourceModule)
             {
@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 baseType = AdaptedNamedTypeSymbol.ContainingAssembly.GetSpecialType(Microsoft.CodeAnalysis.SpecialType.System_Object);
             }
 
-            return (baseType is object) ? moduleBeingBuilt.Translate(baseType,
+            return (baseType is not null) ? moduleBeingBuilt.Translate(baseType,
                                                                    syntaxNodeOpt: (CSharpSyntaxNode)context.SyntaxNode,
                                                                    diagnostics: context.Diagnostics) : null;
         }
@@ -904,11 +904,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // That's why we're not using InterfacesAndTheirBaseInterfaces - it's an unordered set.
             foreach (NamedTypeSymbol @interface in namedType.InterfacesNoUseSiteDiagnostics())
             {
-                if (seen == null)
-                {
-                    // Don't allocate until we see at least one interface.
-                    seen = new HashSet<NamedTypeSymbol>(Symbols.SymbolEqualityComparer.CLRSignature);
-                }
+                // Don't allocate until we see at least one interface.
+                seen ??= new HashSet<NamedTypeSymbol>(Symbols.SymbolEqualityComparer.CLRSignature);
                 if (seen.Add(@interface))
                 {
                     builder.Add(@interface);

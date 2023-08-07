@@ -108,11 +108,8 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            if (set == null)
-            {
-                // Edge case where there are no syntax trees
-                set = ImmutableDictionary<string, string>.Empty;
-            }
+            // Edge case where there are no syntax trees
+            set ??= ImmutableDictionary<string, string>.Empty;
 
             return set;
         }
@@ -545,14 +542,9 @@ namespace Microsoft.CodeAnalysis
             var result = references.AsImmutableOrEmpty();
             for (int i = 0; i < result.Length; i++)
             {
-                var reference = result[i];
-                if (reference == null)
-                {
-                    throw new ArgumentNullException($"{nameof(references)}[{i}]");
-                }
-
+                var reference = result[i] ?? throw new ArgumentNullException($"{nameof(references)}[{i}]");
                 var peReference = reference as PortableExecutableReference;
-                if (peReference == null && !(reference is T))
+                if (peReference == null && reference is not T)
                 {
                     Debug.Assert(reference is UnresolvedMetadataReference || reference is CompilationReference);
                     throw new ArgumentException(string.Format(Properties.Resources.ReferenceOfTypeIsInvalid1, reference.GetType()),
@@ -1539,7 +1531,7 @@ namespace Microsoft.CodeAnalysis
         /// <returns>True if there are no unsuppressed errors (i.e., no errors which fail compilation).</returns>
         public bool FilterAndAppendAndFreeDiagnostics(DiagnosticBag accumulator, [DisallowNull] ref DiagnosticBag? incoming, CancellationToken cancellationToken)
         {
-            RoslynDebug.Assert(incoming is object);
+            RoslynDebug.Assert(incoming is not null);
             bool result = FilterAndAppendDiagnostics(accumulator, incoming.AsEnumerableWithoutResolution(), exclude: null, cancellationToken);
             incoming.Free();
             incoming = null;
@@ -1605,10 +1597,7 @@ namespace Microsoft.CodeAnalysis
                     if (this.Options.OutputKind.IsApplication())
                     {
                         // Applications use a default manifest if one is not specified.
-                        if (manifestContents == null)
-                        {
-                            manifestContents = typeof(Compilation).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.CodeAnalysis.Resources.default.win32manifest");
-                        }
+                        manifestContents ??= typeof(Compilation).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.CodeAnalysis.Resources.default.win32manifest");
                     }
                     else
                     {
@@ -2618,7 +2607,7 @@ namespace Microsoft.CodeAnalysis
                             moduleBeingBuilt,
                             xmlDocumentationStream,
                             win32Resources,
-                            useRawWin32Resources: rebuildData is object,
+                            useRawWin32Resources: rebuildData is not null,
                             options.OutputNameOverride,
                             diagnostics,
                             cancellationToken))
@@ -3283,10 +3272,7 @@ namespace Microsoft.CodeAnalysis
 
         private void MakeMemberMissing(int member)
         {
-            if (_lazyMakeMemberMissingMap == null)
-            {
-                _lazyMakeMemberMissingMap = new SmallDictionary<int, bool>();
-            }
+            _lazyMakeMemberMissingMap ??= new SmallDictionary<int, bool>();
 
             _lazyMakeMemberMissingMap[member] = true;
         }
@@ -3308,10 +3294,7 @@ namespace Microsoft.CodeAnalysis
 
         private void MakeTypeMissing(int type)
         {
-            if (_lazyMakeWellKnownTypeMissingMap == null)
-            {
-                _lazyMakeWellKnownTypeMissingMap = new SmallDictionary<int, bool>();
-            }
+            _lazyMakeWellKnownTypeMissingMap ??= new SmallDictionary<int, bool>();
 
             _lazyMakeWellKnownTypeMissingMap[type] = true;
         }

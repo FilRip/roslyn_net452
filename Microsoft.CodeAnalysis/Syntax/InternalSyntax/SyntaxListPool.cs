@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.Syntax.InternalSyntax
 
         public void Free<TNode>(in SeparatedSyntaxListBuilder<TNode> item) where TNode : GreenNode
         {
-            RoslynDebug.Assert(item.UnderlyingBuilder is object);
+            RoslynDebug.Assert(item.UnderlyingBuilder is not null);
             Free(item.UnderlyingBuilder);
         }
 

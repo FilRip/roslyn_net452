@@ -284,7 +284,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 this.SetFrom(result);
             }
-            else if (result.Symbol is object)
+            else if (result.Symbol is not null)
             {
                 // Same goodness. Include all symbols
                 _symbolList.Add(result.Symbol);
@@ -312,10 +312,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal void Free()
         {
             this.Clear();
-            if (_pool != null)
-            {
-                _pool.Free(this);
-            }
+            _pool?.Free(this);
         }
     }
 }

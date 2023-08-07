@@ -279,7 +279,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // If a viable using alias and a matching member are both defined in the submission an error is reported elsewhere.
                 // Ignore the member in such case.
-                if ((options & LookupOptions.NamespaceAliasesOnly) == 0 && submission.ScriptClass is object)
+                if ((options & LookupOptions.NamespaceAliasesOnly) == 0 && submission.ScriptClass is not null)
                 {
                     LookupMembersWithoutInheritance(submissionSymbols, submission.ScriptClass, name, arity, options, originalBinder, submissionClass, diagnose, ref useSiteInfo, basesBeingResolved);
 
@@ -547,7 +547,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!result.IsClear)
                 {
-                    if (symbolWithoutSuffix is object) // was not ambiguous, but not viable
+                    if (symbolWithoutSuffix is not null) // was not ambiguous, but not viable
                     {
                         result.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithoutSuffix, result.Error, diagnose));
                     }
@@ -557,7 +557,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     if (!resultWithSuffix.IsClear)
                     {
-                        if (symbolWithSuffix is object)
+                        if (symbolWithSuffix is not null)
                         {
                             resultWithSuffix.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithSuffix, resultWithSuffix.Error, diagnose));
                         }
@@ -792,7 +792,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var tmp = LookupResult.GetInstance();
             PooledHashSet<NamedTypeSymbol> visited = null;
-            while (currentType is object)
+            while (currentType is not null)
             {
                 tmp.Clear();
                 LookupMembersWithoutInheritance(tmp, currentType, name, arity, options, originalBinder, accessThroughType, diagnose, ref useSiteInfo, basesBeingResolved);
@@ -833,10 +833,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 currentType = currentType.GetNextBaseTypeNoUseSiteDiagnostics(basesBeingResolved, this.Compilation, ref visited);
-                if (currentType is object)
-                {
-                    currentType.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
-                }
+                currentType?.OriginalDefinition.AddUseSiteInfo(ref useSiteInfo);
             }
 
             visited?.Free();
@@ -1162,7 +1159,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsDerivedType(NamedTypeSymbol baseType, NamedTypeSymbol derivedType, ConsList<TypeSymbol> basesBeingResolved, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            for (NamedTypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); b is object; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            for (NamedTypeSymbol b = derivedType.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo); b is not null; b = b.BaseTypeWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
             {
                 if (TypeSymbol.Equals(b, baseType, TypeCompareKind.ConsiderEverything2)) return true;
             }
@@ -1313,7 +1310,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 diagInfo = diagnose ? new CSDiagnosticInfo(ErrorCode.ERR_CantCallSpecialMethod, unwrappedSymbol) : null;
                 return LookupResult.NotReferencable(symbol, diagInfo);
             }
-            else if ((options & LookupOptions.NamespacesOrTypesOnly) != 0 && !(unwrappedSymbol is NamespaceOrTypeSymbol))
+            else if ((options & LookupOptions.NamespacesOrTypesOnly) != 0 && unwrappedSymbol is not NamespaceOrTypeSymbol)
             {
                 return LookupResult.NotTypeOrNamespace(unwrappedSymbol, symbol, diagnose);
             }
@@ -1442,7 +1439,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     throw ExceptionUtilities.UnexpectedValue(symbol.Kind);
             }
 
-            return ((method1 is object) && (method2 is object)) ?
+            return ((method1 is not null) && (method2 is not null)) ?
                 new CSDiagnosticInfo(ErrorCode.ERR_BindToBogusProp2, symbol, method1, method2) :
                 new CSDiagnosticInfo(ErrorCode.ERR_BindToBogusProp1, symbol, method1 ?? method2);
         }
@@ -1473,7 +1470,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            if ((options & LookupOptions.NamespacesOrTypesOnly) != 0 && !(symbol is NamespaceOrTypeSymbol))
+            if ((options & LookupOptions.NamespacesOrTypesOnly) != 0 && symbol is not NamespaceOrTypeSymbol)
             {
                 return false;
             }
@@ -1529,7 +1526,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool IsEffectivelyPrivate(Symbol symbol)
         {
-            for (Symbol s = symbol; s is object; s = s.ContainingSymbol)
+            for (Symbol s = symbol; s is not null; s = s.ContainingSymbol)
             {
                 if (s.DeclaredAccessibility == Accessibility.Private)
                 {
@@ -1606,7 +1603,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     break;
             }
 
-            return type is object && (type.IsDelegateType() || type.IsDynamic() || type.IsFunctionPointer());
+            return type is not null && (type.IsDelegateType() || type.IsDynamic() || type.IsFunctionPointer());
         }
 
         private static bool IsInstance(Symbol symbol)
@@ -1748,7 +1745,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // TODO: optimize lookup (there might be many interactions in the chain)
             for (CSharpCompilation submission = Compilation; submission != null; submission = submission.PreviousSubmission)
             {
-                if (submission.ScriptClass is object)
+                if (submission.ScriptClass is not null)
                 {
                     AddMemberLookupSymbolsInfoWithoutInheritance(result, submission.ScriptClass, options, originalBinder, scriptClass);
                 }
@@ -1846,7 +1843,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             PooledHashSet<NamedTypeSymbol> visited = null;
             // We need a check for SpecialType.System_Void as its base type is
             // ValueType but we don't wish to return any members for void type
-            while (type is object && !type.IsVoidType())
+            while (type is not null && !type.IsVoidType())
             {
                 AddMemberLookupSymbolsInfoWithoutInheritance(result, type, options, originalBinder, accessThroughType);
 

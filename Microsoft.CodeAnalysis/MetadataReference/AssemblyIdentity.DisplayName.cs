@@ -48,10 +48,7 @@ namespace Microsoft.CodeAnalysis
                 return BuildDisplayName(fullKey: true);
             }
 
-            if (_lazyDisplayName == null)
-            {
-                _lazyDisplayName = BuildDisplayName(fullKey: false);
-            }
+            _lazyDisplayName ??= BuildDisplayName(fullKey: false);
 
             return _lazyDisplayName;
         }

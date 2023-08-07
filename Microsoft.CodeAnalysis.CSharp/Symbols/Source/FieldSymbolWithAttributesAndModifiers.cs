@@ -258,7 +258,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     {
                         constValue = this.GetConstantValue(ConstantFieldsInProgress.Empty, earlyDecodingWellKnownAttributes: false);
 
-                        if (constValue is object && !constValue.IsBad && constValue != attrValue)
+                        if (constValue is not null && !constValue.IsBad && constValue != attrValue)
                         {
                             diagnostics.Add(ErrorCode.ERR_FieldHasMultipleDistinctConstantValues, arguments.AttributeSyntaxOpt.Location);
                         }

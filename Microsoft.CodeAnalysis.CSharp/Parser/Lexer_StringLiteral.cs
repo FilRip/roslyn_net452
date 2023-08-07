@@ -379,10 +379,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                             {
                                 lexer.TextWindow.AdvanceChar(); // }
                             }
-                            else if (error == null)
-                            {
-                                error = lexer.MakeError(pos, 1, ErrorCode.ERR_UnescapedCurly, "}");
-                            }
+                            else error ??= lexer.MakeError(pos, 1, ErrorCode.ERR_UnescapedCurly, "}");
                             continue;
                         case '{':
                             if (lexer.TextWindow.PeekChar(1) == '{')
@@ -405,10 +402,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 else
                                 {
                                     closeBraceMissing = true;
-                                    if (error == null)
-                                    {
-                                        error = lexer.MakeError(openBracePosition - 1, 2, ErrorCode.ERR_UnclosedExpressionHole);
-                                    }
+                                    error ??= lexer.MakeError(openBracePosition - 1, 2, ErrorCode.ERR_UnclosedExpressionHole);
                                 }
 
                                 interpolations?.Add(new Interpolation(openBracePosition, colonPosition, closeBracePosition, closeBraceMissing));
@@ -473,10 +467,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                         {
                             lexer.TextWindow.AdvanceChar(); // {
                         }
-                        else if (error == null)
-                        {
-                            error = lexer.MakeError(pos, 1, ErrorCode.ERR_UnescapedCurly, "{");
-                        }
+                        else error ??= lexer.MakeError(pos, 1, ErrorCode.ERR_UnescapedCurly, "{");
                     }
                     else if (ch == '}')
                     {
@@ -519,10 +510,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     {
                         case '#':
                             // preprocessor directives not allowed.
-                            if (error == null)
-                            {
-                                error = lexer.MakeError(lexer.TextWindow.Position, 1, ErrorCode.ERR_SyntaxError, endingChar.ToString());
-                            }
+                            error ??= lexer.MakeError(lexer.TextWindow.Position, 1, ErrorCode.ERR_SyntaxError, endingChar.ToString());
 
                             lexer.TextWindow.AdvanceChar();
                             continue;
@@ -567,10 +555,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 return;
                             }
 
-                            if (error == null)
-                            {
-                                error = lexer.MakeError(lexer.TextWindow.Position, 1, ErrorCode.ERR_SyntaxError, endingChar.ToString());
-                            }
+                            error ??= lexer.MakeError(lexer.TextWindow.Position, 1, ErrorCode.ERR_SyntaxError, endingChar.ToString());
 
                             goto default;
                         case '"' when RecoveringFromRunawayLexing():
@@ -629,10 +614,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                     else
                                     {
                                         // error: single-line comment not allowed in an interpolated string
-                                        if (error == null)
-                                        {
-                                            error = lexer.MakeError(lexer.TextWindow.Position, 2, ErrorCode.ERR_SingleLineCommentInExpressionHole);
-                                        }
+                                        error ??= lexer.MakeError(lexer.TextWindow.Position, 2, ErrorCode.ERR_SingleLineCommentInExpressionHole);
 
                                         lexer.TextWindow.AdvanceChar();
                                         lexer.TextWindow.AdvanceChar();

@@ -111,7 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public Diagnostic Current
         {
-            get { Debug.Assert(_current is object); return _current; }
+            get { Debug.Assert(_current is not null); return _current; }
         }
 
         private struct NodeIteration

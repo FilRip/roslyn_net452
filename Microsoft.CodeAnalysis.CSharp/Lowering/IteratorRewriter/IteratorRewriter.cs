@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void EnsureSpecialPropertyGetter(SpecialMember member, BindingDiagnosticBag bag)
         {
             PropertySymbol symbol = (PropertySymbol)EnsureSpecialMember(member, bag);
-            if (symbol is object)
+            if (symbol is not null)
             {
                 var getter = symbol.GetMethod;
                 if (getter is null)

@@ -108,7 +108,7 @@ namespace Microsoft.CodeAnalysis
 
         public bool ContainsKey(K key)
         {
-            return TryGetValue(key, out  V _);
+            return TryGetValue(key, out _);
         }
 
         [Conditional("DEBUG")]
@@ -202,7 +202,7 @@ namespace Microsoft.CodeAnalysis
 
         private bool TryGetValue(int hashCode, K key, [MaybeNullWhen(returnValue: false)] out V value)
         {
-            RoslynDebug.Assert(_root is object);
+            RoslynDebug.Assert(_root is not null);
             AvlNode? b = _root;
 
             do
@@ -217,21 +217,18 @@ namespace Microsoft.CodeAnalysis
                 }
                 else
                 {
-                    goto hasBucket;
+                    if (CompareKeys(b.Key, key))
+                    {
+                        value = b.Value;
+                        return true;
+                    }
+
+                    return GetFromList(b.Next, key, out value!);
                 }
             } while (b != null);
 
             value = default!;
             return false;
-
-        hasBucket:
-            if (CompareKeys(b.Key, key))
-            {
-                value = b.Value;
-                return true;
-            }
-
-            return GetFromList(b.Next, key, out value!);
         }
 
         private bool GetFromList(Node? next, K key, [MaybeNullWhen(returnValue: false)] out V value)
@@ -270,7 +267,7 @@ namespace Microsoft.CodeAnalysis
             // nodes on the search path from rotation candidate downwards will change balances because of the node added
             // unbalanced node itself will become balanced or will be rotated
             // either way nodes above unbalanced do not change their balance
-            for (; ; )
+            while (true)
             {
                 // schedule hk read 
                 var hc = currentNode.HashCode;
@@ -372,7 +369,7 @@ namespace Microsoft.CodeAnalysis
 
         private static AvlNode LeftSimple(AvlNode unbalanced)
         {
-            RoslynDebug.Assert(unbalanced.Right is object);
+            RoslynDebug.Assert(unbalanced.Right is not null);
             var right = unbalanced.Right;
             unbalanced.Right = right.Left;
             right.Left = unbalanced;
@@ -384,7 +381,7 @@ namespace Microsoft.CodeAnalysis
 
         private static AvlNode RightSimple(AvlNode unbalanced)
         {
-            RoslynDebug.Assert(unbalanced.Left is object);
+            RoslynDebug.Assert(unbalanced.Left is not null);
             var left = unbalanced.Left;
             unbalanced.Left = left.Right;
             left.Right = unbalanced;
@@ -396,8 +393,8 @@ namespace Microsoft.CodeAnalysis
 
         private static AvlNode LeftComplex(AvlNode unbalanced)
         {
-            RoslynDebug.Assert(unbalanced.Right is object);
-            RoslynDebug.Assert(unbalanced.Right.Left is object);
+            RoslynDebug.Assert(unbalanced.Right is not null);
+            RoslynDebug.Assert(unbalanced.Right.Left is not null);
             var right = unbalanced.Right;
             var rightLeft = right.Left;
             right.Left = rightLeft.Right;

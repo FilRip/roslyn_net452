@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void CheckUnsafeType(BoundExpression e)
         {
-            if (e != null && e.Type is object && e.Type.IsPointerOrFunctionPointer()) NoteUnsafe(e);
+            if (e != null && e.Type is not null && e.Type.IsPointerOrFunctionPointer()) NoteUnsafe(e);
         }
 
         private void NoteUnsafe(BoundNode node)
@@ -177,7 +177,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void CheckReferenceToThisOrBase(BoundExpression node)
         {
-            if (_staticLocalOrAnonymousFunction is object)
+            if (_staticLocalOrAnonymousFunction is not null)
             {
                 var diagnostic = _staticLocalOrAnonymousFunction.MethodKind == MethodKind.LocalFunction
                     ? ErrorCode.ERR_StaticLocalFunctionCannotCaptureThis
@@ -190,7 +190,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void CheckReferenceToVariable(BoundExpression node, Symbol symbol)
         {
 
-            if (_staticLocalOrAnonymousFunction is object && Symbol.IsCaptured(symbol, _staticLocalOrAnonymousFunction))
+            if (_staticLocalOrAnonymousFunction is not null && Symbol.IsCaptured(symbol, _staticLocalOrAnonymousFunction))
             {
                 var diagnostic = _staticLocalOrAnonymousFunction.MethodKind == MethodKind.LocalFunction
                     ? ErrorCode.ERR_StaticLocalFunctionCannotCaptureVariable
@@ -300,7 +300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     Error(ErrorCode.ERR_PartialMethodInExpressionTree, node);
                 }
-                else if (propertyAccess is object && propertyAccess.IsIndexedProperty() && !propertyAccess.IsIndexer)
+                else if (propertyAccess is not null && propertyAccess.IsIndexedProperty() && !propertyAccess.IsIndexer)
                 {
                     Error(ErrorCode.ERR_ExpressionTreeContainsIndexedProperty, node);
                 }
@@ -344,7 +344,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (_inExpressionLambda &&
                 // Ignoring BoundConversion nodes prevents redundant diagnostics
-                !(node is BoundConversion) &&
+                node is not BoundConversion &&
                 node is BoundExpression expr &&
                 expr.Type is TypeSymbol type &&
                 type.IsRestrictedType())
@@ -467,7 +467,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var indexer = node.Indexer;
             var method = indexer.GetOwnOrInheritedGetMethod() ?? indexer.GetOwnOrInheritedSetMethod();
-            if (method is object)
+            if (method is not null)
             {
                 VisitCall(method, indexer, node.Arguments, node.ArgumentRefKindsOpt, node.ArgumentNamesOpt, node.DefaultArguments, node);
             }

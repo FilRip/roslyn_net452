@@ -45,7 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
             // Embed all members
             foreach (MethodSymbol m in UnderlyingNamedType.AdaptedNamedTypeSymbol.GetMethodsToEmit())
             {
-                if (m is object)
+                if (m is not null)
                 {
                     TypeManager.EmbedMethod(this, m.GetCciAdapter(), syntaxNodeOpt, diagnostics);
                 }
@@ -78,7 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
         protected override Cci.ITypeReference GetBaseClass(PEModuleBuilder moduleBuilder, SyntaxNode syntaxNodeOpt, DiagnosticBag diagnostics)
         {
             NamedTypeSymbol baseType = UnderlyingNamedType.AdaptedNamedTypeSymbol.BaseTypeNoUseSiteDiagnostics;
-            return baseType is object ? moduleBuilder.Translate(baseType, syntaxNodeOpt, diagnostics) : null;
+            return baseType is not null ? moduleBuilder.Translate(baseType, syntaxNodeOpt, diagnostics) : null;
         }
 
         protected override IEnumerable<FieldSymbolAdapter> GetFieldsToEmit()
@@ -263,7 +263,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit.NoPia
 
                 var stringType = TypeManager.GetSystemStringType(syntaxNodeOpt, diagnostics);
 
-                if (stringType is object)
+                if (stringType is not null)
                 {
                     string guidString = TypeManager.GetAssemblyGuidString(UnderlyingNamedType.AdaptedNamedTypeSymbol.ContainingAssembly);
                     return new SynthesizedAttributeData(ctor,

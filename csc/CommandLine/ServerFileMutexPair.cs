@@ -2,7 +2,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal sealed class ServerFileMutexPair : IServerMutex, IDisposable
+    internal sealed class ServerFileMutexPair : IServerMutex
     {
         public readonly FileMutex AliveMutex;
 
@@ -15,9 +15,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
             AliveMutex = new FileMutex(mutexName + "-alive");
             HeldMutex = new FileMutex(mutexName + "-held");
             createdNew = AliveMutex.TryLock(0);
-            if ((initiallyOwned & createdNew) && !TryLock(0))
+            if ((initiallyOwned && createdNew) && !TryLock(0))
             {
-                throw new Exception("Failed to lock mutex after creating it");
+                throw new CscException("Failed to lock mutex after creating it");
             }
         }
 

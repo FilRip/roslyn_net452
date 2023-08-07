@@ -162,9 +162,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     var implementingMember = implementingMemberAndDiagnostics.Symbol;
                     var synthesizedImplementation = this.SynthesizeInterfaceMemberImplementation(implementingMemberAndDiagnostics, interfaceMember);
 
-                    bool wasImplementingMemberFound = implementingMember is object;
+                    bool wasImplementingMemberFound = implementingMember is not null;
 
-                    if (synthesizedImplementation is object)
+                    if (synthesizedImplementation is not null)
                     {
                         if (synthesizedImplementation.IsVararg)
                         {
@@ -295,7 +295,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 // a synthesized implementation is needed that invokes the base method.
                                 // We can do so only if there are no use-site errors.
 
-                                if (synthesizedImplementation is object || TypeSymbol.Equals(implementingMember.ContainingType, this, TypeCompareKind.ConsiderEverything2))
+                                if (synthesizedImplementation is not null || TypeSymbol.Equals(implementingMember.ContainingType, this, TypeCompareKind.ConsiderEverything2))
                                 {
                                     UseSiteInfo<AssemblySymbol> useSiteInfo = interfaceMember.GetUseSiteInfo();
                                     // Don't report a use site error with a location in another compilation.  For example,
@@ -418,7 +418,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             HasBaseTypeDeclaringInterfaceResult result = HasBaseTypeDeclaringInterfaceResult.NoMatch;
 
-            for (NamedTypeSymbol currType = this.BaseTypeNoUseSiteDiagnostics; currType is object; currType = currType.BaseTypeNoUseSiteDiagnostics)
+            for (NamedTypeSymbol currType = this.BaseTypeNoUseSiteDiagnostics; currType is not null; currType = currType.BaseTypeNoUseSiteDiagnostics)
             {
                 if (DeclaresBaseInterface(currType, @interface, ref result))
                 {
@@ -528,7 +528,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             // checks.  Roslyn can't, since the language says they are not virtual/override and that's what we need to expose
                             // in the symbol model.  Having said that, Dev11 doesn't seem to produce override errors other than this one
                             // (see SymbolPreparer::prepareOperator).
-                            if (overridden is object && overridden.IsMetadataFinal)
+                            if (overridden is not null && overridden.IsMetadataFinal)
                             {
                                 diagnostics.Add(ErrorCode.ERR_CantOverrideSealed, method.Locations[0], method, overridden);
                             }
@@ -547,11 +547,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             if (!suppressAccessors)
                             {
-                                if (getMethod is object)
+                                if (getMethod is not null)
                                 {
                                     CheckOverrideMember(getMethod, getMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
-                                if (setMethod is object)
+                                if (setMethod is not null)
                                 {
                                     CheckOverrideMember(setMethod, setMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
@@ -564,11 +564,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             if (!suppressAccessors)
                             {
-                                if (getMethod is object)
+                                if (getMethod is not null)
                                 {
                                     CheckNonOverrideMember(getMethod, isNewProperty, getMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
-                                if (setMethod is object)
+                                if (setMethod is not null)
                                 {
                                     CheckNonOverrideMember(setMethod, isNewProperty, setMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
@@ -588,11 +588,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             if (!suppressAccessors)
                             {
-                                if (addMethod is object)
+                                if (addMethod is not null)
                                 {
                                     CheckOverrideMember(addMethod, addMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
-                                if (removeMethod is object)
+                                if (removeMethod is not null)
                                 {
                                     CheckOverrideMember(removeMethod, removeMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
@@ -605,11 +605,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             if (!suppressAccessors)
                             {
-                                if (addMethod is object)
+                                if (addMethod is not null)
                                 {
                                     CheckNonOverrideMember(addMethod, isNewEvent, addMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
-                                if (removeMethod is object)
+                                if (removeMethod is not null)
                                 {
                                     CheckNonOverrideMember(removeMethod, isNewEvent, removeMethod.OverriddenOrHiddenMembers, diagnostics, out bool _);
                                 }
@@ -660,7 +660,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             bool unused = false;
 
             NamedTypeSymbol currType = this.BaseTypeNoUseSiteDiagnostics;
-            while (currType is object)
+            while (currType is not null)
             {
                 foreach (var hiddenMember in currType.GetMembers(symbol.Name))
                 {
@@ -1036,7 +1036,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
                     else
                     {
-                        if (overridingProperty.GetMethod is object)
+                        if (overridingProperty.GetMethod is not null)
                         {
                             MethodSymbol overriddenGetMethod = overriddenProperty.GetOwnOrInheritedGetMethod();
                             checkValidNullableMethodOverride(
@@ -1052,7 +1052,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                                  overriddenProperty.GetOwnOrInheritedSetMethod()?.AssociatedSymbol != overriddenProperty);
                         }
 
-                        if (overridingProperty.SetMethod is object)
+                        if (overridingProperty.SetMethod is not null)
                         {
                             var ownOrInheritedOverriddenSetMethod = overriddenProperty.GetOwnOrInheritedSetMethod();
                             checkValidNullableMethodOverride(
@@ -1063,7 +1063,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 checkReturnType: false,
                                 checkParameters: true);
 
-                            if (ownOrInheritedOverriddenSetMethod is object &&
+                            if (ownOrInheritedOverriddenSetMethod is not null &&
                                 overridingProperty.SetMethod.IsInitOnly != ownOrInheritedOverriddenSetMethod.IsInitOnly)
                             {
                                 diagnostics.Add(ErrorCode.ERR_CantChangeInitOnlyOnOverride, overridingMemberLocation, overridingProperty, overriddenProperty);
@@ -1112,7 +1112,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal static bool IsOrContainsErrorType(TypeSymbol typeSymbol)
         {
-            return typeSymbol.VisitType((currentTypeSymbol, unused1, unused2) => currentTypeSymbol.IsErrorType(), (object)null) is object;
+            return typeSymbol.VisitType((currentTypeSymbol, unused1, unused2) => currentTypeSymbol.IsErrorType(), (object)null) is not null;
         }
 
         /// <summary>
@@ -1286,9 +1286,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             // Don't do any validation if the nullable feature is not enabled or
             // the override is not written directly in source
-            return overriddenMember is object &&
-                   overridingMember is object &&
-                   compilation is object &&
+            return overriddenMember is not null &&
+                   overridingMember is not null &&
+                   compilation is not null &&
                    compilation.IsFeatureEnabled(MessageID.IDS_FeatureNullableReferenceTypes);
         }
 
@@ -1413,7 +1413,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         {
                             case SymbolKind.Method:
                                 var associatedPropertyOrEvent = ((MethodSymbol)hidingMember).AssociatedSymbol;
-                                if (associatedPropertyOrEvent is object)
+                                if (associatedPropertyOrEvent is not null)
                                 {
                                     //Dev10 reports that the property/event is doing the hiding, rather than the method
                                     diagnostics.Add(ErrorCode.ERR_HidingAbstractMethod, associatedPropertyOrEvent.Locations[0], associatedPropertyOrEvent, hiddenMember);
@@ -1655,7 +1655,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static bool IsOverrideOfPossibleImplementationUnderRuntimeRules(MethodSymbol implementingMethod, NamedTypeSymbol @interface)
         {
             MethodSymbol curr = implementingMethod;
-            while (curr is object)
+            while (curr is not null)
             {
                 if (IsPossibleImplementationUnderRuntimeRules(curr, @interface))
                 {

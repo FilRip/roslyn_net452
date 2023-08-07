@@ -82,10 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // present.
                 if (sourceIncludeElementNodes.IsEmpty)
                 {
-                    if (writer != null)
-                    {
-                        writer.Write(unprocessed);
-                    }
+                    writer?.Write(unprocessed);
                     return;
                 }
 
@@ -101,10 +98,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     // If one of the trees wasn't diagnosing doc comments, then an error might have slipped through.
                     // Otherwise, we shouldn't see exceptions from XDocument.Parse.
-                    if (writer != null)
-                    {
-                        writer.Write(unprocessed);
-                    }
+                    writer?.Write(unprocessed);
                     return;
                 }
 
@@ -124,10 +118,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    if (writer != null)
-                    {
-                        writer.Write(node);
-                    }
+                    writer?.Write(node);
                 }
 
 
@@ -147,10 +138,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ArrayBuilder<XNode> builder = null;
                 foreach (XNode child in nodes)
                 {
-                    if (builder == null)
-                    {
-                        builder = ArrayBuilder<XNode>.GetInstance();
-                    }
+                    builder ??= ArrayBuilder<XNode>.GetInstance();
 
                     builder.AddRange(Rewrite(child, currentXmlFilePath, originatingSyntax));
                 }
@@ -319,10 +307,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         return null;
                     }
 
-                    if (_includedFileCache == null)
-                    {
-                        _includedFileCache = new DocumentationCommentIncludeCache(resolver);
-                    }
+                    _includedFileCache ??= new DocumentationCommentIncludeCache(resolver);
 
                     try
                     {
@@ -434,10 +419,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private bool EnterIncludeElement(Location location)
             {
-                if (_inProgressIncludeElementNodes == null)
-                {
-                    _inProgressIncludeElementNodes = new HashSet<Location>();
-                }
+                _inProgressIncludeElementNodes ??= new HashSet<Location>();
 
                 return _inProgressIncludeElementNodes.Add(location);
             }
@@ -584,7 +566,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 break;
                         }
                         currentSymbol = currentSymbol.ContainingSymbol;
-                    } while (isTypeParameterRef && !(currentSymbol is null));
+                    } while (isTypeParameterRef && currentSymbol is not null);
                 }
 
                 return binder;

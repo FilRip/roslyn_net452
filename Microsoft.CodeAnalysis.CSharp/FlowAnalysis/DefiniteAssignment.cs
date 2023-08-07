@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             _alreadyReported = BitVector.Empty;           // no variables yet reported unassigned
             this.regionPlace = RegionPlace.Before;
             EnterParameters(methodParameters);               // with parameters assigned
-            if (methodThisParameter is object)
+            if (methodThisParameter is not null)
             {
                 EnterParameter(methodThisParameter);
                 if (methodThisParameter.Type.SpecialType != SpecialType.None)
@@ -303,14 +303,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (ShouldAnalyzeOutParameters(out Location location))
             {
                 LeaveParameters(methodParameters, null, location);
-                if (methodThisParameter is object) LeaveParameter(methodThisParameter, null, location);
+                if (methodThisParameter is not null) LeaveParameter(methodThisParameter, null, location);
 
                 var savedState = this.State;
                 foreach (PendingBranch returnBranch in pendingReturns)
                 {
                     this.State = returnBranch.State;
                     LeaveParameters(methodParameters, returnBranch.Branch.Syntax, null);
-                    if (methodThisParameter is object) LeaveParameter(methodThisParameter, returnBranch.Branch.Syntax, null);
+                    if (methodThisParameter is not null) LeaveParameter(methodThisParameter, returnBranch.Branch.Syntax, null);
                     Join(ref savedState, ref this.State);
                 }
 
@@ -641,9 +641,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _usedLocalFunctions.Add(localFunction);
             }
 
-            if (variable is object)
+            if (variable is not null)
             {
-                if (_sourceAssembly is object && variable.Kind == SymbolKind.Field)
+                if (_sourceAssembly is not null && variable.Kind == SymbolKind.Field)
                 {
                     _sourceAssembly.NoteFieldAccess((FieldSymbol)variable.OriginalDefinition,
                                                     read: true,
@@ -681,7 +681,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             var eventAccess = (BoundEventAccess)n;
                             FieldSymbol associatedField = eventAccess.EventSymbol.AssociatedField;
-                            if (associatedField is object)
+                            if (associatedField is not null)
                             {
                                 NoteRead(associatedField);
 
@@ -714,10 +714,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected virtual void NoteWrite(Symbol variable, BoundExpression value, bool read)
         {
-            if (variable is object)
+            if (variable is not null)
             {
                 _writtenVariables.Add(variable);
-                if (_sourceAssembly is object && variable.Kind == SymbolKind.Field)
+                if (_sourceAssembly is not null && variable.Kind == SymbolKind.Field)
                 {
                     var field = (FieldSymbol)variable.OriginalDefinition;
                     _sourceAssembly.NoteFieldAccess(field, read: read && WriteConsideredUse(field.Type, value), write: true);
@@ -763,12 +763,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal static bool WriteConsideredUse(TypeSymbol type, BoundExpression value)
         {
             if (value == null || value.HasAnyErrors) return true;
-            if (type is object && type.IsReferenceType && type.SpecialType != SpecialType.System_String)
+            if (type is not null && type.IsReferenceType && type.SpecialType != SpecialType.System_String)
             {
                 return value.ConstantValue != ConstantValue.Null;
             }
 
-            if (type is object && type.IsPointerOrFunctionPointer())
+            if (type is not null && type.IsPointerOrFunctionPointer())
             {
                 // We always suppress the warning for pointer types.
                 return true;
@@ -818,7 +818,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case BoundKind.FieldAccess:
                         {
                             var fieldAccess = (BoundFieldAccess)n;
-                            if (_sourceAssembly is object)
+                            if (_sourceAssembly is not null)
                             {
                                 var field = fieldAccess.FieldSymbol.OriginalDefinition;
                                 _sourceAssembly.NoteFieldAccess(field, read: value == null || WriteConsideredUse(fieldAccess.FieldSymbol.Type, value), write: true);
@@ -843,9 +843,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             var eventAccess = (BoundEventAccess)n;
                             FieldSymbol associatedField = eventAccess.EventSymbol.AssociatedField;
-                            if (associatedField is object)
+                            if (associatedField is not null)
                             {
-                                if (_sourceAssembly is object)
+                                if (_sourceAssembly is not null)
                                 {
                                     var field = associatedField.OriginalDefinition;
                                     _sourceAssembly.NoteFieldAccess(field, read: value == null || WriteConsideredUse(associatedField.Type, value), write: true);
@@ -963,7 +963,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
             }
 
-            return member is object &&
+            return member is not null &&
                 receiver != null &&
                 receiver.Kind != BoundKind.TypeExpression &&
                 MayRequireTrackingReceiverType(receiver.Type);
@@ -971,14 +971,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool MayRequireTrackingReceiverType(TypeSymbol type)
         {
-            return type is object &&
+            return type is not null &&
                 (_trackClassFields || type.TypeKind == TypeKind.Struct);
         }
 
         protected bool MayRequireTracking(BoundExpression receiverOpt, FieldSymbol fieldSymbol)
         {
             return
-                fieldSymbol is object && //simplifies calling pattern for events
+                fieldSymbol is not null && //simplifies calling pattern for events
                 receiverOpt != null &&
                 !fieldSymbol.IsStatic &&
                 !fieldSymbol.IsFixedSizeBuffer &&
@@ -994,7 +994,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         protected void CheckAssigned(Symbol symbol, SyntaxNode node)
         {
-            if (symbol is object)
+            if (symbol is not null)
             {
                 NoteRead(symbol);
 
@@ -1223,7 +1223,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             var fieldAccess = (BoundFieldAccess)expression;
                             var fieldSymbol = fieldAccess.FieldSymbol;
-                            if (_sourceAssembly is object) _sourceAssembly.NoteFieldAccess(fieldSymbol, true, true);
+                            _sourceAssembly?.NoteFieldAccess(fieldSymbol, true, true);
                             if (fieldSymbol.ContainingType.IsReferenceType || fieldSymbol.IsStatic) return null;
                             expression = fieldAccess.ReceiverOpt;
                             continue;
@@ -2014,7 +2014,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool shouldReadOperand = false;
 
             Symbol variable = UseNonFieldSymbolUnsafely(operand);
-            if (variable is object)
+            if (variable is not null)
             {
                 // The goal here is to treat address-of as a read in cases where
                 // we (a) care about a read happening (e.g. for DataFlowsIn) and
@@ -2084,7 +2084,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundKind.EventAccess:
                     var @event = (BoundEventAccess)expr;
                     FieldSymbol associatedField = @event.EventSymbol.AssociatedField;
-                    if (associatedField is object && MayRequireTracking(@event.ReceiverOpt, associatedField))
+                    if (associatedField is not null && MayRequireTracking(@event.ReceiverOpt, associatedField))
                     {
                         CheckAssigned(@event, associatedField, node);
                     }
@@ -2170,7 +2170,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (node.FieldSymbol.IsFixedSizeBuffer && node.Syntax != null && !SyntaxFacts.IsFixedStatementExpression(node.Syntax))
             {
                 Symbol receiver = UseNonFieldSymbolUnsafely(node.ReceiverOpt);
-                if (receiver is object)
+                if (receiver is not null)
                 {
                     CheckCaptured(receiver);
                     if (!_unsafeAddressTakenVariables.ContainsKey(receiver))
@@ -2216,7 +2216,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // special definite assignment behavior for events of struct local variables.
 
             FieldSymbol associatedField = node.EventSymbol.AssociatedField;
-            if (associatedField is object)
+            if (associatedField is not null)
             {
                 NoteRead(associatedField);
                 if (MayRequireTracking(node.ReceiverOpt, associatedField))
@@ -2244,7 +2244,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             var result = base.VisitObjectInitializerMember(node);
 
-            if (_sourceAssembly is object && node.MemberSymbol != null && node.MemberSymbol.Kind == SymbolKind.Field)
+            if (_sourceAssembly is not null && node.MemberSymbol != null && node.MemberSymbol.Kind == SymbolKind.Field)
             {
                 _sourceAssembly.NoteFieldAccess((FieldSymbol)node.MemberSymbol.OriginalDefinition, read: false, write: true);
             }

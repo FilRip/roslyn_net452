@@ -446,17 +446,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override ImmutableArray<PendingBranch> Scan(ref bool badRegion)
         {
-            if (_returnTypesOpt != null)
-            {
-                _returnTypesOpt.Clear();
-            }
+            _returnTypesOpt?.Clear();
             this.Diagnostics.Clear();
             this.regionPlace = RegionPlace.Before;
             if (!_isSpeculative)
             {
                 ParameterSymbol methodThisParameter = MethodThisParameter;
                 EnterParameters(); // assign parameters
-                if (methodThisParameter is object)
+                if (methodThisParameter is not null)
                 {
                     EnterParameter(methodThisParameter, methodThisParameter.TypeWithAnnotations);
                 }
@@ -982,7 +979,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     && state[inputSlot].IsNotNull())
                 {
                     var location = syntaxOpt?.GetLocation() ?? methodMainNode.Syntax.GetLastToken().GetLocation();
-                    if (outputParam is object)
+                    if (outputParam is not null)
                     {
                         // Parameter '{0}' must have a non-null value when exiting because parameter '{1}' is non-null.
                         Diagnostics.Add(ErrorCode.WRN_ParameterNotNullIfNotNull, location, outputParam.Name, inputParam.Name);
@@ -1251,7 +1248,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static BoundNode Rewrite(ImmutableDictionary<BoundExpression, (NullabilityInfo, TypeSymbol?)> updatedNullabilities, SnapshotManager? snapshotManager, BoundNode node, ref ImmutableDictionary<Symbol, Symbol>? remappedSymbols)
         {
             var remappedSymbolsBuilder = ImmutableDictionary.CreateBuilder<Symbol, Symbol>(Symbols.SymbolEqualityComparer.ConsiderEverything, Symbols.SymbolEqualityComparer.ConsiderEverything);
-            if (remappedSymbols is object)
+            if (remappedSymbols is not null)
             {
                 // When we're rewriting for the speculative model, there will be a set of originally-mapped symbols, and we need to
                 // use them in addition to any symbols found during this pass of the walker.
@@ -1580,10 +1577,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
 
-            return member is object &&
-                receiver is object &&
+            return member is not null &&
+                receiver is not null &&
                 receiver.Kind != BoundKind.TypeExpression &&
-                receiver.Type is object;
+                receiver.Type is not null;
         }
 
         protected override int MakeSlot(BoundExpression node)
@@ -1610,7 +1607,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             var method = getTopLevelMethod(_symbol as MethodSymbol);
                             var thisParameter = method?.ThisParameter;
-                            return thisParameter is object ? GetOrCreateSlot(thisParameter) : -1;
+                            return thisParameter is not null ? GetOrCreateSlot(thisParameter) : -1;
                         }
                     case BoundKind.Conversion:
                         {
@@ -1685,7 +1682,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             static MethodSymbol? getTopLevelMethod(MethodSymbol? method)
             {
-                while (method is object)
+                while (method is not null)
                 {
                     var container = method.ContainingSymbol;
                     if (container.Kind == SymbolKind.NamedType)
@@ -2094,7 +2091,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else if (EmptyStructTypeCache.IsTrackableStructType(targetType.Type))
                     {
-                        InheritNullableStateOfTrackableStruct(targetType.Type, targetSlot, valueSlot, isDefaultValue: !(valueOpt is null) && IsDefaultValue(valueOpt), skipSlot: targetSlot);
+                        InheritNullableStateOfTrackableStruct(targetType.Type, targetSlot, valueSlot, isDefaultValue: valueOpt is not null && IsDefaultValue(valueOpt), skipSlot: targetSlot);
                     }
                 }
             }
@@ -2429,10 +2426,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 var result = VisitRvalueWithState(expr);
-                if (_returnTypesOpt != null)
-                {
-                    _returnTypesOpt.Add((node, result.ToTypeWithAnnotations(compilation)));
-                }
+                _returnTypesOpt?.Add((node, result.ToTypeWithAnnotations(compilation)));
             }
 
             EnforceDoesNotReturn(node.Syntax);
@@ -2994,7 +2988,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             int slot = -1;
             var type = node.Type;
             var resultState = NullableFlowState.NotNull;
-            if (type is object)
+            if (type is not null)
             {
                 slot = GetOrCreatePlaceholderSlot(node);
                 if (slot > 0)
@@ -3093,7 +3087,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     SetNotNullResult(collectionInitializer.Placeholder);
                     break;
                 default:
-                    if (containingSymbol is object)
+                    if (containingSymbol is not null)
                     {
                         var type = ApplyLValueAnnotations(containingSymbol.GetTypeOrReturnType(), leftAnnotations);
                         TypeWithState resultType = VisitOptionalImplicitConversion(node, type, useLegacyWarnings: false, trackMembers: true, AssignmentKind.Assignment);
@@ -3137,7 +3131,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             VisitArguments(objectInitializer, objectInitializer.Arguments, objectInitializer.ArgumentRefKindsOpt, (PropertySymbol?)symbol, objectInitializer.ArgsToParamsOpt, objectInitializer.DefaultArguments, objectInitializer.Expanded);
                         }
 
-                        if (symbol is object)
+                        if (symbol is not null)
                         {
                             int slot = (containingSlot < 0 || !IsSlotMember(containingSlot, symbol)) ? -1 : GetOrCreateSlot(symbol, containingSlot);
                             VisitObjectCreationInitializer(symbol, slot, node.Right, GetLValueAnnotations(node.Left));
@@ -3267,7 +3261,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         TrackNullableStateForAssignment(argument, property.TypeWithAnnotations, slot, argumentType, MakeSlot(argument));
 
                         var currentDeclaration = getDeclaration(node, property, ref currentDeclarationIndex);
-                        if (currentDeclaration is object)
+                        if (currentDeclaration is not null)
                         {
                             TakeIncrementalSnapshot(currentDeclaration);
                             SetAnalyzedNullability(currentDeclaration, new VisitResult(argumentType, property.TypeWithAnnotations));
@@ -3360,7 +3354,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     ? elementType.SetUnknownNullabilityForReferenceTypes()
                     : TypeWithAnnotations.Create(bestType);
 
-                if (bestType is object)
+                if (bestType is not null)
                 {
                     // Convert elements to best type to determine element top-level nullability and to report nested nullability warnings
                     for (int i = 0; i < n; i++)
@@ -3665,7 +3659,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 TypeWithState rightUnderlyingType = GetNullableUnderlyingTypeIfNecessary(isLifted, rightType);
                 TypeSymbol? asMemberOfType = getTypeIfContainingType(methodContainer, leftUnderlyingType.Type) ??
                     getTypeIfContainingType(methodContainer, rightUnderlyingType.Type);
-                if (asMemberOfType is object)
+                if (asMemberOfType is not null)
                 {
                     method = (MethodSymbol)AsMemberOfType(asMemberOfType, method);
                 }
@@ -4017,7 +4011,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     yield return member;
 
                 // All types inherit members from their effective bases
-                for (NamedTypeSymbol baseType = effectiveBase(type); !(baseType is null); baseType = baseType.BaseTypeNoUseSiteDiagnostics)
+                for (NamedTypeSymbol baseType = effectiveBase(type); baseType is not null; baseType = baseType.BaseTypeNoUseSiteDiagnostics)
                     foreach (var member in baseType.GetMembers())
                         yield return member;
 
@@ -4546,7 +4540,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             static bool anyOverriddenMethodHasExplicitImplementation(MethodSymbol method)
             {
-                for (var overriddenMethod = method; overriddenMethod is object; overriddenMethod = overriddenMethod.OverriddenMethod)
+                for (var overriddenMethod = method; overriddenMethod is not null; overriddenMethod = overriddenMethod.OverriddenMethod)
                 {
                     if (overriddenMethod.IsExplicitInterfaceImplementation)
                     {
@@ -4577,7 +4571,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 // check whether 'method', when called on this receiver, is an implementation of 'constructedMethod'.
-                for (var baseType = receiverType; baseType is object && method is object; baseType = baseType.BaseTypeNoUseSiteDiagnostics)
+                for (var baseType = receiverType; baseType is not null && method is not null; baseType = baseType.BaseTypeNoUseSiteDiagnostics)
                 {
                     var implementationMethod = baseType.FindImplementationForInterfaceMember(constructedMethod);
                     if (implementationMethod is null)
@@ -4593,7 +4587,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     // could be calling an override of a method that implements the interface method
-                    for (var overriddenMethod = method; overriddenMethod is object; overriddenMethod = overriddenMethod.OverriddenMethod)
+                    for (var overriddenMethod = method; overriddenMethod is not null; overriddenMethod = overriddenMethod.OverriddenMethod)
                     {
                         if (overriddenMethod.Equals(implementationMethod))
                         {
@@ -4617,7 +4611,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // we know that implementationMethod.ContainingType is the same type or a base type of 'baseType',
                     // and that the implementation method will be the same between 'baseType' and 'implementationMethod.ContainingType'.
                     // we step through the intermediate bases in order to skip unnecessary override methods.
-                    while (!baseType.Equals(implementationMethod.ContainingType) && method is object)
+                    while (!baseType.Equals(implementationMethod.ContainingType) && method is not null)
                     {
                         if (baseType.Equals(method.ContainingType))
                         {
@@ -4632,7 +4626,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // now 'baseType == implementationMethod.ContainingType', so if 'method' is
                     // contained in that same type we should advance 'method' one more time.
-                    if (method is object && baseType.Equals(method.ContainingType))
+                    if (method is not null && baseType.Equals(method.ContainingType))
                     {
                         method = method.OverriddenMethod;
                     }
@@ -5070,7 +5064,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (!IsAnalyzingAttribute && method is object && (method.FlowAnalysisAnnotations & FlowAnalysisAnnotations.DoesNotReturn) == FlowAnalysisAnnotations.DoesNotReturn)
+            if (!IsAnalyzingAttribute && method is not null && (method.FlowAnalysisAnnotations & FlowAnalysisAnnotations.DoesNotReturn) == FlowAnalysisAnnotations.DoesNotReturn)
             {
                 SetUnreachable();
             }
@@ -5488,7 +5482,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             FlowAnalysisAnnotations notNullBasedOnParameters(FlowAnalysisAnnotations parameterAnnotations, ArrayBuilder<ParameterSymbol>? notNullParametersOpt, ParameterSymbol parameter)
             {
-                if (!IsAnalyzingAttribute && notNullParametersOpt is object)
+                if (!IsAnalyzingAttribute && notNullParametersOpt is not null)
                 {
                     var notNullIfParameterNotNull = parameter.NotNullIfParameterNotNull;
                     if (!notNullIfParameterNotNull.IsEmpty)
@@ -5873,7 +5867,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ref useSiteDiagnosticsBuilder);
             foreach (var pair in nullabilityBuilder)
             {
-                if (pair.UseSiteInfo.DiagnosticInfo is object)
+                if (pair.UseSiteInfo.DiagnosticInfo is not null)
                 {
                     Diagnostics.Add(pair.UseSiteInfo.DiagnosticInfo, syntax.Location);
                 }
@@ -7237,7 +7231,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         VisitMethodGroup(group);
                         var method = node.MethodOpt;
-                        if (method is object)
+                        if (method is not null)
                         {
                             method = CheckMethodGroupReceiverNullability(group, delegateType.DelegateInvokeMethod.Parameters, method, node.IsExtensionMethod);
                             if (!group.IsSuppressed)
@@ -7375,7 +7369,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var delegateInvokeMethod = delegateTypeOpt?.DelegateInvokeMethod;
             bool useDelegateInvokeParameterTypes = UseDelegateInvokeParameterTypes(node, delegateInvokeMethod);
-            if (useDelegateInvokeParameterTypes && _snapshotBuilderOpt is object)
+            if (useDelegateInvokeParameterTypes && _snapshotBuilderOpt is not null)
             {
                 SetUpdatedSymbol(node, node.Symbol, delegateTypeOpt!);
             }
@@ -7390,7 +7384,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool UseDelegateInvokeParameterTypes(BoundLambda lambda, MethodSymbol? delegateInvokeMethod)
         {
-            return delegateInvokeMethod is object && !lambda.UnboundLambda.HasExplicitlyTypedParameterList;
+            return delegateInvokeMethod is not null && !lambda.UnboundLambda.HasExplicitlyTypedParameterList;
         }
 
         public override BoundNode? VisitUnboundLambda(UnboundLambda node)
@@ -7650,7 +7644,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             var invocation = conversion.DeconstructionInfo.Invocation as BoundCall;
             var deconstructMethod = invocation?.Method;
 
-            if (deconstructMethod is object)
+            if (deconstructMethod is not null)
             {
 
                 int n = variables.Count;
@@ -7917,7 +7911,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     targetTypeOfOperandConversion = node.OperandConversion.Method.ReturnTypeWithAnnotations;
                 }
-                else if (incrementOperator is object)
+                else if (incrementOperator is not null)
                 {
                     targetTypeOfOperandConversion = incrementOperator.Parameters[0].TypeWithAnnotations;
                     assignmentKind = AssignmentKind.Argument;
@@ -8008,7 +8002,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeWithState leftOnRightType = GetAdjustedResult(leftResultType, MakeSlot(node.Left));
 
             // https://github.com/dotnet/roslyn/issues/29962 Update operator based on inferred argument types.
-            if (node.Operator.LeftType is object)
+            if (node.Operator.LeftType is not null)
             {
                 // https://github.com/dotnet/roslyn/issues/29962 Ignoring top-level nullability of operator left parameter.
                 leftOnRightType = VisitConversion(
@@ -8031,9 +8025,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeWithState resultType;
             TypeWithState rightType = VisitRvalueWithState(right);
-            if (node.Operator.ReturnType is object)
+            if (node.Operator.ReturnType is not null)
             {
-                if (node.Operator.Kind.IsUserDefined() && node.Operator.Method is object && node.Operator.Method.ParameterCount == 2)
+                if (node.Operator.Kind.IsUserDefined() && node.Operator.Method is not null && node.Operator.Method.ParameterCount == 2)
                 {
                     MethodSymbol method = node.Operator.Method;
                     VisitArguments(node, ImmutableArray.Create(node.Left, right), method.ParameterRefKinds, method.Parameters, argsToParamsOpt: default, defaultArguments: default,
@@ -8207,7 +8201,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             _ = CheckPossibleNullReceiver(receiverOpt);
 
             var indexer = node.Indexer;
-            if (receiverType is object)
+            if (receiverType is not null)
             {
                 // Update indexer based on inferred receiver type.
                 indexer = (PropertySymbol)AsMemberOfType(receiverType, indexer);
@@ -8231,7 +8225,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             VisitRvalue(node.Argument);
             var patternSymbol = node.PatternSymbol;
-            if (receiverType is object)
+            if (receiverType is not null)
             {
                 patternSymbol = AsMemberOfType(receiverType, patternSymbol);
             }
@@ -8280,7 +8274,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (nullableOfTMember == SpecialMember.System_Nullable_T_get_HasValue && !(receiverOpt is null))
+            if (nullableOfTMember == SpecialMember.System_Nullable_T_get_HasValue && receiverOpt is not null)
             {
                 int containingSlot = MakeSlot(receiverOpt);
                 if (containingSlot > 0)
@@ -8299,7 +8293,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (member.Kind == SymbolKind.Property)
             {
                 var getMethod = ((PropertySymbol)member.OriginalDefinition).GetMethod;
-                if (getMethod is object && getMethod.ContainingType.SpecialType == SpecialType.System_Nullable_T)
+                if (getMethod is not null && getMethod.ContainingType.SpecialType == SpecialType.System_Nullable_T)
                 {
                     if (getMethod == compilation.GetSpecialTypeMember(SpecialMember.System_Nullable_T_get_Value))
                     {
@@ -8535,7 +8529,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             };
 #pragma warning restore IDE0055 // Fix formatting
 
-            if (node.DeconstructionOpt is object)
+            if (node.DeconstructionOpt is not null)
             {
                 var assignment = node.DeconstructionOpt.DeconstructionAssignment;
 
@@ -8792,7 +8786,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Update method based on inferred operand types: see https://github.com/dotnet/roslyn/issues/29605.
             // Analyze operator result properly (honoring [Maybe|NotNull] and [Maybe|NotNullWhen] attribute annotations) https://github.com/dotnet/roslyn/issues/32671
-            if (node.LogicalOperator is object && node.LogicalOperator.ParameterCount == 2)
+            if (node.LogicalOperator is not null && node.LogicalOperator.ParameterCount == 2)
             {
                 return GetReturnTypeWithState(node.LogicalOperator);
             }
@@ -8822,7 +8816,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         left = binary.Left;
                         trueFalseOperator = isAnd ? binary.FalseOperator : binary.TrueOperator;
 
-                        if (trueFalseOperator is object && trueFalseOperator.ParameterCount != 1)
+                        if (trueFalseOperator is not null && trueFalseOperator.ParameterCount != 1)
                         {
                             trueFalseOperator = null;
                         }
@@ -8834,12 +8828,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
 
             // Analyze operator call properly (honoring [Disallow|Allow|Maybe|NotNull] attribute annotations) https://github.com/dotnet/roslyn/issues/32671
-            if (trueFalseOperator is object)
+            if (trueFalseOperator is not null)
             {
                 ReportArgumentWarnings(left!, leftType, trueFalseOperator.Parameters[0]);
             }
 
-            if (logicalOperator is object)
+            if (logicalOperator is not null)
             {
                 ReportArgumentWarnings(left!, leftType, logicalOperator.Parameters[0]);
             }
@@ -8849,7 +8843,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             SetResultType(node, InferResultNullabilityOfBinaryLogicalOperator(node, leftType, rightType));
 
-            if (logicalOperator is object)
+            if (logicalOperator is not null)
             {
                 ReportArgumentWarnings(right, rightType, logicalOperator.Parameters[1]);
             }

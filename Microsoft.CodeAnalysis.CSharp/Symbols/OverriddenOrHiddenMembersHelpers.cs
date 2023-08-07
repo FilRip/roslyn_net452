@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Accessors are handled specially - see MakePropertyAccessorOverriddenOrHiddenMembers for details.
                 MethodSymbol accessor = member as MethodSymbol;
                 Symbol associatedPropertyOrEvent = accessor.AssociatedSymbol;
-                if (associatedPropertyOrEvent is object)
+                if (associatedPropertyOrEvent is not null)
                 {
                     if (associatedPropertyOrEvent.Kind == SymbolKind.Property)
                     {
@@ -153,7 +153,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             };
 
             for (NamedTypeSymbol currType = containingType.BaseTypeNoUseSiteDiagnostics;
-                currType is object && bestMatch is null && hiddenBuilder == null;
+                currType is not null && bestMatch is null && hiddenBuilder == null;
                 currType = currType.BaseTypeNoUseSiteDiagnostics)
             {
                 FindOverriddenOrHiddenMembersInType(
@@ -250,7 +250,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // it overrides), then record the corresponding accessor (if any) as hidden.
                     PropertySymbol propertyHiddenByProperty = (PropertySymbol)hiddenByProperty;
                     MethodSymbol correspondingAccessor = accessorIsGetter ? propertyHiddenByProperty.GetMethod : propertyHiddenByProperty.SetMethod;
-                    if (correspondingAccessor is object)
+                    if (correspondingAccessor is not null)
                     {
                         AccessOrGetInstance(ref hiddenBuilder).Add(correspondingAccessor);
                     }
@@ -264,7 +264,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 MethodSymbol correspondingAccessor = accessorIsGetter ?
                     propertyOverriddenByProperty.GetOwnOrInheritedGetMethod() :
                     propertyOverriddenByProperty.GetOwnOrInheritedSetMethod();
-                if (correspondingAccessor is object)
+                if (correspondingAccessor is not null)
                 {
                     overriddenAccessor = correspondingAccessor;
                 }
@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // There's a detailed comment in MakeOverriddenOrHiddenMembersWorker(Symbol) concerning why this predicate is appropriate.
             bool accessorIsFromSomeCompilation = accessor.Dangerous_IsFromSomeCompilation;
             ImmutableArray<Symbol> overriddenAccessors = ImmutableArray<Symbol>.Empty;
-            if (overriddenAccessor is object && IsOverriddenSymbolAccessible(overriddenAccessor, accessor.ContainingType) &&
+            if (overriddenAccessor is not null && IsOverriddenSymbolAccessible(overriddenAccessor, accessor.ContainingType) &&
                 isAccessorOverride(accessor, overriddenAccessor))
             {
                 FindRelatedMembers(
@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // it overrides), then record the corresponding accessor (if any) as hidden.
                     EventSymbol eventHiddenByEvent = (EventSymbol)hiddenByEvent;
                     MethodSymbol correspondingAccessor = accessorIsAdder ? eventHiddenByEvent.AddMethod : eventHiddenByEvent.RemoveMethod;
-                    if (correspondingAccessor is object)
+                    if (correspondingAccessor is not null)
                     {
                         AccessOrGetInstance(ref hiddenBuilder).Add(correspondingAccessor);
                     }
@@ -352,7 +352,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // CONSIDER: Do something more sensible if there are multiple overridden members?  Already an error case.
                 EventSymbol eventOverriddenByEvent = (EventSymbol)hiddenOrOverriddenByEvent.OverriddenMembers[0];
                 MethodSymbol correspondingAccessor = eventOverriddenByEvent.GetOwnOrInheritedAccessor(accessorIsAdder);
-                if (correspondingAccessor is object)
+                if (correspondingAccessor is not null)
                 {
                     overriddenAccessor = correspondingAccessor;
                 }
@@ -361,7 +361,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // There's a detailed comment in MakeOverriddenOrHiddenMembersWorker(Symbol) concerning why this predicate is appropriate.
             bool accessorIsFromSomeCompilation = accessor.Dangerous_IsFromSomeCompilation;
             ImmutableArray<Symbol> overriddenAccessors = ImmutableArray<Symbol>.Empty;
-            if (overriddenAccessor is object && IsOverriddenSymbolAccessible(overriddenAccessor, accessor.ContainingType) &&
+            if (overriddenAccessor is not null && IsOverriddenSymbolAccessible(overriddenAccessor, accessor.ContainingType) &&
                     (accessorIsFromSomeCompilation
                         ? MemberSignatureComparer.CSharpAccessorOverrideComparer.Equals(accessor, overriddenAccessor) //NB: custom comparer
                         : MemberSignatureComparer.RuntimeSignatureComparer.Equals(accessor, overriddenAccessor)))
@@ -424,7 +424,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     out bool currTypeHasSameKindNonMatch,
                     out ArrayBuilder<Symbol> currTypeHiddenBuilder);
 
-                bool haveBestMatch = currTypeBestMatch is object;
+                bool haveBestMatch = currTypeBestMatch is not null;
 
                 if (haveBestMatch)
                 {
@@ -690,7 +690,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             overriddenMembers = ImmutableArray<Symbol>.Empty;
 
-            if (representativeMember is object)
+            if (representativeMember is not null)
             {
                 bool needToSearchForRelated = representativeMember.Kind != SymbolKind.Field && representativeMember.Kind != SymbolKind.NamedType &&
                                               (!representativeMember.ContainingType.IsDefinition || representativeMember.IsIndexer());
@@ -739,10 +739,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private static ArrayBuilder<T> AccessOrGetInstance<T>(ref ArrayBuilder<T> builder)
         {
-            if (builder == null)
-            {
-                builder = ArrayBuilder<T>.GetInstance();
-            }
+            builder ??= ArrayBuilder<T>.GetInstance();
 
             return builder;
         }

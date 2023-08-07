@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             [NotNullWhen(true)] out CommonCompiler? compiler)
         {
             string language = request.Language;
-            if (!(language == "C#"))
+            if (language != "C#")
             {
                 if (language == "Visual Basic")
                 {

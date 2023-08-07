@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 }
                             }
 
-                            if (IsGlobalNamespace && (locationOpt is null || targetDeclarationWithImports is object))
+                            if (IsGlobalNamespace && (locationOpt is null || targetDeclarationWithImports is not null))
                             {
                                 GetMergedGlobalAliasesAndUsings(basesBeingResolved: null, cancellationToken).Complete(this, cancellationToken);
                             }

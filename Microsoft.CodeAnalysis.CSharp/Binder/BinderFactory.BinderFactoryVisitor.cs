@@ -204,7 +204,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (inBodyOrInitializer)
                     {
                         var method = GetMethodSymbol(parent, resultBinder);
-                        if (method is object)
+                        if (method is not null)
                         {
                             // Ctors cannot be generic
                             //TODO: the error should be given in a different place, but should we ignore or consider the type args?
@@ -274,7 +274,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             case SyntaxKind.IndexerDeclaration:
                                 {
                                     var propertySymbol = GetPropertySymbol((BasePropertyDeclarationSyntax)propertyOrEventDecl, resultBinder);
-                                    if (propertySymbol is object)
+                                    if (propertySymbol is not null)
                                     {
                                         accessor = (parent.Kind() == SyntaxKind.GetAccessorDeclaration) ? propertySymbol.GetMethod : propertySymbol.SetMethod;
                                     }
@@ -287,7 +287,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     // but we want to bind them anyway for error tolerance reasons.
 
                                     var eventSymbol = GetEventSymbol((EventDeclarationSyntax)propertyOrEventDecl, resultBinder);
-                                    if (eventSymbol is object)
+                                    if (eventSymbol is not null)
                                     {
                                         accessor = (parent.Kind() == SyntaxKind.AddAccessorDeclaration) ? eventSymbol.AddMethod : eventSymbol.RemoveMethod;
                                     }
@@ -297,7 +297,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 throw ExceptionUtilities.UnexpectedValue(propertyOrEventDecl.Kind());
                         }
 
-                        if (accessor is object)
+                        if (accessor is not null)
                         {
                             resultBinder = new InMethodBinder(accessor, resultBinder);
                         }
@@ -326,7 +326,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     resultBinder = VisitCore(parent.Parent);
 
                     MethodSymbol method = GetMethodSymbol(parent, resultBinder);
-                    if (method is object && inBody)
+                    if (method is not null && inBody)
                     {
                         resultBinder = new InMethodBinder(method, resultBinder);
                     }
@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     var propertySymbol = GetPropertySymbol(parent, resultBinder);
                     var accessor = propertySymbol.GetMethod;
-                    if (accessor is object)
+                    if (accessor is not null)
                     {
                         resultBinder = new InMethodBinder(accessor, resultBinder);
                     }
@@ -549,7 +549,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // not the implementation (method.Locations includes both parts). If the
                         // span is in fact in the implementation, return that method instead.
                         var implementation = ((MethodSymbol)sym).PartialImplementationPart;
-                        if (implementation is object)
+                        if (implementation is not null)
                         {
                             if (InSpan(implementation.Locations[0], this.SyntaxTree, memberSpan))
                             {
@@ -1152,7 +1152,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // BREAK: Dev11 also allows "value" for readonly properties, but that doesn't
                     // make sense and we don't have a symbol.
-                    if (property.SetMethod is object)
+                    if (property.SetMethod is not null)
                     {
                         parameters = parameters.Add(property.SetMethod.Parameters.Last());
                     }
@@ -1186,7 +1186,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (includeContainingSymbols)
                 {
                     Binder outerBinder = VisitCore(memberSyntax.Parent);
-                    for (NamedTypeSymbol curr = outerBinder.ContainingType; curr is object; curr = curr.ContainingType)
+                    for (NamedTypeSymbol curr = outerBinder.ContainingType; curr is not null; curr = curr.ContainingType)
                     {
                         if (curr.Arity > 0)
                         {

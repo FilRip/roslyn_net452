@@ -36,10 +36,7 @@ namespace System.Text
             {
                 bLastVirama = false;
                 charLeftOver = '\0';
-                if (m_fallbackBuffer != null)
-                {
-                    m_fallbackBuffer.Reset();
-                }
+                m_fallbackBuffer?.Reset();
             }
         }
 
@@ -82,10 +79,7 @@ namespace System.Text
                 bLastDevenagariStressAbbr = false;
                 cLastCharForNextNukta = '\0';
                 cLastCharForNoNextNukta = '\0';
-                if (m_fallbackBuffer != null)
-                {
-                    m_fallbackBuffer.Reset();
-                }
+                m_fallbackBuffer?.Reset();
             }
         }
 

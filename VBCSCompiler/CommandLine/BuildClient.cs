@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
-using System.Reflection;
-using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -51,7 +49,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             ICompilerServerLogger logger,
             Guid? requestId = null)
         {
-            string systemSdkDirectory = BuildClient.GetSystemSdkDirectory();
+            string systemSdkDirectory = GetSystemSdkDirectory();
             if (RuntimeHostInfo.IsCoreClrRuntime)
                 SystemExtensions.ExtensionsEncoding.Encoding_RegisterProvider(CodePagesEncodingProvider.Instance);
             BuildClient buildClient = new(language, compileFunc, logger);
@@ -73,10 +71,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
             Guid? requestId = null)
         {
             textWriter ??= Console.Out;
-            if (CommandLineParser.TryParseClientArgs(originalArguments.Select<string, string>(arg => arg.Trim()).ToArray<string>(), out List<string> parsedArgs, out bool containsShared, out string keepAliveValue, out string pipeName1, out string errorMessage))
+            if (CommandLineParser.TryParseClientArgs(originalArguments.Select(arg => arg.Trim()).ToArray(), out List<string> parsedArgs, out bool containsShared, out string keepAliveValue, out string pipeName1, out string errorMessage))
             {
-                if (pipeName == null)
-                    pipeName = pipeName1;
+                pipeName ??= pipeName1;
                 if (containsShared)
                 {
                     pipeName ??= GetPipeName(buildPaths);
@@ -90,26 +87,6 @@ namespace Microsoft.CodeAnalysis.CommandLine
             textWriter.WriteLine(errorMessage);
             return RunCompilationResult.Failed;
         }
-
-        /*private static bool TryEnableMulticoreJitting(out string errorMessage)
-        {
-            errorMessage = null;
-            try
-            {
-                string str = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RoslynCompiler", "ProfileOptimization");
-                AssemblyName name = Assembly.GetExecutingAssembly().GetName();
-                string profile = name.Name + name.Version?.ToString() + ".profile";
-                Directory.CreateDirectory(str);
-                ProfileOptimization.SetProfileRoot(str);
-                ProfileOptimization.StartProfile(profile);
-            }
-            catch (Exception ex)
-            {
-                errorMessage = string.Format(CodeAnalysisResources.ExceptionEnablingMulticoreJit, ex.Message);
-                return false;
-            }
-            return true;
-        }*/
 
         public Task<RunCompilationResult> RunCompilationAsync(
             IEnumerable<string> originalArguments,
@@ -149,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             string keepAlive,
             Guid? requestId)
         {
-            if (!BuildClient.AreNamedPipesSupported())
+            if (!AreNamedPipesSupported())
                 return new RunCompilationResult?();
             BuildResponse result;
             try
@@ -172,7 +149,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     return new RunCompilationResult?();
                 case BuildResponse.ResponseType.Completed:
                     CompletedBuildResponse completedResponse = (CompletedBuildResponse)result;
-                    return new RunCompilationResult?(ConsoleUtil.RunWithUtf8Output<RunCompilationResult>(completedResponse.Utf8Output, textWriter, tw =>
+                    return new RunCompilationResult?(ConsoleUtil.RunWithUtf8Output(completedResponse.Utf8Output, textWriter, tw =>
                    {
                        tw.Write(completedResponse.Output);
                        return new RunCompilationResult(completedResponse.ReturnCode, true);
@@ -184,9 +161,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         private static string GetPipeName(BuildPaths buildPaths) => BuildServerConnection.GetPipeNameForPath(buildPaths.ClientDirectory);
 
-        private static IEnumerable<string> GetCommandLineArgs(IEnumerable<string> args) => BuildClient.UseNativeArguments() ? BuildClient.GetCommandLineWindows(args) : args;
+        private static IEnumerable<string> GetCommandLineArgs(IEnumerable<string> args) => UseNativeArguments() ? GetCommandLineWindows(args) : args;
 
-        private static bool UseNativeArguments() => BuildClient.IsRunningOnWindows && !PlatformInformation.IsRunningOnMono && !RuntimeHostInfo.IsCoreClrRuntime;
+        private static bool UseNativeArguments() => IsRunningOnWindows && !PlatformInformation.IsRunningOnMono && !RuntimeHostInfo.IsCoreClrRuntime;
 
         private static bool AreNamedPipesSupported()
         {
@@ -202,7 +179,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
             catch (PlatformNotSupportedException)
             {
                 if (disposable != null)
+#pragma warning disable S3971 // "GC.SuppressFinalize" should not be called
                     GC.SuppressFinalize(disposable);
+#pragma warning restore S3971 // "GC.SuppressFinalize" should not be called
                 return false;
             }
         }

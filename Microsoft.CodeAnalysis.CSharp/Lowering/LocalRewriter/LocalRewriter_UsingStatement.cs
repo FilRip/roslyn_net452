@@ -452,15 +452,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
-                if (disposeInfo is null)
-                {
-                    // Generate the info for IDisposable.Dispose(). We know it has no arguments.
-                    disposeInfo = MethodArgumentInfo.CreateParameterlessMethod(disposeMethod);
-                }
+                // Generate the info for IDisposable.Dispose(). We know it has no arguments.
+                disposeInfo ??= MethodArgumentInfo.CreateParameterlessMethod(disposeMethod);
 
                 disposeCall = MakeCallWithNoExplicitArgument(disposeInfo, syntax, disposedExpression);
 
-                if (awaitOpt is object)
+                if (awaitOpt is not null)
                 {
                     // await local.DisposeAsync()
                     _sawAwaitInExceptionHandler = true;

@@ -171,10 +171,7 @@ namespace Microsoft.Cci
                             Debug.Assert(import.AliasOpt != null);
                             Debug.Assert(import.TargetAssemblyOpt == null);
 
-                            if (lazyDeclaredExternAliases == null)
-                            {
-                                lazyDeclaredExternAliases = PooledHashSet<string>.GetInstance();
-                            }
+                            lazyDeclaredExternAliases ??= PooledHashSet<string>.GetInstance();
 
                             lazyDeclaredExternAliases.Add(import.AliasOpt);
                         }
@@ -358,8 +355,8 @@ namespace Microsoft.Cci
 
         private string SerializeVisualBasicImportTypeReference(ITypeReference typeReference)
         {
-            Debug.Assert(!(typeReference is IArrayTypeReference));
-            Debug.Assert(!(typeReference is IPointerTypeReference));
+            Debug.Assert(typeReference is not IArrayTypeReference);
+            Debug.Assert(typeReference is not IPointerTypeReference);
             Debug.Assert(!typeReference.IsTypeSpecification());
 
             var result = PooledStringBuilder.GetInstance();

@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis
 
         internal override GeneratorDriverState Commit(GeneratorDriverState state) => state.With(additionalTexts: state.AdditionalTexts.Add(this.AddedText));
 
-        internal override bool AcceptedBy(GeneratorInfo info) => info.EditCallback is object;
+        internal override bool AcceptedBy(GeneratorInfo info) => info.EditCallback is not null;
 
         internal override bool TryApply(GeneratorInfo info, GeneratorEditContext context) => info.EditCallback!.Invoke(context, this);
     }

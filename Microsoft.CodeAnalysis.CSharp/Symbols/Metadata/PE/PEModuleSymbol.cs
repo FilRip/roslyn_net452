@@ -248,10 +248,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                             {
                                 foreach (var customAttributeHandle in Module.GetCustomAttributesOrThrow(typerefAssemblyAttributesGoHere))
                                 {
-                                    if (moduleAssemblyAttributesBuilder == null)
-                                    {
-                                        moduleAssemblyAttributesBuilder = new ArrayBuilder<CSharpAttributeData>();
-                                    }
+                                    moduleAssemblyAttributesBuilder ??= new ArrayBuilder<CSharpAttributeData>();
                                     moduleAssemblyAttributesBuilder.Add(new PEAttributeData(this, customAttributeHandle));
                                 }
                             }
@@ -349,10 +346,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                         continue;
                     }
 
-                    if (customAttributesBuilder == null)
-                    {
-                        customAttributesBuilder = ArrayBuilder<CSharpAttributeData>.GetInstance();
-                    }
+                    customAttributesBuilder ??= ArrayBuilder<CSharpAttributeData>.GetInstance();
 
                     customAttributesBuilder.Add(new PEAttributeData(this, customAttributeHandle));
                 }
@@ -589,7 +583,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 }
             }
 
-            if (referencedAssemblyResult is object)
+            if (referencedAssemblyResult is not null)
             {
                 return referencedAssemblyResult;
             }
@@ -599,7 +593,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private static bool IsAcceptableSystemTypeSymbol(NamedTypeSymbol candidate)
         {
-            return candidate.Kind != SymbolKind.ErrorType || !(candidate is MissingMetadataTypeSymbol);
+            return candidate.Kind != SymbolKind.ErrorType || candidate is not MissingMetadataTypeSymbol;
         }
 
         internal override bool HasAssemblyCompilationRelaxationsAttribute

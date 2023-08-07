@@ -519,18 +519,18 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal static bool HasYieldOperations(SyntaxNode? node)
         {
             // Do not descend into functions and expressions
-            return node is object &&
+            return node is not null &&
                    node.DescendantNodesAndSelf(child =>
                    {
-                       return !IsNestedFunction(child) && !(node is ExpressionSyntax);
+                       return !IsNestedFunction(child) && node is not ExpressionSyntax;
                    }).Any(n => n is YieldStatementSyntax);
         }
 
         internal static bool HasReturnWithExpression(SyntaxNode? node)
         {
             // Do not descend into functions and expressions
-            return node is object &&
-                   node.DescendantNodesAndSelf(child => !IsNestedFunction(child) && !(node is ExpressionSyntax)).Any(n => n is ReturnStatementSyntax { Expression: { } });
+            return node is not null &&
+                   node.DescendantNodesAndSelf(child => !IsNestedFunction(child) && node is not ExpressionSyntax).Any(n => n is ReturnStatementSyntax { Expression: { } });
         }
     }
 }

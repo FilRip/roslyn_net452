@@ -58,7 +58,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             if (_containingType is PENamedTypeSymbol peType)
             {
-                while (peType is object && (peType.MetadataArity - peType.Arity) > position)
+                while (peType is not null && (peType.MetadataArity - peType.Arity) > position)
                 {
                     peType = peType.ContainingSymbol as PENamedTypeSymbol;
                 }
@@ -76,7 +76,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             if (_containingType is NamedTypeSymbol namedType)
             {
                 GetGenericTypeArgumentSymbol(position, namedType, out int _, out TypeSymbol typeArgument);
-                if (typeArgument is object)
+                if (typeArgument is not null)
                 {
                     return typeArgument;
                 }
@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             int arityOffset = 0;
 
             var containingType = namedType.ContainingType;
-            if (containingType is object)
+            if (containingType is not null)
             {
                 GetGenericTypeArgumentSymbol(position, containingType, out int containingTypeCumulativeArity, out typeArgument);
                 cumulativeArity += containingTypeCumulativeArity;

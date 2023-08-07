@@ -230,7 +230,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal void ComputeReturnType()
         {
-            if (_lazyReturnType is object)
+            if (_lazyReturnType is not null)
             {
                 return;
             }
@@ -243,7 +243,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // Skip some diagnostics when the local function is not associated with a compilation
             // (specifically, local functions nested in expressions in the EE).
-            if (compilation is object)
+            if (compilation is not null)
             {
                 var location = returnTypeSyntax.Location;
                 if (_refKind == RefKind.RefReadOnly)
@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             lock (_declarationDiagnostics)
             {
-                if (_lazyReturnType is object)
+                if (_lazyReturnType is not null)
                 {
                     diagnostics.Free();
                     return;
@@ -317,7 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
-        internal override bool IsIterator => _lazyIteratorElementType is object;
+        internal override bool IsIterator => _lazyIteratorElementType is not null;
 
         public override MethodKind MethodKind => MethodKind.LocalFunction;
 
@@ -391,7 +391,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private void ReportAttributesDisallowed(SyntaxList<AttributeListSyntax> attributes, BindingDiagnosticBag diagnostics)
         {
             var diagnosticInfo = MessageID.IDS_FeatureLocalFunctionAttributes.GetFeatureAvailabilityDiagnosticInfo((CSharpParseOptions)syntaxReferenceOpt.SyntaxTree.Options);
-            if (diagnosticInfo is object)
+            if (diagnosticInfo is not null)
             {
                 foreach (var attrList in attributes)
                 {
@@ -430,7 +430,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 SourceMemberContainerTypeSymbol.ReportTypeNamedRecord(identifier.Text, this.DeclaringCompilation, diagnostics.DiagnosticBag, location);
 
                 var tpEnclosing = ContainingSymbol.FindEnclosingTypeParameter(name);
-                if (tpEnclosing is object)
+                if (tpEnclosing is not null)
                 {
                     ErrorCode typeError;
                     if (tpEnclosing.ContainingSymbol.Kind == SymbolKind.Method)

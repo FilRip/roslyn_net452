@@ -86,13 +86,13 @@ namespace System.Text
 
         private const int CODEPAGE_HEADER_SIZE = 48;
 
-        private static readonly byte[] s_codePagesDataHeader = new byte[44];
+        private static readonly byte[] s_codePagesDataHeader = new byte[CODEPAGE_DATA_FILE_HEADER_SIZE];
 
         protected static Stream s_codePagesEncodingDataStream = GetEncodingDataStream("codepages.nlp");
 
         protected static readonly object s_streamLock = new();
 
-        protected byte[] m_codePageHeader = new byte[48];
+        protected byte[] m_codePageHeader = new byte[CODEPAGE_HEADER_SIZE];
 
         protected int m_firstDataWordOffset;
 
@@ -100,12 +100,12 @@ namespace System.Text
 
         protected SafeAllocHHandle safeNativeMemoryHandle;
 
-        internal BaseCodePageEncoding(int codepage)
+        private protected BaseCodePageEncoding(int codepage)
             : base(codepage)
         {
         }
 
-        internal BaseCodePageEncoding(int codepage, int dataCodePage)
+        private protected BaseCodePageEncoding(int codepage, int dataCodePage)
 			: base(codepage, new InternalEncoderBestFitFallback(null), new InternalDecoderBestFitFallback(null))
 		{
 			SetFallbackEncoding();
@@ -113,7 +113,7 @@ namespace System.Text
 			LoadCodePageTables();
 		}
 
-		internal BaseCodePageEncoding(int codepage, int dataCodePage, EncoderFallback enc, DecoderFallback dec)
+        private protected BaseCodePageEncoding(int codepage, int dataCodePage, EncoderFallback enc, DecoderFallback dec)
 			: base(codepage, enc, dec)
 		{
 			dataTableCodePage = dataCodePage;
@@ -133,11 +133,7 @@ namespace System.Text
 
         internal static Stream GetEncodingDataStream(string tableName)
         {
-            Stream manifestResourceStream = typeof(CodePagesEncodingProvider).GetTypeInfo().Assembly.GetManifestResourceStream(tableName);
-            if (manifestResourceStream == null)
-            {
-                throw new InvalidOperationException();
-            }
+            Stream manifestResourceStream = typeof(CodePagesEncodingProvider).GetTypeInfo().Assembly.GetManifestResourceStream(tableName) ?? throw new InvalidOperationException();
             manifestResourceStream.Read(s_codePagesDataHeader, 0, s_codePagesDataHeader.Length);
             return manifestResourceStream;
         }

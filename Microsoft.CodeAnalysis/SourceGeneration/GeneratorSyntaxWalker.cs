@@ -33,7 +33,7 @@ namespace Microsoft.CodeAnalysis
 #nullable restore
         public override void Visit(SyntaxNode node)
         {
-            Debug.Assert(_semanticModel is object && _semanticModel.SyntaxTree == node.SyntaxTree);
+            Debug.Assert(_semanticModel is not null && _semanticModel.SyntaxTree == node.SyntaxTree);
             _syntaxReceiver.OnVisitSyntaxNode(new GeneratorSyntaxContext(node, _semanticModel));
             base.Visit(node);
         }

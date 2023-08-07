@@ -250,10 +250,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
 
-                if (loadDirectives == null)
-                {
-                    loadDirectives = ArrayBuilder<LoadDirective>.GetInstance();
-                }
+                loadDirectives ??= ArrayBuilder<LoadDirective>.GetInstance();
                 loadDirectives.Add(new LoadDirective(resolvedFilePath, diagnostics.ToReadOnlyAndFree()));
             }
 

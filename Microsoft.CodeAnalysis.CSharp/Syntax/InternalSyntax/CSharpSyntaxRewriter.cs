@@ -54,10 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     alternate.AddRange(list, 0, i);
                 }
 
-                if (alternate != null)
-                {
-                    alternate.Add(visited);
-                }
+                alternate?.Add(visited);
             }
 
             if (alternate != null)

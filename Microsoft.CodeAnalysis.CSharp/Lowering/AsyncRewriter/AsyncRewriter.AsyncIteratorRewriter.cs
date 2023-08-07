@@ -165,7 +165,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 bodyBuilder.Add(F.Assignment(F.InstanceField(stateField), F.Parameter(F.CurrentFunction.Parameters[0]))); // this.state = state;
 
                 var managedThreadId = MakeCurrentThreadId();
-                if (managedThreadId != null && initialThreadIdField is object)
+                if (managedThreadId != null && initialThreadIdField is not null)
                 {
                     // this.initialThreadId = {managedThreadId};
                     bodyBuilder.Add(F.Assignment(F.InstanceField(initialThreadIdField), managedThreadId));
@@ -201,7 +201,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             protected override BoundStatement InitializeParameterField(MethodSymbol getEnumeratorMethod, ParameterSymbol parameter, BoundExpression resultParameter, BoundExpression parameterProxy)
             {
                 BoundStatement result;
-                if (_combinedTokensField is object &&
+                if (_combinedTokensField is not null &&
                     parameter.IsSourceParameterWithEnumeratorCancellationAttribute() &&
                     parameter.Type.Equals(F.Compilation.GetWellKnownType(WellKnownType.System_Threading_CancellationToken), TypeCompareKind.ConsiderEverything))
                 {

@@ -171,7 +171,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
             {
                 var newTypeSymbol = Retarget(underlyingType.Type, options);
 
-                if (asDynamicIfNoPiaContainingType is object)
+                if (asDynamicIfNoPiaContainingType is not null)
                 {
                     newTypeSymbol = newTypeSymbol.AsDynamicIfNoPia(asDynamicIfNoPiaContainingType);
                 }
@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 {
                     var container = type.ContainingType;
 
-                    while (container is object)
+                    while (container is not null)
                     {
                         if (container.IsExplicitDefinitionOfNoPiaLocalType)
                         {
@@ -387,7 +387,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 NamedTypeSymbol containingType = type.ContainingType;
                 MetadataTypeName mdName;
 
-                if (containingType is object)
+                if (containingType is not null)
                 {
                     // Nested type.  We need to retarget 
                     // the enclosing type and then go back and get the type we are interested in.
@@ -420,7 +420,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     NamedTypeSymbol result1;
                     MetadataTypeName mdName;
 
-                    if (containingType is object)
+                    if (containingType is not null)
                     {
                         // This happens if type is a nested class.  We need to retarget 
                         // the enclosing class and then go back and get the type we are interested in.
@@ -477,7 +477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                 int startOfNonInterfaceArguments = int.MaxValue;
 
                 // Collect generic arguments for the type and its containers.
-                while (genericType is object)
+                while (genericType is not null)
                 {
                     if (startOfNonInterfaceArguments == int.MaxValue &&
                         !genericType.IsInterface)
@@ -526,7 +526,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                     ArrayBuilder<TypeParameterSymbol> newParameters = ArrayBuilder<TypeParameterSymbol>.GetInstance(newArguments.Count);
 
                     // Collect generic arguments for the type and its containers.
-                    while (genericType is object)
+                    while (genericType is not null)
                     {
                         if (genericType.Arity > 0)
                         {
@@ -638,7 +638,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
                             namedType = namedType.ContainingType;
                         }
-                        while (namedType is object);
+                        while (namedType is not null);
 
                         return false;
 
@@ -692,9 +692,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
                                             CSharpCustomModifier.CreateOptional(newModifierSymbol) :
                                             CSharpCustomModifier.CreateRequired(newModifierSymbol));
                     }
-                    else if (newModifiers != null)
+                    else
                     {
-                        newModifiers.Add(oldModifier);
+                        newModifiers?.Add(oldModifier);
                     }
                 }
 
@@ -1105,11 +1105,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Retargeting
 
                 NamedTypeSymbol oldAttributeType = oldAttribute.AttributeClass;
                 NamedTypeSymbol newAttributeType;
-                if (newAttributeCtor is object)
+                if (newAttributeCtor is not null)
                 {
                     newAttributeType = newAttributeCtor.ContainingType;
                 }
-                else if (oldAttributeType is object)
+                else if (oldAttributeType is not null)
                 {
                     newAttributeType = Retarget(oldAttributeType, RetargetOptions.RetargetPrimitiveTypesByTypeCode);
                 }
