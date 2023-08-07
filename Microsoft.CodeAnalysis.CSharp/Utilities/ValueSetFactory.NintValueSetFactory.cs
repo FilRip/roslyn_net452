@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
     internal static partial class ValueSetFactory
     {
-        private sealed class NintValueSetFactory : IValueSetFactory<int>, IValueSetFactory
+        private sealed class NintValueSetFactory : IValueSetFactory<int>
         {
             public static readonly NintValueSetFactory Instance = new();
 

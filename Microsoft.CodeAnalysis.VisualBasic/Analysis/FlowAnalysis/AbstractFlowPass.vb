@@ -2038,10 +2038,8 @@ lUnsplitAndFinish:
                     Dim unionBranchWithFinallyState As Boolean = pend.Branch.Kind <> BoundKind.YieldStatement
 
                     ' or if the branch goes from Catch to Try block
-                    If unionBranchWithFinallyState Then
-                        If BothBranchAndLabelArePrefixedByNesting(pend, ignoreLast:=True) Then
-                            unionBranchWithFinallyState = False
-                        End If
+                    If unionBranchWithFinallyState AndAlso BothBranchAndLabelArePrefixedByNesting(pend, ignoreLast:=True) Then
+                        unionBranchWithFinallyState = False
                     End If
 
                     If unionBranchWithFinallyState Then

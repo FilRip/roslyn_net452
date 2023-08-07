@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
     internal static partial class ValueSetFactory
     {
-        private struct SingleTC : IFloatingTC<float>, INumericTC<float>
+        private struct SingleTC : IFloatingTC<float>
         {
             float INumericTC<float>.MinValue => float.NegativeInfinity;
 

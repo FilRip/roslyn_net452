@@ -54,10 +54,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 get
                 {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
                     if (IsEmpty)
-                        throw new ArgumentException();
+                        throw new ArgumentException(nameof(_intervals));
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
 
-                    // Prefer a value near zero.
+                        // Prefer a value near zero.
                     var tc = default(TTC);
                     var gz = NumericValueSetFactory<T, TTC>.Instance.Related(BinaryOperatorKind.GreaterThanOrEqual, tc.Zero);
                     var t = (NumericValueSet<T, TTC>)this.Intersect(gz);
@@ -147,13 +149,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             IValueSet IValueSet.Complement() => this.Complement();
 
-            public IValueSet<T> Intersect(IValueSet<T> o)
+            public IValueSet<T> Intersect(IValueSet<T> other)
             {
-                var other = (NumericValueSet<T, TTC>)o;
+                var otherCast = (NumericValueSet<T, TTC>)other;
                 TTC tc = default;
                 var builder = ArrayBuilder<(T first, T last)>.GetInstance();
                 var left = this._intervals;
-                var right = other._intervals;
+                var right = otherCast._intervals;
                 int l = 0;
                 int r = 0;
                 while (l < left.Length && r < right.Length)
@@ -222,13 +224,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             IValueSet IValueSet.Intersect(IValueSet other) => this.Intersect((IValueSet<T>)other);
 
-            public IValueSet<T> Union(IValueSet<T> o)
+            public IValueSet<T> Union(IValueSet<T> other)
             {
-                var other = (NumericValueSet<T, TTC>)o;
+                var otherCast = (NumericValueSet<T, TTC>)other;
                 TTC tc = default;
                 var builder = ArrayBuilder<(T first, T last)>.GetInstance();
                 var left = this._intervals;
-                var right = other._intervals;
+                var right = otherCast._intervals;
                 int l = 0;
                 int r = 0;
                 while (l < left.Length && r < right.Length)

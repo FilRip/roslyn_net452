@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
     internal static partial class ValueSetFactory
     {
-        private sealed class NuintValueSet : IValueSet<uint>, IValueSet
+        private sealed class NuintValueSet : IValueSet<uint>
         {
             public static readonly NuintValueSet AllValues = new(values: NumericValueSet<uint, UIntTC>.AllValues, hasLarge: true);
 
@@ -44,8 +44,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 get
                 {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
                     if (IsEmpty)
-                        throw new ArgumentException();
+                        throw new ArgumentException(nameof(_hasLarge));
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
 
                     if (!_values.IsEmpty)
                         return _values.Sample;

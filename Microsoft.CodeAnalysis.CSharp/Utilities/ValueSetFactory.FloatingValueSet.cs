@@ -98,14 +98,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             IValueSet IValueSet.Intersect(IValueSet other) => this.Intersect((IValueSet<TFloating>)other);
 
-            public IValueSet<TFloating> Union(IValueSet<TFloating> o)
+            public IValueSet<TFloating> Union(IValueSet<TFloating> other)
             {
-                if (this == o)
+                if (this == other)
                     return this;
-                var other = (FloatingValueSet<TFloating, TFloatingTC>)o;
+                var otherCast = (FloatingValueSet<TFloating, TFloatingTC>)other;
                 return new FloatingValueSet<TFloating, TFloatingTC>(
-                    numbers: this._numbers.Union(other._numbers),
-                    hasNaN: this._hasNaN | other._hasNaN);
+                    numbers: this._numbers.Union(otherCast._numbers),
+                    hasNaN: this._hasNaN || otherCast._hasNaN);
             }
 
             IValueSet IValueSet.Union(IValueSet other) => this.Union((IValueSet<TFloating>)other);

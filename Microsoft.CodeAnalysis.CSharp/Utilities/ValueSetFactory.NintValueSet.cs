@@ -53,8 +53,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 get
                 {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
                     if (IsEmpty)
-                        throw new ArgumentException();
+                        throw new ArgumentException(nameof(_hasSmall) + nameof(_hasLarge) + nameof(_values));
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
 
                     if (!_values.IsEmpty)
                         return _values.Sample;
