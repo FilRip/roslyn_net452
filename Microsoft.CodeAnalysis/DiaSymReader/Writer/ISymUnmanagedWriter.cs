@@ -12,7 +12,7 @@ using System.Security;
 
 namespace Microsoft.DiaSymReader
 {
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("98ECEE1E-752D-11d3-8D56-00C04F680B2B"), SuppressUnmanagedCodeSecurity]
+    [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("98ECEE1E-752D-11d3-8D56-00C04F680B2B"), SuppressUnmanagedCodeSecurity]
     internal interface IPdbWriter
     {
 #pragma warning disable IDE1006
@@ -28,7 +28,7 @@ namespace Microsoft.DiaSymReader
     /// <summary>
     /// The highest version of the interface available on Desktop FX 4.0+.
     /// </summary>
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("DCF7780D-BDE9-45DF-ACFE-21731A32000C"), SuppressUnmanagedCodeSecurity]
+    [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("DCF7780D-BDE9-45DF-ACFE-21731A32000C"), SuppressUnmanagedCodeSecurity]
     internal unsafe interface ISymUnmanagedWriter5
     {
         #region ISymUnmanagedWriter
@@ -119,7 +119,7 @@ namespace Microsoft.DiaSymReader
     /// <summary>
     /// The highest version of the interface available in Microsoft.DiaSymReader.Native.
     /// </summary>
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("5ba52f3b-6bf8-40fc-b476-d39c529b331e"), SuppressUnmanagedCodeSecurity]
+    [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("5ba52f3b-6bf8-40fc-b476-d39c529b331e"), SuppressUnmanagedCodeSecurity]
     internal interface ISymUnmanagedWriter8 : ISymUnmanagedWriter5
     {
         //  ISymUnmanagedWriter, ISymUnmanagedWriter2, ISymUnmanagedWriter3, ISymUnmanagedWriter4, ISymUnmanagedWriter5

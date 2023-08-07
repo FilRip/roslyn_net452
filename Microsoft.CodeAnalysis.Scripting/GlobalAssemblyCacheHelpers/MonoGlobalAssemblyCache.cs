@@ -162,8 +162,8 @@ namespace Microsoft.CodeAnalysis
         public override AssemblyIdentity ResolvePartialName(
             string displayName,
             out string location,
-            ImmutableArray<ProcessorArchitecture> architectureFilter,
-            CultureInfo preferredCulture)
+            ImmutableArray<ProcessorArchitecture> architectureFilter = default,
+            CultureInfo preferredCulture = null)
         {
             if (displayName == null)
             {

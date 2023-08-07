@@ -32,7 +32,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Friend Overrides ReadOnly Property ErrorInfo As DiagnosticInfo
             Get
-                Return ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, String.Empty)
+                Return ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, string.Empty)
             End Get
         End Property
 

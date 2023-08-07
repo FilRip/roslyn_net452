@@ -1104,7 +1104,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim argumentConstantValue = arguments(0).ConstantValueOpt
                     Dim argumentValue As String
                     If argumentConstantValue.IsNull Then
-                        argumentValue = String.Empty
+                        argumentValue = string.Empty
                     ElseIf argumentConstantValue.IsChar Then
                         argumentValue = argumentConstantValue.CharValue
                     Else
@@ -1144,7 +1144,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim constantValue = arguments(0).ConstantValueOpt
                     Dim argumentValue As String
                     If constantValue.IsNull Then
-                        argumentValue = String.Empty
+                        argumentValue = string.Empty
                     ElseIf constantValue.IsChar Then
                         argumentValue = constantValue.CharValue
                     Else

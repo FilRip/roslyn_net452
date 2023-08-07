@@ -513,7 +513,9 @@ namespace Microsoft.CodeAnalysis
                 _dict = dict;
             }
 
+#pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
             public struct Enumerator
+#pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
             {
                 private readonly Stack<AvlNode>? _stack;
                 private Node? _next;
@@ -578,7 +580,9 @@ namespace Microsoft.CodeAnalysis
                 return new Enumerator(_dict);
             }
 
+#pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
             public class EnumerableImpl : IEnumerator<K>
+#pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
             {
                 private Enumerator _e;
 
@@ -589,8 +593,18 @@ namespace Microsoft.CodeAnalysis
 
                 K IEnumerator<K>.Current => _e.Current;
 
-                void IDisposable.Dispose()
+                protected virtual void Dispose(bool disposing)
                 {
+                    if (disposing)
+                    {
+                        // Nothing to do
+                    }
+                }
+
+                public void Dispose()
+                {
+                    Dispose(true);
+                    GC.SuppressFinalize(this);
                 }
 
                 object IEnumerator.Current => _e.Current;
@@ -628,7 +642,9 @@ namespace Microsoft.CodeAnalysis
                 _dict = dict;
             }
 
+#pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
             public struct Enumerator
+#pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
             {
                 private readonly Stack<AvlNode>? _stack;
                 private Node? _next;
@@ -695,7 +711,9 @@ namespace Microsoft.CodeAnalysis
                 return new Enumerator(_dict);
             }
 
+#pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
             public class EnumerableImpl : IEnumerator<V>
+#pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
             {
                 private Enumerator _e;
 
@@ -706,8 +724,18 @@ namespace Microsoft.CodeAnalysis
 
                 V IEnumerator<V>.Current => _e.Current;
 
-                void IDisposable.Dispose()
+                protected virtual void Dispose(bool disposing)
                 {
+                    if (disposing)
+                    {
+                        // Nothing to do
+                    }
+                }
+
+                public void Dispose()
+                {
+                    Dispose(true);
+                    GC.SuppressFinalize(this);
                 }
 
                 object? IEnumerator.Current => _e.Current;
@@ -812,8 +840,18 @@ namespace Microsoft.CodeAnalysis
 
             KeyValuePair<K, V> IEnumerator<KeyValuePair<K, V>>.Current => _e.Current;
 
-            void IDisposable.Dispose()
+            protected virtual void Dispose(bool disposing)
             {
+                if (disposing)
+                {
+                    // Nothing to do
+                }
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
             }
 
             object IEnumerator.Current => _e.Current;

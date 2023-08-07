@@ -72,7 +72,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             Guid? requestId = null)
         {
             textWriter ??= Console.Out;
-            if (CommandLineParser.TryParseClientArgs(originalArguments.ToList().Select<string, string>(arg => arg.Trim()).ToArray<string>(), out List<string> parsedArgs, out bool containsShared, out string keepAliveValue, out string pipeName1, out string errorMessage))
+            if (CommandLineParser.TryParseClientArgs(originalArguments.Select(arg => arg.Trim()).ToArray(), out List<string> parsedArgs, out bool containsShared, out string keepAliveValue, out string pipeName1, out string errorMessage))
             {
                 pipeName ??= pipeName1;
                 if (containsShared)
@@ -88,26 +88,6 @@ namespace Microsoft.CodeAnalysis.CommandLine
             textWriter.WriteLine(errorMessage);
             return RunCompilationResult.Failed;
         }
-
-        /*private static bool TryEnableMulticoreJitting(out string errorMessage)
-        {
-            errorMessage = null;
-            try
-            {
-                string str = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RoslynCompiler", "ProfileOptimization");
-                AssemblyName name = Assembly.GetExecutingAssembly().GetName();
-                string profile = name.Name + name.Version?.ToString() + ".profile";
-                Directory.CreateDirectory(str);
-                ProfileOptimization.SetProfileRoot(str);
-                ProfileOptimization.StartProfile(profile);
-            }
-            catch (Exception ex)
-            {
-                errorMessage = string.Format(CodeAnalysisResources.ExceptionEnablingMulticoreJit, ex.Message);
-                return false;
-            }
-            return true;
-        }*/
 
         public Task<RunCompilationResult> RunCompilationAsync(
             IEnumerable<string> originalArguments,

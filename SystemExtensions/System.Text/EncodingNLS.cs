@@ -1,6 +1,6 @@
 namespace System.Text
 {
-    internal abstract class EncodingNLS : Encoding
+    internal abstract class EncodingNls : Encoding
     {
         private string _encodingName;
 
@@ -49,12 +49,12 @@ namespace System.Text
             }
         }
 
-        protected EncodingNLS(int codePage)
+        protected EncodingNls(int codePage)
             : base(codePage)
         {
         }
 
-        protected EncodingNLS(int codePage, EncoderFallback enc, DecoderFallback dec)
+        protected EncodingNls(int codePage, EncoderFallback enc, DecoderFallback dec)
 			: base(codePage)
 		{
             _encoder = enc;
@@ -71,13 +71,13 @@ namespace System.Text
             get { return _decoder; }
         }
 
-        public unsafe abstract int GetByteCount(char* chars, int count, EncoderNLS encoder);
+        public unsafe abstract int GetByteCount(char* chars, int count, EncoderNls encoder);
 
-        public unsafe abstract int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNLS encoder);
+        public unsafe abstract int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNls encoder);
 
-        public unsafe abstract int GetCharCount(byte* bytes, int count, DecoderNLS decoder);
+        public unsafe abstract int GetCharCount(byte* bytes, int count, DecoderNls decoder);
 
-        public unsafe abstract int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNLS decoder);
+        public unsafe abstract int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNls decoder);
 
         public unsafe override int GetByteCount(char[] chars, int index, int count)
         {
@@ -295,41 +295,17 @@ namespace System.Text
             return GetChars(bytes, byteCount, chars, charCount, null);
         }
 
-        /*public unsafe override string GetString(byte[] bytes, int index, int count)
-		{
-			if (bytes == null)
-			{
-				throw new ArgumentNullException("bytes", SR.ArgumentNull_Array);
-			}
-			if (index < 0 || count < 0)
-			{
-				throw new ArgumentOutOfRangeException((index < 0) ? "index" : "count", SR.ArgumentOutOfRange_NeedNonNegNum);
-			}
-			if (bytes.Length - index < count)
-			{
-				throw new ArgumentOutOfRangeException("bytes", SR.ArgumentOutOfRange_IndexCountBuffer);
-			}
-			if (bytes.Length == 0)
-			{
-				return string.Empty;
-			}
-			fixed (byte* ptr = &bytes[0])
-			{
-				return GetString(ptr + index, count);
-			}
-		}*/ // FilRip : Commented to ignore
-
         public override Decoder GetDecoder()
         {
-            return new DecoderNLS(this);
+            return new DecoderNls(this);
         }
 
         public override Encoder GetEncoder()
         {
-            return new EncoderNLS(this);
+            return new EncoderNls(this);
         }
 
-        internal void ThrowBytesOverflow(EncoderNLS encoder, bool nothingEncoded)
+        internal void ThrowBytesOverflow(EncoderNls encoder, bool nothingEncoded)
         {
             if ((encoder?.m_throwOnOverflow ?? true) || nothingEncoded)
             {
@@ -339,10 +315,17 @@ namespace System.Text
                 }
                 ThrowBytesOverflow();
             }
-            encoder.ClearMustFlush();
+            encoder?.ClearMustFlush();
         }
 
-        internal void ThrowCharsOverflow(DecoderNLS decoder, bool nothingDecoded)
+        internal void ThrowBytesOverflow()
+        {
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one 
+            throw new ArgumentException(SR.Format(SR.Argument_EncodingConversionOverflowBytes, EncodingName, base.EncoderFallback.GetType()), "bytes");
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
+        }
+
+        internal void ThrowCharsOverflow(DecoderNls decoder, bool nothingDecoded)
         {
             if ((decoder?.m_throwOnOverflow ?? true) || nothingDecoded)
             {
@@ -352,17 +335,14 @@ namespace System.Text
                 }
                 ThrowCharsOverflow();
             }
-            decoder.ClearMustFlush();
-        }
-
-        internal void ThrowBytesOverflow()
-        {
-            throw new ArgumentException(SR.Format(SR.Argument_EncodingConversionOverflowBytes, EncodingName, base.EncoderFallback.GetType()), "bytes");
+            decoder?.ClearMustFlush();
         }
 
         internal void ThrowCharsOverflow()
         {
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one 
             throw new ArgumentException(SR.Format(SR.Argument_EncodingConversionOverflowChars, EncodingName, base.DecoderFallback.GetType()), "chars");
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
         }
 
         private static string GetLocalizedEncodingNameResource(int codePage)

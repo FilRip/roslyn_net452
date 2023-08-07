@@ -58,10 +58,10 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (this.Arguments == null || this.Arguments.Length == 0)
             {
-                return String.Format(formatProvider, messagePrefix, message);
+                return string.Format(formatProvider, messagePrefix, message);
             }
 
-            return String.Format(formatProvider, String.Format(formatProvider, messagePrefix, message), GetArgumentsToUse(formatProvider));
+            return string.Format(formatProvider, string.Format(formatProvider, messagePrefix, message), GetArgumentsToUse(formatProvider));
         }
     }
 }

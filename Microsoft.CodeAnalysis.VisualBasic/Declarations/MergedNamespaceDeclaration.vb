@@ -17,7 +17,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Private _children As ImmutableArray(Of MergedNamespaceOrTypeDeclaration)
 
         Private Sub New(declarations As ImmutableArray(Of SingleNamespaceDeclaration))
-            MyBase.New(String.Empty)
+            MyBase.New(string.Empty)
             If declarations.Any() Then
                 Me.Name = SingleNamespaceDeclaration.BestName(Of SingleNamespaceDeclaration)(declarations, _multipleSpellings)
             End If

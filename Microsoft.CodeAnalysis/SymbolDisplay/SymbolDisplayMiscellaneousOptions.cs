@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Specifies miscellaneous options about the format of symbol descriptions.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum SymbolDisplayMiscellaneousOptions
     {
         /// <summary>

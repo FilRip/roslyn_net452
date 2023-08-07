@@ -260,7 +260,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                                 ' NOTE: we need to reset the buffer so that precedingTrivia 
                                 '       lands on the next token
                                 ResetLineBufferOffset()
-                                Return SyntaxFactory.Token(Nothing, SyntaxKind.EndOfXmlToken, Nothing, String.Empty)
+                                Return SyntaxFactory.Token(Nothing, SyntaxKind.EndOfXmlToken, Nothing, string.Empty)
                             End If
                         End If
 
@@ -382,7 +382,7 @@ ScanChars:
                         Dim continueLine = ScanXmlTriviaInXmlDoc(c, precedingTrivia)
                         If Not continueLine Then
                             offsets.Restore()
-                            result = SyntaxFactory.Token(precedingTrivia.ToList.Node, SyntaxKind.EndOfXmlToken, Nothing, String.Empty)
+                            result = SyntaxFactory.Token(precedingTrivia.ToList.Node, SyntaxKind.EndOfXmlToken, Nothing, string.Empty)
                             GoTo CleanUp
                         End If
                 End Select
@@ -486,7 +486,7 @@ CleanUp:
                         _triviaListPool.Free(triviaList)
                         If Not continueLine Then
                             offsets.Restore()
-                            Return SyntaxFactory.Token(precedingTrivia.Node, SyntaxKind.EndOfXmlToken, Nothing, String.Empty)
+                            Return SyntaxFactory.Token(precedingTrivia.Node, SyntaxKind.EndOfXmlToken, Nothing, string.Empty)
                         End If
 
                     Case "/"c

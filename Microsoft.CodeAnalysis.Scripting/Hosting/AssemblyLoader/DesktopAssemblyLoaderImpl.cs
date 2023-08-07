@@ -52,7 +52,9 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             // An assembly is loaded into CLR's Load Context if it is in the GAC, otherwise it's loaded into No Context via Assembly.LoadFile(string).
             // Assembly.LoadFile(string) automatically redirects to GAC if the assembly has a strong name and there is an equivalent assembly in GAC. 
 
+#pragma warning disable S3885 // "Assembly.Load" should be used
             var assembly = Assembly.LoadFile(path);
+#pragma warning restore S3885 // "Assembly.Load" should be used
             var location = assembly.Location;
             var fromGac = CoreLightup.Desktop.IsAssemblyFromGlobalAssemblyCache(assembly);
             return new AssemblyAndLocation(assembly, location, fromGac);

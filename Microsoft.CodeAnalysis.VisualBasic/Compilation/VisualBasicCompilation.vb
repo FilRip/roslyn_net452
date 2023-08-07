@@ -934,11 +934,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 For Each tree As SyntaxTree In trees
                     If tree Is Nothing Then
-                        Throw New ArgumentNullException(String.Format(My.Resources.Trees0, i))
+                        Throw New ArgumentNullException(string.Format(My.Resources.Trees0, i))
                     End If
 
                     If Not tree.HasCompilationUnitRoot Then
-                        Throw New ArgumentException(String.Format(My.Resources.TreesMustHaveRootNode, i))
+                        Throw New ArgumentException(string.Format(My.Resources.TreesMustHaveRootNode, i))
                     End If
 
                     If tree.IsEmbeddedOrMyTemplateTree() Then
@@ -946,7 +946,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
 
                     If declMap.ContainsKey(tree) Then
-                        Throw New ArgumentException(My.Resources.SyntaxTreeAlreadyPresent, String.Format(My.Resources.Trees0, i))
+                        Throw New ArgumentException(My.Resources.SyntaxTreeAlreadyPresent, string.Format(My.Resources.Trees0, i))
                     End If
 
                     AddSyntaxTreeToDeclarationMapAndTable(tree, _options, Me.IsSubmission, declMap, declTable, referenceDirectivesChanged) ' declMap and declTable passed ByRef
@@ -1044,7 +1044,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             )
             Dim root As DeclarationTableEntry = Nothing
             If Not declMap.TryGetValue(tree, root) Then
-                Throw New ArgumentException(String.Format(My.Resources.SyntaxTreeNotFoundToRemove, tree))
+                Throw New ArgumentException(string.Format(My.Resources.SyntaxTreeNotFoundToRemove, tree))
             End If
 
             declTable = declTable.RemoveRootDeclaration(root)
@@ -2569,7 +2569,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Friend Function GetRuntimeMetadataVersion() As String
             Dim corLibrary = TryCast(Assembly.CorLibrary, Symbols.Metadata.PE.PEAssemblySymbol)
-            Return If(corLibrary Is Nothing, String.Empty, corLibrary.Assembly.ManifestModule.MetadataVersion)
+            Return If(corLibrary Is Nothing, string.Empty, corLibrary.Assembly.ManifestModule.MetadataVersion)
         End Function
 
         Protected Overrides Sub AddDebugSourceDocumentsForChecksumDirectives(

@@ -97,7 +97,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 [module].GetPropertyDefPropsOrThrow(handle, _name, _flags)
             Catch mrEx
                 If _name Is Nothing Then
-                    _name = String.Empty
+                    _name = string.Empty
                 End If
             End Try
 

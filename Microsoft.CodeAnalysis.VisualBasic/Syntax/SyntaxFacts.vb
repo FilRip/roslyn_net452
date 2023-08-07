@@ -529,7 +529,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return GetText(SyntaxKind.FriendKeyword)
 
                 Case Accessibility.NotApplicable
-                    Return String.Empty
+                    Return string.Empty
 
                 Case Accessibility.Private
                     Return GetText(SyntaxKind.PrivateKeyword)
@@ -547,7 +547,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return GetText(SyntaxKind.PublicKeyword)
 
                 Case Else
-                    Debug.Assert(False, String.Format("Unknown accessibility '{0}'", accessibility))
+                    Debug.Assert(False, string.Format("Unknown accessibility '{0}'", accessibility))
                     Return Nothing
             End Select
         End Function

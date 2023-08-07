@@ -406,7 +406,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         ' TODO: revise
                         ReportDiagnostic(diagnostics, DirectCast(nameSyntax, GenericNameSyntax).TypeArgumentList,
                                          ERRID.ERR_TypeOrMemberNotGeneric1,
-                                         String.Format(
+                                         string.Format(
                                              "Public {0}Property {1} As T{2}",
                                              If(field.IsKey, "Readonly ", ""),
                                              name, fieldIndex))

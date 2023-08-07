@@ -308,7 +308,7 @@ namespace Microsoft.CodeAnalysis
                 var length = i - _offset;
                 if (length == 0)
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
 
                 // Save start of name. The name should be the emitted name including the '`'  and arity.

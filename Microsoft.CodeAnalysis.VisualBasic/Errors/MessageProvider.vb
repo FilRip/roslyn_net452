@@ -121,7 +121,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ' Given a message identifier (e.g., CS0219), severity, warning as error and a culture, 
         ' get the entire prefix (e.g., "error BC42024:" for VB) used on error messages.
         Public Overrides Function GetMessagePrefix(id As String, severity As DiagnosticSeverity, isWarningAsError As Boolean, culture As CultureInfo) As String
-            Return String.Format(culture, "{0} {1}",
+            Return string.Format(culture, "{0} {1}",
                     If(severity = DiagnosticSeverity.Error OrElse isWarningAsError, "error", "warning"), id)
         End Function
 

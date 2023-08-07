@@ -176,7 +176,7 @@ namespace Microsoft.CodeAnalysis
         /// <remarks>
         /// The simple name has to be non-empty.
         /// A partially specified version might be missing build and/or revision number. The default value for these is 65535.
-        /// The default culture is neutral (<see cref="CultureName"/> is <see cref="String.Empty"/>.
+        /// The default culture is neutral (<see cref="CultureName"/> is <see cref="string.Empty"/>.
         /// If neither public key nor token is specified the identity is considered weak.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="displayName"/> is null.</exception>

@@ -16,7 +16,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         Friend Shared ReadOnly ElasticSpace As SyntaxTrivia = Whitespace(" ", elastic:=True)
         Friend Shared ReadOnly ElasticTab As SyntaxTrivia = Whitespace(vbTab, elastic:=True)
 
-        Friend Shared ReadOnly ElasticZeroSpace As SyntaxTrivia = Whitespace(String.Empty, elastic:=True)
+        Friend Shared ReadOnly ElasticZeroSpace As SyntaxTrivia = Whitespace(string.Empty, elastic:=True)
 
         Friend Shared Function EndOfLine(text As String, Optional elastic As Boolean = False) As SyntaxTrivia
 

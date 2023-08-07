@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         private ImmutableArray<ScriptVariable> _lazyVariables;
         private IReadOnlyDictionary<string, int> _lazyVariableMap;
 
-        internal ScriptState(ScriptExecutionState executionState, Script script, Exception exceptionOpt)
+        private protected ScriptState(ScriptExecutionState executionState, Script script, Exception exceptionOpt)
         {
             Debug.Assert(executionState != null);
             Debug.Assert(script != null);

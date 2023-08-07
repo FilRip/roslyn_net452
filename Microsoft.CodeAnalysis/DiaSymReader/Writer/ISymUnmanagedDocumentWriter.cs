@@ -12,7 +12,7 @@ using System.Security;
 
 namespace Microsoft.DiaSymReader
 {
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("B01FAFEB-C450-3A4D-BEEC-B4CEEC01E006"), SuppressUnmanagedCodeSecurity]
+    [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("B01FAFEB-C450-3A4D-BEEC-B4CEEC01E006"), SuppressUnmanagedCodeSecurity]
     internal unsafe interface ISymUnmanagedDocumentWriter
     {
         void SetSource(uint sourceSize, byte* source);

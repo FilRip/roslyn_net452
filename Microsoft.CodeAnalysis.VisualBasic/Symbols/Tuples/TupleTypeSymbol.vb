@@ -230,7 +230,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Public Overrides ReadOnly Property Name As String
             Get
-                Return String.Empty
+                Return string.Empty
             End Get
         End Property
 

@@ -90,7 +90,6 @@ namespace Microsoft.CodeAnalysis.CompilerServer
         }
 
 #nullable restore
-#pragma warning disable S3358 // Ternary operators should not be nested
         private void CheckCompletedTasks(CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -118,7 +117,6 @@ namespace Microsoft.CodeAnalysis.CompilerServer
                 this.RunGC();
             this.HandleCompletedConnections();
         }
-#pragma warning restore S3358 // Ternary operators should not be nested
 
         private void WaitForAnyCompletion(CancellationToken cancellationToken)
         {

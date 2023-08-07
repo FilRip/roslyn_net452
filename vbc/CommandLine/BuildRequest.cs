@@ -16,18 +16,18 @@ namespace Microsoft.CodeAnalysis.CommandLine
         private const int MaximumRequestSize = 5242880;
         public readonly Guid RequestId;
         public readonly RequestLanguage Language;
-        public readonly ReadOnlyCollection<BuildRequest.Argument> Arguments;
+        public readonly ReadOnlyCollection<Argument> Arguments;
         public readonly string CompilerHash;
 
         public BuildRequest(
             RequestLanguage language,
             string compilerHash,
-            IEnumerable<BuildRequest.Argument> arguments,
+            IEnumerable<Argument> arguments,
             Guid? requestId = null)
         {
             this.RequestId = requestId ?? Guid.Empty;
             this.Language = language;
-            this.Arguments = new ReadOnlyCollection<BuildRequest.Argument>(arguments.ToList<BuildRequest.Argument>());
+            this.Arguments = new ReadOnlyCollection<Argument>(arguments.ToList());
             this.CompilerHash = compilerHash;
             if (this.Arguments.Count > ushort.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(arguments), "Too many arguments: maximum of " + ushort.MaxValue.ToString() + " arguments allowed.");
@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 writer.Write((uint)this.Language);
                 writer.Write(this.CompilerHash);
                 writer.Write(this.Arguments.Count);
-                foreach (BuildRequest.Argument obj in this.Arguments)
+                foreach (Argument obj in this.Arguments)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     obj.WriteToBinaryWriter(writer);

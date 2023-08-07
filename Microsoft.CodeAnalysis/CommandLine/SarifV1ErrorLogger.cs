@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
     /// <remarks>
     /// To log diagnostics in the standardized SARIF v2.1.0 format, use the SarifV2ErrorLogger.
     /// </remarks>
-    internal sealed class SarifV1ErrorLogger : SarifErrorLogger, IDisposable
+    internal sealed class SarifV1ErrorLogger : SarifErrorLogger
     {
         private readonly DiagnosticDescriptorSet _descriptors;
         public SarifV1ErrorLogger(Stream stream, string toolName, string toolFileVersion, Version toolAssemblyVersion, CultureInfo culture)
@@ -108,28 +108,25 @@ namespace Microsoft.CodeAnalysis
             {
                 My_writer.WriteArrayStart("relatedLocations");
 
-                foreach (var additionalLocation in additionalLocations)
+                foreach (var additionalLocation in additionalLocations.Where(al => HasPath(al)))
                 {
-                    if (HasPath(additionalLocation))
-                    {
-                        My_writer.WriteObjectStart(); // annotatedCodeLocation
-                        My_writer.WriteKey("physicalLocation");
+                    My_writer.WriteObjectStart(); // annotatedCodeLocation
+                    My_writer.WriteKey("physicalLocation");
 
-                        WritePhysicalLocation(additionalLocation);
+                    WritePhysicalLocation(additionalLocation);
 
-                        My_writer.WriteObjectEnd(); // annotatedCodeLocation
-                    }
+                    My_writer.WriteObjectEnd(); // annotatedCodeLocation
                 }
 
                 My_writer.WriteArrayEnd(); // relatedLocations
             }
         }
 
-        protected override void WritePhysicalLocation(Location location)
+        protected override void WritePhysicalLocation(Location diagnosticLocation)
         {
-            Debug.Assert(HasPath(location));
+            Debug.Assert(HasPath(diagnosticLocation));
 
-            FileLinePositionSpan span = location.GetLineSpan();
+            FileLinePositionSpan span = diagnosticLocation.GetLineSpan();
 
             My_writer.WriteObjectStart();
             My_writer.Write("uri", GetUri(span.Path));
@@ -200,17 +197,20 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            My_writer.WriteArrayEnd();  // results
+            if (disposing)
+            {
+                My_writer.WriteArrayEnd();  // results
 
-            WriteRules();
+                WriteRules();
 
-            My_writer.WriteObjectEnd(); // run
-            My_writer.WriteArrayEnd();  // runs
-            My_writer.WriteObjectEnd(); // root
+                My_writer.WriteObjectEnd(); // run
+                My_writer.WriteArrayEnd();  // runs
+                My_writer.WriteObjectEnd(); // root
+            }
 
-            base.Dispose();
+            base.Dispose(disposing);
         }
 
         /// <summary>

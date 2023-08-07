@@ -728,7 +728,7 @@ namespace Microsoft.CodeAnalysis
         public override string ToString()
         {
             string? valueToDisplay = this.GetValueToDisplay();
-            return String.Format("{0}({1}: {2})", this.GetType().Name, valueToDisplay, this.Discriminator);
+            return string.Format("{0}({1}: {2})", this.GetType().Name, valueToDisplay, this.Discriminator);
         }
 
         public virtual string? GetValueToDisplay()

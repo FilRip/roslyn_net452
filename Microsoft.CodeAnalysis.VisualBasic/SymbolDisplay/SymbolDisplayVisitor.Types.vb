@@ -148,8 +148,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim vbNamedTypeSymbol = TryCast(symbol, NamedTypeSymbol)
                 Dim emittedName As String = If(
                     vbNamedTypeSymbol IsNot Nothing,
-                    If(vbNamedTypeSymbol.GetEmittedNamespaceName(), String.Empty),
-                                     String.Empty)
+                    If(vbNamedTypeSymbol.GetEmittedNamespaceName(), string.Empty),
+                                     string.Empty)
 
                 VisitNamespace(ns, emittedName)
                 AddOperator(SyntaxKind.DotToken)
@@ -315,7 +315,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     If members.Length = 0 Then
                         builder.Add(New SymbolDisplayPart(SymbolDisplayPartKind.ClassName, symbol, "<empty anonymous type>"))
                     Else
-                        Dim name = String.Format("<anonymous type: {0}>", members)
+                        Dim name = string.Format("<anonymous type: {0}>", members)
                         builder.Add(New SymbolDisplayPart(SymbolDisplayPartKind.ClassName, symbol, name))
                     End If
 

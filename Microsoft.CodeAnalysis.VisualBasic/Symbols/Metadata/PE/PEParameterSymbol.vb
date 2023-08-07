@@ -270,7 +270,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
         Public Overrides ReadOnly Property MetadataName As String
             Get
-                Return If(HasNameInMetadata, _name, String.Empty)
+                Return If(HasNameInMetadata, _name, string.Empty)
             End Get
         End Property
 

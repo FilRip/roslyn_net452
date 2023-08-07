@@ -13,6 +13,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
 
         public void Log(string message)
         {
+            // Nothing to do
         }
     }
 }

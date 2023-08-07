@@ -640,7 +640,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // CS0591: Invalid value for argument to '{0}' attribute
                 Location attributeArgumentSyntaxLocation = this.GetAttributeArgumentSyntaxLocation(0, nodeOpt);
                 diagnostics.Add(ErrorCode.ERR_InvalidAttributeArgument, attributeArgumentSyntaxLocation, nodeOpt != null ? nodeOpt.GetErrorDisplayName() : "");
-                guidString = String.Empty;
+                guidString = string.Empty;
             }
 
             return guidString!;

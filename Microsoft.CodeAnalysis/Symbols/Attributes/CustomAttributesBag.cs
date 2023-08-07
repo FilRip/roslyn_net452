@@ -191,7 +191,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Enum representing the current state of attribute binding/decoding for a corresponding CustomAttributeBag.
         /// </summary>
-        [Flags]
+        [Flags()]
         internal enum CustomAttributeBagCompletionPart : byte
         {
             /// <summary>

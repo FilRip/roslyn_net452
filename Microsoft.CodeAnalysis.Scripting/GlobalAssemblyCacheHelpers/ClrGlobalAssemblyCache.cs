@@ -29,25 +29,25 @@ namespace Microsoft.CodeAnalysis
 
         private const int MAX_PATH = 260;
 
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("21b8916c-f28e-11d2-a473-00c04f8ef448")]
+        [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("21b8916c-f28e-11d2-a473-00c04f8ef448")]
         private interface IAssemblyEnum
         {
-            [PreserveSig]
+            [PreserveSig()]
             int GetNextAssembly(out FusionAssemblyIdentity.IApplicationContext ppAppCtx, out FusionAssemblyIdentity.IAssemblyName ppName, uint dwFlags);
 
-            [PreserveSig]
+            [PreserveSig()]
             int Reset();
 
-            [PreserveSig]
+            [PreserveSig()]
             int Clone(out IAssemblyEnum ppEnum);
         }
 
-        [ComImport, Guid("e707dcde-d1cd-11d2-bab9-00c04f8eceae"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport(), Guid("e707dcde-d1cd-11d2-bab9-00c04f8eceae"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         private interface IAssemblyCache
         {
             void UninstallAssembly();
 
-            void QueryAssemblyInfo(uint dwFlags, [MarshalAs(UnmanagedType.LPWStr)] string pszAssemblyName, ref ASSEMBLY_INFO pAsmInfo);
+            void QueryAssemblyInfo(uint dwFlags, [MarshalAs(UnmanagedType.LPWStr)] string pszAssemblyName, ref AssemblyInfo pAsmInfo);
 
             void CreateAssemblyCacheItem();
             void CreateAssemblyScavenger();
@@ -55,11 +55,13 @@ namespace Microsoft.CodeAnalysis
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private unsafe struct ASSEMBLY_INFO
+        private unsafe struct AssemblyInfo
         {
             public uint cbAssemblyInfo;
-            public readonly uint dwAssemblyFlags;
-            public readonly ulong uliAssemblySizeInKB;
+#pragma warning disable S1144 // Unused private types or members should be removed
+            public uint dwAssemblyFlags;
+            public ulong uliAssemblySizeInKB;
+#pragma warning restore S1144 // Unused private types or members should be removed
             public char* pszCurrentAssemblyPathBuf;
             public uint cchBuf;
         }
@@ -132,10 +134,12 @@ namespace Microsoft.CodeAnalysis
         private const int S_FALSE = 1;
 
         // Internal for testing.
+#pragma warning disable S4456 // Parameter validation in yielding methods should be wrapped
         internal static IEnumerable<FusionAssemblyIdentity.IAssemblyName> GetAssemblyObjects(
             FusionAssemblyIdentity.IAssemblyName partialNameFilter,
             ImmutableArray<ProcessorArchitecture> architectureFilter)
         {
+#pragma warning restore S4456 // Parameter validation in yielding methods should be wrapped
             FusionAssemblyIdentity.IApplicationContext applicationContext = null;
 
             int hr = CreateAssemblyEnum(out IAssemblyEnum enumerator, applicationContext, partialNameFilter, ASM_CACHE.GAC, IntPtr.Zero);
@@ -158,12 +162,14 @@ namespace Microsoft.CodeAnalysis
                 }
                 else
                 {
+#pragma warning disable S125 // Sections of code should not be commented out
                     // for some reason it might happen that CreateAssemblyEnum returns non-zero HR that doesn't correspond to any exception:
                     //#if SCRIPTING
                     throw new ArgumentException(Scripting.Properties.Resources.InvalidAssemblyName);
                     /*#else
                                         throw new ArgumentException(Editor.EditorFeaturesResources.Invalid_assembly_name);
                     #endif*/
+#pragma warning restore S125 // Sections of code should not be commented out
                 }
             }
 
@@ -196,8 +202,8 @@ namespace Microsoft.CodeAnalysis
         public override AssemblyIdentity ResolvePartialName(
             string displayName,
             out string location,
-            ImmutableArray<ProcessorArchitecture> architectureFilter,
-            CultureInfo preferredCulture)
+            ImmutableArray<ProcessorArchitecture> architectureFilter = default,
+            CultureInfo preferredCulture = null)
         {
             if (displayName == null)
             {
@@ -227,13 +233,13 @@ namespace Microsoft.CodeAnalysis
         internal static unsafe string GetAssemblyLocation(FusionAssemblyIdentity.IAssemblyName nameObject)
         {
             // NAME | VERSION | CULTURE | PUBLIC_KEY_TOKEN | RETARGET | PROCESSORARCHITECTURE
-            string fullName = FusionAssemblyIdentity.GetDisplayName(nameObject, FusionAssemblyIdentity.ASM_DISPLAYF.FULL);
+            string fullName = FusionAssemblyIdentity.GetUnsafeDisplayName(nameObject, FusionAssemblyIdentity.ASM_DISPLAYF.FULL);
 
             fixed (char* p = new char[MAX_PATH])
             {
-                ASSEMBLY_INFO info = new()
+                AssemblyInfo info = new()
                 {
-                    cbAssemblyInfo = (uint)Marshal.SizeOf<ASSEMBLY_INFO>(),
+                    cbAssemblyInfo = (uint)Marshal.SizeOf<AssemblyInfo>(),
                     pszCurrentAssemblyPathBuf = p,
                     cchBuf = MAX_PATH
                 };

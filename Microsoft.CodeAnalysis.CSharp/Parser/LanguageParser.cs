@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         // Parsing rule terminating conditions.  This is how we know if it is 
         // okay to abort the current parsing rule when unexpected tokens occur.
 
-        [Flags]
+        [Flags()]
         internal enum TerminatorState
         {
             EndOfFile = 0,
@@ -4458,7 +4458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 expected);
         }
 
-        [Flags]
+        [Flags()]
         private enum VariableFlags
         {
             Fixed = 0x01,
@@ -5098,7 +5098,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             return SyntaxFactory.MissingToken(SyntaxKind.IdentifierToken);
         }
 
-        [Flags]
+        [Flags()]
         private enum NameOptions
         {
             None = 0,

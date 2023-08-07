@@ -58,11 +58,11 @@ namespace Microsoft.CodeAnalysis
         public RelativePathResolver WithBaseDirectory(string baseDirectory) =>
             new(SearchPaths, baseDirectory);
 
-        public bool Equals(RelativePathResolver other) =>
-            BaseDirectory == other.BaseDirectory && SearchPaths.SequenceEqual(other.SearchPaths);
-
         public override int GetHashCode() =>
             Hash.Combine(BaseDirectory, Hash.CombineValues(SearchPaths));
+
+        public bool Equals(RelativePathResolver other) =>
+            BaseDirectory == other.BaseDirectory && SearchPaths.SequenceEqual(other.SearchPaths);
 
         public override bool Equals(object obj) => Equals(obj as RelativePathResolver);
     }

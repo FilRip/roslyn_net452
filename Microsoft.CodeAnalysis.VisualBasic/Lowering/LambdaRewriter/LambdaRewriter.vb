@@ -1341,7 +1341,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             Select Case node.Syntax.Kind
                                 Case SyntaxKind.ResumeLabelStatement, SyntaxKind.OnErrorGoToLabelStatement
                                     Me.Diagnostics.Add(ERRID.ERR_CannotGotoNonScopeBlocksWithClosure, node.Syntax.GetLocation(),
-                                                       node.Syntax.ToString(), String.Empty, label.Name)
+                                                       node.Syntax.ToString(), string.Empty, label.Name)
                                 Case Else
                                     Me.Diagnostics.Add(ERRID.ERR_CannotGotoNonScopeBlocksWithClosure, node.Syntax.GetLocation(), "Goto ", label.Name, label.Name)
                             End Select

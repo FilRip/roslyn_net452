@@ -202,6 +202,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 }
                 catch
                 {
+                    // Nothing to do
                 }
             }
         }

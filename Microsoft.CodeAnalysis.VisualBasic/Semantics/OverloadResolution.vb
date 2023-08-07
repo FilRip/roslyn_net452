@@ -2993,8 +2993,8 @@ Bailout:
                         ' Note, that explicitly converted NOTHING is treated the same way by Dev10.
                         ' But, for the purpose of interpolated string lowering the method is applicable even if the argument expression
                         ' is the literal Nothing. This is because for interpolated string lowering we want to always call methods
-                        ' in their expanded form. E.g. $"{Nothing}" should be lowered to String.Format("{0}", New Object() {Nothing}) not
-                        ' String.Format("{0}", CType(Nothing, Object())).
+                        ' in their expanded form. E.g. $"{Nothing}" should be lowered to string.Format("{0}", New Object() {Nothing}) not
+                        ' string.Format("{0}", CType(Nothing, Object())).
                         If paramArrayItems.Count = 1 AndAlso arguments(paramArrayItems(0)).IsNothingLiteral() AndAlso Not forceExpandedForm Then
                             candidate.State = CandidateAnalysisResultState.ArgumentMismatch
                             candidate.IgnoreExtensionMethods = False

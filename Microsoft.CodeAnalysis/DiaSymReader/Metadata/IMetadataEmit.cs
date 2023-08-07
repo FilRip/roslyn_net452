@@ -12,7 +12,7 @@ using System.Security;
 
 namespace Microsoft.DiaSymReader
 {
-    [ComImport]
+    [ComImport()]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [Guid("BA3FEE4C-ECB9-4e41-83B7-183FA41CD859")]
     [SuppressUnmanagedCodeSecurity]

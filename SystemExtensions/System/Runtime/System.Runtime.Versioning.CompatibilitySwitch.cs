@@ -5,32 +5,51 @@ namespace System.Runtime.Versioning
 {
     public static class CompatibilitySwitch
     {
-        [SecurityCritical]
+        [SecurityCritical()]
         public static bool IsEnabled(string compatibilitySwitchName)
         {
-            return IsEnabledInternalCall(compatibilitySwitchName, onlyDB: true);
+            try
+            {
+                return IsEnabledInternalCall(compatibilitySwitchName, true);
+            }
+            catch (Exception) { /* Nothing to do */ }
+            return false;
         }
 
-        [SecurityCritical]
+        [SecurityCritical()]
         public static string GetValue(string compatibilitySwitchName)
         {
-            return GetValueInternalCall(compatibilitySwitchName, onlyDB: true);
+            try
+            {
+                return GetValueInternalCall(compatibilitySwitchName, true);
+            }
+            catch (Exception) { /* Nothing to do */ }
+            return null;
         }
 
-        [SecurityCritical]
+        [SecurityCritical()]
         internal static bool IsEnabledInternal(string compatibilitySwitchName)
         {
-            return IsEnabledInternalCall(compatibilitySwitchName, onlyDB: false);
+            try
+            {
+                return IsEnabledInternalCall(compatibilitySwitchName, false);
+            }
+            catch (Exception) { /* Nothing to do */ }
+            return false;
         }
 
-        [SecurityCritical]
+        [SecurityCritical()]
         internal static string GetValueInternal(string compatibilitySwitchName)
         {
-            return GetValueInternalCall(compatibilitySwitchName, onlyDB: false);
+            try
+            {
+                return GetValueInternalCall(compatibilitySwitchName, false);
+            }
+            catch (Exception) { /* Nothing to do */ }
+            return null;
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [SecurityCritical]
+        [MethodImpl(MethodImplOptions.InternalCall), SecurityCritical()]
         internal static extern string GetAppContextOverridesInternalCall();
 
         [MethodImpl(MethodImplOptions.InternalCall)]

@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Indicate what kinds of declaration symbols will be included
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum SymbolFilter
     {
         /// <summary>

@@ -531,17 +531,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         private ImmutableHashSet<DiagnosticAnalyzer> ComputeNonConfigurableAnalyzers(ImmutableHashSet<DiagnosticAnalyzer> unsuppressedAnalyzers)
         {
             var builder = ImmutableHashSet.CreateBuilder<DiagnosticAnalyzer>();
-            foreach (var analyzer in unsuppressedAnalyzers)
+            foreach (DiagnosticAnalyzer analyzer in unsuppressedAnalyzers)
             {
-                var descriptors = AnalyzerManager.GetSupportedDiagnosticDescriptors(analyzer, AnalyzerExecutor);
-                foreach (var descriptor in descriptors)
-                {
-                    if (descriptor.IsNotConfigurable())
-                    {
-                        builder.Add(analyzer);
-                        break;
-                    }
-                }
+                ImmutableArray<DiagnosticDescriptor> descriptors = AnalyzerManager.GetSupportedDiagnosticDescriptors(analyzer, AnalyzerExecutor);
+                if (descriptors.Any(d => d.IsNotConfigurable()))
+                    builder.Add(analyzer);
             }
 
             return builder.ToImmutableHashSet();
@@ -550,12 +544,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         private ImmutableHashSet<DiagnosticAnalyzer> ComputeSymbolStartAnalyzers(ImmutableHashSet<DiagnosticAnalyzer> unsuppressedAnalyzers)
         {
             var builder = ImmutableHashSet.CreateBuilder<DiagnosticAnalyzer>();
-            foreach (var action in this.AnalyzerActions.SymbolStartActions)
+            foreach (SymbolStartAnalyzerAction action in this.AnalyzerActions.SymbolStartActions.Where(action => unsuppressedAnalyzers.Contains(action.Analyzer)))
             {
-                if (unsuppressedAnalyzers.Contains(action.Analyzer))
-                {
-                    builder.Add(action.Analyzer);
-                }
+                builder.Add(action.Analyzer);
             }
 
             return builder.ToImmutableHashSet();
@@ -1034,8 +1025,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     }
                 }
 
-                return;
-
                 ImmutableArray<Diagnostic> getSuppressableDiagnostics(DiagnosticSuppressor suppressor)
                 {
                     var supportedSuppressions = AnalyzerManager.GetSupportedSuppressionDescriptors(suppressor, AnalyzerExecutor);
@@ -1045,12 +1034,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     }
 
                     var builder = ArrayBuilder<Diagnostic>.GetInstance();
-                    foreach (var diagnostic in reportedDiagnostics)
+                    foreach (Diagnostic diagnostic in reportedDiagnostics.Where(diag => supportedSuppressions.Contains(s => s.SuppressedDiagnosticId == diag.Id)))
                     {
-                        if (supportedSuppressions.Contains(s => s.SuppressedDiagnosticId == diagnostic.Id))
-                        {
-                            builder.Add(diagnostic);
-                        }
+                        builder.Add(diagnostic);
                     }
 
                     return builder.ToImmutableAndFree();
@@ -1160,13 +1146,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                         var declaredSymbols = model.GetDeclaredSymbolsForNode(node, cancellationToken);
                         Debug.Assert(declaredSymbols != null);
 
-                        foreach (var symbol in declaredSymbols)
-                        {
-                            if (generatedCodeSymbolsInTree.Contains(symbol))
-                            {
-                                return true;
-                            }
-                        }
+                        if (declaredSymbols.Any(symbol => generatedCodeSymbolsInTree.Contains(symbol)))
+                            return true;
                     }
                 }
             }
@@ -1225,7 +1206,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     model.ComputeDeclarationsInSpan(span, getSymbol: true, builder: declarationInfoBuilder, cancellationToken: cancellationToken);
 
                     ImmutableHashSet<ISymbol>.Builder? generatedSymbolsBuilder = null;
-                    foreach (var declarationInfo in declarationInfoBuilder)
+                    foreach (DeclarationInfo declarationInfo in declarationInfoBuilder)
                     {
                         var symbol = declarationInfo.DeclaredSymbol;
                         if (symbol != null &&
@@ -2146,18 +2127,15 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     // Get container symbol's per-symbol actions, which also forces its start actions to execute.
                     var containerActions = await driver.GetPerSymbolAnalyzerActionsAsync(symbol.ContainingSymbol, analyzer, analysisState, cancellationToken).ConfigureAwait(false);
-                    if (!containerActions.IsEmpty)
+                    if (!containerActions.IsEmpty && symbol.ContainingSymbol.Kind != symbol.Kind)
                     {
                         // Don't inherit actions for nested type and namespace from its containing type and namespace respectively.
                         // However, note that we bail out **after** computing container's per-symbol actions above.
                         // This is done to ensure that we have executed symbol started actions for the container before our start actions are executed.
-                        if (symbol.ContainingSymbol.Kind != symbol.Kind)
-                        {
-                            // Don't inherit the symbol start and symbol end actions.
-                            var containerAnalyzerActions = containerActions.AnalyzerActions;
-                            var actions = AnalyzerActions.Empty.Append(in containerAnalyzerActions, appendSymbolStartAndSymbolEndActions: false);
-                            return CreateGroupedActions(analyzer, actions);
-                        }
+                        // Don't inherit the symbol start and symbol end actions.
+                        AnalyzerActions containerAnalyzerActions = containerActions.AnalyzerActions;
+                        AnalyzerActions actions = AnalyzerActions.Empty.Append(in containerAnalyzerActions, appendSymbolStartAndSymbolEndActions: false);
+                        return CreateGroupedActions(analyzer, actions);
                     }
                 }
 
@@ -2351,11 +2329,19 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private static bool IsCompilerAnalyzer(DiagnosticAnalyzer analyzer) => analyzer is CompilerDiagnosticAnalyzer;
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _lazyCompilationEventQueue?.TryComplete();
+                _lazyDiagnosticQueue?.TryComplete();
+                _lazyQueueRegistration?.Dispose();
+            }
+        }
         public void Dispose()
         {
-            _lazyCompilationEventQueue?.TryComplete();
-            _lazyDiagnosticQueue?.TryComplete();
-            _lazyQueueRegistration?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 
@@ -2952,7 +2938,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
             foreach (IOperation operationBlock in operationBlocks)
             {
-                if (checkParent)
+                if (checkParent && operationBlock.Parent != null)
                 {
                     // Special handling for IMethodBodyOperation and IConstructorBodyOperation.
                     // These are newly added root operation nodes for C# method and constructor bodies.
@@ -2962,35 +2948,32 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     // Hence we detect here if the operation block is parented by IMethodBodyOperation or IConstructorBodyOperation and
                     // add them to 'operationsToAnalyze' so that analyzers that explicitly register for these operation kinds
                     // can get callbacks for these nodes.
-                    if (operationBlock.Parent != null)
+                    switch (operationBlock.Parent.Kind)
                     {
-                        switch (operationBlock.Parent.Kind)
-                        {
-                            case OperationKind.MethodBody:
-                            case OperationKind.ConstructorBody:
-                                Debug.Assert(!operationBlock.Parent.IsImplicit);
-                                operationsToAnalyze.Add(operationBlock.Parent);
-                                break;
+                        case OperationKind.MethodBody:
+                        case OperationKind.ConstructorBody:
+                            Debug.Assert(!operationBlock.Parent.IsImplicit);
+                            operationsToAnalyze.Add(operationBlock.Parent);
+                            break;
 
-                            case OperationKind.ExpressionStatement:
-                                // For constructor initializer, we generate an IInvocationOperation with an implicit IExpressionStatementOperation parent.
-                                Debug.Assert(operationBlock.Kind == OperationKind.Invocation);
-                                Debug.Assert(operationBlock.Parent.IsImplicit);
-                                Debug.Assert(operationBlock.Parent.Parent is IConstructorBodyOperation ctorBody &&
-                                    ctorBody.Initializer == operationBlock.Parent);
+                        case OperationKind.ExpressionStatement:
+                            // For constructor initializer, we generate an IInvocationOperation with an implicit IExpressionStatementOperation parent.
+                            Debug.Assert(operationBlock.Kind == OperationKind.Invocation);
+                            Debug.Assert(operationBlock.Parent.IsImplicit);
+                            Debug.Assert(operationBlock.Parent.Parent is IConstructorBodyOperation ctorBody &&
+                                ctorBody.Initializer == operationBlock.Parent);
 #nullable restore
-                                Debug.Assert(!operationBlock.Parent.Parent.IsImplicit);
-                                operationsToAnalyze.Add(operationBlock.Parent.Parent);
+                            Debug.Assert(!operationBlock.Parent.Parent.IsImplicit);
+                            operationsToAnalyze.Add(operationBlock.Parent.Parent);
 
-                                break;
+                            break;
 
-                            default:
-                                Debug.Fail($"Expected operation with kind '{operationBlock.Kind}' to be the root operation with null 'Parent', but instead it has a non-null Parent with kind '{operationBlock.Parent.Kind}'");
-                                break;
-                        }
-
-                        checkParent = false;
+                        default:
+                            Debug.Fail($"Expected operation with kind '{operationBlock.Kind}' to be the root operation with null 'Parent', but instead it has a non-null Parent with kind '{operationBlock.Parent.Kind}'");
+                            break;
                     }
+
+                    checkParent = false;
                 }
 
                 operationsToAnalyze.AddRange(operationBlock.DescendantsAndSelf());

@@ -1591,7 +1591,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (symbol is null)
                 {
-                    MetadataTypeName mdName = MetadataTypeName.FromNamespaceAndTypeName(HostObjectType.Namespace ?? String.Empty,
+                    MetadataTypeName mdName = MetadataTypeName.FromNamespaceAndTypeName(HostObjectType.Namespace ?? string.Empty,
                                                                                         HostObjectType.Name,
                                                                                         useCLSCompliantNameArityEncoding: true);
 

@@ -151,7 +151,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         /// <summary>
         /// True if this an indexed property; that is, a property with parameters
-        /// within a [ComImport] type.
+        /// within a [ComImport()] type.
         /// </summary>
         public virtual bool IsIndexedProperty
         {

@@ -45856,7 +45856,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Case SyntaxKind.DocumentationCommentExteriorTrivia
                     Return "'''"
                 Case Else
-                    Return String.Empty
+                    Return string.Empty
             End Select
         End Function
     End Class

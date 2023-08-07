@@ -111,7 +111,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Protected Overrides Function CreateAssemblyDataForCompilation(compilationReference As CompilationReference) As AssemblyData
                 Dim vbReference = TryCast(compilationReference, VisualBasicCompilationReference)
                 If vbReference Is Nothing Then
-                    Throw New NotSupportedException(String.Format(My.Resources.CantReferenceCompilationFromTypes, compilationReference.GetType(), "Visual Basic"))
+                    Throw New NotSupportedException(string.Format(My.Resources.CantReferenceCompilationFromTypes, compilationReference.GetType(), "Visual Basic"))
                 End If
 
                 Dim result As New AssemblyDataForCompilation(vbReference.Compilation, vbReference.Properties.EmbedInteropTypes)
@@ -245,7 +245,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 If map.TryGetValue(identity, symbol, Function(v1, v2, s) True) Then
                     ' TODO: https://github.com/dotnet/roslyn/issues/9004
-                    Throw New NotSupportedException(String.Format(CodeAnalysisResources.ChangingVersionOfAssemblyReferenceIsNotAllowedDuringDebugging, identity, symbol.Identity.Version))
+                    Throw New NotSupportedException(string.Format(CodeAnalysisResources.ChangingVersionOfAssemblyReferenceIsNotAllowedDuringDebugging, identity, symbol.Identity.Version))
                 End If
 
                 Return New MissingAssemblySymbol(identity)

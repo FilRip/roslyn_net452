@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Corresponds to Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.
         /// </summary>
-        [Flags]
+        [Flags()]
         private enum CSharpBinderFlags
         {
             None = 0,
@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Corresponds to Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfoFlags.
         /// </summary>
-        [Flags]
+        [Flags()]
         private enum CSharpArgumentInfoFlags
         {
             None = 0,

@@ -302,7 +302,7 @@ namespace Microsoft.CodeAnalysis
             }
             else
             {
-                return String.Format("{{{0},{1},{2},{3}}}", NamespaceName, TypeName, UseCLSCompliantNameArityEncoding.ToString(), _forcedArity.ToString());
+                return string.Format("{{{0},{1},{2},{3}}}", NamespaceName, TypeName, UseCLSCompliantNameArityEncoding.ToString(), _forcedArity.ToString());
             }
         }
     }

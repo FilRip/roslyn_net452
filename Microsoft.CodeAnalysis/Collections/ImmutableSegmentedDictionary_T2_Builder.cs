@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable enable
 
@@ -196,21 +197,21 @@ namespace Microsoft.CodeAnalysis.Collections
 
             public bool TryGetKey(TKey equalKey, out TKey actualKey)
             {
-                foreach (var key in Keys)
+                TKey find;
+                if ((find = Keys.FirstOrDefault(k => KeyComparer.Equals(k, equalKey))) != null)
                 {
-                    if (KeyComparer.Equals(key, equalKey))
-                    {
-                        actualKey = key;
-                        return true;
-                    }
+                    actualKey = find;
+                    return true;
                 }
 
                 actualKey = equalKey;
                 return false;
             }
 
+#pragma warning disable CS8767 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
             public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
                 => ReadOnlyDictionary.TryGetValue(key, out value);
+#pragma warning restore CS8767 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
 
             public ImmutableSegmentedDictionary<TKey, TValue> ToImmutable()
             {

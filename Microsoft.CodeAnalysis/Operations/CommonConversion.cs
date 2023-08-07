@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.Operations
     /// </remarks>
     public struct CommonConversion
     {
-        [Flags]
+        [Flags()]
         private enum ConversionKind
         {
             None = 0,

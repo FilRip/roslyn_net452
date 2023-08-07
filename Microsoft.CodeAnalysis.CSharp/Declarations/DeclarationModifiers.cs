@@ -8,7 +8,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [Flags]
+    [Flags()]
     public enum DeclarationModifiers : uint
     {
         None = 0,

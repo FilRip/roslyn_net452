@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.Scripting
 
         private Compilation _lazyCompilation;
 
-        internal Script(ScriptCompiler compiler, ScriptBuilder builder, SourceText sourceText, ScriptOptions options, Type globalsTypeOpt, Script previousOpt)
+        private protected Script(ScriptCompiler compiler, ScriptBuilder builder, SourceText sourceText, ScriptOptions options, Type globalsTypeOpt, Script previousOpt)
         {
             Debug.Assert(sourceText != null);
             Debug.Assert(options != null);
@@ -458,7 +458,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// <exception cref="ArgumentException">The type of <paramref name="globals"/> doesn't match <see cref="Script.GlobalsType"/>.</exception>
         public new Task<ScriptState<T>> RunAsync(object globals = null, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default)
         {
-            // The following validation and executor construction may throw;
+            // The following validation and executor construction may throw
             // do so synchronously so that the exception is not wrapped in the task.
 
             ValidateGlobals(globals, GlobalsType);
@@ -518,7 +518,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// <exception cref="ArgumentException"><paramref name="previousState"/> is not a previous execution state of this script.</exception>
         public new Task<ScriptState<T>> RunFromAsync(ScriptState previousState, Func<Exception, bool> catchException = null, CancellationToken cancellationToken = default)
         {
-            // The following validation and executor construction may throw;
+            // The following validation and executor construction may throw
             // do so synchronously so that the exception is not wrapped in the task.
 
             if (previousState == null)

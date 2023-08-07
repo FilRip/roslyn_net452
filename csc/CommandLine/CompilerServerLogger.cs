@@ -37,6 +37,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             }
             catch (Exception)
             {
+                // Nothing to do
             }
         }
 

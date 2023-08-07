@@ -106,6 +106,7 @@
     <Compile Include="CompilerServer\ServerDispatcher.cs" />
     <Compile Include="CompilerServer\VbCsCompiler.cs" />
     <Compile Include="CompilerServer\VisualBasicCompilerServer.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NamedPipeUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeHostInfo.cs" />

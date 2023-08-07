@@ -365,7 +365,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                                                                         Me.AnonymousType.Manager.System_Int32).MakeCompilerGenerated()),
                                                                                    boundArrayInitializer, arrayOfObjectsType).MakeCompilerGenerated()
 
-                ' String.Format(<formatPattern>, New Object(numberOfFields - 1) { field0, field1, ... })
+                ' string.Format(<formatPattern>, New Object(numberOfFields - 1) { field0, field1, ... })
                 Dim formatMethod = Me.AnonymousType.Manager.System_String__Format_IFormatProvider
                 Dim [call] As BoundExpression = New BoundCall(syntax, formatMethod, Nothing, Nothing,
                                                               ImmutableArray.Create(Of BoundExpression)(

@@ -101,7 +101,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Public Function GetAndEndTemporaryString() As String
                     Dim t As TemporaryStringBuilder = Me._temporaryStringBuilders.Pop()
                     Debug.Assert(Me._indentDepth = t.InitialIndentDepth,
-                                 String.Format("Temporary strings should be indent-neutral (was {0}, is {1})",
+                                 string.Format("Temporary strings should be indent-neutral (was {0}, is {1})",
                                                t.InitialIndentDepth,
                                                Me._indentDepth))
 

@@ -10,9 +10,9 @@ namespace System.Text
 
         private int _charCountResult;
 
-        private readonly EncodingNLS _enc;
+        private readonly EncodingNls _enc;
 
-        private readonly DecoderNLS _decoder;
+        private readonly DecoderNls _decoder;
 
         private readonly unsafe byte* _byteStart;
 
@@ -30,7 +30,7 @@ namespace System.Text
 
         internal int Count => _charCountResult;
 
-        internal unsafe EncodingCharBuffer(EncodingNLS enc, DecoderNLS decoder, char* charStart, int charCount, byte* byteStart, int byteCount)
+        internal unsafe EncodingCharBuffer(EncodingNls enc, DecoderNls decoder, char* charStart, int charCount, byte* byteStart, int byteCount)
         {
             _enc = enc;
             _decoder = decoder;

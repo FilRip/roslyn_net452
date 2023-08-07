@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Specifies the options for how locals are displayed in the description of a symbol.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum SymbolDisplayLocalOptions
     {
         /// <summary>

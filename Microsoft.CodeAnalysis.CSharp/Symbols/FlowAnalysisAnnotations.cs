@@ -8,7 +8,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    [Flags]
+    [Flags()]
     public enum FlowAnalysisAnnotations
     {
         None = 0,

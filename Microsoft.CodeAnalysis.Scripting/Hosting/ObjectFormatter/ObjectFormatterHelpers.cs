@@ -57,13 +57,9 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             // TODO (tomat): which assembly should we look at for dd attributes?
             if (member is TypeInfo type)
             {
-                foreach (DebuggerDisplayAttribute attr in type.Assembly.GetCustomAttributes<DebuggerDisplayAttribute>())
-                {
-                    if (IsApplicableAttribute(type, attr.Target.GetTypeInfo(), attr.TargetTypeName))
-                    {
-                        return attr;
-                    }
-                }
+                DebuggerDisplayAttribute find;
+                if ((find = type.Assembly.GetCustomAttributes<DebuggerDisplayAttribute>().ToList().Find(ca => IsApplicableAttribute(type, ca.Target.GetTypeInfo(), ca.TargetTypeName))) != null)
+                    return find;
             }
 
             return null;
@@ -79,13 +75,9 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             }
 
             // TODO (tomat): which assembly should we look at for proxy attributes?
-            foreach (DebuggerTypeProxyAttribute attr in type.Assembly.GetCustomAttributes<DebuggerTypeProxyAttribute>())
-            {
-                if (IsApplicableAttribute(type, attr.Target.GetTypeInfo(), attr.TargetTypeName))
-                {
-                    return attr;
-                }
-            }
+            DebuggerTypeProxyAttribute find;
+            if ((find = type.Assembly.GetCustomAttributes<DebuggerTypeProxyAttribute>().ToList().Find(attr => IsApplicableAttribute(type, attr.Target.GetTypeInfo(), attr.TargetTypeName))) != null)
+                return find;
 
             return null;
         }
@@ -93,7 +85,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
         private static bool IsApplicableAttribute(TypeInfo type, TypeInfo targetType, string targetTypeName)
         {
             return type != null && AreEquivalent(targetType, type)
-                || targetTypeName != null && type.FullName == targetTypeName;
+                || targetTypeName != null && type?.FullName == targetTypeName;
         }
 
         private static bool AreEquivalent(TypeInfo type, TypeInfo other)
@@ -120,7 +112,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                             proxyType = proxyType.MakeGenericType(type.GenericTypeArguments);
                         }
 
-                        return Activator.CreateInstance(proxyType, new object[] { obj });
+                        return Activator.CreateInstance(proxyType, obj);
                     }
                 }
                 catch (Exception)
@@ -188,35 +180,32 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                 }
 
                 MemberInfo candidate = null;
-                foreach (var member in members)
+                foreach (var member in members.Where(member => StringComparer.OrdinalIgnoreCase.Equals(memberName, member.Name)))
                 {
-                    if (StringComparer.OrdinalIgnoreCase.Equals(memberName, member.Name))
+                    if (candidate != null)
                     {
-                        if (candidate != null)
-                        {
-                            return null;
-                        }
+                        return null;
+                    }
 
-                        MethodInfo method;
+                    MethodInfo method;
 
-                        if (member is FieldInfo)
+                    if (member is FieldInfo)
+                    {
+                        candidate = member;
+                    }
+                    else if ((method = member as MethodInfo) != null)
+                    {
+                        if (method.GetParameters().Length == 0)
                         {
                             candidate = member;
                         }
-                        else if ((method = member as MethodInfo) != null)
+                    }
+                    else
+                    {
+                        var getter = ((PropertyInfo)member).GetMethod;
+                        if (getter?.GetParameters().Length == 0)
                         {
-                            if (method.GetParameters().Length == 0)
-                            {
-                                candidate = member;
-                            }
-                        }
-                        else
-                        {
-                            var getter = ((PropertyInfo)member).GetMethod;
-                            if (getter?.GetParameters().Length == 0)
-                            {
-                                candidate = member;
-                            }
+                            candidate = member;
                         }
                     }
                 }

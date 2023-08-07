@@ -380,7 +380,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         If(token.IsKind(SyntaxKind.IdentifierToken),
                             DirectCast(token.Node, InternalSyntax.IdentifierTokenSyntax).IdentifierText,
                             token.ToString()),
-                        String.Empty)
+                        string.Empty)
         End Function
 
         ''' <summary>
@@ -1384,7 +1384,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If conversionExpression.Language = LanguageNames.VisualBasic Then
                 Return DirectCast(DirectCast(conversionExpression, ConversionOperation).ConversionConvertible, Conversion)
             Else
-                Throw New ArgumentException(String.Format(My.Resources.IConversionExpressionIsNotVisualBasicConversion,
+                Throw New ArgumentException(string.Format(My.Resources.IConversionExpressionIsNotVisualBasicConversion,
                                                           NameOf(IConversionOperation)),
                                             NameOf(conversionExpression))
             End If
@@ -1402,7 +1402,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim inConversionConvertible As IConvertibleConversion = DirectCast(argument, ArgumentOperation).InConversionConvertible
                 Return If(inConversionConvertible IsNot Nothing, DirectCast(inConversionConvertible, Conversion), New Conversion(Conversions.Identity))
             Else
-                Throw New ArgumentException(String.Format(My.Resources.IArgumentIsNotVisualBasicArgument,
+                Throw New ArgumentException(string.Format(My.Resources.IArgumentIsNotVisualBasicArgument,
                                                           NameOf(IArgumentOperation)),
                                             NameOf(argument))
             End If
@@ -1420,7 +1420,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim outConversionConvertible As IConvertibleConversion = DirectCast(argument, ArgumentOperation).OutConversionConvertible
                 Return If(outConversionConvertible IsNot Nothing, DirectCast(outConversionConvertible, Conversion), New Conversion(Conversions.Identity))
             Else
-                Throw New ArgumentException(String.Format(My.Resources.IArgumentIsNotVisualBasicArgument,
+                Throw New ArgumentException(string.Format(My.Resources.IArgumentIsNotVisualBasicArgument,
                                                           NameOf(IArgumentOperation)),
                                             NameOf(argument))
             End If
@@ -1442,7 +1442,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If compoundAssignment.Language = LanguageNames.VisualBasic Then
                 Return DirectCast(DirectCast(compoundAssignment, CompoundAssignmentOperation).InConversionConvertible, Conversion)
             Else
-                Throw New ArgumentException(String.Format(My.Resources.ICompoundAssignmentOperationIsNotVisualBasicCompoundAssignment,
+                Throw New ArgumentException(string.Format(My.Resources.ICompoundAssignmentOperationIsNotVisualBasicCompoundAssignment,
                                                           NameOf(compoundAssignment)),
                                             NameOf(compoundAssignment))
             End If
@@ -1464,7 +1464,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If compoundAssignment.Language = LanguageNames.VisualBasic Then
                 Return DirectCast(DirectCast(compoundAssignment, CompoundAssignmentOperation).OutConversionConvertible, Conversion)
             Else
-                Throw New ArgumentException(String.Format(My.Resources.ICompoundAssignmentOperationIsNotVisualBasicCompoundAssignment,
+                Throw New ArgumentException(string.Format(My.Resources.ICompoundAssignmentOperationIsNotVisualBasicCompoundAssignment,
                                                           NameOf(compoundAssignment)),
                                             NameOf(compoundAssignment))
             End If

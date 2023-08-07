@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
     /// </remarks>
     public sealed partial class InteractiveAssemblyLoader : IDisposable
     {
-        private class LoadedAssembly
+        private sealed class LoadedAssembly
         {
             /// <summary>
             /// The original path of the assembly before it was shadow-copied.
@@ -380,7 +380,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             }
             catch
             {
-                mvid = default;
+                mvid = Guid.Empty;
                 return false;
             }
         }
@@ -460,13 +460,11 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             Version candidateVersion = null;
             foreach (var info in infos)
             {
-                if (DesktopAssemblyIdentityComparer.Default.ReferenceMatchesDefinition(identity, info.Identity))
+                if (DesktopAssemblyIdentityComparer.Default.ReferenceMatchesDefinition(identity, info.Identity) &&
+                    (candidate == null || candidateVersion < info.Identity.Version))
                 {
-                    if (candidate == null || candidateVersion < info.Identity.Version)
-                    {
-                        candidate = info.Assembly;
-                        candidateVersion = info.Identity.Version;
-                    }
+                    candidate = info.Assembly;
+                    candidateVersion = info.Identity.Version;
                 }
             }
 
@@ -478,12 +476,10 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             var candidate = default(AssemblyIdentityAndLocation);
             foreach (var assembly in assemblies)
             {
-                if (DesktopAssemblyIdentityComparer.Default.ReferenceMatchesDefinition(identity, assembly.Identity))
+                if (DesktopAssemblyIdentityComparer.Default.ReferenceMatchesDefinition(identity, assembly.Identity) &&
+                    (candidate.Identity == null || candidate.Identity.Version < assembly.Identity.Version))
                 {
-                    if (candidate.Identity == null || candidate.Identity.Version < assembly.Identity.Version)
-                    {
-                        candidate = assembly;
-                    }
+                    candidate = assembly;
                 }
             }
 

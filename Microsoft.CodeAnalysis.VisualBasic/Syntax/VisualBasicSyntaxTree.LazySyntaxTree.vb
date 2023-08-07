@@ -33,7 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 _text = text
                 _options = options
-                _path = If(path, String.Empty)
+                _path = If(path, string.Empty)
                 _diagnosticOptions = If(diagnosticOptions, EmptyDiagnosticOptions)
             End Sub
 

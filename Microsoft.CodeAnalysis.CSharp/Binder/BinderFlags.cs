@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     /// <summary>
     /// A specific location for binding.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum BinderFlags : uint
     {
         None, // No specific location

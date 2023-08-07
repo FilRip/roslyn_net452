@@ -52,7 +52,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 _encodingOpt = If(encodingOpt, textOpt?.Encoding)
                 _checksumAlgorithm = checksumAlgorithm
                 _options = options
-                _path = If(path, String.Empty)
+                _path = If(path, string.Empty)
                 _root = If(cloneRoot, Me.CloneNodeAsRoot(syntaxRoot), syntaxRoot)
                 _hasCompilationUnitRoot = (syntaxRoot.Kind = SyntaxKind.CompilationUnit)
                 _isMyTemplate = isMyTemplate

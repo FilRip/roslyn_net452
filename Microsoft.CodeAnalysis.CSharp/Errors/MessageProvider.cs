@@ -83,7 +83,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // get the entire prefix (e.g., "error CS0219:" for C#) used on error messages.
         public override string GetMessagePrefix(string id, DiagnosticSeverity severity, bool isWarningAsError, CultureInfo culture)
         {
-            return String.Format(culture, "{0} {1}",
+            return string.Format(culture, "{0} {1}",
                 severity == DiagnosticSeverity.Error || isWarningAsError ? "error" : "warning",
                 id);
         }

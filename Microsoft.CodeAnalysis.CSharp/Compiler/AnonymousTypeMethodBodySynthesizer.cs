@@ -223,7 +223,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 //  Method body:
                 //
                 //  {
-                //      return String.Format(
+                //      return string.Format(
                 //          "{ <name1> = {0}", <name2> = {1}", ... <nameN> = {N-1}",
                 //          this.backingFld_1, 
                 //          this.backingFld_2, 
@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 if (fieldCount > 0)
                 {
-                    //  we do have fields, so have to use String.Format(...)
+                    //  we do have fields, so have to use string.Format(...)
                     BoundExpression[] arguments = new BoundExpression[fieldCount];
 
                     //  process properties
@@ -272,7 +272,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     BoundExpression format = F.Literal(formatString.ToStringAndFree());
 
                     //  Generate expression for return statement
-                    //      retExpression <= System.String.Format(args)
+                    //      retExpression <= System.string.Format(args)
                     var formatMethod = manager.System_String__Format_IFormatProvider;
                     retExpression = F.StaticCall(manager.System_String, formatMethod, F.Null(formatMethod.Parameters[0].Type), format, F.ArrayOrEmpty(manager.System_Object, arguments));
                 }

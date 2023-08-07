@@ -41,7 +41,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Public Overrides Function GetMessage(Optional formatProvider As IFormatProvider = Nothing) As String
                 Dim msg = ErrorFactory.IdToString(ERRID.ERR_GeneralProjectImportsError3, TryCast(formatProvider, CultureInfo))
-                Return String.Format(formatProvider, msg, _importText, _importText.Substring(_startIndex, _length), _wrappedDiagnostic.GetMessage(formatProvider))
+                Return string.Format(formatProvider, msg, _importText, _importText.Substring(_startIndex, _length), _wrappedDiagnostic.GetMessage(formatProvider))
             End Function
 
             Public Sub New(wrappedDiagnostic As DiagnosticInfo,

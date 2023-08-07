@@ -11,7 +11,7 @@ namespace Microsoft.DiaSymReader
     /// <summary>
     /// <see cref="SymUnmanagedWriter"/> creation options.
     /// </summary>
-    [Flags]
+    [Flags()]
     internal enum SymUnmanagedWriterCreationOptions
     {
         /// <summary>

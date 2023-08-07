@@ -1072,7 +1072,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
 
-        [Flags]
+        [Flags()]
         internal enum AllowedRequiredModifierType
         {
             None = 0,
@@ -1316,7 +1316,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        [Flags]
+        [Flags()]
         internal enum ReservedAttributes
         {
             DynamicAttribute = 1 << 1,

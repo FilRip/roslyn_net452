@@ -22,7 +22,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Debug.Assert(containingModule IsNot Nothing)
 
             _containingSymbol = containingModule
-            _name = String.Empty
+            _name = string.Empty
         End Sub
 
         Public Sub New(containingNamespace As NamespaceSymbol, name As String)

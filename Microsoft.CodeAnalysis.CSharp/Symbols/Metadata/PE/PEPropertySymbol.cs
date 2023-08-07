@@ -48,7 +48,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
         private readonly Flags _flags;
 
-        [Flags]
+        [Flags()]
         private enum Flags : byte
         {
             IsSpecialName = 1,
@@ -471,7 +471,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
         {
             get
             {
-                // Indexed property support is limited to types marked [ComImport],
+                // Indexed property support is limited to types marked [ComImport()],
                 // to match the native compiler where the feature was scoped to
                 // avoid supporting property groups.
                 return (this.ParameterCount > 0) && _containingType.IsComImport;

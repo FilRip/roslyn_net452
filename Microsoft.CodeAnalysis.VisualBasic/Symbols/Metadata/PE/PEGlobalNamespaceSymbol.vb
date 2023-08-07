@@ -34,7 +34,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
         Public Overrides ReadOnly Property Name As String
             Get
-                Return String.Empty
+                Return string.Empty
             End Get
         End Property
 

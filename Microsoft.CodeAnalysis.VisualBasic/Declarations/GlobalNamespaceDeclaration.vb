@@ -17,7 +17,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                        syntaxReference As SyntaxReference,
                        nameLocation As Location,
                        children As ImmutableArray(Of SingleNamespaceOrTypeDeclaration))
-            MyBase.New(String.Empty, hasImports, syntaxReference, nameLocation, children)
+            MyBase.New(string.Empty, hasImports, syntaxReference, nameLocation, children)
         End Sub
 
         Public Overrides ReadOnly Property IsGlobalNamespace As Boolean

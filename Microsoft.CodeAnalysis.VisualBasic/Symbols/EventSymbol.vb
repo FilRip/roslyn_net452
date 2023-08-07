@@ -210,7 +210,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                         useSiteInfo = New UseSiteInfo(Of AssemblySymbol)(ErrorFactory.ErrorInfo(ERRID.ERR_UnreferencedModuleEvent3, errorInfo.Arguments(0), Me))
 
                     Case ERRID.ERR_UnsupportedType1
-                        If errorInfo.Arguments(0).Equals(String.Empty) Then
+                        If errorInfo.Arguments(0).Equals(string.Empty) Then
                             useSiteInfo = New UseSiteInfo(Of AssemblySymbol)(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, CustomSymbolDisplayFormatter.ShortErrorName(Me)))
                         End If
 

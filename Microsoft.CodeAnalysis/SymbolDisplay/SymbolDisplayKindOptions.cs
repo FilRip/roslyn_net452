@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Specifies which kind keywords should be included when displaying symbols.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum SymbolDisplayKindOptions
     {
         /// <summary>

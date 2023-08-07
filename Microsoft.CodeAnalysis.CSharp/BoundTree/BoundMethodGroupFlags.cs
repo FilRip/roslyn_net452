@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [Flags]
+    [Flags()]
     public enum BoundMethodGroupFlags
     {
         None = 0,

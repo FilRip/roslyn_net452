@@ -5249,7 +5249,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // BREAKING CHANGE:     Dev10 allows the following code to compile, even though the output assembly is not verifiable and generates a runtime exception:
                 //
-                //          [ComImport, Guid("00020810-0000-0000-C000-000000000046")]
+                //          [ComImport(), Guid("00020810-0000-0000-C000-000000000046")]
                 //          [CoClass(typeof(GenericClass<>))]
                 //          public interface InterfaceType {}
                 //          public class GenericClass<T>: InterfaceType {}

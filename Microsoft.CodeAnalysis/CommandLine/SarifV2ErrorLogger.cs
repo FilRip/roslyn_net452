@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
     /// (Static Analysis Results Interchange Format) v2.1.0 format.
     /// http://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html
     /// </summary>
-    internal sealed class SarifV2ErrorLogger : SarifErrorLogger, IDisposable
+    internal sealed class SarifV2ErrorLogger : SarifErrorLogger
     {
         private readonly DiagnosticDescriptorSet _descriptors;
 
@@ -112,17 +112,14 @@ namespace Microsoft.CodeAnalysis
             {
                 My_writer.WriteArrayStart("relatedLocations");
 
-                foreach (var additionalLocation in additionalLocations)
+                foreach (var additionalLocation in additionalLocations.Where(al => HasPath(al)))
                 {
-                    if (HasPath(additionalLocation))
-                    {
-                        My_writer.WriteObjectStart(); // annotatedCodeLocation
-                        My_writer.WriteKey("physicalLocation");
+                    My_writer.WriteObjectStart(); // annotatedCodeLocation
+                    My_writer.WriteKey("physicalLocation");
 
-                        WritePhysicalLocation(additionalLocation);
+                    WritePhysicalLocation(additionalLocation);
 
-                        My_writer.WriteObjectEnd(); // annotatedCodeLocation
-                    }
+                    My_writer.WriteObjectEnd(); // annotatedCodeLocation
                 }
 
                 My_writer.WriteArrayEnd(); // relatedLocations
@@ -146,18 +143,21 @@ namespace Microsoft.CodeAnalysis
             My_writer.WriteObjectEnd();
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            My_writer.WriteArrayEnd(); //results
+            if (disposing)
+            {
+                My_writer.WriteArrayEnd(); //results
 
-            WriteTool();
+                WriteTool();
 
-            My_writer.Write("columnKind", "utf16CodeUnits");
+                My_writer.Write("columnKind", "utf16CodeUnits");
 
-            My_writer.WriteObjectEnd(); // run
-            My_writer.WriteArrayEnd();  // runs
-            My_writer.WriteObjectEnd(); // root
-            base.Dispose();
+                My_writer.WriteObjectEnd(); // run
+                My_writer.WriteArrayEnd();  // runs
+                My_writer.WriteObjectEnd(); // root
+            }
+            base.Dispose(disposing);
         }
 
         private void WriteTool()
@@ -182,10 +182,8 @@ namespace Microsoft.CodeAnalysis
             {
                 My_writer.WriteArrayStart("rules");
 
-                foreach (var pair in _descriptors.ToSortedList())
+                foreach (DiagnosticDescriptor descriptor in _descriptors.ToSortedList().Select(p => p.Value))
                 {
-                    DiagnosticDescriptor descriptor = pair.Value;
-
                     My_writer.WriteObjectStart(); // rule
                     My_writer.Write("id", descriptor.Id);
 

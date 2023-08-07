@@ -15,14 +15,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(node.Type.SpecialType = SpecialType.System_String)
             Dim factory = New SyntheticBoundNodeFactory(_topMethod, _currentMethodOrLambda, node.Syntax, _compilationState, _diagnostics)
 
-            ' We lower an interpolated string into an invocation of String.Format or System.Runtime.CompilerServices.FormattableStringFactory.Create.
+            ' We lower an interpolated string into an invocation of string.Format or System.Runtime.CompilerServices.FormattableStringFactory.Create.
             ' For example, we translate the expression:
             '
             '     $"Jenny, don't change your number: {phoneNumber:###-####}."
             '
             ' into
             '
-            '     String.Format("Jenny, don't change your number: {0:###-####}.", phoneNumber)
+            '     string.Format("Jenny, don't change your number: {0:###-####}.", phoneNumber)
             '
             ' TODO: A number of optimizations would be beneficial in the generated code.
             ' 
@@ -33,7 +33,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             '     Detect those cases that can be handled that way and take advantage of them.
             If node.IsEmpty Then
 
-                Return factory.StringLiteral(ConstantValue.Create(String.Empty))
+                Return factory.StringLiteral(ConstantValue.Create(string.Empty))
 
             ElseIf Not node.HasInterpolations Then
                 ' We have to process all of the escape sequences in the string.

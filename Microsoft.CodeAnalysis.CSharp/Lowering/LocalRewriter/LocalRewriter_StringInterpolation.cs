@@ -145,13 +145,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 //
-                // We lower an interpolated string into an invocation of String.Format.  For example, we translate the expression
+                // We lower an interpolated string into an invocation of string.Format.  For example, we translate the expression
                 //
                 //     $"Jenny don\'t change your number { 8675309 }"
                 //
                 // into
                 //
-                //     String.Format("Jenny don\'t change your number {0}", new object[] { 8675309 })
+                //     string.Format("Jenny don\'t change your number {0}", new object[] { 8675309 })
                 //
 
                 MakeInterpolatedStringFormat(node, out BoundExpression format, out ArrayBuilder<BoundExpression> expressions);

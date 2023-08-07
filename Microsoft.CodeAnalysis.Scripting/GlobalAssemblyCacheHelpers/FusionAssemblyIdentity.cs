@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +12,7 @@ namespace Microsoft.CodeAnalysis
 {
     internal sealed class FusionAssemblyIdentity
     {
-        [Flags]
+        [Flags()]
         internal enum ASM_DISPLAYF
         {
             VERSION = 0x01,
@@ -65,46 +63,45 @@ namespace Microsoft.CodeAnalysis
             MAX_PARAMS             // 29
         }
 
-        private static class CANOF
+        private static class Canof
         {
             public const uint PARSE_DISPLAY_NAME = 0x1;
-            public const uint SET_DEFAULT_VALUES = 0x2;
         }
 
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CD193BC0-B4BC-11d2-9833-00C04FC31D2E")]
+        [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("CD193BC0-B4BC-11d2-9833-00C04FC31D2E")]
         internal unsafe interface IAssemblyName
         {
             void SetProperty(PropertyId id, void* data, uint size);
 
-            [PreserveSig]
+            [PreserveSig()]
             int GetProperty(PropertyId id, void* data, ref uint size);
 
-            [PreserveSig]
+            [PreserveSig()]
             int Finalize();
 
-            [PreserveSig]
+            [PreserveSig()]
             int GetDisplayName(byte* buffer, ref uint characterCount, ASM_DISPLAYF dwDisplayFlags);
 
             // Le nom provient d'un objet COM de Microsoft, on ne peut pas changer son nom
 #pragma warning disable IDE1006
-            [PreserveSig]
+            [PreserveSig()]
             int __BindToObject(/*...*/);
 
-            [PreserveSig]
+            [PreserveSig()]
             int __GetName(/*...*/);
 #pragma warning restore IDE1006
 
-            [PreserveSig]
+            [PreserveSig()]
             int GetVersion(out uint versionHi, out uint versionLow);
 
-            [PreserveSig]
+            [PreserveSig()]
             int IsEqual(IAssemblyName pName, uint dwCmpFlags);
 
-            [PreserveSig]
+            [PreserveSig()]
             int Clone(out IAssemblyName pName);
         }
 
-        [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("7c23ff90-33af-11d3-95da-00a024a85b51")]
+        [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("7c23ff90-33af-11d3-95da-00a024a85b51")]
         internal interface IApplicationContext
         {
         }
@@ -126,7 +123,7 @@ namespace Microsoft.CodeAnalysis
         private const int ERROR_INSUFFICIENT_BUFFER = unchecked((int)0x8007007A);
         private const int FUSION_E_INVALID_NAME = unchecked((int)0x80131047);
 
-        internal static unsafe string GetDisplayName(IAssemblyName nameObject, ASM_DISPLAYF displayFlags)
+        internal static unsafe string GetUnsafeDisplayName(IAssemblyName nameObject, ASM_DISPLAYF displayFlags)
         {
             int hr;
             uint characterCountIncludingTerminator = 0;
@@ -134,7 +131,7 @@ namespace Microsoft.CodeAnalysis
             hr = nameObject.GetDisplayName(null, ref characterCountIncludingTerminator, displayFlags);
             if (hr == 0)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             if (hr != ERROR_INSUFFICIENT_BUFFER)
@@ -206,7 +203,7 @@ namespace Microsoft.CodeAnalysis
             return hr == 0;
         }
 
-        internal static unsafe Version GetVersion(IAssemblyName nameObject)
+        internal static unsafe Version GetUnsafeVersion(IAssemblyName nameObject)
         {
             int hr = nameObject.GetVersion(out uint hi, out uint lo);
             if (hr != 0)
@@ -218,7 +215,7 @@ namespace Microsoft.CodeAnalysis
             return new Version((int)(hi >> 16), (int)(hi & 0xffff), (int)(lo >> 16), (int)(lo & 0xffff));
         }
 
-        internal static Version GetVersion(IAssemblyName name, out AssemblyIdentityParts parts)
+        internal static Version GetAssemblyVersion(IAssemblyName name, out AssemblyIdentityParts parts)
         {
             uint? major = GetPropertyWord(name, PropertyId.MAJOR_VERSION);
             uint? minor = GetPropertyWord(name, PropertyId.MINOR_VERSION);
@@ -333,7 +330,7 @@ namespace Microsoft.CodeAnalysis
             return result;
         }
 
-        private static unsafe void SetProperty(IAssemblyName nameObject, PropertyId propertyId, string data)
+        private static unsafe void SetUnsafeProperty(IAssemblyName nameObject, PropertyId propertyId, string data)
         {
             if (data == null)
             {
@@ -353,7 +350,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private static unsafe void SetProperty(IAssemblyName nameObject, PropertyId propertyId, byte[] data)
+        private static unsafe void SetUnsafeProperty(IAssemblyName nameObject, PropertyId propertyId, byte[] data)
         {
             if (data == null)
             {
@@ -368,12 +365,12 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private static unsafe void SetProperty(IAssemblyName nameObject, PropertyId propertyId, ushort data)
+        private static unsafe void SetUnsafeProperty(IAssemblyName nameObject, PropertyId propertyId, ushort data)
         {
             nameObject.SetProperty(propertyId, &data, sizeof(ushort));
         }
 
-        private static unsafe void SetProperty(IAssemblyName nameObject, PropertyId propertyId, uint data)
+        private static unsafe void SetUnsafeProperty(IAssemblyName nameObject, PropertyId propertyId, uint data)
         {
             nameObject.SetProperty(propertyId, &data, sizeof(uint));
         }
@@ -387,7 +384,7 @@ namespace Microsoft.CodeAnalysis
             }
             else
             {
-                SetProperty(nameObject, PropertyId.PUBLIC_KEY_TOKEN, value);
+                SetUnsafeProperty(nameObject, PropertyId.PUBLIC_KEY_TOKEN, value);
             }
         }
 
@@ -413,7 +410,7 @@ namespace Microsoft.CodeAnalysis
 
             return new AssemblyIdentity(
                 GetName(nameObject),
-                GetVersion(nameObject, out AssemblyIdentityParts _),
+                GetAssemblyVersion(nameObject, out AssemblyIdentityParts _),
                 GetCulture(nameObject) ?? "",
                 (hasPublicKey ? publicKey : GetPublicKeyToken(nameObject)).AsImmutableOrNull(),
                 hasPublicKey: hasPublicKey,
@@ -447,15 +444,15 @@ namespace Microsoft.CodeAnalysis
 #endif
                 }
 
-                SetProperty(result, PropertyId.NAME, assemblyName);
+                SetUnsafeProperty(result, PropertyId.NAME, assemblyName);
             }
 
             if (name.Version != null)
             {
-                SetProperty(result, PropertyId.MAJOR_VERSION, unchecked((ushort)name.Version.Major));
-                SetProperty(result, PropertyId.MINOR_VERSION, unchecked((ushort)name.Version.Minor));
-                SetProperty(result, PropertyId.BUILD_NUMBER, unchecked((ushort)name.Version.Build));
-                SetProperty(result, PropertyId.REVISION_NUMBER, unchecked((ushort)name.Version.Revision));
+                SetUnsafeProperty(result, PropertyId.MAJOR_VERSION, unchecked((ushort)name.Version.Major));
+                SetUnsafeProperty(result, PropertyId.MINOR_VERSION, unchecked((ushort)name.Version.Minor));
+                SetUnsafeProperty(result, PropertyId.BUILD_NUMBER, unchecked((ushort)name.Version.Build));
+                SetUnsafeProperty(result, PropertyId.REVISION_NUMBER, unchecked((ushort)name.Version.Revision));
             }
 
             string cultureName = name.CultureName;
@@ -472,17 +469,17 @@ namespace Microsoft.CodeAnalysis
 #endif
                 }
 
-                SetProperty(result, PropertyId.CULTURE, cultureName);
+                SetUnsafeProperty(result, PropertyId.CULTURE, cultureName);
             }
 
             if (name.Flags == AssemblyNameFlags.Retargetable)
             {
-                SetProperty(result, PropertyId.RETARGET, 1U);
+                SetUnsafeProperty(result, PropertyId.RETARGET, 1U);
             }
 
             if (name.ContentType != AssemblyContentType.Default)
             {
-                SetProperty(result, PropertyId.CONTENT_TYPE, (uint)name.ContentType);
+                SetUnsafeProperty(result, PropertyId.CONTENT_TYPE, (uint)name.ContentType);
             }
 
             byte[] token = name.GetPublicKeyToken();
@@ -502,7 +499,7 @@ namespace Microsoft.CodeAnalysis
             }
 
             Debug.Assert(displayName != null);
-            int hr = CreateAssemblyNameObject(out IAssemblyName result, displayName, CANOF.PARSE_DISPLAY_NAME, IntPtr.Zero);
+            int hr = CreateAssemblyNameObject(out IAssemblyName result, displayName, Canof.PARSE_DISPLAY_NAME, IntPtr.Zero);
             if (hr != 0)
             {
                 return null;
@@ -519,20 +516,17 @@ namespace Microsoft.CodeAnalysis
         internal static IAssemblyName GetBestMatch(IEnumerable<IAssemblyName> candidates, string preferredCultureOpt)
         {
             IAssemblyName bestCandidate = null;
-            Version bestVersion = null;
-            string bestCulture = null;
+            Version bestVersion;
+            string bestCulture;
             foreach (var candidate in candidates)
             {
                 if (bestCandidate != null)
                 {
-                    Version candidateVersion = GetVersion(candidate);
+                    Version candidateVersion = GetUnsafeVersion(candidate);
                     Debug.Assert(candidateVersion != null);
 
-                    if (bestVersion == null)
-                    {
-                        bestVersion = GetVersion(bestCandidate);
-                        Debug.Assert(bestVersion != null);
-                    }
+                    bestVersion = GetUnsafeVersion(bestCandidate);
+                    Debug.Assert(bestVersion != null);
 
                     int cmp = bestVersion.CompareTo(candidateVersion);
                     if (cmp == 0)
@@ -542,11 +536,8 @@ namespace Microsoft.CodeAnalysis
                             string candidateCulture = GetCulture(candidate);
                             Debug.Assert(candidateCulture != null);
 
-                            if (bestCulture == null)
-                            {
-                                bestCulture = GetCulture(candidate);
-                                Debug.Assert(bestCulture != null);
-                            }
+                            bestCulture = GetCulture(candidate);
+                            Debug.Assert(bestCulture != null);
 
                             // we have exactly the preferred culture or 
                             // we have neutral culture and the best candidate's culture isn't the preferred one:
@@ -554,15 +545,12 @@ namespace Microsoft.CodeAnalysis
                                 candidateCulture.Length == 0 && !StringComparer.OrdinalIgnoreCase.Equals(bestCulture, preferredCultureOpt))
                             {
                                 bestCandidate = candidate;
-                                bestVersion = candidateVersion;
-                                bestCulture = candidateCulture;
                             }
                         }
                     }
                     else if (cmp < 0)
                     {
                         bestCandidate = candidate;
-                        bestVersion = candidateVersion;
                     }
                 }
                 else

@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis
     /// two correspond to whether the nullable feature is enabled. Bits three and four correspond
     /// to whether the context was inherited from the global context.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum NullableContext
     {
         /// <summary>

@@ -4,15 +4,15 @@ using System.Threading;
 
 namespace System.Text
 {
-    internal class DBCSCodePageEncoding : BaseCodePageEncoding
+    internal class DbCsCodePageEncoding : BaseCodePageEncoding
     {
-        internal class DBCSDecoder : DecoderNLS
+        internal class DbCsDecoder : DecoderNls
         {
             internal byte bLeftOver;
 
             internal override bool HasState => bLeftOver != 0;
 
-            public DBCSDecoder(DBCSCodePageEncoding encoding)
+            public DbCsDecoder(DbCsCodePageEncoding encoding)
                 : base(encoding)
             {
             }
@@ -34,10 +34,6 @@ namespace System.Text
 
         protected const char LEAD_BYTE_CHAR = '\ufffe';
 
-        private ushort _bytesUnknown;
-
-        private int _byteCountUnknown;
-
         protected char charUnknown;
 
         private static object s_InternalSyncObject;
@@ -55,25 +51,17 @@ namespace System.Text
             }
         }
 
-        public DBCSCodePageEncoding(int codePage)
+        public DbCsCodePageEncoding(int codePage)
             : base(codePage)
         {
         }
-
-        /*internal unsafe DBCSCodePageEncoding(int codePage, int dataCodePage)
-			: base(codePage, dataCodePage)
-		{
-		}*/
-
-        /*internal unsafe DBCSCodePageEncoding(int codePage, int dataCodePage, EncoderFallback enc, DecoderFallback dec)
-			: base(codePage, dataCodePage, enc, dec)
-		{
-		}*/
 
         protected unsafe override void LoadManagedCodePage()
         {
             fixed (byte* ptr = &m_codePageHeader[0])
             {
+                ushort _bytesUnknown;
+                int _byteCountUnknown;
                 CodePageHeader* ptr2 = (CodePageHeader*)ptr;
                 if (ptr2->ByteCount != 2)
                 {
@@ -96,10 +84,10 @@ namespace System.Text
                 mapBytesToUnicode = (char*)nativeMemory;
                 mapUnicodeToBytes = (ushort*)(nativeMemory + 131072);
                 byte[] array = new byte[m_dataSize];
-                lock (BaseCodePageEncoding.s_streamLock)
+                lock (s_streamLock)
                 {
-                    BaseCodePageEncoding.s_codePagesEncodingDataStream.Seek(m_firstDataWordOffset, SeekOrigin.Begin);
-                    BaseCodePageEncoding.s_codePagesEncodingDataStream.Read(array, 0, m_dataSize);
+                    s_codePagesEncodingDataStream.Seek(m_firstDataWordOffset, SeekOrigin.Begin);
+                    s_codePagesEncodingDataStream.Read(array, 0, m_dataSize);
                 }
                 fixed (byte* ptr3 = array)
                 {
@@ -155,10 +143,10 @@ namespace System.Text
                                 num3 = num2;
                                 c = (char)num2;
                                 break;
-                            case '\ufffe':
+                            case LEAD_BYTE_CHAR:
                                 num3 = num2;
                                 break;
-                            case '\ufffd':
+                            case UNICODE_REPLACEMENT_CHAR:
                                 num2++;
                                 continue;
                             default:
@@ -167,7 +155,7 @@ namespace System.Text
                         }
                         if (CleanUpBytes(ref num3))
                         {
-                            if (c != '\ufffe')
+                            if (c != LEAD_BYTE_CHAR)
                             {
                                 mapUnicodeToBytes[c] = (ushort)num3;
                             }
@@ -198,10 +186,10 @@ namespace System.Text
                     return;
                 }
                 byte[] array = new byte[m_dataSize];
-                lock (BaseCodePageEncoding.s_streamLock)
+                lock (s_streamLock)
                 {
-                    BaseCodePageEncoding.s_codePagesEncodingDataStream.Seek(m_firstDataWordOffset, SeekOrigin.Begin);
-                    BaseCodePageEncoding.s_codePagesEncodingDataStream.Read(array, 0, m_dataSize);
+                    s_codePagesEncodingDataStream.Seek(m_firstDataWordOffset, SeekOrigin.Begin);
+                    s_codePagesEncodingDataStream.Read(array, 0, m_dataSize);
                 }
                 fixed (byte* ptr = array)
                 {
@@ -301,7 +289,7 @@ namespace System.Text
                                 num += c2;
                                 continue;
                         }
-                        if (c2 != '\ufffd')
+                        if (c2 != UNICODE_REPLACEMENT_CHAR)
                         {
                             int bytes = num;
                             if (CleanUpBytes(ref bytes) && mapBytesToUnicode[bytes] != c2)
@@ -360,7 +348,7 @@ namespace System.Text
                                 num += c3;
                                 continue;
                         }
-                        if (c3 != '\ufffd')
+                        if (c3 != UNICODE_REPLACEMENT_CHAR)
                         {
                             int bytes2 = num;
                             if (CleanUpBytes(ref bytes2) && mapBytesToUnicode[bytes2] != c3)
@@ -520,10 +508,10 @@ namespace System.Text
             }
         }
 
-        public unsafe override int GetByteCount(char* chars, int count, EncoderNLS encoder)
+        public unsafe override int GetByteCount(char* chars, int count, EncoderNls encoder)
         {
             CheckMemorySection();
-            char c = '\0';
+            char c = UNKNOWN_CHAR_FLAG;
             if (encoder != null)
             {
                 c = encoder.charLeftOver;
@@ -536,9 +524,9 @@ namespace System.Text
             char* ptr = chars + count;
             EncoderFallbackBuffer encoderFallbackBuffer = null;
             EncoderFallbackBufferHelper encoderFallbackBufferHelper = new(encoderFallbackBuffer);
-            if (c > '\0')
+            if (c > UNKNOWN_CHAR_FLAG)
             {
-                encoderFallbackBuffer = encoder.FallbackBuffer;
+                encoderFallbackBuffer = encoder?.FallbackBuffer;
                 encoderFallbackBufferHelper = new(encoderFallbackBuffer);
                 encoderFallbackBufferHelper.InternalInitialize(chars, ptr, encoder, _setEncoder: false);
                 encoderFallbackBufferHelper.InternalFallback(c, ref chars);
@@ -546,7 +534,7 @@ namespace System.Text
             char c2;
             while ((c2 = ((encoderFallbackBuffer != null) ? encoderFallbackBufferHelper.InternalGetNextChar() : '\0')) != 0 || chars < ptr)
             {
-                if (c2 == '\0')
+                if (c2 == UNKNOWN_CHAR_FLAG)
                 {
                     c2 = *chars;
                     chars++;
@@ -574,7 +562,7 @@ namespace System.Text
             return num;
         }
 
-        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNLS encoder)
+        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNls encoder)
         {
             CheckMemorySection();
             EncoderFallbackBuffer encoderFallbackBuffer = null;
@@ -583,7 +571,7 @@ namespace System.Text
             byte* ptr3 = bytes;
             byte* ptr4 = bytes + byteCount;
             EncoderFallbackBufferHelper encoderFallbackBufferHelper = new(encoderFallbackBuffer);
-            char c = '\0';
+            char c;
             if (encoder != null)
             {
                 c = encoder.charLeftOver;
@@ -594,7 +582,7 @@ namespace System.Text
                 {
                     throw new ArgumentException(SR.Format(SR.Argument_EncoderFallbackNotEmpty, EncodingName, encoder.Fallback.GetType()));
                 }
-                if (c > '\0')
+                if (c > UNKNOWN_CHAR_FLAG)
                 {
                     encoderFallbackBufferHelper.InternalFallback(c, ref chars);
                 }
@@ -602,7 +590,7 @@ namespace System.Text
             char c2;
             while ((c2 = ((encoderFallbackBuffer != null) ? encoderFallbackBufferHelper.InternalGetNextChar() : '\0')) != 0 || chars < ptr)
             {
-                if (c2 == '\0')
+                if (c2 == UNKNOWN_CHAR_FLAG)
                 {
                     c2 = *chars;
                     chars++;
@@ -657,17 +645,17 @@ namespace System.Text
             {
                 if (encoderFallbackBuffer != null && !encoderFallbackBufferHelper.bUsedEncoder)
                 {
-                    encoder.charLeftOver = '\0';
+                    encoder.charLeftOver = UNKNOWN_CHAR_FLAG;
                 }
                 encoder.m_charsUsed = (int)(chars - ptr2);
             }
             return (int)(bytes - ptr3);
         }
 
-        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNLS baseDecoder)
+        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNls decoder)
         {
             CheckMemorySection();
-            DBCSDecoder dBCSDecoder = (DBCSDecoder)baseDecoder;
+            DbCsDecoder dBCSDecoder = (DbCsDecoder)decoder;
             DecoderFallbackBuffer decoderFallbackBuffer = null;
             byte* ptr = bytes + count;
             int num = count;
@@ -689,7 +677,7 @@ namespace System.Text
                 int num2 = dBCSDecoder.bLeftOver << 8;
                 num2 |= *bytes;
                 bytes++;
-                if (mapBytesToUnicode[num2] == '\0' && num2 != 0)
+                if (mapBytesToUnicode[num2] == UNKNOWN_CHAR_FLAG && num2 != 0)
                 {
                     num--;
                     decoderFallbackBuffer = dBCSDecoder.FallbackBuffer;
@@ -708,7 +696,7 @@ namespace System.Text
                 int num3 = *bytes;
                 bytes++;
                 char c = mapBytesToUnicode[num3];
-                if (c == '\ufffe')
+                if (c == LEAD_BYTE_CHAR)
                 {
                     num--;
                     if (bytes < ptr)
@@ -725,7 +713,7 @@ namespace System.Text
                             break;
                         }
                         num++;
-                        c = '\0';
+                        c = UNKNOWN_CHAR_FLAG;
                     }
                 }
                 if (c == '\0' && num3 != 0)
@@ -749,10 +737,10 @@ namespace System.Text
             return num;
         }
 
-        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNLS baseDecoder)
+        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNls decoder)
         {
             CheckMemorySection();
-            DBCSDecoder dBCSDecoder = (DBCSDecoder)baseDecoder;
+            DbCsDecoder dBCSDecoder = (DbCsDecoder)decoder;
             byte* ptr = bytes;
             byte* ptr2 = bytes + byteCount;
             char* ptr3 = chars;
@@ -783,7 +771,7 @@ namespace System.Text
                 num |= *bytes;
                 bytes++;
                 char c = mapBytesToUnicode[num];
-                if (c == '\0' && num != 0)
+                if (c == UNKNOWN_CHAR_FLAG && num != 0)
                 {
                     decoderFallbackBuffer = dBCSDecoder.FallbackBuffer;
                     decoderFallbackBufferHelper = new DecoderFallbackBufferHelper(decoderFallbackBuffer);
@@ -814,7 +802,7 @@ namespace System.Text
                 int num3 = *bytes;
                 bytes++;
                 char c2 = mapBytesToUnicode[num3];
-                if (c2 == '\ufffe')
+                if (c2 == LEAD_BYTE_CHAR)
                 {
                     if (bytes < ptr2)
                     {
@@ -831,10 +819,10 @@ namespace System.Text
                             dBCSDecoder.bLeftOver = (byte)num3;
                             break;
                         }
-                        c2 = '\0';
+                        c2 = UNKNOWN_CHAR_FLAG;
                     }
                 }
-                if (c2 == '\0' && num3 != 0)
+                if (c2 == UNKNOWN_CHAR_FLAG && num3 != 0)
                 {
                     if (decoderFallbackBuffer == null)
                     {
@@ -921,7 +909,7 @@ namespace System.Text
 
         public override Decoder GetDecoder()
         {
-            return new DBCSDecoder(this);
+            return new DbCsDecoder(this);
         }
     }
 }

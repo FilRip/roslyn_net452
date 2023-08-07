@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Microsoft.CodeAnalysis.Interop
 {
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("D332DB9E-B9B3-4125-8207-A14884F53216"), SuppressUnmanagedCodeSecurity]
+    [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("D332DB9E-B9B3-4125-8207-A14884F53216"), SuppressUnmanagedCodeSecurity]
     internal interface IClrMetaHost
     {
         [return: MarshalAs(UnmanagedType.Interface)]
@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.Interop
             [In, MarshalAs(UnmanagedType.LPWStr)] string version,
             [In, MarshalAs(UnmanagedType.LPStruct)] Guid interfaceId);
 
-        [PreserveSig]
+        [PreserveSig()]
         int GetVersionFromFile(
             [In, MarshalAs(UnmanagedType.LPWStr)] string filePath,
             [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder buffer,
@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.Interop
             [In] IntPtr processHandle);
 
         // Placeholder for RequestRuntimeLoadedNotification
-        [PreserveSig]
+        [PreserveSig()]
         int Reserved01(
             [In] IntPtr reserved1);
 

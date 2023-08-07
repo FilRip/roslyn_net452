@@ -147,7 +147,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
             Select Case kind
                 Case SyntaxKind.StatementTerminatorToken
-                    t = SyntaxFactory.Token(Nothing, SyntaxKind.StatementTerminatorToken, Nothing, String.Empty)
+                    t = SyntaxFactory.Token(Nothing, SyntaxKind.StatementTerminatorToken, Nothing, string.Empty)
 
                 Case SyntaxKind.EndOfFileToken
                     t = SyntaxFactory.EndOfFileToken()

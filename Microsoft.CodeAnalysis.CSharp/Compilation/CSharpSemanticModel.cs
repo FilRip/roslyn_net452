@@ -4655,7 +4655,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Options to control the internal working of GetSymbolInfoWorker. Not currently exposed
         /// to public clients, but could be if desired.
         /// </summary>
-        [Flags]
+        [Flags()]
         internal enum SymbolInfoOptions
         {
             /// <summary>

@@ -16,7 +16,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
-    [Flags]
+    [Flags()]
     internal enum LexerMode
     {
         Syntax = 0x0001,

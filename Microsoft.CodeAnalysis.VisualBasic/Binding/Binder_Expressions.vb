@@ -255,7 +255,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     ' e.g. SyntaxKind.MidExpression is handled elsewhere
                     ' NOTE: There were too many "else" cases to justify listing them explicitly and throwing on
                     ' anything unexpected.
-                    Debug.Assert(IsSemanticModelBinder OrElse node.ContainsDiagnostics, String.Format("Unexpected {0} syntax does not have diagnostics", node.Kind))
+                    Debug.Assert(IsSemanticModelBinder OrElse node.ContainsDiagnostics, string.Format("Unexpected {0} syntax does not have diagnostics", node.Kind))
                     Return BadExpression(node, ImmutableArray(Of BoundExpression).Empty, ErrorTypeSymbol.UnknownResultType)
 
             End Select

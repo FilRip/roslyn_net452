@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Microsoft.CodeAnalysis.CommandLine
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct STARTUPINFO
+    internal struct StartupInfo
     {
         internal int cb;
 

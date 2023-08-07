@@ -2,9 +2,9 @@ using System.Runtime.Serialization;
 
 namespace System.Text
 {
-    internal class DecoderNLS : Decoder, ISerializable
+    internal class DecoderNls : Decoder, ISerializable
     {
-        protected EncodingNLS m_encoding;
+        protected EncodingNls m_encoding;
 
         protected bool m_mustFlush;
 
@@ -43,14 +43,14 @@ namespace System.Text
 
         internal virtual bool HasState => false;
 
-        internal DecoderNLS(EncodingNLS encoding)
+        internal DecoderNls(EncodingNls encoding)
         {
             m_encoding = encoding;
             m_fallback = m_encoding.DecoderFallback;
             Reset();
         }
 
-        internal DecoderNLS()
+        internal DecoderNls()
         {
             m_encoding = null;
             Reset();

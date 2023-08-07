@@ -1,6 +1,6 @@
 namespace System.Text
 {
-    internal class ISO2022Encoding : DBCSCodePageEncoding
+    internal class Iso2022Encoding : DbCsCodePageEncoding
     {
         internal enum ISO2022Modes
         {
@@ -17,7 +17,7 @@ namespace System.Text
             ModeNOOP = -3
         }
 
-        internal class ISO2022Encoder : EncoderNLS
+        internal class Iso2022Encoder : EncoderNls
         {
             internal ISO2022Modes currentMode;
 
@@ -35,7 +35,7 @@ namespace System.Text
                 }
             }
 
-            internal ISO2022Encoder(EncodingNLS encoding)
+            internal Iso2022Encoder(EncodingNls encoding)
                 : base(encoding)
             {
             }
@@ -49,7 +49,7 @@ namespace System.Text
             }
         }
 
-        internal class ISO2022Decoder : DecoderNLS
+        internal class Iso2022Decoder : DecoderNls
         {
             internal byte[] bytesLeftOver;
 
@@ -71,7 +71,7 @@ namespace System.Text
                 }
             }
 
-            internal ISO2022Decoder(EncodingNLS encoding)
+            internal Iso2022Decoder(EncodingNls encoding)
                 : base(encoding)
             {
             }
@@ -94,12 +94,6 @@ namespace System.Text
 
         private const byte LEADBYTE_HALFWIDTH = 16;
 
-        private static readonly int[] s_tableBaseCodePages = new int[12]
-        {
-            932, 932, 932, 0, 0, 949, 936, 0, 0, 0,
-            0, 0
-        };
-
         private static readonly ushort[] s_HalfToFullWidthKanaTable = new ushort[63]
         {
             41379, 41430, 41431, 41378, 41382, 42482, 42401, 42403, 42405, 42407,
@@ -111,7 +105,7 @@ namespace System.Text
             42483, 41387, 41388
         };
 
-        internal ISO2022Encoding(int codePage)
+        internal Iso2022Encoding(int codePage)
             : base(codePage)
         {
         }
@@ -227,53 +221,53 @@ namespace System.Text
             return true;
         }
 
-        public unsafe override int GetByteCount(char* chars, int count, EncoderNLS baseEncoder)
+        public unsafe override int GetByteCount(char* chars, int count, EncoderNls encoder)
         {
-            return GetBytes(chars, count, null, 0, baseEncoder);
+            return GetBytes(chars, count, null, 0, encoder);
         }
 
-        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNLS baseEncoder)
+        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNls encoder)
         {
-            ISO2022Encoder encoder = (ISO2022Encoder)baseEncoder;
+            Iso2022Encoder isoEncoder = (Iso2022Encoder)encoder;
             int result = 0;
             switch (CodePage)
             {
                 case 50220:
                 case 50221:
                 case 50222:
-                    result = GetBytesCP5022xJP(chars, charCount, bytes, byteCount, encoder);
+                    result = GetBytesCP5022xJP(chars, charCount, bytes, byteCount, isoEncoder);
                     break;
                 case 50225:
-                    result = GetBytesCP50225KR(chars, charCount, bytes, byteCount, encoder);
+                    result = GetBytesCP50225KR(chars, charCount, bytes, byteCount, isoEncoder);
                     break;
                 case 52936:
-                    result = GetBytesCP52936(chars, charCount, bytes, byteCount, encoder);
+                    result = GetBytesCP52936(chars, charCount, bytes, byteCount, isoEncoder);
                     break;
             }
             return result;
         }
 
-        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNLS baseDecoder)
+        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNls decoder)
         {
-            return GetChars(bytes, count, null, 0, baseDecoder);
+            return GetChars(bytes, count, null, 0, decoder);
         }
 
-        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNLS baseDecoder)
+        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNls decoder)
         {
-            ISO2022Decoder decoder = (ISO2022Decoder)baseDecoder;
+            Iso2022Decoder isoDecoder = (Iso2022Decoder)decoder;
             int result = 0;
             switch (CodePage)
             {
                 case 50220:
                 case 50221:
                 case 50222:
-                    result = GetCharsCP5022xJP(bytes, byteCount, chars, charCount, decoder);
+                    result = GetCharsCP5022xJP(bytes, byteCount, chars, charCount, isoDecoder);
                     break;
                 case 50225:
-                    result = GetCharsCP50225KR(bytes, byteCount, chars, charCount, decoder);
+                    result = GetCharsCP50225KR(bytes, byteCount, chars, charCount, isoDecoder);
                     break;
                 case 52936:
-                    result = GetCharsCP52936(bytes, byteCount, chars, charCount, decoder);
+                    result = GetCharsCP52936(bytes, byteCount, chars, charCount, isoDecoder);
                     break;
             }
             return result;
@@ -314,7 +308,7 @@ namespace System.Text
         // that technique, but the decoder will process them.
 #nullable enable
         private unsafe int GetBytesCP5022xJP(char* chars, int charCount,
-                                                  byte* bytes, int byteCount, ISO2022Encoder? encoder)
+                                                  byte* bytes, int byteCount, Iso2022Encoder? encoder)
         {
             // prepare our helpers
             EncodingByteBuffer buffer = new(this, encoder, bytes, byteCount, chars, charCount);
@@ -527,7 +521,7 @@ namespace System.Text
         }
 #nullable disable
 
-        private unsafe int GetBytesCP50225KR(char* chars, int charCount, byte* bytes, int byteCount, ISO2022Encoder encoder)
+        private unsafe int GetBytesCP50225KR(char* chars, int charCount, byte* bytes, int byteCount, Iso2022Encoder encoder)
         {
             EncodingByteBuffer encodingByteBuffer = new(this, encoder, bytes, byteCount, chars, charCount);
             ISO2022Modes iSO2022Modes = ISO2022Modes.ModeASCII;
@@ -622,7 +616,7 @@ namespace System.Text
             return encodingByteBuffer.Count;
         }
 
-        private unsafe int GetBytesCP52936(char* chars, int charCount, byte* bytes, int byteCount, ISO2022Encoder encoder)
+        private unsafe int GetBytesCP52936(char* chars, int charCount, byte* bytes, int byteCount, Iso2022Encoder encoder)
         {
             EncodingByteBuffer encodingByteBuffer = new(this, encoder, bytes, byteCount, chars, charCount);
             ISO2022Modes iSO2022Modes = ISO2022Modes.ModeASCII;
@@ -703,7 +697,7 @@ namespace System.Text
             return encodingByteBuffer.Count;
         }
 
-        private unsafe int GetCharsCP5022xJP(byte* bytes, int byteCount, char* chars, int charCount, ISO2022Decoder decoder)
+        private unsafe int GetCharsCP5022xJP(byte* bytes, int byteCount, char* chars, int charCount, Iso2022Decoder decoder)
         {
             EncodingCharBuffer encodingCharBuffer = new(this, decoder, chars, charCount, bytes, byteCount);
             ISO2022Modes iSO2022Modes = ISO2022Modes.ModeASCII;
@@ -927,7 +921,7 @@ namespace System.Text
             return result;
         }
 
-        private unsafe int GetCharsCP50225KR(byte* bytes, int byteCount, char* chars, int charCount, ISO2022Decoder decoder)
+        private unsafe int GetCharsCP50225KR(byte* bytes, int byteCount, char* chars, int charCount, Iso2022Decoder decoder)
         {
             EncodingCharBuffer encodingCharBuffer = new(this, decoder, chars, charCount, bytes, byteCount);
             ISO2022Modes iSO2022Modes = ISO2022Modes.ModeASCII;
@@ -1085,7 +1079,7 @@ namespace System.Text
             return ISO2022Modes.ModeInvalidEscape;
         }
 
-        private unsafe int GetCharsCP52936(byte* bytes, int byteCount, char* chars, int charCount, ISO2022Decoder decoder)
+        private unsafe int GetCharsCP52936(byte* bytes, int byteCount, char* chars, int charCount, Iso2022Decoder decoder)
         {
             EncodingCharBuffer encodingCharBuffer = new(this, decoder, chars, charCount, bytes, byteCount);
             ISO2022Modes iSO2022Modes = ISO2022Modes.ModeASCII;
@@ -1211,7 +1205,7 @@ namespace System.Text
                     continue;
                 }
                 char c2 = mapBytesToUnicode[b];
-                if ((c2 == '\0' || c2 == '\0') && b != 0)
+                if (c2 == '\0' && b != 0)
                 {
                     if (!encodingCharBuffer.Fallback(b))
                     {
@@ -1322,12 +1316,12 @@ namespace System.Text
 
         public override Encoder GetEncoder()
         {
-            return new ISO2022Encoder(this);
+            return new Iso2022Encoder(this);
         }
 
         public override Decoder GetDecoder()
         {
-            return new ISO2022Decoder(this);
+            return new Iso2022Decoder(this);
         }
     }
 }

@@ -122,16 +122,20 @@ namespace Microsoft.CodeAnalysis
 
             public override bool Equals(object? obj)
             {
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
                 throw new NotSupportedException();
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
             }
 
             public override int GetHashCode()
             {
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
                 throw new NotSupportedException();
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
             }
         }
 
-        private class EnumeratorImpl : IEnumerator<SyntaxToken>
+        private sealed class EnumeratorImpl : IEnumerator<SyntaxToken>
         {
             private Enumerator _enumerator;
 
@@ -157,6 +161,7 @@ namespace Microsoft.CodeAnalysis
 
             public void Dispose()
             {
+                // Nothing to do
             }
         }
     }

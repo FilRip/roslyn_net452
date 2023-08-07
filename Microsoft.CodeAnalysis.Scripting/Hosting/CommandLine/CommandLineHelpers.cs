@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Immutable;
 
 namespace Microsoft.CodeAnalysis.Scripting.Hosting
@@ -18,7 +16,9 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
         internal static ScriptOptions RemoveImportsAndReferences(this ScriptOptions options)
         {
+#pragma warning disable S3878 // Arrays should not be created for params parameters
             return options.WithReferences(new MetadataReference[0] { }).WithImports(new string[0] { });
+#pragma warning restore S3878 // Arrays should not be created for params parameters
         }
     }
 }

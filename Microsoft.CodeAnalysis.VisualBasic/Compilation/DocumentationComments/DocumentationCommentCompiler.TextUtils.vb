@@ -175,7 +175,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim manager As New ResourceManager("System.Xml", GetType(XmlException).GetTypeInfo().Assembly)
                     Dim locationTemplate As String = manager.GetString("Xml_MessageWithErrorPosition")
                     Dim locationString As String =
-                        String.Format(locationTemplate, "", e.LineNumber, e.LinePosition) ' first arg is where the problem description goes
+                        string.Format(locationTemplate, "", e.LineNumber, e.LinePosition) ' first arg is where the problem description goes
 
                     Dim position As Integer = message.IndexOf(locationString, StringComparison.Ordinal) ' Expect exact match
                     Return If(position < 0, message, message.Remove(position, locationString.Length))

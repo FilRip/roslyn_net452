@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis
 {
-    [Flags]
+    [Flags()]
     public enum SyntaxRemoveOptions
     {
         /// <summary>

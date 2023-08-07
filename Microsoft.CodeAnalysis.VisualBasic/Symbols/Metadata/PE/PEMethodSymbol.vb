@@ -259,7 +259,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 _flags = CType(flags, UShort)
             Catch mrEx As BadImageFormatException
                 If _name Is Nothing Then
-                    _name = String.Empty
+                    _name = string.Empty
                 End If
 
                 InitializeUseSiteInfo(New UseSiteInfo(Of AssemblySymbol)(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedMethod1, CustomSymbolDisplayFormatter.ShortErrorName(Me))))

@@ -120,7 +120,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
             Try
                 name = moduleSymbol.Module.GetTypeDefNameOrThrow(handle)
             Catch mrEx As BadImageFormatException
-                name = String.Empty
+                name = string.Empty
                 makeBad = True
             End Try
 
@@ -1067,13 +1067,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
 
         Friend Overrides ReadOnly Property DefaultPropertyName As String
             Get
-                ' Unset value is Nothing. No default member is String.Empty.
+                ' Unset value is Nothing. No default member is string.Empty.
                 If _lazyDefaultPropertyName Is Nothing Then
                     Dim memberName = GetDefaultPropertyName()
-                    Interlocked.CompareExchange(_lazyDefaultPropertyName, If(memberName, String.Empty), Nothing)
+                    Interlocked.CompareExchange(_lazyDefaultPropertyName, If(memberName, string.Empty), Nothing)
                 End If
 
-                ' Return Nothing rather than String.Empty for no default member.
+                ' Return Nothing rather than string.Empty for no default member.
                 Return If(String.IsNullOrEmpty(_lazyDefaultPropertyName), Nothing, _lazyDefaultPropertyName)
             End Get
         End Property

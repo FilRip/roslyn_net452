@@ -501,7 +501,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                         MethodKind.PropertyGet, MethodKind.PropertySet
                         Return True
                     Case Else
-                        Debug.Assert(False, String.Format("Unexpected method kind '{0}'", DirectCast(sym, MethodSymbol).MethodKind))
+                        Debug.Assert(False, string.Format("Unexpected method kind '{0}'", DirectCast(sym, MethodSymbol).MethodKind))
                         Return False
                 End Select
             End If

@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// Condensed flags storing useful information about the <see cref="SourcePropertySymbolBase"/>
         /// so that we do not have to go back to source to compute this data.
         /// </summary>
-        [Flags]
+        [Flags()]
         private enum Flags : byte
         {
             IsExpressionBodied = 1 << 0,

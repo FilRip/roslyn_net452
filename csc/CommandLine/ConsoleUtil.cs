@@ -24,6 +24,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 }
                 catch
                 {
+                    // Nothing to do
                 }
             }
         }

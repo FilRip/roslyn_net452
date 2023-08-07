@@ -72,7 +72,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 moduleSymbol.Module.GetGenericParamPropsOrThrow(handle, _name, flags)
             Catch mrEx As BadImageFormatException
                 If _name Is Nothing Then
-                    _name = String.Empty
+                    _name = string.Empty
                 End If
 
                 _lazyCachedBoundsUseSiteInfo.Initialize(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, Me))

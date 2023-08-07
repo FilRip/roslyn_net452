@@ -16,7 +16,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal sealed class BuildServerConnection
+    internal static class BuildServerConnection
     {
         internal const int TimeOutMsExistingProcess = 1000;
 
@@ -106,7 +106,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     catch (ApplicationException innerException)
                     {
                         int currentManagedThreadId2 = Environment.CurrentManagedThreadId;
+#pragma warning disable S1163 // Exceptions should not be thrown in finally blocks
                         throw new CscException($"ReleaseMutex failed. WaitOne Id: {currentManagedThreadId} Release Id: {currentManagedThreadId2}", innerException);
+#pragma warning restore S1163 // Exceptions should not be thrown in finally blocks
                     }
                 }
             }
@@ -168,6 +170,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 }
                 catch (OperationCanceledException)
                 {
+                    // Nothing to do
                 }
                 catch (Exception exception)
                 {
@@ -227,7 +230,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
             }
             if (PlatformInformation.IsWindows)
             {
-                STARTUPINFO lpStartupInfo = default;
+                StartupInfo lpStartupInfo = default;
                 lpStartupInfo.cb = Marshal.SizeOf(lpStartupInfo);
                 lpStartupInfo.hStdError = NativeMethods.InvalidIntPtr;
                 lpStartupInfo.hStdInput = NativeMethods.InvalidIntPtr;
@@ -236,7 +239,7 @@ namespace Microsoft.CodeAnalysis.CommandLine
                 uint dwCreationFlags = 134217760u;
                 logger.Log("Attempting to create process '{0}'", serverProcessInfo.Item1);
                 StringBuilder lpCommandLine = new("\"" + serverProcessInfo.Item1 + "\" " + serverProcessInfo.Item2);
-                bool flag = NativeMethods.CreateProcess(null, lpCommandLine, NativeMethods.NullPtr, NativeMethods.NullPtr, bInheritHandles: false, dwCreationFlags, NativeMethods.NullPtr, clientDir, ref lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
+                bool flag = NativeMethods.CreateProcess(null, lpCommandLine, NativeMethods.NullPtr, NativeMethods.NullPtr, bInheritHandles: false, dwCreationFlags, NativeMethods.NullPtr, clientDir, ref lpStartupInfo, out ProcessInformation lpProcessInformation);
                 if (flag)
                 {
                     logger.Log("Successfully created process with process id {0}", lpProcessInformation.dwProcessId);

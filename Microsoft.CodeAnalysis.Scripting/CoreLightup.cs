@@ -80,9 +80,9 @@ namespace Roslyn.Utilities
                 }
 
                 // Necessary parameter to keep compatible with event delegate
-#pragma warning disable IDE0060
+#pragma warning disable IDE0060, S1172
                 private Assembly Stub(object sender, object resolveEventArgs)
-#pragma warning restore IDE0060
+#pragma warning restore IDE0060, S1172
                 {
                     var name = (string)UResolveEventArgs.get_Name.Invoke(resolveEventArgs, new object[0] { });
                     var requestingAssembly = (Assembly)UResolveEventArgs.get_RequestingAssembly.Invoke(resolveEventArgs, new object[0] { });

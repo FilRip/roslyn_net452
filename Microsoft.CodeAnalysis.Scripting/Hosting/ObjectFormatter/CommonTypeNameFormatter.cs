@@ -286,7 +286,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             ref int genericArgIndex,
             CommonTypeNameFormatterOptions options)
         {
-            // generic arguments of all the outer types and the current type;
+            // generic arguments of all the outer types and the current type
             int currentArgCount = (typeInfo.IsGenericTypeDefinition ? typeInfo.GenericTypeParameters.Length : typeInfo.GenericTypeArguments.Length) - genericArgIndex;
 
             if (currentArgCount > 0)

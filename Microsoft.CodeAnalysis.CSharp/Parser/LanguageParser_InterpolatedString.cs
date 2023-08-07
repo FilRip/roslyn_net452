@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             if (interpolations.Count == 0)
             {
                 // In the special case when there are no interpolations, we just construct a format string
-                // with no inserts. We must still use String.Format to get its handling of escapes such as {{,
+                // with no inserts. We must still use string.Format to get its handling of escapes such as {{,
                 // so we still treat it as a composite format string.
                 var text = Substring(originalText, openQuoteIndex + 1, closeQuoteIndex - 1);
                 if (text.Length > 0)

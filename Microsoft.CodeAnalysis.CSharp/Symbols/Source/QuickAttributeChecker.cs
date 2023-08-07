@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
     }
 
-    [Flags]
+    [Flags()]
     internal enum QuickAttributes : byte
     {
         None = 0,

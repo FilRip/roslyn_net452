@@ -616,7 +616,7 @@ namespace Roslyn.Utilities
 
         private static Exception DeserializationReadIncorrectNumberOfValuesException(string typeName)
         {
-            throw new InvalidOperationException(String.Format(Microsoft.CodeAnalysis.Properties.Resources.Deserialization_reader_for_0_read_incorrect_number_of_values, typeName));
+            throw new InvalidOperationException(string.Format(Microsoft.CodeAnalysis.Properties.Resources.Deserialization_reader_for_0_read_incorrect_number_of_values, typeName));
         }
 
         private static Exception NoSerializationTypeException(string typeName)

@@ -8,7 +8,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [Flags]
+    [Flags()]
     public enum UnaryOperatorKind
     {
         // NOTE: these types should line up with the elements in BinaryOperatorKind
@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         DynamicFalse = Dynamic | False,
     }
 
-    [Flags]
+    [Flags()]
     public enum BinaryOperatorKind
     {
         // NOTE: these types should line up with the elements in UnaryOperatorKind

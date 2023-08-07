@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable enable
 
@@ -69,7 +70,7 @@ namespace Microsoft.CodeAnalysis.Collections
     /// This effectively copies the one field in the struct to a local variable so that it is insulated from other
     /// threads.</para>
     /// </devremarks>
-    public readonly partial struct ImmutableSegmentedDictionary<TKey, TValue> : IImmutableDictionary<TKey, TValue>, IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue>, IDictionary, IEquatable<ImmutableSegmentedDictionary<TKey, TValue>>
+    public readonly partial struct ImmutableSegmentedDictionary<TKey, TValue> : IImmutableDictionary<TKey, TValue>, IDictionary<TKey, TValue>, IDictionary, IEquatable<ImmutableSegmentedDictionary<TKey, TValue>>
         where TKey : notnull
     {
         public static readonly ImmutableSegmentedDictionary<TKey, TValue> Empty = new(new SegmentedDictionary<TKey, TValue>());
@@ -262,21 +263,21 @@ namespace Microsoft.CodeAnalysis.Collections
         public bool TryGetKey(TKey equalKey, out TKey actualKey)
         {
             var self = this;
-            foreach (var key in self.Keys)
+            TKey find;
+            if ((find = self.Keys.FirstOrDefault(k => self.KeyComparer.Equals(k, equalKey))) != null)
             {
-                if (self.KeyComparer.Equals(key, equalKey))
-                {
-                    actualKey = key;
-                    return true;
-                }
+                actualKey = find;
+                return true;
             }
 
             actualKey = equalKey;
             return false;
         }
 
+#pragma warning disable CS8767 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
             => _dictionary.TryGetValue(key, out value);
+#pragma warning restore CS8767 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
 
         public ImmutableSegmentedDictionary<TKey, TValue> WithComparer(IEqualityComparer<TKey>? keyComparer)
         {

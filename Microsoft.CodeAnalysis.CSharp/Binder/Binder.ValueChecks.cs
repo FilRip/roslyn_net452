@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Expression capabilities and requirements.
         /// </summary>
-        [Flags]
+        [Flags()]
         public enum BindValueKind : ushort
         {
             ///////////////////

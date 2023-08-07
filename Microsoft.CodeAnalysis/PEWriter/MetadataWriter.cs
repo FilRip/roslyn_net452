@@ -621,7 +621,7 @@ namespace Microsoft.Cci
 
                 // No explicit param row is needed if param has no flags (other than optionally IN),
                 // no name and no references to the param row, such as CustomAttribute, Constant, or FieldMarshal
-                if (parDef.Name != String.Empty ||
+                if (parDef.Name != string.Empty ||
                     parDef.HasDefaultValue || parDef.IsOptional || parDef.IsOut || parDef.IsMarshalledExplicitly ||
                     IteratorHelper.EnumerableIsNotEmpty(parDef.GetAttributes(Context)))
                 {

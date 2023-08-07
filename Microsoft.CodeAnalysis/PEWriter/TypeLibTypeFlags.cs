@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.Cci
 {
-    [Flags]
+    [Flags()]
     public enum TypeLibTypeFlags
     {
         FAppObject = 0x0001,

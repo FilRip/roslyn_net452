@@ -411,7 +411,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <returns>
         ''' A valid <see cref="FileLinePositionSpan"/> that contains path, line and column information.
         '''
-        ''' If the location path is not mapped the resulting path is <see cref="String.Empty"/>.
+        ''' If the location path is not mapped the resulting path is <see cref="string.Empty"/>.
         ''' </returns>
         Public Overrides Function GetMappedLineSpan(span As TextSpan, Optional cancellationToken As CancellationToken = Nothing) As FileLinePositionSpan
             If _lineDirectiveMap Is Nothing Then

@@ -340,7 +340,7 @@ namespace Microsoft.CodeAnalysis
                 return message;
             }
 
-            return String.Format(formatProvider, message, GetArgumentsToUse(formatProvider));
+            return string.Format(formatProvider, message, GetArgumentsToUse(formatProvider));
         }
 
         protected object[] GetArgumentsToUse(IFormatProvider? formatProvider)
@@ -402,7 +402,7 @@ namespace Microsoft.CodeAnalysis
 
         string IFormattable.ToString(string? format, IFormatProvider? formatProvider)
         {
-            return String.Format(formatProvider, "{0}: {1}",
+            return string.Format(formatProvider, "{0}: {1}",
                 _messageProvider.GetMessagePrefix(this.MessageIdentifier, this.Severity, this.IsWarningAsError, formatProvider as CultureInfo),
                 this.GetMessage(formatProvider));
         }

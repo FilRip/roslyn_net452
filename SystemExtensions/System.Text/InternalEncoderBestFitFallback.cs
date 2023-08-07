@@ -29,7 +29,7 @@ namespace System.Text
 
         public override int GetHashCode()
         {
-            return encoding.CodePage;
+            return encoding.CodePage.GetHashCode();
         }
     }
 }

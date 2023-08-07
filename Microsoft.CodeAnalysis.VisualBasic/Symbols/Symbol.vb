@@ -38,7 +38,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' Nothing is never returned.</returns>
         Public Overridable ReadOnly Property Name As String
             Get
-                Return String.Empty
+                Return string.Empty
             End Get
         End Property
 
@@ -808,7 +808,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Private Function GetDebuggerDisplay() As String
-            Return String.Format("{0} {1}", Me.Kind, Me.ToDisplayString(SymbolDisplayFormat.TestFormat))
+            Return string.Format("{0} {1}", Me.Kind, Me.ToDisplayString(SymbolDisplayFormat.TestFormat))
         End Function
 
 
@@ -1034,7 +1034,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 If Not modifier.IsOptional AndAlso
                    (Not allowIsExternalInit OrElse Not DirectCast(modifier, VisualBasicCustomModifier).ModifierSymbol.IsWellKnownTypeIsExternalInit()) Then
 
-                    useSiteInfo = New UseSiteInfo(Of AssemblySymbol)(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, String.Empty))
+                    useSiteInfo = New UseSiteInfo(Of AssemblySymbol)(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, string.Empty))
                     GetSymbolSpecificUnsupportedMetadataUseSiteErrorInfo(useSiteInfo)
 
                     If MergeUseSiteInfo(modifiersUseSiteInfo, useSiteInfo, highestPriorityUseSiteError) Then

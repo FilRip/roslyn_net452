@@ -2,11 +2,11 @@ using System.Runtime.Serialization;
 
 namespace System.Text
 {
-    internal class EncoderNLS : Encoder, ISerializable
+    internal class EncoderNls : Encoder, ISerializable
     {
         internal char charLeftOver;
 
-        protected EncodingNLS m_encoding;
+        protected EncodingNls m_encoding;
 
         protected bool m_mustFlush;
 
@@ -47,22 +47,22 @@ namespace System.Text
 
         internal virtual bool HasState => charLeftOver != '\0';
 
-        internal EncoderNLS(EncodingNLS encoding)
+        internal EncoderNls(EncodingNls encoding)
         {
             m_encoding = encoding;
             m_fallback = m_encoding.EncoderFallback;
             Reset();
         }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        internal EncoderNLS()
+        internal EncoderNls()
         {
             m_encoding = null;
             Reset();
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new PlatformNotSupportedException();
         }
 
         public override void Reset()

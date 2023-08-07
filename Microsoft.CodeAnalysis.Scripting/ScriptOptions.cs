@@ -227,19 +227,6 @@ namespace Microsoft.CodeAnalysis.Scripting
             WithReferences((IEnumerable<MetadataReference>)references);
 
         /// <summary>
-        /// Creates a new <see cref="ScriptOptions"/> with references added.
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
-        public ScriptOptions AddReferences(IEnumerable<MetadataReference> references) =>
-            WithReferences(ConcatChecked(MetadataReferences, references, nameof(references)));
-
-        /// <summary>
-        /// Creates a new <see cref="ScriptOptions"/> with references added.
-        /// </summary>
-        public ScriptOptions AddReferences(params MetadataReference[] references) =>
-            AddReferences((IEnumerable<MetadataReference>)references);
-
-        /// <summary>
         /// Creates a new <see cref="ScriptOptions"/> with the references changed.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
@@ -254,27 +241,6 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// <exception cref="NotSupportedException">Specified assembly is not supported (e.g. it's a dynamic assembly).</exception>
         public ScriptOptions WithReferences(params Assembly[] references) =>
             WithReferences((IEnumerable<Assembly>)references);
-
-        /// <summary>
-        /// Creates a new <see cref="ScriptOptions"/> with references added.
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
-        /// <exception cref="NotSupportedException">Specified assembly is not supported (e.g. it's a dynamic assembly).</exception>
-        public ScriptOptions AddReferences(IEnumerable<Assembly> references) =>
-            AddReferences(SelectChecked(references, nameof(references), CreateReferenceFromAssembly));
-
-        private static MetadataReference CreateReferenceFromAssembly(Assembly assembly)
-        {
-            return MetadataReference.CreateFromAssemblyInternal(assembly, s_assemblyReferenceProperties);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="ScriptOptions"/> with references added.
-        /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
-        /// <exception cref="NotSupportedException">Specified assembly is not supported (e.g. it's a dynamic assembly).</exception>
-        public ScriptOptions AddReferences(params Assembly[] references) =>
-            AddReferences((IEnumerable<Assembly>)references);
 
         /// <summary>
         /// Creates a new <see cref="ScriptOptions"/> with the references changed.
@@ -294,6 +260,35 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// Creates a new <see cref="ScriptOptions"/> with references added.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
+        public ScriptOptions AddReferences(IEnumerable<MetadataReference> references) =>
+            WithReferences(ConcatChecked(MetadataReferences, references, nameof(references)));
+
+        /// <summary>
+        /// Creates a new <see cref="ScriptOptions"/> with references added.
+        /// </summary>
+        public ScriptOptions AddReferences(params MetadataReference[] references) =>
+            AddReferences((IEnumerable<MetadataReference>)references);
+
+        /// <summary>
+        /// Creates a new <see cref="ScriptOptions"/> with references added.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
+        /// <exception cref="NotSupportedException">Specified assembly is not supported (e.g. it's a dynamic assembly).</exception>
+        public ScriptOptions AddReferences(IEnumerable<Assembly> references) =>
+            AddReferences(SelectChecked(references, nameof(references), CreateReferenceFromAssembly));
+
+        /// <summary>
+        /// Creates a new <see cref="ScriptOptions"/> with references added.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
+        /// <exception cref="NotSupportedException">Specified assembly is not supported (e.g. it's a dynamic assembly).</exception>
+        public ScriptOptions AddReferences(params Assembly[] references) =>
+            AddReferences((IEnumerable<Assembly>)references);
+
+        /// <summary>
+        /// Creates a new <see cref="ScriptOptions"/> with references added.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="references"/> is null or contains a null reference.</exception>
         public ScriptOptions AddReferences(IEnumerable<string> references) =>
             AddReferences(SelectChecked(references, nameof(references), CreateUnresolvedReference));
 
@@ -302,6 +297,11 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// </summary>
         public ScriptOptions AddReferences(params string[] references) =>
             AddReferences((IEnumerable<string>)references);
+
+        private static MetadataReference CreateReferenceFromAssembly(Assembly assembly)
+        {
+            return MetadataReference.CreateFromAssemblyInternal(assembly, s_assemblyReferenceProperties);
+        }
 
         /// <summary>
         /// Creates a new <see cref="ScriptOptions"/> with specified <see cref="MetadataResolver"/>.

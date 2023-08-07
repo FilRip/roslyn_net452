@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Specifies how parameters are displayed in the description of a (member, property/indexer, or delegate) symbol.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum SymbolDisplayParameterOptions
     {
         /// <summary>

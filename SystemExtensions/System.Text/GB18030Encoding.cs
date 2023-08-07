@@ -1,8 +1,8 @@
 namespace System.Text
 {
-    internal sealed class GB18030Encoding : DBCSCodePageEncoding
+    internal sealed class GB18030Encoding : DbCsCodePageEncoding
     {
-        internal sealed class GB18030Decoder : DecoderNLS
+        internal sealed class GB18030Decoder : DecoderNls
         {
             internal short bLeftOver1 = -1;
 
@@ -14,7 +14,7 @@ namespace System.Text
 
             internal override bool HasState => bLeftOver1 >= 0;
 
-            internal GB18030Decoder(EncodingNLS encoding)
+            internal GB18030Decoder(EncodingNls encoding)
                 : base(encoding)
             {
             }
@@ -90,7 +90,7 @@ namespace System.Text
         };
 
         internal unsafe GB18030Encoding()
-            : base(54936)
+            : base(GB18030)
         {
         }
 
@@ -98,7 +98,9 @@ namespace System.Text
         {
             iExtraBytes = 87032;
             base.LoadManagedCodePage();
+#pragma warning disable S3869 // "SafeHandle.DangerousGetHandle" should not be called
             byte* ptr = (byte*)(void*)safeNativeMemoryHandle.DangerousGetHandle();
+#pragma warning restore S3869 // "SafeHandle.DangerousGetHandle" should not be called
             mapUnicodeTo4BytesFlags = ptr + 262144;
             map4BytesToUnicode = (char*)(ptr + 262144 + 8192);
             char c = '\0';
@@ -143,12 +145,12 @@ namespace System.Text
             return false;
         }
 
-        public unsafe override int GetByteCount(char* chars, int count, EncoderNLS encoder)
+        public unsafe override int GetByteCount(char* chars, int count, EncoderNls encoder)
         {
             return GetBytes(chars, count, null, 0, encoder);
         }
 
-        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNLS encoder)
+        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNls encoder)
         {
             char c = '\0';
             if (encoder != null)
@@ -183,11 +185,13 @@ namespace System.Text
                             byte b3 = (byte)(num % 10 + 48);
                             num /= 10;
                             c = '\0';
+#pragma warning disable S2234 // Arguments should be passed in the same order as the method parameters
                             if (encodingByteBuffer.AddByte((byte)(num + 144), b3, b2, b))
                             {
                                 c = '\0';
                                 continue;
                             }
+#pragma warning restore S2234 // Arguments should be passed in the same order as the method parameters
                             encodingByteBuffer.MovePrevious(bThrow: false);
                         }
                     }
@@ -289,14 +293,14 @@ namespace System.Text
             return (offset1 - 129) * 10 * 126 * 10 + (offset2 - 48) * 126 * 10 + (offset3 - 129) * 10 + offset4 - 48;
         }
 
-        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNLS baseDecoder)
+        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNls decoder)
         {
-            return GetChars(bytes, count, null, 0, baseDecoder);
+            return GetChars(bytes, count, null, 0, decoder);
         }
 
-        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNLS baseDecoder)
+        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNls decoder)
         {
-            GB18030Decoder gB18030Decoder = (GB18030Decoder)baseDecoder;
+            GB18030Decoder gB18030Decoder = (GB18030Decoder)decoder;
             EncodingCharBuffer encodingCharBuffer = new(this, gB18030Decoder, chars, charCount, bytes, byteCount);
             short num = -1;
             short num2 = -1;
@@ -374,16 +378,16 @@ namespace System.Text
                     else if (IsGBFourByteTrailing(num2) && IsGBLeadByte(num3) && IsGBFourByteTrailing(num4))
                     {
                         int fourBytesOffset = GetFourBytesOffset(num, num2, num3, num4);
-                        if (fourBytesOffset <= 39419)
+                        if (fourBytesOffset <= GBLast4ByteCode)
                         {
                             if (!encodingCharBuffer.AddChar(map4BytesToUnicode[fourBytesOffset], 4))
                             {
                                 break;
                             }
                         }
-                        else if (fourBytesOffset >= 189000 && fourBytesOffset <= 1237575)
+                        else if (fourBytesOffset >= GBSurrogateOffset && fourBytesOffset <= GBLastSurrogateOffset)
                         {
-                            fourBytesOffset -= 189000;
+                            fourBytesOffset -= GBSurrogateOffset;
                             if (!encodingCharBuffer.AddChar((char)(55296 + fourBytesOffset / 1024), (char)(56320 + fourBytesOffset % 1024), 4))
                             {
                                 break;
@@ -444,16 +448,16 @@ namespace System.Text
                                 if (IsGBLeadByte(nextByte3) && IsGBFourByteTrailing(nextByte4))
                                 {
                                     int fourBytesOffset2 = GetFourBytesOffset(nextByte, nextByte2, nextByte3, nextByte4);
-                                    if (fourBytesOffset2 <= 39419)
+                                    if (fourBytesOffset2 <= GBLast4ByteCode)
                                     {
                                         if (!encodingCharBuffer.AddChar(map4BytesToUnicode[fourBytesOffset2], 4))
                                         {
                                             break;
                                         }
                                     }
-                                    else if (fourBytesOffset2 >= 189000 && fourBytesOffset2 <= 1237575)
+                                    else if (fourBytesOffset2 >= GBSurrogateOffset && fourBytesOffset2 <= GBLastSurrogateOffset)
                                     {
-                                        fourBytesOffset2 -= 189000;
+                                        fourBytesOffset2 -= GBSurrogateOffset;
                                         if (!encodingCharBuffer.AddChar((char)(55296 + fourBytesOffset2 / 1024), (char)(56320 + fourBytesOffset2 % 1024), 4))
                                         {
                                             break;

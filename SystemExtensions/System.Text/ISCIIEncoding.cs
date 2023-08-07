@@ -1,12 +1,10 @@
 using System.Runtime.Serialization;
 
-#pragma warning disable IDE0051
-
 namespace System.Text
 {
-    internal class ISCIIEncoding : EncodingNLS, ISerializable
+    internal class IsciiEncoding : EncodingNls, ISerializable
     {
-        internal class ISCIIEncoder : EncoderNLS
+        internal class IsciiEncoder : EncoderNls
         {
             internal int defaultCodePage;
 
@@ -26,7 +24,7 @@ namespace System.Text
                 }
             }
 
-            public ISCIIEncoder(EncodingNLS encoding)
+            public IsciiEncoder(EncodingNls encoding)
                 : base(encoding)
             {
                 currentCodePage = (defaultCodePage = encoding.CodePage - 57000);
@@ -40,7 +38,7 @@ namespace System.Text
             }
         }
 
-        internal class ISCIIDecoder : DecoderNLS
+        internal class IsciiDecoder : DecoderNls
         {
             internal int currentCodePage;
 
@@ -66,7 +64,7 @@ namespace System.Text
                 }
             }
 
-            public ISCIIDecoder(EncodingNLS encoding)
+            public IsciiDecoder(EncodingNls encoding)
                 : base(encoding)
             {
                 currentCodePage = encoding.CodePage - 57000;
@@ -89,29 +87,11 @@ namespace System.Text
 
         private const int CodeDevanagari = 2;
 
-        private const int CodeBengali = 3;
-
-        private const int CodeTamil = 4;
-
-        private const int CodeTelugu = 5;
-
-        private const int CodeAssamese = 6;
-
-        private const int CodeOriya = 7;
-
-        private const int CodeKannada = 8;
-
-        private const int CodeMalayalam = 9;
-
-        private const int CodeGujarati = 10;
-
         private const int CodePunjabi = 11;
 
         private const int MultiByteBegin = 160;
 
         private const int IndicBegin = 2305;
-
-        private const int IndicEnd = 3439;
 
         private const byte ControlATR = 239;
 
@@ -493,11 +473,11 @@ namespace System.Text
             }
         };
 
-        public ISCIIEncoding(int codePage)
+        public IsciiEncoding(int codePage)
             : base(codePage)
         {
             _defaultCodePage = codePage - 57000;
-            if (_defaultCodePage < 2 || _defaultCodePage > 11)
+            if (_defaultCodePage < CodeDevanagari || _defaultCodePage > CodePunjabi)
             {
                 throw new ArgumentException(SR.Format(SR.Argument_CodepageNotSupported, codePage), "codePage");
             }
@@ -533,7 +513,7 @@ namespace System.Text
             {
                 throw new ArgumentOutOfRangeException("byteCount", SR.ArgumentOutOfRange_NeedNonNegNum);
             }
-            long num = byteCount + 1L;
+            long num = byteCount + 1;
             if (base.DecoderFallback.MaxCharCount > 1)
             {
                 num *= base.DecoderFallback.MaxCharCount;
@@ -545,14 +525,14 @@ namespace System.Text
             return (int)num;
         }
 
-        public unsafe override int GetByteCount(char* chars, int count, EncoderNLS baseEncoder)
+        public unsafe override int GetByteCount(char* chars, int count, EncoderNls encoder)
         {
-            return GetBytes(chars, count, null, 0, baseEncoder);
+            return GetBytes(chars, count, null, 0, encoder);
         }
 
-        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNLS baseEncoder)
+        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNls encoder)
         {
-            ISCIIEncoder iSCIIEncoder = (ISCIIEncoder)baseEncoder;
+            IsciiEncoder iSCIIEncoder = (IsciiEncoder)encoder;
             EncodingByteBuffer encodingByteBuffer = new(this, iSCIIEncoder, bytes, byteCount, chars, charCount);
             int num = _defaultCodePage;
             bool flag = false;
@@ -580,16 +560,16 @@ namespace System.Text
                 }
                 if (nextChar < '\u0901' || nextChar > '൯')
                 {
-                    if (flag && (nextChar == '\u200c' || nextChar == '\u200d'))
+                    if (flag && (nextChar == ZWNJ || nextChar == ZWJ))
                     {
-                        if (nextChar == '\u200c')
+                        if (nextChar == ZWNJ)
                         {
-                            if (!encodingByteBuffer.AddByte(232))
+                            if (!encodingByteBuffer.AddByte(Virama))
                             {
                                 break;
                             }
                         }
-                        else if (!encodingByteBuffer.AddByte(233))
+                        else if (!encodingByteBuffer.AddByte(Nukta))
                         {
                             break;
                         }
@@ -602,7 +582,7 @@ namespace System.Text
                     }
                     continue;
                 }
-                int num2 = s_UnicodeToIndicChar[nextChar - 2305];
+                int num2 = s_UnicodeToIndicChar[nextChar - IndicBegin];
                 byte b = (byte)num2;
                 int num3 = 0xF & (num2 >> 8);
                 int num4 = 0xF000 & num2;
@@ -614,17 +594,17 @@ namespace System.Text
                 }
                 if (num3 != num)
                 {
-                    if (!encodingByteBuffer.AddByte(239, (byte)((uint)num3 | 0x40u)))
+                    if (!encodingByteBuffer.AddByte(ControlATR, (byte)((uint)num3 | 0x40u)))
                     {
                         break;
                     }
                     num = num3;
                 }
-                if (!encodingByteBuffer.AddByte(b, (num4 != 0) ? 1 : 0))
+                if (!encodingByteBuffer.AddByte(b, (num4 != CodeDefault) ? CodeRoman : CodeDefault))
                 {
                     break;
                 }
-                flag = b == 232;
+                flag = b == Virama;
                 if (num4 != 0 && !encodingByteBuffer.AddByte(s_SecondIndicByte[num4 >> 12]))
                 {
                     break;
@@ -632,7 +612,7 @@ namespace System.Text
             }
             if (num != _defaultCodePage && (iSCIIEncoder == null || iSCIIEncoder.MustFlush))
             {
-                if (encodingByteBuffer.AddByte(239, (byte)((uint)_defaultCodePage | 0x40u)))
+                if (encodingByteBuffer.AddByte(ControlATR, (byte)((uint)_defaultCodePage | 0x40u)))
                 {
                     num = _defaultCodePage;
                 }
@@ -655,14 +635,14 @@ namespace System.Text
             return encodingByteBuffer.Count;
         }
 
-        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNLS baseDecoder)
+        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNls decoder)
         {
-            return GetChars(bytes, count, null, 0, baseDecoder);
+            return GetChars(bytes, count, null, 0, decoder);
         }
 
-        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNLS baseDecoder)
+        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNls decoder)
         {
-            ISCIIDecoder iSCIIDecoder = (ISCIIDecoder)baseDecoder;
+            IsciiDecoder iSCIIDecoder = (IsciiDecoder)decoder;
             EncodingCharBuffer encodingCharBuffer = new(this, iSCIIDecoder, chars, charCount, bytes, byteCount);
             int num = _defaultCodePage;
             bool flag = false;
@@ -681,7 +661,7 @@ namespace System.Text
             }
             bool flag4 = flag2 || flag || flag3 || c != '\0';
             int num2 = -1;
-            if (num >= 2 && num <= 11)
+            if (num >= 2 && num <= CodePunjabi)
             {
                 num2 = s_IndicMappingIndex[num];
             }
@@ -700,11 +680,11 @@ namespace System.Text
                             flag = false;
                             continue;
                         }
-                        if (nextByte == 64)
+                        if (nextByte == ControlCodePageStart)
                         {
                             num = _defaultCodePage;
                             num2 = -1;
-                            if (num >= 2 && num <= 11)
+                            if (num >= 2 && num <= CodePunjabi)
                             {
                                 num2 = s_IndicMappingIndex[num];
                             }
@@ -715,14 +695,14 @@ namespace System.Text
                         {
                             num = _defaultCodePage;
                             num2 = -1;
-                            if (num >= 2 && num <= 11)
+                            if (num >= 2 && num <= CodePunjabi)
                             {
                                 num2 = s_IndicMappingIndex[num];
                             }
                             flag = false;
                             continue;
                         }
-                        if (!encodingCharBuffer.Fallback(239))
+                        if (!encodingCharBuffer.Fallback(ControlATR))
                         {
                             break;
                         }
@@ -730,18 +710,18 @@ namespace System.Text
                     }
                     else if (flag2)
                     {
-                        if (nextByte == 232)
+                        if (nextByte == Virama)
                         {
-                            if (!encodingCharBuffer.AddChar('\u200c'))
+                            if (!encodingCharBuffer.AddChar(ZWNJ))
                             {
                                 break;
                             }
                             flag2 = false;
                             continue;
                         }
-                        if (nextByte == 233)
+                        if (nextByte == Nukta)
                         {
-                            if (!encodingCharBuffer.AddChar('\u200d'))
+                            if (!encodingCharBuffer.AddChar(ZWJ))
                             {
                                 break;
                             }
@@ -770,7 +750,7 @@ namespace System.Text
                             flag3 = false;
                             continue;
                         }
-                        if (!encodingCharBuffer.Fallback(240))
+                        if (!encodingCharBuffer.Fallback(DevenagariExt))
                         {
                             break;
                         }
@@ -778,7 +758,7 @@ namespace System.Text
                     }
                     else
                     {
-                        if (nextByte == 233)
+                        if (nextByte == Nukta)
                         {
                             if (!encodingCharBuffer.AddChar(c))
                             {
@@ -794,7 +774,7 @@ namespace System.Text
                         c = (c2 = '\0');
                     }
                 }
-                if (nextByte < 160)
+                if (nextByte < MultiByteBegin)
                 {
                     if (!encodingCharBuffer.AddChar((char)nextByte))
                     {
@@ -802,14 +782,14 @@ namespace System.Text
                     }
                     continue;
                 }
-                if (nextByte == 239)
+                if (nextByte == ControlATR)
                 {
                     flag = (flag4 = true);
                     continue;
                 }
-                char c3 = s_IndicMapping[num2, 0, nextByte - 160];
-                char c4 = s_IndicMapping[num2, 1, nextByte - 160];
-                if (c4 == '\0' || nextByte == 233)
+                char c3 = s_IndicMapping[num2, 0, nextByte - MultiByteBegin];
+                char c4 = s_IndicMapping[num2, 1, nextByte - MultiByteBegin];
+                if (c4 == '\0' || nextByte == Nukta)
                 {
                     if (c3 == '\0')
                     {
@@ -823,7 +803,7 @@ namespace System.Text
                         break;
                     }
                 }
-                else if (nextByte == 232)
+                else if (nextByte == Virama)
                 {
                     if (!encodingCharBuffer.AddChar(c3))
                     {
@@ -846,7 +826,7 @@ namespace System.Text
             {
                 if (flag)
                 {
-                    if (encodingCharBuffer.Fallback(239))
+                    if (encodingCharBuffer.Fallback(ControlATR))
                     {
                         flag = false;
                     }
@@ -857,7 +837,7 @@ namespace System.Text
                 }
                 else if (flag3)
                 {
-                    if (encodingCharBuffer.Fallback(240))
+                    if (encodingCharBuffer.Fallback(DevenagariExt))
                     {
                         flag3 = false;
                     }
@@ -905,18 +885,22 @@ namespace System.Text
 
         public override Decoder GetDecoder()
         {
-            return new ISCIIDecoder(this);
+            return new IsciiDecoder(this);
         }
 
         public override Encoder GetEncoder()
         {
-            return new ISCIIEncoder(this);
+            return new IsciiEncoder(this);
         }
 
         public override int GetHashCode()
         {
             return _defaultCodePage + base.EncoderFallback.GetHashCode() + base.DecoderFallback.GetHashCode();
         }
+
+        public override bool Equals(object value)
+        {
+            return base.Equals(value);
+        }
     }
 }
-#pragma warning restore IDE0051

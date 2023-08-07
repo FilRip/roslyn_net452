@@ -202,7 +202,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
                     moduleId = "<" & MetadataHelpers.MangleForTypeNameIfNeeded(moduleId) & ">"
                 Else
-                    moduleId = String.Empty
+                    moduleId = string.Empty
                 End If
 
                 Dim typeIndex = moduleBeingBuilt.GetNextAnonymousTypeIndex(fromDelegates:=False)

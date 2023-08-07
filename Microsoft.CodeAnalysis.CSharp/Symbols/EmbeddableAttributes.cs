@@ -8,7 +8,7 @@ using System;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
-    [Flags]
+    [Flags()]
     internal enum EmbeddableAttributes
     {
         IsReadOnlyAttribute = 0x01,

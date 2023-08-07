@@ -109,7 +109,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' always escape keywords, 
             If SyntaxFacts.GetKeywordKind(identifier) <> SyntaxKind.None Then
-                Return String.Format("[{0}]", identifier)
+                Return string.Format("[{0}]", identifier)
             End If
 
             ' The minimal flag is e.g. used by the service layer when generating code (example: simplify name).
@@ -144,7 +144,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                          SyntaxKind.AscendingKeyword,
                          SyntaxKind.DescendingKeyword,
                          SyntaxKind.PreserveKeyword
-                        Return String.Format("[{0}]", identifier)
+                        Return string.Format("[{0}]", identifier)
                 End Select
             End If
 
@@ -179,12 +179,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 AddSpace()
             End If
 
-            VisitNamespace(symbol, String.Empty)
+            VisitNamespace(symbol, string.Empty)
         End Sub
 
         Private Overloads Sub VisitNamespace(symbol As INamespaceSymbol, emittedName As String)
             Dim myCaseCorrectedNSName As String = symbol.Name
-            Dim myCaseCorrectedParentNSName As String = String.Empty
+            Dim myCaseCorrectedParentNSName As String = string.Empty
 
             If Not emittedName.IsEmpty Then
                 Dim nsIdx = emittedName.LastIndexOf("."c)

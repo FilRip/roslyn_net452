@@ -748,10 +748,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Function
 
         Private Shared Function MakeEofToken(precedingTrivia As CoreInternalSyntax.SyntaxList(Of VisualBasicSyntaxNode)) As SyntaxToken
-            Return SyntaxFactory.Token(precedingTrivia.Node, SyntaxKind.EndOfFileToken, Nothing, String.Empty)
+            Return SyntaxFactory.Token(precedingTrivia.Node, SyntaxKind.EndOfFileToken, Nothing, string.Empty)
         End Function
 
-        Private ReadOnly _simpleEof As SyntaxToken = SyntaxFactory.Token(Nothing, SyntaxKind.EndOfFileToken, Nothing, String.Empty)
+        Private ReadOnly _simpleEof As SyntaxToken = SyntaxFactory.Token(Nothing, SyntaxKind.EndOfFileToken, Nothing, string.Empty)
         Private Function MakeEofToken() As SyntaxToken
             Return _simpleEof
         End Function

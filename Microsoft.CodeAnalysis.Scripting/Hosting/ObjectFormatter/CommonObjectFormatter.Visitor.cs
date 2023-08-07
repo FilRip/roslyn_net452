@@ -724,9 +724,11 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
                 var nonGenericName = type.FullName.Substring(0, backtick);
                 return nonGenericName == "System.ValueTuple" || nonGenericName == "System.Tuple";
+#pragma warning disable S125 // Sections of code should not be commented out
                 /*#else
                                 return obj is ITuple;
                 #endif*/
+#pragma warning restore S125 // Sections of code should not be commented out
             }
 
             private void ObjectToString(Builder result, object obj)

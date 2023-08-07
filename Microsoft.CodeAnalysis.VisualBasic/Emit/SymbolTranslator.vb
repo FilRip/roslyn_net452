@@ -141,7 +141,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Emit
                 ' Try to decrease noise by not complaining about the same type over and over again.
                 If _reportedErrorTypesMap.Add(errorType) Then
                     diagnostics.Add(New VBDiagnostic(
-                                    If(diagInfo, ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, String.Empty)),
+                                    If(diagInfo, ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedType1, string.Empty)),
                                     If(syntaxNodeOpt Is Nothing, NoLocation.Singleton, syntaxNodeOpt.GetLocation())))
                 End If
 

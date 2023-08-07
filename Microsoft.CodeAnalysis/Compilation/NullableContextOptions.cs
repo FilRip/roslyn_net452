@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis
     /// <summary>
     /// Represents the default state of nullable analysis in this compilation.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum NullableContextOptions
     {
         /// <summary>

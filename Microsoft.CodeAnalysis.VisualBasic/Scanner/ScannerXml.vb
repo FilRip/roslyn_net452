@@ -87,7 +87,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
                         If ScanXmlForPossibleStatement(state) Then
                             offsets.Restore()
-                            Return SyntaxFactory.Token(Nothing, SyntaxKind.EndOfXmlToken, Nothing, String.Empty)
+                            Return SyntaxFactory.Token(Nothing, SyntaxKind.EndOfXmlToken, Nothing, string.Empty)
                         End If
 
                     Case " "c, CHARACTER_TABULATION
@@ -781,7 +781,7 @@ CleanUp:
                         'End If
                         'Return
                     Case Else
-                        Return SyntaxFactory.Token(precedingTrivia.Node, SyntaxKind.EndOfXmlToken, Nothing, String.Empty)
+                        Return SyntaxFactory.Token(precedingTrivia.Node, SyntaxKind.EndOfXmlToken, Nothing, string.Empty)
 
                 End Select
             End While
@@ -1122,7 +1122,7 @@ CreateNCNameToken:
             If Here <> 0 Then
                 Dim name = XmlMakeXmlNCNameToken(precedingTrivia, Here)
                 If err <> ERRID.ERR_None Then
-                    name = name.WithDiagnostics(ErrorFactory.ErrorInfo(err, errChar, String.Format("&H{0:X}", errUnicode)))
+                    name = name.WithDiagnostics(ErrorFactory.ErrorInfo(err, errChar, string.Format("&H{0:X}", errUnicode)))
                 End If
                 Return name
             ElseIf IsIllegalChar Then

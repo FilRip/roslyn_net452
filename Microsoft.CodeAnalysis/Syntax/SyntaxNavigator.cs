@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis
         {
         }
 
-        [Flags]
+        [Flags()]
         private enum SyntaxKinds
         {
             DocComments = 1,

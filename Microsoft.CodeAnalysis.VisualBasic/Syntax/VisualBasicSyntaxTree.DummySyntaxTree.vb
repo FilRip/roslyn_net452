@@ -17,19 +17,19 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Private ReadOnly _node As CompilationUnitSyntax
 
             Public Sub New()
-                _node = Me.CloneNodeAsRoot(SyntaxFactory.ParseCompilationUnit(String.Empty))
+                _node = Me.CloneNodeAsRoot(SyntaxFactory.ParseCompilationUnit(string.Empty))
             End Sub
 
             Public Overrides Function ToString() As String
-                Return String.Empty
+                Return string.Empty
             End Function
 
             Public Overrides Function GetText(Optional cancellationToken As CancellationToken = Nothing) As SourceText
-                Return SourceText.From(String.Empty, Encoding.UTF8)
+                Return SourceText.From(string.Empty, Encoding.UTF8)
             End Function
 
             Public Overrides Function TryGetText(ByRef text As SourceText) As Boolean
-                text = SourceText.From(String.Empty, Encoding.UTF8)
+                text = SourceText.From(string.Empty, Encoding.UTF8)
                 Return True
             End Function
 
@@ -59,7 +59,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Public Overrides ReadOnly Property FilePath As String
                 Get
-                    Return String.Empty
+                    Return string.Empty
                 End Get
             End Property
 

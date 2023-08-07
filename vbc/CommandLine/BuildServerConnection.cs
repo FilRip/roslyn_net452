@@ -16,12 +16,12 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CommandLine
 {
-    internal sealed class BuildServerConnection
+    internal static class BuildServerConnection
     {
         internal const int TimeOutMsExistingProcess = 1000;
         internal const int TimeOutMsNewProcess = 20000;
 
-        internal static bool IsCompilerServerSupported => BuildServerConnection.GetPipeNameForPath("") != null;
+        internal static bool IsCompilerServerSupported => GetPipeNameForPath("") != null;
 
         public static Task<BuildResponse> RunServerCompilationAsync(
             Guid requestId,
@@ -86,14 +86,18 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     }
                     catch
                     {
+#pragma warning disable S4586 // Non-async "Task/Task<T>" methods should not return null
                         return null;
+#pragma warning restore S4586 // Non-async "Task/Task<T>" methods should not return null
                     }
                     if (!createdNew)
                     {
                         try
                         {
+#pragma warning disable S4586 // Non-async "Task/Task<T>" methods should not return null
                             if (!serverMutex.TryLock(timeoutMs1))
                                 return null;
+#pragma warning restore S4586 // Non-async "Task/Task<T>" methods should not return null
                         }
                         catch (AbandonedMutexException)
                         {
@@ -115,7 +119,9 @@ namespace Microsoft.CodeAnalysis.CommandLine
                     catch (ApplicationException ex)
                     {
                         int currentManagedThreadId2 = Environment.CurrentManagedThreadId;
+#pragma warning disable S1163 // Exceptions should not be thrown in finally blocks
                         throw new VbcException(string.Format("ReleaseMutex failed. WaitOne Id: {0} Release Id: {1}", currentManagedThreadId1, currentManagedThreadId2), ex);
+#pragma warning restore S1163 // Exceptions should not be thrown in finally blocks
                     }
                 }
             }

@@ -42,7 +42,7 @@ namespace Microsoft.CodeAnalysis.Scripting
         /// To avoid this problem we use a prefix for assemblies we generate that is unlikely to conflict with user specified references.
         /// We also check that no user provided references are allowed to be used in the compiled code and report an error ("reserved assembly name").
         /// </remarks>
-        private static readonly string s_globalAssemblyNamePrefix;
+        private static readonly string s_globalAssemblyNamePrefix = "\u211B*" + Guid.NewGuid().ToString();
         private static int s_engineIdDispenser;
         private int _submissionIdDispenser = -1;
         private readonly string _assemblyNamePrefix;
@@ -52,11 +52,6 @@ namespace Microsoft.CodeAnalysis.Scripting
         private static readonly EmitOptions s_EmitOptionsWithDebuggingInformation = new(
             debugInformationFormat: PdbHelpers.GetPlatformSpecificDebugInformationFormat(),
             pdbChecksumAlgorithm: default);
-
-        static ScriptBuilder()
-        {
-            s_globalAssemblyNamePrefix = "\u211B*" + Guid.NewGuid().ToString();
-        }
 
         public ScriptBuilder(InteractiveAssemblyLoader assemblyLoader)
         {

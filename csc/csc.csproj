@@ -24,7 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
-    <NoWarn>IDE0251</NoWarn>
+    <NoWarn>IDE0251,IDE0250</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -79,14 +79,14 @@
     <Compile Include="CommandLine\IServerMutex.cs" />
     <Compile Include="CommandLine\MismatchedVersionBuildResponse.cs" />
     <Compile Include="CommandLine\NativeMethods.cs" />
-    <Compile Include="CommandLine\PROCESS_INFORMATION.cs" />
+    <Compile Include="CommandLine\ProcessInformation.cs" />
     <Compile Include="CommandLine\RejectedBuildResponse.cs" />
     <Compile Include="CommandLine\RequestLanguage.cs" />
     <Compile Include="CommandLine\RunCompilationResult.cs" />
     <Compile Include="CommandLine\ServerFileMutexPair.cs" />
     <Compile Include="CommandLine\ServerNamedMutex.cs" />
     <Compile Include="CommandLine\ShutdownBuildResponse.cs" />
-    <Compile Include="CommandLine\STARTUPINFO.cs" />
+    <Compile Include="CommandLine\StartupInfo.cs" />
     <Compile Include="CSharp.CommandLine\Csc.cs" />
     <Compile Include="CSharp.CommandLine\Program.cs" />
     <Compile Include="NamedPipeUtil.cs" />

@@ -1675,7 +1675,7 @@ namespace Microsoft.CodeAnalysis
 
             try
             {
-                resources = COFFResourceReader.ReadWin32ResourcesFromCOFF(win32Resources);
+                resources = CoffResourceReader.ReadWin32ResourcesFromCOFF(win32Resources);
             }
             catch (BadImageFormatException ex)
             {
@@ -1702,7 +1702,7 @@ namespace Microsoft.CodeAnalysis
             {
                 return null;
             }
-            List<RESOURCE> resources;
+            List<Resource> resources;
 
             try
             {

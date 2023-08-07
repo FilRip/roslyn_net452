@@ -2069,7 +2069,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return symbol.ContainingAssembly ?? ((NamespaceSymbol)symbol).ConstituentNamespaces.First().ContainingAssembly;
         }
 
-        [Flags]
+        [Flags()]
         private enum BestSymbolLocation
         {
             None,

@@ -13,15 +13,15 @@ using System.Text;
 
 namespace Microsoft.CodeAnalysis.Interop
 {
-    [ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("BD39D1D2-BA2F-486A-89B0-B4B0CB466891"), SuppressUnmanagedCodeSecurity]
+    [ComImport(), InterfaceType(ComInterfaceType.InterfaceIsIUnknown), Guid("BD39D1D2-BA2F-486A-89B0-B4B0CB466891"), SuppressUnmanagedCodeSecurity]
     internal interface IClrRuntimeInfo
     {
-        [PreserveSig]
+        [PreserveSig()]
         int GetVersionString(
             [Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 1)] StringBuilder buffer,
             [In, Out, MarshalAs(UnmanagedType.U4)] ref int bufferLength);
 
-        [PreserveSig]
+        [PreserveSig()]
         int GetRuntimeDirectory(
             [Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 1)] StringBuilder buffer,
             [In, Out, MarshalAs(UnmanagedType.U4)] ref int bufferLength);
@@ -30,7 +30,7 @@ namespace Microsoft.CodeAnalysis.Interop
         bool IsLoaded(
             [In] IntPtr processHandle);
 
-        [PreserveSig]
+        [PreserveSig()]
         int LoadErrorString(
             [In, MarshalAs(UnmanagedType.U4)] int resourceId,
             [Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] StringBuilder buffer,
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.Interop
             [In, MarshalAs(UnmanagedType.U4)] int startupFlags,
             [In, MarshalAs(UnmanagedType.LPStr)] string hostConfigFile);
 
-        [PreserveSig]
+        [PreserveSig()]
         int GetDefaultStartupFlags(
             [Out, MarshalAs(UnmanagedType.U4)] out int startupFlags,
             [Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] StringBuilder hostConfigFile,

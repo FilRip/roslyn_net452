@@ -7,7 +7,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace System.Text
 {
-    internal abstract class BaseCodePageEncoding : EncodingNLS, ISerializable
+    internal abstract class BaseCodePageEncoding : EncodingNls, ISerializable
     {
         [StructLayout(LayoutKind.Explicit)]
         internal struct CodePageDataFileHeader
@@ -88,7 +88,7 @@ namespace System.Text
 
         private static readonly byte[] s_codePagesDataHeader = new byte[CODEPAGE_DATA_FILE_HEADER_SIZE];
 
-        protected static Stream s_codePagesEncodingDataStream = GetEncodingDataStream("codepages.nlp");
+        protected static readonly Stream s_codePagesEncodingDataStream = GetEncodingDataStream("codepages.nlp");
 
         protected static readonly object s_streamLock = new();
 
@@ -227,7 +227,9 @@ namespace System.Text
                 byte* ptr = (byte*)(void*)Marshal.AllocHGlobal(iSize);
                 safeNativeMemoryHandle = new SafeAllocHHandle((IntPtr)ptr);
             }
+#pragma warning disable S3869 // "SafeHandle.DangerousGetHandle" should not be called
             return (byte*)(void*)safeNativeMemoryHandle.DangerousGetHandle();
+#pragma warning restore S3869 // "SafeHandle.DangerousGetHandle" should not be called
         }
 
         protected abstract void ReadBestFitTable();
@@ -252,10 +254,12 @@ namespace System.Text
 
         internal void CheckMemorySection()
         {
+#pragma warning disable S3869 // "SafeHandle.DangerousGetHandle" should not be called
             if (safeNativeMemoryHandle != null && safeNativeMemoryHandle.DangerousGetHandle() == IntPtr.Zero)
             {
                 LoadManagedCodePage();
             }
+#pragma warning restore S3869 // "SafeHandle.DangerousGetHandle" should not be called
         }
     }
 }

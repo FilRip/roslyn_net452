@@ -101,7 +101,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                     End If
                     Dim xmlCh = spelling(0)
                     Dim xmlChAsUnicode = UTF16ToUnicode(New XmlCharResult(xmlCh))
-                    diagnostic = ErrorFactory.ErrorInfo(id, xmlCh, String.Format("&H{0:X}", xmlChAsUnicode))
+                    diagnostic = ErrorFactory.ErrorInfo(id, xmlCh, string.Format("&H{0:X}", xmlChAsUnicode))
                 Case Else
                     diagnostic = ErrorFactory.ErrorInfo(id)
             End Select

@@ -11,7 +11,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    [Flags]
+    [Flags()]
     public enum TypeParameterConstraintKind
     {
         None = 0x00,

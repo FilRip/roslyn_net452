@@ -236,7 +236,7 @@ namespace System.Text
             }
         }
 
-        public unsafe override int GetByteCount(char* chars, int count, EncoderNLS encoder)
+        public unsafe override int GetByteCount(char* chars, int count, EncoderNls encoder)
         {
             CheckMemorySection();
             EncoderReplacementFallback encoderReplacementFallback = null;
@@ -295,7 +295,7 @@ namespace System.Text
             return num;
         }
 
-        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNLS encoder)
+        public unsafe override int GetBytes(char* chars, int charCount, byte* bytes, int byteCount, EncoderNls encoder)
         {
             CheckMemorySection();
             EncoderReplacementFallback encoderReplacementFallback = null;
@@ -418,7 +418,7 @@ namespace System.Text
             return (int)(bytes - ptr2);
         }
 
-        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNLS decoder)
+        public unsafe override int GetCharCount(byte* bytes, int count, DecoderNls decoder)
         {
             CheckMemorySection();
             bool flag = false;
@@ -462,7 +462,7 @@ namespace System.Text
             return num;
         }
 
-        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNLS decoder)
+        public unsafe override int GetChars(byte* bytes, int byteCount, char* chars, int charCount, DecoderNls decoder)
         {
             CheckMemorySection();
             bool flag = false;

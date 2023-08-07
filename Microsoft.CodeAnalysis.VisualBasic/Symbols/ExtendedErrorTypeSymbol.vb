@@ -30,7 +30,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend Sub New(errorInfo As DiagnosticInfo,
                        Optional reportErrorWhenReferenced As Boolean = False,
                        Optional nonErrorGuessType As NamedTypeSymbol = Nothing)
-            Me.New(errorInfo, String.Empty, 0, reportErrorWhenReferenced, nonErrorGuessType)
+            Me.New(errorInfo, string.Empty, 0, reportErrorWhenReferenced, nonErrorGuessType)
         End Sub
 
         Friend Sub New(errorInfo As DiagnosticInfo,

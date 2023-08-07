@@ -850,7 +850,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End Function
 
             Public Overrides Function ToString() As String
-                Dim result = String.Format("{0} : {1}", TypeParameter, Constraint)
+                Dim result = string.Format("{0} : {1}", TypeParameter, Constraint)
                 If IsBad Then
                     result &= " (bad)"
                 End If

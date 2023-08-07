@@ -22,16 +22,16 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting.Hosting
             return ObjectDisplay.FormatLiteral(value);
         }
 
-        protected override string FormatLiteral(string value, bool useQuotes, bool escapeNonPrintable, int numberRadix = NumberRadixDecimal)
+        protected override string FormatLiteral(string value, bool quote, bool escapeNonPrintable, int numberRadix = NumberRadixDecimal)
         {
-            var options = GetObjectDisplayOptions(useQuotes: useQuotes, escapeNonPrintable: escapeNonPrintable, numberRadix: numberRadix);
+            var options = GetObjectDisplayOptions(useQuotes: quote, escapeNonPrintable: escapeNonPrintable, numberRadix: numberRadix);
             return ObjectDisplay.FormatLiteral(value, options);
         }
 
-        protected override string FormatLiteral(char c, bool useQuotes, bool escapeNonPrintable, bool includeCodePoints = false, int numberRadix = NumberRadixDecimal)
+        protected override string FormatLiteral(char value, bool quote, bool escapeNonPrintable, bool includeCodePoints = false, int numberRadix = NumberRadixDecimal)
         {
-            var options = GetObjectDisplayOptions(useQuotes: useQuotes, escapeNonPrintable: escapeNonPrintable, includeCodePoints: includeCodePoints, numberRadix: numberRadix);
-            return ObjectDisplay.FormatLiteral(c, options);
+            var options = GetObjectDisplayOptions(useQuotes: quote, escapeNonPrintable: escapeNonPrintable, includeCodePoints: includeCodePoints, numberRadix: numberRadix);
+            return ObjectDisplay.FormatLiteral(value, options);
         }
 
         protected override string FormatLiteral(sbyte value, int numberRadix = NumberRadixDecimal, CultureInfo cultureInfo = null)

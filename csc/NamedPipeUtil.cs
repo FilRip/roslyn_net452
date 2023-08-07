@@ -12,11 +12,10 @@ namespace Microsoft.CodeAnalysis
 {
     internal static class NamedPipeUtil
     {
-        //private const int PipeBufferSize = 65536;
+        private const int PipeBufferSize = 65536;
+        private const int s_currentUserOnlyValue = 536870912;
 
-        //private const int s_currentUserOnlyValue = 536870912;
-
-        private static readonly PipeOptions CurrentUserOption = (PlatformInformation.IsRunningOnMono ? ((PipeOptions)536870912) : PipeOptions.None);
+        private static readonly PipeOptions CurrentUserOption = (PlatformInformation.IsRunningOnMono ? ((PipeOptions)s_currentUserOnlyValue) : PipeOptions.None);
 
         private static string GetPipeNameOrPath(string pipeName)
         {
@@ -59,7 +58,7 @@ namespace Microsoft.CodeAnalysis
         internal static NamedPipeServerStream CreateServer(string pipeName, PipeDirection? pipeDirection = null)
         {
             PipeOptions options = PipeOptions.WriteThrough | PipeOptions.Asynchronous;
-            return CreateServer(pipeName, pipeDirection ?? PipeDirection.InOut, -1, PipeTransmissionMode.Byte, options, 65536, 65536);
+            return CreateServer(pipeName, pipeDirection ?? PipeDirection.InOut, -1, PipeTransmissionMode.Byte, options, PipeBufferSize, PipeBufferSize);
         }
 
         private static NamedPipeServerStream CreateServer(string pipeName, PipeDirection direction, int maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, int inBufferSize, int outBufferSize)

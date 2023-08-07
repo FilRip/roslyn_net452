@@ -48,6 +48,7 @@
     <Compile Include="CSharpMemberFilter.cs" />
     <Compile Include="CSharpScript.cs" />
     <Compile Include="CSharpScriptCompiler.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hosting\CommandLine\Csi.cs" />
     <Compile Include="Hosting\CSharpReplServiceProvider.cs" />
     <Compile Include="Hosting\ObjectFormatter\CSharpObjectFormatter.cs" />

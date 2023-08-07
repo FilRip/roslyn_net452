@@ -3482,50 +3482,50 @@ _Default:
         ' case we decide we need more verbose logging in certain cases for debugging.
 
         Friend Function GetMessage(position As Integer) As String
-            Return String.Format("{0}: at {1}", Me.SyntaxTree.FilePath, position)
+            Return string.Format("{0}: at {1}", Me.SyntaxTree.FilePath, position)
         End Function
 
         Friend Function GetMessage(node As VisualBasicSyntaxNode) As String
             If node Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} ({2})", Me.SyntaxTree.FilePath, node.Kind.ToString(), node.Position)
+            Return string.Format("{0}: {1} ({2})", Me.SyntaxTree.FilePath, node.Kind.ToString(), node.Position)
         End Function
 
         Friend Function GetMessage(node As VisualBasicSyntaxNode, position As Integer) As String
             If node Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} ({2}) at {3}", Me.SyntaxTree.FilePath, node.Kind.ToString(), node.Position, position)
+            Return string.Format("{0}: {1} ({2}) at {3}", Me.SyntaxTree.FilePath, node.Kind.ToString(), node.Position, position)
         End Function
 
         Friend Function GetMessage(firstStatement As StatementSyntax, lastStatement As StatementSyntax) As String
             If firstStatement Is Nothing OrElse lastStatement Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} to {2}", Me.SyntaxTree.FilePath, firstStatement.Position, lastStatement.EndPosition)
+            Return string.Format("{0}: {1} to {2}", Me.SyntaxTree.FilePath, firstStatement.Position, lastStatement.EndPosition)
         End Function
 
         Friend Function GetMessage(expression As ExpressionSyntax, type As TypeSymbol) As String
             If expression Is Nothing OrElse type Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} ({2}) -> {3} {4}", Me.SyntaxTree.FilePath, expression.Kind.ToString(), expression.Position, type.TypeKind.ToString(), type.Name)
+            Return string.Format("{0}: {1} ({2}) -> {3} {4}", Me.SyntaxTree.FilePath, expression.Kind.ToString(), expression.Position, type.TypeKind.ToString(), type.Name)
         End Function
 
         Friend Function GetMessage(expression As ExpressionSyntax, type As TypeSymbol, position As Integer) As String
             If expression Is Nothing OrElse type Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} ({2}) -> {3} {4} at {5}", Me.SyntaxTree.FilePath, expression.Kind.ToString(), expression.Position, type.TypeKind.ToString(), type.Name, position)
+            Return string.Format("{0}: {1} ({2}) -> {3} {4} at {5}", Me.SyntaxTree.FilePath, expression.Kind.ToString(), expression.Position, type.TypeKind.ToString(), type.Name, position)
         End Function
 
         Friend Function GetMessage(expression As ExpressionSyntax, [option] As SpeculativeBindingOption, position As Integer) As String
             If expression Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} ({2}) at {3} ({4})", Me.SyntaxTree.FilePath, expression.Kind.ToString(), expression.Position, position, [option].ToString())
+            Return string.Format("{0}: {1} ({2}) at {3} ({4})", Me.SyntaxTree.FilePath, expression.Kind.ToString(), expression.Position, position, [option].ToString())
         End Function
 
         Friend Function GetMessage(name As String, [option] As LookupOptions, position As Integer) As String
-            Return String.Format("{0}: {1} at {2} ({3})", Me.SyntaxTree.FilePath, name, position, [option].ToString())
+            Return string.Format("{0}: {1} at {2} ({3})", Me.SyntaxTree.FilePath, name, position, [option].ToString())
         End Function
 
         Friend Function GetMessage(symbol As Symbol, position As Integer) As String
             If symbol Is Nothing Then Return Me.SyntaxTree.FilePath
-            Return String.Format("{0}: {1} {2} at {3}", Me.SyntaxTree.FilePath, symbol.Kind.ToString(), symbol.Name, position)
+            Return string.Format("{0}: {1} {2} at {3}", Me.SyntaxTree.FilePath, symbol.Kind.ToString(), symbol.Name, position)
         End Function
 
         Friend Function GetMessage(stage As CompilationStage) As String
-            Return String.Format("{0} ({1})", Me.SyntaxTree.FilePath, stage.ToString())
+            Return string.Format("{0} ({1})", Me.SyntaxTree.FilePath, stage.ToString())
         End Function
 #End Region
     End Class

@@ -250,7 +250,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
     /// <summary>
     /// Flags to configure mode of generated code analysis.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum GeneratedCodeAnalysisFlags
     {
         /// <summary>

@@ -148,7 +148,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 Dim c = Peek(offset)
 
                 ' Any combination of fullwidth and ASCII curly braces of the same direction is an escaping sequence for the corresponding ASCII curly brace.
-                ' We insert that curly brace doubled and because this is the escaping sequence understood by String.Format, that will be replaced by a single brace.
+                ' We insert that curly brace doubled and because this is the escaping sequence understood by string.Format, that will be replaced by a single brace.
                 ' This is deliberate design and it aligns with existing rules for double quote escaping in strings.
                 If IsLeftCurlyBracket(c) Then
 
@@ -219,7 +219,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 valueBuilder.Length -= pendingWhitespace
             End If
 
-            Dim text = If(offset > 0, GetTextNotInterned(offset), String.Empty)
+            Dim text = If(offset > 0, GetTextNotInterned(offset), string.Empty)
 
             ' PERF: It's common for the text and the 'value' to be identical. If so, try to unify the
             ' two strings.
@@ -230,7 +230,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Function
 
         Private Function MakeEndOfInterpolatedStringToken() As SyntaxToken
-            Return SyntaxFactory.Token(Nothing, SyntaxKind.EndOfInterpolatedStringToken, Nothing, String.Empty)
+            Return SyntaxFactory.Token(Nothing, SyntaxKind.EndOfInterpolatedStringToken, Nothing, string.Empty)
         End Function
 
     End Class

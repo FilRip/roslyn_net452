@@ -203,7 +203,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     ' An XElement with a start and end tag but no content. Include a compiler-
                     ' generated empty string as content for consistency with the native compiler.
                     ' (This also ensures <x></x> is serialized as <x></x> rather than <x/>.)
-                    childNodeBuilder.Add(CreateStringLiteral(syntax, String.Empty, compilerGenerated:=True, diagnostics:=diagnostics))
+                    childNodeBuilder.Add(CreateStringLiteral(syntax, string.Empty, compilerGenerated:=True, diagnostics:=diagnostics))
                 End If
             End If
 
@@ -925,7 +925,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Friend Shared Function GetXmlString(tokens As SyntaxTokenList) As String
             Dim n = tokens.Count
             If n = 0 Then
-                Return String.Empty
+                Return string.Empty
             ElseIf n = 1 Then
                 Return GetXmlString(tokens(0))
             Else
@@ -1246,7 +1246,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         ''' <summary>
-        ''' If name is "xmlns", set prefix to String.Empty and return True.
+        ''' If name is "xmlns", set prefix to string.Empty and return True.
         ''' If name is "xmlns:p", set prefix to p and return True.
         ''' Otherwise return False.
         ''' </summary>
@@ -1284,7 +1284,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
                 End If
 
-                prefix = String.Empty
+                prefix = string.Empty
                 Return True
             End If
 

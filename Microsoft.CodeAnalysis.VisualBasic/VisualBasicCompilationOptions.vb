@@ -278,7 +278,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 referencesSupersedeLowerVersions:=referencesSupersedeLowerVersions)
 
             _globalImports = globalImports.AsImmutableOrEmpty()
-            _rootNamespace = If(rootNamespace, String.Empty)
+            _rootNamespace = If(rootNamespace, string.Empty)
             _optionStrict = optionStrict
             _optionInfer = optionInfer
             _optionExplicit = optionExplicit

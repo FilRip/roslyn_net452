@@ -53,7 +53,9 @@ namespace Microsoft.CodeAnalysis.CompilerServer
             if (properties.Kind == MetadataImageKind.Module)
                 return this.CreateModuleMetadata(fullPath, true);
             Metadata metadata2 = AssemblyMetadata.Create(this.GetAllModules(this.CreateModuleMetadata(fullPath, false), Path.GetDirectoryName(fullPath)));
-            return this._metadataCache.GetOrAdd(uniqueFileKey.Value, metadata2);
+#pragma warning disable S3655 // Empty nullable value should not be accessed
+            return this._metadataCache.GetOrAdd(uniqueFileKey.Value, metadata2); // TODO : What happend if uniqueFileKey is null ?
+#pragma warning restore S3655 // Empty nullable value should not be accessed
         }
 
         private FileKey? GetUniqueFileKey(string filePath)

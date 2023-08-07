@@ -34,14 +34,22 @@ namespace Microsoft.CodeAnalysis
             My_culture = culture;
         }
 
-        //
         protected abstract string PrimaryLocationPropertyName { get; }
 
         protected abstract void WritePhysicalLocation(Location diagnosticLocation);
 
-        public virtual void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            My_writer.Dispose();
+            if (disposing)
+            {
+                My_writer.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected void WriteRegion(FileLinePositionSpan span)
@@ -65,15 +73,12 @@ namespace Microsoft.CodeAnalysis
                 case DiagnosticSeverity.Error:
                     return "error";
 
-                case DiagnosticSeverity.Warning:
-                    return "warning";
-
-                case DiagnosticSeverity.Hidden:
                 default:
                     // hidden diagnostics are not reported on the command line and therefore not currently given to
                     // the error logger. We could represent it with a custom property in the SARIF log if that changes.
-                    Debug.Assert(false);
-                    goto case DiagnosticSeverity.Warning;
+                    if (severity != DiagnosticSeverity.Warning)
+                        Debug.Assert(false);
+                    return "warning";
             }
         }
 

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading;
 
+using SystemExtensions;
+
 namespace System.Text
 {
     public sealed class CodePagesEncodingProvider : EncodingProvider
@@ -11,7 +13,7 @@ namespace System.Text
 
         private readonly ReaderWriterLockSlim _cacheLock = new();
 
-        /*private const int ISCIIAssemese = 57006;
+        private const int ISCIIAssemese = 57006;
 
         private const int ISCIIBengali = 57003;
 
@@ -49,21 +51,13 @@ namespace System.Text
 
         private const int CodePageMacKorean = 10003;
 
-        private const int CodePageGB2312 = 20936;
-
-        private const int CodePageDLLKorean = 20949;
-
         private const int GB18030 = 54936;
 
         private const int DuplicateEUCCN = 51936;
 
         private const int EUCKR = 51949;
 
-        private const int EUCCN = 936;
-
         private const int ISO_8859_8I = 38598;
-
-        private const int ISO_8859_8_Visual = 28598;*/
 
         public static EncodingProvider Instance => s_singleton;
 
@@ -111,7 +105,7 @@ namespace System.Text
                         value = new SBCSCodePageEncoding(codepage);
                         break;
                     case 2:
-                        value = new DBCSCodePageEncoding(codepage);
+                        value = new DbCsCodePageEncoding(codepage);
                         break;
                     default:
                         value = GetEncodingRare(codepage);
@@ -157,45 +151,45 @@ namespace System.Text
             Encoding result = null;
             switch (codepage)
             {
-                case 57002:
-                case 57003:
-                case 57004:
-                case 57005:
-                case 57006:
-                case 57007:
-                case 57008:
-                case 57009:
-                case 57010:
-                case 57011:
-                    result = new ISCIIEncoding(codepage);
+                case ISCIIDevanagari:
+                case ISCIIBengali:
+                case ISCIITamil:
+                case ISCIITelugu:
+                case ISCIIAssemese:
+                case ISCIIOriya:
+                case ISCIIKannada:
+                case ISCIIMalayalam:
+                case ISCIIGujarathi:
+                case ISCIIPanjabi:
+                    result = new IsciiEncoding(codepage);
                     break;
-                case 10008:
-                    result = new DBCSCodePageEncoding(10008);
+                case CodePageMacGB2312:
+                    result = new DbCsCodePageEncoding(10008);
                     break;
-                case 10003:
-                    result = new DBCSCodePageEncoding(10003);
+                case CodePageMacKorean:
+                    result = new DbCsCodePageEncoding(10003);
                     break;
-                case 54936:
+                case GB18030:
                     result = new GB18030Encoding();
                     break;
-                case 50220:
-                case 50221:
-                case 50222:
-                case 50225:
-                case 52936:
-                    result = new ISO2022Encoding(codepage);
+                case ISO2022JP:
+                case ISO2022JPESC:
+                case ISO2022JPSISO:
+                case ISOKorean:
+                case ChineseHZ:
+                    result = new Iso2022Encoding(codepage);
                     break;
-                case 50227:
-                case 51936:
-                    result = new DBCSCodePageEncoding(codepage);
+                case ISOSimplifiedCN:
+                case DuplicateEUCCN:
+                    result = new DbCsCodePageEncoding(codepage);
                     break;
-                case 51932:
+                case EUCJP:
                     result = new EUCJPEncoding();
                     break;
-                case 51949:
-                    result = new DBCSCodePageEncoding(codepage);
+                case EUCKR:
+                    result = new DbCsCodePageEncoding(codepage);
                     break;
-                case 38598:
+                case ISO_8859_8I:
                     result = new SBCSCodePageEncoding(codepage);
                     break;
             }

@@ -1530,8 +1530,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                      BinaryOperatorKind.Equals,
                      BinaryOperatorKind.NotEquals
 
-                    Dim leftValue As String = If(left.IsNothing, String.Empty, left.StringValue)
-                    Dim rightValue As String = If(right.IsNothing, String.Empty, right.StringValue)
+                    Dim leftValue As String = If(left.IsNothing, string.Empty, left.StringValue)
+                    Dim rightValue As String = If(right.IsNothing, string.Empty, right.StringValue)
 
                     Dim stringComparisonSucceeds As Boolean = False
 

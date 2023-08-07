@@ -2,17 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Collections.Immutable;
+using System.Runtime.Serialization;
 
 namespace Microsoft.CodeAnalysis.Scripting
 {
     /// <summary>
     /// An exception thrown when the compilation stage of interactive execution produces compilation errors.
     /// </summary>
-    public sealed class CompilationErrorException : Exception
+    [Serializable()]
+    public class CompilationErrorException : Exception
     {
         /// <summary>
         /// The list of diagnostics produced by compilation.
@@ -29,5 +29,7 @@ namespace Microsoft.CodeAnalysis.Scripting
 
             Diagnostics = diagnostics;
         }
+
+        protected CompilationErrorException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

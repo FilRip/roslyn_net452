@@ -6,7 +6,7 @@ namespace System.Text
 
         internal unsafe char* charEnd;
 
-        internal EncoderNLS encoder;
+        internal EncoderNls encoder;
 
         internal bool setEncoder;
 
@@ -37,7 +37,7 @@ namespace System.Text
             _fallbackBuffer.Reset();
         }
 
-        internal unsafe void InternalInitialize(char* _charStart, char* _charEnd, EncoderNLS _encoder, bool _setEncoder)
+        internal unsafe void InternalInitialize(char* _charStart, char* _charEnd, EncoderNls _encoder, bool _setEncoder)
         {
             charStart = _charStart;
             charEnd = _charEnd;
@@ -82,7 +82,7 @@ namespace System.Text
                     char c = *chars;
                     if (char.IsLowSurrogate(c))
                     {
-                        if (bFallingBack && iRecursionCount++ > 250)
+                        if (bFallingBack && iRecursionCount++ > iMaxRecursion)
                         {
                             ThrowLastCharRecursive(char.ConvertToUtf32(ch, c));
                         }
@@ -92,7 +92,7 @@ namespace System.Text
                     }
                 }
             }
-            if (bFallingBack && iRecursionCount++ > 250)
+            if (bFallingBack && iRecursionCount++ > iMaxRecursion)
             {
                 ThrowLastCharRecursive(ch);
             }
@@ -102,7 +102,7 @@ namespace System.Text
 
         internal void ThrowLastCharRecursive(int charRecursive)
         {
-            throw new ArgumentException(SR.Format(SR.Argument_RecursiveFallback, charRecursive), "chars");
+            throw new ArgumentException(SR.Format(SR.Argument_RecursiveFallback, charRecursive), nameof(charRecursive));
         }
     }
 }

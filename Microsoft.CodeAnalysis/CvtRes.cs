@@ -20,10 +20,10 @@ using WORD = System.UInt16;
 
 namespace Microsoft.CodeAnalysis
 {
-    internal class RESOURCE
+    internal class Resource
     {
-        internal RESOURCE_STRING? pstringType;
-        internal RESOURCE_STRING? pstringName;
+        internal ResourceString? pstringType;
+        internal ResourceString? pstringName;
 
         internal DWORD DataSize;               // size of data without header
         internal DWORD HeaderSize;     // Length of the header
@@ -37,7 +37,7 @@ namespace Microsoft.CodeAnalysis
         internal byte[]? data;       //data
     };
 
-    internal class RESOURCE_STRING
+    internal class ResourceString
     {
         internal WORD Ordinal;
         internal string? theString;
@@ -47,18 +47,18 @@ namespace Microsoft.CodeAnalysis
     /// Parses .RES a file into its constituent resource elements.
     /// Mostly translated from cvtres.cpp.
     /// </summary>
-    internal class CvtResFile
+    internal static class CvtResFile
     {
         private const WORD RT_DLGINCLUDE = 17;
 
-        internal static List<RESOURCE> ReadResFile(Stream stream)
+        internal static List<Resource> ReadResFile(Stream stream)
         {
-            var reader = new BinaryReader(stream, Encoding.Unicode);
-            var resourceNames = new List<RESOURCE>();
+            BinaryReader reader = new(stream, Encoding.Unicode);
+            List<Resource> resourceNames = new();
 
-            var startPos = stream.Position;
+            long startPos = stream.Position;
 
-            var initial32Bits = reader.ReadUInt32();
+            uint initial32Bits = reader.ReadUInt32();
 
             //RC.EXE output starts with a resource that contains no data.
             if (initial32Bits != 0)
@@ -72,13 +72,12 @@ namespace Microsoft.CodeAnalysis
             {
                 // Get the sizes from the file
 
-                var cbData = reader.ReadUInt32();
-                var cbHdr = reader.ReadUInt32();
+                uint cbData = reader.ReadUInt32();
+                uint cbHdr = reader.ReadUInt32();
 
                 if (cbHdr < 2 * sizeof(DWORD))
                 {
-                    throw new ResourceException(String.Format("Resource header beginning at offset 0x{0:x} is malformed.", stream.Position - 8));
-                    //ErrorPrint(ERR_FILECORRUPT, szFilename);
+                    throw new ResourceException(string.Format("Resource header beginning at offset 0x{0:x} is malformed.", stream.Position - 8));
                 }
 
                 // Discard null resource
@@ -89,16 +88,14 @@ namespace Microsoft.CodeAnalysis
                     continue;
                 }
 
-                var pAdditional = new RESOURCE()
+                Resource pAdditional = new()
                 {
                     HeaderSize = cbHdr,
-                    DataSize = cbData
+                    DataSize = cbData,
+                    // Read the TYPE and NAME
+                    pstringType = ReadStringOrID(reader),
+                    pstringName = ReadStringOrID(reader),
                 };
-
-                // Read the TYPE and NAME
-
-                pAdditional.pstringType = ReadStringOrID(reader);
-                pAdditional.pstringName = ReadStringOrID(reader);
 
                 //round up to dword boundary.
                 stream.Position = (stream.Position + 3) & ~3;
@@ -127,13 +124,13 @@ namespace Microsoft.CodeAnalysis
             return resourceNames;
         }
 
-        private static RESOURCE_STRING ReadStringOrID(BinaryReader fhIn)
+        private static ResourceString ReadStringOrID(BinaryReader fhIn)
         {
             // Reads a String structure from fhIn
             // If the first word is 0xFFFF then this is an ID
             // return the ID instead
 
-            RESOURCE_STRING pstring = new();
+            ResourceString pstring = new();
 
             WCHAR firstWord = fhIn.ReadChar();
 
@@ -169,7 +166,7 @@ namespace Microsoft.CodeAnalysis
         }
     }
 
-    internal static class COFFResourceReader
+    internal static class CoffResourceReader
     {
         private static void ConfirmSectionValues(SectionHeader hdr, long fileSize)
         {
@@ -177,7 +174,7 @@ namespace Microsoft.CodeAnalysis
                 throw new ResourceException(Properties.Resources.CoffResourceInvalidSectionSize);
         }
 
-        internal static Microsoft.Cci.ResourceSection ReadWin32ResourcesFromCOFF(Stream stream)
+        internal static Cci.ResourceSection ReadWin32ResourcesFromCOFF(Stream stream)
         {
             var peHeaders = new PEHeaders(stream);
             var rsrc1 = new SectionHeader();
@@ -303,7 +300,7 @@ namespace Microsoft.CodeAnalysis
 
     public static class Win32ResourceConversions
     {
-        private struct ICONDIRENTRY
+        private struct IconDirEntry
         {
             internal BYTE bWidth;
             internal BYTE bHeight;
@@ -332,7 +329,7 @@ namespace Microsoft.CodeAnalysis
             if (count == 0)
                 throw new ResourceException(Properties.Resources.IconStreamUnexpectedFormat);
 
-            var iconDirEntries = new ICONDIRENTRY[count];
+            var iconDirEntries = new IconDirEntry[count];
             for (ushort i = 0; i < count; i++)
             {
                 // Read the Icon header
@@ -352,11 +349,14 @@ namespace Microsoft.CodeAnalysis
             //EDMAURER: PNG compressed icons must be treated differently. Do what has always
             //been done for uncompressed icons. Assume modern, compressed icons set the 
             //ICONDIRENTRY fields correctly.
+
+#pragma warning disable S125 // Sections of code should not be commented out
             //if (*(DWORD*)icoBuffer == sizeof(BITMAPINFOHEADER))
             //{
             //    grp[i].Planes = ((BITMAPINFOHEADER*)icoBuffer)->biPlanes;
             //    grp[i].BitCount = ((BITMAPINFOHEADER*)icoBuffer)->biBitCount;
             //}
+#pragma warning restore S125 // Sections of code should not be commented out
 
             for (ushort i = 0; i < count; i++)
             {
@@ -378,6 +378,7 @@ namespace Microsoft.CodeAnalysis
 
             for (ushort i = 0; i < count; i++)
             {
+#pragma warning disable S125 // Sections of code should not be commented out
                 /* write resource header.
                 struct RESOURCEHEADER
                 {
@@ -394,6 +395,7 @@ namespace Microsoft.CodeAnalysis
                     DWORD Characteristics;
                 };
                 */
+#pragma warning restore S125 // Sections of code should not be commented out
 
                 resStream.Position = (resStream.Position + 3) & ~3; //headers begin on 4-byte boundaries.
                 resWriter.Write(iconDirEntries[i].dwBytesInRes);
@@ -415,8 +417,8 @@ namespace Microsoft.CodeAnalysis
                 resWriter.Write(iconReader.ReadBytes(checked((int)iconDirEntries[i].dwBytesInRes)));
             }
 
+#pragma warning disable S125 // Sections of code should not be commented out
             /*
-            
             struct ICONDIR
             {
                 WORD           idReserved;   // Reserved (must be 0)
@@ -437,6 +439,7 @@ namespace Microsoft.CodeAnalysis
                 WORD IconId;       // = RESOURCEHEADER.Name
             };
             */
+#pragma warning restore S125 // Sections of code should not be commented out
 
             const WORD RT_GROUP_ICON = RT_ICON + 11;
 
@@ -471,34 +474,6 @@ namespace Microsoft.CodeAnalysis
                 resWriter.Write((WORD)(i + 1));   //ID
             }
         }
-
-        /*
-         * Dev10 alink had the following fallback behavior.
-                private uint[] FileVersion
-                {
-                    get
-                    {
-                        if (fileVersionContents != null)
-                            return fileVersionContents;
-                        else
-                        {
-                            System.Diagnostics.Debug.Assert(assemblyVersionContents != null);
-                            return assemblyVersionContents;
-                        }
-                    }
-                }
-
-                private uint[] ProductVersion
-                {
-                    get
-                    {
-                        if (productVersionContents != null)
-                            return productVersionContents;
-                        else
-                            return this.FileVersion;
-                    }
-                }
-                */
 
         public static void AppendVersionToResourceStream(Stream resStream, bool isDll,
             string fileVersion, //should be [major.minor.build.rev] but doesn't have to be
@@ -573,7 +548,7 @@ namespace Microsoft.CodeAnalysis
             manifestStream.CopyTo(resStream);
         }
 
-        private class VersionResourceSerializer
+        private sealed class VersionResourceSerializer
         {
             private readonly string? _commentsContents;
             private readonly string? _companyNameContents;
@@ -613,7 +588,7 @@ namespace Microsoft.CodeAnalysis
                 _productNameContents = productName;
                 _productVersionContents = productVersion;
                 _assemblyVersionContents = assemblyVersion;
-                _langIdAndCodePageKey = System.String.Format("{0:x4}{1:x4}", 0 /*langId*/, CP_WINUNICODE /*codepage*/);
+                _langIdAndCodePageKey = string.Format("{0:x4}{1:x4}", 0 /*langId*/, CP_WINUNICODE /*codepage*/);
             }
 
             private const uint VFT_APP = 0x00000001;
@@ -720,7 +695,9 @@ namespace Microsoft.CodeAnalysis
                 Debug.Assert((writer.BaseStream.Position & 3) == 0);
                 writer.Write(keyValuePair.Value.ToCharArray());
                 writer.Write((WORD)'\0');
+#pragma warning disable S125 // Sections of code should not be commented out
                 //writer.Write(new byte[PadToDword(cbVal) - cbVal]);
+#pragma warning restore S125 // Sections of code should not be commented out
 
                 Debug.Assert(cbBlock == writer.BaseStream.Position - startPos);
             }
@@ -773,35 +750,37 @@ namespace Microsoft.CodeAnalysis
                  * 
                  * the sub-elements of the VS_VERSIONINFO consist of a header (3 WORDS) a string
                  * and then beginning on the next 32-bit boundary, the elements children
-                 
-                    struct VS_VERSIONINFO
-                    {
-                        WORD cbRootBlock;                                     // size of whole resource
-                        WORD cbRootValue;                                     // size of VS_FIXEDFILEINFO structure
-                        WORD fRootText;                                       // root is text?
-                        WCHAR szRootKey[KEYSIZE("VS_VERSION_INFO")];          // Holds "VS_VERSION_INFO"
-                        VS_FIXEDFILEINFO vsFixed;                             // fixed information.
-                          WORD cbVarBlock;                                      //   size of VarFileInfo block
-                          WORD cbVarValue;                                      //   always 0
-                          WORD fVarText;                                        //   VarFileInfo is text?
-                          WCHAR szVarKey[KEYSIZE("VarFileInfo")];               //   Holds "VarFileInfo"
-                            WORD cbTransBlock;                                    //     size of Translation block
-                            WORD cbTransValue;                                    //     size of Translation value
-                            WORD fTransText;                                      //     Translation is text?
-                            WCHAR szTransKey[KEYSIZE("Translation")];             //     Holds "Translation"
-                              WORD langid;                                          //     language id
-                              WORD codepage;                                        //     codepage id
-                          WORD cbStringBlock;                                   //   size of StringFileInfo block
-                          WORD cbStringValue;                                   //   always 0
-                          WORD fStringText;                                     //   StringFileInfo is text?
-                          WCHAR szStringKey[KEYSIZE("StringFileInfo")];         //   Holds "StringFileInfo"
-                            WORD cbLangCpBlock;                                   //     size of language/codepage block
-                            WORD cbLangCpValue;                                   //     always 0
-                            WORD fLangCpText;                                     //     LangCp is text?
-                            WCHAR szLangCpKey[KEYSIZE("12345678")];               //     Holds hex version of language/codepage
-                        // followed by strings
-                    };
-                */
+                 */
+
+#pragma warning disable S125 // Sections of code should not be commented out
+                /*struct VS_VERSIONINFO
+                {
+                    WORD cbRootBlock;                                     // size of whole resource
+                    WORD cbRootValue;                                     // size of VS_FIXEDFILEINFO structure
+                    WORD fRootText;                                       // root is text?
+                    WCHAR szRootKey[KEYSIZE("VS_VERSION_INFO")];          // Holds "VS_VERSION_INFO"
+                    VS_FIXEDFILEINFO vsFixed;                             // fixed information.
+                      WORD cbVarBlock;                                      //   size of VarFileInfo block
+                      WORD cbVarValue;                                      //   always 0
+                      WORD fVarText;                                        //   VarFileInfo is text?
+                      WCHAR szVarKey[KEYSIZE("VarFileInfo")];               //   Holds "VarFileInfo"
+                        WORD cbTransBlock;                                    //     size of Translation block
+                        WORD cbTransValue;                                    //     size of Translation value
+                        WORD fTransText;                                      //     Translation is text?
+                        WCHAR szTransKey[KEYSIZE("Translation")];             //     Holds "Translation"
+                          WORD langid;                                          //     language id
+                          WORD codepage;                                        //     codepage id
+                      WORD cbStringBlock;                                   //   size of StringFileInfo block
+                      WORD cbStringValue;                                   //   always 0
+                      WORD fStringText;                                     //   StringFileInfo is text?
+                      WCHAR szStringKey[KEYSIZE("StringFileInfo")];         //   Holds "StringFileInfo"
+                        WORD cbLangCpBlock;                                   //     size of language/codepage block
+                        WORD cbLangCpValue;                                   //     always 0
+                        WORD fLangCpText;                                     //     LangCp is text?
+                        WCHAR szLangCpKey[KEYSIZE("12345678")];               //     Holds hex version of language/codepage
+                    // followed by strings
+                };*/
+#pragma warning restore S125 // Sections of code should not be commented out
 
                 var debugPos = writer.BaseStream.Position;
                 var dataSize = GetDataSize();

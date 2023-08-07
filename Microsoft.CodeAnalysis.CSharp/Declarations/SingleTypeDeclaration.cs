@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private readonly DeclarationModifiers _modifiers;
         private readonly ImmutableArray<SingleTypeDeclaration> _children;
 
-        [Flags]
+        [Flags()]
         internal enum TypeDeclarationFlags : ushort
         {
             None = 0,

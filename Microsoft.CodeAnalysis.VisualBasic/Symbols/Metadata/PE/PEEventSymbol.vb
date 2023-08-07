@@ -59,7 +59,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 [module].GetEventDefPropsOrThrow(handle, Me._name, Me._flags, eventType)
             Catch mrEx As BadImageFormatException
                 If Me._name Is Nothing Then
-                    Me._name = String.Empty
+                    Me._name = string.Empty
                 End If
 
                 _lazyCachedUseSiteInfo.Initialize(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedEvent1, Me))

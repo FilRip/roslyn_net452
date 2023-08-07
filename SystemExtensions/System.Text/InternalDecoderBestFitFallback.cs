@@ -20,9 +20,9 @@ namespace System.Text
             return new InternalDecoderBestFitFallbackBuffer(this);
         }
 
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value is InternalDecoderBestFitFallback internalDecoderBestFitFallback)
+            if (obj is InternalDecoderBestFitFallback internalDecoderBestFitFallback)
             {
                 return encoding.CodePage == internalDecoderBestFitFallback.encoding.CodePage;
             }
@@ -31,7 +31,7 @@ namespace System.Text
 
         public override int GetHashCode()
         {
-            return encoding.CodePage;
+            return encoding.CodePage.GetHashCode();
         }
     }
 }

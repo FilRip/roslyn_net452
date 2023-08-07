@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
     /// </summary>
     internal class PEParameterSymbol : ParameterSymbol
     {
-        [Flags]
+        [Flags()]
         private enum WellKnownAttributeFlags
         {
             HasIDispatchConstantAttribute = 0x1 << 0,

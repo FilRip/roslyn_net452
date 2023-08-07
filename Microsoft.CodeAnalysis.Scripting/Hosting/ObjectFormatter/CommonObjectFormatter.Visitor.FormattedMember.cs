@@ -51,7 +51,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                     return Index >= 0 && Name != null && Name.Length >= 2 && Name[0] == '[' && Name[Name.Length - 1] == ']';
                 }
 
-                public bool AppendAsCollectionEntry(Builder result)
+                public void AppendAsCollectionEntry(Builder result)
                 {
                     // Some BCL collections use [{key.ToString()}]: {value.ToString()} pattern to display collection entries.
                     // We want them to be printed initializer-style, i.e. { <key>, <value> } 
@@ -68,16 +68,13 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
                     {
                         result.Append(Value);
                     }
-
-                    return true;
                 }
 
-                public bool Append(Builder result, string separator)
+                public void Append(Builder result, string separator)
                 {
                     result.Append(GetDisplayName());
                     result.Append(separator);
                     result.Append(Value);
-                    return true;
                 }
             }
         }

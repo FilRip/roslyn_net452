@@ -1345,7 +1345,7 @@ lVbRuntimePlus:
             ' Validate root namespace if specified
             Debug.Assert(rootNamespace IsNot Nothing)
             ' NOTE: empty namespace is a valid option
-            If Not String.Empty.Equals(rootNamespace) Then
+            If Not string.Empty.Equals(rootNamespace) Then
                 rootNamespace = rootNamespace.Unquote()
                 If String.IsNullOrWhiteSpace(rootNamespace) OrElse Not OptionsValidator.IsValidNamespaceName(rootNamespace) Then
                     AddDiagnostic(diagnostics, ERRID.ERR_BadNamespaceName1, rootNamespace)

@@ -1,6 +1,6 @@
 namespace System.Text
 {
-    internal class EUCJPEncoding : DBCSCodePageEncoding
+    internal class EUCJPEncoding : DbCsCodePageEncoding
     {
         public EUCJPEncoding()
             : base(51932)

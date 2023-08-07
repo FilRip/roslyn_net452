@@ -62,7 +62,7 @@ namespace Microsoft.CodeAnalysis.Emit
             _flags = flags;
         }
 
-        [Flags]
+        [Flags()]
         private enum Flags
         {
             None = 0,

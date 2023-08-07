@@ -16,9 +16,9 @@ namespace System.Text
 
         private int _byteCountResult;
 
-        private readonly EncodingNLS _enc;
+        private readonly EncodingNls _enc;
 
-        private readonly EncoderNLS _encoder;
+        private readonly EncoderNls _encoder;
 
         internal EncoderFallbackBuffer fallbackBuffer;
 
@@ -40,7 +40,7 @@ namespace System.Text
 
         internal int Count => _byteCountResult;
 
-        internal unsafe EncodingByteBuffer(EncodingNLS inEncoding, EncoderNLS inEncoder, byte* inByteStart, int inByteCount, char* inCharStart, int inCharCount)
+        internal unsafe EncodingByteBuffer(EncodingNls inEncoding, EncoderNls inEncoder, byte* inByteStart, int inByteCount, char* inCharStart, int inCharCount)
         {
             _enc = inEncoding;
             _encoder = inEncoder;

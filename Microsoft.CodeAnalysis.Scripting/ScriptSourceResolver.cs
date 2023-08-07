@@ -49,8 +49,8 @@ namespace Microsoft.CodeAnalysis.Scripting
             return new ScriptSourceResolver(SearchPaths, baseDirectory);
         }
 
-        public bool Equals(ScriptSourceResolver other) => base.Equals(other);
         public override int GetHashCode() => base.GetHashCode();
+        public bool Equals(ScriptSourceResolver other) => base.Equals(other);
         public override bool Equals(object obj) => base.Equals(obj);
     }
 }
