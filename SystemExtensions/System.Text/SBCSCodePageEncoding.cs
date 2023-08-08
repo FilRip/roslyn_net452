@@ -4,17 +4,13 @@ using System.Threading;
 
 namespace System.Text
 {
-    internal class SBCSCodePageEncoding : BaseCodePageEncoding
+    internal class SbCsCodePageEncoding : BaseCodePageEncoding
     {
         private unsafe char* _mapBytesToUnicode = null;
 
         private unsafe byte* _mapUnicodeToBytes = null;
 
         private const char UNKNOWN_CHAR = '\ufffd';
-
-        private byte _byteUnknown;
-
-        private char _charUnknown;
 
         private static object s_InternalSyncObject;
 
@@ -33,15 +29,10 @@ namespace System.Text
 
         public override bool IsSingleByte => true;
 
-        public SBCSCodePageEncoding(int codePage)
+        public SbCsCodePageEncoding(int codePage)
             : base(codePage)
         {
         }
-
-        /*public unsafe SBCSCodePageEncoding(int codePage, int dataCodePage)
-			: base(codePage, dataCodePage)
-		{
-		}*/
 
         protected unsafe override void LoadManagedCodePage()
         {
@@ -52,8 +43,8 @@ namespace System.Text
                 {
                     throw new NotSupportedException(SR.Format(SR.NotSupported_NoCodepageData, CodePage));
                 }
-                _byteUnknown = (byte)ptr2->ByteReplace;
-                _charUnknown = ptr2->UnicodeReplace;
+                byte _byteUnknown = (byte)ptr2->ByteReplace;
+                char _charUnknown = ptr2->UnicodeReplace;
                 int num = 66052 + iExtraBytes;
                 byte* nativeMemory = GetNativeMemory(num);
                 Unsafe.InitBlockUnaligned(nativeMemory, 0, (uint)num);
@@ -73,14 +64,14 @@ namespace System.Text
                         if (ptr6[i] != 0 || i == 0)
                         {
                             ptr3[i] = ptr6[i];
-                            if (ptr6[i] != '\ufffd')
+                            if (ptr6[i] != UNKNOWN_CHAR)
                             {
                                 ptr4[ptr6[i]] = (byte)i;
                             }
                         }
                         else
                         {
-                            ptr3[i] = '\ufffd';
+                            ptr3[i] = UNKNOWN_CHAR;
                         }
                     }
                 }
@@ -264,7 +255,7 @@ namespace System.Text
             EncoderFallbackBufferHelper encoderFallbackBufferHelper = new(encoderFallbackBuffer);
             if (c > '\0')
             {
-                encoderFallbackBuffer = encoder.FallbackBuffer;
+                encoderFallbackBuffer = encoder?.FallbackBuffer;
                 encoderFallbackBufferHelper = new EncoderFallbackBufferHelper(encoderFallbackBuffer);
                 encoderFallbackBufferHelper.InternalInitialize(chars, ptr, encoder, _setEncoder: false);
                 encoderFallbackBufferHelper.InternalFallback(c, ref chars);
@@ -359,11 +350,11 @@ namespace System.Text
             EncoderFallbackBufferHelper encoderFallbackBufferHelper = new(encoderFallbackBuffer);
             if (c > '\0')
             {
-                encoderFallbackBuffer = encoder.FallbackBuffer;
+                encoderFallbackBuffer = encoder?.FallbackBuffer;
                 encoderFallbackBufferHelper = new EncoderFallbackBufferHelper(encoderFallbackBuffer);
                 encoderFallbackBufferHelper.InternalInitialize(chars, ptr, encoder, _setEncoder: true);
                 encoderFallbackBufferHelper.InternalFallback(c, ref chars);
-                if (encoderFallbackBuffer.Remaining > ptr4 - bytes)
+                if (encoderFallbackBuffer?.Remaining > ptr4 - bytes)
                 {
                     ThrowBytesOverflow(encoder, nothingEncoded: true);
                 }
@@ -446,7 +437,7 @@ namespace System.Text
             {
                 char c = _mapBytesToUnicode[*bytes];
                 bytes++;
-                if (c == '\ufffd')
+                if (c == UNKNOWN_CHAR)
                 {
                     if (decoderFallbackBuffer == null)
                     {
@@ -504,7 +495,7 @@ namespace System.Text
                         c2 = _mapBytesToUnicode[*bytes];
                     }
                     bytes++;
-                    if (c2 == '\ufffd')
+                    if (c2 == UNKNOWN_CHAR)
                     {
                         *chars = c;
                     }
@@ -528,7 +519,7 @@ namespace System.Text
             {
                 char c3 = _mapBytesToUnicode[*bytes];
                 bytes++;
-                if (c3 == '\ufffd')
+                if (c3 == UNKNOWN_CHAR)
                 {
                     if (decoderFallbackBuffer == null)
                     {

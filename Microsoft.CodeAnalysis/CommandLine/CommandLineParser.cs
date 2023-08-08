@@ -240,7 +240,7 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Trims all '.' and whitespace from the end of the path
         /// </summary>
-        [return: NotNullIfNotNull("path")]
+        [return: NotNullIfNotNull(nameof(path))]
         internal static string? RemoveTrailingSpacesAndDots(string? path)
         {
             if (path == null)
@@ -764,7 +764,7 @@ namespace Microsoft.CodeAnalysis
         /// function is called RemoveQuotesAndSlashes.  It has virtually the same behavior except for a few 
         /// quirks in error cases.  
         /// </remarks>
-        [return: NotNullIfNotNull(parameterName: "arg")]
+        [return: NotNullIfNotNull(parameterName: nameof(arg))]
         public static string? RemoveQuotesAndSlashes(string? arg)
         {
             if (arg == null)

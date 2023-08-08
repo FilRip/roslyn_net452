@@ -32,3 +32,5 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("ApiDesign", "RS0027:Public API with optional parameter(s) should have the most parameters amongst its public overloads.", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.CodeAnalysis.CSharp.SyntaxFactory.FunctionPointerParameterList(Microsoft.CodeAnalysis.SeparatedSyntaxList{Microsoft.CodeAnalysis.CSharp.Syntax.FunctionPointerParameterSyntax})~Microsoft.CodeAnalysis.CSharp.Syntax.FunctionPointerParameterListSyntax")]
 [assembly: SuppressMessage("Info Code Smell", "S1135:Track uses of \"TODO\" tags")]
 [assembly: SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested")]
+[assembly: SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"")]
+[assembly: SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null")]

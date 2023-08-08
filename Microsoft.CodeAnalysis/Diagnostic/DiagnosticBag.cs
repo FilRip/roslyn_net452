@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -202,7 +203,7 @@ namespace Microsoft.CodeAnalysis
 
             ArrayBuilder<TDiagnostic> builder = ArrayBuilder<TDiagnostic>.GetInstance();
 
-            foreach (TDiagnostic diagnostic in oldBag) // Cast should be safe since all diagnostics should be from same language.
+            foreach (TDiagnostic diagnostic in oldBag.OfType<TDiagnostic>()) // Cast should be safe since all diagnostics should be from same language.
             {
                 if (diagnostic.Severity != InternalDiagnosticSeverity.Void)
                 {

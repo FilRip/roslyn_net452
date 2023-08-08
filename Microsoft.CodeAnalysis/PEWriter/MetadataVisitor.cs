@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.Emit;
@@ -22,7 +23,7 @@ namespace Microsoft.Cci
     {
         public readonly EmitContext Context;
 
-        public MetadataVisitor(EmitContext context)
+        protected MetadataVisitor(EmitContext context)
         {
             this.Context = context;
         }
@@ -173,7 +174,7 @@ namespace Microsoft.Cci
 
         public void Visit(IEnumerable<IGenericParameter> genericParameters)
         {
-            foreach (IGenericTypeParameter genericParameter in genericParameters)
+            foreach (IGenericTypeParameter genericParameter in genericParameters.OfType<IGenericTypeParameter>())
             {
                 this.Visit((IGenericParameter)genericParameter);
             }
@@ -376,14 +377,6 @@ namespace Microsoft.Cci
         {
         }
 
-        public void VisitNestedTypes(IEnumerable<INamedTypeDefinition> nestedTypes)
-        {
-            foreach (ITypeDefinitionMember nestedType in nestedTypes)
-            {
-                this.Visit(nestedType);
-            }
-        }
-
         public virtual void Visit(INestedTypeDefinition nestedTypeDefinition)
         {
         }
@@ -583,6 +576,31 @@ namespace Microsoft.Cci
             this.DispatchAsReference(typeReference);
         }
 
+        public void Visit(IEnumerable<IUnitReference> unitReferences)
+        {
+            foreach (IUnitReference unitReference in unitReferences)
+            {
+                this.Visit(unitReference);
+            }
+        }
+
+        public virtual void Visit(IUnitReference unitReference)
+        {
+            this.DispatchAsReference(unitReference);
+        }
+
+        public virtual void Visit(IWin32Resource win32Resource)
+        {
+        }
+
+        public void VisitNestedTypes(IEnumerable<INamedTypeDefinition> nestedTypes)
+        {
+            foreach (ITypeDefinitionMember nestedType in nestedTypes.OfType<ITypeDefinitionMember>())
+            {
+                this.Visit(nestedType);
+            }
+        }
+
         /// <summary>
         /// Use this routine, rather than ITypeReference.Dispatch, to call the appropriate derived overload of an ITypeReference.
         /// The former routine will call Visit(INamespaceTypeDefinition) rather than Visit(INamespaceTypeReference), etc., 
@@ -647,21 +665,7 @@ namespace Microsoft.Cci
             if (typeReference is IModifiedTypeReference modifiedTypeReference)
             {
                 this.Visit(modifiedTypeReference);
-                return;
             }
-        }
-
-        public void Visit(IEnumerable<IUnitReference> unitReferences)
-        {
-            foreach (IUnitReference unitReference in unitReferences)
-            {
-                this.Visit(unitReference);
-            }
-        }
-
-        public virtual void Visit(IUnitReference unitReference)
-        {
-            this.DispatchAsReference(unitReference);
         }
 
         /// <summary>
@@ -681,12 +685,7 @@ namespace Microsoft.Cci
             if (unitReference is IModuleReference moduleReference)
             {
                 this.Visit(moduleReference);
-                return;
             }
-        }
-
-        public virtual void Visit(IWin32Resource win32Resource)
-        {
         }
     }
 }

@@ -580,7 +580,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // byref conditional defers to its operands
                     if (conditional.IsRef &&
-                        (CheckValueKind(conditional.Consequence.Syntax, conditional.Consequence, valueKind, checkingReceiver: false, diagnostics: diagnostics) &
+                        (CheckValueKind(conditional.Consequence.Syntax, conditional.Consequence, valueKind, checkingReceiver: false, diagnostics: diagnostics) &&
                         CheckValueKind(conditional.Alternative.Syntax, conditional.Alternative, valueKind, checkingReceiver: false, diagnostics: diagnostics)))
                     {
                         return true;

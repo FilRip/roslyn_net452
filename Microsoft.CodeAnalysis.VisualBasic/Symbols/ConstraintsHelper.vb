@@ -635,7 +635,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                  <[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol)) As Boolean
             ' The type parameters must be original definitions of type parameters from the containing symbol.
             Debug.Assert(((constructedSymbol Is Nothing) AndAlso (substitution Is Nothing)) OrElse
-                         (typeParameter.ContainingSymbol Is constructedSymbol.OriginalDefinition))
+                         (typeParameter.ContainingSymbol Is constructedSymbol?.OriginalDefinition))
 
             If typeArgument.IsErrorType() Then
                 Return True
@@ -644,10 +644,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim succeeded = True
 
             If typeArgument.IsRestrictedType() Then
-                If diagnosticsBuilder IsNot Nothing Then
-                    ' "'{0}' cannot be made nullable, and cannot be used as the data type of an array element, field, anonymous type member, type argument, 'ByRef' parameter, or return statement."
-                    diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_RestrictedType1, typeArgument)))
-                End If
+                ' "'{0}' cannot be made nullable, and cannot be used as the data type of an array element, field, anonymous type member, type argument, 'ByRef' parameter, or return statement."
+                diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_RestrictedType1, typeArgument)))
                 succeeded = False
             End If
 
@@ -672,10 +670,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim constraintType = t.InternalSubstituteTypeParameters(substitution).Type
 
                 If Not SatisfiesTypeConstraint(typeArgument, constraintType, useSiteInfo) Then
-                    If diagnosticsBuilder IsNot Nothing Then
-                        ' "Type argument '{0}' does not inherit from or implement the constraint type '{1}'."
-                        diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_GenericConstraintNotSatisfied2, typeArgument, constraintType)))
-                    End If
+                    ' "Type argument '{0}' does not inherit from or implement the constraint type '{1}'."
+                    diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_GenericConstraintNotSatisfied2, typeArgument, constraintType)))
                     succeeded = False
                 End If
             Next
@@ -887,10 +883,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     If DirectCast(typeArgument, TypeParameterSymbol).HasConstructorConstraint OrElse typeArgument.IsValueType Then
                         Return True
                     Else
-                        If diagnosticsBuilder IsNot Nothing Then
-                            ' "Type parameter '{0}' must have either a 'New' constraint or a 'Structure' constraint to satisfy the 'New' constraint for type parameter '{1}'."
-                            diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_BadGenericParamForNewConstraint2, typeArgument, typeParameter)))
-                        End If
+                        ' "Type parameter '{0}' must have either a 'New' constraint or a 'Structure' constraint to satisfy the 'New' constraint for type parameter '{1}'."
+                        diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_BadGenericParamForNewConstraint2, typeArgument, typeParameter)))
                         Return False
                     End If
 
@@ -900,10 +894,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
                         If HasPublicParameterlessConstructor(classType) Then
                             If classType.IsMustInherit Then
-                                If diagnosticsBuilder IsNot Nothing Then
-                                    ' "Type argument '{0}' is declared 'MustInherit' and does not satisfy the 'New' constraint for type parameter '{1}'."
-                                    diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_MustInheritForNewConstraint2, typeArgument, typeParameter)))
-                                End If
+                                ' "Type argument '{0}' is declared 'MustInherit' and does not satisfy the 'New' constraint for type parameter '{1}'."
+                                diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_MustInheritForNewConstraint2, typeArgument, typeParameter)))
                                 Return False
                             Else
                                 Return True
@@ -912,10 +904,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
                     End If
 
-                    If diagnosticsBuilder IsNot Nothing Then
-                        ' "Type argument '{0}' must have a public parameterless instance constructor to satisfy the 'New' constraint for type parameter '{1}'."
-                        diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_NoSuitableNewForNewConstraint2, typeArgument, typeParameter)))
-                    End If
+                    ' "Type argument '{0}' must have a public parameterless instance constructor to satisfy the 'New' constraint for type parameter '{1}'."
+                    diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_NoSuitableNewForNewConstraint2, typeArgument, typeParameter)))
                     Return False
 
             End Select
@@ -929,10 +919,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Debug.Assert((typeParameter Is Nothing) OrElse typeParameter.HasReferenceTypeConstraint)
 
             If Not typeArgument.IsReferenceType Then
-                If diagnosticsBuilder IsNot Nothing Then
-                    ' "Type argument '{0}' does not satisfy the 'Class' constraint for type parameter '{1}'."
-                    diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_BadTypeArgForRefConstraint2, typeArgument, typeParameter)))
-                End If
+                ' "Type argument '{0}' does not satisfy the 'Class' constraint for type parameter '{1}'."
+                diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_BadTypeArgForRefConstraint2, typeArgument, typeParameter)))
 
                 Return False
             End If
@@ -965,10 +953,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Return False
 
             ElseIf IsNullableTypeOrTypeParameter(typeArgument, useSiteInfo) Then
-                If diagnosticsBuilder IsNot Nothing Then
-                    ' "'System.Nullable' does not satisfy the 'Structure' constraint for type parameter '{0}'. Only non-nullable 'Structure' types are allowed."
-                    diagnosticsBuilder.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_NullableDisallowedForStructConstr1, typeParameter)))
-                End If
+                ' "'System.Nullable' does not satisfy the 'Structure' constraint for type parameter '{0}'. Only non-nullable 'Structure' types are allowed."
+                diagnosticsBuilder?.Add(New TypeParameterDiagnosticInfo(typeParameter, ErrorFactory.ErrorInfo(ERRID.ERR_NullableDisallowedForStructConstr1, typeParameter)))
 
                 Return False
             End If

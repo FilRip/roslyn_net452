@@ -17,8 +17,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </summary>
         <Extension()>
         Friend Function IsCompilationOutputWinMdObj(symbol As Symbol) As Boolean
-            Dim comp = symbol.DeclaringCompilation
-            Return comp IsNot Nothing And comp.Options.OutputKind = OutputKind.WindowsRuntimeMetadata
+            Dim comp As VisualBasicCompilation = symbol.DeclaringCompilation
+            Return comp IsNot Nothing AndAlso comp.Options.OutputKind = OutputKind.WindowsRuntimeMetadata
         End Function
 
         ''' <summary>

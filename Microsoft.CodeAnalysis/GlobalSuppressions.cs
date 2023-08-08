@@ -19,3 +19,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("ApiDesign", "RS0027:Public API with optional parameter(s) should have the most parameters amongst its public overloads.", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.CodeAnalysis.Text.SourceText.From(System.String,System.Text.Encoding,Microsoft.CodeAnalysis.Text.SourceHashAlgorithm)~Microsoft.CodeAnalysis.Text.SourceText")]
 [assembly: SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "Linking docs to member not in this layer", Scope = "member", Target = "~P:Microsoft.CodeAnalysis.Operations.IConversionOperation.Conversion")]
 [assembly: SuppressMessage("Info Code Smell", "S1135:Track uses of \"TODO\" tags")]
+[assembly: SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested")]

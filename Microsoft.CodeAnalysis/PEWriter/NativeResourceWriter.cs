@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,6 +32,7 @@ namespace Microsoft.Cci
         //// This is consistent with the syntax of the .RC file and the .RES file.
         ////
 
+#pragma warning disable S125
         //typedef struct _IMAGE_RESOURCE_DIRECTORY {
         //    DWORD   Characteristics;
         //    DWORD   TimeDateStamp;
@@ -43,6 +42,7 @@ namespace Microsoft.Cci
         //    WORD    NumberOfIdEntries;
         ////  IMAGE_RESOURCE_DIRECTORY_ENTRY DirectoryEntries[];
         //} IMAGE_RESOURCE_DIRECTORY, *PIMAGE_RESOURCE_DIRECTORY;
+#pragma warning restore S125
 
         //#define IMAGE_RESOURCE_NAME_IS_STRING        0x80000000
         //#define IMAGE_RESOURCE_DATA_IS_DIRECTORY     0x80000000
@@ -116,7 +116,7 @@ namespace Microsoft.Cci
         //    DWORD   Reserved;
         //} IMAGE_RESOURCE_DATA_ENTRY, *PIMAGE_RESOURCE_DATA_ENTRY;
 
-        private class Directory
+        private sealed class Directory
         {
             internal readonly string Name;
             internal readonly int ID;
@@ -171,6 +171,22 @@ namespace Microsoft.Cci
             return resources.OrderBy(CompareResources);
         }
 
+        public static void SerializeWin32Resources(BlobBuilder builder, ResourceSection resourceSections, int resourcesRva)
+        {
+            var sectionWriter = new BlobWriter(builder.ReserveBytes(resourceSections.SectionBytes.Length));
+            sectionWriter.WriteBytes(resourceSections.SectionBytes);
+
+            var readStream = new MemoryStream(resourceSections.SectionBytes);
+            var reader = new BinaryReader(readStream);
+
+            foreach (uint addressToFixup in resourceSections.Relocations)
+            {
+                sectionWriter.Offset = (int)addressToFixup;
+                reader.BaseStream.Position = addressToFixup;
+                sectionWriter.WriteUInt32(reader.ReadUInt32() + (uint)resourcesRva);
+            }
+        }
+
         public static void SerializeWin32Resources(BlobBuilder builder, IEnumerable<IWin32Resource> theResources, int resourcesRva)
         {
             theResources = SortResources(theResources);
@@ -204,7 +220,8 @@ namespace Microsoft.Cci
                     }
 
                     sizeOfDirectoryTree += 24;
-                    typeDirectory.Entries.Add(nameDirectory = new Directory(lastTypeName, lastTypeID));
+                    nameDirectory = new Directory(lastTypeName, lastTypeID);
+                    typeDirectory.Entries.Add(nameDirectory);
                 }
 
                 if (typeDifferent || (r.Id < 0 && r.Name != lastName) || r.Id > lastID)
@@ -213,24 +230,27 @@ namespace Microsoft.Cci
                     lastName = r.Name;
                     if (lastID < 0)
                     {
-                        Debug.Assert(nameDirectory.NumberOfIdEntries == 0, "Not all Win32 resources with names encoded as strings precede those encoded as ints");
+                        Debug.Assert(nameDirectory?.NumberOfIdEntries == 0, "Not all Win32 resources with names encoded as strings precede those encoded as ints");
                         nameDirectory.NumberOfNamedEntries++;
                     }
                     else
                     {
-                        nameDirectory.NumberOfIdEntries++;
+                        if (nameDirectory != null)
+                            nameDirectory.NumberOfIdEntries++;
                     }
 
                     sizeOfDirectoryTree += 24;
-                    nameDirectory.Entries.Add(languageDirectory = new Directory(lastName, lastID));
+                    languageDirectory = new Directory(lastName, lastID);
+                    nameDirectory?.Entries?.Add(languageDirectory);
                 }
 
-                languageDirectory.NumberOfIdEntries++;
+                if (languageDirectory != null)
+                    languageDirectory.NumberOfIdEntries++;
                 sizeOfDirectoryTree += 8;
-                languageDirectory.Entries.Add(r);
+                languageDirectory?.Entries?.Add(r);
             }
 
-            var dataWriter = new BlobBuilder();
+            BlobBuilder dataWriter = new();
 
             //'dataWriter' is where opaque resource data goes as well as strings that are used as type or name identifiers
             WriteDirectory(typeDirectory, builder, 0, 0, sizeOfDirectoryTree, resourcesRva, dataWriter);
@@ -346,22 +366,6 @@ namespace Microsoft.Cci
             }
 
             return size;
-        }
-
-        public static void SerializeWin32Resources(BlobBuilder builder, ResourceSection resourceSections, int resourcesRva)
-        {
-            var sectionWriter = new BlobWriter(builder.ReserveBytes(resourceSections.SectionBytes.Length));
-            sectionWriter.WriteBytes(resourceSections.SectionBytes);
-
-            var readStream = new MemoryStream(resourceSections.SectionBytes);
-            var reader = new BinaryReader(readStream);
-
-            foreach (int addressToFixup in resourceSections.Relocations)
-            {
-                sectionWriter.Offset = addressToFixup;
-                reader.BaseStream.Position = addressToFixup;
-                sectionWriter.WriteUInt32(reader.ReadUInt32() + (uint)resourcesRva);
-            }
         }
     }
 }

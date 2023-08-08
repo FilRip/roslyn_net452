@@ -340,19 +340,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 End If
             End Sub
 
-            ' Lookup all the names available on the given container, that match the given lookup options.
-            ' The supplied binder is used for accessibility checking.
-            Public Shared Sub AddLookupSymbolsInfo(nameSet As LookupSymbolsInfo,
-                                                    container As NamespaceOrTypeSymbol,
-                                                    options As LookupOptions,
-                                                    binder As Binder)
-                If container.IsNamespace Then
-                    AddLookupSymbolsInfo(nameSet, DirectCast(container, NamespaceSymbol), options, binder)
-                Else
-                    AddLookupSymbolsInfo(nameSet, DirectCast(container, TypeSymbol), options, binder)
-                End If
-            End Sub
-
             ''' <summary>
             ''' Lookup a member name in a namespace, returning a LookupResult that
             ''' summarizes the results of the lookup. See LookupResult structure for a detailed
@@ -545,6 +532,48 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Next
             End Sub
 
+            Private Shared Sub AddLookupSymbolsInfo(nameSet As LookupSymbolsInfo,
+                                                     container As TypeSymbol,
+                                                     options As LookupOptions,
+                                                     binder As Binder)
+                Select Case container.TypeKind
+                    Case TypeKind.Class, TypeKind.Structure, TypeKind.Delegate, TypeKind.Array, TypeKind.Enum
+                        AddLookupSymbolsInfoInClass(nameSet, container, options, binder)
+
+                    Case TypeKind.Module
+                        AddLookupSymbolsInfoInClass(nameSet, container, options Or LookupOptions.NoBaseClassLookup, binder)
+
+                    Case TypeKind.Submission
+                        AddLookupSymbolsInfoInSubmissions(nameSet, container, options, binder)
+
+                    Case TypeKind.Interface
+                        AddLookupSymbolsInfoInInterface(nameSet, DirectCast(container, NamedTypeSymbol), options, binder)
+
+                    Case TypeKind.TypeParameter
+                        AddLookupSymbolsInfoInTypeParameter(nameSet, DirectCast(container, TypeParameterSymbol), options, binder)
+
+                    Case TypeKind.Error
+                        ' Error types have no members.
+                        Return
+
+                    Case Else
+                        Throw ExceptionUtilities.UnexpectedValue(container.TypeKind)
+                End Select
+            End Sub
+
+            ' Lookup all the names available on the given container, that match the given lookup options.
+            ' The supplied binder is used for accessibility checking.
+            Public Shared Sub AddLookupSymbolsInfo(nameSet As LookupSymbolsInfo,
+                                                    container As NamespaceOrTypeSymbol,
+                                                    options As LookupOptions,
+                                                    binder As Binder)
+                If container.IsNamespace Then
+                    AddLookupSymbolsInfo(nameSet, DirectCast(container, NamespaceSymbol), options, binder)
+                Else
+                    AddLookupSymbolsInfo(nameSet, DirectCast(container, TypeSymbol), options, binder)
+                End If
+            End Sub
+
             ' Create a diagnostic for ambiguous names in multiple modules.
             Private Shared ReadOnly s_ambiguousInModuleError As Func(Of ImmutableArray(Of Symbol), AmbiguousSymbolDiagnostic) =
                 Function(syms As ImmutableArray(Of Symbol)) As AmbiguousSymbolDiagnostic
@@ -589,35 +618,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     Case Else
                         Throw ExceptionUtilities.UnexpectedValue(type.TypeKind)
-                End Select
-            End Sub
-
-            Private Shared Sub AddLookupSymbolsInfo(nameSet As LookupSymbolsInfo,
-                                                     container As TypeSymbol,
-                                                     options As LookupOptions,
-                                                     binder As Binder)
-                Select Case container.TypeKind
-                    Case TypeKind.Class, TypeKind.Structure, TypeKind.Delegate, TypeKind.Array, TypeKind.Enum
-                        AddLookupSymbolsInfoInClass(nameSet, container, options, binder)
-
-                    Case TypeKind.Module
-                        AddLookupSymbolsInfoInClass(nameSet, container, options Or LookupOptions.NoBaseClassLookup, binder)
-
-                    Case TypeKind.Submission
-                        AddLookupSymbolsInfoInSubmissions(nameSet, container, options, binder)
-
-                    Case TypeKind.Interface
-                        AddLookupSymbolsInfoInInterface(nameSet, DirectCast(container, NamedTypeSymbol), options, binder)
-
-                    Case TypeKind.TypeParameter
-                        AddLookupSymbolsInfoInTypeParameter(nameSet, DirectCast(container, TypeParameterSymbol), options, binder)
-
-                    Case TypeKind.Error
-                        ' Error types have no members.
-                        Return
-
-                    Case Else
-                        Throw ExceptionUtilities.UnexpectedValue(container.TypeKind)
                 End Select
             End Sub
 
@@ -1925,7 +1925,7 @@ ExitForFor:
                                                   binder As Binder)
                 ' We need a check for SpecialType.System_Void as its base type is
                 ' ValueType but we don't wish to return any members for void type
-                If container IsNot Nothing And container.SpecialType = SpecialType.System_Void Then
+                If container IsNot Nothing And container?.SpecialType = SpecialType.System_Void Then
                     Return
                 End If
 

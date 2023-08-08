@@ -481,7 +481,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             ResetPoint resetPoint = GetResetPoint();
             try
             {
-                return ScanType(forPattern: true) != ScanTypeFlags.NotType;
+                return ScanType(forPattern: true) != EScanType.NotType;
             }
             finally
             {

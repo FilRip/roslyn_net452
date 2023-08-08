@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.IO;
 using System.Reflection;
@@ -46,6 +44,14 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
         public abstract Assembly LoadFromStream(Stream peStream, Stream pdbStream);
         public abstract AssemblyAndLocation LoadFromPath(string path);
-        public abstract void Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            // Nothing to do in this abstract class
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

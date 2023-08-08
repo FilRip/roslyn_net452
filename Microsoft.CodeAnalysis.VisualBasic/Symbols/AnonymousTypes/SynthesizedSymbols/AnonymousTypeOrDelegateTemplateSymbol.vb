@@ -344,7 +344,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                             Me.Manager.Compilation.CompareSourceLocations(currentAdjustedNames.Location, newLocation) <= 0 Then
 
                         ' The template's adjusted property names do not need to be changed
-                        Exit Sub
+                        Return
                     End If
 
 #If DEBUG Then

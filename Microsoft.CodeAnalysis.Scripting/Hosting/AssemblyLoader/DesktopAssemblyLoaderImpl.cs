@@ -23,9 +23,9 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             CoreLightup.Desktop.AddAssemblyResolveHandler(_assemblyResolveHandlerOpt);
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (_assemblyResolveHandlerOpt != null)
+            if (disposing && _assemblyResolveHandlerOpt != null)
             {
                 CoreLightup.Desktop.RemoveAssemblyResolveHandler(_assemblyResolveHandlerOpt);
             }

@@ -379,12 +379,8 @@ namespace System.Text
                             }
                             if (num3 != i)
                             {
-                                char c5 = array2[num3];
-                                array2[num3] = array2[i];
-                                array2[i] = c5;
-                                c5 = array2[num3 + 1];
-                                array2[num3 + 1] = array2[i + 1];
-                                array2[i + 1] = c5;
+                                (array2[num3], array2[i]) = (array2[i], array2[num3]);
+                                (array2[num3 + 1], array2[i + 1]) = (array2[i + 1], array2[num3 + 1]);
                             }
                         }
                     }

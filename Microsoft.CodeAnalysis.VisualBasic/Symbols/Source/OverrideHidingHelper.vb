@@ -833,7 +833,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 If Not TypeSymbol.Equals(builder(i).ContainingType, memberContainingType, TypeCompareKind.ConsiderEverything) AndAlso
                         SignaturesMatch(builder(i), member, Nothing, exactMatchIgnoringCustomModifiers) AndAlso exactMatchIgnoringCustomModifiers Then
                     ' Do NOT add
-                    Exit Sub
+                    Return
                 End If
             Next
             builder.Add(member)

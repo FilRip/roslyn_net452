@@ -105,7 +105,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     ' <param> & <paramref>
                     If namedType.TypeKind = TypeKind.Delegate Then
-                        ReportWarningsForParamAndParamRefTags(wellKnownElementNodes, GetSymbolName(delegateInvoke), delegateInvoke.Parameters)
+                        ReportWarningsForParamAndParamRefTags(wellKnownElementNodes, GetSymbolName(delegateInvoke), If(delegateInvoke = Nothing, Nothing, delegateInvoke.Parameters))
                     Else
                         ReportIllegalWellKnownTagIfAny(WellKnownTag.Param, wellKnownElementNodes, symbolName)
                         ReportIllegalWellKnownTagIfAny(WellKnownTag.ParamRef, wellKnownElementNodes, symbolName)

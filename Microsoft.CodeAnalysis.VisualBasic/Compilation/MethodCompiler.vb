@@ -219,15 +219,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(diagnostics IsNot Nothing)
             Debug.Assert(diagnostics.AccumulatesDiagnostics)
 
-            If compilation.PreviousSubmission IsNot Nothing Then
-                ' In case there is a previous submission, we should ensure 
-                ' it has already created anonymous type/delegates templates
+            ' In case there is a previous submission, we should ensure 
+            ' it has already created anonymous type/delegates templates
 
-                ' NOTE: if there are any errors, we will pick up what was created anyway
-                compilation.PreviousSubmission.EnsureAnonymousTypeTemplates(cancellationToken)
+            ' NOTE: if there are any errors, we will pick up what was created anyway
+            compilation?.PreviousSubmission?.EnsureAnonymousTypeTemplates(cancellationToken)
 
-                ' TODO: revise to use a loop instead of a recursion
-            End If
+            ' TODO: revise to use a loop instead of a recursion
 
 #If DEBUG Then
             compilation.EmbeddedSymbolManager.AssertMarkAllDeferredSymbolsAsReferencedIsCalled()
@@ -620,9 +618,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     ' Default shared constructor shall not produce delegate relaxation stubs
                     Debug.Assert(sharedConstructorDelegateRelaxationIdDispenser = 0)
 
-                    If _moduleBeingBuiltOpt IsNot Nothing Then
-                        _moduleBeingBuiltOpt.AddSynthesizedDefinition(sourceTypeSymbol, sharedDefaultConstructor.GetCciAdapter())
-                    End If
+                    _moduleBeingBuiltOpt?.AddSynthesizedDefinition(sourceTypeSymbol, sharedDefaultConstructor.GetCciAdapter())
                 End If
             End If
 
@@ -1091,7 +1087,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 If constructorCallMap.Count = 0 Then
                     ' Nothing left
                     constructorsPath.Free()
-                    Exit Sub
+                    Return
                 End If
 
                 currentMethod = constructorCallMap.Keys.First()
@@ -1252,9 +1248,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             Dim syntax = block.Syntax
                             semanticModelWithCachedBoundNodes = CType(cachingSemanticModelProvider.GetSemanticModel(syntax.SyntaxTree, compilation), SyntaxTreeSemanticModel)
                             Dim memberModel = CType(semanticModelWithCachedBoundNodes.GetMemberSemanticModel(syntax), MethodBodySemanticModel)
-                            If memberModel IsNot Nothing Then
-                                memberModel.CacheBoundNodes(block, syntax)
-                            End If
+                            memberModel?.CacheBoundNodes(block, syntax)
                         End If
 
                         compilation.EventQueue.TryEnqueue(New SymbolDeclaredCompilationEvent(compilation, method, semanticModelWithCachedBoundNodes))

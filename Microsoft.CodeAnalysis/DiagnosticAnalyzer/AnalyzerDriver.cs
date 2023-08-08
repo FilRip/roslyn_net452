@@ -1206,9 +1206,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     model.ComputeDeclarationsInSpan(span, getSymbol: true, builder: declarationInfoBuilder, cancellationToken: cancellationToken);
 
                     ImmutableHashSet<ISymbol>.Builder? generatedSymbolsBuilder = null;
-                    foreach (DeclarationInfo declarationInfo in declarationInfoBuilder)
+                    foreach (ISymbol? symbol in declarationInfoBuilder.Select(declaration => declaration.DeclaredSymbol))
                     {
-                        var symbol = declarationInfo.DeclaredSymbol;
                         if (symbol != null &&
                             GeneratedCodeUtilities.IsGeneratedSymbolWithGeneratedCodeAttribute(symbol, generatedCodeAttribute))
                         {
@@ -1259,10 +1258,10 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
                 var descriptors = AnalyzerManager.GetSupportedDiagnosticDescriptors(analyzer, AnalyzerExecutor);
                 var hasUnsuppressedDiagnostic = false;
-                foreach (var descriptor in descriptors)
+                foreach (string descriptor in descriptors.Select(desc => desc.Id))
                 {
-                    _ = options.TryGetGlobalDiagnosticValue(descriptor.Id, AnalyzerExecutor.CancellationToken, out var configuredSeverity);
-                    if (options.TryGetDiagnosticValue(tree, descriptor.Id, AnalyzerExecutor.CancellationToken, out var diagnosticSeverity))
+                    _ = options.TryGetGlobalDiagnosticValue(descriptor, AnalyzerExecutor.CancellationToken, out var configuredSeverity);
+                    if (options.TryGetDiagnosticValue(tree, descriptor, AnalyzerExecutor.CancellationToken, out var diagnosticSeverity))
                     {
                         configuredSeverity = diagnosticSeverity;
                     }
@@ -1328,7 +1327,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 foreach (var symbolAction in analyzerAndActions)
                 {
                     var kinds = symbolAction.Kinds;
-                    foreach (int kind in kinds.Distinct())
+                    foreach (int kind in kinds.OfType<SymbolKind>().Cast<int>().Distinct())
                     {
                         if (kind > MaxSymbolKind) continue; // protect against vicious analyzers
                         while (kind >= actionsByKindBuilder.Count)
@@ -1542,8 +1541,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     SemanticModelProvider.ClearCache(compilationCompletedEvent.Compilation);
                     break;
             }
-
-            return;
 
             async Task onSymbolAndMembersProcessedAsync(ISymbol symbol, DiagnosticAnalyzer analyzer)
             {
@@ -2017,7 +2014,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
 
             // Slow check when we are executing more than one analyzer, but it is still a strict subset of all analyzers.
-            var symbolStartAnalyzers = PooledHashSet<DiagnosticAnalyzer>.GetInstance();
+            PooledHashSet<DiagnosticAnalyzer> symbolStartAnalyzers = PooledHashSet<DiagnosticAnalyzer>.GetInstance();
             try
             {
                 foreach (var action in this.AnalyzerActions.SymbolStartActions)
@@ -2025,13 +2022,8 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     symbolStartAnalyzers.Add(action.Analyzer);
                 }
 
-                foreach (var analyzer in analysisScope.Analyzers)
-                {
-                    if (symbolStartAnalyzers.Contains(analyzer))
-                    {
-                        return true;
-                    }
-                }
+                if (analysisScope.Analyzers.Any(analyzer => symbolStartAnalyzers.Contains(analyzer)))
+                    return true;
 
                 return false;
             }
@@ -2407,7 +2399,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             var canHaveExecutableCodeBlock = AnalyzerExecutor.CanHaveExecutableCodeBlock(symbol);
             computeShouldExecuteActions(coreActions, canHaveExecutableCodeBlock, ref executeSyntaxNodeActions, ref executeCodeBlockActions, ref executeOperationActions, ref executeOperationBlockActions);
             computeShouldExecuteActions(additionalActions, canHaveExecutableCodeBlock, ref executeSyntaxNodeActions, ref executeCodeBlockActions, ref executeOperationActions, ref executeOperationBlockActions);
-            return;
 
             static void computeShouldExecuteActions(
                 AnalyzerActions analyzerActions,

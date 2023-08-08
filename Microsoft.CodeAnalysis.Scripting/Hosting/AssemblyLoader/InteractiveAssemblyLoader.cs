@@ -283,10 +283,10 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
                         if (!identity.IsStrongName)
                         {
-                            conflictingLoadedAssemblyOpt = loadedInfos.FirstOrDefault(info => !info.Identity.IsStrongName);
+                            conflictingLoadedAssemblyOpt = loadedInfos.Find(info => !info.Identity.IsStrongName);
                         }
 
-                        loadedAssemblyWithEqualNameAndVersionOpt = loadedInfos.FirstOrDefault(info =>
+                        loadedAssemblyWithEqualNameAndVersionOpt = loadedInfos.Find(info =>
                             AssemblyIdentityComparer.SimpleNameComparer.Equals(info.Identity.Name, identity.Name) &&
                             info.Identity.Version == identity.Version);
                     }

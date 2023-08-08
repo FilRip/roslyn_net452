@@ -102,7 +102,7 @@ namespace System.Text
                 switch (BaseCodePageEncoding.GetCodePageByteSize(codepage))
                 {
                     case 1:
-                        value = new SBCSCodePageEncoding(codepage);
+                        value = new SbCsCodePageEncoding(codepage);
                         break;
                     case 2:
                         value = new DbCsCodePageEncoding(codepage);
@@ -190,7 +190,7 @@ namespace System.Text
                     result = new DbCsCodePageEncoding(codepage);
                     break;
                 case ISO_8859_8I:
-                    result = new SBCSCodePageEncoding(codepage);
+                    result = new SbCsCodePageEncoding(codepage);
                     break;
             }
             return result;

@@ -548,7 +548,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim nullCheckTarget As BoundExpression
                     Dim placeholderReplacement As BoundExpression
 
-                    If node.CaptureReceiver OrElse conditionalAccessReceiverPlaceholderReplacementInfo.IsSpilled Then
+                    If node.CaptureReceiver OrElse conditionalAccessReceiverPlaceholderReplacementInfo?.IsSpilled = True Then
                         ' Let's spill or capture it then.
                         If node.CaptureReceiver Then
                             ' We need to capture the receiver by value.
@@ -564,7 +564,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                             ' If receiver is not spilled, we can use a local to capture receiver's value. If receiver is spilled, use SpillRValue to accomplish this
                             ' because values of locals are not preserved across awaits. 
-                            If conditionalAccessReceiverPlaceholderReplacementInfo.IsSpilled Then
+                            If conditionalAccessReceiverPlaceholderReplacementInfo?.IsSpilled = True Then
                                 nullCheckTarget = SpillRValue(receiver.MakeRValue(), builder:=builder)
                                 capturedReceiver = nullCheckTarget
                             Else
@@ -593,7 +593,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                                                    receiver.Type)
                             End If
                         Else
-                            Debug.Assert(conditionalAccessReceiverPlaceholderReplacementInfo.IsSpilled)
+                            Debug.Assert(conditionalAccessReceiverPlaceholderReplacementInfo IsNot Nothing AndAlso conditionalAccessReceiverPlaceholderReplacementInfo.IsSpilled)
                             placeholderReplacement = SpillValue(receiver, isReceiver:=True, evaluateSideEffects:=True, builder:=builder)
                             nullCheckTarget = placeholderReplacement.MakeRValue()
                         End If

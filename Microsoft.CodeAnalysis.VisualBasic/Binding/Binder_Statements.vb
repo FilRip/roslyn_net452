@@ -233,7 +233,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Case SyntaxKind.CatchStatement
                     ' a catch statement is legal as long as it is part of a catch block
-                    If Not node.Parent.Kind = SyntaxKind.CatchBlock Then
+                    If node.Parent.Kind <> SyntaxKind.CatchBlock Then
                         Debug.Assert(node.ContainsDiagnostics)
                         Dim whenClause = DirectCast(node, CatchStatementSyntax).WhenClause
                         Dim childNodes = If(whenClause Is Nothing,
@@ -3041,7 +3041,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim nextVariableBuilder As ArrayBuilder(Of BoundExpression) = ArrayBuilder(Of BoundExpression).GetInstance
                     Dim currentBinder = Me
                     For nextVariableIndex = 0 To nextVariableCount - 1
-                        Dim boundVariable = currentBinder.BindExpression(controlVariableList(nextVariableIndex), diagnostics)
+                        Dim boundVariable = currentBinder?.BindExpression(controlVariableList(nextVariableIndex), diagnostics)
                         boundVariable = ReclassifyAsValue(boundVariable, diagnostics)
                         nextVariableBuilder.Add(boundVariable)
 
@@ -3112,7 +3112,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             If targetType IsNot Nothing AndAlso Not targetType.IsErrorType Then
                 targetTypeIsValid = IsValidForControlVariableType(node, targetType.GetEnumUnderlyingTypeOrSelf(), diagnostics)
-                hasErrors = (Not targetTypeIsValid) Or hasErrors
+                hasErrors = (Not targetTypeIsValid) OrElse hasErrors
             End If
 
             ' Bind initial value
@@ -3171,7 +3171,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' normalize initValue, limit and step to the common type
             If Not hasErrors Then
                 If Not (initialValue.HasErrors OrElse limit.HasErrors OrElse stepValue.HasErrors) AndAlso
-                   targetType.CanContainUserDefinedOperators(useSiteInfo) Then
+                   targetType?.CanContainUserDefinedOperators(useSiteInfo) Then
                     ' Bind user-defined operators that we need.
                     Dim syntax As VisualBasicSyntaxNode = node.ForOrForEachStatement
 
@@ -3855,7 +3855,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                  collectionSyntax,
                                                                  diagnostics)
                         If specialTypeMember IsNot Nothing AndAlso specialTypeMember.GetUseSiteInfo().DiagnosticInfo Is Nothing AndAlso Not targetCollectionType.IsErrorType Then
-                            member = DirectCast(targetCollectionType, SubstitutedNamedType).GetMemberForDefinition(specialTypeMember)
+                            member = DirectCast(targetCollectionType, SubstitutedNamedType)?.GetMemberForDefinition(specialTypeMember)
                         Else
                             member = Nothing
                         End If

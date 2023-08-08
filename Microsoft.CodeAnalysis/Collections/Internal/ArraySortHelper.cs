@@ -115,9 +115,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
 
             if (comparer(keys[i], keys[j]) > 0)
             {
-                T key = keys[i];
-                keys[i] = keys[j];
-                keys[j] = key;
+                (keys[i], keys[j]) = (keys[j], keys[i]);
             }
         }
 
@@ -126,9 +124,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
         {
             Debug.Assert(i != j);
 
-            T t = a[i];
-            a[i] = a[j];
-            a[j] = t;
+            (a[i], a[j]) = (a[j], a[i]);
         }
 
         internal static void IntrospectiveSort(SegmentedArraySegment<T> keys, Comparison<T> comparer)
@@ -264,7 +260,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
                     child++;
                 }
 
-                if (!(comparer!(d, keys[lo + child - 1]) < 0))
+                if (comparer!(d, keys[lo + child - 1]) >= 0)
                     break;
 
                 keys[lo + i - 1] = keys[lo + child - 1];
@@ -412,9 +408,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
         {
             Debug.Assert(!Unsafe.AreSame(ref i, ref j));
 
-            T t = i;
-            i = j;
-            j = t;
+            (j, i) = (i, j);
         }
 
         private static void IntroSort(SegmentedArraySegment<T> keys, int depthLimit)
@@ -692,13 +686,8 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
 
             if (comparer!.Compare(keys[i], keys[j]) > 0)
             {
-                TKey key = keys[i];
-                keys[i] = keys[j];
-                keys[j] = key;
-
-                TValue value = values[i];
-                values[i] = values[j];
-                values[j] = value;
+                (keys[i], keys[j]) = (keys[j], keys[i]);
+                (values[i], values[j]) = (values[j], values[i]);
             }
         }
 
@@ -707,13 +696,8 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
         {
             Debug.Assert(i != j);
 
-            TKey k = keys[i];
-            keys[i] = keys[j];
-            keys[j] = k;
-
-            TValue v = values[i];
-            values[i] = values[j];
-            values[j] = v;
+            (keys[i], keys[j]) = (keys[j], keys[i]);
+            (values[i], values[j]) = (values[j], values[i]);
         }
 
         internal static void IntrospectiveSort(SegmentedArraySegment<TKey> keys, Span<TValue> values, IComparer<TKey> comparer)
@@ -853,7 +837,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
                     child++;
                 }
 
-                if (!(comparer!.Compare(d, keys[lo + child - 1]) < 0))
+                if (comparer!.Compare(d, keys[lo + child - 1]) >= 0)
                     break;
 
                 keys[lo + i - 1] = keys[lo + child - 1];
@@ -946,9 +930,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
                 keys[i] = keys[j];
                 keys[j] = key;
 
-                TValue value = values[i];
-                values[i] = values[j];
-                values[j] = value;
+                (values[j], values[i]) = (values[i], values[j]);
             }
         }
 
@@ -957,13 +939,8 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
         {
             Debug.Assert(i != j);
 
-            TKey k = keys[i];
-            keys[i] = keys[j];
-            keys[j] = k;
-
-            TValue v = values[i];
-            values[i] = values[j];
-            values[j] = v;
+            (keys[i], keys[j]) = (keys[j], keys[i]);
+            (values[i], values[j]) = (values[j], values[i]);
         }
 
         private static void IntroSort(SegmentedArraySegment<TKey> keys, Span<TValue> values, int depthLimit)
@@ -1236,15 +1213,11 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
                     (typeof(TKey) == typeof(float) && float.IsNaN((float)(object)keys[i])) ||
                     (typeof(TKey) == typeof(Half) && Half.IsNaN((Half)(object)keys[i])))
                 {
-                    TKey temp = keys[left];
-                    keys[left] = keys[i];
-                    keys[i] = temp;
+                    (keys[left], keys[i]) = (keys[i], keys[left]);
 
                     if ((uint)i < (uint)values.Length) // check to see if we have values
                     {
-                        TValue tempValue = values[left];
-                        values[left] = values[i];
-                        values[i] = tempValue;
+                        (values[left], values[i]) = (values[i], values[left]);
                     }
 
                     left++;
