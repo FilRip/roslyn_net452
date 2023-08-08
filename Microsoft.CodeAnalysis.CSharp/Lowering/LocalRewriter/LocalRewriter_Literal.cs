@@ -81,7 +81,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         useField = _compilation.GetSpecialTypeMember(SpecialMember.System_Decimal__MinusOne);
                     }
 
-                    if (useField is { HasUseSiteError: false, ContainingType: { HasUseSiteError: false } })
+                    if (useField is { HasUseSiteError: false, ContainingType.HasUseSiteError: false })
                     {
                         var fieldSymbol = (FieldSymbol)useField;
                         return new BoundFieldAccess(syntax, null, fieldSymbol, constantValue);

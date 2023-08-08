@@ -107,8 +107,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            if ((method as Symbols.PublicModel.MethodSymbol)?.UnderlyingMethodSymbol is SourcePropertyAccessorSymbol sourceAccessor &&
-                (propertyOpt as Symbols.PublicModel.PropertySymbol)?.UnderlyingSymbol is SourcePropertySymbolBase sourceProperty)
+            if (method is Symbols.PublicModel.MethodSymbol { UnderlyingMethodSymbol: SourcePropertyAccessorSymbol sourceAccessor } &&
+                propertyOpt is Symbols.PublicModel.PropertySymbol { UnderlyingSymbol: SourcePropertySymbolBase sourceProperty })
             {
                 // only display if the accessor is explicitly readonly
                 return sourceAccessor.LocalDeclaredReadOnly || sourceProperty.HasReadOnlyModifier;

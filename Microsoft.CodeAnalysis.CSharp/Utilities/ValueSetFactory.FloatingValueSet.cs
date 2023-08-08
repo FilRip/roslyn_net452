@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 get
                 {
                     if (IsEmpty)
-                        throw new ArgumentException();
+                        throw new ArgumentException(nameof(_hasNaN) + nameof(_numbers));
 
                     if (!_numbers.IsEmpty)
                     {
@@ -86,14 +86,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                     );
             }
 
-            public IValueSet<TFloating> Intersect(IValueSet<TFloating> o)
+            public IValueSet<TFloating> Intersect(IValueSet<TFloating> other)
             {
-                if (this == o)
+                if (this == other)
                     return this;
-                var other = (FloatingValueSet<TFloating, TFloatingTC>)o;
+                var otherCast = (FloatingValueSet<TFloating, TFloatingTC>)other;
                 return new FloatingValueSet<TFloating, TFloatingTC>(
-                    numbers: this._numbers.Intersect(other._numbers),
-                    hasNaN: this._hasNaN & other._hasNaN);
+                    numbers: this._numbers.Intersect(otherCast._numbers),
+                    hasNaN: this._hasNaN && otherCast._hasNaN);
             }
 
             IValueSet IValueSet.Intersect(IValueSet other) => this.Intersect((IValueSet<TFloating>)other);

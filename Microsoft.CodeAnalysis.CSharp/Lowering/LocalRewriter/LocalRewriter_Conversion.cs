@@ -710,7 +710,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 BoundObjectCreationExpression { Arguments: { Length: 1 } args } => args[0],
                 // Detect the unlowered nullable conversion from value type K to type Nullable<K>
                 // This arises in lowering tuple equality operators
-                BoundConversion { Conversion: { Kind: ConversionKind.ImplicitNullable }, Operand: var convertedArgument }
+                BoundConversion { Conversion.Kind: ConversionKind.ImplicitNullable, Operand: var convertedArgument }
                                         when convertedArgument.Type!.Equals(expression.Type.StrippedType(), TypeCompareKind.AllIgnoreOptions) => convertedArgument,
                 // Detect the unlowered nullable conversion from a tuple type T1 to Nullable<T2> for a tuple type T2.
                 BoundConversion { Conversion: { Kind: ConversionKind.ImplicitNullable, UnderlyingConversions: var underlying }, Operand: var convertedArgument } conversion

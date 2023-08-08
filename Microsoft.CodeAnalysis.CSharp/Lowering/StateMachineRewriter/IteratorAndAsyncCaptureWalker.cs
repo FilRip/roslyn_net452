@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -85,7 +86,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        foreach (CSharpSyntaxNode syntax in kvp.Value)
+                        foreach (CSharpSyntaxNode syntax in kvp.Value.OfType<CSharpSyntaxNode>())
                         {
                             // CS4013: Instance of type '{0}' cannot be used inside an anonymous function, query expression, iterator block or async method
                             diagnostics.Add(ErrorCode.ERR_SpecialByRefInLambda, syntax.Location, type);
@@ -213,7 +214,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundParameter { ParameterSymbol: var symbol }:
                     CaptureVariable(symbol, syntax);
                     break;
-                case BoundFieldAccess { FieldSymbol: { IsStatic: false, ContainingType: { IsValueType: true } }, ReceiverOpt: BoundExpression receiver }:
+                case BoundFieldAccess { FieldSymbol: { IsStatic: false, ContainingType.IsValueType: true }, ReceiverOpt: BoundExpression receiver }:
                     CaptureRefInitializer(receiver, syntax);
                     break;
             }

@@ -1613,7 +1613,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (lookupResult.IsMultiViable)
                 {
                     TypeSymbol containingType = (TypeSymbol)container;
-                    foreach (MethodSymbol extensionMethod in lookupResult.Symbols)
+                    foreach (MethodSymbol extensionMethod in lookupResult.Symbols.OfType<MethodSymbol>())
                     {
                         var reduced = extensionMethod.ReduceExtensionMethod(containingType, Compilation);
                         if (reduced is not null)
@@ -2045,7 +2045,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     convertedNullability = new NullabilityInfo(CodeAnalysis.NullableAnnotation.NotAnnotated, CodeAnalysis.NullableFlowState.NotNull);
                     conversion = new Conversion(ConversionKind.AnonymousFunction, lambda.Symbol, false);
                 }
-                else if ((highestBoundExpr as BoundConversion)?.Conversion.IsTupleLiteralConversion == true)
+                else if (highestBoundExpr is BoundConversion { Conversion.IsTupleLiteralConversion: true })
                 {
                     var tupleLiteralConversion = (BoundConversion)highestBoundExpr;
                     if (tupleLiteralConversion.Operand.Kind == BoundKind.ConvertedTupleLiteral)
@@ -2161,7 +2161,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             break;
                     }
                 }
-                else if (boundExpr is BoundConversion { ConversionKind: ConversionKind.MethodGroup, Conversion: var exprConversion, Type: { TypeKind: TypeKind.FunctionPointer }, SymbolOpt: null })
+                else if (boundExpr is BoundConversion { ConversionKind: ConversionKind.MethodGroup, Conversion: var exprConversion, Type.TypeKind: TypeKind.FunctionPointer, SymbolOpt: null })
                 {
                     // Because the method group is a separate syntax node from the &, the lowest bound node here is the BoundConversion. However,
                     // the conversion represents an implicit method group conversion from a typeless method group to a function pointer type, so
@@ -3963,7 +3963,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var builder = ArrayBuilder<IPropertySymbol>.GetInstance();
 
-            foreach (IPropertySymbol indexer in symbols)
+            foreach (IPropertySymbol indexer in symbols.OfType<IPropertySymbol>())
             {
                 if (hiddenSymbols == null || !hiddenSymbols.Contains(indexer.GetSymbol()))
                 {

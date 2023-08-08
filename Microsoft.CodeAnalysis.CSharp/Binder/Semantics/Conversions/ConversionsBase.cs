@@ -2729,9 +2729,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     IsInterface: true,
                     Name: "IEquatable",
-                    ContainingNamespace: { Name: "System", ContainingNamespace: { IsGlobalNamespace: true } },
-                    ContainingSymbol: { Kind: SymbolKind.Namespace },
-                    TypeParameters: { Length: 1 }
+                    ContainingNamespace: { Name: "System", ContainingNamespace.IsGlobalNamespace: true },
+                    ContainingSymbol.Kind: SymbolKind.Namespace,
+                    TypeParameters.Length: 1
                 };
             }
         }
@@ -2849,7 +2849,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC: The set of implicit conversions is extended to include...
             // SPEC: ... from any pointer type to the type void*.
 
-            return source.IsPointerOrFunctionPointer() && destination is PointerTypeSymbol { PointedAtType: { SpecialType: SpecialType.System_Void } };
+            return source.IsPointerOrFunctionPointer() && destination is PointerTypeSymbol { PointedAtType.SpecialType: SpecialType.System_Void };
         }
 
 #nullable enable

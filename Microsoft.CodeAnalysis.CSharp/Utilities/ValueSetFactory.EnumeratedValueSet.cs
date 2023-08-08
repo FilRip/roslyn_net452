@@ -106,12 +106,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             IValueSet IValueSet.Complement() => this.Complement();
 
-            public IValueSet<T> Intersect(IValueSet<T> o)
+            public IValueSet<T> Intersect(IValueSet<T> other)
             {
-                if (this == o)
+                if (this == other)
                     return this;
-                var other = (EnumeratedValueSet<T, TTC>)o;
-                var (larger, smaller) = (this._membersIncludedOrExcluded.Count > other._membersIncludedOrExcluded.Count) ? (this, other) : (other, this);
+                var otherCast = (EnumeratedValueSet<T, TTC>)other;
+                var (larger, smaller) = (this._membersIncludedOrExcluded.Count > otherCast._membersIncludedOrExcluded.Count) ? (this, otherCast) : (otherCast, this);
                 switch (larger._included, smaller._included)
                 {
                     case (true, true):
@@ -127,12 +127,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             IValueSet IValueSet.Intersect(IValueSet other) => Intersect((IValueSet<T>)other);
 
-            public IValueSet<T> Union(IValueSet<T> o)
+            public IValueSet<T> Union(IValueSet<T> other)
             {
-                if (this == o)
+                if (this == other)
                     return this;
-                var other = (EnumeratedValueSet<T, TTC>)o;
-                var (larger, smaller) = (this._membersIncludedOrExcluded.Count > other._membersIncludedOrExcluded.Count) ? (this, other) : (other, this);
+                var otherCast = (EnumeratedValueSet<T, TTC>)other;
+                var (larger, smaller) = (this._membersIncludedOrExcluded.Count > otherCast._membersIncludedOrExcluded.Count) ? (this, otherCast) : (otherCast, this);
                 switch (larger._included, smaller._included)
                 {
                     case (false, false):

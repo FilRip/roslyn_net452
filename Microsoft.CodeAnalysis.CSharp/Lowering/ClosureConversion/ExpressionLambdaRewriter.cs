@@ -332,8 +332,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else
                 {
-                    // error should have been reported earlier
-                    // Bound.Diagnostics.Add(ErrorCode.ERR_ExpressionTreeContainsMultiDimensionalArrayInitializer, node.Syntax.Location);
                     return new BoundBadExpression(node.Syntax, default, ImmutableArray<Symbol>.Empty, ImmutableArray.Create<BoundExpression>(node), ExpressionType);
                 }
             }
@@ -361,8 +359,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression VisitBaseReference(BoundBaseReference node)
         {
-            // should have been reported earlier.
-            // Diagnostics.Add(ErrorCode.ERR_ExpressionTreeContainsBaseAccess, node.Syntax.Location);
             return new BoundBadExpression(node.Syntax, 0, ImmutableArray<Symbol>.Empty, ImmutableArray.Create<BoundExpression>(node), ExpressionType);
         }
 
@@ -660,9 +656,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
             else
             {
+#pragma warning disable S125 // Sections of code should not be commented out
                 // 4.0 and earlier we do it this way
                 //createDelegate = (MethodSymbol)Bound.WellKnownMember(WellKnownMember.System_Delegate__CreateDelegate);
                 //operand = Bound.Call(nullObject, createDelegate, Bound.Typeof(node.Type), receiver, Bound.MethodInfo(method));
+#pragma warning restore S125 // Sections of code should not be commented out
                 unquoted = _bound.StaticCall(_bound.SpecialType(SpecialType.System_Delegate), "CreateDelegate", _bound.Typeof(delegateType), receiver, _bound.MethodInfo(method));
             }
 
@@ -826,7 +824,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         var oi = (BoundObjectInitializerExpression)node;
                         var builder = ArrayBuilder<BoundExpression>.GetInstance();
-                        foreach (BoundAssignmentOperator a in oi.Initializers)
+                        foreach (BoundAssignmentOperator a in oi.Initializers.OfType<BoundAssignmentOperator>())
                         {
                             var sym = ((BoundObjectInitializerMember)a.Left).MemberSymbol;
 
@@ -871,7 +869,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         // The method invocation must be a static call. 
                         // Dynamic calls are not allowed in ETs, an error is reported in diagnostics pass.
-                        foreach (BoundCollectionElementInitializer i in ci.Initializers)
+                        foreach (BoundCollectionElementInitializer i in ci.Initializers.OfType<BoundCollectionElementInitializer>())
                         {
                             BoundExpression elementInit = ExprFactory("ElementInit", _bound.MethodInfo(i.AddMethod), Expressions(i.Arguments));
                             builder.Add(elementInit);
@@ -947,15 +945,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static BoundExpression VisitPointerIndirectionOperator(BoundPointerIndirectionOperator node)
         {
-            // error should have been reported earlier
-            // Diagnostics.Add(ErrorCode.ERR_ExpressionTreeContainsPointerOp, node.Syntax.Location);
             return new BoundBadExpression(node.Syntax, default, ImmutableArray<Symbol>.Empty, ImmutableArray.Create<BoundExpression>(node), node.Type);
         }
 
         private static BoundExpression VisitPointerElementAccess(BoundPointerElementAccess node)
         {
-            // error should have been reported earlier
-            // Diagnostics.Add(ErrorCode.ERR_ExpressionTreeContainsPointerOp, node.Syntax.Location);
             return new BoundBadExpression(node.Syntax, default, ImmutableArray<Symbol>.Empty, ImmutableArray.Create<BoundExpression>(node), node.Type);
         }
 

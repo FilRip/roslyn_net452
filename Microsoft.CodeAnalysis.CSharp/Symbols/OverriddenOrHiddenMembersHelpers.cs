@@ -147,8 +147,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             Symbol knownOverriddenMember = member switch
             {
                 MethodSymbol method => KnownOverriddenClassMethod(method),
-                PEPropertySymbol { GetMethod: PEMethodSymbol { ExplicitlyOverriddenClassMethod: { AssociatedSymbol: PropertySymbol overriddenProperty } } } => overriddenProperty,
-                RetargetingPropertySymbol { GetMethod: RetargetingMethodSymbol { ExplicitlyOverriddenClassMethod: { AssociatedSymbol: PropertySymbol overriddenProperty } } } => overriddenProperty,
+                PEPropertySymbol { GetMethod: PEMethodSymbol { ExplicitlyOverriddenClassMethod.AssociatedSymbol: PropertySymbol overriddenProperty } } => overriddenProperty,
+                RetargetingPropertySymbol { GetMethod: RetargetingMethodSymbol { ExplicitlyOverriddenClassMethod.AssociatedSymbol: PropertySymbol overriddenProperty } } => overriddenProperty,
                 _ => null
             };
 

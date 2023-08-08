@@ -2917,7 +2917,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return (original, updated) switch
             {
                 (LambdaSymbol l, NamedTypeSymbol n) _ when n.IsDelegateType() => AreLambdaAndNewDelegateSimilar(l, n),
-                (FieldSymbol { ContainingType: { IsTupleType: true }, TupleElementIndex: var oi } originalField, FieldSymbol { ContainingType: { IsTupleType: true }, TupleElementIndex: var ui } updatedField) =>
+                (FieldSymbol { ContainingType.IsTupleType: true, TupleElementIndex: var oi } originalField, FieldSymbol { ContainingType.IsTupleType: true, TupleElementIndex: var ui } updatedField) =>
                     originalField.Type.Equals(updatedField.Type, TypeCompareKind.AllNullableIgnoreOptions | TypeCompareKind.IgnoreTupleNames) && oi == ui,
                 _ => original.Equals(updated, TypeCompareKind.AllNullableIgnoreOptions | TypeCompareKind.IgnoreTupleNames)
             };
@@ -4854,12 +4854,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         // invocation (such as a synthesized call from a query interpretation).
         private static bool HasImplicitTypeArguments(BoundNode node)
         {
-            if (node is BoundCollectionElementInitializer { AddMethod: { TypeArgumentsWithAnnotations: { IsEmpty: false } } })
+            if (node is BoundCollectionElementInitializer { AddMethod.TypeArgumentsWithAnnotations.IsEmpty: false })
             {
                 return true;
             }
 
-            if (node is BoundForEachStatement { EnumeratorInfoOpt: { GetEnumeratorInfo: { Method: { TypeArgumentsWithAnnotations: { IsEmpty: false } } } } })
+            if (node is BoundForEachStatement { EnumeratorInfoOpt.GetEnumeratorInfo.Method.TypeArgumentsWithAnnotations.IsEmpty: false })
             {
                 return true;
             }
@@ -5019,7 +5019,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (node is BoundCall { Method: { OriginalDefinition: LocalFunctionSymbol localFunction } })
+            if (node is BoundCall { Method.OriginalDefinition: LocalFunctionSymbol localFunction })
             {
                 VisitLocalFunctionUse(localFunction);
             }
@@ -8462,7 +8462,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (enumeratorReturnType.State != NullableFlowState.NotNull)
                 {
-                    if (!reportedDiagnostic && !(node.Expression is BoundConversion { Operand: { IsSuppressed: true } }))
+                    if (!reportedDiagnostic && !(node.Expression is BoundConversion { Operand.IsSuppressed: true }))
                     {
                         ReportDiagnostic(ErrorCode.WRN_NullReferenceReceiver, expr.Syntax.GetLocation());
                     }

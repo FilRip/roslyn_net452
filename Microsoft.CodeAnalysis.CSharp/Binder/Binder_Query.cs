@@ -40,8 +40,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 boundFromExpression = BindToNaturalType(boundFromExpression, diagnostics);
             }
 
-            QueryTranslationState state = new();
-            state.fromExpression = MakeMemberAccessValue(boundFromExpression, diagnostics);
+            QueryTranslationState state = new()
+            {
+                fromExpression = MakeMemberAccessValue(boundFromExpression, diagnostics)
+            };
 
             var x = state.rangeVariable = state.AddRangeVariable(this, fromClause.Identifier, diagnostics);
             for (int i = node.Body.Clauses.Count - 1; i >= 0; i--)
@@ -218,9 +220,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             int n = result.Arguments.Length;
             var arguments = ArrayBuilder<BoundExpression>.GetInstance();
             arguments.AddRange(result.Arguments);
-            var lastArgument = arguments[n - 1];
-            arguments[n - 1] = arguments[n - 2];
-            arguments[n - 2] = lastArgument;
+            (arguments[n - 2], arguments[n - 1]) = (arguments[n - 1], arguments[n - 2]);
             var argsToParams = ArrayBuilder<int>.GetInstance();
             argsToParams.AddRange(Enumerable.Range(0, n));
             argsToParams[n - 1] = n - 2;

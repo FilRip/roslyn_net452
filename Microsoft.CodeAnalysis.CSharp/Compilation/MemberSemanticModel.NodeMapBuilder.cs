@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Collections;
 using Microsoft.CodeAnalysis.PooledObjects;
@@ -49,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var builder = new NodeMapBuilder(additionMap, tree, node);
                 builder.Visit(root);
 
-                foreach (CSharpSyntaxNode key in additionMap.Keys)
+                foreach (CSharpSyntaxNode key in additionMap.Keys.OfType<CSharpSyntaxNode>())
                 {
                     if (map.ContainsKey(key))
                     {

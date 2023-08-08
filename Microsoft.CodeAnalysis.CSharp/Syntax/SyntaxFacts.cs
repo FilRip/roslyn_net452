@@ -347,7 +347,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // The grammar gives:
             //
             // expression-statement:
-            //     statement-expression ;
+            //     statement-expression
             //
             // statement-expression:
             //     invocation-expression
@@ -395,12 +395,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 default:
                     return false;
             }
-        }
-
-        [System.Obsolete("IsLambdaBody API is obsolete", true)]
-        public static bool IsLambdaBody(SyntaxNode node)
-        {
-            return LambdaUtilities.IsLambdaBody(node);
         }
 
         internal static bool IsIdentifierVar(this Syntax.InternalSyntax.SyntaxToken node)

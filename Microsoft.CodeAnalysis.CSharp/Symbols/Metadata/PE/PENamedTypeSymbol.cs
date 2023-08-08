@@ -868,13 +868,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                 var handleToFieldMap = new SmallDictionary<FieldDefinitionHandle, FieldSymbol>();
                 int count = 0;
 
-                foreach (PEFieldSymbol field in nonEventFields)
+                foreach (PEFieldSymbol field in nonEventFields.OfType<PEFieldSymbol>())
                 {
                     handleToFieldMap.Add(field.Handle, field);
                     count++;
                 }
 
-                foreach (PEFieldSymbol field in eventFields)
+                foreach (PEFieldSymbol field in eventFields.OfType<PEFieldSymbol>())
                 {
                     handleToFieldMap.Add(field.Handle, field);
                 }
@@ -1176,7 +1176,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     if (this.TypeKind == TypeKind.Struct)
                     {
                         bool haveParameterlessConstructor = false;
-                        foreach (MethodSymbol method in nonFieldMembers)
+                        foreach (MethodSymbol method in nonFieldMembers.OfType<MethodSymbol>())
                         {
                             if (method.IsParameterlessConstructor())
                             {

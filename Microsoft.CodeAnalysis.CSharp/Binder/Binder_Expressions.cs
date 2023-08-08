@@ -1738,7 +1738,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 this.Compilation, name: "var", arity: 0, errorInfo: null, variableUsedBeforeDeclaration: true);
                             isNullableUnknown = true;
                         }
-                        else if ((localSymbol as SourceLocalSymbol)?.IsVar == true && localSymbol.ForbiddenZone?.Contains(node) == true)
+                        else if (localSymbol is SourceLocalSymbol { IsVar: true } && localSymbol.ForbiddenZone?.Contains(node) == true)
                         {
                             // A var (type-inferred) local variable has been used in its own initialization (the "forbidden zone").
                             // There are many cases where this occurs, including:
@@ -6943,7 +6943,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // non-indexed properties (two properties P that differ by custom attributes
                     // for instance), the expectation is that the caller will report an ambiguity
                     // and choose one for error recovery.
-                    foreach (PropertySymbol property in members)
+                    foreach (PropertySymbol property in members.OfType<PropertySymbol>())
                     {
                         if (property.IsIndexedProperty)
                         {

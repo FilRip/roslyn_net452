@@ -100,7 +100,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// line feed characters are recognized by the parser as end of line.</param>
         public static SyntaxTrivia EndOfLine(string text)
         {
-            return Syntax.InternalSyntax.SyntaxFactory.EndOfLine(text, elastic: false);
+            return InternalSyntax.SyntaxFactory.EndOfLine(text, elastic: false);
         }
 
         /// <summary>
@@ -111,14 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// line feed characters are recognized by the parser as end of line.</param>
         public static SyntaxTrivia ElasticEndOfLine(string text)
         {
-            return Syntax.InternalSyntax.SyntaxFactory.EndOfLine(text, elastic: true);
-        }
-
-        [Obsolete("Use SyntaxFactory.EndOfLine or SyntaxFactory.ElasticEndOfLine")]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public static SyntaxTrivia EndOfLine(string text, bool elastic)
-        {
-            return Syntax.InternalSyntax.SyntaxFactory.EndOfLine(text, elastic);
+            return InternalSyntax.SyntaxFactory.EndOfLine(text, elastic: true);
         }
 
         /// <summary>
@@ -128,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// whitespace characters are recognized by the parser.</param>
         public static SyntaxTrivia Whitespace(string text)
         {
-            return Syntax.InternalSyntax.SyntaxFactory.Whitespace(text, elastic: false);
+            return InternalSyntax.SyntaxFactory.Whitespace(text, elastic: false);
         }
 
         /// <summary>
@@ -139,14 +132,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// whitespace characters are recognized by the parser.</param>
         public static SyntaxTrivia ElasticWhitespace(string text)
         {
-            return Syntax.InternalSyntax.SyntaxFactory.Whitespace(text, elastic: false);
-        }
-
-        [Obsolete("Use SyntaxFactory.Whitespace or SyntaxFactory.ElasticWhitespace")]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public static SyntaxTrivia Whitespace(string text, bool elastic)
-        {
-            return Syntax.InternalSyntax.SyntaxFactory.Whitespace(text, elastic);
+            return InternalSyntax.SyntaxFactory.Whitespace(text, elastic: false);
         }
 
         /// <summary>
@@ -157,7 +143,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// or stop or start tokens for multiline comments.</param>
         public static SyntaxTrivia Comment(string text)
         {
-            return Syntax.InternalSyntax.SyntaxFactory.Comment(text);
+            return InternalSyntax.SyntaxFactory.Comment(text);
         }
 
         /// <summary>
@@ -2559,7 +2545,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 : throw new ArgumentException(nameof(body));
 
         // BACK COMPAT OVERLOAD DO NOT MODIFY
+#pragma warning disable S1133 // Deprecated code should be removed
         [Obsolete("The diagnosticOptions parameter is obsolete due to performance problems, if you are passing non-null use CompilationOptions.SyntaxTreeOptionsProvider instead", error: false)]
+#pragma warning restore S1133 // Deprecated code should be removed
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static SyntaxTree ParseSyntaxTree(
             string text,
@@ -2573,7 +2561,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         // BACK COMPAT OVERLOAD DO NOT MODIFY
+#pragma warning disable S1133 // Deprecated code should be removed
         [Obsolete("The diagnosticOptions parameter is obsolete due to performance problems, if you are passing non-null use CompilationOptions.SyntaxTreeOptionsProvider instead", error: false)]
+#pragma warning restore S1133 // Deprecated code should be removed
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static SyntaxTree ParseSyntaxTree(
             SourceText text,
@@ -2587,7 +2577,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // BACK COMPAT OVERLOAD DO NOT MODIFY
         [EditorBrowsable(EditorBrowsableState.Never)]
+#pragma warning disable S1133 // Deprecated code should be removed
         [Obsolete("The diagnosticOptions and isGeneratedCode parameters are obsolete due to performance problems, if you are using them use CompilationOptions.SyntaxTreeOptionsProvider instead", error: false)]
+#pragma warning restore S1133 // Deprecated code should be removed
         public static SyntaxTree ParseSyntaxTree(
             string text,
             ParseOptions? options,
@@ -2602,7 +2594,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // BACK COMPAT OVERLOAD DO NOT MODIFY
         [EditorBrowsable(EditorBrowsableState.Never)]
+#pragma warning disable S1133 // Deprecated code should be removed
         [Obsolete("The diagnosticOptions and isGeneratedCode parameters are obsolete due to performance problems, if you are using them use CompilationOptions.SyntaxTreeOptionsProvider instead", error: false)]
+#pragma warning restore S1133 // Deprecated code should be removed
         public static SyntaxTree ParseSyntaxTree(
             SourceText text,
             ParseOptions? options,

@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             var map = new Dictionary<object, SourceLabelSymbol>(labels.Length, new SwitchConstantValueHelper.SwitchLabelsComparer());
-            foreach (SourceLabelSymbol label in labels)
+            foreach (SourceLabelSymbol label in labels.OfType<SourceLabelSymbol>())
             {
                 SyntaxKind labelKind = label.IdentifierNodeOrToken.Kind();
                 if (labelKind == SyntaxKind.IdentifierToken)

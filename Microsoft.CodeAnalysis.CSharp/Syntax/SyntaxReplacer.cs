@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             }
         }
 
-        private class Replacer<TNode> : CSharpSyntaxRewriter where TNode : SyntaxNode
+        private sealed class Replacer<TNode> : CSharpSyntaxRewriter where TNode : SyntaxNode
         {
             private readonly Func<TNode, TNode, SyntaxNode>? _computeReplacementNode;
             private readonly Func<SyntaxToken, SyntaxToken, SyntaxToken>? _computeReplacementToken;
@@ -179,7 +179,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 return false;
             }
 
-            [return: NotNullIfNotNull("node")]
+            [return: NotNullIfNotNull(nameof(node))]
             public override SyntaxNode? Visit(SyntaxNode? node)
             {
                 SyntaxNode? rewritten = node;
@@ -327,17 +327,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 return false;
             }
 
-            [return: NotNullIfNotNull("node")]
+            [return: NotNullIfNotNull(nameof(node))]
             public override SyntaxNode? Visit(SyntaxNode? node)
             {
                 SyntaxNode? rewritten = node;
 
-                if (node != null)
+                if (node != null && this.ShouldVisit(node.FullSpan))
                 {
-                    if (this.ShouldVisit(node.FullSpan))
-                    {
-                        rewritten = base.Visit(node);
-                    }
+                    rewritten = base.Visit(node);
                 }
 
                 return rewritten;
@@ -368,7 +365,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             }
         }
 
-        private class NodeListEditor : BaseListEditor
+        private sealed class NodeListEditor : BaseListEditor
         {
             private readonly SyntaxNode _originalNode;
             private readonly IEnumerable<SyntaxNode> _newNodes;
@@ -383,7 +380,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 _newNodes = replacementNodes;
             }
 
-            [return: NotNullIfNotNull("node")]
+            [return: NotNullIfNotNull(nameof(node))]
             public override SyntaxNode? Visit(SyntaxNode? node)
             {
                 if (node == _originalNode)
@@ -443,7 +440,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             }
         }
 
-        private class TokenListEditor : BaseListEditor
+        private sealed class TokenListEditor : BaseListEditor
         {
             private readonly SyntaxToken _originalToken;
             private readonly IEnumerable<SyntaxToken> _newTokens;
@@ -490,7 +487,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             }
         }
 
-        private class TriviaListEditor : BaseListEditor
+        private sealed class TriviaListEditor : BaseListEditor
         {
             private readonly SyntaxTrivia _originalTrivia;
             private readonly IEnumerable<SyntaxTrivia> _newTrivia;

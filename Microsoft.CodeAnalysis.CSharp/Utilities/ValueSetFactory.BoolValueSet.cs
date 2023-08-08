@@ -78,7 +78,7 @@ switch
                 if (this == other)
                     return this;
                 BoolValueSet o = (BoolValueSet)other;
-                return Create(hasFalse: this._hasFalse & o._hasFalse, hasTrue: this._hasTrue & o._hasTrue);
+                return Create(hasFalse: this._hasFalse && o._hasFalse, hasTrue: this._hasTrue && o._hasTrue);
             }
 
             public IValueSet Intersect(IValueSet other) => this.Intersect((IValueSet<bool>)other);
@@ -88,7 +88,7 @@ switch
                 if (this == other)
                     return this;
                 BoolValueSet o = (BoolValueSet)other;
-                return Create(hasFalse: this._hasFalse | o._hasFalse, hasTrue: this._hasTrue | o._hasTrue);
+                return Create(hasFalse: this._hasFalse || o._hasFalse, hasTrue: this._hasTrue || o._hasTrue);
             }
 
             IValueSet IValueSet.Union(IValueSet other) => this.Union((IValueSet<bool>)other);

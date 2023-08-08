@@ -301,7 +301,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private bool IsSafeToResolve()
         {
-            return !((DefaultType as TypeParameterSymbol)?.DeclaringMethod is SourceOrdinaryMethodSymbol declaringMethod && !declaringMethod.HasComplete(CompletionPart.FinishMethodChecks) &&
+            return !(DefaultType is TypeParameterSymbol { DeclaringMethod: SourceOrdinaryMethodSymbol declaringMethod } && !declaringMethod.HasComplete(CompletionPart.FinishMethodChecks) &&
                    (declaringMethod.IsOverride || declaringMethod.IsExplicitInterfaceImplementation));
         }
 

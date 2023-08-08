@@ -652,7 +652,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 foreach (var member in AttributeClass.GetMembers(memberName))
                 {
-                    if (member is PropertySymbol { Type: { SpecialType: SpecialType.System_String } })
+                    if (member is PropertySymbol { Type.SpecialType: SpecialType.System_String })
                     {
                         return true;
                     }

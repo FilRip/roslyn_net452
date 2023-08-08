@@ -539,7 +539,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // Note: RValueOnly is checked at the beginning of this method. Since we are here we need more than readable.
                     // "this" is readonly in members marked "readonly" and in members of readonly structs, unless we are in a constructor.
                     var isValueType = ((BoundThisReference)expr).Type.IsValueType;
-                    if (!isValueType || (RequiresAssignableVariable(valueKind) && (this.ContainingMemberOrLambda as MethodSymbol)?.IsEffectivelyReadOnly == true))
+                    if (!isValueType || (RequiresAssignableVariable(valueKind) && this.ContainingMemberOrLambda is MethodSymbol { IsEffectivelyReadOnly: true }))
                     {
                         Error(diagnostics, GetThisLvalueError(valueKind, isValueType), node, node);
                         return false;

@@ -2718,7 +2718,7 @@ namespace Microsoft.Cci
             var typeDefs = this.GetTypeDefs();
             metadata.SetCapacity(TableIndex.TypeDef, typeDefs.Count);
 
-            foreach (INamedTypeDefinition typeDef in typeDefs)
+            foreach (INamedTypeDefinition typeDef in typeDefs.OfType<INamedTypeDefinition>())
             {
                 INamespaceTypeDefinition namespaceType = typeDef.AsNamespaceTypeDefinition(Context);
                 string mangledTypeName = GetMangledName(typeDef);

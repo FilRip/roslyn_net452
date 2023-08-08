@@ -347,7 +347,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 : base((SourceNamedTypeSymbol)invoke.ContainingType, iAsyncResultType, syntax, MethodKind.Ordinary, DeclarationModifiers.Virtual | DeclarationModifiers.Public)
             {
                 var parameters = ArrayBuilder<ParameterSymbol>.GetInstance();
-                foreach (SourceParameterSymbol p in invoke.Parameters)
+                foreach (SourceParameterSymbol p in invoke.Parameters.OfType<SourceParameterSymbol>())
                 {
                     var synthesizedParam = new SourceClonedParameterSymbol(originalParam: p, newOwner: this, newOrdinal: p.Ordinal, suppressOptional: true);
                     parameters.Add(synthesizedParam);
@@ -394,7 +394,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var parameters = ArrayBuilder<ParameterSymbol>.GetInstance();
                 int ordinal = 0;
 
-                foreach (SourceParameterSymbol p in invoke.Parameters)
+                foreach (SourceParameterSymbol p in invoke.Parameters.OfType<SourceParameterSymbol>())
                 {
                     if (p.RefKind != RefKind.None)
                     {

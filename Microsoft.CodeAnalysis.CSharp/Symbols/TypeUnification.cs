@@ -98,9 +98,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // for type parameters on the LHS
             if (!t1.Type.IsTypeParameter() && t2.Type.IsTypeParameter())
             {
-                TypeWithAnnotations tmp = t1;
-                t1 = t2;
-                t2 = tmp;
+                (t2, t1) = (t1, t2);
             }
 
             // If t1 is not a type parameter, then neither is t2

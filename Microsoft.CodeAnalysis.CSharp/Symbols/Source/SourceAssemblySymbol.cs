@@ -1501,7 +1501,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             var builder = ArrayBuilder<SyntaxList<AttributeListSyntax>>.GetInstance();
             var declarations = DeclaringCompilation.MergedRootDeclaration.Declarations;
-            foreach (RootSingleNamespaceDeclaration rootNs in declarations)
+            foreach (RootSingleNamespaceDeclaration rootNs in declarations.OfType<RootSingleNamespaceDeclaration>())
             {
                 if (rootNs.HasAssemblyAttributes)
                 {

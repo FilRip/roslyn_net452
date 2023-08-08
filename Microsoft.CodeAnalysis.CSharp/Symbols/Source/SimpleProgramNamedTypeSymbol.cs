@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             ImmutableArray<Symbol> entryPoints = type.GetMembersAndInitializers().NonTypeMembers;
 
-            foreach (SynthesizedSimpleProgramEntryPointSymbol entryPoint in entryPoints)
+            foreach (SynthesizedSimpleProgramEntryPointSymbol entryPoint in entryPoints.OfType<SynthesizedSimpleProgramEntryPointSymbol>())
             {
                 if (entryPoint.SyntaxTree == compilationUnit.SyntaxTree && entryPoint.SyntaxNode == compilationUnit)
                 {

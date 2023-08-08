@@ -2150,9 +2150,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (IsSecondLocationBetter(first._location, second._location))
                 {
-                    BestSymbolInfo temp = first;
-                    first = second;
-                    second = temp;
+                    (second, first) = (first, second);
                     return true;
                 }
 
@@ -2296,7 +2294,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return diagnostics.Add(ErrorCode.ERR_AliasNotFound, location, whereText);
             }
 
-            if ((where as IdentifierNameSyntax)?.Identifier.Text == "var" && !options.IsAttributeTypeLookup())
+            if (where is IdentifierNameSyntax { Identifier.Text: "var" } && !options.IsAttributeTypeLookup())
             {
                 var code = (where.Parent is QueryClauseSyntax) ? ErrorCode.ERR_TypeVarNotFoundRangeVariable : ErrorCode.ERR_TypeVarNotFound;
                 return diagnostics.Add(code, location);

@@ -252,7 +252,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 NamespaceSymbol nextScope = null;
 
-                foreach (NamespaceOrTypeSymbol symbol in scope.GetMembers(name))
+                foreach (NamespaceOrTypeSymbol symbol in scope.GetMembers(name).OfType<NamespaceOrTypeSymbol>())
                 {
                     if (symbol is NamespaceSymbol ns)
                     {

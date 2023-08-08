@@ -499,7 +499,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 // We don't know any other way this can happen, but if it does we recover gracefully in production.
 
-                var args = diagnostic is DiagnosticWithInfo { Info: { Arguments: var arguments } } ? arguments : diagnostic.Arguments.ToArray();
+                var args = diagnostic is DiagnosticWithInfo { Info.Arguments: var arguments } ? arguments : diagnostic.Arguments.ToArray();
                 diagnostics.Add(newCode, diagnostic.Location, args);
             }
 
@@ -1839,7 +1839,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override BoundNode VisitLocal(BoundLocal node)
         {
             LocalSymbol localSymbol = node.LocalSymbol;
-            if ((localSymbol as SourceLocalSymbol)?.IsVar == true && localSymbol.ForbiddenZone?.Contains(node.Syntax) == true)
+            if (localSymbol is SourceLocalSymbol { IsVar: true } && localSymbol.ForbiddenZone?.Contains(node.Syntax) == true)
             {
                 // Since we've already reported a use of the variable where not permitted, we
                 // suppress the diagnostic that the variable may not be assigned where used.

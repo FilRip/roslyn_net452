@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.Operations
             _semanticModel = semanticModel;
         }
 
-        [return: NotNullIfNotNull("boundNode")]
+        [return: NotNullIfNotNull(nameof(boundNode))]
         public IOperation? Create(BoundNode? boundNode)
         {
             if (boundNode == null)
@@ -1633,7 +1633,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
                                                     enumeratorInfoOpt.PatternDisposeInfo?.Method.GetPublicSymbol(),
                                                     enumeratorInfoOpt.CurrentConversion,
                                                     boundForEachStatement.ElementConversion,
-                                                    getEnumeratorArguments: enumeratorInfoOpt.GetEnumeratorInfo is { Method: { IsExtensionMethod: true } } getEnumeratorInfo
+                                                    getEnumeratorArguments: enumeratorInfoOpt.GetEnumeratorInfo is { Method.IsExtensionMethod: true } getEnumeratorInfo
                                                         ? Operation.SetParentOperation(
                                                             DeriveArguments(
                                                                 getEnumeratorInfo.Method,
@@ -1942,7 +1942,7 @@ methodGroup.Syntax, methodGroup.GetPublicTypeSymbol(), methodGroup.WasCompilerGe
             TypeSymbol? naturalType = boundTupleExpression switch
             {
                 BoundTupleLiteral { Type: var t } => t,
-                BoundConvertedTupleLiteral { SourceTuple: { Type: var t } } => t,
+                BoundConvertedTupleLiteral { SourceTuple.Type: var t } => t,
                 BoundConvertedTupleLiteral => null,
                 { Kind: var kind } => throw ExceptionUtilities.UnexpectedValue(kind)
             };

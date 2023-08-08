@@ -167,7 +167,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return node.Accept(this);
         }
 
-        [return: NotNullIfNotNull("node")]
+        [return: NotNullIfNotNull(nameof(node))]
         private BoundExpression? VisitExpression(BoundExpression? node)
         {
             if (node == null)

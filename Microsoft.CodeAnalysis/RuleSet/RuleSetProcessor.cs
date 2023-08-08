@@ -269,15 +269,16 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         private static XmlReaderSettings GetDefaultXmlReaderSettings()
         {
-            XmlReaderSettings xmlReaderSettings = new();
-
-            xmlReaderSettings.CheckCharacters = true;
-            xmlReaderSettings.CloseInput = true;
-            xmlReaderSettings.ConformanceLevel = ConformanceLevel.Document;
-            xmlReaderSettings.IgnoreComments = true;
-            xmlReaderSettings.IgnoreProcessingInstructions = true;
-            xmlReaderSettings.IgnoreWhitespace = true;
-            xmlReaderSettings.DtdProcessing = DtdProcessing.Prohibit;
+            XmlReaderSettings xmlReaderSettings = new()
+            {
+                CheckCharacters = true,
+                CloseInput = true,
+                ConformanceLevel = ConformanceLevel.Document,
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true,
+                DtdProcessing = DtdProcessing.Prohibit,
+            };
 
             return xmlReaderSettings;
         }

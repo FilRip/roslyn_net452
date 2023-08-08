@@ -737,7 +737,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (_inExpressionLambda)
             {
-                if ((node.LookupSymbolOpt as MethodSymbol)?.MethodKind == MethodKind.LocalFunction)
+                if (node.LookupSymbolOpt is MethodSymbol { MethodKind: MethodKind.LocalFunction })
                 {
                     Error(ErrorCode.ERR_ExpressionTreeContainsLocalFunction, node);
                 }

@@ -978,25 +978,27 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 throw new ArgumentNullException(nameof(otherActions));
             }
 
-            AnalyzerActions actions = new(concurrent: _concurrent || otherActions.Concurrent);
-            actions._compilationStartActions = _compilationStartActions.AddRange(otherActions._compilationStartActions);
-            actions._compilationEndActions = _compilationEndActions.AddRange(otherActions._compilationEndActions);
-            actions._compilationActions = _compilationActions.AddRange(otherActions._compilationActions);
-            actions._syntaxTreeActions = _syntaxTreeActions.AddRange(otherActions._syntaxTreeActions);
-            actions._additionalFileActions = _additionalFileActions.AddRange(otherActions._additionalFileActions);
-            actions._semanticModelActions = _semanticModelActions.AddRange(otherActions._semanticModelActions);
-            actions._symbolActions = _symbolActions.AddRange(otherActions._symbolActions);
-            actions._symbolStartActions = appendSymbolStartAndSymbolEndActions ? _symbolStartActions.AddRange(otherActions._symbolStartActions) : _symbolStartActions;
-            actions._symbolEndActions = appendSymbolStartAndSymbolEndActions ? _symbolEndActions.AddRange(otherActions._symbolEndActions) : _symbolEndActions;
-            actions._codeBlockStartActions = _codeBlockStartActions.AddRange(otherActions._codeBlockStartActions);
-            actions._codeBlockEndActions = _codeBlockEndActions.AddRange(otherActions._codeBlockEndActions);
-            actions._codeBlockActions = _codeBlockActions.AddRange(otherActions._codeBlockActions);
-            actions._syntaxNodeActions = _syntaxNodeActions.AddRange(otherActions._syntaxNodeActions);
-            actions._operationActions = _operationActions.AddRange(otherActions._operationActions);
-            actions._operationBlockStartActions = _operationBlockStartActions.AddRange(otherActions._operationBlockStartActions);
-            actions._operationBlockEndActions = _operationBlockEndActions.AddRange(otherActions._operationBlockEndActions);
-            actions._operationBlockActions = _operationBlockActions.AddRange(otherActions._operationBlockActions);
-            actions.IsEmpty = IsEmpty && otherActions.IsEmpty;
+            AnalyzerActions actions = new(concurrent: _concurrent || otherActions.Concurrent)
+            {
+                _compilationStartActions = _compilationStartActions.AddRange(otherActions._compilationStartActions),
+                _compilationEndActions = _compilationEndActions.AddRange(otherActions._compilationEndActions),
+                _compilationActions = _compilationActions.AddRange(otherActions._compilationActions),
+                _syntaxTreeActions = _syntaxTreeActions.AddRange(otherActions._syntaxTreeActions),
+                _additionalFileActions = _additionalFileActions.AddRange(otherActions._additionalFileActions),
+                _semanticModelActions = _semanticModelActions.AddRange(otherActions._semanticModelActions),
+                _symbolActions = _symbolActions.AddRange(otherActions._symbolActions),
+                _symbolStartActions = appendSymbolStartAndSymbolEndActions ? _symbolStartActions.AddRange(otherActions._symbolStartActions) : _symbolStartActions,
+                _symbolEndActions = appendSymbolStartAndSymbolEndActions ? _symbolEndActions.AddRange(otherActions._symbolEndActions) : _symbolEndActions,
+                _codeBlockStartActions = _codeBlockStartActions.AddRange(otherActions._codeBlockStartActions),
+                _codeBlockEndActions = _codeBlockEndActions.AddRange(otherActions._codeBlockEndActions),
+                _codeBlockActions = _codeBlockActions.AddRange(otherActions._codeBlockActions),
+                _syntaxNodeActions = _syntaxNodeActions.AddRange(otherActions._syntaxNodeActions),
+                _operationActions = _operationActions.AddRange(otherActions._operationActions),
+                _operationBlockStartActions = _operationBlockStartActions.AddRange(otherActions._operationBlockStartActions),
+                _operationBlockEndActions = _operationBlockEndActions.AddRange(otherActions._operationBlockEndActions),
+                _operationBlockActions = _operationBlockActions.AddRange(otherActions._operationBlockActions),
+                IsEmpty = IsEmpty && otherActions.IsEmpty,
+            };
 
             return actions;
         }

@@ -243,7 +243,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     int cardinality = elements.Length;
                     var subpatterns = new ArrayBuilder<string>(cardinality);
                     subpatterns.AddMany("_", cardinality);
-                    foreach (BoundDagFieldEvaluation e in evaluations)
+                    foreach (BoundDagFieldEvaluation e in evaluations.OfType<BoundDagFieldEvaluation>())
                     {
                         var elementTemp = new BoundDagTemp(e.Syntax, e.Field.Type, e);
                         var index = e.Field.TupleElementIndex;

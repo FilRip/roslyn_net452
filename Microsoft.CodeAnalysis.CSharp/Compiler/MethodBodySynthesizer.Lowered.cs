@@ -44,8 +44,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
-            SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            F.CurrentFunction = this;
+            SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics)
+            {
+                CurrentFunction = this
+            };
 
             try
             {
@@ -145,8 +147,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
-            SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            F.CurrentFunction = OriginalDefinition;
+            SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics)
+            {
+                CurrentFunction = OriginalDefinition
+            };
 
             try
             {
@@ -183,8 +187,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
-            SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            F.CurrentFunction = OriginalDefinition;
+            SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics)
+            {
+                CurrentFunction = OriginalDefinition
+            };
 
             try
             {
@@ -218,8 +224,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             /// </summary>
             internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
             {
-                SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-                F.CurrentFunction = this.OriginalDefinition;
+                SyntheticBoundNodeFactory F = new(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics)
+                {
+                    CurrentFunction = this.OriginalDefinition
+                };
 
                 try
                 {

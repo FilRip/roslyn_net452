@@ -415,12 +415,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 return true;
             }
 
-            if (token.IsKind(SyntaxKind.GreaterThanToken) && token.Parent.IsKind(SyntaxKind.TypeArgumentList))
+            if (token.IsKind(SyntaxKind.GreaterThanToken) && token.Parent.IsKind(SyntaxKind.TypeArgumentList) &&
+                !SyntaxFacts.IsPunctuation(next.Kind()))
             {
-                if (!SyntaxFacts.IsPunctuation(next.Kind()))
-                {
-                    return true;
-                }
+                return true;
             }
 
             if (token.IsKind(SyntaxKind.GreaterThanToken) && token.Parent.IsKind(SyntaxKind.FunctionPointerParameterList))
@@ -454,13 +452,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     !token.Parent.IsKind(SyntaxKind.XmlPrefix);
             }
 
-            if (next.IsKind(SyntaxKind.ColonToken))
+            if (next.IsKind(SyntaxKind.ColonToken) &&
+                (next.Parent.IsKind(SyntaxKind.BaseList) ||
+                    next.Parent.IsKind(SyntaxKind.TypeParameterConstraintClause)))
             {
-                if (next.Parent.IsKind(SyntaxKind.BaseList) ||
-                    next.Parent.IsKind(SyntaxKind.TypeParameterConstraintClause))
-                {
-                    return true;
-                }
+                return true;
             }
 
             if (token.IsKind(SyntaxKind.CloseBracketToken) && IsWord(next.Kind()))
@@ -608,9 +604,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                 return true;
             }
 
-            if (IsKeyword(token.Kind()))
-            {
-                if (!next.IsKind(SyntaxKind.ColonToken) &&
+                if (IsKeyword(token.Kind()) && (!next.IsKind(SyntaxKind.ColonToken) &&
                     !next.IsKind(SyntaxKind.DotToken) &&
                     !next.IsKind(SyntaxKind.QuestionToken) &&
                     !next.IsKind(SyntaxKind.SemicolonToken) &&
@@ -620,10 +614,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     !next.IsKind(SyntaxKind.CloseBraceToken) &&
                     !next.IsKind(SyntaxKind.ColonColonToken) &&
                     !next.IsKind(SyntaxKind.GreaterThanToken) &&
-                    !next.IsKind(SyntaxKind.CommaToken))
-                {
-                    return true;
-                }
+                    !next.IsKind(SyntaxKind.CommaToken)))
+            {
+                return true;
             }
 
             if (IsWord(token.Kind()) && IsWord(next.Kind()))

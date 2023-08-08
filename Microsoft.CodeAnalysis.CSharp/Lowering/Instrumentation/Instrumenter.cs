@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ifConditionGotoStart;
         }
 
-        [return: NotNullIfNotNull("collectionVarDecl")]
+        [return: NotNullIfNotNull(nameof(collectionVarDecl))]
         public virtual BoundStatement? InstrumentForEachStatementCollectionVarDeclaration(BoundForEachStatement original, BoundStatement? collectionVarDecl)
         {
             return collectionVarDecl;

@@ -457,7 +457,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public static ImmutableArray<ParameterSymbol> DelegateOrFunctionPointerParameters(this TypeSymbol type)
         {
-            if (type is FunctionPointerTypeSymbol { Signature: { Parameters: var functionPointerParameters } })
+            if (type is FunctionPointerTypeSymbol { Signature.Parameters: var functionPointerParameters })
             {
                 return functionPointerParameters;
             }

@@ -568,9 +568,7 @@ namespace Microsoft.CodeAnalysis
             {
                 T[] copy = array.ToArray();
                 int last = copy.Length - 1;
-                var temp = copy[0];
-                copy[0] = copy[last];
-                copy[last] = temp;
+                (copy[last], copy[0]) = (copy[0], copy[last]);
                 return copy.AsImmutable();
             }
 #endif

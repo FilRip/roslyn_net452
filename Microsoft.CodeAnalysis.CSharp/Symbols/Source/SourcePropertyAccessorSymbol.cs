@@ -446,6 +446,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Making a member implicitly 'readonly' allows valid C# 7.0 code to break PEVerify.
                 // For instance:
 
+#pragma warning disable S125 // Sections of code should not be commented out
                 // struct S {
                 //     int Value { get; set; }
                 //     static readonly S StaticField = new S();
@@ -459,6 +460,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // Code emitted in C# 7.0 and before must be PEVerify compatible, so we will only make
                 // members implicitly readonly in language versions which support the readonly members feature.
+#pragma warning restore S125 // Sections of code should not be commented out
+
                 var options = (CSharpParseOptions)SyntaxTree.Options;
                 if (!options.IsFeatureEnabled(MessageID.IDS_FeatureReadOnlyMembers))
                 {
@@ -698,7 +701,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case SyntaxKind.InitAccessorDeclaration:
                     case SyntaxKind.ArrowExpressionClause:
                         return false;
-                };
+                }
 
                 return true;
             }
@@ -737,7 +740,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // Clone the property parameters for the accessor method. The
             // parameters are cloned (rather than referenced from the property)
             // since the ContainingSymbol needs to be set to the accessor.
-            foreach (SourceParameterSymbol propertyParam in propertyParameters)
+            foreach (SourceParameterSymbol propertyParam in propertyParameters.OfType<SourceParameterSymbol>())
             {
                 parameters.Add(new SourceClonedParameterSymbol(propertyParam, this, propertyParam.Ordinal, suppressOptional: false));
             }

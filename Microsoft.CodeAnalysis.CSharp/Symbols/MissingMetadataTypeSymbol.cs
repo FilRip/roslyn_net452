@@ -231,7 +231,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 NamespaceSymbol? newContainer = null;
 
-                                foreach (NamespaceOrTypeSymbol symbol in container.GetMembers(namespaces[i]))
+                                foreach (NamespaceOrTypeSymbol symbol in container.GetMembers(namespaces[i]).OfType<NamespaceOrTypeSymbol>())
                                 {
                                     if (symbol.Kind == SymbolKind.Namespace) // VB should also check name casing.
                                     {

@@ -34,7 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             // check for System.Array.[Length|LongLength] on a single dimensional array,
             // we have a special node for such cases.
-            if (rewrittenReceiverOpt is { Type: { TypeKind: TypeKind.Array } } && !isLeftOfAssignment)
+            if (rewrittenReceiverOpt is { Type.TypeKind: TypeKind.Array } && !isLeftOfAssignment)
             {
                 var asArrayType = (ArrayTypeSymbol)rewrittenReceiverOpt.Type;
                 if (asArrayType.IsSZArray)

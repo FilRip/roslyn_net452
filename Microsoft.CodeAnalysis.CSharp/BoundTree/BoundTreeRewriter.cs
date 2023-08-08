@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 {
     internal abstract partial class BoundTreeRewriter : BoundTreeVisitor
     {
-        [return: NotNullIfNotNull("type")]
+        [return: NotNullIfNotNull(nameof(type))]
         public virtual TypeSymbol? VisitType(TypeSymbol? type)
         {
             return type;

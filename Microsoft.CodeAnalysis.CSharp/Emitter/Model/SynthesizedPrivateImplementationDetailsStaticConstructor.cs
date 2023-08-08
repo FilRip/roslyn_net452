@@ -27,8 +27,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
         {
             CSharpSyntaxNode syntax = this.GetNonNullSyntaxNode();
-            SyntheticBoundNodeFactory factory = new(this, syntax, compilationState, diagnostics);
-            factory.CurrentFunction = this;
+            SyntheticBoundNodeFactory factory = new(this, syntax, compilationState, diagnostics)
+            {
+                CurrentFunction = this
+            };
             ArrayBuilder<BoundStatement> body = ArrayBuilder<BoundStatement>.GetInstance();
 
             // Initialize the payload root for each kind of dynamic analysis instrumentation.

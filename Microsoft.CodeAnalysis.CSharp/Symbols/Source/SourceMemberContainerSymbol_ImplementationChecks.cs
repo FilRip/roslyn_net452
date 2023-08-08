@@ -1505,9 +1505,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         if (GetImplementsLocationOrFallback(interface1).SourceSpan.Start > GetImplementsLocationOrFallback(interface2).SourceSpan.Start)
                         {
                             // Mention interfaces in order of their appearance in the base list, for consistency.
-                            var temp = interface1;
-                            interface1 = interface2;
-                            interface2 = temp;
+                            (interface2, interface1) = (interface1, interface2);
                         }
 
                         diagnostics.Add(ErrorCode.ERR_UnifyingInterfaceInstantiations, this.Locations[0], this, interface1, interface2);

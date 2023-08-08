@@ -159,7 +159,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                     _ => handleSingleConvention(specifiers[0], compilation, customModifiers, diagnostics)
                                 };
 
-                            case { CallingConventions: { Count: 0 } } unmanagedList:
+                            case { CallingConventions.Count: 0 } unmanagedList:
                                 // Should never be possible from parser-constructed code (parser will always provide at least a missing identifier token),
                                 // so diagnostic quality isn't hugely important
                                 if (!unmanagedList.ContainsDiagnostics)
@@ -630,7 +630,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
 
                 var builder = ArrayBuilder<NamedTypeSymbol>.GetInstance(modifiersToSearch.Length);
-                foreach (CSharpCustomModifier modifier in modifiersToSearch)
+                foreach (CSharpCustomModifier modifier in modifiersToSearch.OfType<CSharpCustomModifier>())
                 {
                     if (FunctionPointerTypeSymbol.IsCallingConventionModifier(modifier.ModifierSymbol))
                     {
