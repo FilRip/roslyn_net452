@@ -1258,7 +1258,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                     Debug.Assert(local Is _empty OrElse locInfo.StackAtDeclaration = StackDepth())
                 End If
 
-                Dim definedAt As LocalDefUseSpan = locInfo.localDefs.Last()
+                Dim definedAt As LocalDefUseSpan = locInfo.localDefs(locInfo.localDefs.Count - 1)
                 definedAt.SetEnd(Me._counter)
 
                 Dim locDef As New LocalDefUseSpan(_counter)

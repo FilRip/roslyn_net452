@@ -294,7 +294,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Friend Function Normalize(data As IEnumerable(Of Symbol)) As ImmutableArray(Of ISymbol)
             Dim builder = ArrayBuilder(Of Symbol).GetInstance()
-            builder.AddRange(data.Where(Function(s) s.CanBeReferencedByName))
+            builder.AddRange(data.Where(Function(s) s.CanBeReferencedByName()))
             builder.Sort(LexicalOrderSymbolComparer.Instance)
             Return builder.ToImmutableAndFree().As(Of ISymbol)()
         End Function

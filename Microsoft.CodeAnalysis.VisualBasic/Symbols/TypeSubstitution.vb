@@ -104,9 +104,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         'Add pairs (including parent pairs) to the given array builder.
         Private Sub AddPairsIncludingParentToBuilder(pairBuilder As ArrayBuilder(Of KeyValuePair(Of TypeParameterSymbol, TypeWithModifiers)))
-            If _parent IsNot Nothing Then
-                _parent.AddPairsIncludingParentToBuilder(pairBuilder)
-            End If
+            _parent?.AddPairsIncludingParentToBuilder(pairBuilder)
             pairBuilder.AddRange(_pairs)
         End Sub
 

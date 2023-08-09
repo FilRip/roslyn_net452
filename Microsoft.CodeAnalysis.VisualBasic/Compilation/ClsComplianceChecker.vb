@@ -556,7 +556,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Sub CheckName(symbol As Symbol)
             Debug.Assert(IsTrue(GetDeclaredOrInheritedCompliance(symbol)))
             Debug.Assert(IsAccessibleOutsideAssembly(symbol))
-            If Not symbol.CanBeReferencedByName Then ' NOTE: Unlike C#, VB checks override names.
+            If Not symbol.CanBeReferencedByName() Then ' NOTE: Unlike C#, VB checks override names.
                 Return
             End If
 

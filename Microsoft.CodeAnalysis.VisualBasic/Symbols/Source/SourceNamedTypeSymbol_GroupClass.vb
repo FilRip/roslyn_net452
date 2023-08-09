@@ -27,15 +27,15 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     ' Attribute arguments are comma-separated lists.
                     Dim separatorComma = {","c}
                     Dim separatorDot = {"."c}
-                    Dim baseTypeNames() As String = If(attributeData.GetConstructorArgument(Of String)(0, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
-                    Dim createMethods() As String = If(attributeData.GetConstructorArgument(Of String)(1, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
-                    Dim disposeMethods() As String = If(attributeData.GetConstructorArgument(Of String)(2, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
+                    Dim baseTypeNames As String() = If(attributeData.GetConstructorArgument(Of String)(0, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
+                    Dim createMethods As String() = If(attributeData.GetConstructorArgument(Of String)(1, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
+                    Dim disposeMethods As String() = If(attributeData.GetConstructorArgument(Of String)(2, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
 
                     ' DefaultInstanceAliases are respected only for attributes applied in MyTemplate.
-                    Dim defaultInstances() As String
+                    Dim defaultInstances As String()
 
                     If attributeSyntax.SyntaxTree.IsMyTemplate Then
-                        defaultInstances = If(attributeData.GetConstructorArgument(Of String)(3, Microsoft.CodeAnalysis.SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
+                        defaultInstances = If(attributeData.GetConstructorArgument(Of String)(3, SpecialType.System_String), "").Split(separatorComma, StringSplitOptions.None)
                     Else
                         defaultInstances = New String() {}
                     End If
@@ -130,6 +130,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim attributeLists As ImmutableArray(Of SyntaxList(Of AttributeListSyntax)) = GetAttributeDeclarations()
             Dim attributeData As VisualBasicAttributeData = Nothing
 
+            Dim DoneWithBindingAttributes =
+            Sub(ByRef subBinder As Binder, ByRef subAttributeSyntax As AttributeSyntax)
+                If attributeData Is Nothing Then
+                    subBinder = Nothing
+                    subAttributeSyntax = Nothing
+                End If
+            End Sub
+
             For Each list As SyntaxList(Of AttributeListSyntax) In attributeLists
                 If list.Any() Then
                     binder = GetAttributeBinder(list, ContainingSourceModule)
@@ -141,55 +149,56 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                 ' This attribute syntax might be an application of MyGroupCollectionAttribute.
                                 ' Let's bind it.
                                 Dim attributeType As NamedTypeSymbol = Binder.BindAttributeType(binder, attr, Me, BindingDiagnosticBag.Discarded)
-                                If Not attributeType.IsErrorType() Then
-                                    If VisualBasicAttributeData.IsTargetEarlyAttribute(attributeType, attr, AttributeDescription.MyGroupCollectionAttribute) Then
-                                        ' Calling GetAttribute can still get us into cycle if MyGroupCollectionAttribute is applied to itself.
-                                        If attributeType Is Me Then
-                                            binder.ReportDiagnostic(diagnostics, attr, ERRID.ERR_MyGroupCollectionAttributeCycle)
-                                            Debug.Assert(attributeData Is Nothing)
-                                            GoTo DoneWithBindingAttributes
+                                If Not attributeType.IsErrorType() AndAlso VisualBasicAttributeData.IsTargetEarlyAttribute(attributeType, attr, AttributeDescription.MyGroupCollectionAttribute) Then
+                                    ' Calling GetAttribute can still get us into cycle if MyGroupCollectionAttribute is applied to itself.
+                                    If attributeType Is Me Then
+                                        Binder.ReportDiagnostic(diagnostics, attr, ERRID.ERR_MyGroupCollectionAttributeCycle)
+                                        Debug.Assert(attributeData Is Nothing)
+                                        DoneWithBindingAttributes(binder, attributeSyntax)
+                                        Return attributeData
+                                    End If
+
+                                    ' Or if any argument expression refers to a member of this type. Therefore, as a simple solution,
+                                    ' we will allow only literals as the arguments.
+                                    For Each argumentSyntax As ArgumentSyntax In attr.ArgumentList.Arguments
+                                        Dim expression As ExpressionSyntax
+
+                                        Select Case argumentSyntax.Kind
+                                            Case SyntaxKind.SimpleArgument
+                                                expression = DirectCast(argumentSyntax, SimpleArgumentSyntax).Expression
+
+                                            Case SyntaxKind.OmittedArgument
+                                                expression = Nothing
+
+                                            Case Else
+                                                Throw ExceptionUtilities.UnexpectedValue(argumentSyntax.Kind)
+                                        End Select
+
+                                        If expression IsNot Nothing AndAlso
+                                           TypeOf expression IsNot LiteralExpressionSyntax Then
+                                            Binder.ReportDiagnostic(diagnostics, expression, ERRID.ERR_LiteralExpected)
+                                            attributeData = Nothing
+                                            DoneWithBindingAttributes(binder, attributeSyntax)
+                                            Return attributeData
+                                        End If
+                                    Next
+
+                                    Dim generatedDiagnostics As Boolean = False
+                                    Dim data As VisualBasicAttributeData = (New EarlyWellKnownAttributeBinder(Me, binder)).GetAttribute(attr, attributeType, generatedDiagnostics)
+                                    If Not data.HasErrors AndAlso Not generatedDiagnostics AndAlso
+                                       data.IsTargetAttribute(Me, AttributeDescription.MyGroupCollectionAttribute) Then
+                                        ' Looks like we've found MyGroupCollectionAttribute
+                                        If attributeData IsNot Nothing Then
+                                            ' Ambiguity, the attribute cannot be applied multiple times. Let's ignore all of them,
+                                            ' an error about multiple applications will be reported later, when all attributes are 
+                                            ' bound and validated.
+                                            attributeData = Nothing
+                                            DoneWithBindingAttributes(binder, attributeSyntax)
+                                            Return attributeData
                                         End If
 
-                                        ' Or if any argument expression refers to a member of this type. Therefore, as a simple solution,
-                                        ' we will allow only literals as the arguments.
-                                        For Each argumentSyntax As ArgumentSyntax In attr.ArgumentList.Arguments
-                                            Dim expression As ExpressionSyntax
-
-                                            Select Case argumentSyntax.Kind
-                                                Case SyntaxKind.SimpleArgument
-                                                    expression = DirectCast(argumentSyntax, SimpleArgumentSyntax).Expression
-
-                                                Case SyntaxKind.OmittedArgument
-                                                    expression = Nothing
-
-                                                Case Else
-                                                    Throw ExceptionUtilities.UnexpectedValue(argumentSyntax.Kind)
-                                            End Select
-
-                                            If expression IsNot Nothing AndAlso
-                                               TypeOf expression IsNot LiteralExpressionSyntax Then
-                                                Binder.ReportDiagnostic(diagnostics, expression, ERRID.ERR_LiteralExpected)
-                                                attributeData = Nothing
-                                                GoTo DoneWithBindingAttributes
-                                            End If
-                                        Next
-
-                                        Dim generatedDiagnostics As Boolean = False
-                                        Dim data As VisualBasicAttributeData = (New EarlyWellKnownAttributeBinder(Me, binder)).GetAttribute(attr, attributeType, generatedDiagnostics)
-                                        If Not data.HasErrors AndAlso Not generatedDiagnostics AndAlso
-                                           data.IsTargetAttribute(Me, AttributeDescription.MyGroupCollectionAttribute) Then
-                                            ' Looks like we've found MyGroupCollectionAttribute
-                                            If attributeData IsNot Nothing Then
-                                                ' Ambiguity, the attribute cannot be applied multiple times. Let's ignore all of them,
-                                                ' an error about multiple applications will be reported later, when all attributes are 
-                                                ' bound and validated.
-                                                attributeData = Nothing
-                                                GoTo DoneWithBindingAttributes
-                                            End If
-
-                                            attributeData = data
-                                            attributeSyntax = attr
-                                        End If
+                                        attributeData = data
+                                        attributeSyntax = attr
                                     End If
                                 End If
                             End If
@@ -197,13 +206,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     Next
                 End If
             Next
-
-DoneWithBindingAttributes:
-
-            If attributeData Is Nothing Then
-                binder = Nothing
-                attributeSyntax = Nothing
-            End If
 
             Return attributeData
         End Function

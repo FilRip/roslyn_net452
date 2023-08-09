@@ -501,16 +501,15 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         '''    constructors, operators, 
         '''    accessor methods for properties and events.
         ''' </summary>
-        Public ReadOnly Property CanBeReferencedByName As Boolean
-            Get
-                Select Case Me.Kind
-                    Case SymbolKind.Local,
+        Public Function CanBeReferencedByName() As Boolean
+            Select Case Me.Kind
+                Case SymbolKind.Local,
                          SymbolKind.Label,
                          SymbolKind.Alias
-                        ' Can't be imported, but might have syntax errors in which case we use an empty name:
-                        Return Me.Name.Length > 0
+                    ' Can't be imported, but might have syntax errors in which case we use an empty name:
+                    Return Me.Name.Length > 0
 
-                    Case SymbolKind.Namespace,
+                Case SymbolKind.Namespace,
                          SymbolKind.Field,
                          SymbolKind.RangeVariable,
                          SymbolKind.Property,
@@ -518,44 +517,39 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                          SymbolKind.Parameter,
                          SymbolKind.TypeParameter,
                          SymbolKind.ErrorType
-                        Exit Select
 
-                    Case SymbolKind.NamedType
-                        If DirectCast(Me, NamedTypeSymbol).IsSubmissionClass Then
-                            Return False
-                        End If
-                        Exit Select
-
-                    Case SymbolKind.Method
-                        Select Case DirectCast(Me, MethodSymbol).MethodKind
-                            Case MethodKind.Ordinary, MethodKind.DeclareMethod, MethodKind.ReducedExtension
-                                Exit Select
-                            Case MethodKind.DelegateInvoke, MethodKind.UserDefinedOperator, MethodKind.Conversion
-                                Return True
-                            Case Else
-                                Return False
-                        End Select
-
-                    Case SymbolKind.Assembly, SymbolKind.NetModule, SymbolKind.ArrayType
+                Case SymbolKind.NamedType
+                    If DirectCast(Me, NamedTypeSymbol).IsSubmissionClass Then
                         Return False
+                    End If
 
-                    Case Else
-                        Throw ExceptionUtilities.UnexpectedValue(Me.Kind)
-                End Select
+                Case SymbolKind.Method
+                    Select Case DirectCast(Me, MethodSymbol).MethodKind
+                        Case MethodKind.DelegateInvoke, MethodKind.UserDefinedOperator, MethodKind.Conversion
+                            Return True
+                        Case Else
+                            Return False
+                    End Select
 
-                ' If we are from source, only need to check the first character, because all special
-                ' names we create in source have a bad first character.
-                ' NOTE: usually, the distinction we want to make is between the "current" compilation and another
-                ' compilation, rather than between source and non-source.  In this case, however, it suffices
-                ' to know that the symbol came from any compilation because we are just optimizing based on whether
-                ' or not previous validation occurred.
-                If Me.Dangerous_IsFromSomeCompilationIncludingRetargeting Then
-                    Return Not String.IsNullOrEmpty(Me.Name) AndAlso SyntaxFacts.IsIdentifierStartCharacter(Me.Name(0))
-                Else
-                    Return SyntaxFacts.IsValidIdentifier(Me.Name)
-                End If
-            End Get
-        End Property
+                Case SymbolKind.Assembly, SymbolKind.NetModule, SymbolKind.ArrayType
+                    Return False
+
+                Case Else
+                    Throw ExceptionUtilities.UnexpectedValue(Me.Kind)
+            End Select
+
+            ' If we are from source, only need to check the first character, because all special
+            ' names we create in source have a bad first character.
+            ' NOTE: usually, the distinction we want to make is between the "current" compilation and another
+            ' compilation, rather than between source and non-source.  In this case, however, it suffices
+            ' to know that the symbol came from any compilation because we are just optimizing based on whether
+            ' or not previous validation occurred.
+            If Me.Dangerous_IsFromSomeCompilationIncludingRetargeting Then
+                Return Not String.IsNullOrEmpty(Me.Name) AndAlso SyntaxFacts.IsIdentifierStartCharacter(Me.Name(0))
+            Else
+                Return SyntaxFacts.IsValidIdentifier(Me.Name)
+            End If
+        End Function
 
         ''' <summary>
         ''' As an optimization, viability checking in the lookup code should use this property instead
@@ -690,10 +684,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' </summary>
         Friend Function GetGuidStringDefaultImplementation(<Out> ByRef guidString As String) As Boolean
             For Each attrData In GetAttributes()
-                If attrData.IsTargetAttribute(Me, AttributeDescription.GuidAttribute) Then
-                    If attrData.TryGetGuidAttributeValue(guidString) Then
-                        Return True
-                    End If
+                If attrData.IsTargetAttribute(Me, AttributeDescription.GuidAttribute) AndAlso
+                    attrData.TryGetGuidAttributeValue(guidString) Then
+                    Return True
                 End If
             Next
 
@@ -765,6 +758,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return Me Is obj
         End Function
 
+        ' By default we don't consider the compareKind. This can be overridden.
+        Public Overridable Overloads Function Equals(other As Symbol, compareKind As TypeCompareKind) As Boolean
+            Return Me.Equals(other)
+        End Function
+
         Private Overloads Function IEquatable_Equals(other As ISymbol) As Boolean Implements IEquatable(Of ISymbol).Equals
             Return Me.[Equals](TryCast(other, Symbol), SymbolEqualityComparer.Default.CompareKind)
         End Function
@@ -775,11 +773,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private Overloads Function ISymbolInternal_Equals(other As ISymbolInternal, compareKind As TypeCompareKind) As Boolean Implements ISymbolInternal.Equals
             Return Me.Equals(TryCast(other, Symbol), compareKind)
-        End Function
-
-        ' By default we don't consider the compareKind. This can be overridden.
-        Public Overridable Overloads Function Equals(other As Symbol, compareKind As TypeCompareKind) As Boolean
-            Return Me.Equals(other)
         End Function
 
         ' By default, we do reference equality. This can be overridden.
@@ -1222,7 +1215,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private ReadOnly Property ISymbol_CanBeReferencedByName As Boolean Implements ISymbol.CanBeReferencedByName
             Get
-                Return Me.CanBeReferencedByName
+                Return Me.CanBeReferencedByName()
             End Get
         End Property
 

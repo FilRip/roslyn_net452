@@ -250,28 +250,28 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Private Shared ReadOnly s_checkRaiseParameterModifierCallback As Binder.CheckParameterModifierDelegate = AddressOf CheckEventMethodParameterModifier
 
         ' applicable to all event methods
-        Private Shared Function CheckEventMethodParameterModifier(container As Symbol, token As SyntaxToken, flag As SourceParameterFlags, diagnostics As BindingDiagnosticBag) As SourceParameterFlags
-            If (flag And SourceParameterFlags.Optional) <> 0 Then
+        Private Shared Function CheckEventMethodParameterModifier(container As Symbol, token As SyntaxToken, flag As ESourceParameter, diagnostics As BindingDiagnosticBag) As ESourceParameter
+            If (flag And ESourceParameter.Optional) <> 0 Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_EventMethodOptionalParamIllegal1, location, token.ToString())
-                flag = flag And (Not SourceParameterFlags.Optional)
+                flag = flag And (Not ESourceParameter.Optional)
             End If
 
-            If (flag And SourceParameterFlags.ParamArray) <> 0 Then
+            If (flag And ESourceParameter.ParamArray) <> 0 Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_EventMethodOptionalParamIllegal1, location, token.ToString())
-                flag = flag And (Not SourceParameterFlags.ParamArray)
+                flag = flag And (Not ESourceParameter.ParamArray)
             End If
 
             Return flag
         End Function
 
         ' additional rules for Add and Remove
-        Private Shared Function CheckAddRemoveParameterModifier(container As Symbol, token As SyntaxToken, flag As SourceParameterFlags, diagnostics As BindingDiagnosticBag) As SourceParameterFlags
-            If (flag And SourceParameterFlags.ByRef) <> 0 Then
+        Private Shared Function CheckAddRemoveParameterModifier(container As Symbol, token As SyntaxToken, flag As ESourceParameter, diagnostics As BindingDiagnosticBag) As ESourceParameter
+            If (flag And ESourceParameter.ByRef) <> 0 Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_EventAddRemoveByrefParamIllegal, location, token.ToString())
-                flag = flag And (Not SourceParameterFlags.ByRef)
+                flag = flag And (Not ESourceParameter.ByRef)
             End If
 
             Return CheckEventMethodParameterModifier(container, token, flag, diagnostics)

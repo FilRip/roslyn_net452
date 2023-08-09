@@ -16,6 +16,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             while (true)
             {
+                bool exit = false;
                 cancellationToken.ThrowIfCancellationRequested();
                 var incompletePart = _state.NextIncompletePart;
                 switch (incompletePart)
@@ -87,7 +88,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 // NOTE: we're going to kick out of the completion part loop after this,
                                 // so not making progress isn't a problem.
-                                goto done;
+                                exit = true;
+                                break;
                             }
                         }
 
@@ -100,10 +102,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
                 }
 
+                if (exit)
+                    break;
                 _state.SpinWaitComplete(incompletePart, cancellationToken);
             }
 
-        done:
             // Don't return until we've seen all of the CompletionParts. This ensures all
             // diagnostics have been reported (not necessarily on this thread).
             CompletionPart allParts = (locationOpt == null) ? CompletionPart.NamespaceSymbolAll : CompletionPart.NamespaceSymbolAll & ~CompletionPart.MembersCompleted;

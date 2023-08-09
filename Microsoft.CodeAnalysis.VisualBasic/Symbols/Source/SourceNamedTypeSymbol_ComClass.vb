@@ -8,6 +8,8 @@ Imports System.Runtime.InteropServices
 Imports Microsoft.CodeAnalysis.PooledObjects
 Imports Microsoft.CodeAnalysis.VisualBasic.Symbols
 
+#Disable Warning S2372 ' Exceptions should not be thrown from property getters
+
 Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
     Partial Friend Class SourceNamedTypeSymbol
@@ -133,12 +135,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Dim eventGuid As Guid
 
                 ' Note, using [And] rather than [AndAlso] to make sure both guids are always validated.
-                If ValidateComClassGuid(comClass, InterfaceId, diagnostics, interfaceGuid) And ValidateComClassGuid(comClass, EventId, diagnostics, eventGuid) Then
+                If ValidateComClassGuid(comClass, InterfaceId, diagnostics, interfaceGuid) AndAlso ValidateComClassGuid(comClass, EventId, diagnostics, eventGuid) AndAlso
+                    InterfaceId IsNot Nothing AndAlso EventId IsNot Nothing AndAlso interfaceGuid = eventGuid Then
                     ' Can't specify the same value for iid and eventsid
                     ' It is not an error to reuse the classid guid though.
-                    If InterfaceId IsNot Nothing AndAlso EventId IsNot Nothing AndAlso interfaceGuid = eventGuid Then
-                        Binder.ReportDiagnostic(diagnostics, comClass.Locations(0), ERRID.ERR_ComClassDuplicateGuids1, comClass.Name)
-                    End If
+                    Binder.ReportDiagnostic(diagnostics, comClass.Locations(0), ERRID.ERR_ComClassDuplicateGuids1, comClass.Name)
                 End If
 
                 ' Can't specify ComClass and Guid
@@ -290,7 +291,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                         Return False
                     End If
                 Else
-                    guidVal = Nothing
+                    guidVal = Guid.Empty
                 End If
 
                 Return True
@@ -486,7 +487,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     Dim typedValue As TypedConstant = attrData(dispIdIndex).CommonConstructorArguments(0)
                     Dim value As Object = If(typedValue.Kind <> TypedConstantKind.Array, typedValue.ValueInternal, Nothing)
 
-                    If value IsNot Nothing AndAlso TypeOf value Is Integer Then
+                    If TypeOf value Is Integer Then
                         Dim dispId = DirectCast(value, Integer)
 
                         ' Validate that the user has not used zero which is reserved
@@ -637,29 +638,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     _members = members.ToImmutableAndFree()
                 End Sub
 
-                Public Overrides Function GetHashCode() As Integer
-                    Return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(Me)
-                End Function
-
-                Public Overrides Function Equals(other As TypeSymbol, comparison As TypeCompareKind) As Boolean
-                    Return Me Is other
-                End Function
-
-                Private Shared Function GetNextAvailableDispId(
-                    usedDispIds As HashSet(Of Integer),
-                    <[In], Out> ByRef nextDispId As Integer
-                ) As Integer
-                    Dim dispId As Integer = nextDispId
-
-                    While usedDispIds.Contains(dispId)
-                        dispId += 1
-                    End While
-
-                    nextDispId = dispId + 1
-
-                    Return dispId
-                End Function
-
                 Public Sub New(comClass As SourceNamedTypeSymbol, interfaceMembers As ArrayBuilder(Of KeyValuePair(Of EventSymbol, Integer)))
                     _comClass = comClass
                     _isEventInterface = True
@@ -700,6 +678,29 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
                     _members = members.ToImmutableAndFree()
                 End Sub
+
+                Public Overrides Function GetHashCode() As Integer
+                    Return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(Me)
+                End Function
+
+                Public Overrides Function Equals(other As TypeSymbol, comparison As TypeCompareKind) As Boolean
+                    Return Me Is other
+                End Function
+
+                Private Shared Function GetNextAvailableDispId(
+                    usedDispIds As HashSet(Of Integer),
+                    <[In], Out> ByRef nextDispId As Integer
+                ) As Integer
+                    Dim dispId As Integer = nextDispId
+
+                    While usedDispIds.Contains(dispId)
+                        dispId += 1
+                    End While
+
+                    nextDispId = dispId + 1
+
+                    Return dispId
+                End Function
 
                 Public ReadOnly Property IsEventInterface As Boolean
                     Get
@@ -849,7 +850,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     End Get
                 End Property
 
-                Friend Overrides Function GetSecurityInformation() As IEnumerable(Of Microsoft.Cci.SecurityAttribute)
+                Friend Overrides Function GetSecurityInformation() As IEnumerable(Of Cci.SecurityAttribute)
                     Throw ExceptionUtilities.Unreachable
                 End Function
 
@@ -1027,6 +1028,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Friend Overrides Function GetSynthesizedWithEventsOverrides() As IEnumerable(Of PropertySymbol)
                     Return SpecializedCollections.EmptyEnumerable(Of PropertySymbol)()
                 End Function
+
             End Class
 
             Private Class SynthesizedComMethod
@@ -1915,3 +1917,4 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
 End Namespace
 
+#Enable Warning S2372 ' Exceptions should not be thrown from property getters

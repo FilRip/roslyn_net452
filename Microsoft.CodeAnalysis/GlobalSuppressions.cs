@@ -20,3 +20,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "Linking docs to member not in this layer", Scope = "member", Target = "~P:Microsoft.CodeAnalysis.Operations.IConversionOperation.Conversion")]
 [assembly: SuppressMessage("Info Code Smell", "S1135:Track uses of \"TODO\" tags")]
 [assembly: SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested")]
+[assembly: SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"")]

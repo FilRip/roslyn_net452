@@ -513,7 +513,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if (!_packedFlags.IsExplicitOverrideIsPopulated)
                 {
-                    var _ = this.ExplicitInterfaceImplementations;
+                    _ = this.ExplicitInterfaceImplementations;
                 }
                 return _packedFlags.IsExplicitFinalizerOverride;
             }
@@ -525,7 +525,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
             {
                 if (!_packedFlags.IsExplicitOverrideIsPopulated)
                 {
-                    var _ = this.ExplicitInterfaceImplementations;
+                    _ = this.ExplicitInterfaceImplementations;
                 }
                 return _packedFlags.IsExplicitClassOverride;
             }

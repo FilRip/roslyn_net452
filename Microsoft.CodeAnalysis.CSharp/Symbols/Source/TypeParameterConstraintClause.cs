@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System;
 using System.Collections.Immutable;
 
@@ -12,7 +10,9 @@ using Roslyn.Utilities;
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
     [Flags()]
+#pragma warning disable S4070 // Non-flags enums should not be marked with "FlagsAttribute"
     public enum TypeParameterConstraintKind
+#pragma warning restore S4070 // Non-flags enums should not be marked with "FlagsAttribute"
     {
         None = 0x00,
         ReferenceType = 0x01,

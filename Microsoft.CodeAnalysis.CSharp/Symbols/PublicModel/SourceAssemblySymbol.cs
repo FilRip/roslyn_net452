@@ -5,9 +5,11 @@
 #nullable disable
 
 
+using System;
+
 namespace Microsoft.CodeAnalysis.CSharp.Symbols.PublicModel
 {
-    internal sealed class SourceAssemblySymbol : AssemblySymbol, ISourceAssemblySymbol
+    internal sealed class SourceAssemblySymbol : AssemblySymbol, ISourceAssemblySymbol, IAssemblySymbol, ISymbol, IEquatable<ISymbol?>
     {
         private readonly Symbols.SourceAssemblySymbol _underlying;
 

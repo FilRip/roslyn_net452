@@ -192,13 +192,11 @@ namespace Microsoft.CodeAnalysis.Text
 
             encoding ??= s_utf8EncodingWithNoBOM;
 
-            if (stream.CanSeek)
+            if (stream.CanSeek &&
+                (encoding.GetMaxCharCountOrThrowIfHuge(stream) >= LargeObjectHeapLimitInChars))
             {
                 // If the resulting string would end up on the large object heap, then use LargeEncodedText.
-                if (encoding.GetMaxCharCountOrThrowIfHuge(stream) >= LargeObjectHeapLimitInChars)
-                {
-                    return LargeText.Decode(stream, encoding, checksumAlgorithm, throwIfBinaryDetected, canBeEmbedded);
-                }
+                return LargeText.Decode(stream, encoding, checksumAlgorithm, throwIfBinaryDetected, canBeEmbedded);
             }
 
             string text = Decode(stream, encoding, out encoding);
@@ -1130,7 +1128,7 @@ namespace Microsoft.CodeAnalysis.Text
             return null;
         }
 
-        private class StaticContainer : SourceTextContainer
+        private sealed class StaticContainer : SourceTextContainer
         {
             private readonly SourceText _text;
 
@@ -1141,18 +1139,19 @@ namespace Microsoft.CodeAnalysis.Text
 
             public override SourceText CurrentText => _text;
 
+#pragma warning disable S3237 // "value" contextual keyword should be used
             public override event EventHandler<TextChangeEventArgs> TextChanged
             {
                 add
                 {
                     // do nothing
                 }
-
                 remove
                 {
                     // do nothing
                 }
             }
+#pragma warning restore S3237 // "value" contextual keyword should be used
         }
     }
 }

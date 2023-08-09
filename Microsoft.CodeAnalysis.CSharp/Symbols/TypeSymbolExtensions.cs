@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 
@@ -110,14 +111,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             if (type.TypeKind == TypeKind.TypeParameter)
             {
                 var constraintTypes = ((TypeParameterSymbol)type).ConstraintTypesNoUseSiteDiagnostics;
-                foreach (var constraintType in constraintTypes)
-                {
-                    if (constraintType.Type.IsNullableTypeOrTypeParameter())
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return constraintTypes.Any(constraintType => constraintType.Type.IsNullableTypeOrTypeParameter());
             }
 
             return type.IsNullableType();
@@ -127,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// Is this System.Nullable`1 type, or its substitution.
         ///
         /// To check whether a type is System.Nullable`1 or is a type parameter constrained to System.Nullable`1
-        /// use <see cref="TypeSymbolExtensions.IsNullableTypeOrTypeParameter" /> instead.
+        /// use <see cref="IsNullableTypeOrTypeParameter" /> instead.
         /// </summary>
         public static bool IsNullableType(this TypeSymbol type)
         {
@@ -644,12 +638,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         return current;
                     }
                 }
-                else if (typePredicate != null)
+                else if (typePredicate != null && typePredicate(current, arg, isNestedNamedType))
                 {
-                    if (typePredicate(current, arg, isNestedNamedType))
-                    {
-                        return current;
-                    }
+                    return current;
                 }
 
                 TypeWithAnnotations next;
@@ -975,9 +966,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return result is not null;
         }
 
-        private static readonly Func<TypeSymbol, TypeParameterSymbol?, bool, bool> s_containsTypeParameterPredicate =
-            (type, parameter, unused) => type.TypeKind == TypeKind.TypeParameter && (parameter is null || TypeSymbol.Equals(type, parameter, TypeCompareKind.ConsiderEverything2));
-
         public static bool ContainsTypeParameter(this TypeSymbol type, MethodSymbol parameterContainer)
         {
 
@@ -985,14 +973,17 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return result is not null;
         }
 
-        private static readonly Func<TypeSymbol, Symbol, bool, bool> s_isTypeParameterWithSpecificContainerPredicate =
-             (type, parameterContainer, unused) => type.TypeKind == TypeKind.TypeParameter && type.ContainingSymbol == (object)parameterContainer;
-
         public static bool ContainsTypeParameters(this TypeSymbol type, HashSet<TypeParameterSymbol> parameters)
         {
             var result = type.VisitType(s_containsTypeParametersPredicate, parameters);
             return result is not null;
         }
+
+        private static readonly Func<TypeSymbol, TypeParameterSymbol?, bool, bool> s_containsTypeParameterPredicate =
+            (type, parameter, unused) => type.TypeKind == TypeKind.TypeParameter && (parameter is null || TypeSymbol.Equals(type, parameter, TypeCompareKind.ConsiderEverything2));
+
+        private static readonly Func<TypeSymbol, Symbol, bool, bool> s_isTypeParameterWithSpecificContainerPredicate =
+             (type, parameterContainer, unused) => type.TypeKind == TypeKind.TypeParameter && type.ContainingSymbol == (object)parameterContainer;
 
         private static readonly Func<TypeSymbol, HashSet<TypeParameterSymbol>, bool, bool> s_containsTypeParametersPredicate =
             (type, parameters, unused) => type.TypeKind == TypeKind.TypeParameter && parameters.Contains((TypeParameterSymbol)type);
@@ -1718,12 +1709,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 var paramsBuilder = ArrayBuilder<TypeWithAnnotations>.GetInstance(funcPtrType.Signature.ParameterCount);
                 bool madeParamChanges = false;
+#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
                 foreach (var param in funcPtrType.Signature.Parameters)
                 {
                     var paramType = param.TypeWithAnnotations;
                     madeParamChanges |= NormalizeTaskTypesInType(compilation, ref paramType);
                     paramsBuilder.Add(paramType);
                 }
+#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
                 if (madeParamChanges)
                 {
@@ -1901,7 +1894,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
 
                     // fall through
-                    goto default;
+                    return -1;
 
                 default: return -1;
             }

@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// </summary>
         private TypeWithAnnotations SetType(/*CSharpCompilation compilation, */BindingDiagnosticBag diagnostics, TypeWithAnnotations type)
         {
-            var _ = _lazyType?.Value.DefaultType;
+            _ = _lazyType?.Value.DefaultType;
 
             // In the event that we race to set the type of a field, we should
             // always deduce the same type, unless the cached type is an error.

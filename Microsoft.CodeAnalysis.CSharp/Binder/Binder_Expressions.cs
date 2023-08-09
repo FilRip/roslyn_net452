@@ -775,13 +775,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 CreateErrorType("ref"));
         }
 
-        private BoundExpression BindRefType(ExpressionSyntax node, BindingDiagnosticBag diagnostics)
-        {
-            var firstToken = node.GetFirstToken();
-            diagnostics.Add(ErrorCode.ERR_UnexpectedToken, firstToken.GetLocation(), firstToken.ValueText);
-            return new BoundTypeExpression(node, null, CreateErrorType("ref"));
-        }
-
         private BoundExpression BindThrowExpression(ThrowExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
             bool hasErrors = node.HasErrors;
@@ -1164,6 +1157,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new BoundMakeRefOperator(node, argument, typedReferenceType, hasErrors);
         }
 
+        private BoundExpression BindRefType(ExpressionSyntax node, BindingDiagnosticBag diagnostics)
+        {
+            var firstToken = node.GetFirstToken();
+            diagnostics.Add(ErrorCode.ERR_UnexpectedToken, firstToken.GetLocation(), firstToken.ValueText);
+            return new BoundTypeExpression(node, null, CreateErrorType("ref"));
+        }
+
         private BoundExpression BindRefType(RefTypeExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
             // __reftype(x) requires that x be implicitly convertible to TypedReference.
@@ -1195,6 +1195,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // The native compiler allows __arglist in a lambda:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // class C
             // {
             //   delegate int D(RuntimeArgumentHandle r);
@@ -1204,6 +1205,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //     f = r=>f(__arglist);
             //   }
             // }
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // This is clearly wrong. Either the developer intends __arglist to refer to the 
             // arg list of the *lambda*, or to the arg list of *M*. The former makes no sense;
@@ -1394,7 +1396,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundExpression expression;
 
-            // It's possible that the argument list is malformed; if so, do not attempt to bind it;
+            // It's possible that the argument list is malformed; if so, do not attempt to bind it
             // just use the null array.
 
             int arity = node.Arity;
@@ -1565,6 +1567,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // 
             // If the lookup finds M in an outer class:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // class Outer { 
             //     static void M(int x) {}
             //     class Inner {
@@ -1595,6 +1598,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // class Derived : Base {
             //   void X() { M(123); }
             // }
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // Then the associated instance expression is "this" *even if one or more methods in the
             // method group are static*. If it turns out that the method was static, then we'll
@@ -1640,15 +1644,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool IsBadLocalOrParameterCapture(Symbol symbol, TypeSymbol type, RefKind refKind)
         {
-            if (refKind != RefKind.None || type.IsRefLikeType)
+            if ((refKind != RefKind.None || type.IsRefLikeType) &&
+                (this.ContainingMemberOrLambda is MethodSymbol containingMethod && symbol.ContainingSymbol != (object)containingMethod))
             {
-                if (this.ContainingMemberOrLambda is MethodSymbol containingMethod && symbol.ContainingSymbol != (object)containingMethod)
-                {
-                    // Not expecting symbol from constructed method.
+                // Not expecting symbol from constructed method.
 
-                    // Captured in a lambda.
-                    return (containingMethod.MethodKind == MethodKind.AnonymousFunction || containingMethod.MethodKind == MethodKind.LocalFunction) && !IsInsideNameof; // false in EE evaluation method
-                }
+                // Captured in a lambda.
+                return (containingMethod.MethodKind == MethodKind.AnonymousFunction || containingMethod.MethodKind == MethodKind.LocalFunction) && !IsInsideNameof; // false in EE evaluation method
             }
             return false;
         }
@@ -1698,12 +1700,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                             // As an additional help to the user, we give a special error for this
                             // scenario:
                             //
+#pragma warning disable S125 // Sections of code should not be commented out
                             // class C { 
                             //  int x; 
                             //  void M() { 
                             //    Print(x); 
                             //    int x = 5;
                             //  } }
+#pragma warning restore S125 // Sections of code should not be commented out
                             //
                             // Because a too-clever C++ user might be attempting to deliberately
                             // bind to "this.x" in the "Print". (In C++ the local does not come
@@ -1743,9 +1747,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                             // A var (type-inferred) local variable has been used in its own initialization (the "forbidden zone").
                             // There are many cases where this occurs, including:
                             //
+#pragma warning disable S125 // Sections of code should not be commented out
                             // 1. var x = M(out x);
                             // 2. M(out var x, out x);
                             // 3. var (x, y) = (y, x);
+#pragma warning restore S125 // Sections of code should not be commented out
                             //
                             // localSymbol.ForbiddenDiagnostic provides a suitable diagnostic for whichever case applies.
                             //
@@ -1843,13 +1849,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static bool ReportSimpleProgramLocalReferencedOutsideOfTopLevelStatement(SimpleNameSyntax node, Symbol symbol, BindingDiagnosticBag diagnostics)
         {
-            if (symbol.ContainingSymbol is SynthesizedSimpleProgramEntryPointSymbol)
+            if (symbol.ContainingSymbol is SynthesizedSimpleProgramEntryPointSymbol &&
+                (!SyntaxFacts.IsTopLevelStatement(node.Ancestors(ascendOutOfTrivia: false).OfType<GlobalStatementSyntax>().FirstOrDefault())))
             {
-                if (!SyntaxFacts.IsTopLevelStatement(node.Ancestors(ascendOutOfTrivia: false).OfType<GlobalStatementSyntax>().FirstOrDefault()))
-                {
-                    Error(diagnostics, ErrorCode.ERR_SimpleProgramLocalIsReferencedOutsideOfTopLevelStatement, node, node);
-                    return true;
-                }
+                Error(diagnostics, ErrorCode.ERR_SimpleProgramLocalIsReferencedOutsideOfTopLevelStatement, node, node);
+                return true;
             }
 
             return false;
@@ -2293,7 +2297,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 GenerateExplicitConversionErrors(diagnostics, node, conversion, operand, targetType);
             }
 
-            return CreateConversion(node, operand, conversion, isCast: true, conversionGroupOpt: conversionGroup, wasCompilerGenerated: wasCompilerGenerated, destination: targetType, diagnostics: diagnostics, hasErrors: hasErrors | suppressErrors);
+            return CreateConversion(node, operand, conversion, isCast: true, conversionGroupOpt: conversionGroup, wasCompilerGenerated: wasCompilerGenerated, destination: targetType, diagnostics: diagnostics, hasErrors: hasErrors || suppressErrors);
         }
 
         private void GenerateExplicitConversionErrors(
@@ -2331,7 +2335,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return;
             }
 
-            if (conversion.ResultKind == LookupResultKind.OverloadResolutionFailure)
+            if (conversion.ResultKind() == LookupResultKind.OverloadResolutionFailure)
             {
 
                 ImmutableArray<MethodSymbol> originalUserDefinedConversions = conversion.OriginalUserDefinedConversions;
@@ -2657,6 +2661,77 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+        // Bind a named/positional argument.
+        // Prevent cascading diagnostic by considering the previous
+        // error state and returning the updated error state.
+        private void BindArgumentAndName(
+            AnalyzedArguments result,
+            BindingDiagnosticBag diagnostics,
+            ref bool hadLangVersionError,
+            CSharpSyntaxNode argumentSyntax,
+            BoundExpression boundArgumentExpression,
+            NameColonSyntax nameColonSyntax,
+            RefKind refKind)
+        {
+
+            bool hasRefKinds = result.RefKinds.Any();
+            if (refKind != RefKind.None)
+            {
+                // The common case is no ref or out arguments. So we defer all work until the first one is seen.
+                if (!hasRefKinds)
+                {
+                    hasRefKinds = true;
+
+                    int argCount = result.Arguments.Count;
+                    for (int i = 0; i < argCount; ++i)
+                    {
+                        result.RefKinds.Add(RefKind.None);
+                    }
+                }
+            }
+
+            if (hasRefKinds)
+            {
+                result.RefKinds.Add(refKind);
+            }
+
+            bool hasNames = result.Names.Any();
+            if (nameColonSyntax != null)
+            {
+                // The common case is no named arguments. So we defer all work until the first named argument is seen.
+                if (!hasNames)
+                {
+#pragma warning disable S125 // Sections of code should not be commented out
+                    //hasNames = true;
+#pragma warning restore S125 // Sections of code should not be commented out
+
+                    int argCount = result.Arguments.Count;
+                    for (int i = 0; i < argCount; ++i)
+                    {
+                        result.Names.Add(null);
+                    }
+                }
+
+                result.Names.Add(nameColonSyntax.Name);
+            }
+            else if (hasNames)
+            {
+                // We just saw a fixed-position argument after a named argument.
+                if (!hadLangVersionError && !Compilation.LanguageVersion.AllowNonTrailingNamedArguments())
+                {
+                    // CS1738: Named argument specifications must appear after all fixed arguments have been specified
+                    Error(diagnostics, ErrorCode.ERR_NamedArgumentSpecificationBeforeFixedArgument, argumentSyntax,
+                        new CSharpRequiredLanguageVersion(MessageID.IDS_FeatureNonTrailingNamedArguments.RequiredVersion()));
+
+                    hadLangVersionError = true;
+                }
+
+                result.Names.Add(null);
+            }
+
+            result.Arguments.Add(boundArgumentExpression);
+        }
+
         private BoundExpression BindArgumentValue(BindingDiagnosticBag diagnostics, ArgumentSyntax argumentSyntax, bool allowArglist, RefKind refKind)
         {
             if (argumentSyntax.Expression.Kind() == SyntaxKind.DeclarationExpression)
@@ -2787,75 +2862,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return null;
-        }
-
-        // Bind a named/positional argument.
-        // Prevent cascading diagnostic by considering the previous
-        // error state and returning the updated error state.
-        private void BindArgumentAndName(
-            AnalyzedArguments result,
-            BindingDiagnosticBag diagnostics,
-            ref bool hadLangVersionError,
-            CSharpSyntaxNode argumentSyntax,
-            BoundExpression boundArgumentExpression,
-            NameColonSyntax nameColonSyntax,
-            RefKind refKind)
-        {
-
-            bool hasRefKinds = result.RefKinds.Any();
-            if (refKind != RefKind.None)
-            {
-                // The common case is no ref or out arguments. So we defer all work until the first one is seen.
-                if (!hasRefKinds)
-                {
-                    hasRefKinds = true;
-
-                    int argCount = result.Arguments.Count;
-                    for (int i = 0; i < argCount; ++i)
-                    {
-                        result.RefKinds.Add(RefKind.None);
-                    }
-                }
-            }
-
-            if (hasRefKinds)
-            {
-                result.RefKinds.Add(refKind);
-            }
-
-            bool hasNames = result.Names.Any();
-            if (nameColonSyntax != null)
-            {
-                // The common case is no named arguments. So we defer all work until the first named argument is seen.
-                if (!hasNames)
-                {
-                    //hasNames = true;
-
-                    int argCount = result.Arguments.Count;
-                    for (int i = 0; i < argCount; ++i)
-                    {
-                        result.Names.Add(null);
-                    }
-                }
-
-                result.Names.Add(nameColonSyntax.Name);
-            }
-            else if (hasNames)
-            {
-                // We just saw a fixed-position argument after a named argument.
-                if (!hadLangVersionError && !Compilation.LanguageVersion.AllowNonTrailingNamedArguments())
-                {
-                    // CS1738: Named argument specifications must appear after all fixed arguments have been specified
-                    Error(diagnostics, ErrorCode.ERR_NamedArgumentSpecificationBeforeFixedArgument, argumentSyntax,
-                        new CSharpRequiredLanguageVersion(MessageID.IDS_FeatureNonTrailingNamedArguments.RequiredVersion()));
-
-                    hadLangVersionError = true;
-                }
-
-                result.Names.Add(null);
-            }
-
-            result.Arguments.Add(boundArgumentExpression);
         }
 
         /// <summary>
@@ -3002,6 +3008,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // array type, but the elements of such an array must be manually initialized. For
             // example, the statement
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // int[][] a = new int[100][];
             //
             // creates a single-dimensional array with 100 elements of type int[]. The initial value
@@ -3018,6 +3025,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // var b = new[] { 1, 1.5, 2, 2.5 };                       // double[]
             // var c = new[,] { { "hello", null }, { "world", "!" } }; // string[,]
             // var d = new[] { 1, "one", 2, "two" };                   // Error
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // The last expression causes a compile-time error because neither int nor string is 
             // implicitly convertible to the other, and so there is no best common type. An
@@ -3033,8 +3041,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // There may be erroneous rank specifiers in the source code, for example:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // int y = 123; 
             // int[][] z = new int[10][y];
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // The "10" is legal but the "y" is not. If we are in such a situation we do have the
             // "y" expression syntax stashed away in the syntax tree. However, we do *not* perform
@@ -3311,16 +3321,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 knownSizes[dimension - 1] = initializers.Count;
             }
-            else if (knownSizeOpt != initializers.Count)
+            else if (knownSizeOpt != initializers.Count && knownSizeOpt >= 0)
             {
                 // No need to report an error if the known size is negative
                 // since we've already reported CS0248 earlier and it's
                 // expected that the number of initializers won't match.
-                if (knownSizeOpt >= 0)
-                {
-                    Error(diagnostics, ErrorCode.ERR_ArrayInitializerIncorrectLength, node, knownSizeOpt.Value);
-                    hasErrors = true;
-                }
+                Error(diagnostics, ErrorCode.ERR_ArrayInitializerIncorrectLength, node, knownSizeOpt.Value);
+                hasErrors = true;
             }
 
             return new BoundArrayInitialization(node, initializers.ToImmutableAndFree(), hasErrors: hasErrors);
@@ -3413,7 +3420,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             for (int i = 0; i < numSizes; ++i)
             {
                 // Here we are being bug-for-bug compatible with C# 4. When you have code like
+#pragma warning disable S125 // Sections of code should not be commented out
                 // byte[] b = new[uint.MaxValue] { 2 };
+#pragma warning restore S125 // Sections of code should not be commented out
                 // you might expect an error that says that the number of elements in the initializer does
                 // not match the size of the array. But in C# 4 if the constant does not fit into an integer
                 // then we confusingly give the error "that's not a constant".
@@ -3849,9 +3858,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                             type: constructorReturnType);
                     }
                 }
-                else
-                {
-                }
 
                 CSharpSyntaxNode nonNullSyntax;
                 Location errorLocation;
@@ -4072,7 +4078,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.FunctionPointer:
                     type = new ExtendedErrorTypeSymbol(type, LookupResultKind.NotCreatable,
                         diagnostics.Add(ErrorCode.ERR_UnsafeTypeInObjectCreation, node.Location, type));
-                    goto case TypeKind.Class;
+                    return BindClassCreationExpression(node, (NamedTypeSymbol)type, GetName(node.Type), diagnostics, originalType);
 
                 case TypeKind.Dynamic:
                 // we didn't find any type called "dynamic" so we are using the builtin dynamic type, which has no constructors:
@@ -4080,7 +4086,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // ex: new ref[]
                     type = new ExtendedErrorTypeSymbol(type, LookupResultKind.NotCreatable,
                         diagnostics.Add(ErrorCode.ERR_InvalidObjectCreation, node.Type.Location, type));
-                    goto case TypeKind.Class;
+                    return BindClassCreationExpression(node, (NamedTypeSymbol)type, GetName(node.Type), diagnostics, originalType);
 
                 default:
                     throw ExceptionUtilities.UnexpectedValue(type.TypeKind);
@@ -4177,7 +4183,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // 2. A method group
-            else if (argument.Kind == BoundKind.MethodGroup)
+            else if (argument?.Kind == BoundKind.MethodGroup)
             {
                 BoundMethodGroup methodGroup = (BoundMethodGroup)argument;
                 hasErrors = MethodGroupConversionDoesNotExistOrHasErrors(methodGroup, type, node.Location, diagnostics, out Conversion conversion);
@@ -4185,9 +4191,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return new BoundDelegateCreationExpression(node, methodGroup, conversion.Method, conversion.IsExtensionMethod, type, hasErrors);
             }
 
-            else if (argument.Type is null)
+            else if (argument?.Type is null)
             {
-                diagnostics.Add(ErrorCode.ERR_MethodNameExpected, argument.Syntax.Location);
+                diagnostics.Add(ErrorCode.ERR_MethodNameExpected, argument?.Syntax?.Location);
             }
 
             // 3. A value of the compile-time type dynamic (which is dynamically case 4), or
@@ -4412,11 +4418,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (initializerType.IsDynamic() && leftSyntax.Kind() == SyntaxKind.IdentifierName)
                 {
-                    {
-                        // D = { ..., <identifier> = <expr>, ... }, where D : dynamic
-                        var memberName = ((IdentifierNameSyntax)leftSyntax).Identifier.Text;
-                        boundLeft = new BoundDynamicObjectInitializerMember(leftSyntax, memberName, implicitReceiver.Type, initializerType, hasErrors: false);
-                    }
+                    // D = { ..., <identifier> = <expr>, ... }, where D : dynamic
+                    var memberName = ((IdentifierNameSyntax)leftSyntax).Identifier.Text;
+                    boundLeft = new BoundDynamicObjectInitializerMember(leftSyntax, memberName, implicitReceiver.Type, initializerType, hasErrors: false);
                 }
                 else
                 {
@@ -4592,16 +4596,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return BadObjectInitializerMemberAccess(boundMember, implicitReceiver, namedAssignment.Left, diagnostics, valueKind, hasErrors);
             }
 
-            if (!hasErrors)
+            if (!hasErrors && !CheckValueKind(boundMember.Syntax, boundMember, valueKind, checkingReceiver: false, diagnostics: diagnostics))
             {
                 // CheckValueKind to generate possible diagnostics for invalid initializers non-viable member lookup result:
                 //      1) CS0154 (ERR_PropertyLacksGet)
                 //      2) CS0200 (ERR_AssgReadonlyProp)
-                if (!CheckValueKind(boundMember.Syntax, boundMember, valueKind, checkingReceiver: false, diagnostics: diagnostics))
-                {
-                    hasErrors = true;
-                    resultKind = isRhsNestedInitializer ? LookupResultKind.NotAValue : LookupResultKind.NotAVariable;
-                }
+                hasErrors = true;
+                resultKind = isRhsNestedInitializer ? LookupResultKind.NotAValue : LookupResultKind.NotAVariable;
             }
 
             return new BoundObjectInitializerMember(
@@ -4716,7 +4717,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // SPEC:    A collection initializer consists of a sequence of element initializers, enclosed by { and } tokens and separated by commas.
             // SPEC:    The following is an example of an object creation expression that includes a collection initializer:
+#pragma warning disable S125 // Sections of code should not be commented out
             // SPEC:        List<int> digits = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+#pragma warning restore S125 // Sections of code should not be commented out
             // SPEC:    The collection object to which a collection initializer is applied must be of a type that implements System.Collections.IEnumerable or
             // SPEC:    a compile-time error occurs. For each specified element in order, the collection initializer invokes an Add method on the target object
             // SPEC:    with the expression list of the element initializer as argument list, applying normal overload resolution for each invocation.
@@ -5249,6 +5252,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // BREAKING CHANGE:     Dev10 allows the following code to compile, even though the output assembly is not verifiable and generates a runtime exception:
                 //
+#pragma warning disable S125 // Sections of code should not be commented out
                 //          [ComImport(), Guid("00020810-0000-0000-C000-000000000046")]
                 //          [CoClass(typeof(GenericClass<>))]
                 //          public interface InterfaceType {}
@@ -5258,6 +5262,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 //          {
                 //              public static void Main() { var i = new InterfaceType(); }
                 //          }
+#pragma warning restore S125 // Sections of code should not be commented out
                 //
                 //  We disallow CoClass creation if coClassType is an unbound generic type and report a compile time error.
 
@@ -5488,10 +5493,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     //
                     // The native compiler produces the error CS1540:
                     //
-                    //   Cannot access protected member 'MyBase.MyBase' via a qualifier of type 'MyBase'; 
+                    //   Cannot access protected member 'MyBase.MyBase' via a qualifier of type 'MyBase'
                     //   the qualifier must be of type 'Derived' (or derived from it)
                     //
-                    // Though technically correct, this is a very confusing error message for this scenario;
+                    // Though technically correct, this is a very confusing error message for this scenario:
                     // one does not typically think of the constructor as being a method that is 
                     // called with an implicit "this" of a particular receiver type, even though of course
                     // that is exactly what it is.
@@ -5564,7 +5569,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundLiteral BindLiteralConstant(LiteralExpressionSyntax node, BindingDiagnosticBag diagnostics)
         {
+#pragma warning disable S125 // Sections of code should not be commented out
             // bug.Assert(node.Kind == SyntaxKind.LiteralExpression);
+#pragma warning restore S125 // Sections of code should not be commented out
 
             var value = node.Token.Value;
 
@@ -5622,7 +5629,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // but that would be much more cumbersome because we'd be unable to build upon the BindMemberAccess infrastructure,
                 // which expects a receiver.
 
-                // Dereference before binding member;
+                // Dereference before binding member
                 BindPointerIndirectionExpressionInternal(node, boundLeft, diagnostics, out TypeSymbol pointedAtType, out bool hasErrors);
 
                 // If there is no pointed-at type, fall back on the actual type (i.e. assume the user meant "." instead of "->").
@@ -5814,7 +5821,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // There are some sources of a `dynamic` typed value that can be known before runtime
                 // to be invalid. For example, accessing a set-only property whose type is dynamic:
+#pragma warning disable S125 // Sections of code should not be commented out
                 //   dynamic Goo { set; }
+#pragma warning restore S125 // Sections of code should not be commented out
                 // If Goo itself is a dynamic thing (e.g. in `x.Goo.Bar`, `x` is dynamic, and we're
                 // currently checking Bar), then CheckValue will do nothing.
                 boundLeft = CheckValue(boundLeft, BindValueKind.RValue, diagnostics);
@@ -6382,7 +6391,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         {
                             // CS0572: 'B': cannot reference a type through an expression; try 'A.B' instead
                             Error(diagnostics, ErrorCode.ERR_BadTypeReference, right, plainName, symbol);
+#pragma warning disable S125 // Sections of code should not be commented out
                             //wasError = true;
+#pragma warning restore S125 // Sections of code should not be commented out
                         }
 
                         // If I identifies a type, then the result is that type constructed with
@@ -6676,21 +6687,25 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     // This is an obvious consequence of the spec.
                     // It is for cases like:
+#pragma warning disable S125 // Sections of code should not be commented out
                     // enum E {
                     //     A,
                     //     B = A + 1, //A is implicitly converted to int (underlying type)
                     // }
+#pragma warning restore S125 // Sections of code should not be commented out
                     enumType = type;
                 }
                 else if (constantValueOpt != null && fieldType.IsEnumType())
                 {
                     // This seems like a borderline SPEC VIOLATION that we're preserving for back compat.
                     // It is for cases like:
+#pragma warning disable S125 // Sections of code should not be commented out
                     // const E e = E.A;
                     // enum E {
                     //     A,
                     //     B = e + 1, //e is implicitly converted to int (underlying type)
                     // }
+#pragma warning restore S125 // Sections of code should not be commented out
                     enumType = (NamedTypeSymbol)fieldType;
                 }
 
@@ -6898,25 +6913,24 @@ namespace Microsoft.CodeAnalysis.CSharp
 
 
             if ((methodOrPropertyGroup.Count > 0) &&
-                IsMethodOrPropertyGroup(methodOrPropertyGroup))
+                IsMethodOrPropertyGroup(methodOrPropertyGroup) &&
+                ((methodOrPropertyGroup[0].Kind == SymbolKind.Method) || (other is null)))
             {
                 // Ambiguities between methods and non-methods are reported here,
                 // but all other ambiguities, including those between properties and
                 // non-methods, are reported in ResultSymbol.
-                if ((methodOrPropertyGroup[0].Kind == SymbolKind.Method) || (other is null))
+
+                // Result will be treated as a method or property group. Any additional
+                // checks, such as use-site errors, must be handled by the caller when
+                // converting to method invocation or property access.
+
+                if (result.Error != null)
                 {
-                    // Result will be treated as a method or property group. Any additional
-                    // checks, such as use-site errors, must be handled by the caller when
-                    // converting to method invocation or property access.
-
-                    if (result.Error != null)
-                    {
-                        Error(diagnostics, result.Error, node);
-                        wasError = (result.Error.Severity == DiagnosticSeverity.Error);
-                    }
-
-                    return null;
+                    Error(diagnostics, result.Error, node);
+                    wasError = (result.Error.Severity == DiagnosticSeverity.Error);
                 }
+
+                return null;
             }
 
             methodOrPropertyGroup.Clear();
@@ -7899,7 +7913,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 inferWithDynamic, allowUnexpandedForm,
                 returnRefKind, returnType, isFunctionPointerResolution, callingConvention);
 
-            // If the method group's receiver is dynamic then there is no point in looking for extension methods; 
+            // If the method group's receiver is dynamic then there is no point in looking for extension methods
             // it's going to be a dynamic invocation.
             if (!methodGroup.SearchExtensionMethods || methodResolution.HasAnyApplicableMethod || methodGroup.MethodGroupReceiverIsDynamic())
             {
@@ -7962,12 +7976,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             in CallingConventionInfo callingConvention = default)
         {
             var methods = node.Methods;
-            if (methods.Length == 0)
+            if (methods.Length == 0 && node.LookupSymbolOpt is MethodSymbol method)
             {
-                if (node.LookupSymbolOpt is MethodSymbol method)
-                {
-                    methods = ImmutableArray.Create(method);
-                }
+                methods = ImmutableArray.Create(method);
             }
 
             var sealedDiagnostics = ImmutableBindingDiagnostic<AssemblySymbol>.Empty;
@@ -8219,7 +8230,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return new BoundConditionalAccess(node, receiver, access, CreateErrorType(), hasErrors: true);
             }
 
-            var _ = receiver.Type;
+            _ = receiver.Type;
 
             // access cannot be a method group
             if (access.Kind == BoundKind.MethodGroup)
@@ -8358,13 +8369,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // create surrogate receiver
-            var receiverType = receiver.Type;
+            var receiverType = receiver?.Type;
             if (receiverType?.IsNullableType() == true)
             {
                 receiverType = receiverType.GetNullableUnderlyingType();
             }
 
-            receiver = new BoundConditionalReceiver(receiver.Syntax, 0, receiverType ?? CreateErrorType(), hasErrors: receiver.HasErrors) { WasCompilerGenerated = true };
+            receiver = new BoundConditionalReceiver(receiver?.Syntax, 0, receiverType ?? CreateErrorType(), hasErrors: receiver.HasErrors) { WasCompilerGenerated = true };
             return receiver;
         }
 

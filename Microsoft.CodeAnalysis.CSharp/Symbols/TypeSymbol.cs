@@ -1045,7 +1045,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     return FindMostSpecificImplementationInBases(interfaceMember, implementingInterface,
                                                                  ref useSiteInfo,
-                                                                 out var _, out var _);
+                                                                 out _, out _);
                 case 1:
                     {
                         Symbol result = implementingMember.Single();

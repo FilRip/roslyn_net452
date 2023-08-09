@@ -9,9 +9,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
     Friend MustInherit Class VisualBasicSymbolVisitor
 
         Public Overridable Sub Visit(symbol As Symbol)
-            If symbol IsNot Nothing Then
-                symbol.Accept(Me)
-            End If
+            symbol?.Accept(Me)
         End Sub
 
         Public Overridable Sub DefaultVisit(symbol As Symbol)

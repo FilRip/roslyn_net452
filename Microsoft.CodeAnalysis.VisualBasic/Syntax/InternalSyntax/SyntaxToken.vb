@@ -288,18 +288,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         Protected Overrides Sub WriteTokenTo(writer As System.IO.TextWriter, leading As Boolean, trailing As Boolean)
             If leading Then
                 Dim leadingTrivia = GetLeadingTrivia()
-                If leadingTrivia IsNot Nothing Then
-                    leadingTrivia.WriteTo(writer, True, True) 'Append leading trivia
-                End If
+                leadingTrivia?.WriteTo(writer, True, True) 'Append leading trivia
             End If
 
             writer.Write(Me.Text) 'Append text of token itself
 
             If trailing Then
                 Dim trailingTrivia = GetTrailingTrivia()
-                If trailingTrivia IsNot Nothing Then
-                    trailingTrivia.WriteTo(writer, True, True) ' Append trailing trivia
-                End If
+                trailingTrivia?.WriteTo(writer, True, True) ' Append trailing trivia
             End If
         End Sub
 

@@ -17,7 +17,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Inherits SourceParameterSymbol
 
         Private ReadOnly _syntaxRef As SyntaxReference
-        Private ReadOnly _flags As SourceParameterFlags
+        Private ReadOnly _flags As ESourceParameter
 
         ' m_lazyDefaultValue is not readonly because it is lazily computed
         Private _lazyDefaultValue As ConstantValue
@@ -204,13 +204,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Public Overrides ReadOnly Property IsOptional As Boolean
             Get
-                Return (_flags And SourceParameterFlags.Optional) <> 0
+                Return (_flags And ESourceParameter.Optional) <> 0
             End Get
         End Property
 
         Public Overrides ReadOnly Property IsParamArray As Boolean
             Get
-                If (_flags And SourceParameterFlags.ParamArray) <> 0 Then
+                If (_flags And ESourceParameter.ParamArray) <> 0 Then
                     Return True
                 End If
 
@@ -254,7 +254,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </summary>
         Friend Overrides ReadOnly Property IsExplicitByRef As Boolean
             Get
-                Return (_flags And SourceParameterFlags.ByRef) <> 0
+                Return (_flags And ESourceParameter.ByRef) <> 0
             End Get
         End Property
 
@@ -265,7 +265,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             type As TypeSymbol,
             location As Location,
             syntaxRef As SyntaxReference,
-            flags As SourceParameterFlags,
+            flags As ESourceParameter,
             defaultValueOpt As ConstantValue
         )
             MyBase.New(container, name, ordinal, type, location)
@@ -281,7 +281,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                  type As TypeSymbol,
                                  location As Location,
                                  syntaxRef As SyntaxReference,
-                                 flags As SourceParameterFlags,
+                                 flags As ESourceParameter,
                                  defaultValueOpt As ConstantValue) As ParameterSymbol
 
             ' Note that parameters of partial method declarations should always be complex
@@ -311,7 +311,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend Shared Function CreateFromSyntax(container As Symbol,
                                                 syntax As ParameterSyntax,
                                                 name As String,
-                                                flags As SourceParameterFlags,
+                                                flags As ESourceParameter,
                                                 ordinal As Integer,
                                                 binder As Binder,
                                                 diagnostics As BindingDiagnosticBag) As ParameterSymbol
@@ -325,7 +325,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             Dim paramType = binder.DecodeModifiedIdentifierType(syntax.Identifier, syntax.AsClause, Nothing, getErrorInfo, diagnostics, ModifiedIdentifierTypeDecoderContext.ParameterType)
 
-            If (flags And SourceParameterFlags.ParamArray) <> 0 AndAlso paramType.TypeKind <> TypeKind.Error Then
+            If (flags And ESourceParameter.ParamArray) <> 0 AndAlso paramType.TypeKind <> TypeKind.Error Then
                 If paramType.TypeKind <> TypeKind.Array Then
                     ' ParamArray must be of array type.
                     Binder.ReportDiagnostic(diagnostics, syntax.Identifier, ERRID.ERR_ParamArrayNotArray)
@@ -353,7 +353,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             Dim defaultValue As ConstantValue = Nothing
 
-            If (flags And SourceParameterFlags.Optional) <> 0 Then
+            If (flags And ESourceParameter.Optional) <> 0 Then
                 ' The default value is computed lazily. If there is default syntax then set the value to ConstantValue.unset to indicate the value needs to
                 ' be computed.
                 If syntax.Default IsNot Nothing Then
@@ -410,7 +410,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 type As TypeSymbol,
                 location As Location,
                 syntaxRef As SyntaxReference,
-                flags As SourceParameterFlags,
+                flags As ESourceParameter,
                 defaultValueOpt As ConstantValue,
                 customModifiers As ImmutableArray(Of CustomModifier),
                 refCustomModifiers As ImmutableArray(Of CustomModifier)

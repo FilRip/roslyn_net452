@@ -37,12 +37,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             _setMethod = setMethod
             _associatedField = associatedField
 
-            If _getMethod IsNot Nothing Then
-                _getMethod.SetAssociatedPropertyOrEvent(Me)
-            End If
-            If _setMethod IsNot Nothing Then
-                _setMethod.SetAssociatedPropertyOrEvent(Me)
-            End If
+            _getMethod?.SetAssociatedPropertyOrEvent(Me)
+            _setMethod?.SetAssociatedPropertyOrEvent(Me)
         End Sub
 
         Public Overrides ReadOnly Property Name As String

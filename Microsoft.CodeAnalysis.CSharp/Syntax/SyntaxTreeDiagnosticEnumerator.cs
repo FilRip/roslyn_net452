@@ -73,33 +73,38 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 var slotIndex = _stack.Top.SlotIndex;
-            tryAgain:
-                if (slotIndex < node.SlotCount - 1)
+                bool loop = true;
+                while (loop)
                 {
-                    slotIndex++;
-                    var child = node.GetSlot(slotIndex);
-                    if (child == null)
+                    loop = false;
+                    if (slotIndex < node.SlotCount - 1)
                     {
-                        goto tryAgain;
+                        slotIndex++;
+                        var child = node.GetSlot(slotIndex);
+                        if (child == null)
+                        {
+                            loop = true;
+                        }
+                        else if (!child.ContainsDiagnostics)
+                        {
+                            _position += child.FullWidth;
+                            loop = true;
+                        }
+                        else
+                        {
+                            _stack.UpdateSlotIndexForStackTop(slotIndex);
+                            _stack.PushNodeOrToken(child);
+                        }
                     }
-
-                    if (!child.ContainsDiagnostics)
+                    else
                     {
-                        _position += child.FullWidth;
-                        goto tryAgain;
-                    }
+                        if (node.SlotCount == 0)
+                        {
+                            _position += node.Width;
+                        }
 
-                    _stack.UpdateSlotIndexForStackTop(slotIndex);
-                    _stack.PushNodeOrToken(child);
-                }
-                else
-                {
-                    if (node.SlotCount == 0)
-                    {
-                        _position += node.Width;
+                        _stack.Pop();
                     }
-
-                    _stack.Pop();
                 }
             }
 

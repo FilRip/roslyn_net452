@@ -124,7 +124,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 foreach (var ((expr, originalSymbol), _) in _updatedSymbolsMap)
                 {
-                    var _ = expr?.Syntax.ToFullString() ?? originalSymbol.ToDisplayString();
+                    _ = expr?.Syntax.ToFullString() ?? originalSymbol.ToDisplayString();
                 }
             }
 #endif

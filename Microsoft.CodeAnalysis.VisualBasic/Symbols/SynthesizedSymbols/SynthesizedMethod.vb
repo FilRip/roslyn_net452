@@ -49,20 +49,20 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                              newType As TypeSymbol,
                              origParameter As ParameterSymbol) As ParameterSymbol
 
-            Dim flags As SourceParameterFlags = Nothing
+            Dim flags As ESourceParameter = Nothing
 
             If origParameter.IsByRef Then
-                flags = flags Or SourceParameterFlags.ByRef
+                flags = flags Or ESourceParameter.ByRef
             Else
-                flags = flags Or SourceParameterFlags.ByVal
+                flags = flags Or ESourceParameter.ByVal
             End If
 
             If origParameter.IsParamArray Then
-                flags = flags Or SourceParameterFlags.ParamArray
+                flags = flags Or ESourceParameter.ParamArray
             End If
 
             If origParameter.IsOptional Then
-                flags = flags Or SourceParameterFlags.Optional
+                flags = flags Or ESourceParameter.Optional
             End If
 
             Return SourceComplexParameterSymbol.Create(

@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 {
     partial class CSharpCompilation
     {
-        private class UsingsFromOptionsAndDiagnostics
+        private sealed class UsingsFromOptionsAndDiagnostics
         {
             public static readonly UsingsFromOptionsAndDiagnostics Empty = new() { UsingNamespacesOrTypes = ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty, Diagnostics = null };
 

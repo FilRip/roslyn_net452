@@ -923,21 +923,21 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Shared Function CheckDelegateParameterModifier(
             container As Symbol,
             token As SyntaxToken,
-            flag As SourceParameterFlags,
+            flag As ESourceParameter,
             diagnostics As BindingDiagnosticBag
-        ) As SourceParameterFlags
+        ) As ESourceParameter
             ' 9.2.5.4: ParamArray parameters may not be specified in delegate or event declarations.
-            If (flag And SourceParameterFlags.ParamArray) = SourceParameterFlags.ParamArray Then
+            If (flag And ESourceParameter.ParamArray) = ESourceParameter.ParamArray Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_ParamArrayIllegal1, location, GetDelegateOrEventKeywordText(container))
-                flag = flag And (Not SourceParameterFlags.ParamArray)
+                flag = flag And (Not ESourceParameter.ParamArray)
             End If
 
             ' 9.2.5.3 Optional parameters may not be specified on delegate or event declarations
-            If (flag And SourceParameterFlags.Optional) = SourceParameterFlags.Optional Then
+            If (flag And ESourceParameter.Optional) = ESourceParameter.Optional Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_OptionalIllegal1, location, GetDelegateOrEventKeywordText(container))
-                flag = flag And (Not SourceParameterFlags.Optional)
+                flag = flag And (Not ESourceParameter.Optional)
             End If
 
             Return flag

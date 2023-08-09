@@ -259,18 +259,18 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         Private Shared Function DecodeParameterModifiers(container As Symbol,
                                                  modifiers As SyntaxTokenList,
                                                  checkModifier As CheckParameterModifierDelegate,
-                                                 diagBag As BindingDiagnosticBag) As SourceParameterFlags
-            Dim flags As SourceParameterFlags = Nothing
+                                                 diagBag As BindingDiagnosticBag) As ESourceParameter
+            Dim flags As ESourceParameter = Nothing
 
             ' Go through each modifiers, accumulating flags of what we've seen and reporting errors.
             For Each keywordSyntax In modifiers
-                Dim foundFlag As SourceParameterFlags
+                Dim foundFlag As ESourceParameter
 
                 Select Case keywordSyntax.Kind
-                    Case SyntaxKind.ByRefKeyword : foundFlag = SourceParameterFlags.ByRef
-                    Case SyntaxKind.ByValKeyword : foundFlag = SourceParameterFlags.ByVal
-                    Case SyntaxKind.OptionalKeyword : foundFlag = SourceParameterFlags.Optional
-                    Case SyntaxKind.ParamArrayKeyword : foundFlag = SourceParameterFlags.ParamArray
+                    Case SyntaxKind.ByRefKeyword : foundFlag = ESourceParameter.ByRef
+                    Case SyntaxKind.ByValKeyword : foundFlag = ESourceParameter.ByVal
+                    Case SyntaxKind.OptionalKeyword : foundFlag = ESourceParameter.Optional
+                    Case SyntaxKind.ParamArrayKeyword : foundFlag = ESourceParameter.ParamArray
                 End Select
 
                 ' Report errors with the modifier
@@ -923,20 +923,20 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private Shared ReadOnly s_checkOperatorParameterModifierCallback As CheckParameterModifierDelegate = AddressOf CheckOperatorParameterModifier
 
-        Private Shared Function CheckOperatorParameterModifier(container As Symbol, token As SyntaxToken, flag As SourceParameterFlags, diagnostics As BindingDiagnosticBag) As SourceParameterFlags
-            If (flag And SourceParameterFlags.ByRef) <> 0 Then
+        Private Shared Function CheckOperatorParameterModifier(container As Symbol, token As SyntaxToken, flag As ESourceParameter, diagnostics As BindingDiagnosticBag) As ESourceParameter
+            If (flag And ESourceParameter.ByRef) <> 0 Then
                 diagnostics.Add(ERRID.ERR_ByRefIllegal1, token.GetLocation(), container.GetKindText())
-                flag = flag And (Not SourceParameterFlags.ByRef)
+                flag = flag And (Not ESourceParameter.ByRef)
             End If
 
-            If (flag And SourceParameterFlags.ParamArray) <> 0 Then
+            If (flag And ESourceParameter.ParamArray) <> 0 Then
                 diagnostics.Add(ERRID.ERR_ParamArrayIllegal1, token.GetLocation(), container.GetKindText())
-                flag = flag And (Not SourceParameterFlags.ParamArray)
+                flag = flag And (Not ESourceParameter.ParamArray)
             End If
 
-            If (flag And SourceParameterFlags.Optional) <> 0 Then
+            If (flag And ESourceParameter.Optional) <> 0 Then
                 diagnostics.Add(ERRID.ERR_OptionalIllegal1, token.GetLocation(), container.GetKindText())
-                flag = flag And (Not SourceParameterFlags.Optional)
+                flag = flag And (Not ESourceParameter.Optional)
             End If
 
             Return flag
@@ -986,11 +986,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private Shared ReadOnly s_checkPropertyParameterModifierCallback As CheckParameterModifierDelegate = AddressOf CheckPropertyParameterModifier
 
-        Private Shared Function CheckPropertyParameterModifier(container As Symbol, token As SyntaxToken, flag As SourceParameterFlags, diagnostics As BindingDiagnosticBag) As SourceParameterFlags
-            If flag = SourceParameterFlags.ByRef Then
+        Private Shared Function CheckPropertyParameterModifier(container As Symbol, token As SyntaxToken, flag As ESourceParameter, diagnostics As BindingDiagnosticBag) As ESourceParameter
+            If flag = ESourceParameter.ByRef Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_ByRefIllegal1, location, container.GetKindText(), token.ToString())
-                Return flag And (Not SourceParameterFlags.ByRef)
+                Return flag And (Not ESourceParameter.ByRef)
             End If
             Return flag
         End Function
@@ -1023,7 +1023,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Next
         End Sub
 
-        Friend Delegate Function CheckParameterModifierDelegate(container As Symbol, token As SyntaxToken, flag As SourceParameterFlags, diagnostics As BindingDiagnosticBag) As SourceParameterFlags
+        Friend Delegate Function CheckParameterModifierDelegate(container As Symbol, token As SyntaxToken, flag As ESourceParameter, diagnostics As BindingDiagnosticBag) As ESourceParameter
 
         Public Sub DecodeParameterList(container As Symbol,
                                             isFromLambda As Boolean,
@@ -1036,25 +1036,25 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim count As Integer = syntax.Count
             Dim ordinal = params.Count
             Dim paramHasImplicitType = False, paramHasExplicitType = False
-            Dim flagsOfPreviousParameters As SourceParameterFlags = Nothing
+            Dim flagsOfPreviousParameters As ESourceParameter = Nothing
             Dim reportedError = False
 
             For i = 0 To count - 1
                 Dim paramSyntax = syntax(i)
                 Dim name = paramSyntax.Identifier.Identifier.ValueText
-                Dim flags As SourceParameterFlags = Nothing
+                Dim flags As ESourceParameter = Nothing
 
                 flags = DecodeParameterModifiers(container, paramSyntax.Modifiers, checkModifier, diagBag)
 
-                If (flagsOfPreviousParameters And SourceParameterFlags.Optional) = SourceParameterFlags.Optional Then
-                    If (flags And SourceParameterFlags.ParamArray) = SourceParameterFlags.ParamArray AndAlso
+                If (flagsOfPreviousParameters And ESourceParameter.Optional) = ESourceParameter.Optional Then
+                    If (flags And ESourceParameter.ParamArray) = ESourceParameter.ParamArray AndAlso
                         Not reportedError Then
 
                         ' If one of the previous parameters is optional then report an error if paramarray is specified.
                         ReportDiagnostic(diagBag, paramSyntax.Identifier.Identifier, ERRID.ERR_ParamArrayWithOptArgs)
                         reportedError = True
 
-                    ElseIf (flags And SourceParameterFlags.Optional) <> SourceParameterFlags.Optional AndAlso
+                    ElseIf (flags And ESourceParameter.Optional) <> ESourceParameter.Optional AndAlso
                         Not reportedError Then
 
                         ' If one of the previous parameters is optional then report an error if this one isn't optional.
@@ -1064,7 +1064,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
                 End If
 
-                If (flagsOfPreviousParameters And SourceParameterFlags.ParamArray) <> 0 AndAlso
+                If (flagsOfPreviousParameters And ESourceParameter.ParamArray) <> 0 AndAlso
                     Not reportedError Then
 
                     ReportDiagnostic(diagBag, paramSyntax, ERRID.ERR_ParamArrayMustBeLast)

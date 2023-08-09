@@ -1110,7 +1110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                             return DeclarationModifiers.Data;
                     }
 
-                    goto default;
+                    return DeclarationModifiers.None;
                 default:
                     return DeclarationModifiers.None;
             }
@@ -3934,41 +3934,45 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
             if (this.CurrentToken.Kind != closeKind)
             {
-            tryAgain:
-                if (this.IsPossibleParameter() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
+                bool loop = true;
+                while (loop)
                 {
-                    // first parameter
-                    var parameter = this.ParseParameter();
-                    nodes.Add(parameter);
-
-                    // additional parameters
-                    while (true)
+                    loop = false;
+                    if (this.IsPossibleParameter() || this.CurrentToken.Kind == SyntaxKind.CommaToken)
                     {
-                        if (this.CurrentToken.Kind == closeKind)
-                        {
-                            break;
-                        }
-                        else if (this.CurrentToken.Kind == SyntaxKind.CommaToken || this.IsPossibleParameter())
-                        {
-                            nodes.AddSeparator(this.EatToken(SyntaxKind.CommaToken));
-                            parameter = this.ParseParameter();
-                            if (parameter.IsMissing && this.IsPossibleParameter())
-                            {
-                                // ensure we always consume tokens
-                                parameter = AddTrailingSkippedSyntax(parameter, this.EatToken());
-                            }
+                        // first parameter
+                        var parameter = this.ParseParameter();
+                        nodes.Add(parameter);
 
-                            nodes.Add(parameter);
-                        }
-                        else if (this.SkipBadParameterListTokens(ref open, nodes, SyntaxKind.CommaToken, closeKind) == PostSkipAction.Abort)
+                        // additional parameters
+                        while (true)
                         {
-                            break;
+                            if (this.CurrentToken.Kind == closeKind)
+                            {
+                                break;
+                            }
+                            else if (this.CurrentToken.Kind == SyntaxKind.CommaToken || this.IsPossibleParameter())
+                            {
+                                nodes.AddSeparator(this.EatToken(SyntaxKind.CommaToken));
+                                parameter = this.ParseParameter();
+                                if (parameter.IsMissing && this.IsPossibleParameter())
+                                {
+                                    // ensure we always consume tokens
+                                    parameter = AddTrailingSkippedSyntax(parameter, this.EatToken());
+                                }
+
+                                nodes.Add(parameter);
+                            }
+                            else if (this.SkipBadParameterListTokens(ref open, nodes, SyntaxKind.CommaToken, closeKind) == PostSkipAction.Abort)
+                            {
+                                break;
+                            }
                         }
                     }
-                }
-                else if (this.SkipBadParameterListTokens(ref open, nodes, SyntaxKind.IdentifierToken, closeKind) == PostSkipAction.Continue)
-                {
-                    goto tryAgain;
+                    else if (this.SkipBadParameterListTokens(ref open, nodes, SyntaxKind.IdentifierToken, closeKind) == PostSkipAction.Continue)
+                    {
+                        loop = true;
+                    }
                 }
             }
 
@@ -5003,53 +5007,56 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         {
             if (this.CurrentToken.Kind != SyntaxKind.CloseBraceToken)
             {
-            tryAgain:
-
-                if (this.IsPossibleEnumMemberDeclaration() || this.CurrentToken.Kind == SyntaxKind.CommaToken || this.CurrentToken.Kind == SyntaxKind.SemicolonToken)
+                bool loop = true;
+                while (loop)
                 {
-                    // first member
-                    members.Add(this.ParseEnumMemberDeclaration());
-
-                    // additional members
-                    while (true)
+                    if (this.IsPossibleEnumMemberDeclaration() || this.CurrentToken.Kind == SyntaxKind.CommaToken || this.CurrentToken.Kind == SyntaxKind.SemicolonToken)
                     {
-                        if (this.CurrentToken.Kind == SyntaxKind.CloseBraceToken)
-                        {
-                            break;
-                        }
-                        else if (this.CurrentToken.Kind == SyntaxKind.CommaToken || this.CurrentToken.Kind == SyntaxKind.SemicolonToken || this.IsPossibleEnumMemberDeclaration())
-                        {
-                            if (this.CurrentToken.Kind == SyntaxKind.SemicolonToken)
-                            {
-                                // semicolon instead of comma.. consume it with error and act as if it were a comma.
-                                members.AddSeparator(this.EatTokenWithPrejudice(SyntaxKind.CommaToken));
-                            }
-                            else
-                            {
-                                members.AddSeparator(this.EatToken(SyntaxKind.CommaToken));
-                            }
+                        // first member
+                        members.Add(this.ParseEnumMemberDeclaration());
 
-                            // check for exit case after legal trailing comma
+                        // additional members
+                        while (true)
+                        {
                             if (this.CurrentToken.Kind == SyntaxKind.CloseBraceToken)
                             {
                                 break;
                             }
-                            else if (!this.IsPossibleEnumMemberDeclaration())
+                            else if (this.CurrentToken.Kind == SyntaxKind.CommaToken || this.CurrentToken.Kind == SyntaxKind.SemicolonToken || this.IsPossibleEnumMemberDeclaration())
                             {
-                                goto tryAgain;
-                            }
+                                if (this.CurrentToken.Kind == SyntaxKind.SemicolonToken)
+                                {
+                                    // semicolon instead of comma.. consume it with error and act as if it were a comma.
+                                    members.AddSeparator(this.EatTokenWithPrejudice(SyntaxKind.CommaToken));
+                                }
+                                else
+                                {
+                                    members.AddSeparator(this.EatToken(SyntaxKind.CommaToken));
+                                }
 
-                            members.Add(this.ParseEnumMemberDeclaration());
-                        }
-                        else if (this.SkipBadEnumMemberListTokens(ref openBrace, members, SyntaxKind.CommaToken) == PostSkipAction.Abort)
-                        {
-                            break;
+                                // check for exit case after legal trailing comma
+                                if (this.CurrentToken.Kind == SyntaxKind.CloseBraceToken)
+                                {
+                                    break;
+                                }
+                                else if (!this.IsPossibleEnumMemberDeclaration())
+                                {
+                                    loop = true;
+                                }
+
+                                if (!loop)
+                                    members.Add(this.ParseEnumMemberDeclaration());
+                            }
+                            else if (this.SkipBadEnumMemberListTokens(ref openBrace, members, SyntaxKind.CommaToken) == PostSkipAction.Abort)
+                            {
+                                break;
+                            }
                         }
                     }
-                }
-                else if (this.SkipBadEnumMemberListTokens(ref openBrace, members, SyntaxKind.IdentifierToken) == PostSkipAction.Continue)
-                {
-                    goto tryAgain;
+                    else if (this.SkipBadEnumMemberListTokens(ref openBrace, members, SyntaxKind.IdentifierToken) == PostSkipAction.Continue)
+                    {
+                        loop = true;
+                    }
                 }
             }
         }
@@ -5882,8 +5889,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 {
                     if (separator?.Kind != SyntaxKind.DotToken)
                     {
+#pragma warning disable S2259 // TODO : What to do is separator is null ?
                         separator = WithAdditionalDiagnostics(separator, GetExpectedTokenError(SyntaxKind.DotToken, separator.Kind, separator.GetLeadingTriviaWidth(), separator.Width));
                         separator = ConvertToMissingWithTrailingTrivia(separator, SyntaxKind.DotToken);
+#pragma warning restore S2259
                     }
 
                     if (isEvent && this.CurrentToken.Kind != SyntaxKind.OpenBraceToken && this.CurrentToken.Kind != SyntaxKind.SemicolonToken)
@@ -6547,7 +6556,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 type = _syntaxFactory.NullableType(type, question);
                                 continue;
                             }
-                            goto done; // token not consumed
+                            return type;
                         }
                         bool canBeNullableType()
                         {
@@ -6587,7 +6596,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 type = this.ParsePointerTypeMods(type);
                                 continue;
                         }
-                        goto done; // token not consumed
+                        return type;
                     case SyntaxKind.OpenBracketToken:
                         // Now check for arrays.
                         {
@@ -6609,11 +6618,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                             continue;
                         }
                     default:
-                        goto done; // token not consumed
+                        return type;
                 }
             }
-        done:;
-
             return type;
         }
 
@@ -7451,7 +7458,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
 
             // don't accept indexers:
-            if (identifierOrThisOpt.Kind == SyntaxKind.ThisKeyword)
+            if (identifierOrThisOpt?.Kind == SyntaxKind.ThisKeyword)
             {
                 return false;
             }
@@ -10748,31 +10755,29 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 }
 
                 // Doesn't look like a cast, so parse this as a parenthesized expression or tuple.
+                this.Reset(ref resetPoint);
+                var openParenthesis = this.EatToken(SyntaxKind.OpenParenToken);
+                var expression = this.ParseExpressionOrDeclaration(ParseTypeMode.FirstElementOfPossibleTupleLiteral, feature: 0, permitTupleDesignation: true);
+
+                //  ( <expr>,    must be a tuple
+                if (this.CurrentToken.Kind == SyntaxKind.CommaToken)
                 {
-                    this.Reset(ref resetPoint);
-                    var openParen = this.EatToken(SyntaxKind.OpenParenToken);
-                    var expression = this.ParseExpressionOrDeclaration(ParseTypeMode.FirstElementOfPossibleTupleLiteral, feature: 0, permitTupleDesignation: true);
-
-                    //  ( <expr>,    must be a tuple
-                    if (this.CurrentToken.Kind == SyntaxKind.CommaToken)
-                    {
-                        var firstArg = _syntaxFactory.Argument(nameColon: null, refKindKeyword: null, expression: expression);
-                        return ParseTupleExpressionTail(openParen, firstArg);
-                    }
-
-                    // ( name:
-                    if (expression.Kind == SyntaxKind.IdentifierName && this.CurrentToken.Kind == SyntaxKind.ColonToken)
-                    {
-                        var nameColon = _syntaxFactory.NameColon((IdentifierNameSyntax)expression, EatToken());
-                        expression = this.ParseExpressionOrDeclaration(ParseTypeMode.FirstElementOfPossibleTupleLiteral, feature: 0, permitTupleDesignation: true);
-
-                        var firstArg = _syntaxFactory.Argument(nameColon, refKindKeyword: null, expression: expression);
-                        return ParseTupleExpressionTail(openParen, firstArg);
-                    }
-
-                    var closeParen = this.EatToken(SyntaxKind.CloseParenToken);
-                    return _syntaxFactory.ParenthesizedExpression(openParen, expression, closeParen);
+                    var firstArg = _syntaxFactory.Argument(nameColon: null, refKindKeyword: null, expression: expression);
+                    return ParseTupleExpressionTail(openParenthesis, firstArg);
                 }
+
+                // ( name:
+                if (expression.Kind == SyntaxKind.IdentifierName && this.CurrentToken.Kind == SyntaxKind.ColonToken)
+                {
+                    var nameColon = _syntaxFactory.NameColon((IdentifierNameSyntax)expression, EatToken());
+                    expression = this.ParseExpressionOrDeclaration(ParseTypeMode.FirstElementOfPossibleTupleLiteral, feature: 0, permitTupleDesignation: true);
+
+                    var firstArg = _syntaxFactory.Argument(nameColon, refKindKeyword: null, expression: expression);
+                    return ParseTupleExpressionTail(openParenthesis, firstArg);
+                }
+
+                var closeParenthesis = this.EatToken(SyntaxKind.CloseParenToken);
+                return _syntaxFactory.ParenthesizedExpression(openParenthesis, expression, closeParenthesis);
             }
             finally
             {

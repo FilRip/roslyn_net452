@@ -57,7 +57,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             private const int NullableContextSize = 3;
 
             private const int IsNullableAnalysisEnabledOffset = NullableContextOffset + NullableContextSize;
-            //private const int IsNullableAnalysisEnabledSize = 1;
 
             private const int MethodKindMask = (1 << MethodKindSize) - 1;
 
@@ -634,8 +633,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override string GetDocumentationCommentXml(CultureInfo preferredCulture = null, bool expandIncludes = false, CancellationToken cancellationToken = default)
         {
-            ref var lazyDocComment = ref expandIncludes ? ref this.lazyExpandedDocComment : ref this.lazyDocComment;
-            return SourceDocumentationCommentUtils.GetAndCacheDocumentationComment(this, expandIncludes, ref lazyDocComment);
+            ref var localLazyDocComment = ref expandIncludes ? ref this.lazyExpandedDocComment : ref this.lazyDocComment;
+            return SourceDocumentationCommentUtils.GetAndCacheDocumentationComment(this, expandIncludes, ref localLazyDocComment);
         }
 
         #endregion
@@ -726,7 +725,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override void ForceComplete(SourceLocation locationOpt, CancellationToken cancellationToken)
         {
-            while (true)
+            bool loop = true;
+            while (loop)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var incompletePart = state.NextIncompletePart;
@@ -741,7 +741,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
 
                     case CompletionPart.Type:
-                        var _ = this.ReturnTypeWithAnnotations;
+                        _ = this.ReturnTypeWithAnnotations;
                         state.NotePartComplete(CompletionPart.Type);
                         break;
 
@@ -771,8 +771,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case CompletionPart.StartMethodChecks:
                     case CompletionPart.FinishMethodChecks:
                         LazyMethodChecks();
-                        goto done;
-
+                        loop = false;
+                        break;
                     case CompletionPart.None:
                         return;
 
@@ -782,10 +782,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         break;
                 }
 
+                if (!loop)
+                    break;
+
                 state.SpinWaitComplete(incompletePart, cancellationToken);
             }
 
-        done:
             // Don't return until we've seen all of the CompletionParts. This ensures all
             // diagnostics have been reported (not necessarily on this thread).
             CompletionPart allParts = CompletionPart.MethodSymbolAll;
@@ -906,7 +908,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         compilation.TrySynthesizeAttribute(WellKnownMember.System_Runtime_CompilerServices_AsyncStateMachineAttribute__ctor,
                             ImmutableArray.Create(arg)));
                 }
-                else if (isIterator)
+                else // isIterator
                 {
                     AddSynthesizedAttribute(ref attributes,
                         compilation.TrySynthesizeAttribute(WellKnownMember.System_Runtime_CompilerServices_IteratorStateMachineAttribute__ctor,

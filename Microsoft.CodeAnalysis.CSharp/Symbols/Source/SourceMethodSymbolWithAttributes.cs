@@ -658,7 +658,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
 
             var attribute = arguments.Attribute;
-            var _ = (BindingDiagnosticBag)arguments.Diagnostics;
+            _ = (BindingDiagnosticBag)arguments.Diagnostics;
 
             if (attribute.IsTargetAttribute(this, AttributeDescription.MarshalAsAttribute))
             {

@@ -273,7 +273,7 @@ namespace Microsoft.CodeAnalysis
             RSAParameters rsaParameters = new()
             {
                 Exponent = ExponentAsBytes(expAsDword),
-                Modulus = br.ReadReversed(modulusLength)
+                Modulus = br.ReadReversed(modulusLength),
             };
             if (includePrivateParameters)
             {

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
@@ -63,12 +61,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 backupLocation ??= inheritedTypeDecls[0].Type.GetLocation();
 
-                foreach (BaseTypeSyntax baseTypeSyntax in inheritedTypeDecls)
+                foreach (TypeSyntax t in inheritedTypeDecls.Select(baseTypeSyntax => baseTypeSyntax.Type))
                 {
-                    TypeSyntax t = baseTypeSyntax.Type;
                     TypeSymbol bt = baseBinder.BindType(t, BindingDiagnosticBag.Discarded).Type;
 
-                    if (TypeSymbol.Equals(bt, @base, TypeCompareKind.ConsiderEverything2))
+                    if (Equals(bt, @base, TypeCompareKind.ConsiderEverything2))
                     {
                         return t.GetLocation();
                     }
@@ -81,20 +78,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal SourceNamedTypeSymbol(NamespaceOrTypeSymbol containingSymbol, MergedTypeDeclaration declaration, BindingDiagnosticBag diagnostics, TupleExtraData tupleData = null)
             : base(containingSymbol, declaration, diagnostics, tupleData)
         {
-            switch (declaration.Kind)
-            {
-                case DeclarationKind.Struct:
-                case DeclarationKind.Interface:
-                case DeclarationKind.Enum:
-                case DeclarationKind.Delegate:
-                case DeclarationKind.Class:
-                case DeclarationKind.Record:
-                case DeclarationKind.RecordStruct:
-                    break;
-                default:
-                    break;
-            }
-
             if (containingSymbol.Kind == SymbolKind.NamedType)
             {
                 // Nested types are never unified.
@@ -157,8 +140,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var parameterBuilder = new List<TypeParameterBuilder>();
                 parameterBuilders1.Add(parameterBuilder);
                 int i = 0;
+                bool next;
                 foreach (var tp in tpl.Parameters)
                 {
+                    next = false;
                     if (tp.VarianceKeyword.Kind() != SyntaxKind.None &&
                         !isInterfaceOrDelegate)
                     {
@@ -181,11 +166,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 typeParameterMismatchReported = true;
                                 diagnostics.Add(ErrorCode.ERR_DuplicateTypeParameter, location, name);
-                                goto next;
+                                next = true;
                             }
                         }
 
-                        if (ContainingType is not null)
+                        if (!next && ContainingType is not null)
                         {
                             var tpEnclosing = ContainingType.FindEnclosingTypeParameter(name);
                             if (tpEnclosing is not null)
@@ -194,7 +179,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 diagnostics.Add(ErrorCode.WRN_TypeParameterSameAsOuterTypeParameter, location, name, tpEnclosing.ContainingType);
                             }
                         }
-                    next:;
                     }
                     else if (!typeParameterMismatchReported)
                     {
@@ -290,9 +274,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 bool skipPartialDeclarationsWithoutConstraintClauses = SkipPartialDeclarationsWithoutConstraintClauses();
                 ArrayBuilder<ImmutableArray<TypeParameterConstraintClause>> otherPartialClauses = null;
 
-                foreach (var decl in declaration.Declarations)
+                foreach (SyntaxReference syntaxRef in declaration.Declarations.Select(decl => decl.SyntaxReference))
                 {
-                    var syntaxRef = decl.SyntaxReference;
                     var constraintClauses = GetConstraintClauses((CSharpSyntaxNode)syntaxRef.GetSyntax(), out TypeParameterListSyntax typeParameterList);
 
                     if (skipPartialDeclarationsWithoutConstraintClauses && constraintClauses.Count == 0)
@@ -369,9 +352,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 bool skipPartialDeclarationsWithoutConstraintClauses = SkipPartialDeclarationsWithoutConstraintClauses();
                 ArrayBuilder<ImmutableArray<TypeParameterConstraintClause>> otherPartialClauses = null;
 
-                foreach (var decl in declaration.Declarations)
+                foreach (var syntaxRef in declaration.Declarations.Select(decl => decl.SyntaxReference))
                 {
-                    var syntaxRef = decl.SyntaxReference;
                     var constraintClauses = GetConstraintClauses((CSharpSyntaxNode)syntaxRef.GetSyntax(), out TypeParameterListSyntax typeParameterList);
 
                     if (skipPartialDeclarationsWithoutConstraintClauses && constraintClauses.Count == 0)
@@ -495,6 +477,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     for (int j = 0; j < originalConstraintTypes.Length; j++)
                     {
+                        // Nothing to do
                     }
 #endif
                     if (builder == null)
@@ -671,16 +654,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     }
                 }
 
-                if (originalConstraintTypes.Length == 0 && clause.ConstraintTypes.Length == 0)
+                if (originalConstraintTypes.Length == 0 && clause.ConstraintTypes.Length == 0 &&
+                    (((mergedKind | clause.Constraints) & ~(TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType | TypeParameterConstraintKind.Constructor)) == 0 &&
+                    (mergedKind & TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType) != 0 && // 'object~'
+                    (clause.Constraints & TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType) == 0))   // 'object?' )
                 {
                     // Try merging nullability of implied 'object' constraint
-                    if (((mergedKind | clause.Constraints) & ~(TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType | TypeParameterConstraintKind.Constructor)) == 0 &&
-                        (mergedKind & TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType) != 0 && // 'object~'
-                        (clause.Constraints & TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType) == 0)   // 'object?' 
-                    {
-                        // Merged value is 'object?'
-                        mergedKind &= ~TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType;
-                    }
+                    // Merged value is 'object?'
+                    mergedKind &= ~TypeParameterConstraintKind.ObliviousNullabilityIfReferenceType;
                 }
             }
         }
@@ -1004,6 +985,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             else if (ReportExplicitUseOfReservedAttributes(in arguments,
                 ReservedAttributes.DynamicAttribute | ReservedAttributes.IsReadOnlyAttribute | ReservedAttributes.IsUnmanagedAttribute | ReservedAttributes.IsByRefLikeAttribute | ReservedAttributes.TupleElementNamesAttribute | ReservedAttributes.NullableAttribute | ReservedAttributes.NullableContextAttribute | ReservedAttributes.NativeIntegerAttribute | ReservedAttributes.CaseSensitiveExtensionAttribute))
             {
+                // Nothing to do
             }
             else if (attribute.IsTargetAttribute(this, AttributeDescription.SecurityCriticalAttribute)
                 || attribute.IsTargetAttribute(this, AttributeDescription.SecuritySafeCriticalAttribute))
@@ -1061,21 +1043,18 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             foreach (SyntaxList<AttributeListSyntax> list in attributeLists)
             {
-                var _ = list.Node.SyntaxTree;
+                _ = list.Node.SyntaxTree;
                 QuickAttributeChecker checker = this.DeclaringCompilation.GetBinderFactory(list.Node.SyntaxTree).GetBinder(list.Node).QuickAttributeChecker;
 
                 foreach (AttributeListSyntax attrList in list)
                 {
-                    foreach (AttributeSyntax attr in attrList.Attributes)
+                    if (attrList.Attributes.Any(attr => checker.IsPossibleMatch(attr, QuickAttributes.TypeIdentifier)))
                     {
-                        if (checker.IsPossibleMatch(attr, QuickAttributes.TypeIdentifier))
-                        {
-                            // This attribute syntax might be an application of TypeIdentifierAttribute.
-                            // Let's bind it.
-                            // For simplicity we bind all attributes.
-                            GetAttributes();
-                            return;
-                        }
+                        // This attribute syntax might be an application of TypeIdentifierAttribute.
+                        // Let's bind it.
+                        // For simplicity we bind all attributes.
+                        GetAttributes();
+                        return;
                     }
                 }
             }

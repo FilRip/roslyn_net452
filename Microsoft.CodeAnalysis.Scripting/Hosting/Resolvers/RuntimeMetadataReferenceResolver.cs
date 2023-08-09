@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
         // TODO: Look for .winmd, but only if the identity has content WindowsRuntime (https://github.com/dotnet/roslyn/issues/6483)
         // The extensions are in order in which the CLR loader looks for assembly files.
-        internal static ImmutableArray<string> AssemblyExtensions = ImmutableArray.Create(".dll", ".exe");
+        internal static readonly ImmutableArray<string> AssemblyExtensions = ImmutableArray.Create(".dll", ".exe");
 
         private static readonly char[] s_directorySeparators = new[] { PathUtilities.DirectorySeparatorChar, PathUtilities.AltDirectorySeparatorChar };
 

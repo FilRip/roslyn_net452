@@ -21,11 +21,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ordinal As Integer,
             type As TypeSymbol,
             location As Location,
-            flags As SourceParameterFlags,
+            flags As ESourceParameter,
             identifierSyntax As ModifiedIdentifierSyntax,
             typeSyntax As SyntaxNodeOrToken
         )
-            MyBase.New(name, ordinal, type, ((flags And SourceParameterFlags.ByRef) <> 0), location)
+            MyBase.New(name, ordinal, type, ((flags And ESourceParameter.ByRef) <> 0), location)
 
             _identifierSyntax = identifierSyntax
             _typeSyntax = typeSyntax
@@ -58,16 +58,16 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ' Create a parameter from syntax.
         Friend Shared Function CreateFromSyntax(syntax As ParameterSyntax,
                                                 name As String,
-                                                flags As SourceParameterFlags,
+                                                flags As ESourceParameter,
                                                 ordinal As Integer,
                                                 binder As Binder,
                                                 diagBag As BindingDiagnosticBag) As ParameterSymbol
-            If (flags And SourceParameterFlags.ParamArray) <> 0 Then
+            If (flags And ESourceParameter.ParamArray) <> 0 Then
                 ' 'Lambda' parameters cannot be declared 'ParamArray'.
                 Binder.ReportDiagnostic(diagBag, GetModifierToken(syntax.Modifiers, SyntaxKind.ParamArrayKeyword), ERRID.ERR_ParamArrayIllegal1, StringConstants.Lambda)
             End If
 
-            If (flags And SourceParameterFlags.Optional) <> 0 Then
+            If (flags And ESourceParameter.Optional) <> 0 Then
                 ' 'Lambda' parameters cannot be declared 'Optional'.
                 Binder.ReportDiagnostic(diagBag, GetModifierToken(syntax.Modifiers, SyntaxKind.OptionalKeyword), ERRID.ERR_OptionalIllegal1, StringConstants.Lambda)
             End If

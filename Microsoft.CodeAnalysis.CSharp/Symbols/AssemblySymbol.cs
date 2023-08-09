@@ -566,7 +566,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 throw new ArgumentNullException(nameof(fullyQualifiedMetadataName));
             }
 
-            return this.GetTypeByMetadataName(fullyQualifiedMetadataName, includeReferences: false, isWellKnownType: false, conflicts: out var _);
+            return this.GetTypeByMetadataName(fullyQualifiedMetadataName, includeReferences: false, isWellKnownType: false, conflicts: out _);
         }
 
         /// <summary>
@@ -727,7 +727,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     typeInfo.Name,
                     forcedArity: typeInfo.GenericTypeArguments.Length);
 
-                NamedTypeSymbol symbol = GetTopLevelTypeByMetadataName(ref mdName, assemblyId, includeReferences, isWellKnownType: false, conflicts: out var _);
+                NamedTypeSymbol symbol = GetTopLevelTypeByMetadataName(ref mdName, assemblyId, includeReferences, isWellKnownType: false, conflicts: out _);
 
                 if (symbol is null || symbol.IsErrorType())
                 {

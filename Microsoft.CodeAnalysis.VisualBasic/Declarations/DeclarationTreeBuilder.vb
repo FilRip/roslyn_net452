@@ -132,7 +132,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' Note: The symbol representing the merged declarations uses parentReference to enumerate non-type members.
             Dim decl As SingleNamespaceOrTypeDeclaration = New SingleTypeDeclaration(
                 kind:=If(_isSubmission, DeclarationKind.Submission, DeclarationKind.Script),
-                name:=fullName.Last(),
+                name:=fullName(fullName.Length - 1),
                 arity:=0,
                 modifiers:=DeclarationModifiers.Friend Or DeclarationModifiers.Partial Or DeclarationModifiers.NotInheritable,
                 declFlags:=declFlags,

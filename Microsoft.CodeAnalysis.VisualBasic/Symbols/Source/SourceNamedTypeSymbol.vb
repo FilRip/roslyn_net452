@@ -298,21 +298,18 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 End If
             End If
 
-            If Me.IsNotInheritable Then
+            If Me.IsNotInheritable AndAlso
+                ((foundModifiers And DeclarationModifiers.MustInherit) <> 0 AndAlso ((foundModifiers And DeclarationModifiers.NotInheritable) = 0)) Then
 
                 ' 'MustInherit' cannot be specified for partial type '|1' because it cannot be combined with 'NotInheritable'
                 '  specified for one of its other partial types.
-                If (foundModifiers And DeclarationModifiers.MustInherit) <> 0 Then
-                    ' Generate error #30926 only if this (partial) declaration does not have both MustInherit and
-                    ' NotInheritable (in which case #31408 error must have been generated which should be enough in this
-                    ' case). 
-                    If (foundModifiers And DeclarationModifiers.NotInheritable) = 0 Then
-                        ' Note: in case one partial declaration has both MustInherit & NotInheritable and other partial
-                        ' declarations have MustInherit, #31408 will be generated for the first one and #30926 for all
-                        ' others with MustInherit
-                        Binder.ReportDiagnostic(diagBag, id, ERRID.ERR_PartialTypeBadMustInherit1, id.ToString())
-                    End If
-                End If
+                ' Generate error #30926 only if this (partial) declaration does not have both MustInherit and
+                ' NotInheritable (in which case #31408 error must have been generated which should be enough in this
+                ' case). 
+                ' Note: in case one partial declaration has both MustInherit & NotInheritable and other partial
+                ' declarations have MustInherit, #31408 will be generated for the first one and #30926 for all
+                ' others with MustInherit
+                Binder.ReportDiagnostic(diagBag, id, ERRID.ERR_PartialTypeBadMustInherit1, id.ToString())
 
             End If
 
@@ -323,26 +320,26 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             If isNested Then
 
                 Select Case containingType.DeclarationKind
-                    Case VisualBasic.Symbols.DeclarationKind.Module
+                    Case DeclarationKind.Module
                         If (foundModifiers And DeclarationModifiers.InvalidInModule) <> 0 Then
                             binder.ReportModifierError(modifiers, ERRID.ERR_ModuleCantUseTypeSpecifier1, diagBag, InvalidModifiersInModule)
                             foundModifiers = (foundModifiers And (Not DeclarationModifiers.InvalidInModule))
                         End If
 
-                    Case VisualBasic.Symbols.DeclarationKind.Interface
+                    Case DeclarationKind.Interface
                         If (foundModifiers And DeclarationModifiers.InvalidInInterface) <> 0 Then
                             Dim err As ERRID = ERRID.ERR_None
 
                             Select Case Me.DeclarationKind
-                                Case VisualBasic.Symbols.DeclarationKind.Class
+                                Case DeclarationKind.Class
                                     err = ERRID.ERR_BadInterfaceClassSpecifier1
-                                Case VisualBasic.Symbols.DeclarationKind.Delegate
+                                Case DeclarationKind.Delegate
                                     err = ERRID.ERR_BadInterfaceDelegateSpecifier1
-                                Case VisualBasic.Symbols.DeclarationKind.Structure
+                                Case DeclarationKind.Structure
                                     err = ERRID.ERR_BadInterfaceStructSpecifier1
-                                Case VisualBasic.Symbols.DeclarationKind.Enum
+                                Case DeclarationKind.Enum
                                     err = ERRID.ERR_BadInterfaceEnumSpecifier1
-                                Case VisualBasic.Symbols.DeclarationKind.Interface
+                                Case DeclarationKind.Interface
 
                                     ' For whatever reason, Dev10 does not report an error on [Friend] or [Public] modifier on an interface inside an interface.
                                     ' Need to handle this specially
@@ -594,15 +591,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                             Dim constituentQualifiedName As String = constituent.ToDisplayString(SymbolDisplayFormat.QualifiedNameOnlyFormat)
 
                             For Each namedType In contenders
-                                If namedType.DeclaredAccessibility = Accessibility.Public AndAlso namedType.MangleName = Me.MangleName Then
+                                If namedType.DeclaredAccessibility = Accessibility.Public AndAlso namedType.MangleName = Me.MangleName AndAlso
+                                    String.Equals(Me.Name, namedType.Name, StringComparison.Ordinal) AndAlso
+                                    String.Equals(targetQualifiedNamespaceName, If(namedType.GetEmittedNamespaceName(), constituentQualifiedName), StringComparison.Ordinal) Then
                                     ' Because namespaces are merged case-insensitively,
                                     ' we need to make sure that we have a match for
                                     ' full emitted name of the type.
-                                    If String.Equals(Me.Name, namedType.Name, StringComparison.Ordinal) AndAlso
-                                       String.Equals(targetQualifiedNamespaceName, If(namedType.GetEmittedNamespaceName(), constituentQualifiedName), StringComparison.Ordinal) Then
-                                        collision = namedType
-                                        Exit For
-                                    End If
+                                    collision = namedType
+                                    Exit For
                                 End If
                             Next
                         Next
@@ -1271,9 +1267,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             ' For types nested in a source type symbol (not in a script class): 
             ' before resolving the base type ensure that enclosing type's base type is already resolved
             Dim containingSourceType = TryCast(ContainingSymbol, SourceNamedTypeSymbol)
-            If containingSourceType IsNot Nothing Then
-                containingSourceType.GetDeclaredBaseSafe(basesBeingResolved.PrependInheritsBeingResolved(Me))
-            End If
+            containingSourceType?.GetDeclaredBaseSafe(basesBeingResolved.PrependInheritsBeingResolved(Me))
 
             Dim baseType As NamedTypeSymbol = Nothing
 
@@ -1653,9 +1647,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                                 0,
                                                                 diagnostics)
 
-            If diagnostics IsNot Nothing Then
-                diagnostics.Free()
-            End If
+            diagnostics?.Free()
         End Sub
 
         ''' <summary>
@@ -1690,9 +1682,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 DeclaringCompilation.SymbolDeclaredEvent(Me)
             End If
 
-            If diagnostics IsNot Nothing Then
-                diagnostics.Free()
-            End If
+            diagnostics?.Free()
         End Sub
 
         ''' <summary>
@@ -2402,7 +2392,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Dim members = Me.GetMembersUnordered()
             For i = 0 To members.Length - 1
                 Dim m = members(i)
-                If Not m.IsShared And m.Kind = SymbolKind.Field Then
+                If Not m.IsShared AndAlso m.Kind = SymbolKind.Field Then
                     Return True
                 End If
             Next
@@ -2504,10 +2494,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End If
 
             Dim baseType As NamedTypeSymbol = Me.BaseTypeNoUseSiteDiagnostics
-            If baseType IsNot Nothing Then
-                If baseType.ContainsTupleNames() Then
-                    AddSynthesizedAttribute(attributes, compilation.SynthesizeTupleNamesAttribute(baseType))
-                End If
+            If baseType IsNot Nothing AndAlso baseType.ContainsTupleNames() Then
+                AddSynthesizedAttribute(attributes, compilation.SynthesizeTupleNamesAttribute(baseType))
             End If
         End Sub
 

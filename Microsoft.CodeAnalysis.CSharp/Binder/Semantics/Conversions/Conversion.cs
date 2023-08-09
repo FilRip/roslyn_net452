@@ -75,7 +75,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        private class DeconstructionUncommonData : UncommonData
+        private sealed class DeconstructionUncommonData : UncommonData
         {
             internal DeconstructionUncommonData(DeconstructMethodInfo deconstructMethodInfoOpt, ImmutableArray<Conversion> nestedConversions)
                 : base(isExtensionMethod: false, isArrayIndex: false, conversionResult: default, conversionMethod: null, nestedConversions)
@@ -166,17 +166,40 @@ namespace Microsoft.CodeAnalysis.CSharp
                     nestedConversions: default));
         }
 
-#pragma warning disable CS0219, IDE0059
+#pragma warning disable IDE0059, S1481
         [Conditional("DEBUG")]
         private static void AssertTrivialConversion(ConversionKind kind)
         {
             var isTrivial = kind switch
             {
-                ConversionKind.NoConversion or ConversionKind.Identity or ConversionKind.ImplicitConstant or ConversionKind.ImplicitNumeric or ConversionKind.ImplicitReference or ConversionKind.ImplicitEnumeration or ConversionKind.ImplicitThrow or ConversionKind.AnonymousFunction or ConversionKind.Boxing or ConversionKind.NullLiteral or ConversionKind.DefaultLiteral or ConversionKind.ImplicitNullToPointer or ConversionKind.ImplicitPointerToVoid or ConversionKind.ExplicitPointerToPointer or ConversionKind.ExplicitPointerToInteger or ConversionKind.ExplicitIntegerToPointer or ConversionKind.Unboxing or ConversionKind.ExplicitReference or ConversionKind.IntPtr or ConversionKind.ExplicitEnumeration or ConversionKind.ExplicitNumeric or ConversionKind.ImplicitDynamic or ConversionKind.ExplicitDynamic or ConversionKind.InterpolatedString => true,
+                ConversionKind.NoConversion or
+                ConversionKind.Identity or
+                ConversionKind.ImplicitConstant or
+                ConversionKind.ImplicitNumeric or
+                ConversionKind.ImplicitReference or
+                ConversionKind.ImplicitEnumeration or
+                ConversionKind.ImplicitThrow or
+                ConversionKind.AnonymousFunction or
+                ConversionKind.Boxing or
+                ConversionKind.NullLiteral or
+                ConversionKind.DefaultLiteral or
+                ConversionKind.ImplicitNullToPointer or
+                ConversionKind.ImplicitPointerToVoid or
+                ConversionKind.ExplicitPointerToPointer or
+                ConversionKind.ExplicitPointerToInteger or
+                ConversionKind.ExplicitIntegerToPointer or
+                ConversionKind.Unboxing or
+                ConversionKind.ExplicitReference or
+                ConversionKind.IntPtr or
+                ConversionKind.ExplicitEnumeration or
+                ConversionKind.ExplicitNumeric or
+                ConversionKind.ImplicitDynamic or
+                ConversionKind.ExplicitDynamic or
+                ConversionKind.InterpolatedString => true,
                 _ => false,
             };
         }
-#pragma warning restore CS0219, IDE0059
+#pragma warning restore IDE0059, S1481
 
         internal static Conversion GetTrivialConversion(ConversionKind kind)
         {
@@ -216,23 +239,23 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         // trivial conversions that could be underlying in nullable conversion
         // NOTE: tuple conversions can be underlying as well, but they are not trivial 
-        internal static ImmutableArray<Conversion> IdentityUnderlying => ConversionSingletons.IdentityUnderlying;
-        internal static ImmutableArray<Conversion> ImplicitConstantUnderlying => ConversionSingletons.ImplicitConstantUnderlying;
-        internal static ImmutableArray<Conversion> ImplicitNumericUnderlying => ConversionSingletons.ImplicitNumericUnderlying;
-        internal static ImmutableArray<Conversion> ExplicitNumericUnderlying => ConversionSingletons.ExplicitNumericUnderlying;
-        internal static ImmutableArray<Conversion> ExplicitEnumerationUnderlying => ConversionSingletons.ExplicitEnumerationUnderlying;
-        internal static ImmutableArray<Conversion> PointerToIntegerUnderlying => ConversionSingletons.PointerToIntegerUnderlying;
+        internal static ImmutableArray<Conversion> IdentityUnderlying => ConversionSingletons.InternalIdentityUnderlying;
+        internal static ImmutableArray<Conversion> ImplicitConstantUnderlying => ConversionSingletons.InternalImplicitConstantUnderlying;
+        internal static ImmutableArray<Conversion> ImplicitNumericUnderlying => ConversionSingletons.InternalImplicitNumericUnderlying;
+        internal static ImmutableArray<Conversion> ExplicitNumericUnderlying => ConversionSingletons.InternalExplicitNumericUnderlying;
+        internal static ImmutableArray<Conversion> ExplicitEnumerationUnderlying => ConversionSingletons.InternalExplicitEnumerationUnderlying;
+        internal static ImmutableArray<Conversion> PointerToIntegerUnderlying => ConversionSingletons.InternalPointerToIntegerUnderlying;
 
         // these static fields are not directly inside the Conversion
         // because that causes CLR loader failure.
         private static class ConversionSingletons
         {
-            internal static ImmutableArray<Conversion> IdentityUnderlying = ImmutableArray.Create(Identity);
-            internal static ImmutableArray<Conversion> ImplicitConstantUnderlying = ImmutableArray.Create(ImplicitConstant);
-            internal static ImmutableArray<Conversion> ImplicitNumericUnderlying = ImmutableArray.Create(ImplicitNumeric);
-            internal static ImmutableArray<Conversion> ExplicitNumericUnderlying = ImmutableArray.Create(ExplicitNumeric);
-            internal static ImmutableArray<Conversion> ExplicitEnumerationUnderlying = ImmutableArray.Create(ExplicitEnumeration);
-            internal static ImmutableArray<Conversion> PointerToIntegerUnderlying = ImmutableArray.Create(PointerToInteger);
+            internal static readonly ImmutableArray<Conversion> InternalIdentityUnderlying = ImmutableArray.Create(Identity);
+            internal static readonly ImmutableArray<Conversion> InternalImplicitConstantUnderlying = ImmutableArray.Create(ImplicitConstant);
+            internal static readonly ImmutableArray<Conversion> InternalImplicitNumericUnderlying = ImmutableArray.Create(ImplicitNumeric);
+            internal static readonly ImmutableArray<Conversion> InternalExplicitNumericUnderlying = ImmutableArray.Create(ExplicitNumeric);
+            internal static readonly ImmutableArray<Conversion> InternalExplicitEnumerationUnderlying = ImmutableArray.Create(ExplicitEnumeration);
+            internal static readonly ImmutableArray<Conversion> InternalPointerToIntegerUnderlying = ImmutableArray.Create(PointerToInteger);
         }
 
         internal static Conversion MakeStackAllocToPointerType(Conversion underlyingConversion)
@@ -770,35 +793,32 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Empty - found no applicable built-in or user-defined conversions.
         /// OverloadResolutionFailure - found applicable conversions, but no unique best.
         /// </summary>
-        internal LookupResultKind ResultKind
+        internal LookupResultKind ResultKind()
         {
-            get
-            {
-                var conversionResult = _uncommonData?._conversionResult ?? default;
+            var conversionResult = _uncommonData?._conversionResult ?? default;
 
-                switch (conversionResult.Kind)
-                {
-                    case UserDefinedConversionResultKind.Valid:
-                        return LookupResultKind.Viable;
-                    case UserDefinedConversionResultKind.Ambiguous:
-                    case UserDefinedConversionResultKind.NoBestSourceType:
-                    case UserDefinedConversionResultKind.NoBestTargetType:
+            switch (conversionResult.Kind)
+            {
+                case UserDefinedConversionResultKind.Valid:
+                    return LookupResultKind.Viable;
+                case UserDefinedConversionResultKind.Ambiguous:
+                case UserDefinedConversionResultKind.NoBestSourceType:
+                case UserDefinedConversionResultKind.NoBestTargetType:
+                    return LookupResultKind.OverloadResolutionFailure;
+                case UserDefinedConversionResultKind.NoApplicableOperators:
+                    if (conversionResult.Results.IsDefaultOrEmpty)
+                    {
+                        return this.Kind == ConversionKind.NoConversion ? LookupResultKind.Empty : LookupResultKind.Viable;
+                    }
+                    else
+                    {
+                        // CONSIDER: indicating an overload resolution failure is sufficient,
+                        // but it would be nice to indicate lack of accessibility or other
+                        // error conditions.
                         return LookupResultKind.OverloadResolutionFailure;
-                    case UserDefinedConversionResultKind.NoApplicableOperators:
-                        if (conversionResult.Results.IsDefaultOrEmpty)
-                        {
-                            return this.Kind == ConversionKind.NoConversion ? LookupResultKind.Empty : LookupResultKind.Viable;
-                        }
-                        else
-                        {
-                            // CONSIDER: indicating an overload resolution failure is sufficient,
-                            // but it would be nice to indicate lack of accessibility or other
-                            // error conditions.
-                            return LookupResultKind.OverloadResolutionFailure;
-                        }
-                    default:
-                        throw ExceptionUtilities.UnexpectedValue(conversionResult.Kind);
-                }
+                    }
+                default:
+                    throw ExceptionUtilities.UnexpectedValue(conversionResult.Kind);
             }
         }
 

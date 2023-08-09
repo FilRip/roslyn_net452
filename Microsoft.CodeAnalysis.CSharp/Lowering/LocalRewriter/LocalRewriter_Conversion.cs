@@ -370,7 +370,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case ConversionKind.MethodGroup when oldNodeOpt is { Type: { TypeKind: TypeKind.FunctionPointer } funcPtrType }:
                     {
-                        var _ = (BoundMethodGroup)rewrittenOperand;
+                        _ = (BoundMethodGroup)rewrittenOperand;
                         return new BoundFunctionPointerLoad(oldNodeOpt.Syntax, oldNodeOpt.SymbolOpt, type: funcPtrType, hasErrors: false);
                     }
 

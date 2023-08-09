@@ -106,7 +106,6 @@ namespace Microsoft.CodeAnalysis
                     }
 
                     bool invalidFormat = false;
-                    //System.Numerics.BigInteger number = 0;
 
                     //There could be an invalid character in the input so check for the presence of one and
                     //parse up to that point. examples of invalid characters are alphas and punctuation
@@ -121,16 +120,13 @@ namespace Microsoft.CodeAnalysis
                         }
                     }
 
-                    if (!invalidFormat)
+                    if (!invalidFormat && (TryGetValue(elements[i], out values[i])))
                     {
                         //if we made it here then there weren't any alpha or punctuation chars in the input so the
                         //element is either greater than ushort.MaxValue or possibly a fullwidth unicode digit.
-                        if (TryGetValue(elements[i], out values[i]))
-                        {
-                            //For this scenario the old compiler would continue processing the remaining version elements
-                            //so continue processing
-                            continue;
-                        }
+                        //For this scenario the old compiler would continue processing the remaining version elements
+                        //so continue processing
+                        continue;
                     }
 
                     //Don't process any more of the version elements
@@ -194,7 +190,7 @@ namespace Microsoft.CodeAnalysis
 
             if (pattern.Build == ushort.MaxValue)
             {
-                TimeSpan days = time.Date - new DateTime(2000, 1, 1);
+                TimeSpan days = time.Date - new DateTime(2000, 1, 1,0,0,0, DateTimeKind.Local);
                 int build = Math.Min(ushort.MaxValue, (int)days.TotalDays);
 
                 return new Version(pattern.Major, pattern.Minor, (ushort)build, (ushort)revision);

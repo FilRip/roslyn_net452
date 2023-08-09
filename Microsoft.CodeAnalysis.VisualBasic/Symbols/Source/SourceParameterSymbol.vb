@@ -184,17 +184,16 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend Overrides Function EarlyDecodeWellKnownAttribute(ByRef arguments As EarlyDecodeWellKnownAttributeArguments(Of EarlyWellKnownAttributeBinder, NamedTypeSymbol, AttributeSyntax, AttributeLocation)) As VisualBasicAttributeData
             ' Declare methods need to know early what marshalling type are their parameters of to determine ByRef-ness.
             Dim containingSymbol = Me.ContainingSymbol
-            If containingSymbol.Kind = SymbolKind.Method AndAlso DirectCast(containingSymbol, MethodSymbol).MethodKind = MethodKind.DeclareMethod Then
-                If VisualBasicAttributeData.IsTargetEarlyAttribute(arguments.AttributeType, arguments.AttributeSyntax, AttributeDescription.MarshalAsAttribute) Then
-                    Dim hasAnyDiagnostics As Boolean = False
+            If containingSymbol.Kind = SymbolKind.Method AndAlso DirectCast(containingSymbol, MethodSymbol).MethodKind = MethodKind.DeclareMethod AndAlso
+                VisualBasicAttributeData.IsTargetEarlyAttribute(arguments.AttributeType, arguments.AttributeSyntax, AttributeDescription.MarshalAsAttribute) Then
+                Dim hasAnyDiagnostics As Boolean = False
 
-                    Dim attrdata = arguments.Binder.GetAttribute(arguments.AttributeSyntax, arguments.AttributeType, hasAnyDiagnostics)
-                    If Not attrdata.HasErrors Then
-                        arguments.GetOrCreateData(Of ParameterEarlyWellKnownAttributeData).HasMarshalAsAttribute = True
-                        Return If(Not hasAnyDiagnostics, attrdata, Nothing)
-                    Else
-                        Return Nothing
-                    End If
+                Dim attrdata = arguments.Binder.GetAttribute(arguments.AttributeSyntax, arguments.AttributeType, hasAnyDiagnostics)
+                If Not attrdata.HasErrors Then
+                    arguments.GetOrCreateData(Of ParameterEarlyWellKnownAttributeData).HasMarshalAsAttribute = True
+                    Return If(Not hasAnyDiagnostics, attrdata, Nothing)
+                Else
+                    Return Nothing
                 End If
             End If
 
@@ -334,22 +333,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             End If
         End Sub
 
-        ''' <summary>
-        ''' Verify the default value matches the default value from any earlier attribute
-        ''' (DefaultParameterValueAttribute, DateTimeConstantAttribute or DecimalConstantAttribute).
-        ''' If not, report ERR_ParamDefaultValueDiffersFromAttribute.
-        ''' </summary>
-        Protected Sub VerifyParamDefaultValueMatchesAttributeIfAny(value As ConstantValue, syntax As VisualBasicSyntaxNode, diagnostics As BindingDiagnosticBag)
-            Dim data = GetEarlyDecodedWellKnownAttributeData()
-            If data IsNot Nothing Then
-                Dim attrValue = data.DefaultParameterValue
-                If attrValue <> ConstantValue.Unset AndAlso
-                    value <> attrValue Then
-                    Binder.ReportDiagnostic(diagnostics, syntax, ERRID.ERR_ParamDefaultValueDiffersFromAttribute)
-                End If
-            End If
-        End Sub
-
         Private Function DecodeDefaultParameterValueAttribute(description As AttributeDescription, attribute As VisualBasicAttributeData) As ConstantValue
             Debug.Assert(Not attribute.HasErrors)
 
@@ -386,6 +369,22 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             Return ConstantValue.Create(arg.ValueInternal, constantValueDiscriminator)
         End Function
+
+        ''' <summary>
+        ''' Verify the default value matches the default value from any earlier attribute
+        ''' (DefaultParameterValueAttribute, DateTimeConstantAttribute or DecimalConstantAttribute).
+        ''' If not, report ERR_ParamDefaultValueDiffersFromAttribute.
+        ''' </summary>
+        Protected Sub VerifyParamDefaultValueMatchesAttributeIfAny(value As ConstantValue, syntax As VisualBasicSyntaxNode, diagnostics As BindingDiagnosticBag)
+            Dim data = GetEarlyDecodedWellKnownAttributeData()
+            If data IsNot Nothing Then
+                Dim attrValue = data.DefaultParameterValue
+                If attrValue <> ConstantValue.Unset AndAlso
+                    value <> attrValue Then
+                    Binder.ReportDiagnostic(diagnostics, syntax, ERRID.ERR_ParamDefaultValueDiffersFromAttribute)
+                End If
+            End If
+        End Sub
 
         Friend NotOverridable Overrides ReadOnly Property MarshallingInformation As MarshalPseudoCustomAttributeData
             Get
@@ -471,7 +470,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
     End Class
 
-    Friend Enum SourceParameterFlags As Byte
+    Friend Enum ESourceParameter As Byte
         [ByVal] = 1 << 0
         [ByRef] = 1 << 1
         [Optional] = 1 << 2

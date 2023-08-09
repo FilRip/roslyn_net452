@@ -132,9 +132,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
             If Me.IsPartial Then
                 Dim partialImpl = Me.OtherPartOfPartial
-                If partialImpl IsNot Nothing Then
-                    partialImpl.SetMetadataName(metadataName)
-                End If
+                partialImpl?.SetMetadataName(metadataName)
             End If
         End Sub
 
@@ -340,9 +338,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 #Enable Warning IDE0059
 
             Dim containingSourceType = TryCast(ContainingType, SourceNamedTypeSymbol)
-            If containingSourceType IsNot Nothing Then
-                containingSourceType.CheckForDuplicateTypeParameters(typeParameters.AsImmutableOrNull, diagBag)
-            End If
+            containingSourceType?.CheckForDuplicateTypeParameters(typeParameters.AsImmutableOrNull, diagBag)
 
             Return typeParameters.AsImmutableOrNull
         End Function
@@ -401,7 +397,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 (syntax.ImplementsClause IsNot Nothing) Then
 
                 Dim binder As Binder = BinderBuilder.CreateBinderForType(sourceModule, Me.SyntaxTree, ContainingType)
-                If Me.IsShared And Not ContainingType.IsModuleType Then
+                If Me.IsShared AndAlso Not ContainingType.IsModuleType Then
                     ' Implementing with shared methods is illegal.
                     ' Module case is caught inside ProcessImplementsClause and has different message.
                     Binder.ReportDiagnostic(diagBag,
@@ -503,9 +499,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Debug.Assert(Me.m_lazyReturnTypeCustomAttributesBag Is Nothing)
                 For Each param In Me.Parameters
                     Dim complexParam = TryCast(param, SourceComplexParameterSymbol)
-                    If complexParam IsNot Nothing Then
-                        complexParam.AssertAttributesNotValidatedYet()
-                    End If
+                    complexParam?.AssertAttributesNotValidatedYet()
                 Next
 
                 ' If partial method info is frozen the new and the old values must be equal

@@ -514,19 +514,17 @@ namespace Microsoft.CodeAnalysis
                     case ThreeEnumeratorListStack.Which.Trivia:
                         // yield structure nodes and enumerate their children
                         SyntaxTrivia trivia;
-                        if (stack.TryGetNext(out trivia))
+                        if (stack.TryGetNext(out trivia) &&
+                            (trivia.TryGetStructure(out var structureNode) && IsInSpan(in span, trivia.FullSpan)))
                         {
-                            if (trivia.TryGetStructure(out var structureNode) && IsInSpan(in span, trivia.FullSpan))
-                            {
-                                // parent nodes come before children (prefix document order)
+                            // parent nodes come before children (prefix document order)
 
-                                // PERF: Push before yield return so that "structureNode" is 'dead' after the yield
-                                // and therefore doesn't need to be stored in the iterator state machine. This
-                                // saves a field.
-                                stack.PushChildren(structureNode, descendIntoChildren);
+                            // PERF: Push before yield return so that "structureNode" is 'dead' after the yield
+                            // and therefore doesn't need to be stored in the iterator state machine. This
+                            // saves a field.
+                            stack.PushChildren(structureNode, descendIntoChildren);
 
-                                yield return structureNode;
-                            }
+                            yield return structureNode;
                         }
                         break;
 
@@ -552,20 +550,14 @@ namespace Microsoft.CodeAnalysis
                     {
                         var token = value.AsToken();
 
-                        foreach (var trivia in token.LeadingTrivia)
+                        foreach (var trivia in token.LeadingTrivia.Where(trivia => IsInSpan(in span, trivia.FullSpan)))
                         {
-                            if (IsInSpan(in span, trivia.FullSpan))
-                            {
-                                yield return trivia;
-                            }
+                            yield return trivia;
                         }
 
-                        foreach (var trivia in token.TrailingTrivia)
+                        foreach (var trivia in token.TrailingTrivia.Where(trivia => IsInSpan(in span, trivia.FullSpan)))
                         {
-                            if (IsInSpan(in span, trivia.FullSpan))
-                            {
-                                yield return trivia;
-                            }
+                            yield return trivia;
                         }
                     }
                 }

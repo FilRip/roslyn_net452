@@ -683,9 +683,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             Dim conditionalAccessStack As ArrayBuilder(Of ConditionalAccessExpressionSyntax) = Nothing
             Dim result As SyntaxToken = ExtractAnonymousTypeMemberName(conditionalAccessStack, input, isNameDictionaryAccess, isRejectedXmlName)
 
-            If conditionalAccessStack IsNot Nothing Then
-                conditionalAccessStack.Free()
-            End If
+            conditionalAccessStack?.Free()
 
             Return result
         End Function
@@ -794,9 +792,7 @@ TryAgain:
         End Function
 
         Private Sub ClearConditionalAccessStack(conditionalAccessStack As ArrayBuilder(Of ConditionalAccessExpressionSyntax))
-            If conditionalAccessStack IsNot Nothing Then
-                conditionalAccessStack.Clear()
-            End If
+            conditionalAccessStack?.Clear()
         End Sub
 
         Private Function PopAndGetConditionalAccessReceiver(conditionalAccessStack As ArrayBuilder(Of ConditionalAccessExpressionSyntax)) As ExpressionSyntax

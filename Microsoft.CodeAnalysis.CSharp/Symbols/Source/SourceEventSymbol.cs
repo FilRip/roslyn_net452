@@ -283,7 +283,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal sealed override void DecodeWellKnownAttribute(ref DecodeWellKnownAttributeArguments<AttributeSyntax, CSharpAttributeData, AttributeLocation> arguments)
         {
             var attribute = arguments.Attribute;
-            var _ = (BindingDiagnosticBag)arguments.Diagnostics;
+            _ = (BindingDiagnosticBag)arguments.Diagnostics;
 
             if (attribute.IsTargetAttribute(this, AttributeDescription.SpecialNameAttribute))
             {

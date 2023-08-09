@@ -1896,7 +1896,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         Error(diagnostics, ErrorCode.ERR_NoImplicitConvCast, syntax, distinguisher.First, distinguisher.Second);
                     }
                 }
-                else if (conversion.ResultKind == LookupResultKind.OverloadResolutionFailure)
+                else if (conversion.ResultKind() == LookupResultKind.OverloadResolutionFailure)
                 {
 
                     ImmutableArray<MethodSymbol> originalUserDefinedConversions = conversion.OriginalUserDefinedConversions;
@@ -2125,7 +2125,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ImmutableArray<BoundExpression> tupleArguments,
             ImmutableArray<TypeWithAnnotations> targetElementTypes)
         {
-            var _ = tupleArguments.Length;
+            _ = tupleArguments.Length;
 
             // report all leaf elements of the tuple literal that failed to convert
             // NOTE: we are not responsible for reporting use site errors here, just the failed leaf conversions.
@@ -3129,7 +3129,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundNode BindSimpleProgram(CompilationUnitSyntax compilationUnit, BindingDiagnosticBag diagnostics)
         {
-            var _ = (SynthesizedSimpleProgramEntryPointSymbol)ContainingMemberOrLambda;
+            _ = (SynthesizedSimpleProgramEntryPointSymbol)ContainingMemberOrLambda;
 
             return GetBinder(compilationUnit).BindSimpleProgramCompilationUnit(compilationUnit, /*simpleProgram, */diagnostics);
         }

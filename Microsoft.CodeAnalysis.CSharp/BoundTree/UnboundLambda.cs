@@ -921,7 +921,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var delegateReturnType = invoke.ReturnType as NamedTypeSymbol;
                         if (delegateReturnType?.IsVoidType() == false)
                         {
-                            if (delegateReturnType.IsCustomTaskType(out var _))
+                            if (delegateReturnType.IsCustomTaskType(out _))
                             {
                                 taskLikeReturnTypeOpt = delegateReturnType.ConstructedFrom;
                             }

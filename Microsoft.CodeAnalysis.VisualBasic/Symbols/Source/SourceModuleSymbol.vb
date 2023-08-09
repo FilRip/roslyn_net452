@@ -346,10 +346,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         ' Make sure the project level imports are bound.
         Private Sub EnsureImportsAreBound(cancellationToken As CancellationToken)
-            If _lazyBoundImports Is Nothing Then
-                If Interlocked.CompareExchange(_lazyBoundImports, BindImports(cancellationToken), Nothing) Is Nothing Then
-                    ValidateImports(_lazyBoundImports.MemberImports, _lazyBoundImports.MemberImportsInfo, _lazyBoundImports.AliasImports, _lazyBoundImports.AliasImportsInfo, _lazyBoundImports.Diagnostics)
-                End If
+            If _lazyBoundImports Is Nothing AndAlso
+                Interlocked.CompareExchange(_lazyBoundImports, BindImports(cancellationToken), Nothing) Is Nothing Then
+                ValidateImports(_lazyBoundImports.MemberImports, _lazyBoundImports.MemberImportsInfo, _lazyBoundImports.AliasImports, _lazyBoundImports.AliasImportsInfo, _lazyBoundImports.Diagnostics)
             End If
         End Sub
 
@@ -1058,10 +1057,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Get
                 ' Only primary module of an assembly marked with an Extension attribute
                 ' can contain extension methods recognized by the language (Dev10 behavior).
-                If _lazyContainsExtensionMethods = ThreeState.Unknown Then
-                    If Not (_assemblySymbol.Modules(0) Is Me) Then
-                        _lazyContainsExtensionMethods = ThreeState.False
-                    End If
+                If _lazyContainsExtensionMethods = ThreeState.Unknown AndAlso (_assemblySymbol.Modules(0) IsNot Me) Then
+                    _lazyContainsExtensionMethods = ThreeState.False
                 End If
 
                 Return _lazyContainsExtensionMethods <> ThreeState.False

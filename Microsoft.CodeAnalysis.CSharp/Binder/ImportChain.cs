@@ -133,18 +133,16 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static Cci.IAssemblyReference TryGetAssemblyScope(NamespaceSymbol @namespace, Emit.PEModuleBuilder moduleBuilder, DiagnosticBag diagnostics)
         {
             AssemblySymbol containingAssembly = @namespace.ContainingAssembly;
-            if (containingAssembly is not null && containingAssembly != (Symbol)moduleBuilder.CommonCompilation.Assembly)
+            if (containingAssembly is not null && containingAssembly != moduleBuilder.CommonCompilation.Assembly)
             {
                 var referenceManager = ((CSharpCompilation)moduleBuilder.CommonCompilation).GetBoundReferenceManager();
 
                 for (int i = 0; i < referenceManager.ReferencedAssemblies.Length; i++)
                 {
-                    if ((object)referenceManager.ReferencedAssemblies[i] == containingAssembly)
+                    if ((object)referenceManager.ReferencedAssemblies[i] == containingAssembly &&
+                        (!referenceManager.DeclarationsAccessibleWithoutAlias(i)))
                     {
-                        if (!referenceManager.DeclarationsAccessibleWithoutAlias(i))
-                        {
-                            return moduleBuilder.Translate(containingAssembly, diagnostics);
-                        }
+                        return moduleBuilder.Translate(containingAssembly, diagnostics);
                     }
                 }
             }

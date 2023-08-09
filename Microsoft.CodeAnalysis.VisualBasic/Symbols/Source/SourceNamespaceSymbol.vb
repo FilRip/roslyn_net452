@@ -26,7 +26,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Private _lazyState As Integer
 
         <Flags>
-        Private Enum StateFlags As Integer
+        Private Enum EState As Integer
             HasMultipleSpellings = &H1     ' ReadOnly: Set if there are multiple declarations with different spellings (casing)
             AllMembersIsSorted = &H2       ' Set if "m_lazyAllMembers" is sorted.
             DeclarationValidated = &H4     ' Set by ValidateDeclaration.
@@ -45,7 +45,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             _containingNamespace = containingNamespace
             _containingModule = containingModule
             If (containingNamespace IsNot Nothing AndAlso containingNamespace.HasMultipleSpellings) OrElse decl.HasMultipleSpellings Then
-                _lazyState = StateFlags.HasMultipleSpellings
+                _lazyState = EState.HasMultipleSpellings
             End If
         End Sub
 
@@ -301,7 +301,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Function
 
         Public Overloads Overrides Function GetMembers() As ImmutableArray(Of Symbol)
-            If (_lazyState And StateFlags.AllMembersIsSorted) <> 0 Then
+            If (_lazyState And EState.AllMembersIsSorted) <> 0 Then
                 Return _lazyAllMembers
 
             Else
@@ -312,7 +312,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     ImmutableInterlocked.InterlockedExchange(_lazyAllMembers, allMembers)
                 End If
 
-                ThreadSafeFlagOperations.Set(_lazyState, StateFlags.AllMembersIsSorted)
+                ThreadSafeFlagOperations.Set(_lazyState, EState.AllMembersIsSorted)
 
                 Return allMembers
             End If
@@ -434,7 +434,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                             End If
                         End If
 
-                    ElseIf decl.IsPartOfRootNamespace
+                    ElseIf decl.IsPartOfRootNamespace Then
                         ' Root namespace is implicitly defined in every tree 
                         Return True
                     End If
@@ -467,7 +467,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ' for example, it is called twice on Namespace X.Y, once with "X" and once with "X.Y".
         ' It will also be called with the CompilationUnit.
         Private Sub ValidateDeclaration(tree As SyntaxTree, cancellationToken As CancellationToken)
-            If (_lazyState And StateFlags.DeclarationValidated) <> 0 Then
+            If (_lazyState And EState.DeclarationValidated) <> 0 Then
                 Return
             End If
 
@@ -498,7 +498,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 cancellationToken.ThrowIfCancellationRequested()
             Next
 
-            If _containingModule.AtomicSetFlagAndStoreDiagnostics(_lazyState, StateFlags.DeclarationValidated, 0, New BindingDiagnosticBag(diagnostics)) Then
+            If _containingModule.AtomicSetFlagAndStoreDiagnostics(_lazyState, EState.DeclarationValidated, 0, New BindingDiagnosticBag(diagnostics)) Then
                 DeclaringCompilation.SymbolDeclaredEvent(Me)
             End If
             diagnostics.Free()
@@ -607,7 +607,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         ''' </summary>
         Friend ReadOnly Property HasMultipleSpellings As Boolean
             Get
-                Return (_lazyState And StateFlags.HasMultipleSpellings) <> 0
+                Return (_lazyState And EState.HasMultipleSpellings) <> 0
             End Get
         End Property
 
@@ -640,16 +640,18 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                                                   Dim nsBlock As NamespaceBlockSyntax = decl.GetNamespaceBlockSyntax()
                                                                                   Return nsBlock IsNot Nothing AndAlso nsBlock.SyntaxTree Is tree AndAlso nsBlock.Span.Contains(location)
                                                                               End Function)
+#Disable Warning IDE0270 ' Utiliser l'expression de fusion
                 If containingDecl Is Nothing Then
                     ' Could be project namespace, which has no namespace block syntax.
                     containingDecl = _declaration.Declarations.FirstOrDefault(Function(decl) decl.GetNamespaceBlockSyntax() Is Nothing)
                 End If
+#Enable Warning IDE0270 ' Utiliser l'expression de fusion
 
                 Dim containingDeclName = If(containingDecl IsNot Nothing, containingDecl.Name, Me.Name)
                 Dim containingNamespace = TryCast(Me.ContainingNamespace, SourceNamespaceSymbol)
                 Dim fullDeclName As String
                 If containingNamespace IsNot Nothing AndAlso containingNamespace.Name <> "" Then
-                    fullDeclName = containingNamespace.GetDeclarationSpelling(tree, location) + "." + containingDeclName
+                    fullDeclName = containingNamespace.GetDeclarationSpelling(tree, location) & "." & containingDeclName
                 Else
                     fullDeclName = containingDeclName
                 End If

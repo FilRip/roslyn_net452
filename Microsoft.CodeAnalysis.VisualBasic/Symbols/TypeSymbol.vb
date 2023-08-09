@@ -95,9 +95,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         Friend Function BaseTypeWithDefinitionUseSiteDiagnostics(<[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol)) As NamedTypeSymbol
             Dim result = BaseTypeNoUseSiteDiagnostics
 
-            If result IsNot Nothing Then
-                result.OriginalDefinition.AddUseSiteInfo(useSiteInfo)
-            End If
+            result?.OriginalDefinition.AddUseSiteInfo(useSiteInfo)
 
             Return result
         End Function
@@ -437,9 +435,7 @@ Done:
         Friend Overridable Function GetDirectBaseTypeWithDefinitionUseSiteDiagnostics(basesBeingResolved As BasesBeingResolved, <[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol)) As NamedTypeSymbol
             Dim result = GetDirectBaseTypeNoUseSiteDiagnostics(basesBeingResolved)
 
-            If result IsNot Nothing Then
-                result.OriginalDefinition.AddUseSiteInfo(useSiteInfo)
-            End If
+            result?.OriginalDefinition.AddUseSiteInfo(useSiteInfo)
 
             Return result
         End Function

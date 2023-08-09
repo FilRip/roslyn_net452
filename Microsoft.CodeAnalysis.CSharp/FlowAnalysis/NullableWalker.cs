@@ -1427,7 +1427,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (compilation.NullableAnalysisData?.Data is { } state)
             {
                 var key = (object?)symbol ?? methodMainNode.Syntax;
-                if (!state.TryGetValue(key, out var _))
+                if (!state.TryGetValue(key, out _))
                 {
                     state.TryAdd(key, new Data(_variables.GetTotalVariableCount(), requiredAnalysis));
                 }
@@ -7111,7 +7111,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             var conversionOpt = conversionExpression as BoundConversion;
-            var _ = conversionOpt?.ConversionGroupOpt;
+            _ = conversionOpt?.ConversionGroupOpt;
             while (conversionOpt != null &&
                    conversionOpt != convertedNode &&
                    conversionOpt.Syntax.SpanStart != convertedNode.Syntax.SpanStart)
@@ -7124,7 +7124,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private void TrackAnalyzedNullabilityThroughConversionGroup(TypeWithState resultType, BoundConversion? conversionOpt, BoundExpression convertedNode)
         {
             var visitResult = new VisitResult(resultType, resultType.ToTypeWithAnnotations(compilation));
-            var _ = conversionOpt?.ConversionGroupOpt;
+            _ = conversionOpt?.ConversionGroupOpt;
             while (conversionOpt != null && conversionOpt != convertedNode)
             {
                 visitResult = withType(visitResult, conversionOpt.Type);

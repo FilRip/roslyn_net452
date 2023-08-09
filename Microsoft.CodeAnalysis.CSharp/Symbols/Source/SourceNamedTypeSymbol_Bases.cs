@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     // to make base resolution errors more deterministic
                     if (ContainingType is not null)
                     {
-                        var _ = ContainingType.BaseTypeNoUseSiteDiagnostics;
+                        _ = ContainingType.BaseTypeNoUseSiteDiagnostics;
                     }
 
                     var diagnostics = BindingDiagnosticBag.GetInstance();
@@ -414,7 +414,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     diagnostics.Add(ErrorCode.ERR_BadBaseType, typeSyntax.GetLocation());
                 }
 
-                var location = new SourceLocation(typeSyntax);
+                SourceLocation location = new(typeSyntax);
 
                 TypeSymbol baseType;
 
@@ -547,7 +547,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                                 continue;
                             }
                         }
-                        goto default;
+                        DefaultCase(ref location, ref baseType);
+                        continue;
 
                     case TypeKind.TypeParameter:
                         diagnostics.Add(ErrorCode.ERR_DerivingFromATyVar, location, baseType);
@@ -566,9 +567,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         throw ExceptionUtilities.UnexpectedValue(baseType.TypeKind);
 
                     default:
-                        diagnostics.Add(ErrorCode.ERR_NonInterfaceInInterfaceList, location, baseType);
+                        DefaultCase(ref location, ref baseType);
                         continue;
                 }
+            }
+
+            void DefaultCase(ref SourceLocation location, ref TypeSymbol baseType)
+            {
+                diagnostics.Add(ErrorCode.ERR_NonInterfaceInInterfaceList, location, baseType);
             }
 
             if (this.SpecialType == SpecialType.System_Object && (localBase is not null || localInterfaces.Count != 0))

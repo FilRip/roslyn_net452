@@ -2706,7 +2706,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // based on a "better", but, in reality, erroneous one.
                         if (node?.Kind == BoundKind.MethodGroup)
                         {
-                            var _ = (BoundMethodGroup)node;
+                            _ = (BoundMethodGroup)node;
 
                             if (delegateResult == BetterResult.Left)
                             {

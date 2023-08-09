@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (_succeeded == null)
                 {
-                    var _ = EntryPoints;
+                    _ = EntryPoints;
                 }
 
                 return _succeeded.Value;

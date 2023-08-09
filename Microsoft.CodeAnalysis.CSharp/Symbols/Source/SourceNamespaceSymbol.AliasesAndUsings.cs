@@ -30,9 +30,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         var calculated = GetAliasesAndUsingsForAsserts(declarationSyntax).GetImports(this, declarationSyntax, basesBeingResolved);
                         if (result == Imports.Empty || calculated == Imports.Empty)
                         {
+                            // Nothing to do
                         }
                         else
                         {
+                            // Nothing to do
                         }
 #endif
 
@@ -375,7 +377,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             return _lazyMergedGlobalAliasesAndUsings;
         }
 
-        private class AliasesAndUsings
+        private sealed class AliasesAndUsings
         {
             private ExternAliasesAndDiagnostics? _lazyExternAliases;
             private UsingsAndDiagnostics? _lazyGlobalUsings;
@@ -451,11 +453,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         else
                         {
                             // some n^2 action, but n should be very small.
-                            foreach (var existingAlias in builder)
+                            foreach (AliasSymbol existingAlias in builder.Select(a => a.Alias))
                             {
-                                if (existingAlias.Alias.Name == aliasSyntax.Identifier.ValueText)
+                                if (existingAlias.Name == aliasSyntax.Identifier.ValueText)
                                 {
-                                    diagnostics.Add(ErrorCode.ERR_DuplicateAlias, existingAlias.Alias.Locations[0], existingAlias.Alias.Name);
+                                    diagnostics.Add(ErrorCode.ERR_DuplicateAlias, existingAlias.Locations[0], existingAlias.Name);
                                     break;
                                 }
                             }
@@ -498,11 +500,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 return GetUsingsAndDiagnostics(declaringSymbol, declarationSyntax, basesBeingResolved).UsingNamespacesOrTypes;
             }
 
-            private UsingsAndDiagnostics GetUsingsAndDiagnostics(SourceNamespaceSymbol declaringSymbol, CSharpSyntaxNode declarationSyntax, ConsList<TypeSymbol>? basesBeingResolved)
-            {
-                return GetUsingsAndDiagnostics(ref _lazyUsings, declaringSymbol, declarationSyntax, basesBeingResolved, onlyGlobal: false);
-            }
-
             internal ImmutableArray<NamespaceOrTypeAndUsingDirective> GetGlobalUsingNamespacesOrTypes(SourceNamespaceSymbol declaringSymbol, SyntaxReference declarationSyntax, ConsList<TypeSymbol>? basesBeingResolved)
             {
                 return (_lazyGlobalUsings ?? GetGlobalUsingsAndDiagnostics(declaringSymbol, (CSharpSyntaxNode)declarationSyntax.GetSyntax(), basesBeingResolved)).UsingNamespacesOrTypes;
@@ -511,6 +508,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             private UsingsAndDiagnostics GetGlobalUsingsAndDiagnostics(SourceNamespaceSymbol declaringSymbol, CSharpSyntaxNode declarationSyntax, ConsList<TypeSymbol>? basesBeingResolved)
             {
                 return GetUsingsAndDiagnostics(ref _lazyGlobalUsings, declaringSymbol, declarationSyntax, basesBeingResolved, onlyGlobal: true);
+            }
+
+            private UsingsAndDiagnostics GetUsingsAndDiagnostics(SourceNamespaceSymbol declaringSymbol, CSharpSyntaxNode declarationSyntax, ConsList<TypeSymbol>? basesBeingResolved)
+            {
+                return GetUsingsAndDiagnostics(ref _lazyUsings, declaringSymbol, declarationSyntax, basesBeingResolved, onlyGlobal: false);
             }
 
             private UsingsAndDiagnostics GetUsingsAndDiagnostics(ref UsingsAndDiagnostics? usings, SourceNamespaceSymbol declaringSymbol, CSharpSyntaxNode declarationSyntax, ConsList<TypeSymbol>? basesBeingResolved, bool onlyGlobal)
@@ -965,7 +967,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 }
             }
 
-            private class ExternAliasesAndDiagnostics
+            private sealed class ExternAliasesAndDiagnostics
             {
                 public static readonly ExternAliasesAndDiagnostics Empty = new() { ExternAliases = ImmutableArray<AliasAndExternAliasDirective>.Empty, Diagnostics = ImmutableArray<Diagnostic>.Empty };
 
@@ -975,7 +977,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
 #nullable enable
 
-            private class UsingsAndDiagnostics
+            private sealed class UsingsAndDiagnostics
             {
                 public static readonly UsingsAndDiagnostics Empty =
                     new()
@@ -994,7 +996,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         }
 
 
-        private class MergedGlobalAliasesAndUsings
+        private sealed class MergedGlobalAliasesAndUsings
         {
             private Imports? _lazyImports;
 

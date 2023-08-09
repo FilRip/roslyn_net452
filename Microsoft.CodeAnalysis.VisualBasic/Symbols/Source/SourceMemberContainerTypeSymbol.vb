@@ -2938,7 +2938,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                     CheckIfMemberNameIsDuplicate(sym, diagBag, members)
                 End If
 
-                If sym.CanBeReferencedByName AndAlso
+                If sym.CanBeReferencedByName() AndAlso
                     TypeParameters.MatchesAnyName(sym.Name) Then
                     If sym.IsImplicitlyDeclared Then
                         Dim symImplicitlyDefinedBy = sym.ImplicitlyDefinedBy(members.Members)

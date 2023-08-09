@@ -1194,9 +1194,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         <Extension>
         Public Sub GetAllTypeParameters(type As NamedTypeSymbol, builder As ArrayBuilder(Of TypeParameterSymbol))
             Dim containingType = type.ContainingType
-            If containingType IsNot Nothing Then
-                containingType.GetAllTypeParameters(builder)
-            End If
+            containingType?.GetAllTypeParameters(builder)
 
             builder.AddRange(type.TypeParameters)
         End Sub

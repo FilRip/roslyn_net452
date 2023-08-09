@@ -307,7 +307,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             Get
                 Return m_property.ShadowsExplicitly
             End Get
-        End Property '
+        End Property
 
         Friend Overrides Function GetLexicalSortKey() As LexicalSortKey
             Return If(m_property.IsCustomProperty, MyBase.GetLexicalSortKey(), m_property.GetLexicalSortKey())
@@ -456,13 +456,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Private Shared ReadOnly s_checkParameterModifierCallback As Binder.CheckParameterModifierDelegate = AddressOf CheckParameterModifier
 
-        Private Shared Function CheckParameterModifier(container As Symbol, token As SyntaxToken, flag As SourceParameterFlags, diagnostics As BindingDiagnosticBag) As SourceParameterFlags
-            If flag <> SourceParameterFlags.ByVal Then
+        Private Shared Function CheckParameterModifier(container As Symbol, token As SyntaxToken, flag As ESourceParameter, diagnostics As BindingDiagnosticBag) As ESourceParameter
+            If flag <> ESourceParameter.ByVal Then
                 Dim location = token.GetLocation()
                 diagnostics.Add(ERRID.ERR_SetHasToBeByVal1, location, token.ToString())
-                Return flag And SourceParameterFlags.ByVal
+                Return flag And ESourceParameter.ByVal
             End If
-            Return SourceParameterFlags.ByVal
+            Return ESourceParameter.ByVal
         End Function
 
         Friend Overrides Function GetBoundMethodBody(compilationState As TypeCompilationState, diagnostics As BindingDiagnosticBag, Optional ByRef methodBodyBinder As Binder = Nothing) As BoundBlock
@@ -476,10 +476,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
         End Function
 
         Friend Overrides Sub DecodeWellKnownAttribute(ByRef arguments As DecodeWellKnownAttributeArguments(Of AttributeSyntax, VisualBasicAttributeData, AttributeLocation))
-            If arguments.SymbolPart = AttributeLocation.None Then
-                If arguments.Attribute.IsTargetAttribute(Me, AttributeDescription.DebuggerHiddenAttribute) Then
-                    arguments.GetOrCreateData(Of MethodWellKnownAttributeData)().IsPropertyAccessorWithDebuggerHiddenAttribute = True
-                End If
+            If arguments.SymbolPart = AttributeLocation.None AndAlso
+                arguments.Attribute.IsTargetAttribute(Me, AttributeDescription.DebuggerHiddenAttribute) Then
+                arguments.GetOrCreateData(Of MethodWellKnownAttributeData)().IsPropertyAccessorWithDebuggerHiddenAttribute = True
             End If
 
             MyBase.DecodeWellKnownAttribute(arguments)

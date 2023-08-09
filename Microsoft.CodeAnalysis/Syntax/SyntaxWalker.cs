@@ -41,12 +41,9 @@ namespace Microsoft.CodeAnalysis
                         Visit(child.AsNode()!);
                     }
                 }
-                else if (child.IsToken)
+                else if (child.IsToken && this.Depth >= SyntaxWalkerDepth.Token)
                 {
-                    if (this.Depth >= SyntaxWalkerDepth.Token)
-                    {
-                        VisitToken(child.AsToken());
-                    }
+                    VisitToken(child.AsToken());
                 }
             }
         }

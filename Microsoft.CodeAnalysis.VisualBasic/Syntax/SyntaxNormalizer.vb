@@ -77,9 +77,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax
         End Function
 
         Private Sub Free()
-            If _indentations IsNot Nothing Then
-                _indentations.Free()
-            End If
+            _indentations?.Free()
         End Sub
 
         Private Function GetIndentation(count As Integer) As SyntaxTrivia

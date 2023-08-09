@@ -1368,7 +1368,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         [Conditional("DEBUG")]
         private static void CheckEffectiveAndDeducedBaseTypes(ConversionsBase conversions, TypeSymbol effectiveBase, TypeSymbol deducedBase)
         {
-            var _ = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
+            _ = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
         }
 
         internal static TypeWithAnnotations ConstraintWithMostSignificantNullability(TypeWithAnnotations type1, TypeWithAnnotations type2)

@@ -265,7 +265,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' Distinguish from <see cref="CheckViability"/>, which performs an analogous task for LookupSymbols*.
         ''' </summary>
         ''' <remarks>
-        ''' Does not consider <see cref="Symbol.CanBeReferencedByName"/> - that is left to the caller.
+        ''' Does not consider <see cref="Symbol.CanBeReferencedByName()"/> - that is left to the caller.
         ''' </remarks>
         Friend Function CanAddLookupSymbolInfo(sym As Symbol,
                                                     options As LookupOptions,
