@@ -120,13 +120,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 _lazyCachedUseSiteInfo.Initialize(ErrorFactory.ErrorInfo(ERRID.ERR_UnsupportedProperty1, CustomSymbolDisplayFormatter.QualifiedName(Me)))
             End If
 
-            If _getMethod IsNot Nothing Then
-                _getMethod.SetAssociatedProperty(Me, MethodKind.PropertyGet)
-            End If
+            _getMethod?.SetAssociatedProperty(Me, MethodKind.PropertyGet)
 
-            If _setMethod IsNot Nothing Then
-                _setMethod.SetAssociatedProperty(Me, MethodKind.PropertySet)
-            End If
+            _setMethod?.SetAssociatedProperty(Me, MethodKind.PropertySet)
 
             Dim returnInfo As ParamInfo(Of TypeSymbol) = propertyParams(0)
 

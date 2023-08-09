@@ -133,6 +133,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static Cci.IAssemblyReference TryGetAssemblyScope(NamespaceSymbol @namespace, Emit.PEModuleBuilder moduleBuilder, DiagnosticBag diagnostics)
         {
             AssemblySymbol containingAssembly = @namespace.ContainingAssembly;
+#pragma warning disable CS0253 // TODO : Possibilité d'une comparaison de références involontaire ; la partie droite a besoin d'un cast
             if (containingAssembly is not null && containingAssembly != moduleBuilder.CommonCompilation.Assembly)
             {
                 var referenceManager = ((CSharpCompilation)moduleBuilder.CommonCompilation).GetBoundReferenceManager();
@@ -146,6 +147,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
             }
+#pragma warning restore CS0253 // Possibilité d'une comparaison de références involontaire ; la partie droite a besoin d'un cast
 
             return null;
         }

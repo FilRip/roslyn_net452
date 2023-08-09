@@ -355,9 +355,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Public Sub Free()
             Clear()
-            If _pool IsNot Nothing Then
-                _pool.Free(Me)
-            End If
+            _pool?.Free(Me)
         End Sub
 
         Public Sub Clear()

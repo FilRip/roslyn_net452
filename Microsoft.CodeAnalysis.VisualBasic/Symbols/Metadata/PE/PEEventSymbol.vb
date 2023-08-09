@@ -80,17 +80,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols.Metadata.PE
                 _eventType = TupleTypeDecoder.DecodeTupleTypesIfApplicable(_eventType, handle, moduleSymbol)
             End If
 
-            If Me._addMethod IsNot Nothing Then
-                Me._addMethod.SetAssociatedEvent(Me, MethodKind.EventAdd)
-            End If
+            Me._addMethod?.SetAssociatedEvent(Me, MethodKind.EventAdd)
 
-            If Me._removeMethod IsNot Nothing Then
-                Me._removeMethod.SetAssociatedEvent(Me, MethodKind.EventRemove)
-            End If
+            Me._removeMethod?.SetAssociatedEvent(Me, MethodKind.EventRemove)
 
-            If Me._raiseMethod IsNot Nothing Then
-                Me._raiseMethod.SetAssociatedEvent(Me, MethodKind.EventRaise)
-            End If
+            Me._raiseMethod?.SetAssociatedEvent(Me, MethodKind.EventRaise)
         End Sub
 
         Public Overrides ReadOnly Property IsWindowsRuntimeEvent As Boolean

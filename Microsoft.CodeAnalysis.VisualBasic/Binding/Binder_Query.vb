@@ -2620,9 +2620,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 sourceOrPreviousOrdering = New BoundOrdering(ordering, boundCallOrBadExpression, boundCallOrBadExpression.Type)
             Next
 
-            If suppressDiagnostics IsNot Nothing Then
-                suppressDiagnostics.Free()
-            End If
+            suppressDiagnostics?.Free()
 
             Debug.Assert(sourceOrPreviousOrdering IsNot source)
             Debug.Assert(keyBinder IsNot Nothing)

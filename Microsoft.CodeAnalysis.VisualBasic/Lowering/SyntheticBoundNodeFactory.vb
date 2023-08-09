@@ -74,9 +74,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Public Sub AddNestedType(nestedType As NamedTypeSymbol)
             Dim [module] As PEModuleBuilder = Me.EmitModule
-            If [module] IsNot Nothing Then
-                [module].AddSynthesizedDefinition(_currentClass, nestedType.GetCciAdapter())
-            End If
+            [module]?.AddSynthesizedDefinition(_currentClass, nestedType.GetCciAdapter())
         End Sub
 
         Public Sub OpenNestedType(nestedType As NamedTypeSymbol)
@@ -87,23 +85,17 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Public Sub AddField(containingType As NamedTypeSymbol, field As FieldSymbol)
             Dim [module] As PEModuleBuilder = Me.EmitModule
-            If [module] IsNot Nothing Then
-                [module].AddSynthesizedDefinition(containingType, field.GetCciAdapter())
-            End If
+            [module]?.AddSynthesizedDefinition(containingType, field.GetCciAdapter())
         End Sub
 
         Public Sub AddMethod(containingType As NamedTypeSymbol, method As MethodSymbol)
             Dim [module] As PEModuleBuilder = Me.EmitModule
-            If [module] IsNot Nothing Then
-                [module].AddSynthesizedDefinition(containingType, method.GetCciAdapter())
-            End If
+            [module]?.AddSynthesizedDefinition(containingType, method.GetCciAdapter())
         End Sub
 
         Public Sub AddProperty(containingType As NamedTypeSymbol, prop As PropertySymbol)
             Dim [module] As PEModuleBuilder = Me.EmitModule
-            If [module] IsNot Nothing Then
-                [module].AddSynthesizedDefinition(containingType, prop.GetCciAdapter())
-            End If
+            [module]?.AddSynthesizedDefinition(containingType, prop.GetCciAdapter())
         End Sub
 
         Public Function StateMachineField(type As TypeSymbol, implicitlyDefinedBy As Symbol, name As String, Optional accessibility As Accessibility = Accessibility.Private) As SynthesizedFieldSymbol
@@ -415,29 +407,35 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 #End If
 
         Public Function LogicalAndAlso(left As BoundExpression, right As BoundExpression) As BoundBinaryOperator
-            Return Binary(BinaryOperatorKind.AndAlso, SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Boolean), left, right)
+            Return Binary(BinaryOperatorKind.AndAlso, SpecialType(CodeAnalysis.SpecialType.System_Boolean), left, right)
         End Function
 
         Public Function LogicalOrElse(left As BoundExpression, right As BoundExpression) As BoundBinaryOperator
-            Return Binary(BinaryOperatorKind.OrElse, SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Boolean), left, right)
+            Return Binary(BinaryOperatorKind.OrElse, SpecialType(CodeAnalysis.SpecialType.System_Boolean), left, right)
         End Function
 
         Public Function IntEqual(left As BoundExpression, right As BoundExpression) As BoundBinaryOperator
-            Return Binary(BinaryOperatorKind.Equals, SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Boolean), left, right)
+            Return Binary(BinaryOperatorKind.Equals, SpecialType(CodeAnalysis.SpecialType.System_Boolean), left, right)
         End Function
 
         Public Function IntLessThan(left As BoundExpression, right As BoundExpression) As BoundBinaryOperator
-            Return Binary(BinaryOperatorKind.LessThan, SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Boolean), left, right)
+            Return Binary(BinaryOperatorKind.LessThan, SpecialType(CodeAnalysis.SpecialType.System_Boolean), left, right)
         End Function
 
         Public Function Literal(value As Boolean) As BoundLiteral
-            Dim boundNode = New BoundLiteral(_syntax, ConstantValue.Create(value), SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Boolean))
+            Dim boundNode = New BoundLiteral(_syntax, ConstantValue.Create(value), SpecialType(CodeAnalysis.SpecialType.System_Boolean))
             boundNode.SetWasCompilerGenerated()
             Return boundNode
         End Function
 
         Public Function Literal(value As Integer) As BoundLiteral
-            Dim boundNode = New BoundLiteral(_syntax, ConstantValue.Create(value), SpecialType(Microsoft.CodeAnalysis.SpecialType.System_Int32))
+            Dim boundNode = New BoundLiteral(_syntax, ConstantValue.Create(value), SpecialType(CodeAnalysis.SpecialType.System_Int32))
+            boundNode.SetWasCompilerGenerated()
+            Return boundNode
+        End Function
+
+        Public Function Literal(value As String) As BoundLiteral
+            Dim boundNode = New BoundLiteral(_syntax, ConstantValue.Create(value), SpecialType(Microsoft.CodeAnalysis.SpecialType.System_String))
             boundNode.SetWasCompilerGenerated()
             Return boundNode
         End Function
@@ -601,6 +599,10 @@ nextm:
             Return Block(boundCondGoto, thenClause, [Goto](afterif), Label(alt), elseClause, Label(afterif))
         End Function
 
+        Public Function [If](condition As BoundExpression, thenClause As BoundStatement) As BoundStatement
+            Return [If](condition, thenClause, Block())
+        End Function
+
         Public Function TernaryConditionalExpression(condition As BoundExpression, ifTrue As BoundExpression, ifFalse As BoundExpression) As BoundTernaryConditionalExpression
             Debug.Assert(ifTrue IsNot Nothing)
             Debug.Assert(ifFalse IsNot Nothing)
@@ -631,10 +633,6 @@ nextm:
                                           ConversionKind.WideningNothingLiteral,
                                           Conversions.ClassifyDirectCastConversion(expression.Type, type, CompoundUseSiteInfo(Of AssemblySymbol).Discarded)),
                                        type)
-        End Function
-
-        Public Function [If](condition As BoundExpression, thenClause As BoundStatement) As BoundStatement
-            Return [If](condition, thenClause, Block())
         End Function
 
         Public Function [Throw](Optional e As BoundExpression = Nothing) As BoundThrowStatement
@@ -741,12 +739,6 @@ nextm:
 
         Public Function Label(labelSym As LabelSymbol) As BoundLabelStatement
             Dim boundNode = New BoundLabelStatement(_syntax, labelSym)
-            boundNode.SetWasCompilerGenerated()
-            Return boundNode
-        End Function
-
-        Public Function Literal(value As String) As BoundLiteral
-            Dim boundNode = New BoundLiteral(_syntax, ConstantValue.Create(value), SpecialType(Microsoft.CodeAnalysis.SpecialType.System_String))
             boundNode.SetWasCompilerGenerated()
             Return boundNode
         End Function

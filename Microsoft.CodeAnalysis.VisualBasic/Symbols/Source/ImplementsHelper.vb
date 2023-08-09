@@ -208,9 +208,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                             implementedMethodName,
                                             implementedMethodName)
 
-                    If candidateSymbols IsNot Nothing Then
-                        candidateSymbols.AddRange(DirectCast(lookup.Diagnostic, AmbiguousSymbolDiagnostic).AmbiguousSymbols)
-                    End If
+                    candidateSymbols?.AddRange(DirectCast(lookup.Diagnostic, AmbiguousSymbolDiagnostic).AmbiguousSymbols)
                     resultKind = LookupResult.WorseResultKind(lookup.Kind, LookupResultKind.Ambiguous)
 
                     errorReported = True
@@ -307,9 +305,7 @@ Next_i:
                         resultKind = LookupResult.WorseResultKind(lookup.Kind, LookupResultKind.Ambiguous)
                         errorReported = True
 DoneWithErrorReporting:
-                        If candidateSymbols IsNot Nothing Then
-                            candidateSymbols.AddRange(lookup.Symbols)
-                        End If
+                        candidateSymbols?.AddRange(lookup.Symbols)
 
                     ElseIf candidatesCount = 1 Then
 
@@ -327,15 +323,11 @@ DoneWithErrorReporting:
                     Else
                         Debug.Assert(candidatesCount = 0)
                         ' No matching members. Remember non-matching members for semantic model questions.
-                        If candidateSymbols IsNot Nothing Then
-                            candidateSymbols.AddRange(lookup.Symbols)
-                        End If
+                        candidateSymbols?.AddRange(lookup.Symbols)
                         resultKind = LookupResult.WorseResultKind(lookup.Kind, LookupResultKind.OverloadResolutionFailure)
                     End If
 
-                    If candidates IsNot Nothing Then
-                        candidates.Free()
-                    End If
+                    candidates?.Free()
 
                     If foundMember IsNot Nothing Then
                         Dim coClassContext As Boolean = interfaceNamedType.CoClassType IsNot Nothing
@@ -353,9 +345,7 @@ DoneWithErrorReporting:
 
                         If foundMember IsNot Nothing Then
                             ' Record found member for semantic model questions.
-                            If candidateSymbols IsNot Nothing Then
-                                candidateSymbols.Add(foundMember)
-                            End If
+                            candidateSymbols?.Add(foundMember)
                             resultKind = LookupResult.WorseResultKind(resultKind, lookup.Kind)
                             If Not binder.IsAccessible(foundMember, useSiteInfo) Then
                                 resultKind = LookupResult.WorseResultKind(resultKind, LookupResultKind.Inaccessible) ' we specified IgnoreAccessibility above.
@@ -382,7 +372,7 @@ DoneWithErrorReporting:
                 diagBag.Add(interfaceName, useSiteInfo)
                 lookup.Free()
 
-                If foundMember Is Nothing And Not errorReported Then
+                If foundMember Is Nothing AndAlso Not errorReported Then
                     ' Didn't find a method (or it was otherwise bad in some way)
                     Binder.ReportDiagnostic(diagBag, implementedMemberSyntax, ERRID.ERR_IdentNotMemberOfInterface4,
                                             CustomSymbolDisplayFormatter.ShortErrorName(implementingSym), implementedMethodName,
@@ -490,7 +480,7 @@ DoneWithErrorReporting:
                 ElseIf ((implementedPropertyGetMethod Is Nothing) Xor (implementedPropertySetMethod Is Nothing)) AndAlso
                        implementingProperty.GetMethod IsNot Nothing AndAlso implementingProperty.SetMethod IsNot Nothing Then
 
-                    errorReported = errorReported Or
+                    errorReported = errorReported OrElse
                                     Not InternalSyntax.Parser.CheckFeatureAvailability(diagBag, implementedMemberSyntax.GetLocation(),
                                         DirectCast(implementedMemberSyntax.SyntaxTree, VisualBasicSyntaxTree).Options.LanguageVersion,
                                         InternalSyntax.Feature.ImplementingReadonlyOrWriteonlyPropertyWithReadwrite)
@@ -635,7 +625,7 @@ DoneWithErrorReporting:
         ''' <param name="comparer">A comparer for comparing signatures of TSymbol according to metadata implementation rules.</param>
         Private Function FindImplicitImplementationDeclaredInType(Of TSymbol As Symbol)(interfaceMember As TSymbol,
                                                                                         currType As TypeSymbol,
-                                                                                        comparer As IEqualityComparer(Of TSymbol)) As TSymbol '
+                                                                                        comparer As IEqualityComparer(Of TSymbol)) As TSymbol
             Debug.Assert(Not currType.Dangerous_IsFromSomeCompilationIncludingRetargeting)
 
             For Each member In currType.GetMembers(interfaceMember.Name)

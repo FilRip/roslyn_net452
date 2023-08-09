@@ -1231,8 +1231,8 @@ ResolutionComplete:
             Dim indexesOfEqualMostApplicableCandidates As ArrayBuilder(Of Integer) = ArrayBuilder(Of Integer).GetInstance()
 
             If FastFindMostApplicableCandidates(candidates, arguments, indexesOfEqualMostApplicableCandidates, binder, useSiteInfo) AndAlso
-               (mostApplicableMustNarrowOnlyFromNumericConstants = False OrElse
-                candidates(indexesOfEqualMostApplicableCandidates(0)).RequiresNarrowingNotFromNumericConstant = False OrElse
+               (Not (mostApplicableMustNarrowOnlyFromNumericConstants) OrElse
+                Not (candidates(indexesOfEqualMostApplicableCandidates(0)).RequiresNarrowingNotFromNumericConstant) OrElse
                 indexesOfEqualMostApplicableCandidates.Count = CountApplicableCandidates(candidates)) Then
 
                 ' We have most applicable candidates.
@@ -1699,6 +1699,7 @@ ResolutionComplete:
         '''       require determining the dominant type for any of its type arguments (i.e. each the 
         '''       type arguments inferred to a single type), but N did, eliminate N from the set.
         ''' </summary>
+#Disable Warning S1172 ' Unused procedure parameters should be removed
         Private Shared Sub ShadowBasedOnInferenceLevel(
             candidates As ArrayBuilder(Of CandidateAnalysisResult),
             arguments As ImmutableArray(Of BoundExpression),
@@ -1709,6 +1710,7 @@ ResolutionComplete:
             ByRef applicableNarrowingCandidates As Integer,
             <[In], Out> ByRef useSiteInfo As CompoundUseSiteInfo(Of AssemblySymbol)
         )
+#Enable Warning S1172 ' Unused procedure parameters should be removed
             Debug.Assert(Not haveNamedArguments OrElse Not candidates(0).Candidate.IsOperator)
 
             ' See if there are candidates with different InferenceLevel
@@ -2823,9 +2825,7 @@ Done:
 
 Bailout:
 
-            If argsToParams IsNot Nothing Then
-                argsToParams.Free()
-            End If
+            argsToParams?.Free()
 
         End Sub
 
@@ -3158,13 +3158,9 @@ Bailout:
             Next
 
 Bailout:
-            If defaultValueDiagnostics IsNot Nothing Then
-                defaultValueDiagnostics.Free()
-            End If
+            defaultValueDiagnostics?.Free()
 
-            If paramArrayItems IsNot Nothing Then
-                paramArrayItems.Free()
-            End If
+            paramArrayItems?.Free()
 
             If conversionKinds IsNot Nothing Then
                 candidate.ConversionsOpt = conversionKinds.AsImmutableOrNull()
@@ -3178,9 +3174,7 @@ Bailout:
                 candidate.OptionalArguments = optionalArguments.AsImmutableOrNull()
             End If
 
-            If parameterToArgumentMap IsNot Nothing Then
-                parameterToArgumentMap.Free()
-            End If
+            parameterToArgumentMap?.Free()
 
         End Sub
 
@@ -4942,13 +4936,9 @@ ContinueCandidatesLoop:
                 candidate.SetSomeInferenceFailed()
             End If
 
-            If paramArrayItems IsNot Nothing Then
-                paramArrayItems.Free()
-            End If
+            paramArrayItems?.Free()
 
-            If parameterToArgumentMap IsNot Nothing Then
-                parameterToArgumentMap.Free()
-            End If
+            parameterToArgumentMap?.Free()
 
             Return (candidate.State = CandidateAnalysisResultState.Applicable)
         End Function

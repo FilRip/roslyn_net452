@@ -166,7 +166,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         Else
                             ' Dev11 seems to ignore any ambiguity and use the first symbol it finds,
                             ' we have to repro this behavior
+#Disable Warning S1481 ' Unused local variables should be removed
                             Dim compilation As VisualBasicCompilation = Me.Compilation
+#Enable Warning S1481 ' Unused local variables should be removed
 
                             ' Some symbols found may not support doc-comment-ids and we just filter those out.
                             ' From the rest of the symbols we take the symbol with 'smallest' documentation 
@@ -197,10 +199,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 ' some symbols were found, but none of them has id
                                 ProcessErrorLocations(crefAttr, errorLocations, Nothing, errid)
                             Else
-                                If Me._writer IsNot Nothing Then
-                                    ' Write [<id>]
-                                    Me._writer.Write(smallestSymbolCommentId)
-                                End If
+                                ' Write [<id>]
+                                Me._writer?.Write(smallestSymbolCommentId)
 
                                 _diagnostics.AddAssembliesUsedByCrefTarget(smallestSymbol.OriginalDefinition)
                             End If

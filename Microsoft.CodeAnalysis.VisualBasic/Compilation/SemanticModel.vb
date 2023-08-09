@@ -486,7 +486,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Determine the symbols, resultKind, and member group.
             Dim resultKind As LookupResultKind = LookupResultKind.Empty
             Dim memberGroup As ImmutableArray(Of Symbol) = Nothing
-            Dim symbols As ImmutableArray(Of Symbol) = GetSemanticSymbols(boundNodes, binderOpt, SymbolInfoOptions.DefaultOptions, resultKind, memberGroup)
+            GetSemanticSymbols(boundNodes, binderOpt, SymbolInfoOptions.DefaultOptions, resultKind, memberGroup)
 
             Return memberGroup
         End Function
@@ -857,9 +857,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ' Given a diagnosticInfo, add any symbols from the diagnosticInfo to the symbol builder.
         Private Sub AddSymbolsFromDiagnosticInfo(symbolsBuilder As ArrayBuilder(Of Symbol), diagnosticInfo As DiagnosticInfo)
             Dim diagInfoWithSymbols = TryCast(diagnosticInfo, IDiagnosticInfoWithSymbols)
-            If diagInfoWithSymbols IsNot Nothing Then
-                diagInfoWithSymbols.GetAssociatedSymbols(symbolsBuilder)
-            End If
+            diagInfoWithSymbols?.GetAssociatedSymbols(symbolsBuilder)
         End Sub
 
         ' Given a symbolsBuilder with a bunch of symbols in it, return an ImmutableArray containing
@@ -975,7 +973,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                         If highestExpr.Kind = BoundKind.Conversion Then
                             Dim conversionNode = DirectCast(highestExpr, BoundConversion)
 
-                            If useOfLocalBeforeDeclaration AndAlso Not type.IsErrorType() Then
+                            If useOfLocalBeforeDeclaration AndAlso Not type?.IsErrorType() Then
                                 conversion = New Conversion(Conversions.ClassifyConversion(type, convertedType, CompoundUseSiteInfo(Of AssemblySymbol).Discarded))
                             Else
                                 conversion = New Conversion(KeyValuePairUtil.Create(conversionNode.ConversionKind,

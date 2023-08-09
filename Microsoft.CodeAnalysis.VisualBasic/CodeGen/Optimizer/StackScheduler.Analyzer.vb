@@ -577,7 +577,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 ' if right is a struct ctor, it may be optimized into in-place call
                 ' Such call will push the receiver ref before the arguments
                 ' so we need to ensure that arguments cannot use stack temps
+#Disable Warning S1481 ' Unused local variables should be removed
                 Dim leftType As TypeSymbol = left.Type
+#Enable Warning S1481 ' Unused local variables should be removed
                 Dim mayPushReceiver As Boolean = False
                 If right.Kind = BoundKind.ObjectCreationExpression Then
                     Dim ctor = DirectCast(right, BoundObjectCreationExpression).ConstructorOpt
@@ -729,9 +731,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                         rewrittenArguments.AddRange(arguments, i)
                     End If
 
-                    If rewrittenArguments IsNot Nothing Then
-                        rewrittenArguments.Add(rewrittenArg)
-                    End If
+                    rewrittenArguments?.Add(rewrittenArg)
                 Next
 
                 Return If(rewrittenArguments IsNot Nothing, rewrittenArguments.ToImmutableAndFree, arguments)

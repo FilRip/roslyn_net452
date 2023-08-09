@@ -460,9 +460,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             Debug.Assert(_lazyAssemblySymbol Is Nothing)
-            If Me.EventQueue IsNot Nothing Then
-                Me.EventQueue.TryEnqueue(New CompilationStartedEvent(Me))
-            End If
+            Me.EventQueue?.TryEnqueue(New CompilationStartedEvent(Me))
         End Sub
 
         Protected Overrides Sub ValidateDebugEntryPoint(debugEntryPoint As IMethodSymbol, diagnostics As DiagnosticBag)
@@ -768,11 +766,11 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim preprocessorStrings = Options.ParseOptions.PreprocessorSymbols.Select(
                     Function(p) As String
                         If TypeOf p.Value Is String Then
-                            Return p.Key + "=""" + p.Value.ToString() + """"
+                            Return p.Key & "=""" & p.Value.ToString() & """"
                         ElseIf p.Value Is Nothing Then
                             Return p.Key
                         Else
-                            Return p.Key + "=" + p.Value.ToString()
+                            Return p.Key & "=" & p.Value.ToString()
                         End If
                     End Function)
                 WriteValue(builder, CompilationOptionNames.Define, String.Join(",", preprocessorStrings))
@@ -829,7 +827,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Select Case lastStatement.Kind
                 Case SyntaxKind.PrintStatement
                     Dim expression = DirectCast(lastStatement, PrintStatementSyntax).Expression
-                    Dim info = model.GetTypeInfo(expression)
+                    model.GetTypeInfo(expression)
                     ' always true, even for info.Type = Void
                     Return True
 
@@ -1122,13 +1120,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 New EmbeddedTreeAndDeclaration(
                     Function()
                         Dim compilation = compReference.Value
-                        Return If(compilation.Options.EmbedVbCoreRuntime Or compilation.IncludeInternalXmlHelper,
+                        Return If(compilation.Options.EmbedVbCoreRuntime OrElse compilation.IncludeInternalXmlHelper,
                                   EmbeddedSymbolManager.EmbeddedSyntax,
                                   Nothing)
                     End Function,
                     Function()
                         Dim compilation = compReference.Value
-                        Return If(compilation.Options.EmbedVbCoreRuntime Or compilation.IncludeInternalXmlHelper,
+                        Return If(compilation.Options.EmbedVbCoreRuntime OrElse compilation.IncludeInternalXmlHelper,
                                   ForTree(EmbeddedSymbolManager.EmbeddedSyntax, compilation.Options, isSubmission:=False),
                                   Nothing)
                     End Function),
@@ -2000,11 +1998,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 AccessCheck.IsSymbolAccessible(symbol0, DirectCast(within0, NamedTypeSymbol), throughType0, useSiteInfo:=CompoundUseSiteInfo(Of AssemblySymbol).Discarded))
         End Function
 
-        <Obsolete("Compilation.IsSymbolAccessibleWithin is not designed for use within the compilers", True)>
-        Friend Shadows Function IsSymbolAccessibleWithin(symbol As ISymbol, within As ISymbol, Optional throughType As ITypeSymbol = Nothing) As Boolean
-            Throw New NotImplementedException
-        End Function
-
 #End Region
 
 #Region "Binding"
@@ -2268,7 +2261,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         ' Get diagnostics by compiling all method bodies in the given tree.
         Private Sub GetDiagnosticsForMethodBodiesInTree(tree As SyntaxTree, filterSpanWithinTree As TextSpan?, hasDeclarationErrors As Boolean, diagnostics As BindingDiagnosticBag, cancellationToken As CancellationToken)
+#Disable Warning S1481 ' Unused local variables should be removed
             Dim sourceMod = DirectCast(SourceModule, SourceModuleSymbol)
+#Enable Warning S1481 ' Unused local variables should be removed
 
             MethodCompiler.GetCompileDiagnostics(Me,
                                                  SourceModule.GlobalNamespace,

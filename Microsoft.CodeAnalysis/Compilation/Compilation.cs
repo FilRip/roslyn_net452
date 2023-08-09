@@ -1099,12 +1099,10 @@ namespace Microsoft.CodeAnalysis
             int cardinality,
             ImmutableArray<NullableAnnotation> elementNullableAnnotations)
         {
-            if (!elementNullableAnnotations.IsDefault)
+            if (!elementNullableAnnotations.IsDefault &&
+                elementNullableAnnotations.Length != cardinality)
             {
-                if (elementNullableAnnotations.Length != cardinality)
-                {
-                    throw new ArgumentException(Properties.Resources.TupleElementNullableAnnotationCountMismatch, nameof(elementNullableAnnotations));
-                }
+                throw new ArgumentException(Properties.Resources.TupleElementNullableAnnotationCountMismatch, nameof(elementNullableAnnotations));
             }
         }
 
@@ -1142,12 +1140,10 @@ namespace Microsoft.CodeAnalysis
             int cardinality,
             ImmutableArray<Location?> elementLocations)
         {
-            if (!elementLocations.IsDefault)
+            if (!elementLocations.IsDefault &&
+                elementLocations.Length != cardinality)
             {
-                if (elementLocations.Length != cardinality)
-                {
-                    throw new ArgumentException(Properties.Resources.TupleElementLocationCountMismatch, nameof(elementLocations));
-                }
+                throw new ArgumentException(Properties.Resources.TupleElementLocationCountMismatch, nameof(elementLocations));
             }
         }
 
@@ -2510,12 +2506,10 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
-            if (win32Resources != null)
+            if (win32Resources != null &&
+                (!win32Resources.CanRead || !win32Resources.CanSeek))
             {
-                if (!win32Resources.CanRead || !win32Resources.CanSeek)
-                {
-                    throw new ArgumentException(Properties.Resources.StreamMustSupportReadAndSeek, nameof(win32Resources));
-                }
+                throw new ArgumentException(Properties.Resources.StreamMustSupportReadAndSeek, nameof(win32Resources));
             }
 
             if (sourceLinkStream != null && !sourceLinkStream.CanRead)
@@ -2886,18 +2880,12 @@ namespace Microsoft.CodeAnalysis
                         deterministic,
                         emitOptions.EmitTestCoverageData,
                         privateKeyOpt,
-                        cancellationToken))
+                        cancellationToken) && nativePdbWriter != null)
                     {
-                        if (nativePdbWriter != null)
-                        {
-                            var nativePdbStream = pdbStreamProvider!.GetOrCreateStream(metadataDiagnostics);
-                            Debug.Assert(nativePdbStream != null || metadataDiagnostics.HasAnyErrors());
+                        var nativePdbStream = pdbStreamProvider!.GetOrCreateStream(metadataDiagnostics);
+                        Debug.Assert(nativePdbStream != null || metadataDiagnostics.HasAnyErrors());
 
-                            if (nativePdbStream != null)
-                            {
-                                nativePdbWriter.WriteTo(nativePdbStream);
-                            }
-                        }
+                        nativePdbWriter?.WriteTo(nativePdbStream);
                     }
                 }
                 catch (SymUnmanagedWriterException ex)

@@ -120,12 +120,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                Not regionsAreAllowedEverywhere Then
                 result = DiagnosticRewriter.Rewrite(result, notClosedIfDirectives, notClosedRegionDirectives, regionsAreAllowedEverywhere, notClosedExternalSourceDirective, Parser)
 
-                If notClosedIfDirectives IsNot Nothing Then
-                    notClosedIfDirectives.Free()
-                End If
-                If notClosedRegionDirectives IsNot Nothing Then
-                    notClosedRegionDirectives.Free()
-                End If
+                notClosedIfDirectives?.Free()
+                notClosedRegionDirectives?.Free()
             End If
 
             FreeStatements()
@@ -205,9 +201,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 #End If
 
             Public Overrides Function VisitCompilationUnit(node As CompilationUnitSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitCompilationUnit(node)
 
@@ -220,9 +214,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitMethodBlock(node As MethodBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitMethodBlock(node)
 
@@ -235,9 +227,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitConstructorBlock(node As ConstructorBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitConstructorBlock(node)
 
@@ -250,9 +240,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitOperatorBlock(node As OperatorBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitOperatorBlock(node)
 
@@ -265,9 +253,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitAccessorBlock(node As AccessorBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitAccessorBlock(node)
 
@@ -280,9 +266,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitNamespaceBlock(node As NamespaceBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitNamespaceBlock(node)
 
@@ -295,9 +279,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitClassBlock(node As ClassBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitClassBlock(node)
 
@@ -310,9 +292,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitStructureBlock(node As StructureBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitStructureBlock(node)
 
@@ -325,9 +305,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitModuleBlock(node As ModuleBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitModuleBlock(node)
 
@@ -340,9 +318,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitInterfaceBlock(node As InterfaceBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitInterfaceBlock(node)
 
@@ -355,9 +331,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitEnumBlock(node As EnumBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitEnumBlock(node)
 
@@ -370,9 +344,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitPropertyBlock(node As PropertyBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitPropertyBlock(node)
 
@@ -385,9 +357,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
             End Function
 
             Public Overrides Function VisitEventBlock(node As EventBlockSyntax) As VisualBasicSyntaxNode
-                If _declarationBlocksBeingVisited IsNot Nothing Then
-                    _declarationBlocksBeingVisited.Push(node)
-                End If
+                _declarationBlocksBeingVisited?.Push(node)
 
                 Dim result = MyBase.VisitEventBlock(node)
 
