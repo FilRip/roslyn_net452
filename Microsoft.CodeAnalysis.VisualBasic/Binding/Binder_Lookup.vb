@@ -129,7 +129,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Return SingleLookupResult.Empty
             End If
 
-            If (options And LookupOptions.MustNotBeReturnValueVariable) <> 0 Then
+            If (options And LookupOptions.MustNotBeReturnValueVariable) <> 0 AndAlso sym.Kind = SymbolKind.Local AndAlso DirectCast(sym, LocalSymbol).IsFunctionValue Then
                 '§11.4.4 Simple Name Expressions
                 '    If the identifier matches a local variable, the local variable matched is 
                 '    the implicit function or Get accessor return local variable, and the expression
@@ -140,9 +140,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 ' is part of an invocation expression, invocation statement, or an AddressOf 
                 ' expression", and we then skip return value variables.
                 ' We'll always bind to the containing method or property instead further on in the lookup process.
-                If sym.Kind = SymbolKind.Local AndAlso DirectCast(sym, LocalSymbol).IsFunctionValue Then
-                    Return SingleLookupResult.Empty
-                End If
+                Return SingleLookupResult.Empty
             End If
 
             Dim unwrappedSym = sym

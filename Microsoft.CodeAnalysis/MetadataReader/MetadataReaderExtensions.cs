@@ -188,8 +188,7 @@ namespace Microsoft.CodeAnalysis
                     }
                 }
                 catch (BadImageFormatException)
-                {
-                }
+                { /* Nothing to do */ }
             }
 
             return false;

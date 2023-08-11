@@ -403,35 +403,33 @@ namespace Microsoft.CodeAnalysis.CodeGen
             {
                 if (next.HasNoRegularInstructions &&
                     next.BranchCode == this.BranchCode &&
-                    next.BranchBlock.Start == this.BranchBlock.Start)
+                    next.BranchBlock.Start == this.BranchBlock.Start &&
+                    next.EnclosingHandler == this.EnclosingHandler)
                 {
-                    if (next.EnclosingHandler == this.EnclosingHandler)
-                    {
-                        var diff = this.BranchCode.Size() + this.BranchCode.GetBranchOperandSize();
-                        delta -= diff;
-                        this.SetBranch(null, ILOpCode.Nop);
+                    var diff = this.BranchCode.Size() + this.BranchCode.GetBranchOperandSize();
+                    delta -= diff;
+                    this.SetBranch(null, ILOpCode.Nop);
 
-                        // If current block has no regular instructions the resulting block is a trivial noop
-                        // TryOptimizeBranchOverUncondBranch relies on an invariant that 
-                        // trivial blocks are not targeted by branches,
-                        // make sure we are not breaking this condition.
-                        if (this.HasNoRegularInstructions)
+                    // If current block has no regular instructions the resulting block is a trivial noop
+                    // TryOptimizeBranchOverUncondBranch relies on an invariant that 
+                    // trivial blocks are not targeted by branches,
+                    // make sure we are not breaking this condition.
+                    if (this.HasNoRegularInstructions)
+                    {
+                        var labelInfos = builder._labelInfos;
+                        var labels = labelInfos.Keys;
+                        foreach (var label in labels)
                         {
-                            var labelInfos = builder._labelInfos;
-                            var labels = labelInfos.Keys;
-                            foreach (var label in labels)
+                            var info = labelInfos[label];
+                            if (info.bb == this)
                             {
-                                var info = labelInfos[label];
-                                if (info.bb == this)
-                                {
-                                    // move the label from "this" to "next"
-                                    labelInfos[label] = info.WithNewTarget(next);
-                                }
+                                // move the label from "this" to "next"
+                                labelInfos[label] = info.WithNewTarget(next);
                             }
                         }
-
-                        return true;
                     }
+
+                    return true;
                 }
 
                 return false;
@@ -519,28 +517,26 @@ namespace Microsoft.CodeAnalysis.CodeGen
             {
                 var curBranchCode = this.BranchCode;
                 if (curBranchCode.IsConditionalBranch() &&
-                    next.EnclosingHandler == this.EnclosingHandler)
+                    next.EnclosingHandler == this.EnclosingHandler &&
+                    (BranchBlock.Start - next.Start == 0 ||
+                        AreIdentical(BranchBlock, next)))
                 {
                     // check for branch to next, 
                     // or if both blocks are identical
-                    if (BranchBlock.Start - next.Start == 0 ||
-                        AreIdentical(BranchBlock, next))
+                    // becomes a pop block
+                    this.SetBranch(null, ILOpCode.Nop);
+                    this.Writer.WriteByte((byte)ILOpCode.Pop);
+
+                    // curBranchCode.Size() + curBranchCode.BranchOperandSize() - ILOpCode.Pop.Size()
+                    delta -= (curBranchCode.Size() + curBranchCode.GetBranchOperandSize() - 1);
+
+                    if (curBranchCode.IsRelationalBranch())
                     {
-                        // becomes a pop block
-                        this.SetBranch(null, ILOpCode.Nop);
                         this.Writer.WriteByte((byte)ILOpCode.Pop);
-
-                        // curBranchCode.Size() + curBranchCode.BranchOperandSize() - ILOpCode.Pop.Size()
-                        delta -= (curBranchCode.Size() + curBranchCode.GetBranchOperandSize() - 1);
-
-                        if (curBranchCode.IsRelationalBranch())
-                        {
-                            this.Writer.WriteByte((byte)ILOpCode.Pop);
-                            delta++;
-                        }
-
-                        return true;
+                        delta++;
                     }
+
+                    return true;
                 }
 
                 return false;

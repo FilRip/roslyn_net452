@@ -1642,25 +1642,23 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (kind.IsLifted())
             {
                 BinaryOperatorKind op = kind.Operator();
-                if (op == BinaryOperatorKind.Equal || op == BinaryOperatorKind.NotEqual)
+                if ((op == BinaryOperatorKind.Equal || op == BinaryOperatorKind.NotEqual) &&
+                    (left.Kind == BoundKind.Conversion && right.Kind == BoundKind.Conversion))
                 {
-                    if (left.Kind == BoundKind.Conversion && right.Kind == BoundKind.Conversion)
-                    {
-                        BoundConversion leftConv = (BoundConversion)left;
-                        BoundConversion rightConv = (BoundConversion)right;
-                        ConstantValue? leftConstant = leftConv.Operand.ConstantValue;
-                        ConstantValue? rightConstant = rightConv.Operand.ConstantValue;
+                    BoundConversion leftConv = (BoundConversion)left;
+                    BoundConversion rightConv = (BoundConversion)right;
+                    ConstantValue? leftConstant = leftConv.Operand.ConstantValue;
+                    ConstantValue? rightConstant = rightConv.Operand.ConstantValue;
 
-                        if (leftConstant != null && rightConstant != null)
+                    if (leftConstant != null && rightConstant != null)
+                    {
+                        bool leftIsNull = leftConstant.IsNull;
+                        bool rightIsNull = rightConstant.IsNull;
+                        if (leftIsNull || rightIsNull)
                         {
-                            bool leftIsNull = leftConstant.IsNull;
-                            bool rightIsNull = rightConstant.IsNull;
-                            if (leftIsNull || rightIsNull)
-                            {
-                                // IMPL CHANGE: Dev10 raises WRN_NubExprIsConstBool in some cases, but that really doesn't
-                                // make sense (why warn that a constant has a constant value?).
-                                return (leftIsNull == rightIsNull) == (op == BinaryOperatorKind.Equal) ? ConstantValue.True : ConstantValue.False;
-                            }
+                            // IMPL CHANGE: Dev10 raises WRN_NubExprIsConstBool in some cases, but that really doesn't
+                            // make sense (why warn that a constant has a constant value?).
+                            return (leftIsNull == rightIsNull) == (op == BinaryOperatorKind.Equal) ? ConstantValue.True : ConstantValue.False;
                         }
                     }
                 }

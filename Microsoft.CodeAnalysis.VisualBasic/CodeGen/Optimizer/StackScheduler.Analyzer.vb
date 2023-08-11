@@ -1330,10 +1330,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             End Sub
 
             Private Sub DeclareLocal(local As LocalSymbol, stack As Integer)
-                If local IsNot Nothing Then
-                    If CanScheduleToStack(local) Then
-                        Me._locals.Add(local, New LocalDefUseInfo(stack))
-                    End If
+                If local IsNot Nothing AndAlso CanScheduleToStack(local) Then
+                    Me._locals.Add(local, New LocalDefUseInfo(stack))
                 End If
             End Sub
 

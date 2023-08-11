@@ -424,18 +424,16 @@ namespace Microsoft.CodeAnalysis
 
             if (obj is DiagnosticInfo other &&
                 other._errorCode == _errorCode &&
-                other.GetType() == this.GetType())
+                other.GetType() == this.GetType() &&
+                _arguments.Length == other._arguments.Length)
             {
-                if (_arguments.Length == other._arguments.Length)
+                result = true;
+                for (int i = 0; i < _arguments.Length; i++)
                 {
-                    result = true;
-                    for (int i = 0; i < _arguments.Length; i++)
+                    if (!object.Equals(_arguments[i], other._arguments[i]))
                     {
-                        if (!object.Equals(_arguments[i], other._arguments[i]))
-                        {
-                            result = false;
-                            break;
-                        }
+                        result = false;
+                        break;
                     }
                 }
             }

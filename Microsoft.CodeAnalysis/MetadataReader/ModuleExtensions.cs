@@ -27,10 +27,12 @@ namespace Microsoft.CodeAnalysis
             // private interfaces, and we use the interfaces (even if inaccessible) to determine
             // conversions. For example:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // public class A: IEnumerable<A.X>
             // { 
             //    private class X: ICloneable {}
             // }
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // Code compiling against A can convert A to IEnumerable<ICloneable>. Knowing this requires
             // importing the type A.X.
@@ -107,7 +109,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             try
             {

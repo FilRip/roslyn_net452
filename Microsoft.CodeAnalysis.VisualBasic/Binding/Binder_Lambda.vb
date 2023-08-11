@@ -162,10 +162,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             If source.ReturnType IsNot Nothing Then
                 targetReturnType = source.ReturnType
 
-                If source.IsFunctionLambda Then
-                    If targetReturnType.IsVoidType() Then
-                        targetReturnType = Symbols.LambdaSymbol.ReturnTypeVoidReplacement
-                    End If
+                If source.IsFunctionLambda AndAlso targetReturnType.IsVoidType() Then
+                    targetReturnType = Symbols.LambdaSymbol.ReturnTypeVoidReplacement
                 End If
             Else
                 Debug.Assert(source.IsFunctionLambda)

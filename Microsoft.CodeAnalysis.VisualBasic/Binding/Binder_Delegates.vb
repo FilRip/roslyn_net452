@@ -267,16 +267,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End If
 
             ' show diagnostics if the an instance method is used in a shared context.
-            If fromMethod IsNot Nothing Then
-                '  Generate an error, but continue processing
-                If addressOfExpression.Binder.CheckSharedSymbolAccess(addressOfExpression.Syntax,
+            If fromMethod IsNot Nothing AndAlso addressOfExpression.Binder.CheckSharedSymbolAccess(addressOfExpression.Syntax,
                                                fromMethod.IsShared,
                                                addressOfExpression.MethodGroup.ReceiverOpt,
                                                addressOfExpression.MethodGroup.QualificationKind,
                                                diagnostics) Then
-
-                    methodConversions = methodConversions Or MethodConversionKind.Error_Unspecified
-                End If
+                '  Generate an error, but continue processing
+                methodConversions = methodConversions Or MethodConversionKind.Error_Unspecified
             End If
 
             ' TODO: Check boxing of restricted types, report ERRID_RestrictedConversion1 and continue.

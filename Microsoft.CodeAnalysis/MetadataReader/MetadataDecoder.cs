@@ -104,7 +104,7 @@ namespace Microsoft.CodeAnalysis
         // Identity of an assembly containing the module, or null if the module is a standalone module
         private readonly AssemblyIdentity _containingAssemblyIdentity;
 
-        public MetadataDecoder(PEModule module, AssemblyIdentity containingAssemblyIdentity, SymbolFactory<ModuleSymbol, TypeSymbol> factory, ModuleSymbol moduleSymbol) :
+        protected MetadataDecoder(PEModule module, AssemblyIdentity containingAssemblyIdentity, SymbolFactory<ModuleSymbol, TypeSymbol> factory, ModuleSymbol moduleSymbol) :
             base(factory, moduleSymbol)
         {
             Debug.Assert(module != null);
@@ -697,7 +697,7 @@ namespace Microsoft.CodeAnalysis
         {
             ArrayBuilder<ModifierInfo<TypeSymbol>> modifiers = null;
 
-            for (; ; )
+            while (true)
             {
                 typeCode = signatureReader.ReadSignatureTypeCode();
                 bool isOptional;
@@ -729,79 +729,85 @@ namespace Microsoft.CodeAnalysis
         private TypeSymbol DecodeModifierTypeOrThrow(ref BlobReader signatureReader)
         {
             EntityHandle token = signatureReader.ReadTypeHandle();
-            TypeSymbol type;
+            TypeSymbol type = null;
+
+#pragma warning disable S125 // Sections of code should not be commented out
             //bool isNoPiaLocalType;
+#pragma warning restore S125 // Sections of code should not be commented out
 
-        // According to ECMA spec:
-        //  The CMOD_OPT or CMOD_REQD is followed by a metadata token that
-        //  indexes a row in the TypeDef table or the TypeRef table.
-        tryAgain:
-            switch (token.Kind)
+            // According to ECMA spec:
+            //  The CMOD_OPT or CMOD_REQD is followed by a metadata token that
+            //  indexes a row in the TypeDef table or the TypeRef table.
+            bool loop = true;
+            while (loop)
             {
-                case HandleKind.TypeDefinition:
-                    type = GetTypeOfTypeDef((TypeDefinitionHandle)token, out bool _, isContainingType: false);
-                    // it is valid for a modifier to refer to an unconstructed type, we need to preserve this fact
-                    type = SubstituteWithUnboundIfGeneric(type);
-                    break;
+                loop = false;
+                switch (token.Kind)
+                {
+                    case HandleKind.TypeDefinition:
+                        type = GetTypeOfTypeDef((TypeDefinitionHandle)token, out bool _, isContainingType: false);
+                        // it is valid for a modifier to refer to an unconstructed type, we need to preserve this fact
+                        type = SubstituteWithUnboundIfGeneric(type);
+                        break;
 
-                case HandleKind.TypeReference:
-                    type = GetTypeOfTypeRef((TypeReferenceHandle)token, out bool _);
-                    // it is valid for a modifier to refer to an unconstructed type, we need to preserve this fact
-                    type = SubstituteWithUnboundIfGeneric(type);
-                    break;
+                    case HandleKind.TypeReference:
+                        type = GetTypeOfTypeRef((TypeReferenceHandle)token, out bool _);
+                        // it is valid for a modifier to refer to an unconstructed type, we need to preserve this fact
+                        type = SubstituteWithUnboundIfGeneric(type);
+                        break;
 
-                case HandleKind.TypeSpecification:
-                    // Section 23.2.7 of the CLI spec specifically says that this is not allowed (see comment on method),
-                    // but, apparently, ilasm turns modopt(int32) into a TypeSpec.
-                    // In addition, managed C++ compiler can use constructed generic types as modifiers, for example Nullable<bool>, etc.
-                    // We will support only cases like these even though it looks like CLR allows any types that can be encoded through a TypeSpec.
+                    case HandleKind.TypeSpecification:
+                        // Section 23.2.7 of the CLI spec specifically says that this is not allowed (see comment on method),
+                        // but, apparently, ilasm turns modopt(int32) into a TypeSpec.
+                        // In addition, managed C++ compiler can use constructed generic types as modifiers, for example Nullable<bool>, etc.
+                        // We will support only cases like these even though it looks like CLR allows any types that can be encoded through a TypeSpec.
 
-                    BlobReader memoryReader = this.Module.GetTypeSpecificationSignatureReaderOrThrow((TypeSpecificationHandle)token);
+                        BlobReader memoryReader = this.Module.GetTypeSpecificationSignatureReaderOrThrow((TypeSpecificationHandle)token);
 
-                    SignatureTypeCode typeCode = memoryReader.ReadSignatureTypeCode();
-                    //bool refersToNoPiaLocalType;
+                        SignatureTypeCode typeCode = memoryReader.ReadSignatureTypeCode();
 
-                    switch (typeCode)
-                    {
-                        case SignatureTypeCode.Void:
-                        case SignatureTypeCode.Boolean:
-                        case SignatureTypeCode.SByte:
-                        case SignatureTypeCode.Byte:
-                        case SignatureTypeCode.Int16:
-                        case SignatureTypeCode.UInt16:
-                        case SignatureTypeCode.Int32:
-                        case SignatureTypeCode.UInt32:
-                        case SignatureTypeCode.Int64:
-                        case SignatureTypeCode.UInt64:
-                        case SignatureTypeCode.Single:
-                        case SignatureTypeCode.Double:
-                        case SignatureTypeCode.Char:
-                        case SignatureTypeCode.String:
-                        case SignatureTypeCode.IntPtr:
-                        case SignatureTypeCode.UIntPtr:
-                        case SignatureTypeCode.Object:
-                        case SignatureTypeCode.TypedReference:
-                            type = GetSpecialType(typeCode.ToSpecialType());
-                            break;
+                        switch (typeCode)
+                        {
+                            case SignatureTypeCode.Void:
+                            case SignatureTypeCode.Boolean:
+                            case SignatureTypeCode.SByte:
+                            case SignatureTypeCode.Byte:
+                            case SignatureTypeCode.Int16:
+                            case SignatureTypeCode.UInt16:
+                            case SignatureTypeCode.Int32:
+                            case SignatureTypeCode.UInt32:
+                            case SignatureTypeCode.Int64:
+                            case SignatureTypeCode.UInt64:
+                            case SignatureTypeCode.Single:
+                            case SignatureTypeCode.Double:
+                            case SignatureTypeCode.Char:
+                            case SignatureTypeCode.String:
+                            case SignatureTypeCode.IntPtr:
+                            case SignatureTypeCode.UIntPtr:
+                            case SignatureTypeCode.Object:
+                            case SignatureTypeCode.TypedReference:
+                                type = GetSpecialType(typeCode.ToSpecialType());
+                                break;
 
-                        case SignatureTypeCode.TypeHandle:
+                            case SignatureTypeCode.TypeHandle:
 
-                            token = memoryReader.ReadTypeHandle();
-                            goto tryAgain;
+                                token = memoryReader.ReadTypeHandle();
+                                loop = true;
+                                break;
 
-                        case SignatureTypeCode.GenericTypeInstance:
-                            type = DecodeGenericTypeInstanceOrThrow(ref memoryReader, out bool _);
-                            break;
+                            case SignatureTypeCode.GenericTypeInstance:
+                                type = DecodeGenericTypeInstanceOrThrow(ref memoryReader, out bool _);
+                                break;
 
-                        default:
-                            throw new UnsupportedSignatureContent();
-                    }
-                    break;
+                            default:
+                                throw new UnsupportedSignatureContent();
+                        }
+                        break;
 
-                default:
-                    throw new UnsupportedSignatureContent();
+                    default:
+                        throw new UnsupportedSignatureContent();
+                }
             }
-
             return type;
         }
 
@@ -1910,33 +1916,30 @@ namespace Microsoft.CodeAnalysis
                         }
                     }
 
-                    if (methodDebugHandle == implementingMethodDef)
+                    if (methodDebugHandle == implementingMethodDef && !implementedMethodHandle.IsNil)
                     {
-                        if (!implementedMethodHandle.IsNil)
+                        HandleKind implementedMethodTokenType = implementedMethodHandle.Kind;
+
+                        MethodSymbol methodSymbol = null;
+
+                        if (implementedMethodTokenType == HandleKind.MethodDefinition)
                         {
-                            HandleKind implementedMethodTokenType = implementedMethodHandle.Kind;
+                            methodSymbol = FindMethodSymbolInSuperType(implementingTypeDef, (MethodDefinitionHandle)implementedMethodHandle);
+                        }
+                        else if (implementedMethodTokenType == HandleKind.MemberReference)
+                        {
+                            methodSymbol = GetMethodSymbolForMemberRef((MemberReferenceHandle)implementedMethodHandle, implementingTypeSymbol);
+                        }
 
-                            MethodSymbol methodSymbol = null;
-
-                            if (implementedMethodTokenType == HandleKind.MethodDefinition)
-                            {
-                                methodSymbol = FindMethodSymbolInSuperType(implementingTypeDef, (MethodDefinitionHandle)implementedMethodHandle);
-                            }
-                            else if (implementedMethodTokenType == HandleKind.MemberReference)
-                            {
-                                methodSymbol = GetMethodSymbolForMemberRef((MemberReferenceHandle)implementedMethodHandle, implementingTypeSymbol);
-                            }
-
-                            if (methodSymbol != null)
-                            {
-                                resultBuilder.Add(methodSymbol);
-                            }
+                        if (methodSymbol != null)
+                        {
+                            resultBuilder.Add(methodSymbol);
                         }
                     }
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             return resultBuilder.ToImmutableAndFree();
         }
@@ -1974,6 +1977,7 @@ namespace Microsoft.CodeAnalysis
                 HashSet<TypeSymbol> visitedTypeSymbols = new();
 
                 bool hasMoreTypeDefs;
+#pragma warning disable S1121 // Assignments should not be made from within sub-expressions
                 while ((hasMoreTypeDefs = (typeDefsToSearch.Count > 0)) || typeSymbolsToSearch.Count > 0)
                 {
                     if (hasMoreTypeDefs)
@@ -2012,9 +2016,10 @@ namespace Microsoft.CodeAnalysis
                         }
                     }
                 }
+#pragma warning restore S1121 // Assignments should not be made from within sub-expressions
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             return null;
         }
@@ -2233,7 +2238,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             // error: unexpected token in IL
             return null;

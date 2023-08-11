@@ -176,12 +176,9 @@ namespace Microsoft.CodeAnalysis.PooledObjects
                 // We will interlock only when we have a candidate. in a worst case we may miss some
                 // recently returned objects. Not a big deal.
                 var inst = items[i].Value;
-                if (inst != null)
+                if (inst != null && inst == Interlocked.CompareExchange(ref items[i].Value, null, inst))
                 {
-                    if (inst == Interlocked.CompareExchange(ref items[i].Value, null, inst))
-                    {
-                        return inst;
-                    }
+                    return inst;
                 }
             }
 

@@ -190,7 +190,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             Me.F.Field(Me.F.Me(), Me._builderField, False),
                             Me._builderType,
                             "SetStateMachine",
-                            {Me.F.Parameter(Me.F.CurrentMethod.Parameters(0))})),
+                            Me.F.Parameter(Me.F.CurrentMethod.Parameters(0)))),
                     Me.F.Return()))
             End If
 
@@ -402,6 +402,18 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Return Nothing
             End If
 
+            Dim lCaptureRValue = Function() As CapturedSymbolOrExpression
+                                     Debug.Assert(Not expression.IsLValue, "Need to support LValues of type " & expression.GetType.Name)
+                                     Me._lastExpressionCaptureNumber += 1
+                                     Return New CapturedRValueExpression(
+                                    Me.F.StateMachineField(
+                                        expression.Type,
+                                        Me.Method,
+                                        StringConstants.StateMachineExpressionCapturePrefix & Me._lastExpressionCaptureNumber,
+                                        Accessibility.Friend),
+                                    expression)
+                                 End Function
+
             Select Case expression.Kind
                 Case BoundKind.Literal
                     Debug.Assert(Not expression.IsLValue)
@@ -427,7 +439,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Case BoundKind.FieldAccess
                     If Not expression.IsLValue Then
-                        GoTo lCaptureRValue
+                        Return lCaptureRValue()
                     End If
 
                     Dim fieldAccess = DirectCast(expression, BoundFieldAccess)
@@ -435,7 +447,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Case BoundKind.ArrayAccess
                     If Not expression.IsLValue Then
-                        GoTo lCaptureRValue
+                        Return lCaptureRValue()
                     End If
 
                     Dim arrayAccess = DirectCast(expression, BoundArrayAccess)
@@ -454,16 +466,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Return New CapturedArrayAccessExpression(capturedArrayPointer, capturedIndices.AsImmutableOrNull)
 
                 Case Else
-lCaptureRValue:
-                    Debug.Assert(Not expression.IsLValue, "Need to support LValues of type " + expression.GetType.Name)
-                    Me._lastExpressionCaptureNumber += 1
-                    Return New CapturedRValueExpression(
-                                    Me.F.StateMachineField(
-                                        expression.Type,
-                                        Me.Method,
-                                        StringConstants.StateMachineExpressionCapturePrefix & Me._lastExpressionCaptureNumber,
-                                        Accessibility.Friend),
-                                    expression)
+                    Return lCaptureRValue()
             End Select
 
             Throw ExceptionUtilities.UnexpectedValue(expression.Kind)
@@ -517,7 +520,7 @@ lCaptureRValue:
             Dim methodGroup = FindMethodAndReturnMethodGroup(receiver, type, methodName, typeArgs)
 
             If methodGroup Is Nothing OrElse
-                arguments.Any(Function(a) a.HasErrors) OrElse
+                Array.Exists(arguments, Function(a) a.HasErrors) OrElse
                 (receiver IsNot Nothing AndAlso receiver.HasErrors) Then
                 Return Me.F.BadExpression(arguments)
             End If
@@ -548,7 +551,9 @@ lCaptureRValue:
 
             If result.IsGood Then
                 Debug.Assert(result.Symbols.Count > 0)
+#Disable Warning S1481 ' Unused local variables should be removed
                 Dim symbol0 = result.Symbols(0)
+#Enable Warning S1481 ' Unused local variables should be removed
                 If result.Symbols(0).Kind = SymbolKind.Method Then
                     group = New BoundMethodGroup(Me.F.Syntax,
                                                  Me.F.TypeArguments(typeArgs),
@@ -607,7 +612,9 @@ lCaptureRValue:
 
             If result.IsGood Then
                 Debug.Assert(result.Symbols.Count > 0)
+#Disable Warning S1481 ' Unused local variables should be removed
                 Dim symbol0 = result.Symbols(0)
+#Enable Warning S1481 ' Unused local variables should be removed
                 If result.Symbols(0).Kind = SymbolKind.Property Then
                     group = New BoundPropertyGroup(Me.F.Syntax,
                                                    result.Symbols.ToDowncastedImmutable(Of PropertySymbol),

@@ -1205,27 +1205,25 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Select
 
             ' Don't allow Overridable, etc. on NotInheritable.
-            If container.IsNotInheritable Then
-                If (flags And SourceMemberFlags.InvalidInNotInheritableClass) <> 0 Then
-                    ' Somewhat strangely, the old VB compiler has different behavior depending on whether the containing type DECLARATION
-                    ' has NotInheritable, vs. any partial has NotInheritable (although they are semantically the same). If the containing declaration
-                    ' does not have NotInheritable, then only MustOverride has an error reported for it, and the error has a different code.
+            If container.IsNotInheritable AndAlso (flags And SourceMemberFlags.InvalidInNotInheritableClass) <> 0 Then
+                ' Somewhat strangely, the old VB compiler has different behavior depending on whether the containing type DECLARATION
+                ' has NotInheritable, vs. any partial has NotInheritable (although they are semantically the same). If the containing declaration
+                ' does not have NotInheritable, then only MustOverride has an error reported for it, and the error has a different code.
 
-                    Dim containingTypeBLock = GetContainingTypeBlock(modifierList.First())
-                    If containingTypeBLock IsNot Nothing AndAlso FindFirstKeyword(containingTypeBLock.BlockStatement.Modifiers, s_notInheritableKeyword).Kind = SyntaxKind.None Then
-                        ' Containing type block doesn't have a NotInheritable modifier on it. Must be from other partial declaration.
+                Dim containingTypeBLock = GetContainingTypeBlock(modifierList.First())
+                If containingTypeBLock IsNot Nothing AndAlso FindFirstKeyword(containingTypeBLock.BlockStatement.Modifiers, s_notInheritableKeyword).Kind = SyntaxKind.None Then
+                    ' Containing type block doesn't have a NotInheritable modifier on it. Must be from other partial declaration.
 
-                        If (flags And SourceMemberFlags.InvalidInNotInheritableOtherPartialClass) <> 0 Then
-                            ReportModifierError(modifierList, ERRID.ERR_MustOverOnNotInheritPartClsMem1, diagBag, InvalidModifiersInNotInheritableOtherPartialClass)
-                            flags = flags And Not SourceMemberFlags.InvalidInNotInheritableOtherPartialClass
-                        End If
-                    Else
-                        ReportModifierError(modifierList, ERRID.ERR_BadFlagsInNotInheritableClass1, diagBag, InvalidModifiersInNotInheritableClass)
-                        flags = flags And Not SourceMemberFlags.InvalidInNotInheritableClass
+                    If (flags And SourceMemberFlags.InvalidInNotInheritableOtherPartialClass) <> 0 Then
+                        ReportModifierError(modifierList, ERRID.ERR_MustOverOnNotInheritPartClsMem1, diagBag, InvalidModifiersInNotInheritableOtherPartialClass)
+                        flags = flags And Not SourceMemberFlags.InvalidInNotInheritableOtherPartialClass
                     End If
-
-                    memberModifiers = New MemberModifiers(flags, memberModifiers.ComputedFlags)
+                Else
+                    ReportModifierError(modifierList, ERRID.ERR_BadFlagsInNotInheritableClass1, diagBag, InvalidModifiersInNotInheritableClass)
+                    flags = flags And Not SourceMemberFlags.InvalidInNotInheritableClass
                 End If
+
+                memberModifiers = New MemberModifiers(flags, memberModifiers.ComputedFlags)
             End If
 
             Return memberModifiers

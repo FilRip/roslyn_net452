@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -72,11 +73,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        protected virtual ImmutableArray<LocalSymbol> BuildLocals()
-        {
-            return ImmutableArray<LocalSymbol>.Empty;
-        }
-
         internal sealed override ImmutableArray<LocalFunctionSymbol> LocalFunctions
         {
             get
@@ -90,11 +86,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        protected virtual ImmutableArray<LocalFunctionSymbol> BuildLocalFunctions()
-        {
-            return ImmutableArray<LocalFunctionSymbol>.Empty;
-        }
-
         internal sealed override ImmutableArray<LabelSymbol> Labels
         {
             get
@@ -106,11 +97,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 return _labels;
             }
-        }
-
-        protected virtual ImmutableArray<LabelSymbol> BuildLabels()
-        {
-            return ImmutableArray<LabelSymbol>.Empty;
         }
 
         private SmallDictionary<string, LocalSymbol> _lazyLocalsMap;
@@ -169,6 +155,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return map;
+        }
+
+        protected virtual ImmutableArray<LocalSymbol> BuildLocals()
+        {
+            return ImmutableArray<LocalSymbol>.Empty;
         }
 
         protected ImmutableArray<LocalSymbol> BuildLocals(SyntaxList<StatementSyntax> statements, Binder enclosingBinder)
@@ -274,6 +265,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
+        protected virtual ImmutableArray<LocalFunctionSymbol> BuildLocalFunctions()
+        {
+            return ImmutableArray<LocalFunctionSymbol>.Empty;
+        }
+
         protected ImmutableArray<LocalFunctionSymbol> BuildLocalFunctions(SyntaxList<StatementSyntax> statements)
         {
             ArrayBuilder<LocalFunctionSymbol> locals = null;
@@ -325,6 +321,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 this,
                 this.ContainingMemberOrLambda,
                 declaration);
+        }
+
+        protected virtual ImmutableArray<LabelSymbol> BuildLabels()
+        {
+            return ImmutableArray<LabelSymbol>.Empty;
         }
 
         protected void BuildLabels(SyntaxList<StatementSyntax> statements, ref ArrayBuilder<LabelSymbol> labels)
@@ -399,68 +400,52 @@ namespace Microsoft.CodeAnalysis.CSharp
             if ((options & LookupOptions.LabelsOnly) != 0)
             {
                 var labelsMap = this.LabelsMap;
-                if (labelsMap != null)
+                if (labelsMap != null && labelsMap.TryGetValue(name, out LabelSymbol labelSymbol))
                 {
-                    if (labelsMap.TryGetValue(name, out LabelSymbol labelSymbol))
-                    {
-                        result.MergeEqual(LookupResult.Good(labelSymbol));
-                    }
+                    result.MergeEqual(LookupResult.Good(labelSymbol));
                 }
                 return;
             }
 
             var localsMap = this.LocalsMap;
-            if (localsMap != null && (options & LookupOptions.NamespaceAliasesOnly) == 0)
+            if (localsMap != null && (options & LookupOptions.NamespaceAliasesOnly) == 0 &&
+                localsMap.TryGetValue(name, out LocalSymbol localSymbol))
             {
-                if (localsMap.TryGetValue(name, out LocalSymbol localSymbol))
-                {
-                    result.MergeEqual(originalBinder.CheckViability(localSymbol, arity, options, null, diagnose, ref useSiteInfo, basesBeingResolved));
-                }
+                result.MergeEqual(originalBinder.CheckViability(localSymbol, arity, options, null, diagnose, ref useSiteInfo, basesBeingResolved));
             }
 
             var localFunctionsMap = this.LocalFunctionsMap;
-            if (localFunctionsMap != null && options.CanConsiderLocals())
+            if (localFunctionsMap != null && options.CanConsiderLocals() &&
+                localFunctionsMap.TryGetValue(name, out LocalFunctionSymbol ls))
             {
-                if (localFunctionsMap.TryGetValue(name, out LocalFunctionSymbol localSymbol))
-                {
-                    result.MergeEqual(originalBinder.CheckViability(localSymbol, arity, options, null, diagnose, ref useSiteInfo, basesBeingResolved));
-                }
+                result.MergeEqual(originalBinder.CheckViability(ls, arity, options, null, diagnose, ref useSiteInfo, basesBeingResolved));
             }
         }
 
-        protected override void AddLookupSymbolsInfoInSingleBinder(LookupSymbolsInfo result, LookupOptions options, Binder originalBinder)
+        protected override void AddLookupSymbolsInfoInSingleBinder(LookupSymbolsInfo info, LookupOptions options, Binder originalBinder)
         {
 
-            if ((options & LookupOptions.LabelsOnly) != 0)
+            if (((options & LookupOptions.LabelsOnly) != 0) && this.LabelsMap != null)
             {
-                if (this.LabelsMap != null)
+                foreach (var label in this.LabelsMap)
                 {
-                    foreach (var label in this.LabelsMap)
-                    {
-                        result.AddSymbol(label.Value, label.Key, 0);
-                    }
+                    info.AddSymbol(label.Value, label.Key, 0);
                 }
             }
             if (options.CanConsiderLocals())
             {
                 if (this.LocalsMap != null)
                 {
-                    foreach (var local in this.LocalsMap)
+                    foreach (var local in this.LocalsMap.Where(local => originalBinder.CanAddLookupSymbolInfo(local.Value, options, info, null)))
                     {
-                        if (originalBinder.CanAddLookupSymbolInfo(local.Value, options, result, null))
-                        {
-                            result.AddSymbol(local.Value, local.Key, 0);
-                        }
+                        info.AddSymbol(local.Value, local.Key, 0);
                     }
                 }
                 if (this.LocalFunctionsMap != null)
                 {
-                    foreach (var local in this.LocalFunctionsMap)
+                    foreach (var local in this.LocalFunctionsMap.Where(local => originalBinder.CanAddLookupSymbolInfo(local.Value, options, info, null)))
                     {
-                        if (originalBinder.CanAddLookupSymbolInfo(local.Value, options, result, null))
-                        {
-                            result.AddSymbol(local.Value, local.Key, 0);
-                        }
+                        info.AddSymbol(local.Value, local.Key, 0);
                     }
                 }
             }

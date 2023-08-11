@@ -57,7 +57,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' <param name="importedNames">The string containing the text to be parsed.</param>
         ''' <returns>A GlobalImport instance. </returns>
         Public Shared Function Parse(importedNames As String) As GlobalImport
+#Disable Warning S3878 ' Arrays should not be created for ParamArray parameters
             Return Parse({importedNames})(0)
+#Enable Warning S3878 ' Arrays should not be created for ParamArray parameters
         End Function
 
         ''' <summary>

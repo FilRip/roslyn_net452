@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -326,6 +327,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // user-defined explicit conversion and produces an error. This means that in
             // C# 5 it is possible to have:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // Y y = new Y();
             // Z z1 = y;
             // 
@@ -334,6 +336,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Z z2 = (Z)y;
             //
             // fail.
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // However, there is another interesting wrinkle. It is possible for both
             // an implicit user-defined conversion and an explicit user-defined conversion
@@ -389,6 +392,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // user-defined explicit conversion and produces an error. This means that in
             // C# 5 it is possible to have:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // Y y = new Y();
             // Z z1 = y;
             // 
@@ -397,6 +401,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Z z2 = (Z)y;
             //
             // fail.
+#pragma warning restore S125 // Sections of code should not be commented out
 
             var conversion = GetExplicitUserDefinedConversion(null, source, destination, ref useSiteInfo);
             if (conversion.Exists)
@@ -614,14 +619,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return Conversion.NoConversion;
             }
 
-            // The call to HasExplicitNumericConversion isn't necessary, because it is always tested
-            // already by the "FastConversion" code.
-
-            //if (HasExplicitNumericConversion(source, specialTypeSource, destination, specialTypeDest))
-            //{
-            //    return Conversion.ExplicitNumeric;
-            //}
-
             if (HasSpecialIntPtrConversion(source, destination))
             {
                 return Conversion.IntPtr;
@@ -685,7 +682,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private Conversion DeriveStandardExplicitFromOppositeStandardImplicitConversion(TypeSymbol source, TypeSymbol destination, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
+#pragma warning disable S2234 // Arguments should be passed in the same order as the method parameters
             var oppositeConversion = ClassifyStandardImplicitConversion(destination, source, ref useSiteInfo);
+#pragma warning restore S2234 // Arguments should be passed in the same order as the method parameters
             Conversion impliedExplicitConversion;
 
             switch (oppositeConversion.Kind)
@@ -757,15 +756,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            foreach (var iface in d.AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
-            {
-                if (HasIdentityConversionInternal(iface, baseType))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return d.AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo).Any(iface => HasIdentityConversionInternal(iface, baseType));
         }
 
         // IsBaseClass returns true if and only if baseType is a base class of derivedType, period.
@@ -1004,7 +995,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // strip nullable from the destination
             //
             // the following should work and it is an ImplicitNullable conversion
+#pragma warning disable S125 // Sections of code should not be commented out
             //    int? x = 1;
+#pragma warning restore S125 // Sections of code should not be commented out
             if (destination.Kind == SymbolKind.NamedType)
             {
                 var nt = (NamedTypeSymbol)destination;
@@ -1029,7 +1022,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // strip nullable from the destination
             //
             // the following should work and it is an ImplicitNullable conversion
+#pragma warning disable S125 // Sections of code should not be commented out
             //    (int, double)? x = (1,2);
+#pragma warning restore S125 // Sections of code should not be commented out
             if (destination.Kind == SymbolKind.NamedType)
             {
                 var nt = (NamedTypeSymbol)destination;
@@ -1058,7 +1053,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // strip nullable from the destination
             //
             // the following should work and it is an ExplicitNullable conversion
+#pragma warning disable S125 // Sections of code should not be commented out
             //    var x = ((byte, string)?)(1,null);
+#pragma warning restore S125 // Sections of code should not be commented out
             if (destination.Kind == SymbolKind.NamedType)
             {
                 var nt = (NamedTypeSymbol)destination;
@@ -1345,12 +1342,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return IsAnonymousFunctionCompatibleWithDelegate(anonymousFunction, type);
             }
-            else if (type.IsGenericOrNonGenericExpressionType(out bool isGenericType))
+            else if (type.IsGenericOrNonGenericExpressionType(out bool isGenericType) &&
+                (isGenericType || IsFeatureInferredDelegateTypeEnabled(anonymousFunction)))
             {
-                if (isGenericType || IsFeatureInferredDelegateTypeEnabled(anonymousFunction))
-                {
-                    return IsAnonymousFunctionCompatibleWithExpressionTree(anonymousFunction, (NamedTypeSymbol)type);
-                }
+                return IsAnonymousFunctionCompatibleWithExpressionTree(anonymousFunction, (NamedTypeSymbol)type);
             }
 
             return LambdaConversionResult.BadTargetType;
@@ -1532,15 +1527,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static bool HasIdentityConversionToAny<T>(T type, ArrayBuilder<T> targetTypes)
             where T : TypeSymbol
         {
-            foreach (var targetType in targetTypes)
-            {
-                if (HasIdentityConversionInternal(type, targetType, includeNullability: false))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return targetTypes.Any(targetType => HasIdentityConversionInternal(type, targetType, includeNullability: false));
         }
 
         public Conversion ConvertExtensionMethodThisArg(TypeSymbol parameterType, TypeSymbol thisType, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -3206,13 +3193,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return true;
                 }
 
-                foreach (var iface in this.corLibrary.GetDeclaredSpecialType(SpecialType.System_Array).AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
-                {
-                    if (HasIdentityConversionInternal(iface, source))
-                    {
-                        return true;
-                    }
-                }
+                if (this.corLibrary.GetDeclaredSpecialType(SpecialType.System_Array).AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo).Any(iface => HasIdentityConversionInternal(iface, source)))
+                    return true;
             }
 
             // SPEC: From a single-dimensional array type S[] to System.Collections.Generic.IList<T> and its base interfaces
@@ -3294,6 +3276,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // SPEC: and from any interface-type to any non-nullable-value-type that implements the interface-type. 
 
+#pragma warning disable S2234 // Arguments should be passed in the same order as the method parameters
             if (source.IsInterfaceType() &&
                 destination.IsValueType &&
                 !destination.IsNullableType() &&
@@ -3301,6 +3284,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return true;
             }
+#pragma warning restore S2234 // Arguments should be passed in the same order as the method parameters
 
             // SPEC: Furthermore type System.Enum can be unboxed to any enum-type.
             if (source.SpecialType == SpecialType.System_Enum && destination.IsEnumType())

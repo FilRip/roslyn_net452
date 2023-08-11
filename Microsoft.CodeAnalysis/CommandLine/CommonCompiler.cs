@@ -403,13 +403,10 @@ namespace Microsoft.CodeAnalysis
             {
                 using var stream = OpenFileForReadWithSmallBufferOptimization(filePath, out _);
                 const int LargeObjectHeapLimit = 80 * 1024;
-                if (stream.Length < LargeObjectHeapLimit)
+                if (stream.Length < LargeObjectHeapLimit &&
+                    EncodedStringText.TryGetByteArrayFromFileStream(stream, out byte[] bytes))
                 {
-                    // FilRip modified
-                    if (EncodedStringText.TryGetByteArrayFromFileStream(stream, out byte[] bytes))
-                    {
-                        return EmbeddedText.FromBytes(filePath, new ArraySegment<byte>(bytes), Arguments.ChecksumAlgorithm);
-                    }
+                    return EmbeddedText.FromBytes(filePath, new ArraySegment<byte>(bytes), Arguments.ChecksumAlgorithm);
                 }
 
                 return EmbeddedText.FromStream(filePath, stream, Arguments.ChecksumAlgorithm);

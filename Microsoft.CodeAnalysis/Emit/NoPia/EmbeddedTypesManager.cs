@@ -96,38 +96,35 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                 builder.AddRange(EmbeddedTypesMap.Values);
                 builder.Sort(TypeComparer.Instance);
 
-                if (ImmutableInterlocked.InterlockedInitialize(ref _frozen, builder.ToImmutableAndFree()))
+                if (ImmutableInterlocked.InterlockedInitialize(ref _frozen, builder.ToImmutableAndFree()) && _frozen.Length > 0)
                 {
-                    if (_frozen.Length > 0)
+                    Cci.INamespaceTypeDefinition prev = _frozen[0];
+                    bool reportedDuplicate = HasNameConflict(namesOfTopLevelTypes, _frozen[0], diagnostics);
+
+                    for (int i = 1; i < _frozen.Length; i++)
                     {
-                        Cci.INamespaceTypeDefinition prev = _frozen[0];
-                        bool reportedDuplicate = HasNameConflict(namesOfTopLevelTypes, _frozen[0], diagnostics);
+                        Cci.INamespaceTypeDefinition current = _frozen[i];
 
-                        for (int i = 1; i < _frozen.Length; i++)
+                        if (prev.NamespaceName == current.NamespaceName &&
+                            prev.Name == current.Name)
                         {
-                            Cci.INamespaceTypeDefinition current = _frozen[i];
-
-                            if (prev.NamespaceName == current.NamespaceName &&
-                                prev.Name == current.Name)
+                            if (!reportedDuplicate)
                             {
-                                if (!reportedDuplicate)
-                                {
-                                    Debug.Assert(_frozen[i - 1] == prev);
+                                Debug.Assert(_frozen[i - 1] == prev);
 
-                                    // ERR_DuplicateLocalTypes3/ERR_InteropTypesWithSameNameAndGuid
-                                    ReportNameCollisionBetweenEmbeddedTypes(_frozen[i - 1], _frozen[i], diagnostics);
-                                    reportedDuplicate = true;
-                                }
-                            }
-                            else
-                            {
-                                prev = current;
-                                reportedDuplicate = HasNameConflict(namesOfTopLevelTypes, _frozen[i], diagnostics);
+                                // ERR_DuplicateLocalTypes3/ERR_InteropTypesWithSameNameAndGuid
+                                ReportNameCollisionBetweenEmbeddedTypes(_frozen[i - 1], _frozen[i], diagnostics);
+                                reportedDuplicate = true;
                             }
                         }
-
-                        OnGetTypesCompleted(_frozen, diagnostics);
+                        else
+                        {
+                            prev = current;
+                            reportedDuplicate = HasNameConflict(namesOfTopLevelTypes, _frozen[i], diagnostics);
+                        }
                     }
+
+                    OnGetTypesCompleted(_frozen, diagnostics);
                 }
             }
 

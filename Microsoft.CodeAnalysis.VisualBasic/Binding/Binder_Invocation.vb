@@ -746,17 +746,15 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics)
             Dim results As OverloadResolution.OverloadResolutionResult = OverloadResolution.MethodOrPropertyInvocationOverloadResolution(group, boundArguments, argumentNames, Me, callerInfoOpt, useSiteInfo, forceExpandedForm:=forceExpandedForm)
 
-            If diagnostics.Add(node, useSiteInfo) Then
-                If group.ResultKind <> LookupResultKind.Inaccessible Then
-                    ' Suppress additional diagnostics
-                    diagnostics = BindingDiagnosticBag.Discarded
-                End If
+            If diagnostics.Add(node, useSiteInfo) AndAlso group.ResultKind <> LookupResultKind.Inaccessible Then
+                ' Suppress additional diagnostics
+                diagnostics = BindingDiagnosticBag.Discarded
             End If
 
             If Not results.BestResult.HasValue Then
 
                 If results.ResolutionIsLateBound Then
-                    Debug.Assert(OptionStrict <> VisualBasic.OptionStrict.On)
+                    Debug.Assert(OptionStrict <> OptionStrict.On)
 
                     ' Did we have extension methods among candidates?
                     If group.Kind = BoundKind.MethodGroup Then

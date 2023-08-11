@@ -722,13 +722,13 @@ namespace Microsoft.CodeAnalysis
         /// <exception cref="BadImageFormatException">An exception from metadata reader.</exception>
         private void GetTypeNamespaceNamesOrThrow(Dictionary<string, ArrayBuilder<TypeDefinitionHandle>> namespaces)
         {
+#pragma warning disable S4158 // Empty collections should not be accessed or iterated
             // PERF: Group by namespace handle so we only have to allocate one string for every namespace
             var namespaceHandles = new Dictionary<NamespaceDefinitionHandle, ArrayBuilder<TypeDefinitionHandle>>(NamespaceHandleEqualityComparer.Singleton);
             foreach (TypeDefToNamespace pair in GetTypeDefsOrThrow(topLevelOnly: true))
             {
                 NamespaceDefinitionHandle nsHandle = pair.NamespaceHandle;
                 TypeDefinitionHandle typeDef = pair.TypeDef;
-
 
                 if (namespaceHandles.TryGetValue(nsHandle, out ArrayBuilder<TypeDefinitionHandle> builder))
                 {
@@ -754,9 +754,10 @@ namespace Microsoft.CodeAnalysis
                     namespaces.Add(@namespace, kvp.Value);
                 }
             }
+#pragma warning restore S4158 // Empty collections should not be accessed or iterated
         }
 
-        private class NamespaceHandleEqualityComparer : IEqualityComparer<NamespaceDefinitionHandle>
+        private sealed class NamespaceHandleEqualityComparer : IEqualityComparer<NamespaceDefinitionHandle>
         {
             public static readonly NamespaceHandleEqualityComparer Singleton = new();
 
@@ -956,11 +957,6 @@ namespace Microsoft.CodeAnalysis
             {
                 return default;
             }
-        }
-
-        public bool IsNoPiaLocalType(TypeDefinitionHandle typeDef)
-        {
-            return IsNoPiaLocalType(typeDef, out AttributeInfo _);
         }
 
         public bool HasParamsAttribute(EntityHandle token)
@@ -1171,6 +1167,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 catch (Exception ex) when (ex is BadImageFormatException or UnsupportedSignatureContent)
                 {
+                    // Nothing to do
                 }
             }
 
@@ -1258,7 +1255,7 @@ namespace Microsoft.CodeAnalysis
                 }
                 else
                 {
-                    defaultValue = ConstantValue.Create(new DateTime(value));
+                    defaultValue = ConstantValue.Create(new DateTime(value, DateTimeKind.Local));
                 }
 
                 return true;
@@ -1328,22 +1325,16 @@ namespace Microsoft.CodeAnalysis
             {
                 if (ai.SignatureIndex == 0)
                 {
-                    if (TryExtractStringValueFromAttribute(ai.Handle, out string extracted))
+                    if (TryExtractStringValueFromAttribute(ai.Handle, out string extracted) && extracted is not null)
                     {
-                        if (extracted is not null)
-                        {
-                            result.Add(extracted);
-                        }
+                        result.Add(extracted);
                     }
                 }
                 else if (TryExtractStringArrayValueFromAttribute(ai.Handle, out ImmutableArray<string> extracted2))
                 {
-                    foreach (var value in extracted2)
+                    foreach (var value in extracted2.Where(value => value is not null))
                     {
-                        if (value is not null)
-                        {
-                            result.Add(value);
-                        }
+                        result.Add(value);
                     }
                 }
             }
@@ -1369,24 +1360,18 @@ namespace Microsoft.CodeAnalysis
             {
                 if (ai.SignatureIndex == 0)
                 {
-                    if (TryExtractValueFromAttribute(ai.Handle, out BoolAndStringData extracted, s_attributeBoolAndStringValueExtractor))
+                    if (TryExtractValueFromAttribute(ai.Handle, out BoolAndStringData extracted, s_attributeBoolAndStringValueExtractor) && extracted.String is not null)
                     {
-                        if (extracted.String is not null)
-                        {
-                            var whenResult = extracted.Sense ? whenTrue : whenFalse;
-                            whenResult.Add(extracted.String);
-                        }
+                        var whenResult = extracted.Sense ? whenTrue : whenFalse;
+                        whenResult.Add(extracted.String);
                     }
                 }
                 else if (TryExtractValueFromAttribute(ai.Handle, out BoolAndStringArrayData extracted2, s_attributeBoolAndStringArrayValueExtractor))
                 {
                     var whenResult = extracted2.Sense ? whenTrue : whenFalse;
-                    foreach (var value in extracted2.Strings)
+                    foreach (var value in extracted2.Strings.Where(value => value is not null))
                     {
-                        if (value is not null)
-                        {
-                            whenResult.Add(value);
-                        }
+                        whenResult.Add(value);
                     }
                 }
             }
@@ -1465,18 +1450,14 @@ namespace Microsoft.CodeAnalysis
                 if (!valueBlob.IsNil)
                 {
                     blobReader = MetadataReader.GetBlobReader(valueBlob);
-                    if (blobReader.Length >= 4)
+                    if (blobReader.Length >= 4 && blobReader.ReadInt16() == 1)
                     {
                         // check prolog
-                        if (blobReader.ReadInt16() == 1)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
-            catch (BadImageFormatException)
-            { }
+            catch (BadImageFormatException) { /* Nothing to do */ }
 
             blobReader = default;
             return false;
@@ -1647,18 +1628,15 @@ namespace Microsoft.CodeAnalysis
                     // TODO: error checking offset in range
                     BlobReader reader = MetadataReader.GetBlobReader(valueBlob);
 
-                    if (reader.Length > 4)
+                    if (reader.Length > 4 && reader.ReadByte() == 1 && reader.ReadByte() == 0)
                     {
                         // check prolog
-                        if (reader.ReadByte() == 1 && reader.ReadByte() == 0)
-                        {
-                            return valueExtractor(out value, ref reader);
-                        }
+                        return valueExtractor(out value, ref reader);
                     }
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             value = default;
             return false;
@@ -1686,6 +1664,58 @@ namespace Microsoft.CodeAnalysis
 
             stringValue = null;
             intValue = 0;
+            return false;
+        }
+
+        public bool IsNoPiaLocalType(TypeDefinitionHandle typeDef)
+        {
+            return IsNoPiaLocalType(typeDef, out AttributeInfo _);
+        }
+
+        private bool IsNoPiaLocalType(TypeDefinitionHandle typeDef, out AttributeInfo attributeInfo)
+        {
+            if (_lazyContainsNoPiaLocalTypes == ThreeState.False)
+            {
+                attributeInfo = default;
+                return false;
+            }
+
+            if (_lazyNoPiaLocalTypeCheckBitMap != null &&
+                _lazyTypeDefToTypeIdentifierMap != null)
+            {
+                int rid = MetadataReader.GetRowNumber(typeDef);
+                Debug.Assert(rid > 0);
+
+                int item = rid / 32;
+                int bit = 1 << (rid % 32);
+
+                if ((_lazyNoPiaLocalTypeCheckBitMap[item] & bit) != 0)
+                {
+                    return _lazyTypeDefToTypeIdentifierMap.TryGetValue(typeDef, out attributeInfo);
+                }
+            }
+
+            try
+            {
+                foreach (var attributeHandle in MetadataReader.GetCustomAttributes(typeDef))
+                {
+                    int signatureIndex = IsTypeIdentifierAttribute(attributeHandle);
+                    if (signatureIndex != -1)
+                    {
+                        // We found a match
+                        _lazyContainsNoPiaLocalTypes = ThreeState.True;
+
+                        RegisterNoPiaLocalType(typeDef, attributeHandle, signatureIndex);
+                        attributeInfo = new AttributeInfo(attributeHandle, signatureIndex);
+                        return true;
+                    }
+                }
+            }
+            catch (BadImageFormatException)
+            { /* Nothing to do */ }
+
+            RecordNoPiaLocalTypeCheck(typeDef);
+            attributeInfo = default;
             return false;
         }
 
@@ -1725,17 +1755,13 @@ namespace Microsoft.CodeAnalysis
                     {
                         BlobReader reader = MetadataReader.GetBlobReader(valueBlob);
 
-                        if (reader.Length > 4)
+                        if (reader.Length > 4 &&
+                            (reader.ReadInt16() == 1 &&
+                            (!CrackStringInAttributeValue(out scope, ref reader) ||
+                            !CrackStringInAttributeValue(out identifier, ref reader))))
                         {
                             // check prolog
-                            if (reader.ReadInt16() == 1)
-                            {
-                                if (!CrackStringInAttributeValue(out scope, ref reader) ||
-                                    !CrackStringInAttributeValue(out identifier, ref reader))
-                                {
-                                    return false;
-                                }
-                            }
+                            return false;
                         }
                     }
                 }
@@ -1785,8 +1811,8 @@ namespace Microsoft.CodeAnalysis
                     }
                 }
             }
-            catch (BadImageFormatException) { }
-            catch (UnsupportedSignatureContent) { }
+            catch (BadImageFormatException) { /* Nothing to do */ }
+            catch (UnsupportedSignatureContent) { /* Nothing to do */ }
 
             return (diagnosticId, urlFormat);
         }
@@ -2047,7 +2073,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             return result;
         }
@@ -2072,7 +2098,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             return default;
         }
@@ -2094,7 +2120,7 @@ namespace Microsoft.CodeAnalysis
                 return attrInfo;
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             return default;
         }
@@ -2112,53 +2138,6 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             return count;
-        }
-
-        private bool IsNoPiaLocalType(TypeDefinitionHandle typeDef, out AttributeInfo attributeInfo)
-        {
-            if (_lazyContainsNoPiaLocalTypes == ThreeState.False)
-            {
-                attributeInfo = default;
-                return false;
-            }
-
-            if (_lazyNoPiaLocalTypeCheckBitMap != null &&
-                _lazyTypeDefToTypeIdentifierMap != null)
-            {
-                int rid = MetadataReader.GetRowNumber(typeDef);
-                Debug.Assert(rid > 0);
-
-                int item = rid / 32;
-                int bit = 1 << (rid % 32);
-
-                if ((_lazyNoPiaLocalTypeCheckBitMap[item] & bit) != 0)
-                {
-                    return _lazyTypeDefToTypeIdentifierMap.TryGetValue(typeDef, out attributeInfo);
-                }
-            }
-
-            try
-            {
-                foreach (var attributeHandle in MetadataReader.GetCustomAttributes(typeDef))
-                {
-                    int signatureIndex = IsTypeIdentifierAttribute(attributeHandle);
-                    if (signatureIndex != -1)
-                    {
-                        // We found a match
-                        _lazyContainsNoPiaLocalTypes = ThreeState.True;
-
-                        RegisterNoPiaLocalType(typeDef, attributeHandle, signatureIndex);
-                        attributeInfo = new AttributeInfo(attributeHandle, signatureIndex);
-                        return true;
-                    }
-                }
-            }
-            catch (BadImageFormatException)
-            { }
-
-            RecordNoPiaLocalTypeCheck(typeDef);
-            attributeInfo = default;
-            return false;
         }
 
         private void RegisterNoPiaLocalType(TypeDefinitionHandle typeDef, CustomAttributeHandle customAttribute, int signatureIndex)
@@ -2310,18 +2289,16 @@ namespace Microsoft.CodeAnalysis
             try
             {
                 // Iterate over assembly ref rows
-                foreach (var assemblyRef in MetadataReader.AssemblyReferences)
+                // Check whether matching name
+                if (MetadataReader.AssemblyReferences.Any(assemblyRef => MetadataReader.StringComparer.Equals(MetadataReader.GetAssemblyReference(assemblyRef).Name, assemblyName)))
                 {
-                    // Check whether matching name                    
-                    if (MetadataReader.StringComparer.Equals(MetadataReader.GetAssemblyReference(assemblyRef).Name, assemblyName))
-                    {
-                        // Return assembly ref token
-                        return assemblyRef;
-                    }
+                    AssemblyReferenceHandle found = MetadataReader.AssemblyReferences.FirstOrDefault(assemblyRef => MetadataReader.StringComparer.Equals(MetadataReader.GetAssemblyReference(assemblyRef).Name, assemblyName));
+                    // Return assembly ref token
+                    return found;
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             // Not found
             return default;
@@ -2370,7 +2347,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             // Not found
             return default(TypeReferenceHandle);
@@ -2533,7 +2510,7 @@ namespace Microsoft.CodeAnalysis
                 }
             }
             catch (BadImageFormatException)
-            { }
+            { /* Nothing to do */ }
 
             return No;
         }
@@ -2706,7 +2683,7 @@ namespace Microsoft.CodeAnalysis
                     }
                 }
                 catch (BadImageFormatException)
-                { }
+                { /* Nothing to do */ }
 
                 _lazyContainsNoPiaLocalTypes = ThreeState.False;
             }
@@ -3259,13 +3236,11 @@ namespace Microsoft.CodeAnalysis
                 // this functionality when computing diagnostics.  Note
                 // that we can't store the map case-insensitively, since real metadata name
                 // lookup has to remain case sensitive.
-                foreach (var pair in _lazyForwardedTypesToAssemblyIndexMap)
+                if (_lazyForwardedTypesToAssemblyIndexMap.Any(pair => string.Equals(pair.Key, fullName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    if (string.Equals(pair.Key, fullName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        matchedName = pair.Key;
-                        return pair.Value;
-                    }
+                    KeyValuePair<string, (int FirstIndex, int SecondIndex)> found = _lazyForwardedTypesToAssemblyIndexMap.FirstOrDefault(pair => string.Equals(pair.Key, fullName, StringComparison.OrdinalIgnoreCase));
+                    matchedName = found.Key;
+                    return found.Value;
                 }
             }
             else
@@ -3355,7 +3330,7 @@ namespace Microsoft.CodeAnalysis
                     }
                 }
                 catch (BadImageFormatException)
-                { }
+                { /* Nothing to do */ }
 
                 _lazyForwardedTypesToAssemblyIndexMap = typesToAssemblyIndexMap;
             }
@@ -3423,11 +3398,13 @@ namespace Microsoft.CodeAnalysis
             Debug.Assert(_peReaderOpt != null);
 
             MethodDefinition method = MetadataReader.GetMethodDefinition(methodHandle);
-            if ((method.ImplAttributes & MethodImplAttributes.CodeTypeMask) != MethodImplAttributes.IL ||
+#pragma warning disable S3265 // Non-flags enums should not be used in bitwise operations
+            if (((method.ImplAttributes & MethodImplAttributes.CodeTypeMask) != MethodImplAttributes.IL) ||
                  method.RelativeVirtualAddress == 0)
             {
                 return null;
             }
+#pragma warning restore S3265 // Non-flags enums should not be used in bitwise operations
 
             return _peReaderOpt.GetMethodBody(method.RelativeVirtualAddress);
         }

@@ -718,6 +718,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             else
             {
                 // In the native compiler when given a situation like
+#pragma warning disable S125 // Sections of code should not be commented out
                 //
                 // D[] x;
                 //
@@ -725,6 +726,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // of an array, and that D[] is not a valid type for a local variable.
                 // This seems silly; the first error is entirely sufficient. We no longer
                 // produce additional errors for local variables of arrays of static types.
+#pragma warning restore S125 // Sections of code should not be commented out
 
                 if (declType.IsStatic)
                 {
@@ -902,13 +904,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                         hasErrors = true;
                     }
 
-                    if (!declTypeOpt.Type.IsErrorType())
+                    if (!declTypeOpt.Type.IsErrorType() && declTypeOpt.IsStatic)
                     {
-                        if (declTypeOpt.IsStatic)
-                        {
-                            Error(localDiagnostics, ErrorCode.ERR_VarDeclIsStaticClass, typeSyntax, initializerType);
-                            hasErrors = true;
-                        }
+                        Error(localDiagnostics, ErrorCode.ERR_VarDeclIsStaticClass, typeSyntax, initializerType);
+                        hasErrors = true;
                     }
                 }
                 else

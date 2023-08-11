@@ -596,13 +596,11 @@ namespace Microsoft.CodeAnalysis
 
         public SyntaxAnnotation[] GetAnnotations()
         {
-            if (this.ContainsAnnotations)
+            if (this.ContainsAnnotations &&
+                s_annotationsTable.TryGetValue(this, out SyntaxAnnotation[] annotations))
             {
-                if (s_annotationsTable.TryGetValue(this, out SyntaxAnnotation[] annotations))
-                {
-                    System.Diagnostics.Debug.Assert(annotations.Length != 0, "we should return nonempty annotations or NoAnnotations");
-                    return annotations;
-                }
+                Debug.Assert(annotations.Length != 0, "we should return nonempty annotations or NoAnnotations");
+                return annotations;
             }
 
             return s_noAnnotations;
@@ -615,12 +613,10 @@ namespace Microsoft.CodeAnalysis
         #region Diagnostics
         public DiagnosticInfo[] GetDiagnostics()
         {
-            if (this.ContainsDiagnostics)
+            if (this.ContainsDiagnostics &&
+                s_diagnosticsTable.TryGetValue(this, out DiagnosticInfo[] diags))
             {
-                if (s_diagnosticsTable.TryGetValue(this, out DiagnosticInfo[] diags))
-                {
-                    return diags;
-                }
+                return diags;
             }
 
             return s_noDiagnostics;

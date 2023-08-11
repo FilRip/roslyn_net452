@@ -235,7 +235,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (!hasErrors && awaitInfo.GetResult?.ReturnType.SpecialType != SpecialType.System_Boolean)
                 {
-                    diagnostics.Add(ErrorCode.ERR_BadGetAsyncEnumerator, expr.Location, getEnumeratorMethod.ReturnTypeWithAnnotations, getEnumeratorMethod);
+                    diagnostics.Add(ErrorCode.ERR_BadGetAsyncEnumerator, expr.Location, getEnumeratorMethod?.ReturnTypeWithAnnotations, getEnumeratorMethod);
                     hasErrors = true;
                 }
             }
@@ -264,9 +264,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                         if (isVar)
                         {
                             declType = inferredType.HasType ? inferredType : TypeWithAnnotations.Create(CreateErrorType("var"));
-                        }
-                        else
-                        {
                         }
 
                         iterationVariableType = declType;
@@ -570,6 +567,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             return collectionExpr;
         }
 
+        private enum EnumeratorResult
+        {
+            Succeeded,
+            FailedNotReported,
+            FailedAndReported
+        }
+
         /// <summary>
         /// The spec describes an algorithm for finding the following types:
         ///   1) Collection type
@@ -626,13 +630,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             diagnostics.Add(errorCode, _syntax.Expression.Location,
                 collectionExprType, isAsync ? GetAsyncEnumeratorMethodName : GetEnumeratorMethodName);
             return false;
-        }
-
-        private enum EnumeratorResult
-        {
-            Succeeded,
-            FailedNotReported,
-            FailedAndReported
         }
 
         private EnumeratorResult GetEnumeratorInfo(ref ForEachEnumeratorInfo.Builder builder, ref BoundExpression collectionExpr, bool isAsync, BindingDiagnosticBag diagnostics)
@@ -1107,13 +1104,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                         MessageID patternName = isAsync ? MessageID.IDS_FeatureAsyncStreams : MessageID.IDS_Collection;
                         diagnostics.Add(ErrorCode.WRN_PatternNotPublicOrNotInstance, _syntax.Expression.Location, patternType, patternName.Localize(), result);
                     }
+#pragma warning disable S125 // Sections of code should not be commented out
                     //result = null;
+#pragma warning restore S125 // Sections of code should not be commented out
                 }
                 else if (result.CallsAreOmitted(_syntax.SyntaxTree))
                 {
                     // Calls to this method are omitted in the current syntax tree, i.e it is either a partial method with no implementation part OR a conditional method whose condition is not true in this source file.
                     // We don't want to allow this case.
+#pragma warning disable S125 // Sections of code should not be commented out
                     //result = null;
+#pragma warning restore S125 // Sections of code should not be commented out
                 }
                 else
                 {
@@ -1133,13 +1134,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                     info = new MethodArgumentInfo(result, analyzedArguments.Arguments.ToImmutable(), argsToParams, defaultArguments, expanded);
                 }
             }
-            else if (overloadResolutionResult.GetAllApplicableMembers() is var applicableMembers && applicableMembers.Length > 1)
+            else if (overloadResolutionResult.GetAllApplicableMembers() is var applicableMembers && applicableMembers.Length > 1 && warningsOnly)
             {
-                if (warningsOnly)
-                {
-                    diagnostics.Add(ErrorCode.WRN_PatternIsAmbiguous, _syntax.Expression.Location, patternType, MessageID.IDS_Collection.Localize(),
-                        applicableMembers[0], applicableMembers[1]);
-                }
+                diagnostics.Add(ErrorCode.WRN_PatternIsAmbiguous, _syntax.Expression.Location, patternType, MessageID.IDS_Collection.Localize(),
+                    applicableMembers[0], applicableMembers[1]);
             }
 
             overloadResolutionResult.Free();
@@ -1459,20 +1457,17 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             interfaces = MethodTypeInferrer.ModuloReferenceTypeNullabilityDifferences(interfaces, VarianceKind.In);
 
-            foreach (NamedTypeSymbol @interface in interfaces)
+            foreach (NamedTypeSymbol @interface in interfaces.Where(iface => IsIEnumerableT(iface.OriginalDefinition, isAsync, compilation)))
             {
-                if (IsIEnumerableT(@interface.OriginalDefinition, isAsync, compilation))
+                if (result is null ||
+                    TypeSymbol.Equals(@interface, result, TypeCompareKind.IgnoreTupleNames))
                 {
-                    if (result is null ||
-                        TypeSymbol.Equals(@interface, result, TypeCompareKind.IgnoreTupleNames))
-                    {
-                        result = @interface;
-                    }
-                    else
-                    {
-                        foundMultiple = true;
-                        return;
-                    }
+                    result = @interface;
+                }
+                else
+                {
+                    foundMultiple = true;
+                    return;
                 }
             }
         }

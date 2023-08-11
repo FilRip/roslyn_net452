@@ -284,13 +284,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private void RemovePendingSourceEvent_NoLock(SyntaxTree tree, CompilationEvent compilationEvent)
         {
-            if (_pendingSourceEvents.TryGetValue(tree, out var currentEvents))
+            if (_pendingSourceEvents.TryGetValue(tree, out var currentEvents) &&
+                currentEvents.Remove(compilationEvent) && currentEvents.Count == 0)
             {
-                if (currentEvents.Remove(compilationEvent) && currentEvents.Count == 0)
-                {
-                    _pendingSourceEvents.Remove(tree);
-                    _semanticModelProvider.ClearCache(tree, compilationEvent.Compilation);
-                }
+                _pendingSourceEvents.Remove(tree);
+                _semanticModelProvider.ClearCache(tree, compilationEvent.Compilation);
             }
         }
 
@@ -401,24 +399,21 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// </summary>
         private ImmutableArray<CompilationEvent> GetPendingEvents_NoLock(ImmutableArray<DiagnosticAnalyzer> analyzers, SyntaxTree tree)
         {
-            if (_pendingSourceEvents.TryGetValue(tree, out var compilationEventsForTree))
+            if (_pendingSourceEvents.TryGetValue(tree, out var compilationEventsForTree) && compilationEventsForTree?.Count > 0)
             {
-                if (compilationEventsForTree?.Count > 0)
+                HashSet<CompilationEvent>? pendingEvents = null;
+                try
                 {
-                    HashSet<CompilationEvent>? pendingEvents = null;
-                    try
+                    pendingEvents = GetPendingEvents_NoLock(analyzers);
+                    if (pendingEvents.Count > 0)
                     {
-                        pendingEvents = GetPendingEvents_NoLock(analyzers);
-                        if (pendingEvents.Count > 0)
-                        {
-                            pendingEvents.IntersectWith(compilationEventsForTree);
-                            return pendingEvents.ToImmutableArray();
-                        }
+                        pendingEvents.IntersectWith(compilationEventsForTree);
+                        return pendingEvents.ToImmutableArray();
                     }
-                    finally
-                    {
-                        Free(pendingEvents);
-                    }
+                }
+                finally
+                {
+                    Free(pendingEvents);
                 }
             }
 

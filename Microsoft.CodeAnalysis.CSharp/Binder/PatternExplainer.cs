@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             bool sense = t.WhenTrue == nextNode || (t.WhenFalse != nextNode && t.WhenTrue is BoundWhenDecisionDagNode);
                             BoundDagTest test = t.Test;
                             BoundDagTemp temp = test.Input;
-                            if (test is BoundDagTypeTest && sense == false)
+                            if (test is BoundDagTypeTest && !sense)
                             {
                                 // A failed type test is not very useful in constructing a counterexample,
                                 // at least not without discriminated unions, so we just drop them.
@@ -135,7 +135,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                             {
                                 if (!constraints.TryGetValue(temp, out var constraintBuilder))
                                 {
+#pragma warning disable S1121 // Assignments should not be made from within sub-expressions
                                     constraints.Add(temp, constraintBuilder = new ArrayBuilder<(BoundDagTest, bool)>());
+#pragma warning restore S1121 // Assignments should not be made from within sub-expressions
                                 }
                                 constraintBuilder.Add((test, sense));
                             }
@@ -146,7 +148,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                             BoundDagTemp temp = e.Evaluation.Input;
                             if (!evaluations.TryGetValue(temp, out var evaluationBuilder))
                             {
+#pragma warning disable S1121 // Assignments should not be made from within sub-expressions
                                 evaluations.Add(temp, evaluationBuilder = new ArrayBuilder<BoundDagEvaluation>());
+#pragma warning restore S1121 // Assignments should not be made from within sub-expressions
                             }
                             evaluationBuilder.Add(e.Evaluation);
                         }
@@ -192,7 +196,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             return !sense ? "null" : requireExactType ? input.Type.ToDisplayString() : "not null";
                         case (test: BoundDagExplicitNullTest _, sense: var sense):
                             return sense ? "null" : requireExactType ? input.Type.ToDisplayString() : "not null";
-                        case (test: BoundDagTypeTest { Type: var testedType }, sense: var sense):
+                        case (test: BoundDagTypeTest { Type: var testedType }, sense: var _):
                             return testedType.ToDisplayString();
                     }
                 }
@@ -434,10 +438,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (remainingValues.Any(BinaryOperatorKind.LessThan, ConstantValue.Create(int.MinValue)))
                     return $"< ({type.ToDisplayString()})int.MinValue";
             }
-            else if (underlyingType.SpecialType == SpecialType.System_UIntPtr)
+            else if (underlyingType.SpecialType == SpecialType.System_UIntPtr &&
+                remainingValues.Any(BinaryOperatorKind.GreaterThan, ConstantValue.Create(uint.MaxValue)))
             {
-                if (remainingValues.Any(BinaryOperatorKind.GreaterThan, ConstantValue.Create(uint.MaxValue)))
-                    return $"> ({type.ToDisplayString()})uint.MaxValue";
+                return $"> ({type.ToDisplayString()})uint.MaxValue";
             }
 
             throw ExceptionUtilities.Unreachable;

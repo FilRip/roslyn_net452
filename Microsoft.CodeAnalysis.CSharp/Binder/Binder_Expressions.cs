@@ -2675,18 +2675,15 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             bool hasRefKinds = result.RefKinds.Any();
-            if (refKind != RefKind.None)
+            if (refKind != RefKind.None && !hasRefKinds)
             {
                 // The common case is no ref or out arguments. So we defer all work until the first one is seen.
-                if (!hasRefKinds)
-                {
-                    hasRefKinds = true;
+                hasRefKinds = true;
 
-                    int argCount = result.Arguments.Count;
-                    for (int i = 0; i < argCount; ++i)
-                    {
-                        result.RefKinds.Add(RefKind.None);
-                    }
+                int argCount = result.Arguments.Count;
+                for (int i = 0; i < argCount; ++i)
+                {
+                    result.RefKinds.Add(RefKind.None);
                 }
             }
 

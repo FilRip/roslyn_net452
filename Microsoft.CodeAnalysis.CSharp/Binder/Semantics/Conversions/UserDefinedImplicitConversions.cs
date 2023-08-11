@@ -43,9 +43,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // The rule above can come into play in cases like:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // sealed class C<T> { public static implicit operator T(C<T> c) { ... } }
             // C<object> c = whatever;
             // object o = c;
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // The built-in implicit conversion from C<object> to object must shadow
             // the user-defined implicit conversion.
@@ -311,12 +313,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeSymbol MostSpecificSourceTypeForImplicitUserDefinedConversion(ImmutableArray<UserDefinedConversionAnalysis> u, TypeSymbol source, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
             // SPEC: If any of the operators in U convert from S then SX is S.
-            if (source is not null)
+            if (source is not null &&
+                u.Any(conv => TypeSymbol.Equals(conv.FromType, source, TypeCompareKind.ConsiderEverything2)))
             {
-                if (u.Any(conv => TypeSymbol.Equals(conv.FromType, source, TypeCompareKind.ConsiderEverything2)))
-                {
-                    return source;
-                }
+                return source;
             }
 
             // SPEC: Otherwise, SX is the most encompassed type in the set of
@@ -382,7 +382,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static int? MostSpecificConversionOperator(Func<UserDefinedConversionAnalysis, bool> constraint, ImmutableArray<UserDefinedConversionAnalysis> u)
         {
             // SPEC: If U contains exactly one user-defined conversion operator from SX to TX 
-            // SPEC: then that is the most-specific conversion operator;
+            // SPEC: then that is the most-specific conversion operator
             //
             // SPEC: Otherwise, if U contains exactly one lifted conversion operator that converts from
             // SPEC: SX to TX then this is the most specific operator.
@@ -697,7 +697,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (result == BetterResult.Equal)
                 {
                     // The list had the same item twice. Just ignore it.
-                    continue;
                 }
                 else if (result == BetterResult.Neither)
                 {
@@ -786,6 +785,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC VIOLATION: This introduces a SPEC VIOLATION for the following tests in the native compiler:
 
             // NOTE:    // See test SwitchTests.CS0166_AggregateTypeWithMultipleImplicitConversions_07
+#pragma warning disable S125 // Sections of code should not be commented out
             // NOTE:    struct Conv
             // NOTE:    {
             // NOTE:        public static implicit operator int (Conv C) { return 1; }
@@ -820,6 +820,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC VIOLATION: This occurs because the native compiler compares the applicable conversions to find one with the least amount
             // SPEC VIOLATION: of lifting, ignoring whether the return types are the same or not.
             // SPEC VIOLATION: We do the same to maintain compatibility with the native compiler.
+#pragma warning restore S125 // Sections of code should not be commented out
 
             // (a) Compute the set of types D from which user-defined conversion operators should be considered by considering only the source type.
             var d = ArrayBuilder<NamedTypeSymbol>.GetInstance();

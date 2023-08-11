@@ -1135,15 +1135,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             RefKind refArg = arguments.RefKind(arg);
             RefKind refParameter = parameter.RefKind;
 
-            if (arguments.IsExtensionMethodThisArgument(arg))
+            if (arguments.IsExtensionMethodThisArgument(arg) &&
+                (refParameter == RefKind.Ref || refParameter == RefKind.In))
             {
-                if (refParameter == RefKind.Ref || refParameter == RefKind.In)
-                {
-                    // For ref and ref-readonly extension methods, we omit the "ref" modifier on receiver arguments.
-                    // Setting the correct RefKind for finding the correct diagnostics message.
-                    // For other ref kinds, keeping it as it is to find mismatch errors. 
-                    refArg = refParameter;
-                }
+                // For ref and ref-readonly extension methods, we omit the "ref" modifier on receiver arguments.
+                // Setting the correct RefKind for finding the correct diagnostics message.
+                // For other ref kinds, keeping it as it is to find mismatch errors. 
+                refArg = refParameter;
             }
 
             // If the expression is untyped because it is a lambda, anonymous method, method group or null

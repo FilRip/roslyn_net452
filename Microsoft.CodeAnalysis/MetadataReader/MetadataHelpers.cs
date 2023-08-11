@@ -370,12 +370,9 @@ namespace Microsoft.CodeAnalysis
 
                 AssemblyQualifiedTypeName result = DecodeTypeName(isTypeArgument: true, isTypeArgumentWithAssemblyName: isTypeArgumentWithAssemblyName);
 
-                if (isTypeArgumentWithAssemblyName)
+                if (isTypeArgumentWithAssemblyName && !EndOfInput && Current == ']')
                 {
-                    if (!EndOfInput && Current == ']')
-                    {
-                        Advance();
-                    }
+                    Advance();
                 }
 
                 return result;

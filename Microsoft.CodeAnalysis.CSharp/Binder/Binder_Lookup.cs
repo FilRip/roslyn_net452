@@ -210,19 +210,15 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void LookupMembersInErrorType(LookupResult result, ErrorTypeSymbol errorType, string name, int arity, ConsList<TypeSymbol> basesBeingResolved, LookupOptions options, Binder originalBinder, bool diagnose, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
         {
-            if (!errorType.CandidateSymbols.IsDefault && errorType.CandidateSymbols.Length == 1)
+            if (!errorType.CandidateSymbols.IsDefault && errorType.CandidateSymbols.Length == 1 &&
+                errorType.ResultKind == LookupResultKind.Inaccessible &&
+                errorType.CandidateSymbols.First() is TypeSymbol candidateType)
             {
                 // The dev11 IDE experience provided meaningful information about members of inaccessible types,
                 // so we should do the same (DevDiv #633340).
                 // TODO: generalize to other result kinds and/or candidate counts?
-                if (errorType.ResultKind == LookupResultKind.Inaccessible)
-                {
-                    if (errorType.CandidateSymbols.First() is TypeSymbol candidateType)
-                    {
-                        LookupMembersInType(result, candidateType, name, arity, basesBeingResolved, options, originalBinder, diagnose, ref useSiteInfo);
-                        return; // Bypass call to Clear()
-                    }
-                }
+                LookupMembersInType(result, candidateType, name, arity, basesBeingResolved, options, originalBinder, diagnose, ref useSiteInfo);
+                return; // Bypass call to Clear()
             }
 
             result.Clear();

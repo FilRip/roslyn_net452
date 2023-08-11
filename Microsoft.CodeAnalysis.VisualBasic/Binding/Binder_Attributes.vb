@@ -557,24 +557,23 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
         Private Sub MarkEmbeddedTypeReferenceIfNeeded(expression As BoundExpression)
             ' If we are embedding code and also there are no errors
-            If (Me.Compilation.EmbeddedSymbolManager.Embedded <> 0) AndAlso Not expression.HasErrors Then
+            If (Me.Compilation.EmbeddedSymbolManager.Embedded <> 0) AndAlso Not expression.HasErrors AndAlso
+                expression.Syntax.SyntaxTree IsNot Nothing AndAlso
+                Me.Compilation.ContainsSyntaxTree(expression.Syntax.SyntaxTree) Then
 
                 ' And also is the expression comes from compilation syntax trees
-                If expression.Syntax.SyntaxTree IsNot Nothing AndAlso
-                    Me.Compilation.ContainsSyntaxTree(expression.Syntax.SyntaxTree) Then
 
-                    ' Mark type if it is referenced in expression like 'GetType(Microsoft.VisualBasic.Strings)'
-                    If expression.Kind = BoundKind.GetType Then
-                        MarkEmbeddedTypeReferencedFromGetTypeExpression(DirectCast(expression, BoundGetType))
+                ' Mark type if it is referenced in expression like 'GetType(Microsoft.VisualBasic.Strings)'
+                If expression.Kind = BoundKind.GetType Then
+                    MarkEmbeddedTypeReferencedFromGetTypeExpression(DirectCast(expression, BoundGetType))
 
-                    ElseIf expression.Kind = BoundKind.ArrayCreation Then
-                        Dim arrayCreation = DirectCast(expression, BoundArrayCreation)
-                        Dim arrayInitialization As BoundArrayInitialization = arrayCreation.InitializerOpt
-                        If arrayInitialization IsNot Nothing Then
-                            For Each initializer In arrayInitialization.Initializers
-                                MarkEmbeddedTypeReferenceIfNeeded(initializer)
-                            Next
-                        End If
+                ElseIf expression.Kind = BoundKind.ArrayCreation Then
+                    Dim arrayCreation = DirectCast(expression, BoundArrayCreation)
+                    Dim arrayInitialization As BoundArrayInitialization = arrayCreation.InitializerOpt
+                    If arrayInitialization IsNot Nothing Then
+                        For Each initializer In arrayInitialization.Initializers
+                            MarkEmbeddedTypeReferenceIfNeeded(initializer)
+                        Next
                     End If
                 End If
             End If

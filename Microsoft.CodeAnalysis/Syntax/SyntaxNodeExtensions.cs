@@ -367,16 +367,6 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
-        /// Creates a new node from this node with the leading trivia removed.
-        /// </summary>
-        public static TSyntax WithoutLeadingTrivia<TSyntax>(
-            this TSyntax node
-            ) where TSyntax : SyntaxNode
-        {
-            return node.WithLeadingTrivia((IEnumerable<SyntaxTrivia>?)null);
-        }
-
-        /// <summary>
         /// Creates a new node from this node with the leading trivia replaced.
         /// </summary>
         public static TSyntax WithLeadingTrivia<TSyntax>(
@@ -384,6 +374,16 @@ namespace Microsoft.CodeAnalysis
             params SyntaxTrivia[]? trivia) where TSyntax : SyntaxNode
         {
             return node.WithLeadingTrivia((IEnumerable<SyntaxTrivia>?)trivia);
+        }
+
+        /// <summary>
+        /// Creates a new node from this node with the leading trivia removed.
+        /// </summary>
+        public static TSyntax WithoutLeadingTrivia<TSyntax>(
+            this TSyntax node
+            ) where TSyntax : SyntaxNode
+        {
+            return node.WithLeadingTrivia((IEnumerable<SyntaxTrivia>?)null);
         }
 
         /// <summary>
@@ -411,14 +411,6 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
-        /// Creates a new node from this node with the trailing trivia removed.
-        /// </summary>
-        public static TSyntax WithoutTrailingTrivia<TSyntax>(this TSyntax node) where TSyntax : SyntaxNode
-        {
-            return node.WithTrailingTrivia((IEnumerable<SyntaxTrivia>?)null);
-        }
-
-        /// <summary>
         /// Creates a new node from this node with the trailing trivia replaced.
         /// </summary>
         public static TSyntax WithTrailingTrivia<TSyntax>(
@@ -426,6 +418,14 @@ namespace Microsoft.CodeAnalysis
             params SyntaxTrivia[]? trivia) where TSyntax : SyntaxNode
         {
             return node.WithTrailingTrivia((IEnumerable<SyntaxTrivia>?)trivia);
+        }
+
+        /// <summary>
+        /// Creates a new node from this node with the trailing trivia removed.
+        /// </summary>
+        public static TSyntax WithoutTrailingTrivia<TSyntax>(this TSyntax node) where TSyntax : SyntaxNode
+        {
+            return node.WithTrailingTrivia((IEnumerable<SyntaxTrivia>?)null);
         }
 
         /// <summary>

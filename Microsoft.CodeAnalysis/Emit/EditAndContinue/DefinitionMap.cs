@@ -279,13 +279,11 @@ namespace Microsoft.CodeAnalysis.Emit
                             return null;
                         }
                     }
-                    else if (method.IsIterator)
+                    else if (method.IsIterator &&
+                        compilation.CommonGetWellKnownTypeMember(WellKnownMember.System_Runtime_CompilerServices_IteratorStateMachineAttribute__ctor) == null)
                     {
-                        if (compilation.CommonGetWellKnownTypeMember(WellKnownMember.System_Runtime_CompilerServices_IteratorStateMachineAttribute__ctor) == null)
-                        {
-                            ReportMissingStateMachineAttribute(diagnostics, method, AttributeDescription.IteratorStateMachineAttribute.FullName);
-                            return null;
-                        }
+                        ReportMissingStateMachineAttribute(diagnostics, method, AttributeDescription.IteratorStateMachineAttribute.FullName);
+                        return null;
                     }
 
                     try

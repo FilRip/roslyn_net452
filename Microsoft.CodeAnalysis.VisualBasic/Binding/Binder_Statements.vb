@@ -1003,11 +1003,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 Dim asClauseOpt = varDecl.AsClause
                 Dim initializerOpt As EqualsValueSyntax = varDecl.Initializer
 
-                If initializerOpt IsNot Nothing Then
-                    If varDecl.Names.Count > 1 Then
-                        ' Can't combine an initializer with multiple variables
-                        ReportDiagnostic(diagnostics, varDecl, ERRID.ERR_InitWithMultipleDeclarators)
-                    End If
+                If initializerOpt IsNot Nothing AndAlso varDecl.Names.Count > 1 Then
+                    ' Can't combine an initializer with multiple variables
+                    ReportDiagnostic(diagnostics, varDecl, ERRID.ERR_InitWithMultipleDeclarators)
                 End If
 
                 Dim names = varDecl.Names

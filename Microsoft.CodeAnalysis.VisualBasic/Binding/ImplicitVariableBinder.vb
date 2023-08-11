@@ -212,10 +212,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 #End If
             ' locals are always arity 0, and never types and namespaces.
             Dim localSymbol As LocalSymbol = Nothing
-            If _implicitLocals IsNot Nothing AndAlso (options And (LookupOptions.NamespacesOrTypesOnly Or LookupOptions.LabelsOnly)) = 0 Then
-                If _implicitLocals.TryGetValue(name, localSymbol) Then
-                    lookupResult.SetFrom(CheckViability(localSymbol, arity, options, Nothing, useSiteInfo))
-                End If
+            If _implicitLocals IsNot Nothing AndAlso (options And (LookupOptions.NamespacesOrTypesOnly Or LookupOptions.LabelsOnly)) = 0 AndAlso _implicitLocals.TryGetValue(name, localSymbol) Then
+                lookupResult.SetFrom(CheckViability(localSymbol, arity, options, Nothing, useSiteInfo))
             End If
 
             Return

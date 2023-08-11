@@ -102,27 +102,23 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 this.LookupMembersInternal(result, _container, name, arity, basesBeingResolved, options, originalBinder, diagnose, ref useSiteInfo);
 
-                if (result.IsMultiViable)
+                if (result.IsMultiViable &&
+                    arity == 0 &&
+                    Next is WithExternAndUsingAliasesBinder withUsingAliases && withUsingAliases.IsUsingAlias(name, originalBinder.IsSemanticModelBinder, basesBeingResolved))
                 {
-                    if (arity == 0)
-                    {
-                        // symbols cannot conflict with using alias names
-                        if (Next is WithExternAndUsingAliasesBinder withUsingAliases && withUsingAliases.IsUsingAlias(name, originalBinder.IsSemanticModelBinder, basesBeingResolved))
-                        {
-                            CSDiagnosticInfo diagInfo = new(ErrorCode.ERR_ConflictAliasAndMember, name, _container);
-                            var error = new ExtendedErrorTypeSymbol((NamespaceOrTypeSymbol)null, name, arity, diagInfo, unreported: true);
-                            result.SetFrom(LookupResult.Good(error)); // force lookup to be done w/ error symbol as result
-                        }
-                    }
+                    // symbols cannot conflict with using alias names
+                    CSDiagnosticInfo diagInfo = new(ErrorCode.ERR_ConflictAliasAndMember, name, _container);
+                    var error = new ExtendedErrorTypeSymbol((NamespaceOrTypeSymbol)null, name, arity, diagInfo, unreported: true);
+                    result.SetFrom(LookupResult.Good(error)); // force lookup to be done w/ error symbol as result
 
                     return;
                 }
             }
         }
 
-        protected override void AddLookupSymbolsInfoInSingleBinder(LookupSymbolsInfo result, LookupOptions options, Binder originalBinder)
+        protected override void AddLookupSymbolsInfoInSingleBinder(LookupSymbolsInfo info, LookupOptions options, Binder originalBinder)
         {
-            this.AddMemberLookupSymbolsInfo(result, _container, options, originalBinder);
+            this.AddMemberLookupSymbolsInfo(info, _container, options, originalBinder);
         }
 
         protected override SourceLocalSymbol LookupLocal(SyntaxToken nameToken)

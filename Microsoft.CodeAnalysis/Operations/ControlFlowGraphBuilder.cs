@@ -928,13 +928,10 @@ namespace Microsoft.CodeAnalysis.FlowAnalysis
 
                                 foreach (BasicBlockBuilder predecessor in predecessorsBuilder)
                                 {
-                                    if (tryMergeBranch(predecessor, ref predecessor.FallThrough, block))
+                                    if (tryMergeBranch(predecessor, ref predecessor.FallThrough, block) && value != null)
                                     {
-                                        if (value != null)
-                                        {
-                                            Debug.Assert(predecessor.BranchValue == null);
-                                            predecessor.BranchValue = value;
-                                        }
+                                        Debug.Assert(predecessor.BranchValue == null);
+                                        predecessor.BranchValue = value;
                                     }
 
                                     if (tryMergeBranch(predecessor, ref predecessor.Conditional, block))

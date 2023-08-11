@@ -117,12 +117,10 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                                     attrData, syntaxNodeOpt, diagnostics));
                             }
                         }
-                        else if (IsTargetAttribute(attrData, AttributeDescription.DefaultParameterValueAttribute))
+                        else if (IsTargetAttribute(attrData, AttributeDescription.DefaultParameterValueAttribute) &&
+                            attrData.CommonConstructorArguments.Length == 1)
                         {
-                            if (attrData.CommonConstructorArguments.Length == 1)
-                            {
-                                builder.AddOptional(TypeManager.CreateSynthesizedAttribute(WellKnownMember.System_Runtime_InteropServices_DefaultParameterValueAttribute__ctor, attrData, syntaxNodeOpt, diagnostics));
-                            }
+                            builder.AddOptional(TypeManager.CreateSynthesizedAttribute(WellKnownMember.System_Runtime_InteropServices_DefaultParameterValueAttribute__ctor, attrData, syntaxNodeOpt, diagnostics));
                         }
                     }
                 }

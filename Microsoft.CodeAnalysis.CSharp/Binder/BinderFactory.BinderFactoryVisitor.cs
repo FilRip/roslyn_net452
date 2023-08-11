@@ -78,9 +78,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            public override Binder DefaultVisit(SyntaxNode parent)
+            public override Binder DefaultVisit(SyntaxNode node)
             {
-                return VisitCore(parent.Parent);
+                return VisitCore(node.Parent);
             }
 
             // node, for which we are trying to find a binder is not supposed to be null
@@ -127,19 +127,19 @@ namespace Microsoft.CodeAnalysis.CSharp
             // This is used mainly by the method body binder.  During construction of the method symbol,
             // the contexts are built "by hand" rather than by this builder (see
             // MethodMemberBuilder.EnsureDeclarationBound).
-            public override Binder VisitMethodDeclaration(MethodDeclarationSyntax methodDecl)
+            public override Binder VisitMethodDeclaration(MethodDeclarationSyntax node)
             {
-                if (!LookupPosition.IsInMethodDeclaration(_position, methodDecl))
+                if (!LookupPosition.IsInMethodDeclaration(_position, node))
                 {
-                    return VisitCore(methodDecl.Parent);
+                    return VisitCore(node.Parent);
                 }
 
                 NodeUsage usage;
-                if (LookupPosition.IsInBody(_position, methodDecl))
+                if (LookupPosition.IsInBody(_position, node))
                 {
                     usage = NodeUsage.MethodBody;
                 }
-                else if (LookupPosition.IsInMethodTypeParameterScope(_position, methodDecl))
+                else if (LookupPosition.IsInMethodTypeParameterScope(_position, node))
                 {
                     usage = NodeUsage.MethodTypeParameters;
                 }
@@ -150,60 +150,60 @@ namespace Microsoft.CodeAnalysis.CSharp
                     usage = NodeUsage.Normal;
                 }
 
-                var key = CreateBinderCacheKey(methodDecl, usage);
+                var key = CreateBinderCacheKey(node, usage);
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
-                    if (methodDecl.Parent is TypeDeclarationSyntax parentType)
+                    if (node.Parent is TypeDeclarationSyntax parentType)
                     {
                         resultBinder = VisitTypeDeclarationCore(parentType, NodeUsage.NamedTypeBodyOrTypeParameters);
                     }
                     else
                     {
-                        resultBinder = VisitCore(methodDecl.Parent);
+                        resultBinder = VisitCore(node.Parent);
                     }
 
                     SourceMemberMethodSymbol method = null;
 
-                    if (usage != NodeUsage.Normal && methodDecl.TypeParameterList != null)
+                    if (usage != NodeUsage.Normal && node.TypeParameterList != null)
                     {
-                        method = GetMethodSymbol(methodDecl, resultBinder);
+                        method = GetMethodSymbol(node, resultBinder);
                         resultBinder = new WithMethodTypeParametersBinder(method, resultBinder);
                     }
 
                     if (usage == NodeUsage.MethodBody)
                     {
-                        method ??= GetMethodSymbol(methodDecl, resultBinder);
+                        method ??= GetMethodSymbol(node, resultBinder);
                         resultBinder = new InMethodBinder(method, resultBinder);
                     }
 
-                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(methodDecl.Modifiers);
+                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(node.Modifiers);
                     BinderCache.TryAdd(key, resultBinder);
                 }
 
                 return resultBinder;
             }
 
-            public override Binder VisitConstructorDeclaration(ConstructorDeclarationSyntax parent)
+            public override Binder VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
             {
                 // If the position isn't in the scope of the method, then proceed to the parent syntax node.
-                if (!LookupPosition.IsInMethodDeclaration(_position, parent))
+                if (!LookupPosition.IsInMethodDeclaration(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
-                bool inBodyOrInitializer = LookupPosition.IsInConstructorParameterScope(_position, parent);
+                bool inBodyOrInitializer = LookupPosition.IsInConstructorParameterScope(_position, node);
                 var extraInfo = inBodyOrInitializer ? NodeUsage.ConstructorBodyOrInitializer : NodeUsage.Normal;  // extra info for the cache.
-                var key = CreateBinderCacheKey(parent, extraInfo);
+                var key = CreateBinderCacheKey(node, extraInfo);
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
-                    resultBinder = VisitCore(parent.Parent);
+                    resultBinder = VisitCore(node.Parent);
 
                     // NOTE: Don't get the method symbol unless we're sure we need it.
                     if (inBodyOrInitializer)
                     {
-                        var method = GetMethodSymbol(parent, resultBinder);
+                        var method = GetMethodSymbol(node, resultBinder);
                         if (method is not null)
                         {
                             // Ctors cannot be generic
@@ -213,7 +213,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                     }
 
-                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
+                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(node.Modifiers);
 
                     BinderCache.TryAdd(key, resultBinder);
                 }
@@ -221,25 +221,25 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return resultBinder;
             }
 
-            public override Binder VisitDestructorDeclaration(DestructorDeclarationSyntax parent)
+            public override Binder VisitDestructorDeclaration(DestructorDeclarationSyntax node)
             {
                 // If the position isn't in the scope of the method, then proceed to the parent syntax node.
-                if (!LookupPosition.IsInMethodDeclaration(_position, parent))
+                if (!LookupPosition.IsInMethodDeclaration(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
-                var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
+                var key = CreateBinderCacheKey(node, usage: NodeUsage.Normal);
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
                     // Destructors have neither parameters nor type parameters, so there's nothing special to do here.
-                    resultBinder = VisitCore(parent.Parent);
+                    resultBinder = VisitCore(node.Parent);
 
-                    SourceMemberMethodSymbol method = GetMethodSymbol(parent, resultBinder);
+                    SourceMemberMethodSymbol method = GetMethodSymbol(node, resultBinder);
                     resultBinder = new InMethodBinder(method, resultBinder);
 
-                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
+                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(node.Modifiers);
 
                     BinderCache.TryAdd(key, resultBinder);
                 }
@@ -247,25 +247,25 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return resultBinder;
             }
 
-            public override Binder VisitAccessorDeclaration(AccessorDeclarationSyntax parent)
+            public override Binder VisitAccessorDeclaration(AccessorDeclarationSyntax node)
             {
                 // If the position isn't in the scope of the method, then proceed to the parent syntax node.
-                if (!LookupPosition.IsInMethodDeclaration(_position, parent))
+                if (!LookupPosition.IsInMethodDeclaration(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
-                bool inBody = LookupPosition.IsInBody(_position, parent);
+                bool inBody = LookupPosition.IsInBody(_position, node);
                 var extraInfo = inBody ? NodeUsage.AccessorBody : NodeUsage.Normal;  // extra info for the cache.
-                var key = CreateBinderCacheKey(parent, extraInfo);
+                var key = CreateBinderCacheKey(node, extraInfo);
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
-                    resultBinder = VisitCore(parent.Parent);
+                    resultBinder = VisitCore(node.Parent);
 
                     if (inBody)
                     {
-                        var propertyOrEventDecl = parent.Parent.Parent;
+                        var propertyOrEventDecl = node.Parent.Parent;
                         MethodSymbol accessor = null;
 
                         switch (propertyOrEventDecl.Kind())
@@ -276,7 +276,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     var propertySymbol = GetPropertySymbol((BasePropertyDeclarationSyntax)propertyOrEventDecl, resultBinder);
                                     if (propertySymbol is not null)
                                     {
-                                        accessor = (parent.Kind() == SyntaxKind.GetAccessorDeclaration) ? propertySymbol.GetMethod : propertySymbol.SetMethod;
+                                        accessor = (node.Kind() == SyntaxKind.GetAccessorDeclaration) ? propertySymbol.GetMethod : propertySymbol.SetMethod;
                                     }
                                     break;
                                 }
@@ -289,7 +289,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     var eventSymbol = GetEventSymbol((EventDeclarationSyntax)propertyOrEventDecl, resultBinder);
                                     if (eventSymbol is not null)
                                     {
-                                        accessor = (parent.Kind() == SyntaxKind.AddAccessorDeclaration) ? eventSymbol.AddMethod : eventSymbol.RemoveMethod;
+                                        accessor = (node.Kind() == SyntaxKind.AddAccessorDeclaration) ? eventSymbol.AddMethod : eventSymbol.RemoveMethod;
                                     }
                                     break;
                                 }
@@ -339,49 +339,49 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return resultBinder;
             }
 
-            public override Binder VisitOperatorDeclaration(OperatorDeclarationSyntax parent)
+            public override Binder VisitOperatorDeclaration(OperatorDeclarationSyntax node)
             {
-                return VisitOperatorOrConversionDeclaration(parent);
+                return VisitOperatorOrConversionDeclaration(node);
             }
 
-            public override Binder VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax parent)
+            public override Binder VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
             {
-                return VisitOperatorOrConversionDeclaration(parent);
+                return VisitOperatorOrConversionDeclaration(node);
             }
 
-            public override Binder VisitFieldDeclaration(FieldDeclarationSyntax parent)
+            public override Binder VisitFieldDeclaration(FieldDeclarationSyntax node)
             {
-                return VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
+                return VisitCore(node.Parent).WithUnsafeRegionIfNecessary(node.Modifiers);
             }
 
-            public override Binder VisitEventDeclaration(EventDeclarationSyntax parent)
+            public override Binder VisitEventDeclaration(EventDeclarationSyntax node)
             {
-                return VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
+                return VisitCore(node.Parent).WithUnsafeRegionIfNecessary(node.Modifiers);
             }
 
-            public override Binder VisitEventFieldDeclaration(EventFieldDeclarationSyntax parent)
+            public override Binder VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
             {
-                return VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
+                return VisitCore(node.Parent).WithUnsafeRegionIfNecessary(node.Modifiers);
             }
 
-            public override Binder VisitPropertyDeclaration(PropertyDeclarationSyntax parent)
+            public override Binder VisitPropertyDeclaration(PropertyDeclarationSyntax node)
             {
-                if (!LookupPosition.IsInBody(_position, parent))
+                if (!LookupPosition.IsInBody(_position, node))
                 {
-                    return VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
+                    return VisitCore(node.Parent).WithUnsafeRegionIfNecessary(node.Modifiers);
                 }
 
-                return VisitPropertyOrIndexerExpressionBody(parent);
+                return VisitPropertyOrIndexerExpressionBody(node);
             }
 
-            public override Binder VisitIndexerDeclaration(IndexerDeclarationSyntax parent)
+            public override Binder VisitIndexerDeclaration(IndexerDeclarationSyntax node)
             {
-                if (!LookupPosition.IsInBody(_position, parent))
+                if (!LookupPosition.IsInBody(_position, node))
                 {
-                    return VisitCore(parent.Parent).WithUnsafeRegionIfNecessary(parent.Modifiers);
+                    return VisitCore(node.Parent).WithUnsafeRegionIfNecessary(node.Modifiers);
                 }
 
-                return VisitPropertyOrIndexerExpressionBody(parent);
+                return VisitPropertyOrIndexerExpressionBody(node);
             }
 
             private Binder VisitPropertyOrIndexerExpressionBody(BasePropertyDeclarationSyntax parent)
@@ -530,7 +530,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             private Symbol GetMemberSymbol(string memberName, TextSpan memberSpan, NamedTypeSymbol container, SymbolKind kind)
             {
+#pragma warning disable S125 // Sections of code should not be commented out
                 // return container.GetMembers(methodSyntax.Identifier.ValueText).OfType<SourceMethodSymbol>().Single(m => m.Locations.Any(l => l.SourceTree == tree && methodSyntax.Span.Contains(l.SourceSpan)));
+#pragma warning restore S125 // Sections of code should not be commented out
                 foreach (Symbol sym in container.GetMembers(memberName))
                 {
                     if (sym.Kind != kind)
@@ -549,12 +551,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // not the implementation (method.Locations includes both parts). If the
                         // span is in fact in the implementation, return that method instead.
                         var implementation = ((MethodSymbol)sym).PartialImplementationPart;
-                        if (implementation is not null)
+                        if (implementation is not null && InSpan(implementation.Locations[0], this.SyntaxTree, memberSpan))
                         {
-                            if (InSpan(implementation.Locations[0], this.SyntaxTree, memberSpan))
-                            {
-                                return implementation;
-                            }
+                            return implementation;
                         }
                     }
                     else if (InSpan(sym.Locations, this.SyntaxTree, memberSpan))
@@ -579,40 +578,33 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </summary>
             private static bool InSpan(ImmutableArray<Location> locations, SyntaxTree syntaxTree, TextSpan span)
             {
-                foreach (var loc in locations)
-                {
-                    if (InSpan(loc, syntaxTree, span))
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return (locations.Any(loc => InSpan(loc, syntaxTree, span)));
             }
 
-            public override Binder VisitDelegateDeclaration(DelegateDeclarationSyntax parent)
+            public override Binder VisitDelegateDeclaration(DelegateDeclarationSyntax node)
             {
-                if (!LookupPosition.IsInDelegateDeclaration(_position, parent))
+                if (!LookupPosition.IsInDelegateDeclaration(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
-                var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
+                var key = CreateBinderCacheKey(node, usage: NodeUsage.Normal);
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
-                    Binder outer = VisitCore(parent.Parent); // a binder for the body of the enclosing type or namespace
-                    var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent);
+                    Binder outer = VisitCore(node.Parent); // a binder for the body of the enclosing type or namespace
+                    var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(node);
 
                     // NOTE: Members of the delegate type are in scope in the entire delegate declaration syntax.
                     // NOTE: Hence we can assume that we are in body of the delegate type and explicitly insert the InContainerBinder in the binder chain.
                     resultBinder = new InContainerBinder(container, outer);
 
-                    if (parent.TypeParameterList != null)
+                    if (node.TypeParameterList != null)
                     {
                         resultBinder = new WithClassTypeParametersBinder(container, resultBinder);
                     }
 
-                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
+                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(node.Modifiers);
 
                     BinderCache.TryAdd(key, resultBinder);
                 }
@@ -620,26 +612,26 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return resultBinder;
             }
 
-            public override Binder VisitEnumDeclaration(EnumDeclarationSyntax parent)
+            public override Binder VisitEnumDeclaration(EnumDeclarationSyntax node)
             {
                 // This method has nothing to contribute unless the position is actually inside the enum (i.e. not in the declaration part)
-                bool inBody = LookupPosition.IsBetweenTokens(_position, parent.OpenBraceToken, parent.CloseBraceToken) ||
-                    LookupPosition.IsInAttributeSpecification(_position, parent.AttributeLists);
+                bool inBody = LookupPosition.IsBetweenTokens(_position, node.OpenBraceToken, node.CloseBraceToken) ||
+                    LookupPosition.IsInAttributeSpecification(_position, node.AttributeLists);
                 if (!inBody)
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
-                var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
+                var key = CreateBinderCacheKey(node, usage: NodeUsage.Normal);
 
                 if (!BinderCache.TryGetValue(key, out Binder resultBinder))
                 {
-                    Binder outer = VisitCore(parent.Parent); // a binder for the body of the type enclosing this type
-                    var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent.Identifier.ValueText, 0, SyntaxKind.EnumDeclaration, parent);
+                    Binder outer = VisitCore(node.Parent); // a binder for the body of the type enclosing this type
+                    var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(node.Identifier.ValueText, 0, SyntaxKind.EnumDeclaration, node);
 
                     resultBinder = new InContainerBinder(container, outer);
 
-                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
+                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(node.Modifiers);
 
                     BinderCache.TryAdd(key, resultBinder);
                 }
@@ -741,20 +733,22 @@ namespace Microsoft.CodeAnalysis.CSharp
             public override Binder VisitRecordDeclaration(RecordDeclarationSyntax node)
                 => VisitTypeDeclarationCore(node);
 
-            public override Binder VisitNamespaceDeclaration(NamespaceDeclarationSyntax parent)
+            public override Binder VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
             {
-                if (!LookupPosition.IsInNamespaceDeclaration(_position, parent))
+                if (!LookupPosition.IsInNamespaceDeclaration(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
                 // test for position equality in case the open brace token is missing:
+#pragma warning disable S125 // Sections of code should not be commented out
                 // namespace X class C { }
-                bool inBody = LookupPosition.IsBetweenTokens(_position, parent.OpenBraceToken, parent.CloseBraceToken);
+#pragma warning restore S125 // Sections of code should not be commented out
+                bool inBody = LookupPosition.IsBetweenTokens(_position, node.OpenBraceToken, node.CloseBraceToken);
 
-                bool inUsing = IsInUsing(parent);
+                bool inUsing = IsInUsing(node);
 
-                return VisitNamespaceDeclaration(parent, _position, inBody, inUsing);
+                return VisitNamespaceDeclaration(node, _position, inBody, inUsing);
             }
 
             internal Binder VisitNamespaceDeclaration(NamespaceDeclarationSyntax parent, int position, bool inBody, bool inUsing)
@@ -823,18 +817,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     outer = AddInImportsBinders((SourceNamespaceSymbol)outer.Compilation.SourceModule.GetModuleNamespace(ns), namespaceDecl, outer, inUsing);
                 }
-                else
-                {
-                }
 
                 return new InContainerBinder(ns, outer);
             }
 
-            public override Binder VisitCompilationUnit(CompilationUnitSyntax parent)
+            public override Binder VisitCompilationUnit(CompilationUnitSyntax node)
             {
                 return VisitCompilationUnit(
-                    parent,
-                    inUsing: IsInUsing(parent),
+                    node,
+                    inUsing: IsInUsing(node),
                     inScript: InScript);
             }
 
@@ -995,44 +986,44 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            public override Binder VisitDocumentationCommentTrivia(DocumentationCommentTriviaSyntax parent)
+            public override Binder VisitDocumentationCommentTrivia(DocumentationCommentTriviaSyntax node)
             {
                 // Need to step across the structured trivia boundary explicitly - can't just follow Parent references.
-                return VisitCore(parent.ParentTrivia.Token.Parent);
+                return VisitCore(node.ParentTrivia.Token.Parent);
             }
 
             /// <remarks>
             /// Used to detect whether we are in a cref parameter type.
             /// </remarks>
-            public override Binder VisitCrefParameter(CrefParameterSyntax parent)
+            public override Binder VisitCrefParameter(CrefParameterSyntax node)
             {
-                XmlCrefAttributeSyntax containingAttribute = parent.FirstAncestorOrSelf<XmlCrefAttributeSyntax>(ascendOutOfTrivia: false);
+                XmlCrefAttributeSyntax containingAttribute = node.FirstAncestorOrSelf<XmlCrefAttributeSyntax>(ascendOutOfTrivia: false);
                 return VisitXmlCrefAttributeInternal(containingAttribute, NodeUsage.CrefParameterOrReturnType);
             }
 
             /// <remarks>
             /// Used to detect whether we are in a cref return type.
             /// </remarks>
-            public override Binder VisitConversionOperatorMemberCref(ConversionOperatorMemberCrefSyntax parent)
+            public override Binder VisitConversionOperatorMemberCref(ConversionOperatorMemberCrefSyntax node)
             {
-                if (parent.Type.Span.Contains(_position))
+                if (node.Type.Span.Contains(_position))
                 {
-                    XmlCrefAttributeSyntax containingAttribute = parent.FirstAncestorOrSelf<XmlCrefAttributeSyntax>(ascendOutOfTrivia: false);
+                    XmlCrefAttributeSyntax containingAttribute = node.FirstAncestorOrSelf<XmlCrefAttributeSyntax>(ascendOutOfTrivia: false);
                     return VisitXmlCrefAttributeInternal(containingAttribute, NodeUsage.CrefParameterOrReturnType);
                 }
 
-                return base.VisitConversionOperatorMemberCref(parent);
+                return base.VisitConversionOperatorMemberCref(node);
             }
 
-            public override Binder VisitXmlCrefAttribute(XmlCrefAttributeSyntax parent)
+            public override Binder VisitXmlCrefAttribute(XmlCrefAttributeSyntax node)
             {
-                if (!LookupPosition.IsInXmlAttributeValue(_position, parent))
+                if (!LookupPosition.IsInXmlAttributeValue(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
                 var extraInfo = NodeUsage.Normal;  // extra info for the cache.
-                return VisitXmlCrefAttributeInternal(parent, extraInfo);
+                return VisitXmlCrefAttributeInternal(node, extraInfo);
             }
 
             private Binder VisitXmlCrefAttributeInternal(XmlCrefAttributeSyntax parent, NodeUsage extraInfo)
@@ -1056,14 +1047,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return result;
             }
 
-            public override Binder VisitXmlNameAttribute(XmlNameAttributeSyntax parent)
+            public override Binder VisitXmlNameAttribute(XmlNameAttributeSyntax node)
             {
-                if (!LookupPosition.IsInXmlAttributeValue(_position, parent))
+                if (!LookupPosition.IsInXmlAttributeValue(_position, node))
                 {
-                    return VisitCore(parent.Parent);
+                    return VisitCore(node.Parent);
                 }
 
-                XmlNameAttributeElementKind elementKind = parent.GetElementKind();
+                XmlNameAttributeElementKind elementKind = node.GetElementKind();
                 var extraInfo = elementKind switch
                 {
                     XmlNameAttributeElementKind.Parameter or XmlNameAttributeElementKind.ParameterReference => NodeUsage.DocumentationCommentParameter,
@@ -1075,13 +1066,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Cleverness: rather than using this node as the key, we're going to use the
                 // enclosing doc comment, because all name attributes with the same element
                 // kind, in the same doc comment can share the same binder.
-                var key = CreateBinderCacheKey(GetEnclosingDocumentationComment(parent), extraInfo);
+                var key = CreateBinderCacheKey(GetEnclosingDocumentationComment(node), extraInfo);
 
                 if (!BinderCache.TryGetValue(key, out Binder result))
                 {
                     result = this.BuckStopsHereBinder;
 
-                    Binder outerBinder = VisitCore(GetEnclosingDocumentationComment(parent));
+                    Binder outerBinder = VisitCore(GetEnclosingDocumentationComment(node));
                     if (outerBinder != null)
                     {
                         // The rest of the doc comment is going to report something for containing symbol -
@@ -1089,7 +1080,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         result = result.WithContainingMemberOrLambda(outerBinder.ContainingMemberOrLambda);
                     }
 
-                    MemberDeclarationSyntax memberSyntax = GetAssociatedMemberForXmlSyntax(parent);
+                    MemberDeclarationSyntax memberSyntax = GetAssociatedMemberForXmlSyntax(node);
                     if (memberSyntax != null)
                     {
                         switch (elementKind)
@@ -1132,8 +1123,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     SourceNamedTypeSymbol recordType = ((NamespaceOrTypeSymbol)outerBinder.ContainingMemberOrLambda).GetSourceTypeMember((TypeDeclarationSyntax)memberSyntax);
                     var primaryConstructor = recordType.GetMembersUnordered().OfType<SynthesizedRecordConstructor>().SingleOrDefault();
 
-                    if (primaryConstructor.SyntaxRef.SyntaxTree == memberSyntax.SyntaxTree &&
-                        primaryConstructor.GetSyntax() == memberSyntax)
+                    if (primaryConstructor?.SyntaxRef?.SyntaxTree == memberSyntax.SyntaxTree &&
+                        primaryConstructor?.GetSyntax() == memberSyntax)
                     {
                         return new WithParametersBinder(primaryConstructor.Parameters, nextBinder);
                     }
@@ -1304,6 +1295,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             CSharpSyntaxNode curr = xmlSyntax;
             for (; !SyntaxFacts.IsDocumentationCommentTrivia(curr.Kind()); curr = curr.Parent)
             {
+                /* Nothing to do */
             }
 
             return (DocumentationCommentTriviaSyntax)curr;

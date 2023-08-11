@@ -4662,11 +4662,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                                                                                                                           arguments, Me,
                                                                                                                                           useSiteInfo)
 
-                If diagnostics.Add(node, useSiteInfo) Then
-                    If methodGroup.ResultKind <> LookupResultKind.Inaccessible Then
-                        ' Suppress additional diagnostics
-                        diagnostics = BindingDiagnosticBag.Discarded
-                    End If
+                If diagnostics.Add(node, useSiteInfo) AndAlso methodGroup.ResultKind <> LookupResultKind.Inaccessible Then
+                    ' Suppress additional diagnostics
+                    diagnostics = BindingDiagnosticBag.Discarded
                 End If
 
                 If Not results.BestResult.HasValue Then

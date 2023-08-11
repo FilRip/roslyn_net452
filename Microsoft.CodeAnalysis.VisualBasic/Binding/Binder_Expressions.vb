@@ -1229,12 +1229,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
            diagnostics As BindingDiagnosticBag
         ) As BoundExpression
 
-            If expr.Kind = BoundKind.Parenthesized Then
-                If Not expr.IsNothingLiteral() Then
-                    Dim parenthesized = DirectCast(expr, BoundParenthesized)
-                    Dim enclosed As BoundExpression = MakeValue(parenthesized.Expression, diagnostics)
-                    Return parenthesized.Update(enclosed, enclosed.Type)
-                End If
+            If expr.Kind = BoundKind.Parenthesized AndAlso Not expr.IsNothingLiteral() Then
+                Dim parenthesized = DirectCast(expr, BoundParenthesized)
+                Dim enclosed As BoundExpression = MakeValue(parenthesized.Expression, diagnostics)
+                Return parenthesized.Update(enclosed, enclosed.Type)
             End If
 
             expr = ReclassifyAsValue(expr, diagnostics)

@@ -371,7 +371,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // We are in a context where only instance (or only static) methods are permitted. We reject the others.
-            bool keepStatic = isImplicitReceiver && isStaticContext || Binder.IsMemberAccessedThroughType(receiverOpt);
+            bool keepStatic = isImplicitReceiver || Binder.IsMemberAccessedThroughType(receiverOpt);
 
             RemoveStaticInstanceMismatches(results, keepStatic);
         }
@@ -482,38 +482,43 @@ namespace Microsoft.CodeAnalysis.CSharp
                         switch (unmanagedCallingConventionTypes.Count)
                         {
                             case 0:
-                                actualCallKind = Cci.CallingConvention.Unmanaged;
+                                actualCallKind = CallingConvention.Unmanaged;
                                 actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
                                 break;
                             case 1:
                                 switch (unmanagedCallingConventionTypes.Single().Name)
                                 {
                                     case "CallConvCdecl":
-                                        actualCallKind = Cci.CallingConvention.CDecl;
+                                        actualCallKind = CallingConvention.CDecl;
                                         actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
                                         break;
                                     case "CallConvStdcall":
-                                        actualCallKind = Cci.CallingConvention.Standard;
+                                        actualCallKind = CallingConvention.Standard;
                                         actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
                                         break;
                                     case "CallConvThiscall":
-                                        actualCallKind = Cci.CallingConvention.ThisCall;
+                                        actualCallKind = CallingConvention.ThisCall;
                                         actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
                                         break;
                                     case "CallConvFastcall":
-                                        actualCallKind = Cci.CallingConvention.FastCall;
+                                        actualCallKind = CallingConvention.FastCall;
                                         actualUnmanagedCallingConventionTypes = ImmutableHashSet<INamedTypeSymbolInternal>.Empty;
                                         break;
                                     default:
-                                        goto outerDefault;
+                                        DefaultCase();
+                                        break;
                                 }
                                 break;
 
                             default:
-                            outerDefault:
-                                actualCallKind = Cci.CallingConvention.Unmanaged;
-                                actualUnmanagedCallingConventionTypes = unmanagedCallingConventionTypes;
+                                DefaultCase();
                                 break;
+                        }
+
+                        void DefaultCase()
+                        {
+                            actualCallKind = CallingConvention.Unmanaged;
+                            actualUnmanagedCallingConventionTypes = unmanagedCallingConventionTypes;
                         }
                     }
 
@@ -529,7 +534,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         continue;
                     }
 
-                    if (expectedConvention.CallKind.IsCallingConvention(Cci.CallingConvention.Unmanaged))
+                    if (expectedConvention.CallKind.IsCallingConvention(CallingConvention.Unmanaged))
                     {
 #nullable restore
                         if (expectedConvention.UnmanagedCallingConventionTypes.Count != actualUnmanagedCallingConventionTypes.Count)
@@ -695,15 +700,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             var normalResult = IsConstructorApplicableInNormalForm(constructor, arguments, completeResults, ref useSiteInfo);
             var result = normalResult;
-            if (!normalResult.IsValid)
+            if (!normalResult.IsValid && IsValidParams(constructor))
             {
-                if (IsValidParams(constructor))
+                var expandedResult = IsConstructorApplicableInExpandedForm(constructor, arguments, completeResults, ref useSiteInfo);
+                if (expandedResult.IsValid || completeResults)
                 {
-                    var expandedResult = IsConstructorApplicableInExpandedForm(constructor, arguments, completeResults, ref useSiteInfo);
-                    if (expandedResult.IsValid || completeResults)
-                    {
-                        result = expandedResult;
-                    }
+                    result = expandedResult;
                 }
             }
 
@@ -1297,6 +1299,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static void RemoveAllInterfaceMembers<TMember>(ArrayBuilder<MemberResolutionResult<TMember>> results)
             where TMember : Symbol
         {
+#pragma warning disable S125 // Sections of code should not be commented out
             // Consider the following case:
             // 
             // interface IGoo { string ToString(); }
@@ -1327,6 +1330,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Then the candidate set contains a method ToString which comes from a class type other
             // than object. The interface method should be eliminated and M should call virtual
             // method C.ToString().
+#pragma warning restore S125 // Sections of code should not be commented out
 
             bool anyClassOtherThanObject = false;
             for (int f = 0; f < results.Count; f++)
@@ -1393,8 +1397,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             // method cannot be identified, the method invocation is ambiguous, and a binding-time
             // error occurs. 
             RemoveWorseMembers(results, arguments, ref useSiteInfo);
-
-            return;
         }
 
         private static void ReportUseSiteInfo<TMember>(ArrayBuilder<MemberResolutionResult<TMember>> results, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
@@ -1482,7 +1484,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // 3 is neither better than nor worse than 1
             //
             // It is tempting to say that overload 3 is the winner because it is the one method
-            // that beats something, and is beaten by nothing. But that would be incorrect;
+            // that beats something, and is beaten by nothing. But that would be incorrect
             // method 3 needs to beat all other methods, including method 1.
             //
             // We work up a full analysis of every member of the set. If it is worse than anything
@@ -1578,9 +1580,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // Mark those candidates, that are worse than the single notBest candidate, as Worst in order to improve error reporting.
                         results[i] = BetterResult.Left == BetterFunctionMember(results[notBestIdx], results[i], arguments.Arguments, ref useSiteInfo)
                             ? results[i].Worst() : results[i].Worse();
-                    }
-                    else
-                    {
                     }
                 }
 
@@ -2453,38 +2452,42 @@ namespace Microsoft.CodeAnalysis.CSharp
                             }
                             else
                             {
-                                goto default;
+                                if (DefaultCase(ref useSiteInfo))
+                                    return true;
                             }
 
                             break;
 
                         default:
-                            var returnStatements = ArrayBuilder<BoundReturnStatement>.GetInstance();
-                            var walker = new ReturnStatements(returnStatements);
-
-                            walker.Visit(lambda.Body);
-
-                            bool result = false;
-                            foreach (BoundReturnStatement r in returnStatements)
-                            {
-                                if (r.ExpressionOpt == null || !ExpressionMatchExactly(r.ExpressionOpt, y, ref useSiteInfo))
-                                {
-                                    result = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    result = true;
-                                }
-                            }
-
-                            returnStatements.Free();
-
-                            if (result)
-                            {
+                            if (DefaultCase(ref useSiteInfo))
                                 return true;
-                            }
                             break;
+                    }
+
+                    bool DefaultCase(ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
+                    {
+                        var returnStatements = ArrayBuilder<BoundReturnStatement>.GetInstance();
+                        var walker = new ReturnStatements(returnStatements);
+
+                        walker.Visit(lambda.Body);
+
+                        bool result = false;
+                        foreach (BoundExpression expr in returnStatements.Select(r => r.ExpressionOpt))
+                        {
+                            if (expr == null || !ExpressionMatchExactly(expr, y, ref useSiteInfo))
+                            {
+                                result = false;
+                                break;
+                            }
+                            else
+                            {
+                                result = true;
+                            }
+                        }
+
+                        returnStatements.Free();
+
+                        return result;
                     }
                 }
             }
@@ -2523,7 +2526,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return true;
         }
 
-        private class ReturnStatements : BoundTreeWalker
+        private sealed class ReturnStatements : BoundTreeWalker
         {
             private readonly ArrayBuilder<BoundReturnStatement> _returns;
 
@@ -2562,14 +2565,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private const int BetterConversionTargetRecursionLimit = 100;
 
-        /*private BetterResult BetterConversionTarget(
-            TypeSymbol type1,
-            TypeSymbol type2,
-            ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
-        {
-            return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out bool _, BetterConversionTargetRecursionLimit);
-        }*/
-
         private BetterResult BetterConversionTargetCore(
             TypeSymbol type1,
             TypeSymbol type2,
@@ -2582,18 +2577,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return BetterConversionTargetCore(null, type1, default, type2, default, ref useSiteInfo, out bool _, betterConversionTargetRecursionLimit - 1);
-        }
-
-        private BetterResult BetterConversionTarget(
-            BoundExpression node,
-            TypeSymbol type1,
-            Conversion conv1,
-            TypeSymbol type2,
-            Conversion conv2,
-            ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
-            out bool okToDowngradeToNeither)
-        {
-            return BetterConversionTargetCore(node, type1, conv1, type2, conv2, ref useSiteInfo, out okToDowngradeToNeither, BetterConversionTargetRecursionLimit);
         }
 
         private BetterResult BetterConversionTargetCore(
@@ -2754,6 +2737,18 @@ namespace Microsoft.CodeAnalysis.CSharp
             return BetterResult.Neither;
         }
 
+        private BetterResult BetterConversionTarget(
+            BoundExpression node,
+            TypeSymbol type1,
+            Conversion conv1,
+            TypeSymbol type2,
+            Conversion conv2,
+            ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
+            out bool okToDowngradeToNeither)
+        {
+            return BetterConversionTargetCore(node, type1, conv1, type2, conv2, ref useSiteInfo, out okToDowngradeToNeither, BetterConversionTargetRecursionLimit);
+        }
+
         private bool IsMethodGroupConversionIncompatibleWithDelegate(/*BoundMethodGroup node, */NamedTypeSymbol delegateType, Conversion conv)
         {
             if (conv.IsMethodGroup)
@@ -2765,7 +2760,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             return false;
         }
 
+#pragma warning disable S1172 // Unused method parameters should be removed
         private bool CanDowngradeConversionFromLambdaToNeither(BetterResult currentResult, UnboundLambda lambda, TypeSymbol type1, TypeSymbol type2, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, bool fromTypeAnalysis)
+#pragma warning restore S1172 // Unused method parameters should be removed
         {
             // DELIBERATE SPEC VIOLATION: See bug 11961.
             // The native compiler uses one algorithm for determining betterness of lambdas and another one
@@ -3115,7 +3112,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case ArgumentAnalysisResultKind.RequiredParameterMissing:
                     case ArgumentAnalysisResultKind.NoCorrespondingParameter:
                     case ArgumentAnalysisResultKind.DuplicateNamedArgument:
-                        if (!completeResults) goto default;
+                        if (!completeResults)
+                            return new MemberResolutionResult<TMember>(member, leastOverriddenMember, MemberAnalysisResult.ArgumentParameterMismatch(argumentAnalysis));
                         // When we are producing more complete results, and we have the wrong number of arguments, we push on
                         // through type inference so that lambda arguments can be bound to their delegate-typed parameters,
                         // thus improving the API and intellisense experience.
@@ -3308,6 +3306,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     //   and the parameter list of F is applicable with respect to A (§7.5.3.1).
                     //
                     // This rule is a bit complicated; let's take a look at an example. Suppose we have
+#pragma warning disable S125 // Sections of code should not be commented out
                     // class X<U> where U : struct {}
                     // ...
                     // void M<T>(T t, X<T> xt) where T : struct {}
@@ -3329,6 +3328,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // and a call M("") then type inference still works out that T is string, and
                     // the generic method still needs to be discarded, even though type inference
                     // never saw the second formal parameter.
+#pragma warning restore S125 // Sections of code should not be commented out
 
                     var parameterTypes = leastOverriddenMember.GetParameterTypes();
                     for (int i = 0; i < parameterTypes.Length; i++)
@@ -3370,55 +3370,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 completeResults: completeResults,
                 useSiteInfo: ref useSiteInfo);
             return new MemberResolutionResult<TMember>(member, leastOverriddenMember, applicableResult);
-        }
-
-        private ImmutableArray<TypeWithAnnotations> InferMethodTypeArguments(
-            MethodSymbol method,
-            ImmutableArray<TypeParameterSymbol> originalTypeParameters,
-            AnalyzedArguments arguments,
-            EffectiveParameters originalEffectiveParameters,
-            out MemberAnalysisResult error,
-            ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
-        {
-            var args = arguments.Arguments.ToImmutable();
-
-            // The reason why we pass the type parameters and formal parameter types
-            // from the original definition, not the method as it exists as a member of 
-            // a possibly constructed generic type, is exceedingly subtle. See the comments
-            // in "Infer" for details.
-
-            var inferenceResult = MethodTypeInferrer.Infer(
-                _binder,
-                _binder.Conversions,
-                originalTypeParameters,
-                method.ContainingType,
-                originalEffectiveParameters.ParameterTypes,
-                originalEffectiveParameters.ParameterRefKinds,
-                args,
-                ref useSiteInfo);
-
-            if (inferenceResult.Success)
-            {
-                error = default;
-                return inferenceResult.InferredTypeArguments;
-            }
-
-            if (arguments.IsExtensionMethodInvocation)
-            {
-                var inferredFromFirstArgument = MethodTypeInferrer.InferTypeArgumentsFromFirstArgument(
-                    _binder.Conversions,
-                    method,
-                    args,
-                    useSiteInfo: ref useSiteInfo);
-                if (inferredFromFirstArgument.IsDefault)
-                {
-                    error = MemberAnalysisResult.TypeInferenceExtensionInstanceArgumentFailed();
-                    return default;
-                }
-            }
-
-            error = MemberAnalysisResult.TypeInferenceFailed();
-            return default;
         }
 
         private MemberAnalysisResult IsApplicable(
@@ -3484,15 +3435,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                     RefKind parameterRefKind = parameters.ParameterRefKinds.IsDefault ? RefKind.None : parameters.ParameterRefKinds[argumentPosition];
                     bool forExtensionMethodThisArg = arguments.IsExtensionMethodThisArgument(argumentPosition);
 
-                    if (forExtensionMethodThisArg)
+                    if (forExtensionMethodThisArg && parameterRefKind == RefKind.Ref)
                     {
-                        if (parameterRefKind == RefKind.Ref)
-                        {
-                            // For ref extension methods, we omit the "ref" modifier on the receiver arguments
-                            // Passing the parameter RefKind for finding the correct conversion.
-                            // For ref-readonly extension methods, argumentRefKind is always None.
-                            argumentRefKind = parameterRefKind;
-                        }
+                        // For ref extension methods, we omit the "ref" modifier on the receiver arguments
+                        // Passing the parameter RefKind for finding the correct conversion.
+                        // For ref-readonly extension methods, argumentRefKind is always None.
+                        argumentRefKind = parameterRefKind;
                     }
 
                     conversion = CheckArgumentForApplicability(
@@ -3552,6 +3500,55 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             return result;
+        }
+
+        private ImmutableArray<TypeWithAnnotations> InferMethodTypeArguments(
+            MethodSymbol method,
+            ImmutableArray<TypeParameterSymbol> originalTypeParameters,
+            AnalyzedArguments arguments,
+            EffectiveParameters originalEffectiveParameters,
+            out MemberAnalysisResult error,
+            ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo)
+        {
+            var args = arguments.Arguments.ToImmutable();
+
+            // The reason why we pass the type parameters and formal parameter types
+            // from the original definition, not the method as it exists as a member of 
+            // a possibly constructed generic type, is exceedingly subtle. See the comments
+            // in "Infer" for details.
+
+            var inferenceResult = MethodTypeInferrer.Infer(
+                _binder,
+                _binder.Conversions,
+                originalTypeParameters,
+                method.ContainingType,
+                originalEffectiveParameters.ParameterTypes,
+                originalEffectiveParameters.ParameterRefKinds,
+                args,
+                ref useSiteInfo);
+
+            if (inferenceResult.Success)
+            {
+                error = default;
+                return inferenceResult.InferredTypeArguments;
+            }
+
+            if (arguments.IsExtensionMethodInvocation)
+            {
+                var inferredFromFirstArgument = MethodTypeInferrer.InferTypeArgumentsFromFirstArgument(
+                    _binder.Conversions,
+                    method,
+                    args,
+                    useSiteInfo: ref useSiteInfo);
+                if (inferredFromFirstArgument.IsDefault)
+                {
+                    error = MemberAnalysisResult.TypeInferenceExtensionInstanceArgumentFailed();
+                    return default;
+                }
+            }
+
+            error = MemberAnalysisResult.TypeInferenceFailed();
+            return default;
         }
 
         private Conversion CheckArgumentForApplicability(

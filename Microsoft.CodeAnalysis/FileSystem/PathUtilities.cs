@@ -310,12 +310,9 @@ namespace Roslyn.Utilities
                     return PathKind.RelativeToCurrentDirectory;
                 }
 
-                if (path[1] == '.')
+                if (path[1] == '.' && path.Length == 2 || IsDirectorySeparator(path[2]))
                 {
-                    if (path.Length == 2 || IsDirectorySeparator(path[2]))
-                    {
-                        return PathKind.RelativeToCurrentParent;
-                    }
+                    return PathKind.RelativeToCurrentParent;
                 }
             }
 

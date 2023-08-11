@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 {
     public struct BinaryOperatorSignature : IEquatable<BinaryOperatorSignature>
     {
-        public static BinaryOperatorSignature Error = default;
+        public static BinaryOperatorSignature Error { get; set; } = default;
 
         public readonly TypeSymbol LeftType;
         public readonly TypeSymbol RightType;
@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// operators. If two operators are both applicable and both have a non-null Priority,
         /// the one with the numerically lower Priority value is preferred.
         /// </summary>
-        public int? Priority;
+        public int? Priority { get; set; }
 
         public BinaryOperatorSignature(BinaryOperatorKind kind, TypeSymbol leftType, TypeSymbol rightType, TypeSymbol returnType, MethodSymbol method = null)
         {
@@ -54,6 +54,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 this.Method == other.Method;
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is BinaryOperatorSignature signature && Equals(signature);
+        }
+
         public static bool operator ==(BinaryOperatorSignature x, BinaryOperatorSignature y)
         {
             return x.Equals(y);
@@ -62,11 +67,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static bool operator !=(BinaryOperatorSignature x, BinaryOperatorSignature y)
         {
             return !x.Equals(y);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is BinaryOperatorSignature signature && Equals(signature);
         }
 
         public override int GetHashCode()
@@ -81,14 +81,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (Method is not null)
+                if (Method is not null && !Method.ParameterRefKinds.IsDefaultOrEmpty)
                 {
-
-                    if (!Method.ParameterRefKinds.IsDefaultOrEmpty)
-                    {
-
-                        return Method.ParameterRefKinds[0];
-                    }
+                    return Method.ParameterRefKinds[0];
                 }
 
                 return RefKind.None;
@@ -99,14 +94,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                if (Method is not null)
+                if (Method is not null && !Method.ParameterRefKinds.IsDefaultOrEmpty)
                 {
-
-                    if (!Method.ParameterRefKinds.IsDefaultOrEmpty)
-                    {
-
-                        return Method.ParameterRefKinds[1];
-                    }
+                    return Method.ParameterRefKinds[1];
                 }
 
                 return RefKind.None;

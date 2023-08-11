@@ -382,13 +382,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     foreach (var tree in compilation.SyntaxTrees)
                     {
                         // Check if diagnostic is enabled by SyntaxTree.DiagnosticOptions or Bulk configuration from AnalyzerConfigOptions.
-                        if (treeOptions.TryGetDiagnosticValue(tree, descriptor.Id, cancellationToken, out var configuredValue) ||
-                            analyzerOptions.TryGetSeverityFromBulkConfiguration(tree, compilation, descriptor, cancellationToken, out configuredValue))
+                        if ((treeOptions.TryGetDiagnosticValue(tree, descriptor.Id, cancellationToken, out var configuredValue) ||
+                            analyzerOptions.TryGetSeverityFromBulkConfiguration(tree, compilation, descriptor, cancellationToken, out configuredValue)) &&
+                            (configuredValue != ReportDiagnostic.Suppress && !severityFilter.Contains(configuredValue)))
                         {
-                            if (configuredValue != ReportDiagnostic.Suppress && !severityFilter.Contains(configuredValue))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }

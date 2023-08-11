@@ -199,13 +199,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     return false;
                 }
             }
-            else if (diagnostic.Location is ExternalFileLocation externalFileLocation)
+            else if ((diagnostic.Location is ExternalFileLocation externalFileLocation) &&
+                (FilterFileOpt.Value.AdditionalFile == null ||
+                !PathUtilities.Comparer.Equals(externalFileLocation.FilePath, FilterFileOpt.Value.AdditionalFile.Path)))
             {
-                if (FilterFileOpt.Value.AdditionalFile == null ||
-                    !PathUtilities.Comparer.Equals(externalFileLocation.FilePath, FilterFileOpt.Value.AdditionalFile.Path))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return ShouldInclude(diagnostic.Location.SourceSpan);

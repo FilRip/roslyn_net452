@@ -27,12 +27,10 @@ namespace Microsoft.Cci
             }
             RoslynDebug.Assert(x is object && y is object);
 
-            if (x.GetContainingType(_metadataWriter.Context) != y.GetContainingType(_metadataWriter.Context))
+            if (x.GetContainingType(_metadataWriter.Context) != y.GetContainingType(_metadataWriter.Context) &&
+                _metadataWriter.GetMemberReferenceParent(x) != _metadataWriter.GetMemberReferenceParent(y))
             {
-                if (_metadataWriter.GetMemberReferenceParent(x) != _metadataWriter.GetMemberReferenceParent(y))
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (x.Name != y.Name)

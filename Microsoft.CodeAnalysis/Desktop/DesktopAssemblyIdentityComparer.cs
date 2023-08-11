@@ -254,31 +254,27 @@ namespace Microsoft.CodeAnalysis
             {
                 if (identity.PublicKeyToken.SequenceEqual(s_SILVERLIGHT_PLATFORM_PUBLICKEY_STR_L))
                 {
-                    if (!policy.SuppressSilverlightPlatformAssembliesPortability)
+                    if (!policy.SuppressSilverlightPlatformAssembliesPortability &&
+                        (SimpleNameComparer.Equals(identity.Name, "System") ||
+                        SimpleNameComparer.Equals(identity.Name, "System.Core")))
                     {
-                        if (SimpleNameComparer.Equals(identity.Name, "System") ||
-                            SimpleNameComparer.Equals(identity.Name, "System.Core"))
-                        {
-                            newVersion = (Version)s_VER_ASSEMBLYVERSION_STR_L;
-                            newPublicKeyToken = s_ECMA_PUBLICKEY_STR_L;
-                        }
+                        newVersion = (Version)s_VER_ASSEMBLYVERSION_STR_L;
+                        newPublicKeyToken = s_ECMA_PUBLICKEY_STR_L;
                     }
                 }
-                else if (identity.PublicKeyToken.SequenceEqual(s_SILVERLIGHT_PUBLICKEY_STR_L))
+                else if (identity.PublicKeyToken.SequenceEqual(s_SILVERLIGHT_PUBLICKEY_STR_L) &&
+                    !policy.SuppressSilverlightLibraryAssembliesPortability)
                 {
-                    if (!policy.SuppressSilverlightLibraryAssembliesPortability)
+                    if (SimpleNameComparer.Equals(identity.Name, "Microsoft.VisualBasic"))
                     {
-                        if (SimpleNameComparer.Equals(identity.Name, "Microsoft.VisualBasic"))
-                        {
-                            newVersion = new Version(10, 0, 0, 0);
-                            newPublicKeyToken = s_MICROSOFT_PUBLICKEY_STR_L;
-                        }
+                        newVersion = new Version(10, 0, 0, 0);
+                        newPublicKeyToken = s_MICROSOFT_PUBLICKEY_STR_L;
+                    }
 
-                        if (SimpleNameComparer.Equals(identity.Name, "System.ComponentModel.Composition"))
-                        {
-                            newVersion = (Version)s_VER_ASSEMBLYVERSION_STR_L;
-                            newPublicKeyToken = s_ECMA_PUBLICKEY_STR_L;
-                        }
+                    if (SimpleNameComparer.Equals(identity.Name, "System.ComponentModel.Composition"))
+                    {
+                        newVersion = (Version)s_VER_ASSEMBLYVERSION_STR_L;
+                        newPublicKeyToken = s_ECMA_PUBLICKEY_STR_L;
                     }
                 }
             }

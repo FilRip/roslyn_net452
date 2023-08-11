@@ -115,12 +115,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Debug.Assert(argument.IsNothingLiteral() OrElse (sourceType IsNot Nothing AndAlso Not sourceType.IsErrorType()))
 
             ' Check for special error conditions
-            If Conversions.NoConversion(conv) Then
-                If sourceType.IsValueType AndAlso sourceType.IsRestrictedType() AndAlso
+            If Conversions.NoConversion(conv) AndAlso sourceType?.IsValueType AndAlso sourceType.IsRestrictedType() AndAlso
                        (targetType.IsObjectType() OrElse targetType.SpecialType = SpecialType.System_ValueType) Then
-                    ReportDiagnostic(diagnostics, argument.Syntax, ERRID.ERR_RestrictedConversion1, sourceType)
-                    Return New BoundDirectCast(node, argument, conv, targetType, hasErrors:=True)
-                End If
+                ReportDiagnostic(diagnostics, argument.Syntax, ERRID.ERR_RestrictedConversion1, sourceType)
+                Return New BoundDirectCast(node, argument, conv, targetType, hasErrors:=True)
             End If
 
             WarnOnNarrowingConversionBetweenSealedClassAndAnInterface(conv, argument.Syntax, sourceType, targetType, diagnostics)

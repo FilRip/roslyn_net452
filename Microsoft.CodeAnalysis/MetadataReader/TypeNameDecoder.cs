@@ -135,15 +135,12 @@ namespace Microsoft.CodeAnalysis
 
                 // the assembly name has to be a full name:
                 referencedAssemblyIndex = GetIndexOfReferencedAssembly(identity);
-                if (referencedAssemblyIndex == -1)
+                if (referencedAssemblyIndex == -1 && !this.IsContainingAssembly(identity))
                 {
                     // In rare cases (e.g. assemblies emitted by Reflection.Emit) the identity 
                     // might be the identity of the containing assembly. The metadata spec doesn't disallow this.
-                    if (!this.IsContainingAssembly(identity))
-                    {
-                        refersToNoPiaLocalType = false;
-                        return GetUnsupportedMetadataTypeSymbol();
-                    }
+                    refersToNoPiaLocalType = false;
+                    return GetUnsupportedMetadataTypeSymbol();
                 }
             }
             else

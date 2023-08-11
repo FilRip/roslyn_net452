@@ -716,6 +716,15 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
+        /// Determines whether the supplied <see cref="SyntaxNodeOrToken"/> is equal to this
+        /// <see cref="SyntaxNodeOrToken"/>.
+        /// </summary>
+        public override bool Equals(object? obj)
+        {
+            return obj is SyntaxNodeOrToken token && Equals(token);
+        }
+
+        /// <summary>
         /// Determines whether two <see cref="SyntaxNodeOrToken"/>s are equal.
         /// </summary>
         public static bool operator ==(SyntaxNodeOrToken left, SyntaxNodeOrToken right)
@@ -729,15 +738,6 @@ namespace Microsoft.CodeAnalysis
         public static bool operator !=(SyntaxNodeOrToken left, SyntaxNodeOrToken right)
         {
             return !left.Equals(right);
-        }
-
-        /// <summary>
-        /// Determines whether the supplied <see cref="SyntaxNodeOrToken"/> is equal to this
-        /// <see cref="SyntaxNodeOrToken"/>.
-        /// </summary>
-        public override bool Equals(object? obj)
-        {
-            return obj is SyntaxNodeOrToken token && Equals(token);
         }
 
         /// <summary>
@@ -876,6 +876,18 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+        private static void GetDirectives<TDirective>(in SyntaxTriviaList trivia, Func<TDirective, bool>? filter, ref List<TDirective>? directives)
+            where TDirective : SyntaxNode
+        {
+            foreach (var tr in trivia)
+            {
+                if (!GetDirectivesInTrivia(tr, filter, ref directives) && tr.GetStructure() is SyntaxNode node)
+                {
+                    GetDirectives(node, filter, ref directives);
+                }
+            }
+        }
+
         private static bool GetDirectivesInTrivia<TDirective>(in SyntaxTrivia trivia, Func<TDirective, bool>? filter, ref List<TDirective>? directives)
             where TDirective : SyntaxNode
         {
@@ -892,18 +904,6 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
             return false;
-        }
-
-        private static void GetDirectives<TDirective>(in SyntaxTriviaList trivia, Func<TDirective, bool>? filter, ref List<TDirective>? directives)
-            where TDirective : SyntaxNode
-        {
-            foreach (var tr in trivia)
-            {
-                if (!GetDirectivesInTrivia(tr, filter, ref directives) && tr.GetStructure() is SyntaxNode node)
-                {
-                    GetDirectives(node, filter, ref directives);
-                }
-            }
         }
 
         #endregion
@@ -945,7 +945,7 @@ namespace Microsoft.CodeAnalysis
                         // first one in the list)
                         for (; r > 0 && list[r - 1].FullWidth == 0; r--)
                         {
-                            ;
+                            // Nothing to do
                         }
 
                         return r;

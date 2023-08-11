@@ -135,11 +135,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                             End If
                         Next
 
-                        If returnType IsNot Nothing Then
-                            If candidateMethod.IsSub OrElse Not candidateMethod.ReturnType.IsSameTypeIgnoringAll(returnType) Then
-                                ' Return type does not match
-                                Exit Select
-                            End If
+                        If (returnType IsNot Nothing AndAlso (candidateMethod.IsSub OrElse Not candidateMethod.ReturnType.IsSameTypeIgnoringAll(returnType))) Then
+                            ' Return type does not match
+                            Exit Select
                         End If
 
                         ' Good candidate

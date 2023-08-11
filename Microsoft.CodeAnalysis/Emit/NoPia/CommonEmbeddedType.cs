@@ -169,12 +169,10 @@ namespace Microsoft.CodeAnalysis.Emit.NoPia
                                 }
                             }
                         }
-                        else if (IsTargetAttribute(attrData, AttributeDescription.UnmanagedFunctionPointerAttribute))
+                        else if (IsTargetAttribute(attrData, AttributeDescription.UnmanagedFunctionPointerAttribute) &&
+                            attrData.CommonConstructorArguments.Length == 1)
                         {
-                            if (attrData.CommonConstructorArguments.Length == 1)
-                            {
-                                builder.AddOptional(TypeManager.CreateSynthesizedAttribute(WellKnownMember.System_Runtime_InteropServices_UnmanagedFunctionPointerAttribute__ctor, attrData, syntaxNodeOpt, diagnostics));
-                            }
+                            builder.AddOptional(TypeManager.CreateSynthesizedAttribute(WellKnownMember.System_Runtime_InteropServices_UnmanagedFunctionPointerAttribute__ctor, attrData, syntaxNodeOpt, diagnostics));
                         }
                     }
                 }

@@ -406,14 +406,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                 {
                     for (int i = 0; i < argumentPosition; ++i)
                     {
-                        if (arguments.Name(i) == null)
+                        if (arguments.Name(i) == null &&
+                            argsToParameters[argumentPosition] == argsToParameters[i])
                         {
-                            if (argsToParameters[argumentPosition] == argsToParameters[i])
-                            {
-                                // Error; we've got a named argument that corresponds to 
-                                // a previously-given positional argument.
-                                return argumentPosition;
-                            }
+                            // Error; we've got a named argument that corresponds to 
+                            // a previously-given positional argument.
+                            return argumentPosition;
                         }
                     }
                 }

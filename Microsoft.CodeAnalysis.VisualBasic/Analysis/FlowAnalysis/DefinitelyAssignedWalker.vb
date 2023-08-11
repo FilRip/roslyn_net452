@@ -67,7 +67,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             For Each slot In state1.Assigned.TrueBits()
                 If slot < variableBySlot.Length Then
 #If REFERENCE_STATE Then
+#Disable Warning S1066 ' Collapsible "if" statements should be merged
                     If state2opt Is Nothing OrElse state2opt.IsAssigned(slot) Then
+#Enable Warning S1066 ' Collapsible "if" statements should be merged
 #Else
                     If state2opt Is Nothing OrElse state2opt.Value.IsAssigned(slot) Then
 #End If

@@ -923,10 +923,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 New BadSymbolDiagnostic(lookupResult.SingleSymbol, ERRID.ERR_TypeOrMemberNotGeneric1, lookupResult.SingleSymbol)))
                     End If
                 Else
-                    If Not suppressUseSiteError Then
-                        If ReportUseSite(diagBag, genericNameSyntax, genericType) Then
-                            reportedAnError = True
-                        End If
+                    If Not suppressUseSiteError AndAlso ReportUseSite(diagBag, genericNameSyntax, genericType) Then
+                        reportedAnError = True
                     End If
 
                     ' Construct the type and validate constraints.

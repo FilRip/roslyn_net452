@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private ImmutableHashSet<Symbol> _lazyLockedOrDisposedVariables;
         private ExpressionAndDiagnostics _lazyExpressionAndDiagnostics;
 
-        internal LockOrUsingBinder(Binder enclosing)
+        protected LockOrUsingBinder(Binder enclosing)
             : base(enclosing)
         {
         }
@@ -37,7 +37,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     ExpressionSyntax targetExpressionSyntax = TargetExpressionSyntax;
 
-                    if (targetExpressionSyntax != null)
+                    if (targetExpressionSyntax != null &&
+                        targetExpressionSyntax.Kind() == SyntaxKind.IdentifierName)
                     {
                         // We rely on this in the GetBinder call below.
 
@@ -48,20 +49,17 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // which is going to bind the expression, which is going to check LockedOrDisposedVariables, etc.
                         // Fortunately, SyntaxKind.IdentifierName includes local and parameter accesses, but no expressions
                         // that require lvalue checks.
-                        if (targetExpressionSyntax.Kind() == SyntaxKind.IdentifierName)
-                        {
-                            BoundExpression expression = BindTargetExpression(diagnostics: null, // Diagnostics reported by BindUsingStatementParts.
-                                                                              originalBinder: GetBinder(targetExpressionSyntax.Parent));
+                        BoundExpression expression = BindTargetExpression(diagnostics: null, // Diagnostics reported by BindUsingStatementParts.
+                                                                          originalBinder: GetBinder(targetExpressionSyntax.Parent));
 
-                            switch (expression.Kind)
-                            {
-                                case BoundKind.Local:
-                                    lockedOrDisposedVariables = lockedOrDisposedVariables.Add(((BoundLocal)expression).LocalSymbol);
-                                    break;
-                                case BoundKind.Parameter:
-                                    lockedOrDisposedVariables = lockedOrDisposedVariables.Add(((BoundParameter)expression).ParameterSymbol);
-                                    break;
-                            }
+                        switch (expression.Kind)
+                        {
+                            case BoundKind.Local:
+                                lockedOrDisposedVariables = lockedOrDisposedVariables.Add(((BoundLocal)expression).LocalSymbol);
+                                break;
+                            case BoundKind.Parameter:
+                                lockedOrDisposedVariables = lockedOrDisposedVariables.Add(((BoundParameter)expression).ParameterSymbol);
+                                break;
                         }
                     }
 
@@ -99,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// CONSIDER: If this causes too many allocations, we could use start and end flags plus spinlocking
         /// as for completion parts.
         /// </remarks>
-        private class ExpressionAndDiagnostics
+        private sealed class ExpressionAndDiagnostics
         {
             public readonly BoundExpression Expression;
             public readonly ImmutableBindingDiagnostic<AssemblySymbol> Diagnostics;

@@ -519,23 +519,20 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 var action = symbolAction.Action;
                 var kinds = symbolAction.Kinds;
 
-                if (kinds.Contains(symbol.Kind))
+                if (kinds.Contains(symbol.Kind) && ShouldExecuteAction(analyzerState, symbolAction))
                 {
-                    if (ShouldExecuteAction(analyzerState, symbolAction))
-                    {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                    _cancellationToken.ThrowIfCancellationRequested();
 
-                        var context = new SymbolAnalysisContext(symbol, Compilation, AnalyzerOptions, addDiagnostic,
-                            isSupportedDiagnostic, _cancellationToken);
+                    var context = new SymbolAnalysisContext(symbol, Compilation, AnalyzerOptions, addDiagnostic,
+                        isSupportedDiagnostic, _cancellationToken);
 
-                        ExecuteAndCatchIfThrows(
-                            symbolAction.Analyzer,
-                            data => data.action(data.context),
-                            (action, context),
-                            new AnalysisContextInfo(Compilation, symbol));
+                    ExecuteAndCatchIfThrows(
+                        symbolAction.Analyzer,
+                        data => data.action(data.context),
+                        (action, context),
+                        new AnalysisContextInfo(Compilation, symbol));
 
-                        analyzerState?.ProcessedActions.Add(symbolAction);
-                    }
+                    analyzerState?.ProcessedActions.Add(symbolAction);
                 }
             }
         }

@@ -221,11 +221,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             left = MakeRValue(left, diagnostics)
             right = MakeRValue(right, diagnostics)
 
-            If (left.HasErrors OrElse right.HasErrors) Then
+            If ((left.HasErrors OrElse right.HasErrors) AndAlso (diagnostics Is originalDiagnostics)) Then
                 ' Suppress any additional diagnostics by overriding DiagnosticBag.
-                If diagnostics Is originalDiagnostics Then
-                    diagnostics = BindingDiagnosticBag.Discarded
-                End If
+                diagnostics = BindingDiagnosticBag.Discarded
             End If
 
             Dim leftType As TypeSymbol = left.Type

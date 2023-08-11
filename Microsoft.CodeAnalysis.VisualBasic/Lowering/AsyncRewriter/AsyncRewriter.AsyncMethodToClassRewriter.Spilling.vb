@@ -402,7 +402,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Private Function RewriteSpillSequenceIntoBlock(spill As BoundSpillSequence,
                                                            addValueAsExpression As Boolean) As BoundBlock
-                Return RewriteSpillSequenceIntoBlock(spill, addValueAsExpression, New BoundStatement() {})
+                Return RewriteSpillSequenceIntoBlock(spill, addValueAsExpression, New BoundStatement(0) {})
             End Function
 
             Private Function RewriteSpillSequenceIntoBlock(spill As BoundSpillSequence,

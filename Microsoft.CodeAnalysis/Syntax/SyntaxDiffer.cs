@@ -367,14 +367,12 @@ namespace Microsoft.CodeAnalysis
 
                         // Are these really the same? This may be expensive so only check this if 
                         // similarity is rated equal to them being identical.
-                        if (sim == node.FullSpan.Length && node.IsToken)
+                        if (sim == node.FullSpan.Length && node.IsToken &&
+                            stackNode.ToFullString() == node.ToFullString())
                         {
-                            if (stackNode.ToFullString() == node.ToFullString())
-                            {
-                                index = i;
-                                similarity = sim;
-                                return;
-                            }
+                            index = i;
+                            similarity = sim;
+                            return;
                         }
 
                         if (sim > similarity)

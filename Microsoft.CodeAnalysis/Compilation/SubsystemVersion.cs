@@ -116,14 +116,12 @@ namespace Microsoft.CodeAnalysis
 
                 //it's fine to have just a single number specified for the subsystem.
 
-                if (minor != null)
-                {
-                    if (minor != minor.Trim() ||
+                if (minor != null &&
+                    (minor != minor.Trim() ||
                         !int.TryParse(minor, NumberStyles.None, CultureInfo.InvariantCulture, out minorValue) ||
-                        minorValue >= 65356 || minorValue < 0)
-                    {
-                        return false;
-                    }
+                        minorValue >= 65356 || minorValue < 0))
+                {
+                    return false;
                 }
 
                 version = new SubsystemVersion(majorValue, minorValue);

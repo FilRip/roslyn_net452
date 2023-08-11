@@ -249,20 +249,18 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             IEnumerable<string>? result = null;
             foreach (CustomAttributeHandle customAttrHandle in typeDef.GetCustomAttributes())
             {
-                if (peModule.IsTargetAttribute(customAttrHandle, attributeType.Namespace!, attributeType.Name, ctor: out _))
+                if (peModule.IsTargetAttribute(customAttrHandle, attributeType.Namespace!, attributeType.Name, ctor: out _) &&
+                    languagesFunc(peModule, customAttrHandle) is { } attributeSupportedLanguages)
                 {
-                    if (languagesFunc(peModule, customAttrHandle) is { } attributeSupportedLanguages)
+                    if (result is null)
                     {
-                        if (result is null)
-                        {
-                            result = attributeSupportedLanguages;
-                        }
-                        else
-                        {
-                            // This is a slow path, but only occurs if a single type has multiple
-                            // DiagnosticAnalyzerAttribute instances applied to it.
-                            result = result.Concat(attributeSupportedLanguages);
-                        }
+                        result = attributeSupportedLanguages;
+                    }
+                    else
+                    {
+                        // This is a slow path, but only occurs if a single type has multiple
+                        // DiagnosticAnalyzerAttribute instances applied to it.
+                        result = result.Concat(attributeSupportedLanguages);
                     }
                 }
             }
@@ -298,25 +296,22 @@ namespace Microsoft.CodeAnalysis.Diagnostics
 
         private static IEnumerable<string> ReadLanguagesFromAttribute(ref BlobReader argsReader)
         {
-            if (argsReader.Length > 4)
+            if (argsReader.Length > 4 && argsReader.ReadByte() == 1 && argsReader.ReadByte() == 0)
             {
                 // Arguments are present--check prologue.
-                if (argsReader.ReadByte() == 1 && argsReader.ReadByte() == 0)
+                if (!PEModule.CrackStringInAttributeValue(out string firstLanguageName, ref argsReader))
                 {
-                    if (!PEModule.CrackStringInAttributeValue(out string firstLanguageName, ref argsReader))
+                    return SpecializedCollections.EmptyEnumerable<string>();
+                }
+
+                if (PEModule.CrackStringArrayInAttributeValue(out ImmutableArray<string> additionalLanguageNames, ref argsReader))
+                {
+                    if (additionalLanguageNames.Length == 0)
                     {
-                        return SpecializedCollections.EmptyEnumerable<string>();
+                        return SpecializedCollections.SingletonEnumerable(firstLanguageName);
                     }
 
-                    if (PEModule.CrackStringArrayInAttributeValue(out ImmutableArray<string> additionalLanguageNames, ref argsReader))
-                    {
-                        if (additionalLanguageNames.Length == 0)
-                        {
-                            return SpecializedCollections.SingletonEnumerable(firstLanguageName);
-                        }
-
-                        return additionalLanguageNames.Insert(0, firstLanguageName);
-                    }
+                    return additionalLanguageNames.Insert(0, firstLanguageName);
                 }
             }
             return SpecializedCollections.EmptyEnumerable<string>();

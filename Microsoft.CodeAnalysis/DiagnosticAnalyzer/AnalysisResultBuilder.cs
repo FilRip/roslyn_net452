@@ -172,16 +172,14 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             AdditionalText? getAdditionalTextKey(Diagnostic diagnostic)
             {
                 // Fetch the first additional file that matches diagnostic location.
-                if (diagnostic.Location is ExternalFileLocation externalFileLocation)
+                if (diagnostic.Location is ExternalFileLocation externalFileLocation &&
+                    _pathToAdditionalTextMap.TryGetValue(externalFileLocation.FilePath, out var additionalTexts))
                 {
-                    if (_pathToAdditionalTextMap.TryGetValue(externalFileLocation.FilePath, out var additionalTexts))
+                    foreach (var additionalText in additionalTexts)
                     {
-                        foreach (var additionalText in additionalTexts)
+                        if (analysisScope.AdditionalFiles.Contains(additionalText))
                         {
-                            if (analysisScope.AdditionalFiles.Contains(additionalText))
-                            {
-                                return additionalText;
-                            }
+                            return additionalText;
                         }
                     }
                 }

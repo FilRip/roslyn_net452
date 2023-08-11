@@ -1197,13 +1197,11 @@ namespace Microsoft.CodeAnalysis
                             {
                                 parameters.Clear();
 
-                                if (PeekNextChar(id, index) == '(')
+                                if (PeekNextChar(id, index) == '(' &&
+                                    !ParseParameterList(id, ref index, compilation, methodSymbol, parameters))
                                 {
-                                    if (!ParseParameterList(id, ref index, compilation, methodSymbol, parameters))
-                                    {
-                                        // if the parameters cannot be identified (some error), then the symbol cannot match, try next method symbol
-                                        continue;
-                                    }
+                                    // if the parameters cannot be identified (some error), then the symbol cannot match, try next method symbol
+                                    continue;
                                 }
 
                                 if (!AllParametersMatch(methodSymbol.Parameters, parameters))

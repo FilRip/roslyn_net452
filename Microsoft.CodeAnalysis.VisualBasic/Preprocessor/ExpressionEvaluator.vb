@@ -19,7 +19,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
 
         ' PERF: Using Byte instead of SpecialType because we want the compiler to use array literal initialization.
         '       The most natural type choice, Enum arrays, are not blittable due to a CLR limitation.
-        Private Shared ReadOnly s_dominantType(,) As Byte
+        Private Shared ReadOnly s_dominantType As Byte(,)
 
         Shared Sub New()
 
@@ -214,10 +214,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
         End Function
 
         Private Shared Function ReportSemanticError(id As ERRID, node As VisualBasicSyntaxNode) As BadCConst
-            Return ReportSemanticError(id, node, New Object() {})
+            Return ReportSemanticError(id, node, New Object(0) {})
         End Function
 
-#Disable Warning IDE0060
+#Disable Warning IDE0060, S1172
         Private Shared Function ReportSemanticError(id As ERRID, node As VisualBasicSyntaxNode, ParamArray args As Object()) As BadCConst
 #Enable Warning IDE0060
             ' TODO: should we use the node?
@@ -1420,7 +1420,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                             ComparisonSucceeds = (ComparisonResult = 0)
 
                         Case SyntaxKind.NotEqualsExpression
-                            ComparisonSucceeds = Not (ComparisonResult = 0)
+                            ComparisonSucceeds = (ComparisonResult <> 0)
 
                         Case SyntaxKind.LessThanOrEqualExpression
                             ComparisonSucceeds = (ComparisonResult <= 0)
@@ -1556,25 +1556,29 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                     ' // Amazingly, False > True.
 
                     Case SyntaxKind.GreaterThanExpression
-                        OperationSucceeds = LeftValue = False AndAlso RightValue <> False
+                        OperationSucceeds = Not LeftValue AndAlso RightValue
 
                     Case SyntaxKind.GreaterThanOrEqualExpression
-                        OperationSucceeds = LeftValue = False OrElse RightValue <> False
+                        OperationSucceeds = Not LeftValue OrElse RightValue
 
                     Case SyntaxKind.LessThanExpression
-                        OperationSucceeds = LeftValue <> False AndAlso RightValue = False
+                        OperationSucceeds = LeftValue AndAlso Not RightValue
 
                     Case SyntaxKind.LessThanOrEqualExpression
-                        OperationSucceeds = LeftValue <> False OrElse RightValue = False
+                        OperationSucceeds = LeftValue OrElse Not RightValue
 
                     Case SyntaxKind.ExclusiveOrExpression
                         OperationSucceeds = LeftValue Xor RightValue
 
                     Case SyntaxKind.OrElseExpression, SyntaxKind.OrExpression
+#Disable Warning S2178 ' Short-circuit logic should be used in boolean contexts
                         OperationSucceeds = LeftValue Or RightValue
+#Enable Warning S2178 ' Short-circuit logic should be used in boolean contexts
 
                     Case SyntaxKind.AndAlsoExpression, SyntaxKind.AndExpression
+#Disable Warning S2178 ' Short-circuit logic should be used in boolean contexts
                         OperationSucceeds = LeftValue And RightValue
+#Enable Warning S2178 ' Short-circuit logic should be used in boolean contexts
 
                     Case Else
                         Throw ExceptionUtilities.UnexpectedValue(opcode)

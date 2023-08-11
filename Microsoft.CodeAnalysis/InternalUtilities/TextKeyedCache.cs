@@ -116,12 +116,10 @@ namespace Roslyn.Utilities
 
             var text = localSlot.Text;
 
-            if (text != null && localSlot.HashCode == hashCode)
+            if (text != null && localSlot.HashCode == hashCode &&
+                StringTable.TextEquals(text, chars.AsSpan(start, len)))
             {
-                if (StringTable.TextEquals(text, chars.AsSpan(start, len)))
-                {
-                    return localSlot.Item;
-                }
+                return localSlot.Item;
             }
 
             SharedEntryValue? e = FindSharedEntry(chars, start, len, hashCode);

@@ -787,6 +787,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
+#pragma warning disable S125 // Sections of code should not be commented out
             // SPEC: If the best method is a generic method, the type arguments (supplied or inferred) are checked against the constraints 
             // SPEC: declared on the generic method. If any type argument does not satisfy the corresponding constraint(s) on
             // SPEC: the type parameter, a binding-time error occurs.
@@ -825,6 +826,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // because of the constraint, type inference fails. M<string> is never added to the
             // applicable candidate set, so the applicable candidate set consists solely of
             // M(object, object) and is therefore the best match.
+#pragma warning restore S125 // Sections of code should not be commented out
 
             return !methodSymbol.CheckConstraints(new ConstraintsHelper.CheckConstraintsArgs(this.Compilation, this.Conversions, includeNullability: false, node.Location, diagnostics));
         }
@@ -1159,13 +1161,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             MethodSymbol selectedMethod = conversion.Method;
 
             var location = syntax.Location;
-            if (delegateOrFuncPtrType.SpecialType != SpecialType.System_Delegate)
+            if (delegateOrFuncPtrType.SpecialType != SpecialType.System_Delegate && (!MethodIsCompatibleWithDelegateOrFunctionPointer(/*receiverOpt, */isExtensionMethod, selectedMethod, delegateOrFuncPtrType, location, diagnostics) ||
+                    MemberGroupFinalValidation(receiverOpt, selectedMethod, syntax, diagnostics, isExtensionMethod)))
             {
-                if (!MethodIsCompatibleWithDelegateOrFunctionPointer(/*receiverOpt, */isExtensionMethod, selectedMethod, delegateOrFuncPtrType, location, diagnostics) ||
-                    MemberGroupFinalValidation(receiverOpt, selectedMethod, syntax, diagnostics, isExtensionMethod))
-                {
-                    return true;
-                }
+                return true;
             }
 
             if (selectedMethod.IsConditional)
@@ -1264,7 +1263,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC VIOLATION: a constant expression must be either the null literal, or an expression of one 
             // SPEC VIOLATION: of the given types. 
 
+#pragma warning disable S125 // Sections of code should not be commented out
             // SPEC VIOLATION: const C c = (C)null;
+#pragma warning restore S125 // Sections of code should not be commented out
 
             // TODO: Some conversions can produce errors or warnings depending on checked/unchecked.
             // TODO: Fold conversions on enums and strings too.
@@ -1388,13 +1389,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                 }
             }
-            else if (destinationType == SpecialType.System_IntPtr || destinationType == SpecialType.System_UIntPtr)
+            else if ((destinationType == SpecialType.System_IntPtr || destinationType == SpecialType.System_UIntPtr) &&
+                (!CheckConstantBounds(destinationType, sourceValue, out _)))
             {
-                if (!CheckConstantBounds(destinationType, sourceValue, out _))
-                {
-                    // Can be calculated at runtime, but is not a compile-time constant.
-                    return null;
-                }
+                // Can be calculated at runtime, but is not a compile-time constant.
+                return null;
             }
 
             return ConstantValue.Create(DoUncheckedConversion(destinationType, sourceValue), destinationType);
@@ -1409,6 +1408,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // An example will help. Suppose we have:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // const float cf1 = 1.0f;
             // const float cf2 = 1.0e-15f;
             // const double cd3 = cf1 - cf2;
@@ -1426,6 +1426,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // The int is converted to float and stored internally as the double 214783648, even though the
             // fully precise int would fit into a double.
+#pragma warning restore S125 // Sections of code should not be commented out
 
             unchecked
             {
@@ -1665,12 +1666,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                             SpecialType.System_IntPtr => (int)doubleValue,
                             SpecialType.System_UIntPtr => (uint)doubleValue,
                             SpecialType.System_Single => (double)(float)doubleValue,
-                            SpecialType.System_Double => (double)doubleValue,
+                            SpecialType.System_Double => doubleValue,
                             SpecialType.System_Decimal => (value.Discriminator == ConstantValueTypeDiscriminator.Single) ? (decimal)(float)doubleValue : (decimal)doubleValue,
                             _ => throw ExceptionUtilities.UnexpectedValue(destinationType),
                         };
                     case ConstantValueTypeDiscriminator.Decimal:
-                        decimal decimalValue = CheckConstantBounds(destinationType, value.DecimalValue, out _) ? value.DecimalValue : 0m;
+                        decimal decimalValue = CheckConstantBounds(destinationType, value.DecimalValue, out _) ? value.DecimalValue : 0;
                         return destinationType switch
                         {
                             SpecialType.System_Byte => (byte)decimalValue,
@@ -1695,7 +1696,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // all cases should have been handled in the switch above.
+#pragma warning disable S125 // Sections of code should not be commented out
             // return value.Value;
+#pragma warning restore S125 // Sections of code should not be commented out
         }
 
         public static bool CheckConstantBounds(SpecialType destinationType, ConstantValue value, out bool maySucceedAtRuntime)

@@ -957,12 +957,10 @@ namespace Microsoft.Cci
 
                     if (memberRef is IMethodReference methodRef)
                     {
-                        if (methodRef.AcceptsExtraArguments)
+                        if (methodRef.AcceptsExtraArguments &&
+                            this.TryGetMethodDefinitionHandle(methodRef.GetResolvedMethod(Context), out MethodDefinitionHandle methodHandle))
                         {
-                            if (this.TryGetMethodDefinitionHandle(methodRef.GetResolvedMethod(Context), out MethodDefinitionHandle methodHandle))
-                            {
-                                return methodHandle;
-                            }
+                            return methodHandle;
                         }
 
                         return parentTypeDefHandle;

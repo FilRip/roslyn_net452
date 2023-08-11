@@ -43,25 +43,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         /// <summary>
-        /// Binds the type for the syntax taking into account possibility of "unmanaged" type.
-        /// </summary>
-        /// <param name="syntax">Type syntax to bind.</param>
-        /// <param name="diagnostics">Diagnostics.</param>
-        /// <param name="keyword">
-        /// Set to <see cref="ConstraintContextualKeyword.None"/> if syntax binds to a type in the current context, otherwise
-        /// syntax binds to the corresponding keyword in the current context.
-        /// </param>
-        /// <returns>
-        /// Bound type if syntax binds to a type in the current context and
-        /// null if syntax binds to a contextual constraint keyword.
-        /// </returns>
-        private TypeWithAnnotations BindTypeOrConstraintKeyword(TypeSyntax syntax, BindingDiagnosticBag diagnostics, out ConstraintContextualKeyword keyword)
-        {
-            var symbol = BindTypeOrAliasOrConstraintKeyword(syntax, diagnostics, out keyword);
-            return (keyword != ConstraintContextualKeyword.None) ? default : UnwrapAlias(symbol, diagnostics, syntax).TypeWithAnnotations;
-        }
-
-        /// <summary>
         /// Binds the type for the syntax taking into account possibility of "var" type.
         /// </summary>
         /// <param name="syntax">Type syntax to bind.</param>
@@ -87,6 +68,25 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 return UnwrapAlias(symbol, out alias, diagnostics, syntax).TypeWithAnnotations;
             }
+        }
+
+        /// <summary>
+        /// Binds the type for the syntax taking into account possibility of "unmanaged" type.
+        /// </summary>
+        /// <param name="syntax">Type syntax to bind.</param>
+        /// <param name="diagnostics">Diagnostics.</param>
+        /// <param name="keyword">
+        /// Set to <see cref="ConstraintContextualKeyword.None"/> if syntax binds to a type in the current context, otherwise
+        /// syntax binds to the corresponding keyword in the current context.
+        /// </param>
+        /// <returns>
+        /// Bound type if syntax binds to a type in the current context and
+        /// null if syntax binds to a contextual constraint keyword.
+        /// </returns>
+        private TypeWithAnnotations BindTypeOrConstraintKeyword(TypeSyntax syntax, BindingDiagnosticBag diagnostics, out ConstraintContextualKeyword keyword)
+        {
+            var symbol = BindTypeOrAliasOrConstraintKeyword(syntax, diagnostics, out keyword);
+            return (keyword != ConstraintContextualKeyword.None) ? default : UnwrapAlias(symbol, diagnostics, syntax).TypeWithAnnotations;
         }
 
         /// <summary>
@@ -246,7 +246,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         // NOTE: don't report diagnostics - we're not going to use the lookup result.
                         resultDiagnostics.DiagnosticBag.Free();
                         // Case (2)(a)(2)
-                        goto default;
+                        isKeyword = true;
+                        symbol = null;
+                        break;
                     }
 
                     diagnostics.AddRange(resultDiagnostics.DiagnosticBag);
@@ -926,6 +928,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return null;
             }
 
+#pragma warning disable S125 // Sections of code should not be commented out
             switch (node.Parent)
             {
                 case AttributeSyntax parent when parent.Name == node: // [nint]
@@ -939,6 +942,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // Don't bind nameof(nint) or nameof(nuint) so that ERR_NameNotInContext is reported.
                     return null;
             }
+#pragma warning restore S125 // Sections of code should not be commented out
 
             CheckFeatureAvailability(node, MessageID.IDS_FeatureNativeInt, diagnostics);
             return this.GetSpecialType(specialType, diagnostics, node).AsNativeInteger();
@@ -1583,26 +1587,23 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (memberSymbol is not null)
             {
                 useSiteInfo = GetUseSiteInfoForWellKnownMemberOrContainingType(memberSymbol);
-                if (useSiteInfo.DiagnosticInfo != null)
+                if (useSiteInfo.DiagnosticInfo != null && isOptional)
                 {
                     // Dev11 reports use-site diagnostics even for optional symbols that are found.
                     // We decided to silently ignore bad optional symbols.
 
                     // Report errors only for non-optional members:
-                    if (isOptional)
+                    var severity = useSiteInfo.DiagnosticInfo.Severity;
+
+                    // if the member is optional and bad for whatever reason ignore it:
+                    if (severity == DiagnosticSeverity.Error)
                     {
-                        var severity = useSiteInfo.DiagnosticInfo.Severity;
-
-                        // if the member is optional and bad for whatever reason ignore it:
-                        if (severity == DiagnosticSeverity.Error)
-                        {
-                            useSiteInfo = default;
-                            return null;
-                        }
-
-                        // ignore warnings:
-                        useSiteInfo = new UseSiteInfo<AssemblySymbol>(diagnosticInfo: null, useSiteInfo.PrimaryDependency, useSiteInfo.SecondaryDependencies);
+                        useSiteInfo = default;
+                        return null;
                     }
+
+                    // ignore warnings:
+                    useSiteInfo = new UseSiteInfo<AssemblySymbol>(diagnosticInfo: null, useSiteInfo.PrimaryDependency, useSiteInfo.SecondaryDependencies);
                 }
             }
             else if (!isOptional)
@@ -1619,7 +1620,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return memberSymbol;
         }
 
-        private class ConsistentSymbolOrder : IComparer<Symbol>
+        private sealed class ConsistentSymbolOrder : IComparer<Symbol>
         {
             public static readonly ConsistentSymbolOrder Instance = new();
             public int Compare(Symbol fst, Symbol snd)
@@ -1893,7 +1894,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 //info = diagnostics.Add(ErrorCode.ERR_AmbigContext, location, readOnlySymbols,
                                 //    whereText,
                                 //    first,
-                                //    second);
+                                //    second)
 
                                 // CS0229: Ambiguity between '{0}' and '{1}'
                                 info = new CSDiagnosticInfo(ErrorCode.ERR_AmbigMember, originalSymbols,
@@ -1970,13 +1971,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                         else
                         {
                             if (singleResult.Kind == SymbolKind.NamedType &&
-                                ((SourceModuleSymbol)this.Compilation.SourceModule).AnyReferencedAssembliesAreLinked)
+                                ((SourceModuleSymbol)this.Compilation.SourceModule).AnyReferencedAssembliesAreLinked &&
+                                diagnostics.DiagnosticBag is not null)
                             {
                                 // Complain about unembeddable types from linked assemblies.
-                                if (diagnostics.DiagnosticBag is not null)
-                                {
-                                    Emit.NoPia.EmbeddedTypesManager.IsValidEmbeddableType((NamedTypeSymbol)singleResult, where, diagnostics.DiagnosticBag);
-                                }
+                                Emit.NoPia.EmbeddedTypesManager.IsValidEmbeddableType((NamedTypeSymbol)singleResult, where, diagnostics.DiagnosticBag);
                             }
 
                             if (!suppressUseSiteDiagnostics)
@@ -2072,11 +2071,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         [Flags()]
         private enum BestSymbolLocation
         {
-            None,
-            FromSourceModule,
-            FromAddedModule,
-            FromReferencedAssembly,
-            FromCorLibrary,
+            None = 0,
+            FromSourceModule = 1,
+            FromAddedModule = 2,
+            FromReferencedAssembly = 4,
+            FromCorLibrary = 8,
         }
 
         [DebuggerDisplay("Location = {_location}, Index = {_index}")]

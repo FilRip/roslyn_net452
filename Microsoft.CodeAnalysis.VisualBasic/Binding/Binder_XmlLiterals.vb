@@ -1477,11 +1477,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Sub
 
         Friend Overrides Function LookupXmlNamespace(prefix As String, ignoreXmlNodes As Boolean, <Out()> ByRef [namespace] As String, <Out()> ByRef fromImports As Boolean) As Boolean
-            If Not ignoreXmlNodes Then
-                If _namespaces.TryGetValue(prefix, [namespace]) Then
-                    fromImports = False
-                    Return True
-                End If
+            If Not ignoreXmlNodes AndAlso _namespaces.TryGetValue(prefix, [namespace]) Then
+                fromImports = False
+                Return True
             End If
             Return MyBase.LookupXmlNamespace(prefix, ignoreXmlNodes, [namespace], fromImports)
         End Function

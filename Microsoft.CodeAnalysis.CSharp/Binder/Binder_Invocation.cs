@@ -168,59 +168,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return result;
         }
 
-        private BoundExpression BindArgListOperator(InvocationExpressionSyntax node, BindingDiagnosticBag diagnostics, AnalyzedArguments analyzedArguments)
-        {
-            bool hasErrors = analyzedArguments.HasErrors;
-
-            // We allow names, oddly enough; M(__arglist(x : 123)) is legal. We just ignore them.
-            TypeSymbol objType = GetSpecialType(SpecialType.System_Object, diagnostics, node);
-            for (int i = 0; i < analyzedArguments.Arguments.Count; ++i)
-            {
-                BoundExpression argument = analyzedArguments.Arguments[i];
-
-                if (argument.Kind == BoundKind.OutVariablePendingInference)
-                {
-                    analyzedArguments.Arguments[i] = ((OutVariablePendingInference)argument).FailInference(this, diagnostics);
-                }
-                else if (argument.Type is null && !argument.HasAnyErrors)
-                {
-                    // We are going to need every argument in here to have a type. If we don't have one,
-                    // try converting it to object. We'll either succeed (if it is a null literal)
-                    // or fail with a good error message.
-                    //
-                    // Note that the native compiler converts null literals to object, and for everything
-                    // else it either crashes, or produces nonsense code. Roslyn improves upon this considerably.
-
-                    analyzedArguments.Arguments[i] = GenerateConversionForAssignment(objType, argument, diagnostics);
-                }
-                else if (argument.Type.IsVoidType())
-                {
-                    Error(diagnostics, ErrorCode.ERR_CantUseVoidInArglist, argument.Syntax);
-                    hasErrors = true;
-                }
-                else if (analyzedArguments.RefKind(i) == RefKind.None)
-                {
-                    analyzedArguments.Arguments[i] = BindToNaturalType(analyzedArguments.Arguments[i], diagnostics);
-                }
-
-                switch (analyzedArguments.RefKind(i))
-                {
-                    case RefKind.None:
-                    case RefKind.Ref:
-                        break;
-                    default:
-                        // Disallow "in" or "out" arguments
-                        Error(diagnostics, ErrorCode.ERR_CantUseInOrOutInArglist, argument.Syntax);
-                        hasErrors = true;
-                        break;
-                }
-            }
-
-            ImmutableArray<BoundExpression> arguments = analyzedArguments.Arguments.ToImmutable();
-            ImmutableArray<RefKind> refKinds = analyzedArguments.RefKinds.ToImmutableOrNull();
-            return new BoundArgListOperator(node, arguments, refKinds, null, hasErrors);
-        }
-
         /// <summary>
         /// Bind an expression as a method invocation.
         /// </summary>
@@ -279,6 +226,59 @@ namespace Microsoft.CodeAnalysis.CSharp
             CheckRestrictedTypeReceiver(result, this.Compilation, diagnostics);
 
             return result;
+        }
+
+        private BoundExpression BindArgListOperator(InvocationExpressionSyntax node, BindingDiagnosticBag diagnostics, AnalyzedArguments analyzedArguments)
+        {
+            bool hasErrors = analyzedArguments.HasErrors;
+
+            // We allow names, oddly enough; M(__arglist(x : 123)) is legal. We just ignore them.
+            TypeSymbol objType = GetSpecialType(SpecialType.System_Object, diagnostics, node);
+            for (int i = 0; i < analyzedArguments.Arguments.Count; ++i)
+            {
+                BoundExpression argument = analyzedArguments.Arguments[i];
+
+                if (argument.Kind == BoundKind.OutVariablePendingInference)
+                {
+                    analyzedArguments.Arguments[i] = ((OutVariablePendingInference)argument).FailInference(this, diagnostics);
+                }
+                else if (argument.Type is null && !argument.HasAnyErrors)
+                {
+                    // We are going to need every argument in here to have a type. If we don't have one,
+                    // try converting it to object. We'll either succeed (if it is a null literal)
+                    // or fail with a good error message.
+                    //
+                    // Note that the native compiler converts null literals to object, and for everything
+                    // else it either crashes, or produces nonsense code. Roslyn improves upon this considerably.
+
+                    analyzedArguments.Arguments[i] = GenerateConversionForAssignment(objType, argument, diagnostics);
+                }
+                else if (argument.Type.IsVoidType())
+                {
+                    Error(diagnostics, ErrorCode.ERR_CantUseVoidInArglist, argument.Syntax);
+                    hasErrors = true;
+                }
+                else if (analyzedArguments.RefKind(i) == RefKind.None)
+                {
+                    analyzedArguments.Arguments[i] = BindToNaturalType(analyzedArguments.Arguments[i], diagnostics);
+                }
+
+                switch (analyzedArguments.RefKind(i))
+                {
+                    case RefKind.None:
+                    case RefKind.Ref:
+                        break;
+                    default:
+                        // Disallow "in" or "out" arguments
+                        Error(diagnostics, ErrorCode.ERR_CantUseInOrOutInArglist, argument.Syntax);
+                        hasErrors = true;
+                        break;
+                }
+            }
+
+            ImmutableArray<BoundExpression> arguments = analyzedArguments.Arguments.ToImmutable();
+            ImmutableArray<RefKind> refKinds = analyzedArguments.RefKinds.ToImmutableOrNull();
+            return new BoundArgListOperator(node, arguments, refKinds, null, hasErrors);
         }
 
         private BoundExpression BindDynamicInvocation(
@@ -873,7 +873,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             dynInvoke.Expression.Type is not null &&
                             dynInvoke.Expression.Type.IsRestrictedType())
                         {
-                            // eg: b = typedReference.Equals(dyn);
+                            // eg: b = typedReference.Equals(dyn)
                             // error CS1978: Cannot use an expression of type 'TypedReference' as an argument to a dynamically dispatched operation
                             Error(diagnostics, ErrorCode.ERR_BadDynamicMethodArg, dynInvoke.Expression.Syntax, dynInvoke.Expression.Type);
                         }
@@ -1098,16 +1098,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             bool isDelegateCall = delegateTypeOpt is not null;
-            if (!isDelegateCall)
+            if (!isDelegateCall && method.RequiresInstanceReceiver)
             {
-                if (method.RequiresInstanceReceiver)
-                {
-                    WarnOnAccessOfOffDefault(node.Kind() == SyntaxKind.InvocationExpression ?
-                                                ((InvocationExpressionSyntax)node).Expression :
-                                                node,
-                                             receiver,
-                                             diagnostics);
-                }
+                WarnOnAccessOfOffDefault(node.Kind() == SyntaxKind.InvocationExpression ?
+                                            ((InvocationExpressionSyntax)node).Expression :
+                                            node,
+                                         receiver,
+                                         diagnostics);
             }
 
             return new BoundCall(node, receiver, method, args, argNames, argRefKinds, isDelegateCall: isDelegateCall,
@@ -1483,12 +1480,10 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         private static NamedTypeSymbol GetDelegateType(BoundExpression expr)
         {
-            if (expr != null && expr.Kind != BoundKind.TypeExpression)
+            if (expr != null && expr.Kind != BoundKind.TypeExpression &&
+                (expr.Type is NamedTypeSymbol type) && type.IsDelegateType())
             {
-                if ((expr.Type is NamedTypeSymbol type) && type.IsDelegateType())
-                {
-                    return type;
-                }
+                return type;
             }
             return null;
         }
@@ -1535,6 +1530,24 @@ namespace Microsoft.CodeAnalysis.CSharp
             var argRefKinds = analyzedArguments.RefKinds.ToImmutableOrNull();
             receiver = BindToTypeForErrorRecovery(receiver);
             return BoundCall.ErrorCall(node, receiver, method, args, argNames, argRefKinds, isDelegate, invokedAsExtensionMethod: invokedAsExtensionMethod, originalMethods: methods, resultKind: resultKind, binder: this);
+        }
+
+        private BoundCall CreateBadCall(
+            SyntaxNode node,
+            BoundExpression expr,
+            LookupResultKind resultKind,
+            AnalyzedArguments analyzedArguments)
+        {
+            TypeSymbol returnType = new ExtendedErrorTypeSymbol(this.Compilation, string.Empty, arity: 0, errorInfo: null);
+            var methodContainer = expr.Type ?? this.ContainingType;
+            MethodSymbol method = new ErrorMethodSymbol(methodContainer, returnType, string.Empty);
+
+            var args = BuildArgumentsForErrorRecovery(analyzedArguments);
+            var argNames = analyzedArguments.GetNames();
+            var argRefKinds = analyzedArguments.RefKinds.ToImmutableOrNull();
+            var originalMethods = (expr.Kind == BoundKind.MethodGroup) ? ((BoundMethodGroup)expr).Methods : ImmutableArray<MethodSymbol>.Empty;
+
+            return BoundCall.ErrorCall(node, expr, method, args, argNames, argRefKinds, isDelegateCall: false, invokedAsExtensionMethod: false, originalMethods: originalMethods, resultKind: resultKind, binder: this);
         }
 
         private static bool IsUnboundGeneric(MethodSymbol method)
@@ -1587,6 +1600,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             return result;
         }
 
+        /// <summary>
+        /// Absent parameter types to bind the arguments, we simply use the arguments provided for error recovery.
+        /// </summary>
+        private ImmutableArray<BoundExpression> BuildArgumentsForErrorRecovery(AnalyzedArguments analyzedArguments)
+        {
+            return BuildArgumentsForErrorRecovery(analyzedArguments, Enumerable.Empty<ImmutableArray<ParameterSymbol>>());
+        }
+
         private ImmutableArray<BoundExpression> BuildArgumentsForErrorRecovery(AnalyzedArguments analyzedArguments, IEnumerable<ImmutableArray<ParameterSymbol>> parameterListList)
         {
             var discardedDiagnostics = DiagnosticBag.GetInstance();
@@ -1608,7 +1629,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                 if (parameterType?.Kind == SymbolKind.NamedType &&
                                     parameterType.GetDelegateType() is not null)
                                 {
-                                    var discarded = unboundArgument.Bind((NamedTypeSymbol)parameterType);
+                                    unboundArgument.Bind((NamedTypeSymbol)parameterType);
                                 }
                             }
 
@@ -1722,32 +1743,6 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             return (i < parameterList.Length) ? parameterList[i].Type : null;
             // CONSIDER: should we handle variable argument lists?
-        }
-
-        /// <summary>
-        /// Absent parameter types to bind the arguments, we simply use the arguments provided for error recovery.
-        /// </summary>
-        private ImmutableArray<BoundExpression> BuildArgumentsForErrorRecovery(AnalyzedArguments analyzedArguments)
-        {
-            return BuildArgumentsForErrorRecovery(analyzedArguments, Enumerable.Empty<ImmutableArray<ParameterSymbol>>());
-        }
-
-        private BoundCall CreateBadCall(
-            SyntaxNode node,
-            BoundExpression expr,
-            LookupResultKind resultKind,
-            AnalyzedArguments analyzedArguments)
-        {
-            TypeSymbol returnType = new ExtendedErrorTypeSymbol(this.Compilation, string.Empty, arity: 0, errorInfo: null);
-            var methodContainer = expr.Type ?? this.ContainingType;
-            MethodSymbol method = new ErrorMethodSymbol(methodContainer, returnType, string.Empty);
-
-            var args = BuildArgumentsForErrorRecovery(analyzedArguments);
-            var argNames = analyzedArguments.GetNames();
-            var argRefKinds = analyzedArguments.RefKinds.ToImmutableOrNull();
-            var originalMethods = (expr.Kind == BoundKind.MethodGroup) ? ((BoundMethodGroup)expr).Methods : ImmutableArray<MethodSymbol>.Empty;
-
-            return BoundCall.ErrorCall(node, expr, method, args, argNames, argRefKinds, isDelegateCall: false, invokedAsExtensionMethod: false, originalMethods: originalMethods, resultKind: resultKind, binder: this);
         }
 
         private static TypeSymbol GetCommonTypeOrReturnType<TMember>(ImmutableArray<TMember> members)
@@ -1886,15 +1881,19 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.BaseExpression:
                 case SyntaxKind.PredefinedType:
                     name = "";
-                    if (top) goto default;
+                    if (top)
+                        return DefaultCase(out name);
                     return true;
                 default:
-                    {
-                        var code = top ? ErrorCode.ERR_ExpressionHasNoName : ErrorCode.ERR_SubexpressionNotInNameof;
-                        diagnostics.Add(code, argument.Location);
-                        name = "";
-                        return false;
-                    }
+                    return DefaultCase(out name);
+            }
+
+            bool DefaultCase(out string name)
+            {
+                var code = top ? ErrorCode.ERR_ExpressionHasNoName : ErrorCode.ERR_SubexpressionNotInNameof;
+                diagnostics.Add(code, argument.Location);
+                name = "";
+                return false;
             }
         }
 

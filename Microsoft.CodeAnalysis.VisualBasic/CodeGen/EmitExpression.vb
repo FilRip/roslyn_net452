@@ -13,7 +13,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
     Partial Friend Class CodeGenerator
         Private _recursionDepth As Integer
 
-        Private Class EmitCancelledException
+        Friend Class EmitCancelledException
             Inherits Exception
         End Class
 
@@ -461,7 +461,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             '   Delegates shall be declared sealed.
             '   The Invoke method shall be virtual.
             ' Dev11 VB uses ldvirtftn for delegate methods, we emit ldftn to be consistent with C#.
-            If method.IsMetadataVirtual AndAlso Not method.ContainingType.IsDelegateType() AndAlso Not receiver.SuppressVirtualCalls Then
+            If method.IsMetadataVirtual AndAlso Not method.ContainingType.IsDelegateType() AndAlso Not receiver?.SuppressVirtualCalls Then
                 _builder.EmitOpCode(ILOpCode.Dup)
                 _builder.EmitOpCode(ILOpCode.Ldvirtftn)
             Else
@@ -1069,13 +1069,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 ' In reality we would typically have one method calling another method in the same class (one GetEnumerator calling another).
                 ' Other scenarios are uncommon since base class cannot be sealed and 
                 ' referring to a derived type in a different module is not an easy thing to do.
-                If IsMeReceiver(receiver) AndAlso method.ContainingType.IsNotInheritable Then
+                If ((IsMeReceiver(receiver) AndAlso method.ContainingType.IsNotInheritable) OrElse
+                    (method.IsMetadataFinal AndAlso CanUseCallOnRefTypeReceiver(receiver))) Then
                     ' special case for target is in a sealed class and "this" receiver.
-                    Debug.Assert(receiver.Type.IsVerifierReference())
-                    callKind = CallKind.Call
-
-                ElseIf method.IsMetadataFinal AndAlso CanUseCallOnRefTypeReceiver(receiver) Then
-                    ' special case for calling 'final' virtual method on reference receiver
                     Debug.Assert(receiver.Type.IsVerifierReference())
                     callKind = CallKind.Call
                 End If
@@ -1208,7 +1204,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
 
             If used Then
 
+#Disable Warning S1481 ' Unused local variables should be removed
                 Dim typeFrom = operand.Type
+#Enable Warning S1481 ' Unused local variables should be removed
                 Dim typeTo = expression.TargetType
 
                 _builder.EmitOpCode(ILOpCode.Isinst)
@@ -1273,11 +1271,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             ' okay to only explicitly convert one branch.
             '
             Dim mergeTypeOfAlternative As TypeSymbol = StackMergeType(expr.WhenFalse)
-            If (used) Then
-                If (IsVarianceCast(expr.Type, mergeTypeOfAlternative)) Then
-                    EmitStaticCast(expr.Type, expr.Syntax)
-                    mergeTypeOfAlternative = expr.Type
-                End If
+            If (used AndAlso IsVarianceCast(expr.Type, mergeTypeOfAlternative)) Then
+                EmitStaticCast(expr.Type, expr.Syntax)
+                mergeTypeOfAlternative = expr.Type
             End If
 
             _builder.EmitBranch(ILOpCode.Br, doneLabel)
@@ -1518,7 +1514,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
             If expression.IsDefaultValue Then
                 EmitInitObj(expression.Type, used, expression.Syntax)
             Else
-                Dim constructor As MethodSymbol = expression.ConstructorOpt
+#Disable Warning S1481 ' Unused local variables should be removed
+                Dim constructor = expression.ConstructorOpt
+#Enable Warning S1481 ' Unused local variables should be removed
                 EmitNewObj(expression.ConstructorOpt, expression.Arguments, used, expression.Syntax)
             End If
         End Sub
@@ -1730,15 +1728,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                 Me.InPlaceInit(left, used)
                 Return True
             Else
-                If right.Kind = BoundKind.ObjectCreationExpression Then
+                If right.Kind = BoundKind.ObjectCreationExpression AndAlso Me.PartialCtorResultCannotEscape(left) Then
                     ' It is desirable to do in-place ctor call if possible.
                     ' we could do newobj/stloc, but inplace call 
                     ' produces same or better code in current JITs 
-                    If Me.PartialCtorResultCannotEscape(left) Then
-                        Dim objCreation As BoundObjectCreationExpression = DirectCast(right, BoundObjectCreationExpression)
-                        Me.InPlaceCtorCall(left, objCreation, used)
-                        Return True
-                    End If
+                    Dim objCreation As BoundObjectCreationExpression = DirectCast(right, BoundObjectCreationExpression)
+                    Me.InPlaceCtorCall(left, objCreation, used)
+                    Return True
                 End If
             End If
 
@@ -1761,7 +1757,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
 
             If used Then
                 Debug.Assert(Me.TargetIsNotOnHeap(target), "cannot read-back the target since it could have been modified")
-                Me.EmitExpression(target, used = True)
+                Me.EmitExpression(target, used)
             End If
         End Sub
 
@@ -1779,7 +1775,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
 
             If used Then
                 Debug.Assert(Me.TargetIsNotOnHeap(target), "cannot read-back the target since it could have been modified")
-                Me.EmitExpression(target, used = True)
+                Me.EmitExpression(target, used)
             End If
         End Sub
 

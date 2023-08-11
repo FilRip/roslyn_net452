@@ -692,12 +692,9 @@ namespace Microsoft.CodeAnalysis
         private static SyntaxNode? GetParent(SyntaxNode node, bool ascendOutOfTrivia)
         {
             var parent = node.Parent;
-            if (parent == null && ascendOutOfTrivia)
+            if (parent == null && ascendOutOfTrivia && node is IStructuredTriviaSyntax structuredTrivia)
             {
-                if (node is IStructuredTriviaSyntax structuredTrivia)
-                {
-                    parent = structuredTrivia.ParentTrivia.Token.Parent;
-                }
+                parent = structuredTrivia.ParentTrivia.Token.Parent;
             }
 
             return parent;
@@ -1345,14 +1342,11 @@ namespace Microsoft.CodeAnalysis
 
         private bool TryGetEofAt(int position, out SyntaxToken Eof)
         {
-            if (position == this.EndPosition)
+            if (position == this.EndPosition && this is ICompilationUnitSyntax compilationUnit)
             {
-                if (this is ICompilationUnitSyntax compilationUnit)
-                {
-                    Eof = compilationUnit.EndOfFileToken;
-                    Debug.Assert(Eof.EndPosition == position);
-                    return true;
-                }
+                Eof = compilationUnit.EndOfFileToken;
+                Debug.Assert(Eof.EndPosition == position);
+                return true;
             }
 
             Eof = default;

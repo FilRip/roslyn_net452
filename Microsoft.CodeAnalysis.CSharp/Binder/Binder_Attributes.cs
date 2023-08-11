@@ -25,9 +25,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         // Note: attributesToBind contains merged attributes from all the different syntax locations (e.g. for named types, partial methods, etc.).
         // Note: Additionally, the attributes with non-matching target specifier for the given owner symbol have been filtered out, i.e. Binder.MatchAttributeTarget method returned true.
         // For example, if were binding attributes on delegate type symbol for below code snippet:
+#pragma warning disable S125 // Sections of code should not be commented out
         //      [A1]
         //      [return: A2]
         //      public delegate void Goo();
+#pragma warning restore S125 // Sections of code should not be commented out
         // attributesToBind will only contain first attribute syntax.
         internal static void BindAttributeTypes(ImmutableArray<Binder> binders, ImmutableArray<AttributeSyntax> attributesToBind, /*Symbol ownerSymbol, */NamedTypeSymbol[] boundAttributeTypes, BindingDiagnosticBag diagnostics)
         {
@@ -95,18 +97,6 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return this.GetRequiredBinder(node).BindAttributeCore(node, attributeType, diagnostics);
         }
-
-        /*private Binder SkipSemanticModelBinder()
-        {
-            Binder result = this;
-
-            while (result.IsSemanticModelBinder)
-            {
-                result = result.Next!;
-            }
-
-            return result;
-        }*/
 
         private BoundAttribute BindAttributeCore(AttributeSyntax node, NamedTypeSymbol attributeType, BindingDiagnosticBag diagnostics)
         {
@@ -1043,15 +1033,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var operand = node.Operand;
                 var operandType = operand.Type;
 
-                if (type is not null && operandType is not null)
+                if ((type is not null && operandType is not null) &&
+                    (type.SpecialType == SpecialType.System_Object ||
+                    operandType.IsArray() && type.IsArray() &&
+                    ((ArrayTypeSymbol)type).ElementType.SpecialType == SpecialType.System_Object))
                 {
-                    if (type.SpecialType == SpecialType.System_Object ||
-                        operandType.IsArray() && type.IsArray() &&
-                        ((ArrayTypeSymbol)type).ElementType.SpecialType == SpecialType.System_Object)
-                    {
-                        var typedConstantKind = operandType.GetAttributeParameterTypedConstantKind(_binder.Compilation);
-                        return VisitExpression(operand, typedConstantKind, diagnostics, ref attrHasErrors, curArgumentHasErrors);
-                    }
+                    var typedConstantKind = operandType.GetAttributeParameterTypedConstantKind(_binder.Compilation);
+                    return VisitExpression(operand, typedConstantKind, diagnostics, ref attrHasErrors, curArgumentHasErrors);
                 }
 
                 return CreateTypedConstant(node, TypedConstantKind.Error, diagnostics, ref attrHasErrors, curArgumentHasErrors);
@@ -1139,10 +1127,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                     // SPEC ERROR:  C# language specification does not explicitly disallow constant values of open types. For e.g.
 
+#pragma warning disable S125 // Sections of code should not be commented out
                     //  public class C<T>
                     //  {
                     //      public enum E { V }
                     //  }
+#pragma warning restore S125 // Sections of code should not be commented out
                     //
                     //  [SomeAttr(C<T>.E.V)]        // case (a): Constant value of open type.
                     //  [SomeAttr(C<int>.E.V)]      // case (b): Constant value of constructed type.

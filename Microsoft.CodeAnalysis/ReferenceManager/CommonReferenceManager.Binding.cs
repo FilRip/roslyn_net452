@@ -174,13 +174,11 @@ namespace Microsoft.CodeAnalysis
                 // we know that we cannot reuse symbols for any assemblies containing NoPia
                 // local types. Because we cannot reuse symbols for assembly referring back
                 // to assemblyBeingBuilt.
-                if (!hasCircularReference)
+                if (!hasCircularReference &&
+                    ReuseAssemblySymbolsWithNoPiaLocalTypes(boundInputs, candidateInputAssemblySymbols, allAssemblies, corLibraryIndex))
                 {
                     // Deal with assemblies containing NoPia local types.
-                    if (ReuseAssemblySymbolsWithNoPiaLocalTypes(boundInputs, candidateInputAssemblySymbols, allAssemblies, corLibraryIndex))
-                    {
-                        return boundInputs;
-                    }
+                    return boundInputs;
                 }
 
                 // NoPia shortcut either didn't apply or failed, go through general process 
@@ -972,21 +970,18 @@ namespace Microsoft.CodeAnalysis
 
                 // Linked references cannot be used as COR library.
                 // References containing NoPia local types also cannot be used as COR library.
-                if (!assembly.IsLinked &&
+                if ((!assembly.IsLinked &&
                     assembly.AssemblyReferences.Length == 0 &&
                     !assembly.ContainsNoPiaLocalTypes &&
-                    (!supersedeLowerVersions || !IsSuperseded(assembly.Identity, assemblyReferencesBySimpleName)))
+                    (!supersedeLowerVersions || !IsSuperseded(assembly.Identity, assemblyReferencesBySimpleName))) &&
+                    assembly.DeclaresTheObjectClass)
                 {
                     // We have referenced assembly that doesn't have assembly references,
                     // check if it declares baseless System.Object.
+                    corLibraryCandidates ??= ArrayBuilder<int>.GetInstance();
 
-                    if (assembly.DeclaresTheObjectClass)
-                    {
-                        corLibraryCandidates ??= ArrayBuilder<int>.GetInstance();
-
-                        // This could be the COR library.
-                        corLibraryCandidates.Add(i);
-                    }
+                    // This could be the COR library.
+                    corLibraryCandidates.Add(i);
                 }
             }
 

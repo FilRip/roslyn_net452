@@ -74,15 +74,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return Nothing
         End Function
 
-        Protected Overrides Sub VisitCatchBlock(catchBlock As BoundCatchBlock, ByRef finallyState As LocalState)
-            If IsInsideRegion(catchBlock.Syntax.Span) Then
-                If catchBlock.LocalOpt IsNot Nothing Then
-                    _variablesDeclared.Add(catchBlock.LocalOpt)
-                End If
-
+        Protected Overrides Sub VisitCatchBlock(node As BoundCatchBlock, ByRef finallyState As LocalState)
+            If IsInsideRegion(node.Syntax.Span) AndAlso node.LocalOpt IsNot Nothing Then
+                _variablesDeclared.Add(node.LocalOpt)
             End If
 
-            MyBase.VisitCatchBlock(catchBlock, finallyState)
+            MyBase.VisitCatchBlock(node, finallyState)
         End Sub
     End Class
 End Namespace

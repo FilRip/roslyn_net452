@@ -157,6 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // 
             // Scenario one: 
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // class C<T> 
             // {
             //   delegate Y FT<X, Y>(T t, X x);
@@ -246,6 +247,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // the *fully constructed* type that the method call is on. When constructing the fixed
             // delegate type for inference from a lambda, we do the appropriate type substitution on
             // the delegate.
+#pragma warning restore S125 // Sections of code should not be commented out
 
             ImmutableArray<RefKind> formalParameterRefKinds, // Optional; assume all value if missing.
             ImmutableArray<BoundExpression> arguments,// Required; in scenarios like method group conversions where there are
@@ -565,14 +567,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 ExplicitParameterTypeInference(argument, target, ref useSiteInfo);
             }
-            else if (argument.Kind != BoundKind.TupleLiteral ||
-                !MakeExplicitParameterTypeInferences((BoundTupleLiteral)argument, target, kind, ref useSiteInfo))
+            else if ((argument.Kind != BoundKind.TupleLiteral ||
+                !MakeExplicitParameterTypeInferences((BoundTupleLiteral)argument, target, kind, ref useSiteInfo)) &&
+                    IsReallyAType(argument.Type))
             {
                 // Either the argument is not a tuple literal, or we were unable to do the inference from its elements, let's try to infer from argument type
-                if (IsReallyAType(argument.Type))
-                {
-                    ExactOrBoundsInference(kind, _extensions.GetTypeWithAnnotations(argument), target, ref useSiteInfo);
-                }
+                ExactOrBoundsInference(kind, _extensions.GetTypeWithAnnotations(argument), target, ref useSiteInfo);
             }
         }
 
@@ -740,10 +740,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (HasUnfixedParamInOutputType(argument, formalType.Type) && !HasUnfixedParamInInputType(argument, formalType.Type))
                 {
+#pragma warning disable S125 // Sections of code should not be commented out
                     //UNDONE: if (argument->isTYPEORNAMESPACEERROR() && argumentType->IsErrorType())
                     //UNDONE: {
                     //UNDONE:     argumentType = GetTypeManager().GetErrorSym();
                     //UNDONE: }
+#pragma warning restore S125 // Sections of code should not be commented out
                     OutputTypeInference(binder, argument, formalType, ref useSiteInfo);
                 }
             }
@@ -819,12 +821,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // Fix as much as you can, even if there are errors.  That will
                 // help with intellisense.
-                if (needsFixing[param])
+                if (needsFixing[param] && !Fix(param, ref useSiteInfo))
                 {
-                    if (!Fix(param, ref useSiteInfo))
-                    {
-                        result = InferenceResult.InferenceFailed;
-                    }
+                    result = InferenceResult.InferenceFailed;
                 }
             }
             return result;
@@ -859,27 +858,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
-            foreach (var parameter in parameters)
-            {
-                if (parameter.Type.ContainsTypeParameter(typeParameter))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return parameters.Any(parameter => parameter.Type.ContainsTypeParameter(typeParameter));
         }
 
         private bool HasUnfixedParamInInputType(BoundExpression pSource, TypeSymbol pDest)
         {
             for (int iParam = 0; iParam < _methodTypeParameters.Length; iParam++)
             {
-                if (IsUnfixed(iParam))
+                if (IsUnfixed(iParam) && DoesInputTypeContain(pSource, pDest, _methodTypeParameters[iParam]))
                 {
-                    if (DoesInputTypeContain(pSource, pDest, _methodTypeParameters[iParam]))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -934,12 +922,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             for (int iParam = 0; iParam < _methodTypeParameters.Length; iParam++)
             {
-                if (IsUnfixed(iParam))
+                if (IsUnfixed(iParam) && DoesOutputTypeContain(argument, formalParameterType, _methodTypeParameters[iParam]))
                 {
-                    if (DoesOutputTypeContain(argument, formalParameterType, _methodTypeParameters[iParam]))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -1044,7 +1029,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 SetIndirectsToUnknown();
                 DeduceAllDependencies();
             }
-            return 0 != ((_dependencies[iParam, jParam]) & Dependency.DependsMask);
+#pragma warning disable S3265 // Non-flags enums should not be used in bitwise operations
+            return ((_dependencies[iParam, jParam]) & Dependency.DependsMask) != 0;
+#pragma warning restore S3265 // Non-flags enums should not be used in bitwise operations
         }
 
         private bool DependsTransitivelyOn(int iParam, int jParam)
@@ -1060,11 +1047,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             for (int kParam = 0; kParam < _methodTypeParameters.Length; ++kParam)
             {
+#pragma warning disable S3265 // Non-flags enums should not be used in bitwise operations
                 if (((_dependencies[iParam, kParam]) & Dependency.DependsMask) != 0 &&
                     ((_dependencies[kParam, jParam]) & Dependency.DependsMask) != 0)
                 {
                     return true;
                 }
+#pragma warning restore S3265 // Non-flags enums should not be used in bitwise operations
             }
             return false;
         }
@@ -1087,13 +1076,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 for (int jParam = 0; jParam < _methodTypeParameters.Length; ++jParam)
                 {
-                    if (_dependencies[iParam, jParam] == Dependency.Unknown)
+                    if (_dependencies[iParam, jParam] == Dependency.Unknown && DependsTransitivelyOn(iParam, jParam))
                     {
-                        if (DependsTransitivelyOn(iParam, jParam))
-                        {
-                            _dependencies[iParam, jParam] = Dependency.Indirect;
-                            madeProgress = true;
-                        }
+                        _dependencies[iParam, jParam] = Dependency.Indirect;
+                        madeProgress = true;
                     }
                 }
             }
@@ -1161,10 +1147,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             for (int jParam = 0; jParam < _methodTypeParameters.Length; ++jParam)
             {
+#pragma warning disable S2234 // Arguments should be passed in the same order as the method parameters
                 if (DependsOn(jParam, iParam))
                 {
                     return true;
                 }
+#pragma warning restore S2234 // Arguments should be passed in the same order as the method parameters
             }
             return false;
         }
@@ -1433,7 +1421,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             // This can be valid via (where T : unmanaged) constraints
             if (ExactPointerInference(source, target, ref useSiteInfo))
             {
+#pragma warning disable S3626 // Jump statements should not be redundant
                 return;
+#pragma warning restore S3626 // Jump statements should not be redundant
             }
 
             // SPEC: * Otherwise no inferences are made.
@@ -1709,11 +1699,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             // UNDONE: Until then, we will turn off the proposed lower bound nullable
             // UNDONE: inference.
 
-            // if (LowerBoundNullableInference(pSource, pDest))
-            // {
-            //     return;
-            // }
-
             if (LowerBoundTupleInference(source, target, ref useSiteInfo))
             {
                 return;
@@ -1727,7 +1712,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (LowerBoundFunctionPointerTypeInference(source.Type, target.Type, ref useSiteInfo))
             {
+#pragma warning disable S3626 // Jump statements should not be redundant
                 return;
+#pragma warning restore S3626 // Jump statements should not be redundant
             }
 
             // SPEC: * Otherwise, no inferences are made.
@@ -2128,10 +2115,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             // NOTE: spec would ask us to do the following checks, but since the value types
             //       are trivially handled as exact inference in the callers, we do not have to.
 
+#pragma warning disable S125 // Sections of code should not be commented out
             //if (ExactTupleInference(source, target, ref useSiteInfo))
             //{
             //    return;
             //}
+#pragma warning restore S125 // Sections of code should not be commented out
 
             // SPEC: * Otherwise... cases for constructed types
 
@@ -2142,7 +2131,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (UpperBoundFunctionPointerTypeInference(source.Type, target.Type, ref useSiteInfo))
             {
+#pragma warning disable S3626 // Jump statements should not be redundant
                 return;
+#pragma warning restore S3626 // Jump statements should not be redundant
             }
 
             // SPEC: * Otherwise, no inferences are made.
@@ -2439,7 +2430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // If the first attempt succeeded, the result should be the same as
                 // the second attempt, although perhaps with different nullability.
                 var discardedUseSiteInfo = CompoundUseSiteInfo<AssemblySymbol>.Discarded;
-                var withoutNullability = Fix(exact, lower, upper, ref discardedUseSiteInfo, _conversions.WithNullability(false));
+                Fix(exact, lower, upper, ref discardedUseSiteInfo, _conversions.WithNullability(false));
                 // https://github.com/dotnet/roslyn/issues/27961 Results may differ by tuple names or dynamic.
                 // See NullableReferenceTypesTests.TypeInference_TupleNameDifferences_01 for example.
             }
@@ -2536,23 +2527,22 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (!candidate.Equals(candidate2, TypeCompareKind.ConsiderEverything) &&
                         !ImplicitConversionExists(candidate2, candidate, ref useSiteInfo, conversions.WithNullability(false)))
                     {
-                        goto OuterBreak;
+                        // Nothing to do
+                    }
+                    else
+                    {
+                        if (!best.HasType)
+                        {
+                            best = candidate;
+                        }
+                        else
+                        {
+                            // best candidate is not unique
+                            best = default;
+                            break;
+                        }
                     }
                 }
-
-                if (!best.HasType)
-                {
-                    best = candidate;
-                }
-                else
-                {
-                    // best candidate is not unique
-                    best = default;
-                    break;
-                }
-
-            OuterBreak:
-                ;
             }
 
             initialCandidates.Free();
@@ -2668,19 +2658,16 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static NamedTypeSymbol GetInterfaceInferenceBound(ImmutableArray<NamedTypeSymbol> interfaces, NamedTypeSymbol target)
         {
             NamedTypeSymbol matchingInterface = null;
-            foreach (var currentInterface in interfaces)
+            foreach (var currentInterface in interfaces.Where(ci => TypeSymbol.Equals(ci.OriginalDefinition, target.OriginalDefinition, TypeCompareKind.ConsiderEverything)))
             {
-                if (TypeSymbol.Equals(currentInterface.OriginalDefinition, target.OriginalDefinition, TypeCompareKind.ConsiderEverything))
+                if (matchingInterface is null)
                 {
-                    if (matchingInterface is null)
-                    {
-                        matchingInterface = currentInterface;
-                    }
-                    else if (!TypeSymbol.Equals(matchingInterface, currentInterface, TypeCompareKind.ConsiderEverything))
-                    {
-                        // Not unique. Bail out.
-                        return null;
-                    }
+                    matchingInterface = currentInterface;
+                }
+                else if (!TypeSymbol.Equals(matchingInterface, currentInterface, TypeCompareKind.ConsiderEverything))
+                {
+                    // Not unique. Bail out.
+                    return null;
                 }
             }
             return matchingInterface;

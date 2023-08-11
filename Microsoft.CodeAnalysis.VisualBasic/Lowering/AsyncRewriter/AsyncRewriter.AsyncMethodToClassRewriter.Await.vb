@@ -172,8 +172,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                     builderFieldAsRValue,
                                     Me._owner._builderType,
                                     "AwaitUnsafeOnCompleted",
-                                    ImmutableArray.Create(Of TypeSymbol)(asCriticalNotifyCompletion.Type, Me.F.Me().Type),
-                                    {criticalNotifyCompletionAsLValue, Me.F.ReferenceOrByrefMe()}))
+                                    ImmutableArray.Create(asCriticalNotifyCompletion.Type, Me.F.Me().Type),
+                                    criticalNotifyCompletionAsLValue, Me.F.ReferenceOrByrefMe()))
 
                         ' >>>>   dcast2 = DirectCast(AwaiterLocalTemp, INotifyCompletion)
                         ' TODO: POSTPROCESS ASSIGNMENT
@@ -189,12 +189,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                     builderFieldAsRValue,
                                     Me._owner._builderType,
                                     "AwaitOnCompleted",
-                                    ImmutableArray.Create(Of TypeSymbol)(asNotifyCompletion.Type, Me.F.Me().Type),
-                                    {notifyCompletionAsLValue, Me.F.ReferenceOrByrefMe()}))
+                                    ImmutableArray.Create(asNotifyCompletion.Type, Me.F.Me().Type),
+                                    notifyCompletionAsLValue, Me.F.ReferenceOrByrefMe()))
 
                         blockBuilder.Add(
                             Me.F.Block(
-                                ImmutableArray.Create(Of LocalSymbol)(asCriticalNotifyCompletion, asNotifyCompletion),
+                                ImmutableArray.Create(asCriticalNotifyCompletion, asNotifyCompletion),
                                 asCriticalNotifyCompletionAssignment,
                                 Me.F.If(
                                     condition:=Me.F.Not(Me.F.ReferenceIsNothing(Me.F.Local(asCriticalNotifyCompletion, False))),
@@ -223,8 +223,8 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                     builderFieldAsRValue,
                                     Me._owner._builderType,
                                     If(useUnsafeOnCompleted, "AwaitUnsafeOnCompleted", "AwaitOnCompleted"),
-                                    ImmutableArray.Create(Of TypeSymbol)(awaiterType, Me.F.Me().Type),
-                                    {Me.F.Local(awaiterTemp, True), Me.F.ReferenceOrByrefMe()})))
+                                    ImmutableArray.Create(awaiterType, Me.F.Me().Type),
+                                    Me.F.Local(awaiterTemp, True), Me.F.ReferenceOrByrefMe())))
                     End If
                 End If
 
