@@ -142,9 +142,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             End Sub
 
             Friend Overloads Overrides Sub CreateCaptureInitializationCode(rewriter As AsyncRewriter.AsyncMethodToClassRewriter, prologue As ArrayBuilder(Of BoundExpression))
-                If Me.ReceiverOpt IsNot Nothing Then
-                    Me.ReceiverOpt.CreateCaptureInitializationCode(rewriter, prologue)
-                End If
+                Me.ReceiverOpt?.CreateCaptureInitializationCode(rewriter, prologue)
             End Sub
 
             Friend Overloads Overrides Function Materialize(rewriter As AsyncMethodToClassRewriter, isLValue As Boolean) As BoundExpression

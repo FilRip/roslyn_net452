@@ -357,9 +357,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                                                                 0,
                                                                 If(diagnostics IsNot Nothing, New BindingDiagnosticBag(diagnostics), Nothing))
 
-            If diagnostics IsNot Nothing Then
-                diagnostics.Free()
-            End If
+            diagnostics?.Free()
 
             If infosBuffer IsNot Nothing Then
                 ' all diagnostics were reported to diagnostic bag:

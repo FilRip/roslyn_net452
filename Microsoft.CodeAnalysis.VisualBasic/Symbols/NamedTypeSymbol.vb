@@ -46,7 +46,9 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Friend Function GetEmptyTypeArgumentCustomModifiers(ordinal As Integer) As ImmutableArray(Of CustomModifier)
             If ordinal < 0 OrElse ordinal >= Me.Arity Then
+#Disable Warning S112 ' General exceptions should never be thrown
                 Throw New IndexOutOfRangeException()
+#Enable Warning S112 ' General exceptions should never be thrown
             End If
 
             Return ImmutableArray(Of CustomModifier).Empty
@@ -757,9 +759,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 Interlocked.CompareExchange(variable, value, comparand)
             Else
                 Dim sourceModule = TryCast(Me.ContainingModule, SourceModuleSymbol)
-                If sourceModule IsNot Nothing Then
-                    sourceModule.AtomicStoreReferenceAndDiagnostics(variable, value, diagBag, comparand)
-                End If
+                sourceModule?.AtomicStoreReferenceAndDiagnostics(variable, value, diagBag, comparand)
             End If
         End Sub
 
@@ -772,9 +772,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
                 ImmutableInterlocked.InterlockedCompareExchange(variable, value, Nothing)
             Else
                 Dim sourceModule = TryCast(Me.ContainingModule, SourceModuleSymbol)
-                If sourceModule IsNot Nothing Then
-                    sourceModule.AtomicStoreArrayAndDiagnostics(variable, value, diagBag)
-                End If
+                sourceModule?.AtomicStoreArrayAndDiagnostics(variable, value, diagBag)
             End If
         End Sub
 

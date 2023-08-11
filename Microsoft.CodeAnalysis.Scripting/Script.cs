@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.Scripting
 
         private Compilation _lazyCompilation;
 
-        private protected Script(ScriptCompiler compiler, ScriptBuilder builder, SourceText sourceText, ScriptOptions options, Type globalsTypeOpt, Script previousOpt)
+        protected Script(ScriptCompiler compiler, ScriptBuilder builder, SourceText sourceText, ScriptOptions options, Type globalsTypeOpt, Script previousOpt)
         {
             Debug.Assert(sourceText != null);
             Debug.Assert(options != null);

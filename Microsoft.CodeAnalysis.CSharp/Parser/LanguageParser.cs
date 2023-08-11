@@ -1061,59 +1061,35 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         internal static DeclarationModifiers GetModifier(SyntaxKind kind, SyntaxKind contextualKind)
         {
-            switch (kind)
+            return kind switch
             {
-                case SyntaxKind.PublicKeyword:
-                    return DeclarationModifiers.Public;
-                case SyntaxKind.InternalKeyword:
-                    return DeclarationModifiers.Internal;
-                case SyntaxKind.ProtectedKeyword:
-                    return DeclarationModifiers.Protected;
-                case SyntaxKind.PrivateKeyword:
-                    return DeclarationModifiers.Private;
-                case SyntaxKind.SealedKeyword:
-                    return DeclarationModifiers.Sealed;
-                case SyntaxKind.AbstractKeyword:
-                    return DeclarationModifiers.Abstract;
-                case SyntaxKind.StaticKeyword:
-                    return DeclarationModifiers.Static;
-                case SyntaxKind.VirtualKeyword:
-                    return DeclarationModifiers.Virtual;
-                case SyntaxKind.ExternKeyword:
-                    return DeclarationModifiers.Extern;
-                case SyntaxKind.NewKeyword:
-                    return DeclarationModifiers.New;
-                case SyntaxKind.OverrideKeyword:
-                    return DeclarationModifiers.Override;
-                case SyntaxKind.ReadOnlyKeyword:
-                    return DeclarationModifiers.ReadOnly;
-                case SyntaxKind.VolatileKeyword:
-                    return DeclarationModifiers.Volatile;
-                case SyntaxKind.UnsafeKeyword:
-                    return DeclarationModifiers.Unsafe;
-                case SyntaxKind.PartialKeyword:
-                    return DeclarationModifiers.Partial;
-                case SyntaxKind.AsyncKeyword:
-                    return DeclarationModifiers.Async;
-                case SyntaxKind.RefKeyword:
-                    return DeclarationModifiers.Ref;
-                case SyntaxKind.DataKeyword:
-                    return DeclarationModifiers.Data;
-                case SyntaxKind.IdentifierToken:
-                    switch (contextualKind)
-                    {
-                        case SyntaxKind.PartialKeyword:
-                            return DeclarationModifiers.Partial;
-                        case SyntaxKind.AsyncKeyword:
-                            return DeclarationModifiers.Async;
-                        case SyntaxKind.DataKeyword:
-                            return DeclarationModifiers.Data;
-                    }
-
-                    return DeclarationModifiers.None;
-                default:
-                    return DeclarationModifiers.None;
-            }
+                SyntaxKind.PublicKeyword => DeclarationModifiers.Public,
+                SyntaxKind.InternalKeyword => DeclarationModifiers.Internal,
+                SyntaxKind.ProtectedKeyword => DeclarationModifiers.Protected,
+                SyntaxKind.PrivateKeyword => DeclarationModifiers.Private,
+                SyntaxKind.SealedKeyword => DeclarationModifiers.Sealed,
+                SyntaxKind.AbstractKeyword => DeclarationModifiers.Abstract,
+                SyntaxKind.StaticKeyword => DeclarationModifiers.Static,
+                SyntaxKind.VirtualKeyword => DeclarationModifiers.Virtual,
+                SyntaxKind.ExternKeyword => DeclarationModifiers.Extern,
+                SyntaxKind.NewKeyword => DeclarationModifiers.New,
+                SyntaxKind.OverrideKeyword => DeclarationModifiers.Override,
+                SyntaxKind.ReadOnlyKeyword => DeclarationModifiers.ReadOnly,
+                SyntaxKind.VolatileKeyword => DeclarationModifiers.Volatile,
+                SyntaxKind.UnsafeKeyword => DeclarationModifiers.Unsafe,
+                SyntaxKind.PartialKeyword => DeclarationModifiers.Partial,
+                SyntaxKind.AsyncKeyword => DeclarationModifiers.Async,
+                SyntaxKind.RefKeyword => DeclarationModifiers.Ref,
+                SyntaxKind.DataKeyword => DeclarationModifiers.Data,
+                SyntaxKind.IdentifierToken => contextualKind switch
+                {
+                    SyntaxKind.PartialKeyword => DeclarationModifiers.Partial,
+                    SyntaxKind.AsyncKeyword => DeclarationModifiers.Async,
+                    SyntaxKind.DataKeyword => DeclarationModifiers.Data,
+                    _ => DeclarationModifiers.None,
+                },
+                _ => DeclarationModifiers.None,
+            };
         }
 
         private void ParseModifiers(SyntaxListBuilder tokens, bool forAccessors)

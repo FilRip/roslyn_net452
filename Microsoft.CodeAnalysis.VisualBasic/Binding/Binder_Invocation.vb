@@ -567,9 +567,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             ' We don't want the default property GROUP to override the meaning of the item it's being 
             ' accessed off of, so mark it as compiler generated.
-            If defaultMemberGroup IsNot Nothing Then
-                defaultMemberGroup.SetWasCompilerGenerated()
-            End If
+            defaultMemberGroup?.SetWasCompilerGenerated()
 
             Return defaultMemberGroup
         End Function
@@ -1102,7 +1100,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim argumentConstantValue = arguments(0).ConstantValueOpt
                     Dim argumentValue As String
                     If argumentConstantValue.IsNull Then
-                        argumentValue = string.Empty
+                        argumentValue = String.Empty
                     ElseIf argumentConstantValue.IsChar Then
                         argumentValue = argumentConstantValue.CharValue
                     Else
@@ -1142,7 +1140,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     Dim constantValue = arguments(0).ConstantValueOpt
                     Dim argumentValue As String
                     If constantValue.IsNull Then
-                        argumentValue = string.Empty
+                        argumentValue = String.Empty
                     ElseIf constantValue.IsChar Then
                         argumentValue = constantValue.CharValue
                     Else
@@ -2789,9 +2787,7 @@ ProduceBoundNode:
                 argumentsInOrder.Add(adjustedArgument)
             Next
 
-            If paramArrayItems IsNot Nothing Then
-                paramArrayItems.Free()
-            End If
+            paramArrayItems?.Free()
 
             parameterToArgumentMap.Free()
             Return (argumentsInOrder.ToImmutableAndFree(), defaultArguments)
@@ -2941,9 +2937,7 @@ ProduceBoundNode:
                         argBuilder.AddRange(args, i)
                     End If
 
-                    If argBuilder IsNot Nothing Then
-                        argBuilder.Add(newArg)
-                    End If
+                    argBuilder?.Add(newArg)
                 Next
 
                 If argBuilder IsNot Nothing Then

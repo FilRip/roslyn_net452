@@ -289,9 +289,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                 Private Sub ProcessBadNameInCrefAttribute(crefAttribute As XmlCrefAttributeSyntax, errorLocation As Location, errid As ERRID)
                     ' Write [!:<name>]
-                    If Me._writer IsNot Nothing Then
-                        Me._writer.Write("!:")
-                    End If
+                    Me._writer?.Write("!:")
 
                     Dim reference As VisualBasicSyntaxNode = crefAttribute.Reference
 

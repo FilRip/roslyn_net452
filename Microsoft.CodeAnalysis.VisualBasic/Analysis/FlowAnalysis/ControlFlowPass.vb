@@ -49,9 +49,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
             Try
                 walker.Analyze()
-                If diagnostics IsNot Nothing Then
-                    diagnostics.AddRange(walker.diagnostics)
-                End If
+                diagnostics?.AddRange(walker.diagnostics)
                 Return walker.State.Alive
             Catch ex As CancelledByStackGuardException When diagnostics IsNot Nothing
                 ex.AddAnError(diagnostics)

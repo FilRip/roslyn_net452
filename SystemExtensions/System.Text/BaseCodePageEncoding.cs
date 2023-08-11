@@ -100,12 +100,12 @@ namespace System.Text
 
         protected SafeAllocHHandle safeNativeMemoryHandle;
 
-        private protected BaseCodePageEncoding(int codepage)
+        protected BaseCodePageEncoding(int codepage)
             : base(codepage)
         {
         }
 
-        private protected BaseCodePageEncoding(int codepage, int dataCodePage)
+        protected BaseCodePageEncoding(int codepage, int dataCodePage)
 			: base(codepage, new InternalEncoderBestFitFallback(null), new InternalDecoderBestFitFallback(null))
 		{
 			SetFallbackEncoding();
@@ -113,7 +113,7 @@ namespace System.Text
 			LoadCodePageTables();
 		}
 
-        private protected BaseCodePageEncoding(int codepage, int dataCodePage, EncoderFallback enc, DecoderFallback dec)
+        protected BaseCodePageEncoding(int codepage, int dataCodePage, EncoderFallback enc, DecoderFallback dec)
 			: base(codepage, enc, dec)
 		{
 			dataTableCodePage = dataCodePage;

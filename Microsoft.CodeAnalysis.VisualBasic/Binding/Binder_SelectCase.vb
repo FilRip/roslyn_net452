@@ -505,9 +505,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             ' Exactly one of the LowerBoundOpt or LowerBoundConditionOpt must be non-null
             Debug.Assert(boundClause.LowerBoundOpt IsNot Nothing Xor boundClause.LowerBoundConditionOpt IsNot Nothing)
 
-            Dim lowerBoundConditionOpt = boundClause.LowerBoundConditionOpt
-            If lowerBoundConditionOpt Is Nothing Then
-                lowerBoundConditionOpt = BindBinaryOperator(
+            Dim lowerBoundConditionOpt = If(boundClause.LowerBoundConditionOpt, BindBinaryOperator(
                     node:=boundClause.Syntax,
                     left:=selectExpression,
                     right:=boundClause.LowerBoundOpt,
@@ -515,15 +513,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     preliminaryOperatorKind:=BinaryOperatorKind.GreaterThanOrEqual,
                     isOperandOfConditionalBranch:=False,
                     diagnostics:=diagnostics,
-                    isSelectCase:=True).MakeCompilerGenerated()
-            End If
+                    isSelectCase:=True).MakeCompilerGenerated())
 
             ' Exactly one of the UpperBoundOpt or UpperBoundConditionOpt must be non-null
             Debug.Assert(boundClause.UpperBoundOpt IsNot Nothing Xor boundClause.UpperBoundConditionOpt IsNot Nothing)
 
-            Dim upperBoundConditionOpt = boundClause.UpperBoundConditionOpt
-            If upperBoundConditionOpt Is Nothing Then
-                upperBoundConditionOpt = BindBinaryOperator(
+            Dim upperBoundConditionOpt = If(boundClause.UpperBoundConditionOpt, BindBinaryOperator(
                     node:=syntax,
                     left:=selectExpression,
                     right:=boundClause.UpperBoundOpt,
@@ -531,8 +526,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     preliminaryOperatorKind:=BinaryOperatorKind.LessThanOrEqual,
                     isOperandOfConditionalBranch:=False,
                     diagnostics:=diagnostics,
-                    isSelectCase:=True).MakeCompilerGenerated()
-            End If
+                    isSelectCase:=True).MakeCompilerGenerated())
 
             conditionOpt = BindBinaryOperator(
                 node:=syntax,

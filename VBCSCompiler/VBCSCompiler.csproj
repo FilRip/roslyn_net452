@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CA00C092-AC9F-436A-97DF-98F4B9D136FB}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Microsoft.CodeAnalysis.CommandLine</RootNamespace>
+    <RootNamespace>Microsoft.CodeAnalysis</RootNamespace>
     <AssemblyName>VBCSCompiler</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

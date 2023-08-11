@@ -27,12 +27,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim boundExpression As BoundExpression
 
             If node.Expression Is Nothing Then
-                boundExpression = TryBindOmittedLeftForConditionalAccess(node, Me, diagnostics)
-
-                If boundExpression Is Nothing Then
-                    ' Didn't find binder that can handle conditional access with omitted left part
-                    boundExpression = ReportDiagnosticAndProduceBadExpression(diagnostics, node, ERRID.ERR_BadConditionalWithRef).MakeCompilerGenerated()
-                End If
+                boundExpression = If(TryBindOmittedLeftForConditionalAccess(node, Me, diagnostics), ReportDiagnosticAndProduceBadExpression(diagnostics, node, ERRID.ERR_BadConditionalWithRef).MakeCompilerGenerated())
             Else
                 ' Bind the expression as a value
                 boundExpression = BindValue(node.Expression, diagnostics)

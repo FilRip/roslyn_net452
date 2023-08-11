@@ -183,10 +183,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Private Shared Function GetPropertyStatementCodeBlocks(propertyStatement As PropertyStatementSyntax) As IEnumerable(Of SyntaxNode)
-            Dim initializer As SyntaxNode = propertyStatement.Initializer
-            If initializer Is Nothing Then
-                initializer = GetAsNewClauseInitializer(propertyStatement.AsClause)
-            End If
+            Dim initializer As SyntaxNode = If(propertyStatement.Initializer, GetAsNewClauseInitializer(propertyStatement.AsClause))
             Dim codeBlocks = GetMethodBaseCodeBlocks(propertyStatement)
             Return If(initializer IsNot Nothing,
                 SpecializedCollections.SingletonEnumerable(initializer).Concat(codeBlocks),
@@ -260,10 +257,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         End Function
 
         Private Shared Function GetInitializerNode(variableDeclarator As VariableDeclaratorSyntax) As SyntaxNode
-            Dim initializer As SyntaxNode = variableDeclarator.Initializer
-            If initializer Is Nothing Then
-                initializer = GetAsNewClauseInitializer(variableDeclarator.AsClause)
-            End If
+            Dim initializer As SyntaxNode = If(variableDeclarator.Initializer, GetAsNewClauseInitializer(variableDeclarator.AsClause))
 
             Return initializer
         End Function

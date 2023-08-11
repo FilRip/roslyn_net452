@@ -222,9 +222,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Try
                 Dim result As Boolean = walker.Analyze()
                 Debug.Assert(result)
-                If diagnostics IsNot Nothing Then
-                    diagnostics.AddRange(walker.diagnostics)
-                End If
+                diagnostics?.AddRange(walker.diagnostics)
 
             Catch ex As CancelledByStackGuardException When diagnostics IsNot Nothing
                 ex.AddAnError(diagnostics)

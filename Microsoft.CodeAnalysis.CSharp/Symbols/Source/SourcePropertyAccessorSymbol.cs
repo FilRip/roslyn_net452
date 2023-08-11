@@ -694,16 +694,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 // Per design meeting resolution [see bug 11253], no source accessor is implicitly declared in C#,
                 // if there is "get", "set", or expression-body syntax.
-                switch (GetSyntax().Kind())
+                return GetSyntax().Kind() switch
                 {
-                    case SyntaxKind.GetAccessorDeclaration:
-                    case SyntaxKind.SetAccessorDeclaration:
-                    case SyntaxKind.InitAccessorDeclaration:
-                    case SyntaxKind.ArrowExpressionClause:
-                        return false;
-                }
-
-                return true;
+                    SyntaxKind.GetAccessorDeclaration or
+                    SyntaxKind.SetAccessorDeclaration or
+                    SyntaxKind.InitAccessorDeclaration or
+                    SyntaxKind.ArrowExpressionClause => false,
+                    _ => true,
+                };
             }
         }
 

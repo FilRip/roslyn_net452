@@ -10,13 +10,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 {
     internal abstract partial class StructuredTriviaSyntax : CSharpSyntaxNode
     {
-        private protected StructuredTriviaSyntax(SyntaxKind kind, DiagnosticInfo[] diagnostics = null, SyntaxAnnotation[] annotations = null)
+        protected StructuredTriviaSyntax(SyntaxKind kind, DiagnosticInfo[] diagnostics = null, SyntaxAnnotation[] annotations = null)
             : base(kind, diagnostics, annotations)
         {
             this.Initialize();
         }
 
-        private protected StructuredTriviaSyntax(ObjectReader reader)
+        protected StructuredTriviaSyntax(ObjectReader reader)
             : base(reader)
         {
             this.Initialize();

@@ -1695,9 +1695,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 AddImportsDependencies(diagnostics, infoTree, clauseSpans(0))
                             End If
                         Else
-                            If unusedBuilder IsNot Nothing Then
-                                unusedBuilder.Clear()
-                            End If
+                            unusedBuilder?.Clear()
 
                             For Each clauseSpan In info.ClauseSpans
                                 If Not Me.IsImportDirectiveUsed(infoTree, clauseSpan.Start) Then
@@ -1723,9 +1721,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
                 Next
 
-                If unusedBuilder IsNot Nothing Then
-                    unusedBuilder.Free()
-                End If
+                unusedBuilder?.Free()
             End If
 
             CompleteTrees(filterTree)
@@ -3043,10 +3039,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 spine.Add(current)
                 For Each child In current.Children
                     Dim mergedNamespaceOrType = TryCast(child, MergedNamespaceOrTypeDeclaration)
-                    If mergedNamespaceOrType IsNot Nothing Then
-                        If _includeMember OrElse _includeType OrElse child.Kind = DeclarationKind.Namespace Then
-                            AppendSymbolsWithName(spine, mergedNamespaceOrType, [set])
-                        End If
+                    If mergedNamespaceOrType IsNot Nothing AndAlso
+                        (_includeMember OrElse _includeType OrElse child.Kind = DeclarationKind.Namespace) Then
+
+                        AppendSymbolsWithName(spine, mergedNamespaceOrType, [set])
                     End If
                 Next
 

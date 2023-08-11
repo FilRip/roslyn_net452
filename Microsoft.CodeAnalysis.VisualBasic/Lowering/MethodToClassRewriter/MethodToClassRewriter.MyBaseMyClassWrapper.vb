@@ -82,9 +82,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim wrapperMethod As New SynthesizedWrapperMethod(DirectCast(containingType, InstanceTypeSymbol), method, wrapperMethodName, syntax)
 
             ' register a new method
-            If Me.CompilationState.ModuleBuilderOpt IsNot Nothing Then
-                Me.CompilationState.ModuleBuilderOpt.AddSynthesizedDefinition(containingType, wrapperMethod.GetCciAdapter())
-            End If
+            Me.CompilationState.ModuleBuilderOpt?.AddSynthesizedDefinition(containingType, wrapperMethod.GetCciAdapter())
 
             ' generate method body
             Dim wrappedMethod As MethodSymbol = wrapperMethod.WrappedMethod

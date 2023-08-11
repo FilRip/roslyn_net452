@@ -17,43 +17,43 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
     [DebuggerDisplay("{GetDebuggerDisplay(), nq}")]
     internal abstract class CSharpSyntaxNode : GreenNode
     {
-        private protected CSharpSyntaxNode(SyntaxKind kind)
+        protected CSharpSyntaxNode(SyntaxKind kind)
             : base((ushort)kind)
         {
             GreenStats.NoteGreen(this);
         }
 
-        private protected CSharpSyntaxNode(SyntaxKind kind, int fullWidth)
+        protected CSharpSyntaxNode(SyntaxKind kind, int fullWidth)
             : base((ushort)kind, fullWidth)
         {
             GreenStats.NoteGreen(this);
         }
 
-        private protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics)
+        protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics)
             : base((ushort)kind, diagnostics)
         {
             GreenStats.NoteGreen(this);
         }
 
-        private protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics, int fullWidth)
+        protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics, int fullWidth)
             : base((ushort)kind, diagnostics, fullWidth)
         {
             GreenStats.NoteGreen(this);
         }
 
-        private protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics, SyntaxAnnotation[] annotations)
+        protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics, SyntaxAnnotation[] annotations)
             : base((ushort)kind, diagnostics, annotations)
         {
             GreenStats.NoteGreen(this);
         }
 
-        private protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics, SyntaxAnnotation[] annotations, int fullWidth)
+        protected CSharpSyntaxNode(SyntaxKind kind, DiagnosticInfo[] diagnostics, SyntaxAnnotation[] annotations, int fullWidth)
             : base((ushort)kind, diagnostics, annotations, fullWidth)
         {
             GreenStats.NoteGreen(this);
         }
 
-        private protected CSharpSyntaxNode(ObjectReader reader)
+        protected CSharpSyntaxNode(ObjectReader reader)
             : base(reader)
         {
         }

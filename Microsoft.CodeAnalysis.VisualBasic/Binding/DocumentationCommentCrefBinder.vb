@@ -182,9 +182,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 candidatePointer += 1
             End While
 
-            If signatureTypes IsNot Nothing Then
-                signatureTypes.Free()
-            End If
+            signatureTypes?.Free()
 
             If goodPointer < candidatePointer Then
                 symbols.Clip(goodPointer)

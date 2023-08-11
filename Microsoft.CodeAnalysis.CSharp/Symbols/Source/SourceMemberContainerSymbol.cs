@@ -171,7 +171,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         #region Construction
 
-        private protected SourceMemberContainerTypeSymbol(
+        protected SourceMemberContainerTypeSymbol(
             NamespaceOrTypeSymbol containingSymbol,
             MergedTypeDeclaration declaration,
             BindingDiagnosticBag diagnostics,

@@ -6,8 +6,8 @@ using System.Security.Principal;
 
 using Roslyn.Utilities;
 
-
 #nullable enable
+
 namespace Microsoft.CodeAnalysis
 {
     internal static class NamedPipeUtil

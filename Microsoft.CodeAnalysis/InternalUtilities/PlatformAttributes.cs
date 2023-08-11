@@ -13,7 +13,7 @@ namespace System.Runtime.Versioning
     /// </summary>
     internal abstract class OSPlatformAttribute : Attribute
     {
-        private protected OSPlatformAttribute(string platformName)
+        protected OSPlatformAttribute(string platformName)
         {
             PlatformName = platformName;
         }

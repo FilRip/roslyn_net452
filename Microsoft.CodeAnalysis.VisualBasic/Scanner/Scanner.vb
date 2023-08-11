@@ -134,9 +134,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 s_wsTablePool.Free(_wsTable)
 
                 For Each p As Page In _pages
-                    If p IsNot Nothing Then
-                        p.Free()
-                    End If
+                    p?.Free()
                 Next
 
                 Array.Clear(_pages, 0, _pages.Length)
@@ -210,11 +208,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Syntax.InternalSyntax
                 End If
             End If
 
-            Dim token = TryScanToken(leadingTrivia)
-
-            If token Is Nothing Then
-                token = ScanNextCharAsToken(leadingTrivia)
-            End If
+            Dim token = If(TryScanToken(leadingTrivia), ScanNextCharAsToken(leadingTrivia))
 
             If _lineBufferOffset > _endOfTerminatorTrivia Then
                 _endOfTerminatorTrivia = _lineBufferOffset

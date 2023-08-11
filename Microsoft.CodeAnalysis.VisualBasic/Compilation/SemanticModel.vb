@@ -1860,9 +1860,7 @@ _Default:
                     ' Special case: we want to see constructors, even though they can't be referenced by name.
                     If result.CanBeReferencedByName() OrElse
                         (result.Kind = SymbolKind.Method AndAlso DirectCast(result, MethodSymbol).MethodKind = MethodKind.Constructor) Then
-                        If builder IsNot Nothing Then
-                            builder.Add(result)
-                        End If
+                        builder?.Add(result)
                     ElseIf builder Is Nothing Then
                         builder = ArrayBuilder(Of Symbol).GetInstance()
                         builder.AddRange(sealedResults, pos)

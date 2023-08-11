@@ -372,9 +372,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                             rewrittenSideeffects.AddRange(sideeffects, i)
                         End If
 
-                        If rewrittenSideeffects IsNot Nothing Then
-                            rewrittenSideeffects.Add(rewrittenSideeffect)
-                        End If
+                        rewrittenSideeffects?.Add(rewrittenSideeffect)
 
                     Next
                 End If
@@ -1148,9 +1146,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.CodeGen
                             rewrittenInitializers.AddRange(initializers, i)
                         End If
 
-                        If rewrittenInitializers IsNot Nothing Then
-                            rewrittenInitializers.Add(rewrittenInitializer)
-                        End If
+                        rewrittenInitializers?.Add(rewrittenInitializer)
                     Next
                 End If
 

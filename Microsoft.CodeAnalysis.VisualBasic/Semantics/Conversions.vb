@@ -776,7 +776,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                                 targetType,
                                 integerOverflow)
 
-                Debug.Assert(result Is Nothing OrElse Not result.IsBad OrElse integerOverflow = False)
+                Debug.Assert(result Is Nothing OrElse Not result.IsBad OrElse Not integerOverflow)
                 Return result
             End If
 
@@ -2443,12 +2443,12 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             'Check interfaces implemented by System.Array first.
             Dim base = source.BaseTypeWithDefinitionUseSiteDiagnostics(useSiteInfo)
 
-            If base IsNot Nothing Then
-                If Not base.IsErrorType() AndAlso base.TypeKind = TypeKind.Class AndAlso
-                   IsWideningConversion(ClassifyDirectCastConversion(base, destination, useSiteInfo)) Then
-                    'From a reference type to an interface type, provided that the type implements the interface or a variant compatible interface.
-                    Return ConversionKind.WideningReference
-                End If
+            If base IsNot Nothing AndAlso
+                Not base.IsErrorType() AndAlso base.TypeKind = TypeKind.Class AndAlso
+                IsWideningConversion(ClassifyDirectCastConversion(base, destination, useSiteInfo)) Then
+
+                'From a reference type to an interface type, provided that the type implements the interface or a variant compatible interface.
+                Return ConversionKind.WideningReference
             End If
 
             Dim array = DirectCast(source, ArrayTypeSymbol)
@@ -3712,9 +3712,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Dim queue As ArrayBuilder(Of TypeParameterSymbol) = Nothing
             Dim result As ConversionKind = ClassifyConversionFromTypeParameter(typeParameter, destination, queue, varianceCompatibilityClassificationDepth, useSiteInfo)
 
-            If queue IsNot Nothing Then
-                queue.Free()
-            End If
+            queue?.Free()
 
             Return result
         End Function
@@ -3755,14 +3753,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     If dstIsInterfaceType Then
                         Dim valueType = typeParameter.ContainingAssembly.GetSpecialType(SpecialType.System_ValueType)
 
-                        If valueType.Kind <> SymbolKind.ErrorType Then
-                            ' !!! Not mentioned explicitly in the spec.
-                            If convToInterface.AccumulateConversionClassificationToVariantCompatibleInterface(valueType, destinationInterface,
+                        If valueType.Kind <> SymbolKind.ErrorType AndAlso
+                            convToInterface.AccumulateConversionClassificationToVariantCompatibleInterface(valueType, destinationInterface,
                                                                                                               varianceCompatibilityClassificationDepth,
                                                                                                               useSiteInfo) Then
-                                convToInterface.AssertFoundIdentity()
-                                Return ConversionKind.WideningTypeParameter
-                            End If
+                            ' !!! Not mentioned explicitly in the spec.
+                            convToInterface.AssertFoundIdentity()
+                            Return ConversionKind.WideningTypeParameter
                         End If
                     End If
 
@@ -3860,12 +3857,10 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
                 Next
 
-                If queue IsNot Nothing Then
-                    If queueIndex < queue.Count Then
-                        typeParameter = queue(queueIndex)
-                        queueIndex += 1
-                        Continue Do
-                    End If
+                If queue IsNot Nothing AndAlso queueIndex < queue.Count Then
+                    typeParameter = queue(queueIndex)
+                    queueIndex += 1
+                    Continue Do
                 End If
 
                 Exit Do

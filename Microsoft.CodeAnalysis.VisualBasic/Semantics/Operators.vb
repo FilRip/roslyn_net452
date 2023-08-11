@@ -2218,9 +2218,7 @@ Done:
                         mostSpecificTargetType = MostEncompassing(typeSet, useSiteInfo)
                     End If
 
-                    If typeSet IsNot Nothing Then
-                        typeSet.Free()
-                    End If
+                    typeSet?.Free()
 
                     If mostSpecificSourceType IsNot Nothing AndAlso mostSpecificTargetType IsNot Nothing Then
                         bestMatch = ChooseMostSpecificConversionOperator(opSet, applicable, mostSpecificSourceType, mostSpecificTargetType, bestMatchIsAmbiguous)
@@ -2636,9 +2634,7 @@ Done:
                         End If
                     End If
 
-                    If typeSet IsNot Nothing Then
-                        typeSet.Free()
-                    End If
+                    typeSet?.Free()
 
                     If mostSpecificSourceType IsNot Nothing AndAlso mostSpecificTargetType IsNot Nothing Then
                         bestMatch = ChooseMostSpecificConversionOperator(opSet, applicable, mostSpecificSourceType, mostSpecificTargetType, bestMatchIsAmbiguous)

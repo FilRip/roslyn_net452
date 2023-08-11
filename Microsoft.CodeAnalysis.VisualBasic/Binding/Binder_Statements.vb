@@ -1779,9 +1779,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                     Dim container = Me.ContainingBinder
 
-                    If container IsNot Nothing Then
-                        container.VerifyNameShadowingInMethodBody(local, nameSyntax, identifier, diagnostics)
-                    End If
+                    container?.VerifyNameShadowingInMethodBody(local, nameSyntax, identifier, diagnostics)
                 End If
             End If
         End Sub

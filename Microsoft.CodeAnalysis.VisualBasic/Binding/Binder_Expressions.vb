@@ -640,9 +640,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                 symbols.Clear()
                 Dim diagnosticInfo = TryCast(errorType.ErrorInfo, IDiagnosticInfoWithSymbols)
 
-                If diagnosticInfo IsNot Nothing Then
-                    diagnosticInfo.GetAssociatedSymbols(symbols)
-                End If
+                diagnosticInfo?.GetAssociatedSymbols(symbols)
             End If
         End Sub
 
@@ -2752,9 +2750,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
                     End If
                 End If
 
-                If propertyDiagnostics IsNot Nothing Then
-                    propertyDiagnostics.Free()
-                End If
+                propertyDiagnostics?.Free()
 
                 diagnostics.AddRangeAndFree(leftDiagnostics)
                 Return boundLeft
@@ -4259,9 +4255,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
 
                         initializers.Add(boundExpression)
 
-                        If allInitializers IsNot Nothing Then
-                            allInitializers.Add(boundExpression)
-                        End If
+                        allInitializers?.Add(boundExpression)
 
                     Next
                 Else

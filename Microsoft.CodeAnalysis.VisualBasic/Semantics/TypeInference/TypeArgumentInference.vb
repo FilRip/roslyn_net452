@@ -1296,9 +1296,7 @@ HandleAsAGeneralExpression:
             )
                 Dim typeNode As TypeParameterNode = FindTypeParameterNode(genericParameter)
 
-                If typeNode IsNot Nothing Then
-                    typeNode.AddTypeHint(inferredType, inferredTypeByAssumption, argumentLocation, parameter, inferredFromObject, inferenceRestrictions)
-                End If
+                typeNode?.AddTypeHint(inferredType, inferredTypeByAssumption, argumentLocation, parameter, inferredFromObject, inferenceRestrictions)
             End Sub
 
 
