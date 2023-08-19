@@ -39,7 +39,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
             if (reference is Cci.IFieldReference fieldReference)
             {
                 VisitFieldReference(fieldReference, context);
-                return;
             }
         }
 
@@ -58,13 +57,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 VisitTypeReference(pointerType.GetTargetType(context), context);
                 return;
             }
-
-            //Cci.IManagedPointerTypeReference managedPointerType = typeReference as Cci.IManagedPointerTypeReference;
-            //if (managedPointerType != null)
-            //{
-            //    VisitTypeReference(managedPointerType.GetTargetType(this.context));
-            //    return;
-            //}
 
             if (typeReference is Cci.IModifiedTypeReference modifiedType)
             {

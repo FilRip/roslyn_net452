@@ -354,7 +354,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
         private readonly Cci.ITypeReference _type;
         private readonly string _name;
 
-        public SynthesizedStaticField(string name, Cci.INamedTypeDefinition containingType, Cci.ITypeReference type)
+        protected SynthesizedStaticField(string name, Cci.INamedTypeDefinition containingType, Cci.ITypeReference type)
         {
             RoslynDebug.Assert(name != null);
             RoslynDebug.Assert(containingType != null);
@@ -391,7 +391,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public int Offset
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public Cci.ITypeDefinition ContainingTypeDefinition => _containingType;
@@ -429,19 +431,25 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public MetadataConstant Constant
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public sealed override bool Equals(object? obj)
         {
             // It is not supported to rely on default equality of these Cci objects, an explicit way to compare and hash them should be used.
-            throw Roslyn.Utilities.ExceptionUtilities.Unreachable;
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+            throw ExceptionUtilities.Unreachable;
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
 
         public sealed override int GetHashCode()
         {
             // It is not supported to rely on default equality of these Cci objects, an explicit way to compare and hash them should be used.
-            throw Roslyn.Utilities.ExceptionUtilities.Unreachable;
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+            throw ExceptionUtilities.Unreachable;
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
     }
 
@@ -558,7 +566,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public TypeDefinitionHandle TypeDef
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public Cci.IGenericMethodParameterReference? AsGenericMethodParameterReference => null;
@@ -602,13 +612,17 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public sealed override bool Equals(object? obj)
         {
             // It is not supported to rely on default equality of these Cci objects, an explicit way to compare and hash them should be used.
-            throw Roslyn.Utilities.ExceptionUtilities.Unreachable;
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+            throw ExceptionUtilities.Unreachable;
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
 
         public sealed override int GetHashCode()
         {
             // It is not supported to rely on default equality of these Cci objects, an explicit way to compare and hash them should be used.
-            throw Roslyn.Utilities.ExceptionUtilities.Unreachable;
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+            throw ExceptionUtilities.Unreachable;
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
     }
 }

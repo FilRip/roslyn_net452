@@ -83,7 +83,10 @@ namespace Microsoft.CodeAnalysis
         private const string s_PublicIdBitmap = "\u2400\u0000\uffbb\uafff\uffff\u87ff\ufffe\u07ff";
 
         // size of XmlCharType table
+
+#pragma warning disable S125 // Sections of code should not be commented out
         //private const uint CharPropertiesSize = (uint)char.MaxValue + 1;
+#pragma warning restore S125 // Sections of code should not be commented out
 
         // 8 results in the smaller combined size of the tables.
         // if anything changes (like we do not care about some of the char flags), try 

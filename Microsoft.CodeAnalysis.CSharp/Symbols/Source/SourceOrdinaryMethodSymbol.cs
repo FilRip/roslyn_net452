@@ -126,7 +126,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // evaluating the constraints may depend on accessing this method from
             // the container (comparing this method to others to find overrides for
             // instance). Constraints are checked in AfterAddingTypeMembersChecks.
-            var signatureBinder = withTypeParamsBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+            var signatureBinder = withTypeParamsBinder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
 
             ImmutableArray<ParameterSymbol> parameters = ParameterHelpers.MakeParameters(
                 signatureBinder, this, syntax.ParameterList, out SyntaxToken arglistToken,
@@ -169,7 +169,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     Binder.CheckFeatureAvailability(syntax.SyntaxTree, MessageID.IDS_OverrideWithConstraints, diagnostics,
                                                     syntax.ConstraintClauses[0].WhereKeyword.GetLocation());
 
-                    declaredConstraints = signatureBinder.WithAdditionalFlags(BinderFlags.GenericConstraintsClause | BinderFlags.SuppressConstraintChecks).
+                    declaredConstraints = signatureBinder.WithAdditionalFlags(EBinder.GenericConstraintsClause | EBinder.SuppressConstraintChecks).
                                               BindTypeParameterConstraintClauses(this, TypeParameters, syntax.TypeParameterList, syntax.ConstraintClauses,
                                                                                  diagnostics, performOnlyCycleSafeValidation: false, isForOverride: true);
                 }

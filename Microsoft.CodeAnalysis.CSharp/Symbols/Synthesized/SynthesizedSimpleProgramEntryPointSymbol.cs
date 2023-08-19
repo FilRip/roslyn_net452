@@ -206,7 +206,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             result = new InContainerBinder(globalNamespace, result);
             result = new InContainerBinder(ContainingType, result);
             result = new InMethodBinder(this, result);
-            result = result.WithAdditionalFlags(ignoreAccessibility ? BinderFlags.IgnoreAccessibility : BinderFlags.None);
+            result = result.WithAdditionalFlags(ignoreAccessibility ? EBinder.IgnoreAccessibility : EBinder.None);
 
             return new ExecutableCodeBinder(syntaxNode, this, result);
         }

@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis
         private static readonly char[] s_searchPatternTrimChars = new char[] { '\t', '\n', '\v', '\f', '\r', ' ', '\x0085', '\x00a0' };
         public const string ErrorLogOptionFormat = "<file>[,version={1|1.0|2|2.1}]";
 
-        public CommandLineParser(CommonMessageProvider messageProvider, bool isScriptCommandLineParser)
+        protected CommandLineParser(CommonMessageProvider messageProvider, bool isScriptCommandLineParser)
         {
             RoslynDebug.Assert(messageProvider != null);
             _messageProvider = messageProvider;
@@ -710,6 +710,7 @@ namespace Microsoft.CodeAnalysis
             {
                 for (; offset < length && string.IsNullOrEmpty(parts[offset]); offset++)
                 {
+                    // Nothing to do
                 }
 
                 length -= offset;
@@ -925,8 +926,10 @@ namespace Microsoft.CodeAnalysis
             }
             else
             {
+#pragma warning disable S125 // Sections of code should not be commented out
                 // TODO: uncomment when fixing https://github.com/dotnet/roslyn/issues/5325
                 //isScriptFile = string.Equals(extension, ScriptFileExtension, StringComparison.OrdinalIgnoreCase);
+#pragma warning restore S125 // Sections of code should not be commented out
                 isScriptFile = false;
             }
 

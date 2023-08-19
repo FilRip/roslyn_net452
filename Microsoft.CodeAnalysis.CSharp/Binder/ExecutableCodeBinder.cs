@@ -31,8 +31,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             _binderUpdatedHandler = binderUpdatedHandler;
         }
 
-        internal ExecutableCodeBinder(SyntaxNode root, Symbol memberSymbol, Binder next, BinderFlags additionalFlags)
-            : base(next, (next.Flags | additionalFlags) & ~BinderFlags.AllClearedAtExecutableCodeBoundary)
+        internal ExecutableCodeBinder(SyntaxNode root, Symbol memberSymbol, Binder next, EBinder additionalFlags)
+            : base(next, (next.Flags | additionalFlags) & ~EBinder.AllClearedAtExecutableCodeBoundary)
         {
             _memberSymbol = memberSymbol;
             _root = root;

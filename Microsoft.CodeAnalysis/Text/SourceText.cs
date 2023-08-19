@@ -55,7 +55,7 @@ namespace Microsoft.CodeAnalysis.Text
             _lazyContainer = container;
         }
 
-        internal SourceText(ImmutableArray<byte> checksum, SourceHashAlgorithm checksumAlgorithm, ImmutableArray<byte> embeddedTextBlob)
+        protected SourceText(ImmutableArray<byte> checksum, SourceHashAlgorithm checksumAlgorithm, ImmutableArray<byte> embeddedTextBlob)
             : this(checksum, checksumAlgorithm, container: null)
         {
             // We should never have precomputed the embedded text blob without precomputing the checksum.

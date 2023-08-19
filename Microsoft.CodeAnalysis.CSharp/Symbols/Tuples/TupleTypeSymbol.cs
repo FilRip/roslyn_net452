@@ -248,7 +248,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static void ReportUseSiteAndObsoleteDiagnostics(CSharpSyntaxNode? syntax, BindingDiagnosticBag diagnostics, NamedTypeSymbol firstTupleType)
         {
             Binder.ReportUseSite(firstTupleType, diagnostics, syntax);
-            Binder.ReportDiagnosticsIfObsoleteInternal(diagnostics, firstTupleType, syntax, firstTupleType.ContainingType, BinderFlags.None);
+            Binder.ReportDiagnosticsIfObsoleteInternal(diagnostics, firstTupleType, syntax, firstTupleType.ContainingType, EBinder.None);
         }
 
         /// <summary>

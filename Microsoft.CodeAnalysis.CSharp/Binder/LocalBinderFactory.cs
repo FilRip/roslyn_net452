@@ -162,7 +162,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override void VisitPrimaryConstructorBaseType(PrimaryConstructorBaseTypeSyntax node)
         {
-            Binder enclosing = _enclosing.WithAdditionalFlags(BinderFlags.ConstructorInitializer);
+            Binder enclosing = _enclosing.WithAdditionalFlags(EBinder.ConstructorInitializer);
             AddToMap(node, enclosing);
             VisitConstructorInitializerArgumentList(node, node.ArgumentList, enclosing);
         }
@@ -311,7 +311,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override void VisitConstructorInitializer(ConstructorInitializerSyntax node)
         {
-            var binder = _enclosing.WithAdditionalFlags(BinderFlags.ConstructorInitializer);
+            var binder = _enclosing.WithAdditionalFlags(EBinder.ConstructorInitializer);
             AddToMap(node, binder);
             VisitConstructorInitializerArgumentList(node, node.ArgumentList, binder);
         }
@@ -483,7 +483,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override void VisitUnsafeStatement(UnsafeStatementSyntax node)
         {
-            Binder binder = _enclosing.WithAdditionalFlags(BinderFlags.UnsafeRegion);
+            Binder binder = _enclosing.WithAdditionalFlags(EBinder.UnsafeRegion);
             AddToMap(node, binder);
 
             Visit(node.Block, binder); // This will create the block binder for the block.
@@ -515,7 +515,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Visit(node.Expression, lockBinder);
 
             StatementSyntax statement = node.Statement;
-            Binder statementBinder = lockBinder.WithAdditionalFlags(BinderFlags.InLockBody);
+            Binder statementBinder = lockBinder.WithAdditionalFlags(EBinder.InLockBody);
             if (statementBinder != lockBinder)
             {
                 AddToMap(statement, statementBinder);
@@ -617,7 +617,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // to get a map entry, so we don't need to worry about the WithAdditionalFlags
                 // binder being dropped.  That is, there's no point in adding the WithAdditionalFlags
                 // binder to the map ourselves and having VisitBlock unconditionally overwrite it.
-                Visit(node.Block, _enclosing.WithAdditionalFlags(BinderFlags.InTryBlockOfTryCatch));
+                Visit(node.Block, _enclosing.WithAdditionalFlags(EBinder.InTryBlockOfTryCatch));
             }
             else
             {
@@ -642,7 +642,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (node.Filter != null)
             {
-                Binder filterBinder = clauseBinder.WithAdditionalFlags(BinderFlags.InCatchFilter);
+                Binder filterBinder = clauseBinder.WithAdditionalFlags(EBinder.InCatchFilter);
                 AddToMap(node.Filter, filterBinder);
                 Visit(node.Filter, filterBinder);
             }
@@ -667,10 +667,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             // statement with no arguments is not allowed in a finally clause that is nested inside
             // the nearest enclosing catch clause.
 
-            var additionalFlags = BinderFlags.InFinallyBlock;
-            if (_enclosing.Flags.Includes(BinderFlags.InCatchBlock))
+            var additionalFlags = EBinder.InFinallyBlock;
+            if (_enclosing.Flags.Includes(EBinder.InCatchBlock))
             {
-                additionalFlags |= BinderFlags.InNestedFinallyBlock;
+                additionalFlags |= EBinder.InNestedFinallyBlock;
             }
 
             Visit(node.Block, _enclosing.WithAdditionalFlags(additionalFlags));

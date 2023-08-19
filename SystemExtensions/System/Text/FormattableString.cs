@@ -15,7 +15,7 @@ namespace SystemExtensions
 
         public abstract string ToString(IFormatProvider formatProvider);
 
-        string IFormattable.ToString(string ignored, IFormatProvider formatProvider)
+        string IFormattable.ToString(string format, IFormatProvider formatProvider)
         {
             return ToString(formatProvider);
         }

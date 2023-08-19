@@ -21,7 +21,9 @@ namespace Microsoft.CodeAnalysis
 
             // TODO: Below assert has been commented out as is not true for VB field decls where multiple variables can share same initializer.
             // Declared node is the identifier, which doesn't contain the initializer. Can we tweak the assert somehow to handle this case?
+#pragma warning disable S125 // Sections of code should not be commented out
             // Debug.Assert(executableCodeBlocks.All(n => n.Ancestors().Contains(declaredNode)));
+#pragma warning restore S125 // Sections of code should not be commented out
 
             DeclaredNode = declaredNode;
             ExecutableCodeBlocks = executableCodeBlocks;

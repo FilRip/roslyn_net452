@@ -176,15 +176,15 @@ namespace Microsoft.CodeAnalysis.CSharp
             // NOTE: it's possible that more than one of these conditions is satisfied and that
             // we won't report the syntactically innermost.  However, dev11 appears to check
             // them in this order, regardless of syntactic nesting (StatementBinder::bindYield).
-            if (this.Flags.Includes(BinderFlags.InFinallyBlock))
+            if (this.Flags.Includes(EBinder.InFinallyBlock))
             {
                 Error(diagnostics, ErrorCode.ERR_BadYieldInFinally, node.YieldKeyword);
             }
-            else if (this.Flags.Includes(BinderFlags.InTryBlockOfTryCatch))
+            else if (this.Flags.Includes(EBinder.InTryBlockOfTryCatch))
             {
                 Error(diagnostics, ErrorCode.ERR_BadYieldInTryOfCatch, node.YieldKeyword);
             }
-            else if (this.Flags.Includes(BinderFlags.InCatchBlock))
+            else if (this.Flags.Includes(EBinder.InCatchBlock))
             {
                 Error(diagnostics, ErrorCode.ERR_BadYieldInCatch, node.YieldKeyword);
             }
@@ -199,7 +199,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundStatement BindYieldBreakStatement(YieldStatementSyntax node, BindingDiagnosticBag diagnostics)
         {
-            if (this.Flags.Includes(BinderFlags.InFinallyBlock))
+            if (this.Flags.Includes(EBinder.InFinallyBlock))
             {
                 Error(diagnostics, ErrorCode.ERR_BadYieldInFinally, node.YieldKeyword);
             }
@@ -358,12 +358,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 boundExpr = BindThrownExpression(exprSyntax, diagnostics, ref hasErrors);
             }
-            else if (!this.Flags.Includes(BinderFlags.InCatchBlock))
+            else if (!this.Flags.Includes(EBinder.InCatchBlock))
             {
                 diagnostics.Add(ErrorCode.ERR_BadEmptyThrow, node.ThrowKeyword.GetLocation());
                 hasErrors = true;
             }
-            else if (this.Flags.Includes(BinderFlags.InNestedFinallyBlock))
+            else if (this.Flags.Includes(EBinder.InNestedFinallyBlock))
             {
                 // There's a special error code for a rethrow in a finally clause in a catch clause.
                 // Best guess interpretation: if an exception occurs within the nested try block

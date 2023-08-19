@@ -13,9 +13,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 {
     public partial class Binder
     {
-        private bool ValidateLambdaParameterNameConflictsInScope(Location location, string name, BindingDiagnosticBag diagnostics)
+        private void ValidateLambdaParameterNameConflictsInScope(Location location, string name, BindingDiagnosticBag diagnostics)
         {
-            return ValidateNameConflictsInScope(null, location, name, diagnostics);
+            ValidateNameConflictsInScope(null, location, name, diagnostics);
         }
 
         internal bool ValidateDeclarationNameConflictsInScope(Symbol symbol, BindingDiagnosticBag diagnostics)

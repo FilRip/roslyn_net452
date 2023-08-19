@@ -182,6 +182,14 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return attributes
         End Function
 
+        Private Shared Iterator Function GetAttributes(attributeLists As SyntaxList(Of AttributeListSyntax)) As IEnumerable(Of SyntaxNode)
+            For Each attributeList In attributeLists
+                For Each attribute In attributeList.Attributes
+                    Yield attribute
+                Next
+            Next
+        End Function
+
         Private Shared Function GetPropertyStatementCodeBlocks(propertyStatement As PropertyStatementSyntax) As IEnumerable(Of SyntaxNode)
             Dim initializer As SyntaxNode = If(propertyStatement.Initializer, GetAsNewClauseInitializer(propertyStatement.AsClause))
             Dim codeBlocks = GetMethodBaseCodeBlocks(propertyStatement)
@@ -236,14 +244,6 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
             Return If(asClause IsNot Nothing AndAlso Not asClause.Attributes.IsEmpty,
                 GetAttributes(asClause.Attributes),
                 SpecializedCollections.EmptyEnumerable(Of SyntaxNode))
-        End Function
-
-        Private Shared Iterator Function GetAttributes(attributeLists As SyntaxList(Of AttributeListSyntax)) As IEnumerable(Of SyntaxNode)
-            For Each attributeList In attributeLists
-                For Each attribute In attributeList.Attributes
-                    Yield attribute
-                Next
-            Next
         End Function
 
         Private Shared Function GetParameterListInitializersAndAttributes(parameterList As ParameterListSyntax) As IEnumerable(Of SyntaxNode)

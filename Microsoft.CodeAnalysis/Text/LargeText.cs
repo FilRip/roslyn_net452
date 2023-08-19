@@ -288,8 +288,8 @@ namespace Microsoft.CodeAnalysis.Text
                     {
                         case '\r':
                             lastCr = index;
-                            goto line_break;
-
+                            LineBreak();
+                            break;
                         case '\n':
                             // Assumes that the only 2-char line break sequence is CR+LF
                             if (lastCr == (index - 1))
@@ -297,16 +297,19 @@ namespace Microsoft.CodeAnalysis.Text
                                 position = index;
                                 break;
                             }
-
-                            goto line_break;
-
+                            LineBreak();
+                            break;
                         case '\u0085':
                         case '\u2028':
                         case '\u2029':
-                        line_break:
-                            arrayBuilder.Add(position);
-                            position = index;
+                            LineBreak();
                             break;
+                    }
+
+                    void LineBreak()
+                    {
+                        arrayBuilder.Add(position);
+                        position = index;
                     }
                 }
             }

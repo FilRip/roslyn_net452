@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // public readonly Conversion ElementConversion; // element type to iteration var type - also required for arrays, so stored elsewhere
         public readonly Conversion EnumeratorConversion; // enumerator to object
 
-        public readonly BinderFlags Location;
+        public readonly EBinder Location;
 
         private ForEachEnumeratorInfo(
             TypeSymbol collectionType,
@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             Conversion collectionConversion,
             Conversion currentConversion,
             Conversion enumeratorConversion,
-            BinderFlags location)
+            EBinder location)
         {
 
             this.CollectionType = collectionType;
@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             public Conversion CurrentConversion;
             public Conversion EnumeratorConversion;
 
-            public ForEachEnumeratorInfo Build(BinderFlags location)
+            public ForEachEnumeratorInfo Build(EBinder location)
             {
 #nullable restore
                 return new ForEachEnumeratorInfo(

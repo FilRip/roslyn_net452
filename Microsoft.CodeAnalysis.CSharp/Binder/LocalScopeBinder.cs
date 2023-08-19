@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
         }
 
-        internal LocalScopeBinder(Binder next, BinderFlags flags)
+        internal LocalScopeBinder(Binder next, EBinder flags)
             : base(next, flags)
         {
             var parentDepth = next.LocalScopeDepth;

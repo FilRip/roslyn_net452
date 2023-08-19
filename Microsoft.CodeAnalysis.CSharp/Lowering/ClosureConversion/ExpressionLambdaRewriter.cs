@@ -1037,7 +1037,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private BoundExpression ExprFactory(string name, ImmutableArray<TypeSymbol> typeArgs, params BoundExpression[] arguments)
         {
-            return _bound.StaticCall(_ignoreAccessibility ? BinderFlags.IgnoreAccessibility : BinderFlags.None, ExpressionType, name, typeArgs, arguments);
+            return _bound.StaticCall(_ignoreAccessibility ? EBinder.IgnoreAccessibility : EBinder.None, ExpressionType, name, typeArgs, arguments);
         }
 
         private BoundExpression Constant(BoundExpression node)

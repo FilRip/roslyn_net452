@@ -42,13 +42,13 @@ namespace Microsoft.CodeAnalysis.CodeGen
         private int _instructionCountAtLastLabel = -1;
 
         // This data is only relevant when builder has been realized.
-        public ImmutableArray<byte> RealizedIL;
-        public ImmutableArray<Cci.ExceptionHandlerRegion> RealizedExceptionHandlers;
-        public SequencePointList RealizedSequencePoints;
+        public ImmutableArray<byte> RealizedIL { get; set; }
+        public ImmutableArray<Cci.ExceptionHandlerRegion> RealizedExceptionHandlers { get; set; }
+        public SequencePointList RealizedSequencePoints { get; set; }
 
         // debug sequence points from all blocks, note that each 
         // sequence point references absolute IL offset via IL marker
-        public ArrayBuilder<RawSequencePoint> SeqPointsOpt;
+        public ArrayBuilder<RawSequencePoint> SeqPointsOpt { get; set; }
 
         /// <summary> 
         /// In some cases we have to get a final IL offset during emit phase, for example for
@@ -283,47 +283,53 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// </summary>
         private static void MarkReachableFrom(ArrayBuilder<BasicBlock> reachableBlocks, BasicBlock block)
         {
-        tryAgain:
-
-            if (block != null && block.Reachability == Reachability.NotReachable)
+            bool loop = true;
+            while (loop)
             {
-                block.Reachability = Reachability.Reachable;
+                loop = false;
+                if (block != null && block.Reachability == Reachability.NotReachable)
+                {
+                    block.Reachability = Reachability.Reachable;
 
-                var branchCode = block.BranchCode;
-                if (branchCode == ILOpCode.Nop && block.Type == BlockType.Normal)
-                {
-                    block = block.NextBlock;
-                    goto tryAgain;
-                }
-
-                if (branchCode.CanFallThrough())
-                {
-                    PushReachableBlockToProcess(reachableBlocks, block.NextBlock);
-                }
-                else
-                {
-                    // If this block is an "endfinally" block, then clear
-                    // the reachability of the following special block.
-                    if (branchCode == ILOpCode.Endfinally)
+                    var branchCode = block.BranchCode;
+                    if (branchCode == ILOpCode.Nop && block.Type == BlockType.Normal)
                     {
-                        var enclosingFinally = block.EnclosingHandler;
-                        enclosingFinally?.UnblockFinally();
+                        block = block.NextBlock;
+                        loop = true;
                     }
-                }
 
-                switch (block.Type)
-                {
-                    case BlockType.Switch:
-                        MarkReachableFromSwitch(reachableBlocks, block);
-                        break;
+                    if (!loop)
+                    {
+                        if (branchCode.CanFallThrough())
+                        {
+                            PushReachableBlockToProcess(reachableBlocks, block.NextBlock);
+                        }
+                        else
+                        {
+                            // If this block is an "endfinally" block, then clear
+                            // the reachability of the following special block.
+                            if (branchCode == ILOpCode.Endfinally)
+                            {
+                                var enclosingFinally = block.EnclosingHandler;
+                                enclosingFinally?.UnblockFinally();
+                            }
+                        }
 
-                    case BlockType.Try:
-                        MarkReachableFromTry(reachableBlocks, block);
-                        break;
+                        switch (block.Type)
+                        {
+                            case BlockType.Switch:
+                                MarkReachableFromSwitch(reachableBlocks, block);
+                                break;
 
-                    default:
-                        MarkReachableFromBranch(reachableBlocks, block);
-                        break;
+                            case BlockType.Try:
+                                MarkReachableFromTry(reachableBlocks, block);
+                                break;
+
+                            default:
+                                MarkReachableFromBranch(reachableBlocks, block);
+                                break;
+                        }
+                    }
                 }
             }
         }
@@ -488,7 +494,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             // since unconditional labels can move outside try blocks, but conditional cannot,
             // forwarding unconditional labels via leaving before forwarding unconditional ones
             // may yield slightly different results and we want results to be deterministic.
-            return ForwardLabelsNoLeaving() | ForwardLabelsAllowLeaving();
+            return ForwardLabelsNoLeaving() || ForwardLabelsAllowLeaving();
         }
 
         private bool ForwardLabelsNoLeaving()
@@ -903,7 +909,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
                         break;
 
                     case ILOpCode.Switch:
+#pragma warning disable S125 // Sections of code should not be commented out
                         // switch (N, t1, t2... tN)
+#pragma warning restore S125 // Sections of code should not be commented out
                         //  IL ==> ILOpCode.Switch < unsigned int32 > < int32 >... < int32 >
 
                         WriteOpCode(writer, ILOpCode.Switch);
@@ -1005,7 +1013,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
         /// </summary>
         public void DefineSequencePoint(SyntaxTree syntaxTree, TextSpan span)
         {
-            //var curBlock = GetCurrentBlock();
             _lastSeqPointTree = syntaxTree;
 
             this.SeqPointsOpt ??= ArrayBuilder<RawSequencePoint>.GetInstance();

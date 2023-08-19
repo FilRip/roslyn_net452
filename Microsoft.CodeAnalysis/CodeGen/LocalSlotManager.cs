@@ -48,6 +48,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 _type = valType;
             }
 
+            public override int GetHashCode()
+                => Hash.Combine(Cci.SymbolEquivalentEqualityComparer.Instance.GetHashCode(_type), (int)_constraints);
+
             public bool Equals(LocalSignature other)
             {
                 // ITypeReference does not have object identity.
@@ -56,9 +59,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 return _constraints == other._constraints &&
                     (Cci.SymbolEquivalentEqualityComparer.Instance.Equals(_type, other._type));
             }
-
-            public override int GetHashCode()
-                => Hash.Combine(Cci.SymbolEquivalentEqualityComparer.Instance.GetHashCode(_type), (int)_constraints);
 
             public override bool Equals(object? obj)
                 => obj is LocalSignature ls && Equals(ls);

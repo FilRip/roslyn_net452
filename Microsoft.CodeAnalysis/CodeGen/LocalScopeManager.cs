@@ -35,6 +35,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             private ScopeInfo CurrentScope => _scopes.Peek();
 
+#pragma warning disable S3241 // Methods should not return values that are never used
             internal ScopeInfo OpenScope(ScopeType scopeType, Cci.ITypeReference exceptionType)
             {
                 var scope = CurrentScope.OpenScope(scopeType, exceptionType, _enclosingExceptionHandler);
@@ -48,6 +49,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 Debug.Assert(_enclosingExceptionHandler == GetEnclosingExceptionHandler());
                 return scope;
             }
+#pragma warning restore S3241 // Methods should not return values that are never used
 
             internal void FinishFilterCondition(ILBuilder builder)
             {
@@ -320,9 +322,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
             public override ScopeInfo OpenScope(
                 ScopeType scopeType,
                 Cci.ITypeReference exceptionType,
-                ExceptionHandlerScope currentExceptionHandler)
+                ExceptionHandlerScope currentHandler)
             {
-                var scope = base.OpenScope(scopeType, exceptionType, currentExceptionHandler);
+                var scope = base.OpenScope(scopeType, exceptionType, currentHandler);
                 _nestedScopes ??= ImmutableArray.CreateBuilder<ScopeInfo>(1);
                 _nestedScopes.Add(scope);
                 return scope;
@@ -633,11 +635,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     _ => BlockType.Fault,
                 };
             }
-
-            public override void FreeBasicBlocks()
-            {
-                base.FreeBasicBlocks();
-            }
         }
 
         /// <summary>
@@ -667,12 +664,12 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             public override ScopeInfo OpenScope(ScopeType scopeType,
                 Microsoft.Cci.ITypeReference exceptionType,
-                ExceptionHandlerScope currentExceptionHandler)
+                ExceptionHandlerScope currentHandler)
             {
                 Debug.Assert(((_handlers.Count == 0) && (scopeType == ScopeType.Try)) ||
                     ((_handlers.Count > 0) && ((scopeType == ScopeType.Catch) || (scopeType == ScopeType.Filter) || (scopeType == ScopeType.Finally) || (scopeType == ScopeType.Fault))));
 
-                Debug.Assert(currentExceptionHandler == _containingHandler);
+                Debug.Assert(currentHandler == _containingHandler);
 
                 var handler = new ExceptionHandlerScope(this, scopeType, exceptionType);
                 _handlers.Add(handler);
@@ -769,8 +766,8 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 }
             }
 
-            internal override ScopeBounds GetLocalScopes(ArrayBuilder<Cci.LocalScope> scopesWithVariables)
-                => GetLocalScopes(scopesWithVariables, _handlers);
+            internal override ScopeBounds GetLocalScopes(ArrayBuilder<Cci.LocalScope> result)
+                => GetLocalScopes(result, _handlers);
 
             internal override ScopeBounds GetHoistedLocalScopes(ArrayBuilder<StateMachineHoistedLocalScope> result)
                 => GetHoistedLocalScopes(result, _handlers);

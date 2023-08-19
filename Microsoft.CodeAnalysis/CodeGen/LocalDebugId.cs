@@ -72,14 +72,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 && Ordinal == other.Ordinal;
         }
 
-        public override int GetHashCode()
-        {
-            return Hash.Combine(SyntaxOffset, Ordinal);
-        }
-
         public override bool Equals(object? obj)
         {
             return obj is LocalDebugId id && Equals(id);
+        }
+
+        public override int GetHashCode()
+        {
+            return Hash.Combine(SyntaxOffset, Ordinal);
         }
 
         public override string ToString()

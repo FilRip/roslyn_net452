@@ -41,7 +41,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             public override bool Equals(object obj)
             {
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
                 throw new NotSupportedException();
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
             }
         }
 

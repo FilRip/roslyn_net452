@@ -441,7 +441,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
 
-            if (_binder.InAttributeArgument || (_binder.Flags & BinderFlags.InContextualAttributeBinder) != 0)
+            if (_binder.InAttributeArgument || (_binder.Flags & EBinder.InContextualAttributeBinder) != 0)
             {
                 // We're at a location where the unmanaged data might not yet been bound. This cannot be valid code
                 // anyway, as attribute arguments can't be method references, so we'll just assume that the conventions

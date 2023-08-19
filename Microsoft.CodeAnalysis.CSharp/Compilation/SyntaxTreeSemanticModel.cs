@@ -1045,7 +1045,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // (although we try to minimize such cases). In such cases, null is returned.
         private MemberSemanticModel CreateMemberModel(CSharpSyntaxNode node)
         {
-            Binder defaultOuter() => _binderFactory.GetBinder(node).WithAdditionalFlags(this.IgnoresAccessibility ? BinderFlags.IgnoreAccessibility : BinderFlags.None);
+            Binder defaultOuter() => _binderFactory.GetBinder(node).WithAdditionalFlags(this.IgnoresAccessibility ? EBinder.IgnoreAccessibility : EBinder.None);
 
             switch (node.Kind())
             {
@@ -1248,7 +1248,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 attribute,
                 attributeType,
                 aliasOpt,
-                enclosingBinder.WithAdditionalFlags(BinderFlags.AttributeArgument),
+                enclosingBinder.WithAdditionalFlags(EBinder.AttributeArgument),
                 containingModel?.GetRemappedSymbols());
         }
 

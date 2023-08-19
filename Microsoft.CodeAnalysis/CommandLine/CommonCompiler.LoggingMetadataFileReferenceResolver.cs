@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis
                 throw new NotImplementedException();
             }
 
-            public override bool Equals(object? obj) => obj is LoggingMetadataFileReferenceResolver other && Equals(other);
+            public override bool Equals(object? other) => other is LoggingMetadataFileReferenceResolver otherCast && Equals(otherCast);
         }
     }
 }

@@ -713,7 +713,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // NOTE: no point in reporting unsafe errors in the return type - anything unsafe will either
             // fail to be a delegate or will be (invalidly) passed as a type argument.
             // Prevent constraint checking.
-            binder = binder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks | BinderFlags.SuppressUnsafeDiagnostics, this);
+            binder = binder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks | EBinder.SuppressUnsafeDiagnostics, this);
 
             return binder.BindType(typeSyntax, diagnostics);
         }

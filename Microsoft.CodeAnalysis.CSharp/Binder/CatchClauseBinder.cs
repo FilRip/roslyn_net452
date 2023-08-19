@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private readonly CatchClauseSyntax _syntax;
 
         public CatchClauseBinder(Binder enclosing, CatchClauseSyntax syntax)
-            : base(enclosing, (enclosing.Flags | BinderFlags.InCatchBlock) & ~BinderFlags.InNestedFinallyBlock)
+            : base(enclosing, (enclosing.Flags | EBinder.InCatchBlock) & ~EBinder.InNestedFinallyBlock)
         {
             _syntax = syntax;
         }

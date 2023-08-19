@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 _containingMemberOrLambda = containingMemberOrLambda;
             }
 
-            internal BinderWithContainingMemberOrLambda(Binder next, BinderFlags flags, Symbol containingMemberOrLambda)
+            internal BinderWithContainingMemberOrLambda(Binder next, EBinder flags, Symbol containingMemberOrLambda)
                 : base(next, flags)
             {
 
@@ -55,14 +55,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal Binder WithFlags(BinderFlags flags)
+        internal Binder WithFlags(EBinder flags)
         {
             return this.Flags == flags
                 ? this
                 : new Binder(this, flags);
         }
 
-        internal Binder WithAdditionalFlags(BinderFlags flags)
+        internal Binder WithAdditionalFlags(EBinder flags)
         {
             return this.Flags.Includes(flags)
                 ? this
@@ -78,23 +78,23 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// It seems to be common to do both of these things at once, so provide a way to do so
         /// without adding two links to the binder chain.
         /// </remarks>
-        internal Binder WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags flags, Symbol containing)
+        internal Binder WithAdditionalFlagsAndContainingMemberOrLambda(EBinder flags, Symbol containing)
         {
             return new BinderWithContainingMemberOrLambda(this, this.Flags | flags, containing);
         }
 
         internal Binder WithUnsafeRegionIfNecessary(SyntaxTokenList modifiers)
         {
-            return (this.Flags.Includes(BinderFlags.UnsafeRegion) || !modifiers.Any(SyntaxKind.UnsafeKeyword))
+            return (this.Flags.Includes(EBinder.UnsafeRegion) || !modifiers.Any(SyntaxKind.UnsafeKeyword))
                 ? this
-                : new Binder(this, this.Flags | BinderFlags.UnsafeRegion);
+                : new Binder(this, this.Flags | EBinder.UnsafeRegion);
         }
 
         internal Binder WithCheckedOrUncheckedRegion(bool @checked)
         {
 
-            BinderFlags added = @checked ? BinderFlags.CheckedRegion : BinderFlags.UncheckedRegion;
-            BinderFlags removed = @checked ? BinderFlags.UncheckedRegion : BinderFlags.CheckedRegion;
+            EBinder added = @checked ? EBinder.CheckedRegion : EBinder.UncheckedRegion;
+            EBinder removed = @checked ? EBinder.UncheckedRegion : EBinder.CheckedRegion;
 
             return this.Flags.Includes(added)
                 ? this

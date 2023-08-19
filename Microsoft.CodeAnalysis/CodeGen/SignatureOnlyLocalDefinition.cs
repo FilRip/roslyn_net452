@@ -30,12 +30,16 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public MetadataConstant CompileTimeValue
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public ImmutableArray<Cci.ICustomModifier> CustomModifiers
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public ImmutableArray<bool> DynamicTransformFlags
@@ -56,17 +60,23 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public bool IsPinned
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public bool IsReference
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public LocalSlotConstraints Constraints
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public Location Location => Location.None;
@@ -77,7 +87,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public Cci.ITypeReference Type
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public byte[] Signature => _signature;

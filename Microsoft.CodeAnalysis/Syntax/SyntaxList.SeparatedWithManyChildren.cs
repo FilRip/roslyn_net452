@@ -18,26 +18,26 @@ namespace Microsoft.CodeAnalysis.Syntax
                 _children = new ArrayElement<SyntaxNode?>[(green.SlotCount + 1) >> 1];
             }
 
-            public override SyntaxNode? GetNodeSlot(int i)
+            public override SyntaxNode? GetNodeSlot(int slot)
             {
-                if ((i & 1) != 0)
+                if ((slot & 1) != 0)
                 {
                     //separator
                     return null;
                 }
 
-                return this.GetRedElement(ref _children[i >> 1].Value, i);
+                return this.GetRedElement(ref _children[slot >> 1].Value, slot);
             }
 
-            public override SyntaxNode? GetCachedSlot(int i)
+            public override SyntaxNode? GetCachedSlot(int index)
             {
-                if ((i & 1) != 0)
+                if ((index & 1) != 0)
                 {
                     //separator
                     return null;
                 }
 
-                return _children[i >> 1].Value;
+                return _children[index >> 1].Value;
             }
         }
     }

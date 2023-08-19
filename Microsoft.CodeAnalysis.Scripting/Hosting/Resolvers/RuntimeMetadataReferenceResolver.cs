@@ -32,7 +32,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
             PathUtilities.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.ManifestModule.FullyQualifiedName) : null;
 
         // file name to path:
-        internal ImmutableDictionary<string, string> TrustedPlatformAssemblies;
+        internal readonly ImmutableDictionary<string, string> TrustedPlatformAssemblies;
 
         internal readonly RelativePathResolver PathResolver;
         internal readonly NuGetPackageResolver? PackageResolver;

@@ -479,6 +479,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return BindDynamicBinaryOperator(node, kind, left, right, diagnostics);
             }
 
+#pragma warning disable S125 // Sections of code should not be commented out
             // SPEC OMISSION: The C# 2.0 spec had a line in it that noted that the expressions "null == null"
             // SPEC OMISSION: and "null != null" were to be automatically treated as the appropriate constant;
             // SPEC OMISSION: overload resolution was to be skipped.  That's because a strict reading
@@ -486,6 +487,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // SPEC OMISSION: ambiguity error for this case; the expression is ambiguous between the int?,
             // SPEC OMISSION: bool? and string versions of equality.  This line was accidentally edited
             // SPEC OMISSION: out of the C# 3 specification; we should re-insert it.
+#pragma warning restore S125 // Sections of code should not be commented out
 
             bool leftNull = left.IsLiteralNull();
             bool rightNull = right.IsLiteralNull();
@@ -509,9 +511,11 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Note that the spec says "fails to find an applicable operator", not "fails to
             // find a unique best applicable operator." For example:
+#pragma warning disable S125 // Sections of code should not be commented out
             // struct X {
             //   public static bool operator ==(X? x, double? y) {...}
             //   public static bool operator ==(X? x, decimal? y) {...}
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // The comparison "x == null" should produce an ambiguity error rather
             // that being bound as !x.HasValue.
@@ -1021,6 +1025,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //
             // That is a small difference but it has an observable effect. For example:
             //
+#pragma warning disable S125 // Sections of code should not be commented out
             // class V { public static implicit operator T(V v) { ... } }
             // class X : V { public static implicit operator T?(X x) { ... } }
             // struct T {
@@ -1028,6 +1033,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //   public static operator true(T? t) { ... }
             //   public static T operator &(T t1, T t2) { ... }
             // }
+#pragma warning restore S125 // Sections of code should not be commented out
             //
             // Under the spec'd interpretation, if we had x of type X and y of type T then x && y is
             //
@@ -1550,7 +1556,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return concatResult;
             }
 
-            // Certain binary operations always fail if they overflow even when in an unchecked context;
+            // Certain binary operations always fail if they overflow even when in an unchecked context
             // decimal + decimal, for example. If we are in one of those cases, make the attempt. If it
             // succeeds, return the result. If not, give a compile-time error regardless of context.
             try
@@ -1722,7 +1728,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BinaryOperatorKind.ULongRightShift:
                     return valueLeft.UInt64Value >> valueRight.Int32Value;
                 case BinaryOperatorKind.BoolAnd:
-                    return valueLeft.BooleanValue & valueRight.BooleanValue;
+                    return valueLeft.BooleanValue && valueRight.BooleanValue;
                 case BinaryOperatorKind.IntAnd:
                 case BinaryOperatorKind.NIntAnd:
                     return valueLeft.Int32Value & valueRight.Int32Value;
@@ -1734,7 +1740,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BinaryOperatorKind.ULongAnd:
                     return valueLeft.UInt64Value & valueRight.UInt64Value;
                 case BinaryOperatorKind.BoolOr:
-                    return valueLeft.BooleanValue | valueRight.BooleanValue;
+                    return valueLeft.BooleanValue || valueRight.BooleanValue;
                 case BinaryOperatorKind.IntOr:
                 case BinaryOperatorKind.NIntOr:
                     return valueLeft.Int32Value | valueRight.Int32Value;
@@ -2121,7 +2127,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ManagedKind managedKind = operandType.GetManagedKind(ref useSiteInfo);
             diagnostics.Add(node.Location, useSiteInfo);
 
-            bool allowManagedAddressOf = Flags.Includes(BinderFlags.AllowManagedAddressOf);
+            bool allowManagedAddressOf = Flags.Includes(EBinder.AllowManagedAddressOf);
             if (!allowManagedAddressOf)
             {
                 if (!hasErrors)
@@ -2129,13 +2135,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                     hasErrors = CheckManagedAddr(Compilation, operandType, managedKind, node.Location, diagnostics);
                 }
 
-                if (!hasErrors)
+                if (!hasErrors &&
+                    IsMoveableVariable(operand, out _) != isFixedStatementAddressOfExpression)
                 {
-                    if (IsMoveableVariable(operand, out Symbol _) != isFixedStatementAddressOfExpression)
-                    {
-                        Error(diagnostics, isFixedStatementAddressOfExpression ? ErrorCode.ERR_FixedNotNeeded : ErrorCode.ERR_FixedNeeded, node);
-                        hasErrors = true;
-                    }
+                    Error(diagnostics, isFixedStatementAddressOfExpression ? ErrorCode.ERR_FixedNotNeeded : ErrorCode.ERR_FixedNeeded, node);
+                    hasErrors = true;
                 }
             }
 
@@ -2569,25 +2573,31 @@ namespace Microsoft.CodeAnalysis.CSharp
             return kind switch
             {
                 SyntaxKind.SimpleAssignmentExpression => BindValueKind.Assignable,
-                SyntaxKind.AddAssignmentExpression or SyntaxKind.AndAssignmentExpression or SyntaxKind.DivideAssignmentExpression or SyntaxKind.ExclusiveOrAssignmentExpression or SyntaxKind.LeftShiftAssignmentExpression or SyntaxKind.ModuloAssignmentExpression or SyntaxKind.MultiplyAssignmentExpression or SyntaxKind.OrAssignmentExpression or SyntaxKind.RightShiftAssignmentExpression or SyntaxKind.SubtractAssignmentExpression or SyntaxKind.CoalesceAssignmentExpression => BindValueKind.CompoundAssignment,
+                SyntaxKind.AddAssignmentExpression or
+                SyntaxKind.AndAssignmentExpression or
+                SyntaxKind.DivideAssignmentExpression or
+                SyntaxKind.ExclusiveOrAssignmentExpression or
+                SyntaxKind.LeftShiftAssignmentExpression or
+                SyntaxKind.ModuloAssignmentExpression or
+                SyntaxKind.MultiplyAssignmentExpression or
+                SyntaxKind.OrAssignmentExpression or
+                SyntaxKind.RightShiftAssignmentExpression or
+                SyntaxKind.SubtractAssignmentExpression or
+                SyntaxKind.CoalesceAssignmentExpression => BindValueKind.CompoundAssignment,
                 _ => BindValueKind.RValue,
             };
         }
 
         private static BindValueKind GetUnaryAssignmentKind(SyntaxKind kind)
         {
-            switch (kind)
+            return kind switch
             {
-                case SyntaxKind.PreDecrementExpression:
-                case SyntaxKind.PreIncrementExpression:
-                case SyntaxKind.PostDecrementExpression:
-                case SyntaxKind.PostIncrementExpression:
-                    return BindValueKind.IncrementDecrement;
-                case SyntaxKind.AddressOfExpression:
-                    goto default;
-                default:
-                    return BindValueKind.RValue;
-            }
+                SyntaxKind.PreDecrementExpression or
+                SyntaxKind.PreIncrementExpression or
+                SyntaxKind.PostDecrementExpression or
+                SyntaxKind.PostIncrementExpression => BindValueKind.IncrementDecrement,
+                _ => BindValueKind.RValue,
+            };
         }
 #nullable disable
 
@@ -2929,94 +2939,100 @@ namespace Microsoft.CodeAnalysis.CSharp
                 operandType.CanContainNull() && // a non-nullable value type is never null
                 (operandConstantValue == null || operandConstantValue == ConstantValue.Null); // a non-null constant is never null
 
+            ConstantValue NoConversionCase()
+            {
+                // Oddly enough, "x is T" can be true even if there is no conversion from x to T!
+                //
+                // Scenario 1: Type parameter compared to System.Enum.
+                //
+#pragma warning disable S125 // Sections of code should not be commented out
+                // bool M1<X>(X x) where X : struct { return x is Enum; }
+#pragma warning restore S125 // Sections of code should not be commented out
+                //
+                // There is no conversion from X to Enum, not even an explicit conversion. But
+                // nevertheless, X could be constructed as an enumerated type.
+                // However, we can sometimes know that the result will be false.
+                //
+                // Scenario 2a: Constrained type parameter compared to reference type.
+                //
+                // bool M2a<X>(X x) where X : struct { return x is string; }
+                //
+                // We know that X, constrained to struct, will never be string.
+                //
+                // Scenario 2b: Reference type compared to constrained type parameter.
+                //
+                // bool M2b<X>(string x) where X : struct { return x is X; }
+                //
+                // We know that string will never be X, constrained to struct.
+                //
+                // Scenario 3: Value type compared to type parameter.
+                //
+                // bool M3<T>(int x) { return x is T; }
+                //
+                // There is no conversion from int to T, but T could nevertheless be int.
+                //
+                // Scenario 4: Constructed type compared to open type
+                //
+                // bool M4<T>(C<int> x) { return x is C<T>; }
+                //
+                // There is no conversion from C<int> to C<T>, but nevertheless, T might be int.
+                //
+                // Scenario 5: Open type compared to constructed type:
+                //
+                // bool M5<X>(C<X> x) { return x is C<int>);
+                //
+                // Again, X could be int.
+                //
+                // We could then go on to get more complicated. For example,
+                //
+                // bool M6<X>(C<X> x) where X : struct { return x is C<string>; }
+                //
+                // We know that C<X> is never convertible to C<string> no matter what
+                // X is. Or:
+                //
+                // bool M7<T>(Dictionary<int, int> x) { return x is List<T>; }
+                //
+                // We know that no matter what T is, the conversion will never succeed.
+                //
+                // As noted above, we must be conservative. We follow the lead of the native compiler,
+                // which uses the following algorithm:
+                //
+                // * If neither type is open and there is no conversion then the result is always false:
+
+                if (!operandType.ContainsTypeParameter() && !targetType.ContainsTypeParameter())
+                {
+                    return ConstantValue.False;
+                }
+
+                // * Otherwise, at least one of them is of an open type. If the operand is of value type
+                //   and the target is a class type other than System.Enum, or vice versa, then we are
+                //   in scenario 2, not scenario 1, and can correctly deduce that the result is false.
+
+                if (operandType.IsValueType && targetType.IsClassType() && targetType.SpecialType != SpecialType.System_Enum ||
+                    targetType.IsValueType && operandType.IsClassType() && operandType.SpecialType != SpecialType.System_Enum)
+                {
+                    return ConstantValue.False;
+                }
+
+                // * Otherwise, if the other type is a restricted type, we know no conversion is possible.
+                if (targetType.IsRestrictedType() || operandType.IsRestrictedType())
+                {
+                    return ConstantValue.False;
+                }
+
+                // * Otherwise, we give up. Though there are other situations in which we can deduce that
+                //   the result will always be false, such as scenarios 6 and 7, but we do not attempt
+                //   to deduce this.
+
+                // CONSIDER: we could use TypeUnification.CanUnify to do additional compile-time checking.
+
+                return null;
+            }
+
             switch (conversionKind)
             {
                 case ConversionKind.NoConversion:
-                    // Oddly enough, "x is T" can be true even if there is no conversion from x to T!
-                    //
-                    // Scenario 1: Type parameter compared to System.Enum.
-                    //
-                    // bool M1<X>(X x) where X : struct { return x is Enum; }
-                    //
-                    // There is no conversion from X to Enum, not even an explicit conversion. But
-                    // nevertheless, X could be constructed as an enumerated type.
-                    // However, we can sometimes know that the result will be false.
-                    //
-                    // Scenario 2a: Constrained type parameter compared to reference type.
-                    //
-                    // bool M2a<X>(X x) where X : struct { return x is string; }
-                    //
-                    // We know that X, constrained to struct, will never be string.
-                    //
-                    // Scenario 2b: Reference type compared to constrained type parameter.
-                    //
-                    // bool M2b<X>(string x) where X : struct { return x is X; }
-                    //
-                    // We know that string will never be X, constrained to struct.
-                    //
-                    // Scenario 3: Value type compared to type parameter.
-                    //
-                    // bool M3<T>(int x) { return x is T; }
-                    //
-                    // There is no conversion from int to T, but T could nevertheless be int.
-                    //
-                    // Scenario 4: Constructed type compared to open type
-                    //
-                    // bool M4<T>(C<int> x) { return x is C<T>; }
-                    //
-                    // There is no conversion from C<int> to C<T>, but nevertheless, T might be int.
-                    //
-                    // Scenario 5: Open type compared to constructed type:
-                    //
-                    // bool M5<X>(C<X> x) { return x is C<int>);
-                    //
-                    // Again, X could be int.
-                    //
-                    // We could then go on to get more complicated. For example,
-                    //
-                    // bool M6<X>(C<X> x) where X : struct { return x is C<string>; }
-                    //
-                    // We know that C<X> is never convertible to C<string> no matter what
-                    // X is. Or:
-                    //
-                    // bool M7<T>(Dictionary<int, int> x) { return x is List<T>; }
-                    //
-                    // We know that no matter what T is, the conversion will never succeed.
-                    //
-                    // As noted above, we must be conservative. We follow the lead of the native compiler,
-                    // which uses the following algorithm:
-                    //
-                    // * If neither type is open and there is no conversion then the result is always false:
-
-                    if (!operandType.ContainsTypeParameter() && !targetType.ContainsTypeParameter())
-                    {
-                        return ConstantValue.False;
-                    }
-
-                    // * Otherwise, at least one of them is of an open type. If the operand is of value type
-                    //   and the target is a class type other than System.Enum, or vice versa, then we are
-                    //   in scenario 2, not scenario 1, and can correctly deduce that the result is false.
-
-                    if (operandType.IsValueType && targetType.IsClassType() && targetType.SpecialType != SpecialType.System_Enum ||
-                        targetType.IsValueType && operandType.IsClassType() && operandType.SpecialType != SpecialType.System_Enum)
-                    {
-                        return ConstantValue.False;
-                    }
-
-                    // * Otherwise, if the other type is a restricted type, we know no conversion is possible.
-                    if (targetType.IsRestrictedType() || operandType.IsRestrictedType())
-                    {
-                        return ConstantValue.False;
-                    }
-
-                    // * Otherwise, we give up. Though there are other situations in which we can deduce that
-                    //   the result will always be false, such as scenarios 6 and 7, but we do not attempt
-                    //   to deduce this.
-
-                    // CONSIDER: we could use TypeUnification.CanUnify to do additional compile-time checking.
-
-                    return null;
-
+                    return NoConversionCase();
                 case ConversionKind.ImplicitNumeric:
                 case ConversionKind.ExplicitNumeric:
                 case ConversionKind.ImplicitEnumeration:
@@ -3047,7 +3063,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // conversions (i.e. make allowances for type unification, etc)
                     if (operandType.IsEnumType() && targetType.IsEnumType())
                     {
-                        goto case ConversionKind.NoConversion;
+                        return NoConversionCase();
                     }
 
                     return ConstantValue.False;
@@ -3258,14 +3274,12 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // if operand has a dynamic type, we do the same thing as though it were an object
                 operandType = GetSpecialType(SpecialType.System_Object, diagnostics, node);
-                //operandTypeKind = operandType.TypeKind;
             }
 
             if (targetTypeKind == TypeKind.Dynamic)
             {
                 // for "as dynamic", we do the same thing as though it were an "as object"
                 targetType = GetSpecialType(SpecialType.System_Object, diagnostics, node);
-                //targetTypeKind = targetType.TypeKind;
             }
 
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);
@@ -3751,7 +3765,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression condition = BindBooleanExpression(node.Condition, diagnostics);
             BoundExpression trueExpr = BindValue(whenTrue, diagnostics, BindValueKind.RValue | BindValueKind.RefersToLocation);
             BoundExpression falseExpr = BindValue(whenFalse, diagnostics, BindValueKind.RValue | BindValueKind.RefersToLocation);
-            bool hasErrors = trueExpr.HasErrors | falseExpr.HasErrors;
+            bool hasErrors = trueExpr.HasErrors || falseExpr.HasErrors;
             TypeSymbol trueType = trueExpr.Type;
             TypeSymbol falseType = falseExpr.Type;
 

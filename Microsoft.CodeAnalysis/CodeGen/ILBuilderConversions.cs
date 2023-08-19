@@ -11,16 +11,16 @@ namespace Microsoft.CodeAnalysis.CodeGen
 {
     public partial class ILBuilder
     {
-        public void EmitNumericConversion(Microsoft.Cci.PrimitiveTypeCode fromPredefTypeKind, Microsoft.Cci.PrimitiveTypeCode toPredefTypeKind, bool @checked)
+        public void EmitNumericConversion(Cci.PrimitiveTypeCode fromPredefTypeKind, Cci.PrimitiveTypeCode toPredefTypeKind, bool @checked)
         {
             bool fromUnsigned = fromPredefTypeKind.IsUnsigned();
 
             switch (toPredefTypeKind)
             {
-                case Microsoft.Cci.PrimitiveTypeCode.Int8:
+                case Cci.PrimitiveTypeCode.Int8:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.Int8:
                             break; // NOP
                         default:
                             if (@checked)
@@ -31,10 +31,10 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.UInt8:
+                case Cci.PrimitiveTypeCode.UInt8:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt8:
                             break; // NOP
                         default:
                             if (@checked)
@@ -45,12 +45,12 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Int16:
+                case Cci.PrimitiveTypeCode.Int16:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.Int16:
                             break; // NOP
                         default:
                             if (@checked)
@@ -61,13 +61,13 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Char:
-                case Microsoft.Cci.PrimitiveTypeCode.UInt16:
+                case Cci.PrimitiveTypeCode.Char:
+                case Cci.PrimitiveTypeCode.UInt16:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.Char:
                             break; // NOP
                         default:
                             if (@checked)
@@ -78,17 +78,17 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Int32:
+                case Cci.PrimitiveTypeCode.Int32:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int32:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.Int32:
+                        case Cci.PrimitiveTypeCode.Char:
                             break; // NOP
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.UInt32:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_i4_un);
                             break; // NOP in unchecked
@@ -101,17 +101,17 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.UInt32:
+                case Cci.PrimitiveTypeCode.UInt32:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.Char:
                             break; // NOP
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int32:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.Int32:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u4);
                             break; // NOP in unchecked
@@ -124,60 +124,57 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.IntPtr:
+                case Cci.PrimitiveTypeCode.IntPtr:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.IntPtr:
+                        case Cci.PrimitiveTypeCode.IntPtr:
                             break; // NOP
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int32:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.Int32:
                             this.EmitOpCode(ILOpCode.Conv_i); // potentially widening, so not NOP
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.Char:
                             // Doesn't actually matter whether we sign extend, because
                             // bit 32 can't be set in any of these types.
                             this.EmitOpCode(ILOpCode.Conv_u); // potentially widening, so not NOP
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.UInt32:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_i_un);
                             else
                                 // Don't want to sign extend if this is a widening conversion.
                                 this.EmitOpCode(ILOpCode.Conv_u); // potentially widening, so not NOP
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.Pointer:
-                        case Microsoft.Cci.PrimitiveTypeCode.FunctionPointer:
+                        case Cci.PrimitiveTypeCode.Pointer:
+                        case Cci.PrimitiveTypeCode.FunctionPointer:
                             if (@checked)
-                                goto default;
+                                DefaultCase();
                             break; // NOP
                         default:
-                            if (@checked)
-                                this.EmitOpCode(fromUnsigned ? ILOpCode.Conv_ovf_i_un : ILOpCode.Conv_ovf_i);
-                            else
-                                this.EmitOpCode(ILOpCode.Conv_i);
+                            DefaultCase();
                             break;
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.UIntPtr:
+                case Cci.PrimitiveTypeCode.UIntPtr:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UIntPtr:
-                        case Microsoft.Cci.PrimitiveTypeCode.Pointer:
-                        case Microsoft.Cci.PrimitiveTypeCode.FunctionPointer:
+                        case Cci.PrimitiveTypeCode.UIntPtr:
+                        case Cci.PrimitiveTypeCode.Pointer:
+                        case Cci.PrimitiveTypeCode.FunctionPointer:
                             break; // NOP
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.Char:
                             this.EmitOpCode(ILOpCode.Conv_u); // potentially widening, so not NOP
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int32:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.Int32:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u);
                             else
@@ -192,32 +189,32 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Int64:
+                case Cci.PrimitiveTypeCode.Int64:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.Int64:
+                        case Cci.PrimitiveTypeCode.Int64:
                             break; //NOP
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int32:
-                        case Microsoft.Cci.PrimitiveTypeCode.IntPtr:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.Int32:
+                        case Cci.PrimitiveTypeCode.IntPtr:
                             this.EmitOpCode(ILOpCode.Conv_i8); // sign extend
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.Char:
                             this.EmitOpCode(ILOpCode.Conv_u8); // 0 extend
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.Pointer:
-                        case Microsoft.Cci.PrimitiveTypeCode.FunctionPointer:
-                        case Microsoft.Cci.PrimitiveTypeCode.UIntPtr:
+                        case Cci.PrimitiveTypeCode.Pointer:
+                        case Cci.PrimitiveTypeCode.FunctionPointer:
+                        case Cci.PrimitiveTypeCode.UIntPtr:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_i8_un);
                             else
                                 this.EmitOpCode(ILOpCode.Conv_u8); // 0 extend if unchecked
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt64:
+                        case Cci.PrimitiveTypeCode.UInt64:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_i8_un);
                             break; // NOP in unchecked
@@ -231,30 +228,30 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.UInt64:
+                case Cci.PrimitiveTypeCode.UInt64:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt64:
+                        case Cci.PrimitiveTypeCode.UInt64:
                             break; //NOP
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                        case Microsoft.Cci.PrimitiveTypeCode.Pointer:
-                        case Microsoft.Cci.PrimitiveTypeCode.FunctionPointer:
-                        case Microsoft.Cci.PrimitiveTypeCode.UIntPtr:
-                        case Microsoft.Cci.PrimitiveTypeCode.Char:
+                        case Cci.PrimitiveTypeCode.UInt8:
+                        case Cci.PrimitiveTypeCode.UInt16:
+                        case Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.Pointer:
+                        case Cci.PrimitiveTypeCode.FunctionPointer:
+                        case Cci.PrimitiveTypeCode.UIntPtr:
+                        case Cci.PrimitiveTypeCode.Char:
                             this.EmitOpCode(ILOpCode.Conv_u8); // 0 extend
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                        case Microsoft.Cci.PrimitiveTypeCode.Int32:
-                        case Microsoft.Cci.PrimitiveTypeCode.IntPtr:
+                        case Cci.PrimitiveTypeCode.Int8:
+                        case Cci.PrimitiveTypeCode.Int16:
+                        case Cci.PrimitiveTypeCode.Int32:
+                        case Cci.PrimitiveTypeCode.IntPtr:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u8);
                             else
                                 this.EmitOpCode(ILOpCode.Conv_i8); // sign extend if unchecked
                             break;
-                        case Microsoft.Cci.PrimitiveTypeCode.Int64:
+                        case Cci.PrimitiveTypeCode.Int64:
                             if (@checked)
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u8);
                             break; // NOP in unchecked
@@ -268,52 +265,52 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     }
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Float32:
+                case Cci.PrimitiveTypeCode.Float32:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt64:
+                        case Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.UInt64:
                             this.EmitOpCode(ILOpCode.Conv_r_un);
                             break;
                     }
                     this.EmitOpCode(ILOpCode.Conv_r4);
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Float64:
+                case Cci.PrimitiveTypeCode.Float64:
                     switch (fromPredefTypeKind)
                     {
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                        case Microsoft.Cci.PrimitiveTypeCode.UInt64:
+                        case Cci.PrimitiveTypeCode.UInt32:
+                        case Cci.PrimitiveTypeCode.UInt64:
                             this.EmitOpCode(ILOpCode.Conv_r_un);
                             break;
                     }
                     this.EmitOpCode(ILOpCode.Conv_r8);
                     break;
 
-                case Microsoft.Cci.PrimitiveTypeCode.Pointer:
-                case Microsoft.Cci.PrimitiveTypeCode.FunctionPointer:
+                case Cci.PrimitiveTypeCode.Pointer:
+                case Cci.PrimitiveTypeCode.FunctionPointer:
                     if (@checked)
                     {
                         switch (fromPredefTypeKind)
                         {
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt32:
+                            case Cci.PrimitiveTypeCode.UInt8:
+                            case Cci.PrimitiveTypeCode.UInt16:
+                            case Cci.PrimitiveTypeCode.UInt32:
                                 this.EmitOpCode(ILOpCode.Conv_u);
                                 break;
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt64:
+                            case Cci.PrimitiveTypeCode.UInt64:
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u_un);
                                 break;
-                            case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                            case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                            case Microsoft.Cci.PrimitiveTypeCode.Int32:
-                            case Microsoft.Cci.PrimitiveTypeCode.Int64:
+                            case Cci.PrimitiveTypeCode.Int8:
+                            case Cci.PrimitiveTypeCode.Int16:
+                            case Cci.PrimitiveTypeCode.Int32:
+                            case Cci.PrimitiveTypeCode.Int64:
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u);
                                 break;
-                            case Microsoft.Cci.PrimitiveTypeCode.IntPtr:
+                            case Cci.PrimitiveTypeCode.IntPtr:
                                 this.EmitOpCode(ILOpCode.Conv_ovf_u);
                                 break;
-                            case Microsoft.Cci.PrimitiveTypeCode.UIntPtr:
+                            case Cci.PrimitiveTypeCode.UIntPtr:
                                 break; // NOP
                             default:
                                 throw ExceptionUtilities.UnexpectedValue(fromPredefTypeKind);
@@ -323,22 +320,22 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     {
                         switch (fromPredefTypeKind)
                         {
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt8:
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt16:
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt32:
-                            case Microsoft.Cci.PrimitiveTypeCode.UInt64:
-                            case Microsoft.Cci.PrimitiveTypeCode.Int64:
+                            case Cci.PrimitiveTypeCode.UInt8:
+                            case Cci.PrimitiveTypeCode.UInt16:
+                            case Cci.PrimitiveTypeCode.UInt32:
+                            case Cci.PrimitiveTypeCode.UInt64:
+                            case Cci.PrimitiveTypeCode.Int64:
                                 this.EmitOpCode(ILOpCode.Conv_u);
                                 break;
-                            case Microsoft.Cci.PrimitiveTypeCode.Int8:
-                            case Microsoft.Cci.PrimitiveTypeCode.Int16:
-                            case Microsoft.Cci.PrimitiveTypeCode.Int32:
+                            case Cci.PrimitiveTypeCode.Int8:
+                            case Cci.PrimitiveTypeCode.Int16:
+                            case Cci.PrimitiveTypeCode.Int32:
                                 // This matches dev10.  Presumably, we're using conv_i,
                                 // rather than conv_u, to sign-extend the value.
                                 this.EmitOpCode(ILOpCode.Conv_i);
                                 break;
-                            case Microsoft.Cci.PrimitiveTypeCode.IntPtr:
-                            case Microsoft.Cci.PrimitiveTypeCode.UIntPtr:
+                            case Cci.PrimitiveTypeCode.IntPtr:
+                            case Cci.PrimitiveTypeCode.UIntPtr:
                                 break; // NOP
                             default:
                                 throw ExceptionUtilities.UnexpectedValue(fromPredefTypeKind);
@@ -348,6 +345,14 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
                 default:
                     throw ExceptionUtilities.UnexpectedValue(toPredefTypeKind);
+            }
+
+            void DefaultCase()
+            {
+                if (@checked)
+                    this.EmitOpCode(fromUnsigned ? ILOpCode.Conv_ovf_i_un : ILOpCode.Conv_ovf_i);
+                else
+                    this.EmitOpCode(ILOpCode.Conv_i);
             }
         }
     }

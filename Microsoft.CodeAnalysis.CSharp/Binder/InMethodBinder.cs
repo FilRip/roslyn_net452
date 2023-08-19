@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeWithAnnotations.Boxed _iteratorElementType;
 
         public InMethodBinder(MethodSymbol owner, Binder enclosing)
-            : base(enclosing, enclosing.Flags & ~BinderFlags.AllClearedAtExecutableCodeBoundary)
+            : base(enclosing, enclosing.Flags & ~EBinder.AllClearedAtExecutableCodeBoundary)
         {
             _methodSymbol = owner;
         }

@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
         }
 
-        public BlockBinder(Binder enclosing, BlockSyntax block, BinderFlags additionalFlags)
+        public BlockBinder(Binder enclosing, BlockSyntax block, EBinder additionalFlags)
             : base(enclosing, enclosing.Flags | additionalFlags)
         {
             _block = block;

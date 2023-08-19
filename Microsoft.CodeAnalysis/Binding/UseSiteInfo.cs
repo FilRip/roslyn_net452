@@ -238,6 +238,15 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+        private void RecordPresenceOfAnError()
+        {
+            if (!_hasErrors)
+            {
+                _hasErrors = true;
+                _dependencies = null;
+            }
+        }
+
         public void AddDiagnostics(UseSiteInfo<TAssemblySymbol> info)
         {
             if (!AccumulatesDiagnostics)
@@ -249,15 +258,6 @@ namespace Microsoft.CodeAnalysis
                 info.DiagnosticInfo?.Severity == DiagnosticSeverity.Error)
             {
                 RecordPresenceOfAnError();
-            }
-        }
-
-        private void RecordPresenceOfAnError()
-        {
-            if (!_hasErrors)
-            {
-                _hasErrors = true;
-                _dependencies = null;
             }
         }
 
@@ -335,7 +335,8 @@ namespace Microsoft.CodeAnalysis
 
                 if (info.SecondaryDependencies?.IsEmpty == false && (_assemblyBeingBuilt is null || info.SecondaryDependencies.AsSingleton() != _assemblyBeingBuilt))
                 {
-                    (_dependencies ??= new HashSet<TAssemblySymbol>()).AddAll(info.SecondaryDependencies);
+                    _dependencies ??= new HashSet<TAssemblySymbol>();
+                    _dependencies.AddAll(info.SecondaryDependencies);
                 }
             }
         }
@@ -354,7 +355,8 @@ namespace Microsoft.CodeAnalysis
             if (!_hasErrors && AccumulatesDependencies && !dependencies.IsNullOrEmpty() &&
                 (_assemblyBeingBuilt is null || dependencies.AsSingleton() != _assemblyBeingBuilt))
             {
-                (_dependencies ??= new HashSet<TAssemblySymbol>()).AddAll(dependencies);
+                _dependencies ??= new HashSet<TAssemblySymbol>();
+                _dependencies.AddAll(dependencies);
             }
         }
 
@@ -363,7 +365,8 @@ namespace Microsoft.CodeAnalysis
             if (!_hasErrors && AccumulatesDependencies && !dependencies.IsNullOrEmpty() &&
                 (_assemblyBeingBuilt is null || dependencies.AsSingleton() != _assemblyBeingBuilt))
             {
-                (_dependencies ??= new HashSet<TAssemblySymbol>()).AddAll(dependencies);
+                _dependencies ??= new HashSet<TAssemblySymbol>();
+                _dependencies.AddAll(dependencies);
             }
         }
 
@@ -372,7 +375,8 @@ namespace Microsoft.CodeAnalysis
             if (!_hasErrors && AccumulatesDependencies && !dependencies.IsDefaultOrEmpty &&
                 (_assemblyBeingBuilt is null || dependencies.Length != 1 || dependencies[0] != _assemblyBeingBuilt))
             {
-                (_dependencies ??= new HashSet<TAssemblySymbol>()).AddAll(dependencies);
+                _dependencies ??= new HashSet<TAssemblySymbol>();
+                _dependencies.AddAll(dependencies);
             }
         }
 
@@ -572,7 +576,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private class Boxed
+        private sealed class Boxed
         {
             /// <summary>
             /// Diagnostic info that should be reported at the use site of the symbol, or null if there is none.

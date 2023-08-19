@@ -76,6 +76,8 @@ namespace Microsoft.CodeAnalysis.CodeGen
             //  a)	Sort the switch case labels based on their constant values.
 
             //  b)	Divide the sorted switch labels into buckets with good enough density (>50%). For example:
+
+#pragma warning disable S125 // Sections of code should not be commented out
             //      switch(..)
             //      {
             //          case 1:
@@ -89,6 +91,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             //          case 202:
             //              break;
             //      }
+#pragma warning restore S125 // Sections of code should not be commented out
 
             //      can be divided into 3 buckets: (1, 2, 4) (100) (200, 201, 202).
             //      We do this bucketing so that we have reasonable size jump tables for generated switch instructions.
@@ -277,7 +280,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         private void EmitSwitchBuckets(ImmutableArray<SwitchBucket> switchBuckets, int low, int high)
         {
-            // if (high - low + 1 <= LinearSearchThreshold)
             if (high - low < LinearSearchThreshold)
             {
                 this.EmitSwitchBucketsLinearLeaf(switchBuckets, low, high);
@@ -298,8 +300,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             ConstantValue pivotConstant = switchBuckets[mid - 1].EndConstant;
 
-            //  if(key > midLabelConstant)
-            //      goto secondHalfLabel;
             this.EmitCondBranchForSwitch(
                 _keyTypeCode.IsUnsigned() ? ILOpCode.Bgt_un : ILOpCode.Bgt,
                 pivotConstant,
@@ -325,8 +325,6 @@ namespace Microsoft.CodeAnalysis.CodeGen
             if (switchBucket.LabelsCount == 1)
             {
                 var c = switchBucket[0];
-                //  if(key == constant)
-                //      goto caseLabel;
                 ConstantValue constant = c.Key;
                 object caseLabel = c.Value;
                 this.EmitEqBranchForSwitch(constant, caseLabel);
@@ -345,19 +343,19 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     // Create the labels array for emitting a switch instruction for the bucket
                     object[] labels = this.CreateBucketLabels(switchBucket);
 
-                    //  switch (N, label1, label2... labelN)
                     // Emit the switch instruction
                     _builder.EmitSwitch(labels);
                 }
             }
 
-            //  goto fallThroughLabel;
             _builder.EmitBranch(ILOpCode.Br, bucketFallThroughLabel);
         }
 
         private object[] CreateBucketLabels(SwitchBucket switchBucket)
         {
+#pragma warning disable S125 // Sections of code should not be commented out
             //  switch (N, t1, t2... tN)
+#pragma warning restore S125 // Sections of code should not be commented out
             //      IL ==> ILOpCode.Switch < unsigned int32 > < int32 >... < int32 >
 
             //  For example: given a switch bucket [1, 3, 5] and FallThrough Label,
@@ -531,6 +529,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
             // 64bit values, however must be checked before 32bit truncation happens.
             if (_keyTypeCode.Is64BitIntegral())
             {
+#pragma warning disable S125 // Sections of code should not be commented out
                 // Dup(normalized);
                 // if ((ulong)(normalized) > (ulong)(endConstant - startConstant)) 
                 // {
@@ -538,6 +537,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 //      Pop(normalized);
                 //      goto bucketFallThroughLabel;
                 // }
+#pragma warning restore S125 // Sections of code should not be commented out
 
                 var inRangeLabel = new object();
 

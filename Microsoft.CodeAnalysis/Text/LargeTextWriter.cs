@@ -87,14 +87,14 @@ namespace Microsoft.CodeAnalysis.Text
             }
         }
 
-        public override void Write(char[] chars, int index, int count)
+        public override void Write(char[] buffer, int index, int count)
         {
-            if (index < 0 || index >= chars.Length)
+            if (index < 0 || index >= buffer.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            if (count < 0 || count > chars.Length - index)
+            if (count < 0 || count > buffer.Length - index)
             {
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
@@ -106,7 +106,7 @@ namespace Microsoft.CodeAnalysis.Text
                 var remaining = _buffer!.Length - _currentUsed;
                 var copy = Math.Min(remaining, count);
 
-                Array.Copy(chars, index, _buffer, _currentUsed, copy);
+                Array.Copy(buffer, index, _buffer, _currentUsed, copy);
                 _currentUsed += copy;
                 index += copy;
                 count -= copy;

@@ -51,10 +51,12 @@ namespace Microsoft.CodeAnalysis
                 Interlocked.CompareExchange(ref _lazyStateMachineTypes, new Dictionary<TMethodSymbol, TNamedTypeSymbol>(), null);
             }
 
+#pragma warning disable S2445 // Blocks should be synchronized on read-only fields
             lock (_lazyStateMachineTypes)
             {
                 _lazyStateMachineTypes.Add(method, stateMachineClass);
             }
+#pragma warning restore S2445 // Blocks should be synchronized on read-only fields
         }
 
         public bool TryGetStateMachineType(TMethodSymbol method, [NotNullWhen(true)] out TNamedTypeSymbol? stateMachineType)

@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </remarks>
         internal bool InUnsafeRegion
         {
-            get { return this.Flags.Includes(BinderFlags.UnsafeRegion); }
+            get { return this.Flags.Includes(EBinder.UnsafeRegion); }
         }
 
         /// <returns>True if a diagnostic was reported</returns>
@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private CSDiagnosticInfo GetUnsafeDiagnosticInfo(TypeSymbol sizeOfTypeOpt)
         {
-            if (this.Flags.Includes(BinderFlags.SuppressUnsafeDiagnostics))
+            if (this.Flags.Includes(EBinder.SuppressUnsafeDiagnostics))
             {
                 return null;
             }

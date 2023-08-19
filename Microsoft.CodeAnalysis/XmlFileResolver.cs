@@ -90,16 +90,16 @@ namespace Microsoft.CodeAnalysis
             return File.Exists(resolvedPath);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object? other)
         {
             // Explicitly check that we're not comparing against a derived type
-            if (obj == null || GetType() != obj.GetType())
+            if (other == null || GetType() != other.GetType())
             {
                 return false;
             }
 
-            var other = (XmlFileResolver)obj;
-            return string.Equals(_baseDirectory, other._baseDirectory, StringComparison.Ordinal);
+            var otherCast = (XmlFileResolver)other;
+            return string.Equals(_baseDirectory, otherCast._baseDirectory, StringComparison.Ordinal);
         }
 
         public override int GetHashCode()

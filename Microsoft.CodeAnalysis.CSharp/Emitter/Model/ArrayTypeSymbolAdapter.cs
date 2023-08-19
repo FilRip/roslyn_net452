@@ -14,7 +14,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal partial class
+    public partial class
 #if DEBUG
         ArrayTypeSymbolAdapter : SymbolAdapter,
 #else
@@ -102,7 +102,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     }
 
 #if DEBUG
-    internal partial class ArrayTypeSymbolAdapter
+    public partial class ArrayTypeSymbolAdapter
     {
         internal ArrayTypeSymbolAdapter(ArrayTypeSymbol underlyingArrayTypeSymbol)
         {

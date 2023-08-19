@@ -260,11 +260,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.Class:
                 case TypeKind.Dynamic:
                     Error(diagnostics, ErrorCode.ERR_ImplicitObjectCreationIllegalTargetType, syntax, type);
-                    goto case TypeKind.Error;
+                    return MakeBadExpressionForObjectCreation(syntax, type, arguments, node.InitializerOpt, typeSyntax: syntax, diagnostics);
                 case TypeKind.Pointer:
                 case TypeKind.FunctionPointer:
                     Error(diagnostics, ErrorCode.ERR_UnsafeTypeInObjectCreation, syntax, type);
-                    goto case TypeKind.Error;
+                    return MakeBadExpressionForObjectCreation(syntax, type, arguments, node.InitializerOpt, typeSyntax: syntax, diagnostics);
                 case TypeKind.Error:
                     return MakeBadExpressionForObjectCreation(syntax, type, arguments, node.InitializerOpt, typeSyntax: syntax, diagnostics);
                 case var v:
@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private BoundExpression ConvertSwitchExpression(BoundUnconvertedSwitchExpression source, TypeSymbol destination, Conversion? conversionIfTargetTyped, BindingDiagnosticBag diagnostics, bool hasErrors = false)
         {
             bool targetTyped = conversionIfTargetTyped is { };
-            Conversion conversion = conversionIfTargetTyped ?? Conversion.Identity;
+            Conversion conversion = conversionIfTargetTyped.HasValue ? conversionIfTargetTyped.Value : Conversion.Identity;
             ImmutableArray<Conversion> underlyingConversions = conversion.UnderlyingConversions;
             var builder = ArrayBuilder<BoundSwitchExpressionArm>.GetInstance(source.SwitchArms.Length);
             for (int i = 0, n = source.SwitchArms.Length; i < n; i++)
@@ -887,7 +887,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 else if (!WasImplicitReceiver(receiverOpt) && IsMemberAccessedThroughVariableOrValue(receiverOpt))
                 {
-                    if (this.Flags.Includes(BinderFlags.CollectionInitializerAddMethod))
+                    if (this.Flags.Includes(EBinder.CollectionInitializerAddMethod))
                     {
                         diagnostics.Add(ErrorCode.ERR_InitializerAddHasWrongSignature, node.Location, memberSymbol);
                     }

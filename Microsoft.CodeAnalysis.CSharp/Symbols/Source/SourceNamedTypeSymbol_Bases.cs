@@ -211,7 +211,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 {
                     var baseBinder = this.DeclaringCompilation.GetBinder(bases);
                     // Wrap base binder in a location-specific binder that will avoid generic constraint checks.
-                    baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+                    baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
 
                     foreach (var baseTypeSyntax in bases.Types)
                     {
@@ -402,7 +402,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // Wrap base binder in a location-specific binder that will avoid generic constraint checks
             // (to avoid cycles if the constraint types are not bound yet). Instead, constraint checks
             // are handled by the caller.
-            baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+            baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
 
             int i = -1;
             foreach (var baseTypeSyntax in bases.Types)

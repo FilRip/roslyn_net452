@@ -12,7 +12,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal partial class
+    public partial class
 #if DEBUG
         EventSymbolAdapter : SymbolAdapter,
 #else
@@ -195,7 +195,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     }
 
 #if DEBUG
-    internal partial class EventSymbolAdapter
+    public partial class EventSymbolAdapter
     {
         internal EventSymbolAdapter(EventSymbol underlyingEventSymbol)
         {

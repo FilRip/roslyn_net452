@@ -20,27 +20,27 @@ namespace Microsoft.CodeAnalysis.Syntax
                 _children = new ArrayElement<WeakReference<SyntaxNode>?>[(((green.SlotCount + 1) >> 1) - 1)];
             }
 
-            public override SyntaxNode? GetNodeSlot(int i)
+            public override SyntaxNode? GetNodeSlot(int slot)
             {
                 SyntaxNode? result = null;
 
-                if ((i & 1) == 0)
+                if ((slot & 1) == 0)
                 {
                     // not a separator
-                    result = GetWeakRedElement(ref this._children[i >> 1].Value, i);
+                    result = GetWeakRedElement(ref this._children[slot >> 1].Value, slot);
                 }
 
                 return result;
             }
 
-            public override SyntaxNode? GetCachedSlot(int i)
+            public override SyntaxNode? GetCachedSlot(int index)
             {
                 SyntaxNode? result = null;
 
-                if ((i & 1) == 0)
+                if ((index & 1) == 0)
                 {
                     // not a separator
-                    var weak = this._children[i >> 1].Value;
+                    var weak = this._children[index >> 1].Value;
                     weak?.TryGetTarget(out result);
                 }
 

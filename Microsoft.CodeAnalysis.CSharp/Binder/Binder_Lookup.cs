@@ -541,22 +541,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Both results are clear, non-viable or ambiguous.
                 // No need to adjust useSiteInfo based on attributeTypeWithoutSuffixViabilityUseSiteInfo/attributeTypeWithSuffixViabilityUseSiteInfo.
 
-                if (!result.IsClear)
+                if (!result.IsClear && symbolWithoutSuffix != null)
                 {
-                    if (symbolWithoutSuffix is not null) // was not ambiguous, but not viable
-                    {
-                        result.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithoutSuffix, result.Error, diagnose));
-                    }
+                    result.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithoutSuffix, result.Error, diagnose));
                 }
 
                 if (resultWithSuffix != null)
                 {
-                    if (!resultWithSuffix.IsClear)
+                    if (!resultWithSuffix.IsClear && symbolWithSuffix != null)
                     {
-                        if (symbolWithSuffix is not null)
-                        {
-                            resultWithSuffix.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithSuffix, resultWithSuffix.Error, diagnose));
-                        }
+                        resultWithSuffix.SetFrom(GenerateNonViableAttributeTypeResult(symbolWithSuffix, resultWithSuffix.Error, diagnose));
                     }
 
                     result.MergePrioritized(resultWithSuffix);
@@ -888,24 +882,21 @@ namespace Microsoft.CodeAnalysis.CSharp
             GetWellKnownWinRTMemberInterfaces(out NamedTypeSymbol idictSymbol, out NamedTypeSymbol iroDictSymbol, out NamedTypeSymbol iListSymbol, out NamedTypeSymbol iCollectionSymbol, out NamedTypeSymbol inccSymbol, out NamedTypeSymbol inpcSymbol);
 
             // Dev11 searches all declared and undeclared base interfaces
-            foreach (var iface in type.AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo))
+            foreach (var iface in type.AllInterfacesWithDefinitionUseSiteDiagnostics(ref useSiteInfo).Where(iface => ShouldAddWinRTMembersForInterface(iface, idictSymbol, iroDictSymbol, iListSymbol, iCollectionSymbol, inccSymbol, inpcSymbol)))
             {
-                if (ShouldAddWinRTMembersForInterface(iface, idictSymbol, iroDictSymbol, iListSymbol, iCollectionSymbol, inccSymbol, inpcSymbol))
+                LookupMembersWithoutInheritance(tmp, iface, name, arity, options, originalBinder, iface, diagnose, ref useSiteInfo, basesBeingResolved: null);
+                // only add viable members
+                if (tmp.IsMultiViable)
                 {
-                    LookupMembersWithoutInheritance(tmp, iface, name, arity, options, originalBinder, iface, diagnose, ref useSiteInfo, basesBeingResolved: null);
-                    // only add viable members
-                    if (tmp.IsMultiViable)
+                    foreach (var sym in tmp.Symbols)
                     {
-                        foreach (var sym in tmp.Symbols)
+                        if (!allMembers.Add(sym))
                         {
-                            if (!allMembers.Add(sym))
-                            {
-                                conflictingMembers.Add(sym);
-                            }
+                            conflictingMembers.Add(sym);
                         }
                     }
-                    tmp.Clear();
                 }
+                tmp.Clear();
             }
             tmp.Free();
             if (result.IsMultiViable)
@@ -1181,6 +1172,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     var sym = hiddenSymbols[i];
                     var hiddenContainer = sym.ContainingType;
 
+                    bool found = false;
+
                     // see if sym is hidden
                     for (int j = 0; j < hidingCount; j++)
                     {
@@ -1188,31 +1181,30 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var hidingContainer = hidingSym.ContainingType;
                         var hidingContainerIsInterface = hidingContainer.IsInterface;
 
-                        if (hidingContainerIsInterface)
+                        if (hidingContainerIsInterface &&
+                            !IsDerivedType(baseType: hiddenContainer, derivedType: hidingSym.ContainingType, basesBeingResolved, useSiteInfo: ref useSiteInfo) &&
+                            hiddenContainer.SpecialType != SpecialType.System_Object)
                         {
                             // SPEC: For the purposes of member lookup [...] if T is an
                             // SPEC: interface type, the base types of T are the base interfaces
                             // SPEC: of T and the class type object. 
 
-                            if (!IsDerivedType(baseType: hiddenContainer, derivedType: hidingSym.ContainingType, basesBeingResolved, useSiteInfo: ref useSiteInfo) &&
-                                hiddenContainer.SpecialType != SpecialType.System_Object)
-                            {
-                                continue; // not in inheritance relationship, so it cannot hide
-                            }
+                            continue; // not in inheritance relationship, so it cannot hide
                         }
 
                         if (!IsMethodOrIndexer(hidingSym) || !IsMethodOrIndexer(sym))
                         {
                             // any non-method [non-indexer] hides everything in the hiding scope
                             // any method [indexer] hides non-methods [non-indexers].
-                            goto symIsHidden;
+                            found = true;
+                            break;
                         }
 
                         // Note: We do not implement hiding by signature in non-interfaces here; that is handled later in overload lookup.
                     }
 
-                    hidingSymbols.Add(sym); // not hidden
-                symIsHidden:;
+                    if (!found)
+                        hidingSymbols.Add(sym); // not hidden
                 }
             }
             else
@@ -1396,16 +1388,20 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         return false;
                     }
-                    foreach (ImmutableArray<byte> key in keys)
-                    {
-                        if (key.SequenceEqual(this.Compilation.Assembly.Identity.PublicKey))
-                        {
-                            return false;
-                        }
-                    }
+                    if (keys.Any(key => key.SequenceEqual(this.Compilation.Assembly.Identity.PublicKey)))
+                        return false;
                     return true;
                 }
                 return false;
+            }
+        }
+
+        internal void CheckViability<TSymbol>(LookupResult result, ImmutableArray<TSymbol> symbols, int arity, LookupOptions options, TypeSymbol accessThroughType, bool diagnose, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConsList<TypeSymbol> basesBeingResolved) where TSymbol : Symbol
+        {
+            foreach (var symbol in symbols)
+            {
+                var res = this.CheckViability(symbol, arity, options, accessThroughType, diagnose, ref useSiteInfo, basesBeingResolved);
+                result.MergeEqual(res);
             }
         }
 
@@ -1438,15 +1434,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return ((method1 is not null) && (method2 is not null)) ?
                 new CSDiagnosticInfo(ErrorCode.ERR_BindToBogusProp2, symbol, method1, method2) :
                 new CSDiagnosticInfo(ErrorCode.ERR_BindToBogusProp1, symbol, method1 ?? method2);
-        }
-
-        internal void CheckViability<TSymbol>(LookupResult result, ImmutableArray<TSymbol> symbols, int arity, LookupOptions options, TypeSymbol accessThroughType, bool diagnose, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConsList<TypeSymbol> basesBeingResolved) where TSymbol : Symbol
-        {
-            foreach (var symbol in symbols)
-            {
-                var res = this.CheckViability(symbol, arity, options, accessThroughType, diagnose, ref useSiteInfo, basesBeingResolved);
-                result.MergeEqual(res);
-            }
         }
 
         /// <summary>
@@ -1549,7 +1536,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         internal bool IsAccessible(Symbol symbol, TypeSymbol accessThroughType, out bool failedThroughTypeCheck, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConsList<TypeSymbol> basesBeingResolved = null)
         {
-            if (this.Flags.Includes(BinderFlags.IgnoreAccessibility))
+            if (this.Flags.Includes(EBinder.IgnoreAccessibility))
             {
                 failedThroughTypeCheck = false;
                 return true;
@@ -1560,7 +1547,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         /// <remarks>
         /// Should only be called by <see cref="IsAccessible(Symbol, TypeSymbol, out bool, ref CompoundUseSiteInfo{AssemblySymbol}, ConsList{TypeSymbol})"/>,
-        /// which will already have checked for <see cref="BinderFlags.IgnoreAccessibility"/>.
+        /// which will already have checked for <see cref="EBinder.IgnoreAccessibility"/>.
         /// </remarks>
         internal virtual bool IsAccessibleHelper(Symbol symbol, TypeSymbol accessThroughType, out bool failedThroughTypeCheck, ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo, ConsList<TypeSymbol> basesBeingResolved)
         {
@@ -1799,24 +1786,18 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static void AddMemberLookupSymbolsInfoInNamespace(LookupSymbolsInfo result, NamespaceSymbol ns, LookupOptions options, Binder originalBinder)
         {
             var candidateMembers = result.FilterName != null ? GetCandidateMembers(ns, result.FilterName, options, originalBinder) : GetCandidateMembers(ns, options, originalBinder);
-            foreach (var symbol in candidateMembers)
+            foreach (var symbol in candidateMembers.Where(symbol => originalBinder.CanAddLookupSymbolInfo(symbol, options, result, null)))
             {
-                if (originalBinder.CanAddLookupSymbolInfo(symbol, options, result, null))
-                {
-                    result.AddSymbol(symbol, symbol.Name, symbol.GetArity());
-                }
+                result.AddSymbol(symbol, symbol.Name, symbol.GetArity());
             }
         }
 
         private static void AddMemberLookupSymbolsInfoWithoutInheritance(LookupSymbolsInfo result, TypeSymbol type, LookupOptions options, Binder originalBinder, TypeSymbol accessThroughType)
         {
             var candidateMembers = result.FilterName != null ? GetCandidateMembers(type, result.FilterName, options, originalBinder) : GetCandidateMembers(type, options, originalBinder);
-            foreach (var symbol in candidateMembers)
+            foreach (var symbol in candidateMembers.Where(symbol => originalBinder.CanAddLookupSymbolInfo(symbol, options, result, accessThroughType)))
             {
-                if (originalBinder.CanAddLookupSymbolInfo(symbol, options, result, accessThroughType))
-                {
-                    result.AddSymbol(symbol, symbol.Name, symbol.GetArity());
-                }
+                result.AddSymbol(symbol, symbol.Name, symbol.GetArity());
             }
         }
 
@@ -1825,12 +1806,9 @@ namespace Microsoft.CodeAnalysis.CSharp
             GetWellKnownWinRTMemberInterfaces(out NamedTypeSymbol idictSymbol, out NamedTypeSymbol iroDictSymbol, out NamedTypeSymbol iListSymbol, out NamedTypeSymbol iCollectionSymbol, out NamedTypeSymbol inccSymbol, out NamedTypeSymbol inpcSymbol);
 
             // Dev11 searches all declared and undeclared base interfaces
-            foreach (var iface in type.AllInterfacesNoUseSiteDiagnostics)
+            foreach (var iface in type.AllInterfacesNoUseSiteDiagnostics.Where(iface => ShouldAddWinRTMembersForInterface(iface, idictSymbol, iroDictSymbol, iListSymbol, iCollectionSymbol, inccSymbol, inpcSymbol)))
             {
-                if (ShouldAddWinRTMembersForInterface(iface, idictSymbol, iroDictSymbol, iListSymbol, iCollectionSymbol, inccSymbol, inpcSymbol))
-                {
-                    AddMemberLookupSymbolsInfoWithoutInheritance(result, iface, options, originalBinder, accessThroughType);
-                }
+                AddMemberLookupSymbolsInfoWithoutInheritance(result, iface, options, originalBinder, accessThroughType);
             }
         }
 

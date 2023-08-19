@@ -46,12 +46,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             public override Location ParameterLocation(int index) { return _parameters[index].Locations[0]; }
             public override TypeWithAnnotations ParameterTypeWithAnnotations(int index) { throw new ArgumentException(); } // implicitly typed
 
-            public override void GenerateAnonymousFunctionConversionError(BindingDiagnosticBag diagnostics, TypeSymbol targetType)
-            {
-                // TODO: improved diagnostics for query expressions
-                base.GenerateAnonymousFunctionConversionError(diagnostics, targetType);
-            }
-
             public override Binder ParameterBinder(LambdaSymbol lambdaSymbol, Binder binder)
             {
                 return new WithQueryLambdaParametersBinder(lambdaSymbol, _rangeVariableMap, binder);

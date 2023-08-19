@@ -18,9 +18,9 @@ namespace System.Text
             return new InternalEncoderBestFitFallbackBuffer(this);
         }
 
-        public override bool Equals(object value)
+        public override bool Equals(object obj)
         {
-            if (value is InternalEncoderBestFitFallback internalEncoderBestFitFallback)
+            if (obj is InternalEncoderBestFitFallback internalEncoderBestFitFallback)
             {
                 return encoding.CodePage == internalEncoderBestFitFallback.encoding.CodePage;
             }

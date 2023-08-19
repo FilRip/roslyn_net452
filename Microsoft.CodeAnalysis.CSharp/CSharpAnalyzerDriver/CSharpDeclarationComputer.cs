@@ -118,23 +118,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                             return;
                         }
 
-                        goto case SyntaxKind.ClassDeclaration;
+                        ClassDeclarationCase();
+                        return;
                     }
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.StructDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
-                    {
-                        var t = (TypeDeclarationSyntax)node;
-                        foreach (var decl in t.Members)
-                        {
-                            ComputeDeclarations(model, associatedSymbol: null, decl, shouldSkip, getSymbol, builder, newLevel, cancellationToken);
-                        }
-
-                        var attributes = GetAttributes(t.AttributeLists).Concat(GetTypeParameterListAttributes(t.TypeParameterList));
-                        builder.Add(GetDeclarationInfo(model, node, getSymbol, attributes, cancellationToken));
-                        return;
-                    }
-
+                    ClassDeclarationCase();
+                    return;
                 case SyntaxKind.EnumDeclaration:
                     {
                         var t = (EnumDeclarationSyntax)node;
@@ -329,6 +320,18 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 default:
                     return;
+            }
+
+            void ClassDeclarationCase()
+            {
+                var t = (TypeDeclarationSyntax)node;
+                foreach (var decl in t.Members)
+                {
+                    ComputeDeclarations(model, associatedSymbol: null, decl, shouldSkip, getSymbol, builder, newLevel, cancellationToken);
+                }
+
+                var attributes = GetAttributes(t.AttributeLists).Concat(GetTypeParameterListAttributes(t.TypeParameterList));
+                builder.Add(GetDeclarationInfo(model, node, getSymbol, attributes, cancellationToken));
             }
         }
 

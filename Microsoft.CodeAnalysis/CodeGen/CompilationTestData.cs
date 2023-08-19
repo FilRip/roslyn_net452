@@ -35,9 +35,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public readonly ConcurrentDictionary<IMethodSymbolInternal, MethodData> Methods = new();
 
         // The emitted module.
-        public CommonPEModuleBuilder? Module;
+        public CommonPEModuleBuilder? Module { get; set; }
 
-        public Func<ISymWriterMetadataProvider, SymUnmanagedWriter>? SymWriterFactory;
+        public Func<ISymWriterMetadataProvider, SymUnmanagedWriter>? SymWriterFactory { get; set; }
 
         public ILBuilder GetIL(Func<IMethodSymbolInternal, bool> predicate)
         {

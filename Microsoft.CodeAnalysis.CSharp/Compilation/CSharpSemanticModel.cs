@@ -249,7 +249,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
 
             BoundExpression boundNode;
-            if (bindingOption == SpeculativeBindingOption.BindAsTypeOrNamespace || binder.Flags.Includes(BinderFlags.CrefParameterOrReturnType))
+            if (bindingOption == SpeculativeBindingOption.BindAsTypeOrNamespace || binder.Flags.Includes(EBinder.CrefParameterOrReturnType))
             {
                 boundNode = binder.BindNamespaceOrType(expression, BindingDiagnosticBag.Discarded);
             }
@@ -285,7 +285,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return null;
             }
 
-            if (binder.Flags.Includes(BinderFlags.CrefParameterOrReturnType))
+            if (binder.Flags.Includes(EBinder.CrefParameterOrReturnType))
             {
                 crefSymbols = ImmutableArray.Create<Symbol>(binder.BindType(expression, BindingDiagnosticBag.Discarded).Type);
                 return null;
@@ -3107,11 +3107,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <param name="typeParameter"></param>
         public abstract ITypeParameterSymbol GetDeclaredSymbol(TypeParameterSyntax typeParameter, CancellationToken cancellationToken = default);
 
-        internal BinderFlags GetSemanticModelBinderFlags()
+        internal EBinder GetSemanticModelBinderFlags()
         {
             return this.IgnoresAccessibility
-                ? BinderFlags.SemanticModel | BinderFlags.IgnoreAccessibility
-                : BinderFlags.SemanticModel;
+                ? EBinder.SemanticModel | EBinder.IgnoreAccessibility
+                : EBinder.SemanticModel;
         }
 
         /// <summary>
@@ -4430,7 +4430,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     options = LookupOptions.Default;
                 }
 
-                binder = binder.WithAdditionalFlags(BinderFlags.SemanticModel);
+                binder = binder.WithAdditionalFlags(EBinder.SemanticModel);
                 foreach (var scope in new ExtensionMethodScopes(binder))
                 {
                     var extensionMethods = ArrayBuilder<MethodSymbol>.GetInstance();

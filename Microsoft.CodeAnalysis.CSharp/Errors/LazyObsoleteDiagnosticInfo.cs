@@ -16,9 +16,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private readonly object _symbolOrSymbolWithAnnotations;
         private readonly Symbol _containingSymbol;
-        private readonly BinderFlags _binderFlags;
+        private readonly EBinder _binderFlags;
 
-        internal LazyObsoleteDiagnosticInfo(object symbol, Symbol containingSymbol, BinderFlags binderFlags)
+        internal LazyObsoleteDiagnosticInfo(object symbol, Symbol containingSymbol, EBinder binderFlags)
             : base(CSharp.MessageProvider.Instance, (int)ErrorCode.Unknown)
         {
             _symbolOrSymbolWithAnnotations = symbol;

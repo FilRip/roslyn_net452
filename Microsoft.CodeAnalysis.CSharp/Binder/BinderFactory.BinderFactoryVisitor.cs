@@ -1255,10 +1255,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             // that dev11 does not suppress these members when performing lookup within parameter and return
             // types, within crefs (DevDiv #586815, #598371).
             // NOTE: always allow pointer types.
-            BinderFlags flags = BinderFlags.Cref | BinderFlags.SuppressConstraintChecks | BinderFlags.UnsafeRegion;
+            EBinder flags = EBinder.Cref | EBinder.SuppressConstraintChecks | EBinder.UnsafeRegion;
             if (inParameterOrReturnType)
             {
-                flags |= BinderFlags.CrefParameterOrReturnType;
+                flags |= EBinder.CrefParameterOrReturnType;
             }
 
             binder = binder.WithAdditionalFlags(flags);

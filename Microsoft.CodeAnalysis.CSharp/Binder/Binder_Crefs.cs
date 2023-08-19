@@ -293,108 +293,109 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Since we may find symbols without going through the lookup API, 
             // expose the symbols via an ArrayBuilder.
             ArrayBuilder<Symbol> builder;
+
+            LookupResult result = LookupResult.GetInstance();
+            this.LookupSymbolsOrMembersInternal(
+                result,
+                containerOpt,
+                name: memberName,
+                arity: arity,
+                basesBeingResolved: null,
+                options: LookupOptions.AllMethodsOnArityZero,
+                diagnose: false,
+                useSiteInfo: ref useSiteInfo);
+
+            // CONSIDER: Dev11 also checks for a constructor in the event of an ambiguous result.
+            if (result.IsMultiViable)
             {
-                LookupResult result = LookupResult.GetInstance();
-                this.LookupSymbolsOrMembersInternal(
-                    result,
-                    containerOpt,
-                    name: memberName,
-                    arity: arity,
-                    basesBeingResolved: null,
-                    options: LookupOptions.AllMethodsOnArityZero,
-                    diagnose: false,
-                    useSiteInfo: ref useSiteInfo);
+                // Dev11 doesn't consider members from System.Object when the container is an interface.
+                // Lookup should already have dropped such members.
+                builder = ArrayBuilder<Symbol>.GetInstance();
+                builder.AddRange(result.Symbols);
+                result.Free();
+            }
+            else
+            {
+                result.Free(); // Won't be using this.
 
-                // CONSIDER: Dev11 also checks for a constructor in the event of an ambiguous result.
-                if (result.IsMultiViable)
+                // Dev11 has a complicated two-stage process for determining when a cref is really referring to a constructor.
+                // Under two sets of conditions, XmlDocCommentBinder::bindXMLReferenceName will decide that a name refers
+                // to a constructor and under one set of conditions, the calling method, XmlDocCommentBinder::bindXMLReference,
+                // will roll back that decision and return null.
+
+                // In XmlDocCommentBinder::bindXMLReferenceName:
+                //   1) If an unqualified, non-generic name didn't bind to anything and the name matches the name of the type
+                //      to which the doc comment is applied, then bind to a constructor.
+                //   2) If a qualified, non-generic name didn't bind to anything and the LHS of the qualified name is a type
+                //      with the same name, then bind to a constructor.
+
+                // Quoted from XmlDocCommentBinder::bindXMLReference:
+                //   Filtering out the case where specifying the name of a generic type without specifying
+                //   any arity returns a constructor. This case shouldn't return anything. Note that
+                //   returning the constructors was a fix for the wonky constructor behavior, but in order
+                //   to not introduce a regression and breaking change we return NULL in this case.
+                //   e.g.
+                //   
+                //   /// <see cref="Goo"/>
+#pragma warning disable S125 // Sections of code should not be commented out
+                //   class Goo<T> { }
+#pragma warning restore S125 // Sections of code should not be commented out
+                //   
+                //   This cref used not to bind to anything, because before it was looking for a type and
+                //   since there was no arity, it didn't find Goo<T>. Now however, it finds Goo<T>.ctor,
+                //   which is arguably correct, but would be a breaking change (albeit with minimal impact)
+                //   so we catch this case and chuck out the symbol found.
+
+                // In Roslyn, we're doing everything in one pass, rather than guessing and rolling back.  
+
+                // As in the native compiler, we treat this as a fallback case - something that actually has the
+                // specified name is preferred.
+
+                NamedTypeSymbol? constructorType = null;
+
+                if (arity == 0) // Member arity
                 {
-                    // Dev11 doesn't consider members from System.Object when the container is an interface.
-                    // Lookup should already have dropped such members.
-                    builder = ArrayBuilder<Symbol>.GetInstance();
-                    builder.AddRange(result.Symbols);
-                    result.Free();
+                    if (containerOpt is NamedTypeSymbol containerType)
+                    {
+                        // Case 1: If the name is qualified by a type with the same name, then we want a 
+                        // constructor (unless the type is generic, the cref is on/in the type (but not 
+                        // on/in a nested type), and there were no parens after the member name).
+
+                        if (containerType.Name == memberName && (hasParameterList || containerType.Arity == 0 || !TypeSymbol.Equals(this.ContainingType, containerType.OriginalDefinition, TypeCompareKind.ConsiderEverything2)))
+                        {
+                            constructorType = containerType;
+                        }
+                    }
+                    else if (containerOpt is null && hasParameterList)
+                    {
+                        // Case 2: If the name is not qualified by anything, but we're in the scope
+                        // of a type with the same name (regardless of arity), then we want a constructor,
+                        // as long as there were parens after the member name.
+
+                        NamedTypeSymbol? binderContainingType = this.ContainingType;
+                        if (binderContainingType is not null && memberName == binderContainingType.Name)
+                        {
+                            constructorType = binderContainingType;
+                        }
+                    }
                 }
-                else
+
+                if (constructorType is not null)
                 {
-                    result.Free(); // Won't be using this.
+                    ImmutableArray<MethodSymbol> instanceConstructors = constructorType.InstanceConstructors;
+                    int numInstanceConstructors = instanceConstructors.Length;
 
-                    // Dev11 has a complicated two-stage process for determining when a cref is really referring to a constructor.
-                    // Under two sets of conditions, XmlDocCommentBinder::bindXMLReferenceName will decide that a name refers
-                    // to a constructor and under one set of conditions, the calling method, XmlDocCommentBinder::bindXMLReference,
-                    // will roll back that decision and return null.
-
-                    // In XmlDocCommentBinder::bindXMLReferenceName:
-                    //   1) If an unqualified, non-generic name didn't bind to anything and the name matches the name of the type
-                    //      to which the doc comment is applied, then bind to a constructor.
-                    //   2) If a qualified, non-generic name didn't bind to anything and the LHS of the qualified name is a type
-                    //      with the same name, then bind to a constructor.
-
-                    // Quoted from XmlDocCommentBinder::bindXMLReference:
-                    //   Filtering out the case where specifying the name of a generic type without specifying
-                    //   any arity returns a constructor. This case shouldn't return anything. Note that
-                    //   returning the constructors was a fix for the wonky constructor behavior, but in order
-                    //   to not introduce a regression and breaking change we return NULL in this case.
-                    //   e.g.
-                    //   
-                    //   /// <see cref="Goo"/>
-                    //   class Goo<T> { }
-                    //   
-                    //   This cref used not to bind to anything, because before it was looking for a type and
-                    //   since there was no arity, it didn't find Goo<T>. Now however, it finds Goo<T>.ctor,
-                    //   which is arguably correct, but would be a breaking change (albeit with minimal impact)
-                    //   so we catch this case and chuck out the symbol found.
-
-                    // In Roslyn, we're doing everything in one pass, rather than guessing and rolling back.  
-
-                    // As in the native compiler, we treat this as a fallback case - something that actually has the
-                    // specified name is preferred.
-
-                    NamedTypeSymbol? constructorType = null;
-
-                    if (arity == 0) // Member arity
-                    {
-                        if (containerOpt is NamedTypeSymbol containerType)
-                        {
-                            // Case 1: If the name is qualified by a type with the same name, then we want a 
-                            // constructor (unless the type is generic, the cref is on/in the type (but not 
-                            // on/in a nested type), and there were no parens after the member name).
-
-                            if (containerType.Name == memberName && (hasParameterList || containerType.Arity == 0 || !TypeSymbol.Equals(this.ContainingType, containerType.OriginalDefinition, TypeCompareKind.ConsiderEverything2)))
-                            {
-                                constructorType = containerType;
-                            }
-                        }
-                        else if (containerOpt is null && hasParameterList)
-                        {
-                            // Case 2: If the name is not qualified by anything, but we're in the scope
-                            // of a type with the same name (regardless of arity), then we want a constructor,
-                            // as long as there were parens after the member name.
-
-                            NamedTypeSymbol? binderContainingType = this.ContainingType;
-                            if (binderContainingType is not null && memberName == binderContainingType.Name)
-                            {
-                                constructorType = binderContainingType;
-                            }
-                        }
-                    }
-
-                    if (constructorType is not null)
-                    {
-                        ImmutableArray<MethodSymbol> instanceConstructors = constructorType.InstanceConstructors;
-                        int numInstanceConstructors = instanceConstructors.Length;
-
-                        if (numInstanceConstructors == 0)
-                        {
-                            return ImmutableArray<Symbol>.Empty;
-                        }
-
-                        builder = ArrayBuilder<Symbol>.GetInstance(numInstanceConstructors);
-                        builder.AddRange(instanceConstructors);
-                    }
-                    else
+                    if (numInstanceConstructors == 0)
                     {
                         return ImmutableArray<Symbol>.Empty;
                     }
+
+                    builder = ArrayBuilder<Symbol>.GetInstance(numInstanceConstructors);
+                    builder.AddRange(instanceConstructors);
+                }
+                else
+                {
+                    return ImmutableArray<Symbol>.Empty;
                 }
             }
 
@@ -449,6 +450,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //
                         // Consider the following code:
                         //
+#pragma warning disable S125 // Sections of code should not be commented out
                         //   public class C<T>
                         //   {
                         //       public class Inner { }
@@ -462,6 +464,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         //       /// <see cref="C{Q}.M(Inner)"/> // WRN_UnqualifiedNestedTypeInCref
                         //       public void N() { }
                         //   }
+#pragma warning restore S125 // Sections of code should not be commented out
                         //
                         // Dev12 binds all of the crefs as "M:C`1.M(C{`0}.Inner)".
                         // Roslyn accepts all but the last.  The issue is that the context for performing
@@ -503,13 +506,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                         return true;
                     }
 
-                    foreach (var param in signature.Parameters)
-                    {
-                        if (ContainsNestedTypeOfUnconstructedGenericType(param.Type))
-                        {
-                            return true;
-                        }
-                    }
+                    if (signature.Parameters.Any(param => ContainsNestedTypeOfUnconstructedGenericType(param.Type)))
+                        return true;
 
                     return false;
                 case TypeKind.Delegate:
@@ -524,13 +522,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                         return true;
                     }
 
-                    foreach (TypeWithAnnotations typeArgument in namedType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics)
-                    {
-                        if (ContainsNestedTypeOfUnconstructedGenericType(typeArgument.Type))
-                        {
-                            return true;
-                        }
-                    }
+                    if (namedType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics.Any(typeArgument => ContainsNestedTypeOfUnconstructedGenericType(typeArgument.Type)))
+                        return true;
 
                     return false;
                 case TypeKind.Dynamic:
@@ -877,7 +870,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // crefs, in order to match dev11's behavior (Changeset #829014).  Unfortunately, it turns out
             // that dev11 does not suppress these members when performing lookup within parameter and return
             // types, within crefs (DevDiv #586815, #598371).
-            Binder parameterOrReturnTypeBinder = this.WithAdditionalFlags(BinderFlags.CrefParameterOrReturnType);
+            Binder parameterOrReturnTypeBinder = this.WithAdditionalFlags(EBinder.CrefParameterOrReturnType);
 
             // It would be nice to pull this binder out of the factory so we wouldn't have to worry about them getting out
             // of sync, but this code is also used for included crefs, which don't have BinderFactories.
@@ -888,19 +881,14 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             TypeSymbol type = parameterOrReturnTypeBinder.BindType(typeSyntax, localDiagnostics).Type;
 
-            if (localDiagnostics.HasAnyErrors())
+            if (localDiagnostics.HasAnyErrors() &&
+                HasNonObsoleteError(localDiagnostics.DiagnosticBag))
             {
-                if (HasNonObsoleteError(localDiagnostics.DiagnosticBag))
-                {
-                    ErrorCode code = typeSyntax.Parent.Kind() == SyntaxKind.ConversionOperatorMemberCref
-                        ? ErrorCode.WRN_BadXMLRefReturnType
-                        : ErrorCode.WRN_BadXMLRefParamType;
-                    CrefSyntax crefSyntax = GetRootCrefSyntax(memberCrefSyntax);
-                    diagnostics.Add(code, typeSyntax.Location, typeSyntax.ToString(), crefSyntax.ToString());
-                }
-            }
-            else
-            {
+                ErrorCode code = typeSyntax.Parent.Kind() == SyntaxKind.ConversionOperatorMemberCref
+                    ? ErrorCode.WRN_BadXMLRefReturnType
+                    : ErrorCode.WRN_BadXMLRefParamType;
+                CrefSyntax crefSyntax = GetRootCrefSyntax(memberCrefSyntax);
+                diagnostics.Add(code, typeSyntax.Location, typeSyntax.ToString(), crefSyntax.ToString());
             }
 
             localDiagnostics.DiagnosticBag.Free();

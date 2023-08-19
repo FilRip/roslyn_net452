@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // Avoid checking constraints context when binding explicit interface type since
             // that might result in a recursive attempt to bind the containing class.
-            binder = binder.WithAdditionalFlags(BinderFlags.SuppressConstraintChecks | BinderFlags.SuppressObsoleteChecks);
+            binder = binder.WithAdditionalFlags(EBinder.SuppressConstraintChecks | EBinder.SuppressObsoleteChecks);
 
             NameSyntax explicitInterfaceName = explicitInterfaceSpecifierOpt.Name;
             explicitInterfaceTypeOpt = binder.BindType(explicitInterfaceName, diagnostics).Type;

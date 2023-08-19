@@ -110,7 +110,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public MetadataConstant CompileTimeValue
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public ImmutableArray<Cci.ICustomModifier> CustomModifiers
@@ -118,7 +120,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
         public bool IsConstant
         {
+#pragma warning disable S2372 // Exceptions should not be thrown from property getters
             get { throw ExceptionUtilities.Unreachable; }
+#pragma warning restore S2372 // Exceptions should not be thrown from property getters
         }
 
         public bool IsModified => false;

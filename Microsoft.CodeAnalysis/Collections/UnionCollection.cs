@@ -77,13 +77,8 @@ namespace Microsoft.CodeAnalysis
         {
             // PERF: Expansion of "return collections.Any(c => c.Contains(item));"
             // to avoid allocating a lambda.
-            foreach (var c in _collections)
-            {
-                if (c.Contains(item))
-                {
-                    return true;
-                }
-            }
+            if (_collections.Any(c => c.Contains(item)))
+                return true;
 
             return false;
         }

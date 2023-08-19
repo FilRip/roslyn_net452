@@ -89,7 +89,7 @@ namespace Microsoft.CodeAnalysis.Text
             return this.GetEnumerator();
         }
 
-        public struct Enumerator : IEnumerator<TextLine>, IEnumerator
+        public struct Enumerator : IEnumerator<TextLine>
         {
             private readonly TextLineCollection _lines;
             private int _index;
@@ -139,20 +139,26 @@ namespace Microsoft.CodeAnalysis.Text
 
             void IEnumerator.Reset()
             {
+                // Nothing to do
             }
 
             void IDisposable.Dispose()
             {
+                // Nothing to do
             }
 
             public override bool Equals(object? obj)
             {
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
                 throw new NotSupportedException();
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
             }
 
             public override int GetHashCode()
             {
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
                 throw new NotSupportedException();
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
             }
         }
     }

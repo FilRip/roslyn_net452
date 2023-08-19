@@ -630,7 +630,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // Could not find an implementation of the query pattern for source type '{0}'.  '{1}' not found.
                 diagnostics.Add(ErrorCode.ERR_QueryNoProvider, location, receiverOpt.Type, symbol.Name);
             }
-            else if (binder.Flags.Includes(BinderFlags.CollectionInitializerAddMethod))
+            else if (binder.Flags.Includes(EBinder.CollectionInitializerAddMethod))
             {
                 diagnostics.Add(ErrorCode.ERR_InitializerAddHasWrongSignature, location, symbol);
             }
@@ -1039,7 +1039,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             AnalyzedArguments arguments,
             ImmutableArray<Symbol> symbols,
             Location location,
-            BinderFlags flags,
+            EBinder flags,
             bool isMethodGroupConversion)
         {
             var badArg = GetFirstMemberKind(MemberResolutionKind.BadArgumentConversion);
@@ -1063,7 +1063,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //    symbols);
             //
 
-            if (flags.Includes(BinderFlags.CollectionInitializerAddMethod))
+            if (flags.Includes(EBinder.CollectionInitializerAddMethod))
             {
                 // However, if we are binding the collection initializer Add method, we do want to generate
                 // ErrorCode.ERR_BadArgTypesForCollectionAdd or ErrorCode.ERR_InitializerAddHasParamModifiers

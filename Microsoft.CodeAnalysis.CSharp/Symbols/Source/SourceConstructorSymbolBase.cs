@@ -44,7 +44,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // evaluating the constraints may depend on accessing this method from
             // the container (comparing this method to others to find overrides for
             // instance). Constraints are checked in AfterAddingTypeMembersChecks.
-            var signatureBinder = bodyBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+            var signatureBinder = bodyBinder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
 
             _lazyParameters = ParameterHelpers.MakeParameters(
                 signatureBinder, this, parameterList, out SyntaxToken arglistToken,

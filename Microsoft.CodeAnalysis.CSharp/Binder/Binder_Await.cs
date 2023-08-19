@@ -124,8 +124,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return this.Flags.Includes(BinderFlags.InCatchFilter) ||
-                    this.Flags.Includes(BinderFlags.InLockBody);
+                return this.Flags.Includes(EBinder.InCatchFilter) ||
+                    this.Flags.Includes(EBinder.InLockBody);
             }
         }
 
@@ -187,28 +187,28 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <returns>True if errors were found.</returns>
         private bool ReportBadAwaitContext(SyntaxNode node, Location location, BindingDiagnosticBag diagnostics)
         {
-            if (this.InUnsafeRegion && !this.Flags.Includes(BinderFlags.AllowAwaitInUnsafeContext))
+            if (this.InUnsafeRegion && !this.Flags.Includes(EBinder.AllowAwaitInUnsafeContext))
             {
                 Error(diagnostics, ErrorCode.ERR_AwaitInUnsafeContext, location);
                 return true;
             }
-            else if (this.Flags.Includes(BinderFlags.InLockBody))
+            else if (this.Flags.Includes(EBinder.InLockBody))
             {
                 Error(diagnostics, ErrorCode.ERR_BadAwaitInLock, location);
                 return true;
             }
-            else if (this.Flags.Includes(BinderFlags.InCatchFilter))
+            else if (this.Flags.Includes(EBinder.InCatchFilter))
             {
                 Error(diagnostics, ErrorCode.ERR_BadAwaitInCatchFilter, location);
                 return true;
             }
-            else if (this.Flags.Includes(BinderFlags.InFinallyBlock) &&
+            else if (this.Flags.Includes(EBinder.InFinallyBlock) &&
                 (node.SyntaxTree as CSharpSyntaxTree)?.Options?.IsFeatureEnabled(MessageID.IDS_AwaitInCatchAndFinally) == false)
             {
                 Error(diagnostics, ErrorCode.ERR_BadAwaitInFinally, location);
                 return true;
             }
-            else if (this.Flags.Includes(BinderFlags.InCatchBlock) &&
+            else if (this.Flags.Includes(EBinder.InCatchBlock) &&
                 (node.SyntaxTree as CSharpSyntaxTree)?.Options?.IsFeatureEnabled(MessageID.IDS_AwaitInCatchAndFinally) == false)
             {
                 Error(diagnostics, ErrorCode.ERR_BadAwaitInCatch, location);

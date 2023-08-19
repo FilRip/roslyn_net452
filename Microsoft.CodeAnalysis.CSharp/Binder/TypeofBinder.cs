@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal TypeofBinder(ExpressionSyntax typeExpression, Binder next)
             // Unsafe types are not unsafe in typeof, so it is effectively an unsafe region.
-            : base(next, next.Flags | BinderFlags.UnsafeRegion)
+            : base(next, next.Flags | EBinder.UnsafeRegion)
         {
             OpenTypeVisitor.Visit(typeExpression, out _allowedMap, out _isTypeExpressionOpen);
         }

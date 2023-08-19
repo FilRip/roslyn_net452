@@ -8,16 +8,13 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.PooledObjects;
-
-#if DEBUG
-using System.Linq;
-#endif
 
 #nullable enable
 
@@ -42,6 +39,18 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
+        /// Converts an array to an immutable array. The array must not be null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items">The sequence to convert</param>
+        /// <returns></returns>
+        public static ImmutableArray<T> AsImmutable<T>(this T[] items)
+        {
+            Debug.Assert(items != null);
+            return ImmutableArray.Create<T>(items);
+        }
+
+        /// <summary>
         /// Converts a sequence to an immutable array.
         /// </summary>
         /// <typeparam name="T">Elemental type of the sequence.</typeparam>
@@ -56,6 +65,22 @@ namespace Microsoft.CodeAnalysis
             }
 
             return ImmutableArray.CreateRange<T>(items);
+        }
+
+        /// <summary>
+        /// Converts an array to an immutable array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items">The sequence to convert</param>
+        /// <returns>If the array is null, this will return an empty immutable array.</returns>
+        public static ImmutableArray<T> AsImmutableOrEmpty<T>(this T[]? items)
+        {
+            if (items == null)
+            {
+                return ImmutableArray<T>.Empty;
+            }
+
+            return ImmutableArray.Create<T>(items);
         }
 
         /// <summary>
@@ -76,18 +101,6 @@ namespace Microsoft.CodeAnalysis
         }
 
         /// <summary>
-        /// Converts an array to an immutable array. The array must not be null.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="items">The sequence to convert</param>
-        /// <returns></returns>
-        public static ImmutableArray<T> AsImmutable<T>(this T[] items)
-        {
-            Debug.Assert(items != null);
-            return ImmutableArray.Create<T>(items);
-        }
-
-        /// <summary>
         /// Converts a array to an immutable array.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -99,22 +112,6 @@ namespace Microsoft.CodeAnalysis
             if (items == null)
             {
                 return default;
-            }
-
-            return ImmutableArray.Create<T>(items);
-        }
-
-        /// <summary>
-        /// Converts an array to an immutable array.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="items">The sequence to convert</param>
-        /// <returns>If the array is null, this will return an empty immutable array.</returns>
-        public static ImmutableArray<T> AsImmutableOrEmpty<T>(this T[]? items)
-        {
-            if (items == null)
-            {
-                return ImmutableArray<T>.Empty;
             }
 
             return ImmutableArray.Create<T>(items);
@@ -215,12 +212,9 @@ namespace Microsoft.CodeAnalysis
             }
 
             var builder = ArrayBuilder<TResult>.GetInstance();
-            foreach (var item in array)
+            foreach (var item in array.Where(item => predicate(item)))
             {
-                if (predicate(item))
-                {
-                    builder.Add(selector(item));
-                }
+                builder.Add(selector(item));
             }
 
             return builder.ToImmutableAndFree();
@@ -533,12 +527,9 @@ namespace Microsoft.CodeAnalysis
 
             var set = new HashSet<T>(comparer);
             var builder = ArrayBuilder<T>.GetInstance();
-            foreach (var a in array)
+            foreach (var a in array.Where(a => set.Add(a)))
             {
-                if (set.Add(a))
-                {
-                    builder.Add(a);
-                }
+                builder.Add(a);
             }
 
             var result = (builder.Count == array.Length) ? array : builder.ToImmutable();
@@ -747,15 +738,17 @@ namespace Microsoft.CodeAnalysis
         {
             // The framework implementation of SequenceEqual forces a NullRef for default array1 and 2, so we
             // maintain the same behavior in this extension
+
+#pragma warning disable S112 // General exceptions should never be thrown
             if (array1.IsDefault)
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException(nameof(array1));
             }
-
             if (array2.IsDefault)
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException(nameof(array2));
             }
+#pragma warning restore S112 // General exceptions should never be thrown
 
             if (array1.Length != array2.Length)
             {

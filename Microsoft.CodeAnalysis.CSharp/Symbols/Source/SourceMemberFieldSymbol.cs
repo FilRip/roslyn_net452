@@ -437,7 +437,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 var binderFactory = compilation.GetBinderFactory(SyntaxTree);
                 var binder = binderFactory.GetBinder(typeSyntax);
 
-                binder = binder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+                binder = binder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
                 if (!ContainingType.IsScriptClass)
                 {
                     type = binder.BindType(typeSyntax, diagnosticsForFirstDeclarator);

@@ -120,12 +120,12 @@ namespace Microsoft.CodeAnalysis
             out ImmutableArray<DiagnosticAnalyzer> analyzers,
             out ImmutableArray<ISourceGenerator> generators);
 
-        public CommonCompiler(CommandLineParser parser, string? responseFile, string[] args, BuildPaths buildPaths, string? additionalReferenceDirectories, IAnalyzerAssemblyLoader assemblyLoader)
+        protected CommonCompiler(CommandLineParser parser, string? responseFile, string[] args, BuildPaths buildPaths, string? additionalReferenceDirectories, IAnalyzerAssemblyLoader assemblyLoader)
         {
             IEnumerable<string> allArgs = args;
 
             Debug.Assert(null == responseFile || PathUtilities.IsAbsolute(responseFile));
-            if (!SuppressDefaultResponseFile(args) && File.Exists(responseFile))
+            if (CallOverloadedMethods(args, responseFile))
             {
                 allArgs = new[] { "@" + responseFile }.Concat(allArgs);
             }
@@ -139,6 +139,11 @@ namespace Microsoft.CodeAnalysis
             {
                 EmitDeterminismKey(Arguments, args, buildPaths.WorkingDirectory, parser);
             }
+        }
+
+        private bool CallOverloadedMethods(string[] args, string? responseFile)
+        {
+            return !SuppressDefaultResponseFile(args) && File.Exists(responseFile);
         }
 
         public abstract bool SuppressDefaultResponseFile(IEnumerable<string> args);
@@ -544,7 +549,9 @@ namespace Microsoft.CodeAnalysis
                     // so we attach an error to the "=" and attach it (plus following tokens) to the IncompleteMemberSyntax
                     // we previously created.
                     //this assert isn't valid if we change the design to not bail out after each phase.
+#pragma warning disable S125 // Sections of code should not be commented out
                     //System.Diagnostics.Debug.Assert(diag.Severity != DiagnosticSeverity.Error);
+#pragma warning restore S125 // Sections of code should not be commented out
                     return;
                 }
                 else if (diag.Severity == DiagnosticSeverity.Hidden)
@@ -608,13 +615,8 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         public static bool HasUnsuppressableErrors(DiagnosticBag diagnostics)
         {
-            foreach (var diag in diagnostics.AsEnumerable())
-            {
-                if (diag.IsUnsuppressableError())
-                {
-                    return true;
-                }
-            }
+            if (diagnostics.AsEnumerable().Any(diag => diag.IsUnsuppressableError()))
+                return true;
             return false;
         }
 
@@ -847,13 +849,8 @@ namespace Microsoft.CodeAnalysis
 
             // The act of reporting errors can cause more errors to appear in
             // additional files due to forcing all additional files to fetch text
-            foreach (var additionalFile in additionalTextFiles)
-            {
-                if (ReportDiagnostics(additionalFile.Diagnostics, consoleOutput, errorLogger, compilation))
-                {
-                    exitCode = Failed;
-                }
-            }
+            if (additionalTextFiles.Any(additionalFile => ReportDiagnostics(additionalFile.Diagnostics, consoleOutput, errorLogger, compilation)))
+                exitCode = Failed;
 
             diagnostics.Free();
             if (reportAnalyzer)
@@ -1641,14 +1638,14 @@ namespace Microsoft.CodeAnalysis
 
             builder.AppendLine("Source Files:");
             var hash = MD5.Create();
-            foreach (var sourceFile in args.SourceFiles)
+            foreach (var sourceFile in args.SourceFiles.Select(sourceFile => sourceFile.Path))
             {
-                var sourceFileName = Path.GetFileName(sourceFile.Path);
+                var sourceFileName = Path.GetFileName(sourceFile);
 
                 string hashValue;
                 try
                 {
-                    var bytes = File.ReadAllBytes(sourceFile.Path);
+                    var bytes = File.ReadAllBytes(sourceFile);
                     var hashBytes = hash.ComputeHash(bytes);
                     var data = BitConverter.ToString(hashBytes);
                     hashValue = data.Replace("-", "");

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,9 +39,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             // No need to report duplicate names since duplicates
             // are reported when the type parameters are bound.
             var names = new Dictionary<string, int>(n, StringOrdinalComparer.Instance);
-            foreach (var typeParameter in typeParameters)
+            foreach (var name in typeParameters.Select(typeParameter => typeParameter.Name))
             {
-                var name = typeParameter.Name;
                 if (!names.ContainsKey(name))
                 {
                     names.Add(name, names.Count);
@@ -524,7 +524,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case TypeKind.Class:
                         if (type.IsSealed)
                         {
-                            goto case TypeKind.Struct;
+                            Error(diagnostics, ErrorCode.ERR_BadBoundType, syntax, type);
+                            return false;
                         }
                         else if (type.IsStatic)
                         {

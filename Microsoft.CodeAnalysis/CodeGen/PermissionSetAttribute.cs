@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 using Microsoft.CodeAnalysis.Emit;
@@ -187,7 +188,8 @@ namespace Microsoft.CodeAnalysis.CodeGen
     /// <summary>
     /// Exception class to enable generating ERR_PermissionSetAttributeFileReadError while reading the file for PermissionSetAttribute fixup.
     /// </summary>
-    internal class PermissionSetFileReadException : Exception
+    [Serializable()]
+    public class PermissionSetFileReadException : Exception
     {
         private readonly string _file;
 
@@ -200,5 +202,10 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public string FileName => _file;
 
         public string PropertyName => PermissionSetAttributeWithFileReference.FilePropertyName;
+
+        protected PermissionSetFileReadException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            _file = "";
+        }
     }
 }

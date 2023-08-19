@@ -8,7 +8,7 @@
 // The old way to throw an exception generates quite a lot IL code and assembly code.
 // Following is an example:
 //     C# source
-//          throw new ArgumentNullException(nameof(key), SR.ArgumentNull_Key);
+//          throw new ArgumentNullException(nameof(key), SR.ArgumentNull_Key)
 //     IL code:
 //          IL_0003:  ldstr      "key"
 //          IL_0008:  ldstr      "ArgumentNull_Key"
@@ -20,7 +20,7 @@
 // So we want to get rid of the ldstr and call to Environment.GetResource in IL.
 // In order to do that, I created two enums: ExceptionResource, ExceptionArgument to represent the
 // argument name and resource name in a small integer. The source code will be changed to
-//    ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key, ExceptionResource.ArgumentNull_Key);
+//    ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key, ExceptionResource.ArgumentNull_Key)
 //
 // The IL code will be 7 bytes.
 //    IL_0008:  ldc.i4.4
@@ -46,67 +46,81 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
 {
     internal static class ThrowHelper
     {
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowIndexOutOfRangeException()
         {
+#pragma warning disable S112 // General exceptions should never be thrown
             throw new IndexOutOfRangeException();
+#pragma warning restore S112 // General exceptions should never be thrown
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowArgumentOutOfRangeException()
         {
             throw new ArgumentOutOfRangeException();
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
+        internal static void ThrowArgumentOutOfRangeException(ExceptionArgument argument)
+        {
+            throw new ArgumentOutOfRangeException(GetArgumentName(argument));
+        }
+
+        [DoesNotReturn()]
+        internal static void ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+        {
+            throw GetArgumentOutOfRangeException(argument, resource);
+        }
+
+        [DoesNotReturn()]
         internal static void ThrowArgumentOutOfRange_IndexException()
         {
             throw GetArgumentOutOfRangeException(ExceptionArgument.index,
                                                     ExceptionResource.ArgumentOutOfRange_Index);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowArgumentException_BadComparer(object? comparer)
         {
             throw new ArgumentException(string.Format(Properties.Resources.Arg_BogusIComparer, comparer));
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowIndexArgumentOutOfRange_NeedNonNegNumException()
         {
             throw GetArgumentOutOfRangeException(ExceptionArgument.index,
                                                     ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowLengthArgumentOutOfRange_ArgumentOutOfRange_NeedNonNegNum()
         {
             throw GetArgumentOutOfRangeException(ExceptionArgument.length,
                                                     ExceptionResource.ArgumentOutOfRange_NeedNonNegNum);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowStartIndexArgumentOutOfRange_ArgumentOutOfRange_Index()
         {
             throw GetArgumentOutOfRangeException(ExceptionArgument.startIndex,
                                                     ExceptionResource.ArgumentOutOfRange_Index);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowCountArgumentOutOfRange_ArgumentOutOfRange_Count()
         {
             throw GetArgumentOutOfRangeException(ExceptionArgument.count,
                                                     ExceptionResource.ArgumentOutOfRange_Count);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowWrongKeyTypeArgumentException<T>(T key, Type targetType)
         {
             // Generic key to move the boxing to the right hand side of throw
             throw GetWrongKeyTypeArgumentException(key, targetType);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowWrongValueTypeArgumentException<T>(T value, Type targetType)
         {
             // Generic key to move the boxing to the right hand side of throw
@@ -118,21 +132,21 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
             return new ArgumentException(string.Format(Properties.Resources.Argument_AddingDuplicateWithKey, key));
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowAddingDuplicateWithKeyArgumentException<T>(T key)
         {
             // Generic key to move the boxing to the right hand side of throw
             throw GetAddingDuplicateWithKeyArgumentException(key);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowKeyNotFoundException<T>(T key)
         {
             // Generic key to move the boxing to the right hand side of throw
             throw GetKeyNotFoundException(key);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowArgumentException(ExceptionResource resource)
         {
             throw GetArgumentException(resource);
@@ -143,55 +157,43 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
             return new ArgumentNullException(GetArgumentName(argument));
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowArgumentNullException(ExceptionArgument argument)
         {
             throw GetArgumentNullException(argument);
         }
 
-        [DoesNotReturn]
-        internal static void ThrowArgumentOutOfRangeException(ExceptionArgument argument)
-        {
-            throw new ArgumentOutOfRangeException(GetArgumentName(argument));
-        }
-
-        [DoesNotReturn]
-        internal static void ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
-        {
-            throw GetArgumentOutOfRangeException(argument, resource);
-        }
-
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowInvalidOperationException(ExceptionResource resource, Exception e)
         {
             throw new InvalidOperationException(GetResourceString(resource), e);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowNotSupportedException(ExceptionResource resource)
         {
             throw new NotSupportedException(GetResourceString(resource));
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowArgumentException_Argument_InvalidArrayType()
         {
             throw new ArgumentException(Properties.Resources.Argument_InvalidArrayType);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowInvalidOperationException_InvalidOperation_EnumFailedVersion()
         {
             throw new InvalidOperationException(Properties.Resources.InvalidOperation_EnumFailedVersion);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowInvalidOperationException_InvalidOperation_EnumOpCantHappen()
         {
             throw new InvalidOperationException(Properties.Resources.InvalidOperation_EnumOpCantHappen);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void ThrowInvalidOperationException_ConcurrentOperationsNotSupported()
         {
             throw new InvalidOperationException(Properties.Resources.InvalidOperation_ConcurrentOperationsNotSupported);
@@ -229,7 +231,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
         internal static void IfNullAndNullsAreIllegalThenThrow<T>(object? value, ExceptionArgument argName)
         {
             // Note that default(T) is not equal to null for value types except when T is Nullable<U>.
-            if (!(default(T) == null) && value == null)
+            if (default(T) != null && value == null)
                 ThrowHelper.ThrowArgumentNullException(argName);
         }
 

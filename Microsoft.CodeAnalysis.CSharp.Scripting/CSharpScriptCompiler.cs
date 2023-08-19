@@ -77,6 +77,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Scripting
         }
 
         internal static CSharpCompilationOptions WithTopLevelBinderFlags(CSharpCompilationOptions options)
-            => options.WithTopLevelBinderFlags(BinderFlags.IgnoreCorLibraryDuplicatedTypes);
+            => options.WithTopLevelBinderFlags(EBinder.IgnoreCorLibraryDuplicatedTypes);
     }
 }

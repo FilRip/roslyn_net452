@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -42,6 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Expression capabilities and requirements.
         /// </summary>
         [Flags()]
+#pragma warning disable S4070 // Non-flags enums should not be marked with "FlagsAttribute"
         public enum BindValueKind : ushort
         {
             ///////////////////
@@ -132,6 +134,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             /// </summary>
             RefReturn = RefOrOut + 1,
         }
+#pragma warning restore S4070 // Non-flags enums should not be marked with "FlagsAttribute"
 
         private static bool RequiresRValueOnly(BindValueKind kind)
         {
@@ -339,7 +342,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             switch (expression?.Kind)
             {
                 case BoundKind.TypeOrValueExpression:
-                case BoundKind.QueryClause when ((BoundQueryClause)expression).Value.Kind == BoundKind.TypeOrValueExpression:
+                case BoundKind.QueryClause when expression != null && ((BoundQueryClause)expression).Value.Kind == BoundKind.TypeOrValueExpression:
                     return true;
                 default:
                     return false;
@@ -944,7 +947,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private bool CheckIsValidReceiverForVariable(SyntaxNode node, BoundExpression receiver, BindValueKind kind, BindingDiagnosticBag diagnostics)
         {
-            return Flags.Includes(BinderFlags.ObjectInitializerMember) && receiver.Kind == BoundKind.ObjectOrCollectionValuePlaceholder ||
+            return Flags.Includes(EBinder.ObjectInitializerMember) && receiver.Kind == BoundKind.ObjectOrCollectionValuePlaceholder ||
                 CheckValueKind(node, receiver, kind, true, diagnostics);
         }
 
@@ -1272,47 +1275,52 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!argsOpt.IsDefault)
             {
-            moreArguments:
-                for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
+                bool loop = true;
+                while (loop)
                 {
-                    var argument = argsOpt[argIndex];
-                    if (argument.Kind == BoundKind.ArgListOperator)
+                    loop = false;
+                    for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
                     {
-                        var argList = (BoundArgListOperator)argument;
+                        var argument = argsOpt[argIndex];
+                        if (argument.Kind == BoundKind.ArgListOperator)
+                        {
+                            var argList = (BoundArgListOperator)argument;
 
-                        // unwrap varargs and process as more arguments
-                        argsOpt = argList.Arguments;
-                        // ref kinds of varargs are not interesting here. 
-                        // __refvalue is not ref-returnable, so ref varargs can't come back from a call
-                        argRefKindsOpt = default;
-                        parameters = ImmutableArray<ParameterSymbol>.Empty;
-                        argsToParamsOpt = default;
+                            // unwrap varargs and process as more arguments
+                            argsOpt = argList.Arguments;
+                            // ref kinds of varargs are not interesting here. 
+                            // __refvalue is not ref-returnable, so ref varargs can't come back from a call
+                            argRefKindsOpt = default;
+                            parameters = ImmutableArray<ParameterSymbol>.Empty;
+                            argsToParamsOpt = default;
 
-                        goto moreArguments;
-                    }
+                            loop = true;
+                            break;
+                        }
 
-                    RefKind effectiveRefKind = GetEffectiveRefKindAndMarkMatchedInParameter(argIndex, argRefKindsOpt, parameters, argsToParamsOpt, ref inParametersMatchedWithArgs);
+                        RefKind effectiveRefKind = GetEffectiveRefKindAndMarkMatchedInParameter(argIndex, argRefKindsOpt, parameters, argsToParamsOpt, ref inParametersMatchedWithArgs);
 
-                    // ref escape scope is the narrowest of 
-                    // - ref escape of all byref arguments
-                    // - val escape of all byval arguments  (ref-like values can be unwrapped into refs, so treat val escape of values as possible ref escape of the result)
-                    //
-                    // val escape scope is the narrowest of 
-                    // - val escape of all byval arguments  (refs cannot be wrapped into values, so their ref escape is irrelevant, only use val escapes)
+                        // ref escape scope is the narrowest of 
+                        // - ref escape of all byref arguments
+                        // - val escape of all byval arguments  (ref-like values can be unwrapped into refs, so treat val escape of values as possible ref escape of the result)
+                        //
+                        // val escape scope is the narrowest of 
+                        // - val escape of all byval arguments  (refs cannot be wrapped into values, so their ref escape is irrelevant, only use val escapes)
 
-                    var argEscape = effectiveRefKind != RefKind.None && isRefEscape ?
-                                        GetRefEscape(argument, scopeOfTheContainingExpression) :
-                                        GetValEscape(argument, scopeOfTheContainingExpression);
+                        var argEscape = effectiveRefKind != RefKind.None && isRefEscape ?
+                                            GetRefEscape(argument, scopeOfTheContainingExpression) :
+                                            GetValEscape(argument, scopeOfTheContainingExpression);
 
-                    escapeScope = Math.Max(escapeScope, argEscape);
+                        escapeScope = Math.Max(escapeScope, argEscape);
 
-                    if (escapeScope >= scopeOfTheContainingExpression)
-                    {
-                        // no longer needed
-                        inParametersMatchedWithArgs?.Free();
+                        if (escapeScope >= scopeOfTheContainingExpression)
+                        {
+                            // no longer needed
+                            inParametersMatchedWithArgs?.Free();
 
-                        // can't get any worse
-                        return escapeScope;
+                            // can't get any worse
+                            return escapeScope;
+                        }
                     }
                 }
             }
@@ -1375,63 +1383,67 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!argsOpt.IsDefault)
             {
-
-            moreArguments:
-                for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
+                bool loop = true;
+                while (loop)
                 {
-                    var argument = argsOpt[argIndex];
-                    if (argument.Kind == BoundKind.ArgListOperator)
+                    loop = false;
+                    for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
                     {
-                        var argList = (BoundArgListOperator)argument;
-
-                        // unwrap varargs and process as more arguments
-                        argsOpt = argList.Arguments;
-                        // ref kinds of varargs are not interesting here. 
-                        // __refvalue is not ref-returnable, so ref varargs can't come back from a call
-                        argRefKindsOpt = default;
-                        parameters = ImmutableArray<ParameterSymbol>.Empty;
-                        argsToParamsOpt = default;
-
-                        goto moreArguments;
-                    }
-
-                    RefKind effectiveRefKind = GetEffectiveRefKindAndMarkMatchedInParameter(argIndex, argRefKindsOpt, parameters, argsToParamsOpt, ref inParametersMatchedWithArgs);
-
-                    // ref escape scope is the narrowest of 
-                    // - ref escape of all byref arguments
-                    // - val escape of all byval arguments  (ref-like values can be unwrapped into refs, so treat val escape of values as possible ref escape of the result)
-                    //
-                    // val escape scope is the narrowest of 
-                    // - val escape of all byval arguments  (refs cannot be wrapped into values, so their ref escape is irrelevant, only use val escapes)
-                    var valid = effectiveRefKind != RefKind.None && isRefEscape ?
-                                        CheckRefEscape(argument.Syntax, argument, escapeFrom, escapeTo, false, diagnostics) :
-                                        CheckValEscape(argument.Syntax, argument, escapeFrom, escapeTo, false, diagnostics);
-
-                    if (!valid)
-                    {
-                        // no longer needed
-                        inParametersMatchedWithArgs?.Free();
-
-                        ErrorCode errorCode = GetStandardCallEscapeError(checkingReceiver);
-
-                        string parameterName;
-                        if (parameters.Length > 0)
+                        var argument = argsOpt[argIndex];
+                        if (argument.Kind == BoundKind.ArgListOperator)
                         {
-                            var paramIndex = argsToParamsOpt.IsDefault ? argIndex : argsToParamsOpt[argIndex];
-                            parameterName = parameters[paramIndex].Name;
+                            var argList = (BoundArgListOperator)argument;
 
-                            if (string.IsNullOrEmpty(parameterName))
+                            // unwrap varargs and process as more arguments
+                            argsOpt = argList.Arguments;
+                            // ref kinds of varargs are not interesting here. 
+                            // __refvalue is not ref-returnable, so ref varargs can't come back from a call
+                            argRefKindsOpt = default;
+                            parameters = ImmutableArray<ParameterSymbol>.Empty;
+                            argsToParamsOpt = default;
+
+                            loop = true;
+                            break;
+                        }
+
+                        RefKind effectiveRefKind = GetEffectiveRefKindAndMarkMatchedInParameter(argIndex, argRefKindsOpt, parameters, argsToParamsOpt, ref inParametersMatchedWithArgs);
+
+                        // ref escape scope is the narrowest of 
+                        // - ref escape of all byref arguments
+                        // - val escape of all byval arguments  (ref-like values can be unwrapped into refs, so treat val escape of values as possible ref escape of the result)
+                        //
+                        // val escape scope is the narrowest of 
+                        // - val escape of all byval arguments  (refs cannot be wrapped into values, so their ref escape is irrelevant, only use val escapes)
+                        var valid = effectiveRefKind != RefKind.None && isRefEscape ?
+                                            CheckRefEscape(argument.Syntax, argument, escapeFrom, escapeTo, false, diagnostics) :
+                                            CheckValEscape(argument.Syntax, argument, escapeFrom, escapeTo, false, diagnostics);
+
+                        if (!valid)
+                        {
+                            // no longer needed
+                            inParametersMatchedWithArgs?.Free();
+
+                            ErrorCode errorCode = GetStandardCallEscapeError(checkingReceiver);
+
+                            string parameterName;
+                            if (parameters.Length > 0)
                             {
-                                parameterName = paramIndex.ToString();
-                            }
-                        }
-                        else
-                        {
-                            parameterName = "__arglist";
-                        }
+                                var paramIndex = argsToParamsOpt.IsDefault ? argIndex : argsToParamsOpt[argIndex];
+                                parameterName = parameters[paramIndex].Name;
 
-                        Error(diagnostics, errorCode, syntax, symbol, parameterName);
-                        return false;
+                                if (string.IsNullOrEmpty(parameterName))
+                                {
+                                    parameterName = paramIndex.ToString();
+                                }
+                            }
+                            else
+                            {
+                                parameterName = "__arglist";
+                            }
+
+                            Error(diagnostics, errorCode, syntax, symbol, parameterName);
+                            return false;
+                        }
                     }
                 }
             }
@@ -1540,40 +1552,45 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             if (!argsOpt.IsDefault)
             {
-            moreArguments:
-                for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
+                bool loop = true;
+                while (loop)
                 {
-                    // check val escape of all arguments
-                    var argument = argsOpt[argIndex];
-                    if (argument.Kind == BoundKind.ArgListOperator)
+                    loop = false;
+                    for (var argIndex = 0; argIndex < argsOpt.Length; argIndex++)
                     {
-                        var argList = (BoundArgListOperator)argument;
-
-                        // unwrap varargs and process as more arguments
-                        argsOpt = argList.Arguments;
-                        parameters = ImmutableArray<ParameterSymbol>.Empty;
-                        argsToParamsOpt = default;
-
-                        goto moreArguments;
-                    }
-
-                    var valid = CheckValEscape(argument.Syntax, argument, scopeOfTheContainingExpression, escapeTo, false, diagnostics);
-
-                    if (!valid)
-                    {
-                        string parameterName;
-                        if (parameters.Length > 0)
+                        // check val escape of all arguments
+                        var argument = argsOpt[argIndex];
+                        if (argument.Kind == BoundKind.ArgListOperator)
                         {
-                            var paramIndex = argsToParamsOpt.IsDefault ? argIndex : argsToParamsOpt[argIndex];
-                            parameterName = parameters[paramIndex].Name;
-                        }
-                        else
-                        {
-                            parameterName = "__arglist";
+                            var argList = (BoundArgListOperator)argument;
+
+                            // unwrap varargs and process as more arguments
+                            argsOpt = argList.Arguments;
+                            parameters = ImmutableArray<ParameterSymbol>.Empty;
+                            argsToParamsOpt = default;
+
+                            loop = true;
+                            break;
                         }
 
-                        Error(diagnostics, ErrorCode.ERR_CallArgMixing, syntax, symbol, parameterName);
-                        return false;
+                        var valid = CheckValEscape(argument.Syntax, argument, scopeOfTheContainingExpression, escapeTo, false, diagnostics);
+
+                        if (!valid)
+                        {
+                            string parameterName;
+                            if (parameters.Length > 0)
+                            {
+                                var paramIndex = argsToParamsOpt.IsDefault ? argIndex : argsToParamsOpt[argIndex];
+                                parameterName = parameters[paramIndex].Name;
+                            }
+                            else
+                            {
+                                parameterName = "__arglist";
+                            }
+
+                            Error(diagnostics, ErrorCode.ERR_CallArgMixing, syntax, symbol, parameterName);
+                            return false;
+                        }
                     }
                 }
             }
@@ -1654,7 +1671,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         if (parameter.RefKind == RefKind.In &&
                             inParametersMatchedWithArgs?[i] != true &&
-                            parameter.Type.IsRefLikeType == false)
+                            !parameter.Type.IsRefLikeType)
                         {
                             return parameter;
                         }
@@ -3096,9 +3113,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 case BoundKind.UnconvertedSwitchExpression:
                 case BoundKind.ConvertedSwitchExpression:
-                    foreach (var arm in ((BoundSwitchExpression)expr).SwitchArms)
+                    foreach (var result in ((BoundSwitchExpression)expr).SwitchArms.Select(arm => arm.Value))
                     {
-                        var result = arm.Value;
                         if (!CheckValEscape(result.Syntax, result, escapeFrom, escapeTo, checkingReceiver: false, diagnostics: diagnostics))
                             return false;
                     }
@@ -3401,8 +3417,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                         (IsAnyReadOnly(addressKind) && lhsRefKind == RefKind.RefReadOnly);
 
                 case BoundKind.ComplexConditionalReceiver:
-                    goto case BoundKind.ConditionalReceiver;
-
                 case BoundKind.ConditionalReceiver:
                     //ConditionalReceiver is a noop from Emit point of view. - it represents something that has already been pushed. 
                     //We should never need a temp for it. 

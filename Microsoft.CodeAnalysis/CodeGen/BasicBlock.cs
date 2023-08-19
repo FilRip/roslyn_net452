@@ -306,13 +306,13 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
                 if (!this.IsBranchToLabel)
                 {
-                    return; //Not a branch;
+                    return; //Not a branch
                 }
 
                 var curBranchCode = this.BranchCode;
                 if (curBranchCode.GetBranchOperandSize() == 1)
                 {
-                    return; //already short;
+                    return; //already short
                 }
 
                 // reduction in current block length if changed to short branch.
@@ -647,7 +647,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 return "";
             }
 
-            private class PooledBasicBlock : BasicBlock
+            private sealed class PooledBasicBlock : BasicBlock
             {
                 internal override void Free()
                 {
@@ -745,7 +745,9 @@ namespace Microsoft.CodeAnalysis.CodeGen
             {
                 get
                 {
+#pragma warning disable S125 // Sections of code should not be commented out
                     // switch (N, t1, t2... tN)
+#pragma warning restore S125 // Sections of code should not be commented out
                     //  IL ==> ILOpCode.Switch < unsigned int32 > < int32 >... < int32 > 
 
                     // size(ILOpCode.Switch) = 1

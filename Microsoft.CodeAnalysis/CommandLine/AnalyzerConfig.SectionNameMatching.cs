@@ -445,7 +445,6 @@ namespace Microsoft.CodeAnalysis
 
             public TokenKind Lex()
             {
-                //int lexemeStart = Position;
                 switch (_sectionName[Position])
                 {
                     case '*':
@@ -527,7 +526,9 @@ namespace Microsoft.CodeAnalysis
                 }
             }
 
+#pragma warning disable S1144 // Unused private types or members should be removed
             public char this[int position] => _sectionName[position];
+#pragma warning restore S1144 // Unused private types or members should be removed
 
             /// <summary>
             /// Returns the string representation of a decimal integer, or null if

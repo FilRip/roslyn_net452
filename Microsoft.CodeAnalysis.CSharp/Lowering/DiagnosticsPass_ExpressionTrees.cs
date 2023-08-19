@@ -257,7 +257,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (node.IsUsableAsField)
             {
                 bool hasBaseReceiver = node.ReceiverOpt != null && node.ReceiverOpt.Kind == BoundKind.BaseReference;
-                Binder.ReportDiagnosticsIfObsolete(_diagnostics, node.EventSymbol.AssociatedField, node.Syntax, hasBaseReceiver, _containingSymbol, _containingSymbol.ContainingType, BinderFlags.None);
+                Binder.ReportDiagnosticsIfObsolete(_diagnostics, node.EventSymbol.AssociatedField, node.Syntax, hasBaseReceiver, _containingSymbol, _containingSymbol.ContainingType, EBinder.None);
             }
             CheckReceiverIfField(node.ReceiverOpt);
             return base.VisitEventAccess(node);
@@ -271,7 +271,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             bool hasBaseReceiver = node.ReceiverOpt != null && node.ReceiverOpt.Kind == BoundKind.BaseReference;
-            Binder.ReportDiagnosticsIfObsolete(_diagnostics, node.Event, ((AssignmentExpressionSyntax)node.Syntax).Left, hasBaseReceiver, _containingSymbol, _containingSymbol.ContainingType, BinderFlags.None);
+            Binder.ReportDiagnosticsIfObsolete(_diagnostics, node.Event, ((AssignmentExpressionSyntax)node.Syntax).Left, hasBaseReceiver, _containingSymbol, _containingSymbol.ContainingType, EBinder.None);
             CheckReceiverIfField(node.ReceiverOpt);
             return base.VisitEventAssignmentOperator(node);
         }

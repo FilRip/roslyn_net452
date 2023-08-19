@@ -274,10 +274,10 @@ namespace Microsoft.CodeAnalysis.Collections
             return false;
         }
 
-#pragma warning disable CS8767 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
+#pragma warning disable CS8767, IDE0079 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
             => _dictionary.TryGetValue(key, out value);
-#pragma warning restore CS8767 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
+#pragma warning restore CS8767, IDE0079 // La nullabilité des types référence dans le type du paramètre ne correspond pas au membre implémenté implicitement (probablement en raison des attributs de nullabilité).
 
         public ImmutableSegmentedDictionary<TKey, TValue> WithComparer(IEqualityComparer<TKey>? keyComparer)
         {

@@ -240,17 +240,17 @@ namespace Microsoft.CodeAnalysis.Collections
             _items[size] = item;
         }
 
-        int IList.Add(object? item)
+        int IList.Add(object? value)
         {
-            ThrowHelper.IfNullAndNullsAreIllegalThenThrow<T>(item, ExceptionArgument.item);
+            ThrowHelper.IfNullAndNullsAreIllegalThenThrow<T>(value, ExceptionArgument.item);
 
             try
             {
-                Add((T)item!);
+                Add((T)value!);
             }
             catch (InvalidCastException)
             {
-                ThrowHelper.ThrowWrongValueTypeArgumentException(item, typeof(T));
+                ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
             }
 
             return Count - 1;
@@ -342,11 +342,11 @@ namespace Microsoft.CodeAnalysis.Collections
             return _size != 0 && IndexOf(item) != -1;
         }
 
-        bool IList.Contains(object? item)
+        bool IList.Contains(object? value)
         {
-            if (IsCompatibleObject(item))
+            if (IsCompatibleObject(value))
             {
-                return Contains((T)item!);
+                return Contains((T)value!);
             }
             return false;
         }
@@ -372,26 +372,6 @@ namespace Microsoft.CodeAnalysis.Collections
         public void CopyTo(T[] array)
             => CopyTo(array, 0);
 
-        // Copies this SegmentedList into array, which must be of a
-        // compatible array type.
-        void ICollection.CopyTo(Array array, int arrayIndex)
-        {
-            if ((array != null) && (array.Rank != 1))
-            {
-                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
-            }
-
-            try
-            {
-                // Array.Copy will check for NULL.
-                SegmentedArray.Copy(_items, 0, array!, arrayIndex, _size);
-            }
-            catch (ArrayTypeMismatchException)
-            {
-                ThrowHelper.ThrowArgumentException_Argument_InvalidArrayType();
-            }
-        }
-
         // Copies a section of this list to the given array at the given index.
         //
         // The method uses the Array.Copy method to copy the elements.
@@ -411,6 +391,26 @@ namespace Microsoft.CodeAnalysis.Collections
         {
             // Delegate rest of error checking to Array.Copy.
             SegmentedArray.Copy(_items, 0, array, arrayIndex, _size);
+        }
+
+        // Copies this SegmentedList into array, which must be of a
+        // compatible array type.
+        void ICollection.CopyTo(Array array, int index)
+        {
+            if ((array != null) && (array.Rank != 1))
+            {
+                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
+            }
+
+            try
+            {
+                // Array.Copy will check for NULL.
+                SegmentedArray.Copy(_items, 0, array!, index, _size);
+            }
+            catch (ArrayTypeMismatchException)
+            {
+                ThrowHelper.ThrowArgumentException_Argument_InvalidArrayType();
+            }
         }
 
         // Ensures that the capacity of this list is at least the given minimum
@@ -637,15 +637,6 @@ namespace Microsoft.CodeAnalysis.Collections
         public int IndexOf(T item)
             => SegmentedArray.IndexOf(_items, item, 0, _size);
 
-        int IList.IndexOf(object? item)
-        {
-            if (IsCompatibleObject(item))
-            {
-                return IndexOf((T)item!);
-            }
-            return -1;
-        }
-
         // Returns the index of the first occurrence of a given value in a range of
         // this list. The list is searched forwards, starting at index
         // index and ending at count number of elements. The
@@ -682,6 +673,15 @@ namespace Microsoft.CodeAnalysis.Collections
             return SegmentedArray.IndexOf(_items, item, index, count);
         }
 
+        int IList.IndexOf(object? value)
+        {
+            if (IsCompatibleObject(value))
+            {
+                return IndexOf((T)value!);
+            }
+            return -1;
+        }
+
         // Inserts an element into this list at a given index. The size of the list
         // is increased by one. If required, the capacity of the list is doubled
         // before inserting the new element.
@@ -704,17 +704,17 @@ namespace Microsoft.CodeAnalysis.Collections
             _version++;
         }
 
-        void IList.Insert(int index, object? item)
+        void IList.Insert(int index, object? value)
         {
-            ThrowHelper.IfNullAndNullsAreIllegalThenThrow<T>(item, ExceptionArgument.item);
+            ThrowHelper.IfNullAndNullsAreIllegalThenThrow<T>(value, ExceptionArgument.item);
 
             try
             {
-                Insert(index, (T)item!);
+                Insert(index, (T)value!);
             }
             catch (InvalidCastException)
             {
-                ThrowHelper.ThrowWrongValueTypeArgumentException(item, typeof(T));
+                ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
             }
         }
 
@@ -872,11 +872,11 @@ namespace Microsoft.CodeAnalysis.Collections
             return false;
         }
 
-        void IList.Remove(object? item)
+        void IList.Remove(object? value)
         {
-            if (IsCompatibleObject(item))
+            if (IsCompatibleObject(value))
             {
-                Remove((T)item!);
+                Remove((T)value!);
             }
         }
 
@@ -914,9 +914,7 @@ namespace Microsoft.CodeAnalysis.Collections
 #if NETCOREAPP
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
-            {
                 SegmentedArray.Clear(_items, freeIndex, _size - freeIndex); // Clear the elements so that the gc can reclaim the references.
-            }
 
             var result = _size - freeIndex;
             _size = freeIndex;
@@ -940,9 +938,8 @@ namespace Microsoft.CodeAnalysis.Collections
 #if NETCOREAPP
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
-            {
                 _items[_size] = default!;
-            }
+
             _version++;
         }
 
@@ -974,9 +971,7 @@ namespace Microsoft.CodeAnalysis.Collections
 #if NETCOREAPP
                 if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
-                {
                     SegmentedArray.Clear(_items, _size, count);
-                }
             }
         }
 
@@ -1089,9 +1084,10 @@ namespace Microsoft.CodeAnalysis.Collections
         // release all memory referenced by the list, execute the following
         // statements:
         //
+#pragma warning disable S125 // Sections of code should not be commented out
         // list.Clear();
         // list.TrimExcess();
-        //
+#pragma warning restore S125 // Sections of code should not be commented out
         public void TrimExcess()
         {
             var threshold = (int)(_items.Length * 0.9);
@@ -1118,7 +1114,7 @@ namespace Microsoft.CodeAnalysis.Collections
             return true;
         }
 
-        public struct Enumerator : IEnumerator<T>, IEnumerator
+        public struct Enumerator : IEnumerator<T>
         {
             private readonly SegmentedList<T> _list;
             private int _index;

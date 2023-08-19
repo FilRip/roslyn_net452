@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis
     public static class FailFast
     {
         [DebuggerHidden]
-        [DoesNotReturn]
+        [DoesNotReturn()]
         public static void OnFatalException(Exception exception)
         {
             // EDMAURER Now using the managed API to fail fast so as to default
@@ -37,16 +37,16 @@ namespace Microsoft.CodeAnalysis
             DumpStackTrace(exception: exception);
 
             Environment.FailFast(exception.ToString(), exception);
-            throw ExceptionUtilities.Unreachable; // to satisfy [DoesNotReturn]
+            throw ExceptionUtilities.Unreachable; // to satisfy [DoesNotReturn()]
         }
 
         [DebuggerHidden]
-        [DoesNotReturn]
+        [DoesNotReturn()]
         internal static void Fail(string message)
         {
             DumpStackTrace(message: message);
             Environment.FailFast(message);
-            throw ExceptionUtilities.Unreachable; // to satisfy [DoesNotReturn]
+            throw ExceptionUtilities.Unreachable; // to satisfy [DoesNotReturn()]
         }
 
         /// <summary>

@@ -525,8 +525,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             ConstantValue result = Binder.GetIsOperatorConstantResult(expressionType, patternType, conversion.Kind, operandConstantValue, operandCouldBeNull);
             return
                 (result == null) ? null :
-                (result == ConstantValue.True) || ((result == ConstantValue.False) ? false :
-                throw ExceptionUtilities.UnexpectedValue(result));
+                (result == ConstantValue.True || result == ConstantValue.False) ? false :
+                throw ExceptionUtilities.UnexpectedValue(result);
         }
 
         private BoundPattern BindDeclarationPattern(
@@ -1017,7 +1017,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 inputType = CreateErrorType();
             }
 
-            //TypeSymbol declType = inputType;
             Symbol foundSymbol = BindTypeOrAliasOrKeyword(node.VarKeyword, node, diagnostics, out bool isVar).Symbol;
             if (!isVar)
             {
@@ -1231,9 +1230,6 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case BoundKind.PropertyAccess:
                     break;
 
-                case BoundKind.IndexerAccess:
-                case BoundKind.DynamicIndexerAccess:
-                case BoundKind.EventAccess:
                 default:
                     if (!hasErrors)
                     {

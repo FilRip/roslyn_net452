@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         internal CSharpCompilation Compilation { get; }
 
-        internal readonly BinderFlags Flags;
+        internal readonly EBinder Flags;
 
         /// <summary>
         /// Used to create a root binder.
@@ -43,7 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             _lazyConversions = conversions;
         }
 
-        protected Binder(Binder next, BinderFlags flags)
+        protected Binder(Binder next, EBinder flags)
         {
             Next = next;
             this.Flags = flags;
@@ -54,7 +54,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return this.Flags.Includes(BinderFlags.SemanticModel);
+                return this.Flags.Includes(EBinder.SemanticModel);
             }
         }
 
@@ -63,7 +63,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return this.Flags.Includes(BinderFlags.EarlyAttributeBinding);
+                return this.Flags.Includes(EBinder.EarlyAttributeBinding);
             }
         }
 
@@ -105,9 +105,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // For Roslyn we decided to change the spec and always flow the context in.
                 // So we don't stop at lambda binder.
 
-                return this.Flags.Includes(BinderFlags.CheckedRegion)
+                return this.Flags.Includes(EBinder.CheckedRegion)
                     ? OverflowChecks.Enabled
-                    : this.Flags.Includes(BinderFlags.UncheckedRegion)
+                    : this.Flags.Includes(EBinder.UncheckedRegion)
                         ? OverflowChecks.Disabled
                         : OverflowChecks.Implicit;
             }
@@ -610,7 +610,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool hasBaseReceiver,
             Symbol? containingMember,
             NamedTypeSymbol? containingType,
-            BinderFlags location)
+            EBinder location)
         {
             // Dev11 also reports on the unconstructed method.  It would be nice to report on 
             // the constructed method, but then we wouldn't be able to walk the override chain.
@@ -667,7 +667,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool hasBaseReceiver,
             Symbol? containingMember,
             NamedTypeSymbol? containingType,
-            BinderFlags location)
+            EBinder location)
         {
             if (diagnostics.DiagnosticBag is not null)
             {
@@ -675,7 +675,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
         }
 
-        internal static ObsoleteDiagnosticKind ReportDiagnosticsIfObsoleteInternal(DiagnosticBag diagnostics, Symbol symbol, SyntaxNodeOrToken node, Symbol? containingMember, BinderFlags location)
+        internal static ObsoleteDiagnosticKind ReportDiagnosticsIfObsoleteInternal(DiagnosticBag diagnostics, Symbol symbol, SyntaxNodeOrToken node, Symbol? containingMember, EBinder location)
         {
             var kind = ObsoleteAttributeHelpers.GetObsoleteDiagnosticKind(symbol, containingMember);
 
@@ -699,7 +699,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             return kind;
         }
 
-        internal static void ReportDiagnosticsIfObsoleteInternal(BindingDiagnosticBag diagnostics, Symbol symbol, SyntaxNodeOrToken node, Symbol containingMember, BinderFlags location)
+        internal static void ReportDiagnosticsIfObsoleteInternal(BindingDiagnosticBag diagnostics, Symbol symbol, SyntaxNodeOrToken node, Symbol containingMember, EBinder location)
         {
             if (diagnostics.DiagnosticBag is not null)
             {
@@ -739,7 +739,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
             TypeSymbol? throughTypeOpt = null)
         {
-            return this.Flags.Includes(BinderFlags.IgnoreAccessibility) || AccessCheck.IsSymbolAccessible(symbol, within, ref useSiteInfo, throughTypeOpt);
+            return this.Flags.Includes(EBinder.IgnoreAccessibility) || AccessCheck.IsSymbolAccessible(symbol, within, ref useSiteInfo, throughTypeOpt);
         }
 
         internal bool IsSymbolAccessibleConditional(
@@ -750,7 +750,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
             ConsList<TypeSymbol>? basesBeingResolved = null)
         {
-            if (this.Flags.Includes(BinderFlags.IgnoreAccessibility))
+            if (this.Flags.Includes(EBinder.IgnoreAccessibility))
             {
                 failedThroughTypeCheck = false;
                 return true;

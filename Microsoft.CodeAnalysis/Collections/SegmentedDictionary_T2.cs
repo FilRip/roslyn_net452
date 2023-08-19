@@ -35,13 +35,6 @@ namespace Microsoft.CodeAnalysis.Collections
     internal sealed class SegmentedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary, IReadOnlyDictionary<TKey, TValue>
         where TKey : notnull
     {
-        private const bool SupportsComparerDevirtualization
-#if NETCOREAPP
-            = true;
-#else
-            = false;
-#endif
-
         private SegmentedArray<int> _buckets;
         private SegmentedArray<Entry> _entries;
         private ulong _fastModMultiplier;
@@ -117,7 +110,7 @@ namespace Microsoft.CodeAnalysis.Collections
             // avoid the enumerator allocation and overhead by looping through the entries array directly.
             // We only do this when dictionary is SegmentedDictionary<TKey,TValue> and not a subclass, to maintain
             // back-compat with subclasses that may have overridden the enumerator behavior.
-            if (dictionary.GetType() == typeof(SegmentedDictionary<TKey, TValue>))
+            if (dictionary.GetType() is SegmentedDictionary<TKey, TValue>)
             {
                 var d = (SegmentedDictionary<TKey, TValue>)dictionary;
                 var count = d._count;
@@ -264,17 +257,6 @@ namespace Microsoft.CodeAnalysis.Collections
                     }
                 }
             }
-            else if (SupportsComparerDevirtualization && typeof(TValue).IsValueType)
-            {
-                // ValueType: Devirtualize with EqualityComparer<TValue>.Default intrinsic
-                for (var i = 0; i < _count; i++)
-                {
-                    if (entries[i]._next >= -1 && EqualityComparer<TValue>.Default.Equals(entries[i]._value, value))
-                    {
-                        return true;
-                    }
-                }
-            }
             else
             {
                 // Object type: Shared Generic, EqualityComparer<TValue>.Default won't devirtualize
@@ -339,118 +321,53 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 Debug.Assert(_entries.Length > 0, "expected entries to be non-empty");
                 var comparer = _comparer;
-                if (SupportsComparerDevirtualization && comparer == null)
+                var hashCode = (uint)comparer.GetHashCode(key);
+                var i = GetBucket(hashCode);
+                var entries = _entries;
+                uint collisionCount = 0;
+                i--; // Value in _buckets is 1-based; subtract 1 from i. We do it here so it fuses with the following conditional.
+                do
                 {
-                    var hashCode = (uint)key.GetHashCode();
-                    var i = GetBucket(hashCode);
-                    var entries = _entries;
-                    uint collisionCount = 0;
-                    if (typeof(TKey).IsValueType)
+                    // Should be a while loop https://github.com/dotnet/runtime/issues/9422
+                    // Test in if to drop range check for following array access
+                    if ((uint)i >= (uint)entries.Length)
                     {
-                        // ValueType: Devirtualize with EqualityComparer<TValue>.Default intrinsic
-
-                        i--; // Value in _buckets is 1-based; subtract 1 from i. We do it here so it fuses with the following conditional.
-                        do
-                        {
-                            // Should be a while loop https://github.com/dotnet/runtime/issues/9422
-                            // Test in if to drop range check for following array access
-                            if ((uint)i >= (uint)entries.Length)
-                            {
-                                goto ReturnNotFound;
-                            }
-
-                            entry = ref entries[i];
-                            if (entry._hashCode == hashCode && EqualityComparer<TKey>.Default.Equals(entry._key, key))
-                            {
-                                goto ReturnFound;
-                            }
-
-                            i = entry._next;
-
-                            collisionCount++;
-                        } while (collisionCount <= (uint)entries.Length);
-
-                        // The chain of entries forms a loop; which means a concurrent update has happened.
-                        // Break out of the loop and throw, rather than looping forever.
-                        goto ConcurrentOperation;
+                        return ref ReturnNotFound();
                     }
-                    else
+
+                    entry = ref entries[i];
+                    if (entry._hashCode == hashCode && comparer.Equals(entry._key, key))
                     {
-                        // Object type: Shared Generic, EqualityComparer<TValue>.Default won't devirtualize
-                        // https://github.com/dotnet/runtime/issues/10050
-                        // So cache in a local rather than get EqualityComparer per loop iteration
-                        var defaultComparer = EqualityComparer<TKey>.Default;
-
-                        i--; // Value in _buckets is 1-based; subtract 1 from i. We do it here so it fuses with the following conditional.
-                        do
-                        {
-                            // Should be a while loop https://github.com/dotnet/runtime/issues/9422
-                            // Test in if to drop range check for following array access
-                            if ((uint)i >= (uint)entries.Length)
-                            {
-                                goto ReturnNotFound;
-                            }
-
-                            entry = ref entries[i];
-                            if (entry._hashCode == hashCode && defaultComparer.Equals(entry._key, key))
-                            {
-                                goto ReturnFound;
-                            }
-
-                            i = entry._next;
-
-                            collisionCount++;
-                        } while (collisionCount <= (uint)entries.Length);
-
-                        // The chain of entries forms a loop; which means a concurrent update has happened.
-                        // Break out of the loop and throw, rather than looping forever.
-                        goto ConcurrentOperation;
+                        return ref ReturnFound(ref entry);
                     }
-                }
-                else
-                {
-                    var hashCode = (uint)comparer.GetHashCode(key);
-                    var i = GetBucket(hashCode);
-                    var entries = _entries;
-                    uint collisionCount = 0;
-                    i--; // Value in _buckets is 1-based; subtract 1 from i. We do it here so it fuses with the following conditional.
-                    do
-                    {
-                        // Should be a while loop https://github.com/dotnet/runtime/issues/9422
-                        // Test in if to drop range check for following array access
-                        if ((uint)i >= (uint)entries.Length)
-                        {
-                            goto ReturnNotFound;
-                        }
 
-                        entry = ref entries[i];
-                        if (entry._hashCode == hashCode && comparer.Equals(entry._key, key))
-                        {
-                            goto ReturnFound;
-                        }
+                    i = entry._next;
 
-                        i = entry._next;
+                    collisionCount++;
+                } while (collisionCount <= (uint)entries.Length);
 
-                        collisionCount++;
-                    } while (collisionCount <= (uint)entries.Length);
-
-                    // The chain of entries forms a loop; which means a concurrent update has happened.
-                    // Break out of the loop and throw, rather than looping forever.
-                    goto ConcurrentOperation;
-                }
+                // The chain of entries forms a loop; which means a concurrent update has happened.
+                // Break out of the loop and throw, rather than looping forever.
+                return ref ConcurrentOperation(ref entry);
             }
 
-            goto ReturnNotFound;
+            return ref ReturnNotFound();
 
-        ConcurrentOperation:
-            ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
-        ReturnFound:
-            ref TValue value = ref entry._value;
-        Return:
-            return ref value;
-        ReturnNotFound:
-            value = ref RoslynUnsafe.NullRef<TValue>();
-            goto Return;
+            ref TValue ConcurrentOperation(ref Entry entry)
+            {
+                ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
+                return ref ReturnFound(ref entry);
+            }
+            ref TValue ReturnFound(ref Entry entry)
+            {
+                ref TValue value = ref entry._value;
+                return ref value;
+            }
+            ref TValue ReturnNotFound()
+            {
+                ref TValue value = ref RoslynUnsafe.NullRef<TValue>();
+                return ref value;
+            }
         }
 
         private int Initialize(int capacity)
@@ -485,132 +402,45 @@ namespace Microsoft.CodeAnalysis.Collections
             Debug.Assert(entries.Length > 0, "expected entries to be non-empty");
 
             var comparer = _comparer;
-            var hashCode = (uint)((SupportsComparerDevirtualization && comparer == null) ? key.GetHashCode() : comparer.GetHashCode(key));
+            var hashCode = (uint)(comparer.GetHashCode(key));
 
             uint collisionCount = 0;
             ref var bucket = ref GetBucket(hashCode);
             var i = bucket - 1; // Value in _buckets is 1-based
 
-            if (SupportsComparerDevirtualization && comparer == null)
+            while (true)
             {
-                if (typeof(TKey).IsValueType)
+                // Should be a while loop https://github.com/dotnet/runtime/issues/9422
+                // Test uint in if rather than loop condition to drop range check for following array access
+                if ((uint)i >= (uint)entries.Length)
                 {
-                    // ValueType: Devirtualize with EqualityComparer<TValue>.Default intrinsic
-                    while (true)
-                    {
-                        // Should be a while loop https://github.com/dotnet/runtime/issues/9422
-                        // Test uint in if rather than loop condition to drop range check for following array access
-                        if ((uint)i >= (uint)entries.Length)
-                        {
-                            break;
-                        }
-
-                        if (entries[i]._hashCode == hashCode && EqualityComparer<TKey>.Default.Equals(entries[i]._key, key))
-                        {
-                            if (behavior == InsertionBehavior.OverwriteExisting)
-                            {
-                                entries[i]._value = value;
-                                return true;
-                            }
-
-                            if (behavior == InsertionBehavior.ThrowOnExisting)
-                            {
-                                ThrowHelper.ThrowAddingDuplicateWithKeyArgumentException(key);
-                            }
-
-                            return false;
-                        }
-
-                        i = entries[i]._next;
-
-                        collisionCount++;
-                        if (collisionCount > (uint)entries.Length)
-                        {
-                            // The chain of entries forms a loop; which means a concurrent update has happened.
-                            // Break out of the loop and throw, rather than looping forever.
-                            ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
-                        }
-                    }
+                    break;
                 }
-                else
+
+                if (entries[i]._hashCode == hashCode && comparer.Equals(entries[i]._key, key))
                 {
-                    // Object type: Shared Generic, EqualityComparer<TValue>.Default won't devirtualize
-                    // https://github.com/dotnet/runtime/issues/10050
-                    // So cache in a local rather than get EqualityComparer per loop iteration
-                    var defaultComparer = EqualityComparer<TKey>.Default;
-                    while (true)
+                    if (behavior == InsertionBehavior.OverwriteExisting)
                     {
-                        // Should be a while loop https://github.com/dotnet/runtime/issues/9422
-                        // Test uint in if rather than loop condition to drop range check for following array access
-                        if ((uint)i >= (uint)entries.Length)
-                        {
-                            break;
-                        }
-
-                        if (entries[i]._hashCode == hashCode && defaultComparer.Equals(entries[i]._key, key))
-                        {
-                            if (behavior == InsertionBehavior.OverwriteExisting)
-                            {
-                                entries[i]._value = value;
-                                return true;
-                            }
-
-                            if (behavior == InsertionBehavior.ThrowOnExisting)
-                            {
-                                ThrowHelper.ThrowAddingDuplicateWithKeyArgumentException(key);
-                            }
-
-                            return false;
-                        }
-
-                        i = entries[i]._next;
-
-                        collisionCount++;
-                        if (collisionCount > (uint)entries.Length)
-                        {
-                            // The chain of entries forms a loop; which means a concurrent update has happened.
-                            // Break out of the loop and throw, rather than looping forever.
-                            ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
-                        }
+                        entries[i]._value = value;
+                        return true;
                     }
+
+                    if (behavior == InsertionBehavior.ThrowOnExisting)
+                    {
+                        ThrowHelper.ThrowAddingDuplicateWithKeyArgumentException(key);
+                    }
+
+                    return false;
                 }
-            }
-            else
-            {
-                while (true)
+
+                i = entries[i]._next;
+
+                collisionCount++;
+                if (collisionCount > (uint)entries.Length)
                 {
-                    // Should be a while loop https://github.com/dotnet/runtime/issues/9422
-                    // Test uint in if rather than loop condition to drop range check for following array access
-                    if ((uint)i >= (uint)entries.Length)
-                    {
-                        break;
-                    }
-
-                    if (entries[i]._hashCode == hashCode && comparer.Equals(entries[i]._key, key))
-                    {
-                        if (behavior == InsertionBehavior.OverwriteExisting)
-                        {
-                            entries[i]._value = value;
-                            return true;
-                        }
-
-                        if (behavior == InsertionBehavior.ThrowOnExisting)
-                        {
-                            ThrowHelper.ThrowAddingDuplicateWithKeyArgumentException(key);
-                        }
-
-                        return false;
-                    }
-
-                    i = entries[i]._next;
-
-                    collisionCount++;
-                    if (collisionCount > (uint)entries.Length)
-                    {
-                        // The chain of entries forms a loop; which means a concurrent update has happened.
-                        // Break out of the loop and throw, rather than looping forever.
-                        ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
-                    }
+                    // The chain of entries forms a loop; which means a concurrent update has happened.
+                    // Break out of the loop and throw, rather than looping forever.
+                    ThrowHelper.ThrowInvalidOperationException_ConcurrentOperationsNotSupported();
                 }
             }
 
@@ -715,16 +545,12 @@ namespace Microsoft.CodeAnalysis.Collections
 #if NETCOREAPP
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TKey>())
 #endif
-                        {
                             entry._key = default!;
-                        }
 
 #if NETCOREAPP
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TValue>())
 #endif
-                        {
                             entry._value = default!;
-                        }
 
                         _freeList = i;
                         _freeCount++;
@@ -789,16 +615,12 @@ namespace Microsoft.CodeAnalysis.Collections
 #if NETCOREAPP
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TKey>())
 #endif
-                        {
                             entry._key = default!;
-                        }
 
 #if NETCOREAPP
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TValue>())
 #endif
-                        {
                             entry._value = default!;
-                        }
 
                         _freeList = i;
                         _freeCount++;
@@ -842,8 +664,8 @@ namespace Microsoft.CodeAnalysis.Collections
 
         bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly => false;
 
-        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int index)
-            => CopyTo(array, index);
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+            => CopyTo(array, arrayIndex);
 
         void ICollection.CopyTo(Array array, int index)
         {
@@ -1275,19 +1097,19 @@ namespace Microsoft.CodeAnalysis.Collections
             public Enumerator GetEnumerator()
                 => new(_dictionary);
 
-            public void CopyTo(TKey[] array, int index)
+            public void CopyTo(TKey[] array, int arrayIndex)
             {
                 if (array == null)
                 {
                     ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
                 }
 
-                if (index < 0 || index > array.Length)
+                if (arrayIndex < 0 || arrayIndex > array.Length)
                 {
                     ThrowHelper.ThrowIndexArgumentOutOfRange_NeedNonNegNumException();
                 }
 
-                if (array.Length - index < _dictionary.Count)
+                if (array.Length - arrayIndex < _dictionary.Count)
                 {
                     ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
                 }
@@ -1297,7 +1119,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 for (var i = 0; i < count; i++)
                 {
                     if (entries[i]._next >= -1)
-                        array[index++] = entries[i]._key;
+                        array[arrayIndex++] = entries[i]._key;
                 }
             }
 
@@ -1386,7 +1208,7 @@ namespace Microsoft.CodeAnalysis.Collections
 
             object ICollection.SyncRoot => ((ICollection)_dictionary).SyncRoot;
 
-            public struct Enumerator : IEnumerator<TKey>, IEnumerator
+            public struct Enumerator : IEnumerator<TKey>
             {
                 private readonly SegmentedDictionary<TKey, TValue> _dictionary;
                 private int _index;
@@ -1475,19 +1297,19 @@ namespace Microsoft.CodeAnalysis.Collections
             public Enumerator GetEnumerator()
                 => new(_dictionary);
 
-            public void CopyTo(TValue[] array, int index)
+            public void CopyTo(TValue[] array, int arrayIndex)
             {
                 if (array == null)
                 {
                     ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
                 }
 
-                if ((uint)index > array.Length)
+                if ((uint)arrayIndex > array.Length)
                 {
                     ThrowHelper.ThrowIndexArgumentOutOfRange_NeedNonNegNumException();
                 }
 
-                if (array.Length - index < _dictionary.Count)
+                if (array.Length - arrayIndex < _dictionary.Count)
                 {
                     ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
                 }
@@ -1497,7 +1319,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 for (var i = 0; i < count; i++)
                 {
                     if (entries[i]._next >= -1)
-                        array[index++] = entries[i]._value;
+                        array[arrayIndex++] = entries[i]._value;
                 }
             }
 
@@ -1586,7 +1408,7 @@ namespace Microsoft.CodeAnalysis.Collections
 
             object ICollection.SyncRoot => ((ICollection)_dictionary).SyncRoot;
 
-            public struct Enumerator : IEnumerator<TValue>, IEnumerator
+            public struct Enumerator : IEnumerator<TValue>
             {
                 private readonly SegmentedDictionary<TKey, TValue> _dictionary;
                 private int _index;

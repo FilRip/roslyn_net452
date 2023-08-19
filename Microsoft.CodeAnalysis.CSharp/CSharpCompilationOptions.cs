@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Flags applied to the top-level binder created for each syntax tree in the compilation 
         /// as well as for the binder of global imports.
         /// </summary>
-        internal BinderFlags TopLevelBinderFlags { get; private set; }
+        internal EBinder TopLevelBinderFlags { get; private set; }
 
         /// <summary>
         /// Global Nullable context options.
@@ -91,7 +91,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    metadataImportOptions: metadataImportOptions,
                    referencesSupersedeLowerVersions: false,
                    publicSign: publicSign,
-                   topLevelBinderFlags: BinderFlags.None,
+                   topLevelBinderFlags: EBinder.None,
                    nullableContextOptions: nullableContextOptions)
         {
         }
@@ -215,7 +215,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             MetadataImportOptions metadataImportOptions,
             bool referencesSupersedeLowerVersions,
             bool publicSign,
-            BinderFlags topLevelBinderFlags,
+            EBinder topLevelBinderFlags,
             NullableContextOptions nullableContextOptions)
             : base(outputKind, reportSuppressedDiagnostics, moduleName, mainTypeName, scriptClassName,
                    cryptoKeyContainer, cryptoKeyFile, cryptoPublicKey, delaySign, publicSign, optimizationLevel, checkOverflow,
@@ -268,7 +268,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override string Language => LanguageNames.CSharp;
 
-        public CSharpCompilationOptions WithTopLevelBinderFlags(BinderFlags flags)
+        public CSharpCompilationOptions WithTopLevelBinderFlags(EBinder flags)
         {
             return (flags == TopLevelBinderFlags) ? this : new CSharpCompilationOptions(this) { TopLevelBinderFlags = flags };
         }
@@ -932,7 +932,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    metadataImportOptions: MetadataImportOptions.Public,
                    referencesSupersedeLowerVersions: false,
                    publicSign: false,
-                   topLevelBinderFlags: BinderFlags.None,
+                   topLevelBinderFlags: EBinder.None,
                    nullableContextOptions: NullableContextOptions.Disable)
         {
         }

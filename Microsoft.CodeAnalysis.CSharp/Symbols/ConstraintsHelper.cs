@@ -320,7 +320,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
             // Wrap binder from factory in a generic constraints specific binder
             // to avoid checking constraints when binding type names.
-            binder = binder.WithAdditionalFlags(BinderFlags.GenericConstraintsClause | BinderFlags.SuppressConstraintChecks);
+            binder = binder.WithAdditionalFlags(EBinder.GenericConstraintsClause | EBinder.SuppressConstraintChecks);
 
             ImmutableArray<TypeParameterConstraintClause> clauses;
             clauses = binder.BindTypeParameterConstraintClauses(containingSymbol, typeParameters, typeParameterList, constraintClauses,
@@ -357,7 +357,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 // Wrap binder from factory in a generic constraints specific binder
                 // Also, suppress type argument binding in constraint types, this helps to avoid cycles while we figure out constraint kinds. 
                 // to avoid checking constraints when binding type names.
-                binder = binder.WithAdditionalFlags(BinderFlags.GenericConstraintsClause | BinderFlags.SuppressConstraintChecks | BinderFlags.SuppressTypeArgumentBinding);
+                binder = binder.WithAdditionalFlags(EBinder.GenericConstraintsClause | EBinder.SuppressConstraintChecks | EBinder.SuppressTypeArgumentBinding);
 
                 // We will recompute this diagnostics more accurately later, when binding without BinderFlags.SuppressTypeArgumentBinding  
                 clauses = binder.BindTypeParameterConstraintClauses(containingSymbol, typeParameters, typeParameterList, constraintClauses,

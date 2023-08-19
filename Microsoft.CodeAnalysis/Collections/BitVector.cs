@@ -66,6 +66,7 @@ namespace Microsoft.CodeAnalysis
             return !left.Equals(right);
         }
 
+#pragma warning disable S2328 // "GetHashCode" should not reference mutable fields
         public override int GetHashCode()
         {
             int bitsHash = _bits0.GetHashCode();
@@ -80,6 +81,7 @@ namespace Microsoft.CodeAnalysis
 
             return Hash.Combine(_capacity, bitsHash);
         }
+#pragma warning restore S2328 // "GetHashCode" should not reference mutable fields
 
         private static int WordsForCapacity(int capacity)
         {
@@ -270,15 +272,14 @@ namespace Microsoft.CodeAnalysis
                 otherLength = thisLength;
 
             // intersect the inline portion
+            var oldVBlock = _bits0;
+            var newVBlock = oldVBlock & other._bits0;
+            if (newVBlock != oldVBlock)
             {
-                var oldV = _bits0;
-                var newV = oldV & other._bits0;
-                if (newV != oldV)
-                {
-                    _bits0 = newV;
-                    anyChanged = true;
-                }
+                _bits0 = newVBlock;
+                anyChanged = true;
             }
+
             // intersect up to their common length.
             for (int i = 0; i < otherLength; i++)
             {
@@ -342,8 +343,10 @@ namespace Microsoft.CodeAnalysis
         {
             get
             {
+#pragma warning disable S112 // General exceptions should never be thrown
                 if (index < 0)
                     throw new IndexOutOfRangeException();
+#pragma warning restore S112 // General exceptions should never be thrown
                 if (index >= _capacity)
                     return false;
                 int i = (index >> Log2BitsPerWord) - 1;
@@ -354,8 +357,10 @@ namespace Microsoft.CodeAnalysis
 
             set
             {
+#pragma warning disable S112 // General exceptions should never be thrown
                 if (index < 0)
                     throw new IndexOutOfRangeException();
+#pragma warning restore S112 // General exceptions should never be thrown
                 if (index >= _capacity)
                     EnsureCapacity(index + 1);
                 int i = (index >> Log2BitsPerWord) - 1;

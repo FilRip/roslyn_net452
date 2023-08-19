@@ -259,7 +259,7 @@ A catch() block after a catch (System.Exception e) block can catch non-CLS excep
   <data name="WRN_UseDefViolationOut"><value>Use of unassigned out parameter '{0}'</value></data>
   <data name="WRN_GlobalAliasDefn_Title"><value>Defining an alias named 'global' is ill-advised</value></data>
   <data name="ERR_BadPrefer32OnLib"><value>/platform:anycpu32bitpreferred can only be used with /t:exe, /t:winexe and /t:appcontainerexe</value></data>
-  <data name="WRN_DoesNotReturnMismatch"><value>Method '{0}' lacks `[DoesNotReturn]` annotation to match implemented or overridden member.</value></data>
+  <data name="WRN_DoesNotReturnMismatch"><value>Method '{0}' lacks `[DoesNotReturn()]` annotation to match implemented or overridden member.</value></data>
   <data name="ERR_ComImportWithBase"><value>'{0}': a class with the ComImport attribute cannot specify a base class</value></data>
   <data name="ERR_ComImportWithImpl"><value>Since '{1}' has the ComImport attribute, '{0}' must be extern or abstract</value></data>
   <data name="IDS_FIXEDLOCAL"><value>fixed variable</value></data>
@@ -915,7 +915,7 @@ To remove the warning, you can use /reference instead (set the Embed Interop Typ
   <data name="ERR_ProtectedInStatic"><value>'{0}': static classes cannot contain protected members</value></data>
   <data name="ERR_InstanceMemberInStaticClass"><value>'{0}': cannot declare instance members in a static class</value></data>
   <data name="ERR_InvalidAssemblyCultureForExe"><value>Executables cannot be satellite assemblies; culture should always be empty</value></data>
-  <data name="WRN_DoesNotReturnMismatch_Title"><value>Method lacks `[DoesNotReturn]` annotation to match implemented or overridden member.</value></data>
+  <data name="WRN_DoesNotReturnMismatch_Title"><value>Method lacks `[DoesNotReturn()]` annotation to match implemented or overridden member.</value></data>
   <data name="ERR_BaseIllegal"><value>Use of keyword 'base' is not valid in this context</value></data>
   <data name="ERR_NoTypeDef"><value>The type '{0}' is defined in an assembly that is not referenced. You must add a reference to assembly '{1}'.</value></data>
   <data name="ERR_ExplicitPropertyAddingAccessor"><value>'{0}' adds an accessor not found in interface member '{1}'</value></data>
@@ -1326,7 +1326,7 @@ Give the compiler some way to differentiate the methods. For example, you can gi
   <data name="ERR_BadIteratorReturnRef"><value>The body of '{0}' cannot be an iterator block because '{0}' returns by reference</value></data>
   <data name="ERR_BadIndexCount"><value>Wrong number of indices inside []; expected {0}</value></data>
   <data name="WRN_DelaySignButNoKey"><value>Delay signing was specified and requires a public key, but no public key was specified</value></data>
-  <data name="WRN_ShouldNotReturn"><value>A method marked [DoesNotReturn] should not return.</value></data>
+  <data name="WRN_ShouldNotReturn"><value>A method marked [DoesNotReturn()] should not return.</value></data>
   <data name="ERR_InvalidExprTerm"><value>Invalid expression term '{0}'</value></data>
   <data name="ERR_InvalidPropertyAccessMod"><value>The accessibility modifier of the '{0}' accessor must be more restrictive than the property or indexer '{1}'</value></data>
   <data name="ERR_BadCallerFilePathParamWithoutDefaultValue"><value>The CallerFilePathAttribute may only be applied to parameters with default values</value></data>
@@ -2128,7 +2128,7 @@ If such a class is used as a base class and if the deriving class defines a dest
   <data name="WRN_MultipleRuntimeOverrideMatches_Title"><value>Member overrides base member with multiple override candidates at run-time</value></data>
   <data name="ERR_RefReturnReadonlyLocalCause"><value>Cannot return '{0}' by reference because it is a '{1}'</value></data>
   <data name="INF_UnableToLoadSomeTypesInAnalyzer_Title"><value>Skip loading types in analyzer assembly that fail due to a ReflectionTypeLoadException</value></data>
-  <data name="WRN_ShouldNotReturn_Title"><value>A method marked [DoesNotReturn] should not return.</value></data>
+  <data name="WRN_ShouldNotReturn_Title"><value>A method marked [DoesNotReturn()] should not return.</value></data>
   <data name="ERR_SimpleProgramMultipleUnitsWithTopLevelStatements"><value>Only one compilation unit can have top-level statements.</value></data>
   <data name="ERR_BadSpecialByRefLocal"><value>Parameters or locals of type '{0}' cannot be declared in async methods or async lambda expressions.</value></data>
   <data name="ERR_PartialMethodMustHaveLatent"><value>No defining declaration found for implementing declaration of partial method '{0}'</value></data>

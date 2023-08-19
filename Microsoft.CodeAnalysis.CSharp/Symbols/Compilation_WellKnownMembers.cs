@@ -121,7 +121,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal NamedTypeSymbol GetWellKnownType(WellKnownType type)
         {
 
-            bool ignoreCorLibraryDuplicatedTypes = this.Options.TopLevelBinderFlags.Includes(BinderFlags.IgnoreCorLibraryDuplicatedTypes);
+            bool ignoreCorLibraryDuplicatedTypes = this.Options.TopLevelBinderFlags.Includes(EBinder.IgnoreCorLibraryDuplicatedTypes);
 
             int index = (int)type - (int)WellKnownType.First;
             if (_lazyWellKnownTypes == null || _lazyWellKnownTypes[index] is null)

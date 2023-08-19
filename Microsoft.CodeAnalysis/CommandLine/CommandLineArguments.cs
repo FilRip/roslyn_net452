@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis
         public StrongNameProvider GetStrongNameProvider(StrongNameFileSystem fileSystem)
             => new DesktopStrongNameProvider(KeyFileSearchPaths, fileSystem);
 
-        public CommandLineArguments()
+        protected CommandLineArguments()
         {
         }
 

@@ -90,15 +90,15 @@ namespace Microsoft.CodeAnalysis.Text
             this.Source.CopyTo(sourceIndex, destination, destinationIndex, count);
         }
 
-        public override void Write(TextWriter textWriter, TextSpan span, CancellationToken cancellationToken = default)
+        public override void Write(TextWriter writer, TextSpan span, CancellationToken cancellationToken = default)
         {
             if (span.Start == 0 && span.End == this.Length)
             {
-                textWriter.Write(this.Source);
+                writer.Write(this.Source);
             }
             else
             {
-                base.Write(textWriter, span, cancellationToken);
+                base.Write(writer, span, cancellationToken);
             }
         }
     }

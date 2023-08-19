@@ -61,32 +61,32 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         internal bool InFieldInitializer
         {
-            get { return this.Flags.Includes(BinderFlags.FieldInitializer); }
+            get { return this.Flags.Includes(EBinder.FieldInitializer); }
         }
 
         internal bool InParameterDefaultValue
         {
-            get { return this.Flags.Includes(BinderFlags.ParameterDefaultValue); }
+            get { return this.Flags.Includes(EBinder.ParameterDefaultValue); }
         }
 
         protected bool InConstructorInitializer
         {
-            get { return this.Flags.Includes(BinderFlags.ConstructorInitializer); }
+            get { return this.Flags.Includes(EBinder.ConstructorInitializer); }
         }
 
         internal bool InAttributeArgument
         {
-            get { return this.Flags.Includes(BinderFlags.AttributeArgument); }
+            get { return this.Flags.Includes(EBinder.AttributeArgument); }
         }
 
         internal bool InCref
         {
-            get { return this.Flags.Includes(BinderFlags.Cref); }
+            get { return this.Flags.Includes(EBinder.Cref); }
         }
 
         protected bool InCrefButNotParameterOrReturnType
         {
-            get { return InCref && !this.Flags.Includes(BinderFlags.CrefParameterOrReturnType); }
+            get { return InCref && !this.Flags.Includes(EBinder.CrefParameterOrReturnType); }
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             ParameterSymbol parameter,
             EqualsValueClauseSyntax defaultValueSyntax)
         {
-            var binder = new LocalScopeBinder(this.WithContainingMemberOrLambda(parameter.ContainingSymbol).WithAdditionalFlags(BinderFlags.ParameterDefaultValue));
+            var binder = new LocalScopeBinder(this.WithContainingMemberOrLambda(parameter.ContainingSymbol).WithAdditionalFlags(EBinder.ParameterDefaultValue));
             return new ExecutableCodeBinder(defaultValueSyntax,
                                             parameter.ContainingSymbol,
                                             binder);
@@ -3571,7 +3571,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             }
 
             // Check if we're syntactically within a catch or finally clause.
-            if (this.Flags.IncludesAny(BinderFlags.InCatchBlock | BinderFlags.InCatchFilter | BinderFlags.InFinallyBlock))
+            if (this.Flags.IncludesAny(EBinder.InCatchBlock | EBinder.InCatchFilter | EBinder.InFinallyBlock))
             {
                 Error(diagnostics, ErrorCode.ERR_StackallocInCatchFinally, node);
             }
@@ -4372,7 +4372,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // Note that this is only used for the LHS of the assignment - these diagnostics do not apply on the RHS.
             // For this reason, we will actually need two binders: this and this.WithAdditionalFlags.
             var objectInitializerMemberBinder = useObjectInitDiagnostics
-                ? this.WithAdditionalFlags(BinderFlags.ObjectInitializerMember)
+                ? this.WithAdditionalFlags(EBinder.ObjectInitializerMember)
                 : this;
 
             var initializers = ArrayBuilder<BoundExpression>.GetInstance(initializerSyntax.Expressions.Count);
@@ -4738,7 +4738,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             //  1) CS1921 (ERR_InitializerAddHasWrongSignature)
             //  2) CS1950 (ERR_BadArgTypesForCollectionAdd)
             //  3) CS1954 (ERR_InitializerAddHasParamModifiers)
-            var collectionInitializerAddMethodBinder = this.WithAdditionalFlags(BinderFlags.CollectionInitializerAddMethod);
+            var collectionInitializerAddMethodBinder = this.WithAdditionalFlags(EBinder.CollectionInitializerAddMethod);
 
             foreach (var elementInitializer in initializerSyntax.Expressions)
             {
@@ -6826,7 +6826,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 if (instanceReceiver == true)
                 {
-                    ErrorCode errorCode = this.Flags.Includes(BinderFlags.ObjectInitializerMember) ?
+                    ErrorCode errorCode = this.Flags.Includes(EBinder.ObjectInitializerMember) ?
                         ErrorCode.ERR_StaticMemberInObjectInitializer :
                         ErrorCode.ERR_ObjectProhibited;
                     Error(diagnostics, errorCode, node, symbol);
@@ -8372,7 +8372,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 receiverType = receiverType.GetNullableUnderlyingType();
             }
 
-            receiver = new BoundConditionalReceiver(receiver?.Syntax, 0, receiverType ?? CreateErrorType(), hasErrors: receiver.HasErrors) { WasCompilerGenerated = true };
+            receiver = new BoundConditionalReceiver(receiver?.Syntax, 0, receiverType ?? CreateErrorType(), hasErrors: receiver?.HasErrors == true) { WasCompilerGenerated = true };
             return receiver;
         }
 

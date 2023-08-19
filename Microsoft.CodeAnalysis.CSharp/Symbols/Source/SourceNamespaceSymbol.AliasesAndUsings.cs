@@ -689,7 +689,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                             var directiveDiagnostics = BindingDiagnosticBag.GetInstance();
 
-                            declarationBinder ??= compilation.GetBinderFactory(declarationSyntax.SyntaxTree).GetBinder(usingDirective.Name).WithAdditionalFlags(BinderFlags.SuppressConstraintChecks);
+                            declarationBinder ??= compilation.GetBinderFactory(declarationSyntax.SyntaxTree).GetBinder(usingDirective.Name).WithAdditionalFlags(EBinder.SuppressConstraintChecks);
                             var imported = declarationBinder.BindNamespaceOrTypeSymbol(usingDirective.Name, directiveDiagnostics, basesBeingResolved).NamespaceOrTypeSymbol;
 
                             if (imported.Kind == SymbolKind.Namespace)

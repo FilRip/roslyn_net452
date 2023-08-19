@@ -18,14 +18,14 @@ namespace Microsoft.CodeAnalysis
                 _logger = logger;
             }
 
-            protected override bool FileExists(string? fullPath)
+            protected override bool FileExists(string? resolvedPath)
             {
-                if (fullPath != null)
+                if (resolvedPath != null)
                 {
-                    _logger?.AddRead(fullPath);
+                    _logger?.AddRead(resolvedPath);
                 }
 
-                return base.FileExists(fullPath);
+                return base.FileExists(resolvedPath);
             }
         }
     }

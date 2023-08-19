@@ -194,7 +194,7 @@ namespace Microsoft.CodeAnalysis
             return value;
         }
 
-        // if someone needs to create a pool;
+        // if someone needs to create a pool
         public static ObjectPool<CachingIdentityFactory<TKey, TValue>> CreatePool(int size, Func<TKey, TValue> valueFactory)
         {
             var pool = new ObjectPool<CachingIdentityFactory<TKey, TValue>>(
@@ -207,9 +207,6 @@ namespace Microsoft.CodeAnalysis
         public void Free()
         {
             var pool = _pool;
-
-            // Array.Clear(this.entries, 0, this.entries.Length);
-
             pool?.Free(this);
         }
     }
@@ -223,7 +220,7 @@ namespace Microsoft.CodeAnalysis
         protected readonly int mask;
         protected readonly TEntry[] entries;
 
-        public CachingBase(int size)
+        protected CachingBase(int size)
         {
             var alignedSize = AlignSize(size);
             this.mask = alignedSize - 1;

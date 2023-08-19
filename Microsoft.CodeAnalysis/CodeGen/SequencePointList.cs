@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Text;
@@ -219,9 +220,8 @@ namespace Microsoft.CodeAnalysis.CodeGen
 
             while (current != null)
             {
-                foreach (var offsetAndSpan in current._points)
+                foreach (TextSpan span in current._points.Select(offsetAndSpan => offsetAndSpan.Span))
                 {
-                    TextSpan span = offsetAndSpan.Span;
                     bool isHidden = span == RawSequencePoint.HiddenSequencePointSpan;
                     if (!isHidden)
                     {

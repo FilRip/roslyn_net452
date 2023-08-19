@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 GetBinderFactory(declarationSyntax.SyntaxTree).GetBinder(returnTypeSyntax, declarationSyntax, this);
 
 
-            var signatureBinder = binder.WithAdditionalFlags(BinderFlags.SuppressConstraintChecks);
+            var signatureBinder = binder.WithAdditionalFlags(EBinder.SuppressConstraintChecks);
 
             parameters = ParameterHelpers.MakeParameters(
                 signatureBinder,

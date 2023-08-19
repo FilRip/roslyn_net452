@@ -361,13 +361,17 @@ namespace Microsoft.CodeAnalysis.CodeGen
         public sealed override bool Equals(object? obj)
         {
             // It is not supported to rely on default equality of these Cci objects, an explicit way to compare and hash them should be used.
-            throw Roslyn.Utilities.ExceptionUtilities.Unreachable;
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+            throw ExceptionUtilities.Unreachable;
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
 
         public sealed override int GetHashCode()
         {
             // It is not supported to rely on default equality of these Cci objects, an explicit way to compare and hash them should be used.
-            throw Roslyn.Utilities.ExceptionUtilities.Unreachable;
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+            throw ExceptionUtilities.Unreachable;
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
     }
 }

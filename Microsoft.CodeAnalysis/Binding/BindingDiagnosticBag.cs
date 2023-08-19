@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Symbols;
@@ -205,11 +206,6 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        public bool Add(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
-        {
-            return Add(node.Location, useSiteInfo);
-        }
-
         public bool AddDiagnostics(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
         {
             return AddDiagnostics(node.Location, useSiteInfo);
@@ -222,13 +218,8 @@ namespace Microsoft.CodeAnalysis
                 if (!useSiteInfo.Diagnostics.IsNullOrEmpty())
                 {
                     bool haveError = false;
-                    foreach (var diagnosticInfo in useSiteInfo.Diagnostics)
-                    {
-                        if (ReportUseSiteDiagnostic(diagnosticInfo, diagnosticBag, location))
-                        {
-                            haveError = true;
-                        }
-                    }
+                    if (useSiteInfo.Diagnostics.Any(diagnosticInfo => ReportUseSiteDiagnostic(diagnosticInfo, diagnosticBag, location)))
+                        haveError = true;
 
                     if (haveError)
                     {
@@ -250,6 +241,11 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+        public bool Add(SyntaxNode node, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
+        {
+            return Add(node.Location, useSiteInfo);
+        }
+
         public bool Add(Location location, CompoundUseSiteInfo<TAssemblySymbol> useSiteInfo)
         {
             Debug.Assert(!useSiteInfo.AccumulatesDependencies || this.AccumulatesDependencies);
@@ -261,8 +257,6 @@ namespace Microsoft.CodeAnalysis
             AddDependencies(useSiteInfo);
             return false;
         }
-
-        protected abstract bool ReportUseSiteDiagnostic(DiagnosticInfo diagnosticInfo, DiagnosticBag diagnosticBag, Location location);
 
         public bool Add(UseSiteInfo<TAssemblySymbol> useSiteInfo, SyntaxNode node)
         {
@@ -279,6 +273,8 @@ namespace Microsoft.CodeAnalysis
             AddDependencies(info);
             return false;
         }
+
+        protected abstract bool ReportUseSiteDiagnostic(DiagnosticInfo diagnosticInfo, DiagnosticBag diagnosticBag, Location location);
 
         public bool ReportUseSiteDiagnostic(DiagnosticInfo? info, Location location)
         {

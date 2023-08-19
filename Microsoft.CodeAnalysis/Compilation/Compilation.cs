@@ -1095,6 +1095,38 @@ namespace Microsoft.CodeAnalysis
             return CreateTupleTypeSymbol(elementTypes, elementNames, elementLocations, elementNullableAnnotations: default);
         }
 
+        /// <summary>
+        /// Returns a new INamedTypeSymbol with the given underlying type and
+        /// (optional) element names, locations, and nullable annotations.
+        /// The underlying type needs to be tuple-compatible.
+        /// </summary>
+        public INamedTypeSymbol CreateTupleTypeSymbol(
+            INamedTypeSymbol underlyingType,
+            ImmutableArray<string?> elementNames = default,
+            ImmutableArray<Location?> elementLocations = default,
+            ImmutableArray<NullableAnnotation> elementNullableAnnotations = default)
+        {
+            if (underlyingType == null)
+            {
+                throw new ArgumentNullException(nameof(underlyingType));
+            }
+
+            return CommonCreateTupleTypeSymbol(underlyingType, elementNames, elementLocations, elementNullableAnnotations);
+        }
+
+        /// <summary>
+        /// Returns a new INamedTypeSymbol with the given underlying type and element names and locations.
+        /// The underlying type needs to be tuple-compatible.
+        /// </summary>
+        /// <remarks>This overload is for backwards compatibility. Do not remove.</remarks>
+        public INamedTypeSymbol CreateTupleTypeSymbol(
+            INamedTypeSymbol underlyingType,
+            ImmutableArray<string?> elementNames,
+            ImmutableArray<Location?> elementLocations)
+        {
+            return CreateTupleTypeSymbol(underlyingType, elementNames, elementLocations, elementNullableAnnotations: default);
+        }
+
         protected static void CheckTupleElementNullableAnnotations(
             int cardinality,
             ImmutableArray<NullableAnnotation> elementNullableAnnotations)
@@ -1152,38 +1184,6 @@ namespace Microsoft.CodeAnalysis
             ImmutableArray<string?> elementNames,
             ImmutableArray<Location?> elementLocations,
             ImmutableArray<NullableAnnotation> elementNullableAnnotations);
-
-        /// <summary>
-        /// Returns a new INamedTypeSymbol with the given underlying type and
-        /// (optional) element names, locations, and nullable annotations.
-        /// The underlying type needs to be tuple-compatible.
-        /// </summary>
-        public INamedTypeSymbol CreateTupleTypeSymbol(
-            INamedTypeSymbol underlyingType,
-            ImmutableArray<string?> elementNames = default,
-            ImmutableArray<Location?> elementLocations = default,
-            ImmutableArray<NullableAnnotation> elementNullableAnnotations = default)
-        {
-            if (underlyingType == null)
-            {
-                throw new ArgumentNullException(nameof(underlyingType));
-            }
-
-            return CommonCreateTupleTypeSymbol(underlyingType, elementNames, elementLocations, elementNullableAnnotations);
-        }
-
-        /// <summary>
-        /// Returns a new INamedTypeSymbol with the given underlying type and element names and locations.
-        /// The underlying type needs to be tuple-compatible.
-        /// </summary>
-        /// <remarks>This overload is for backwards compatibility. Do not remove.</remarks>
-        public INamedTypeSymbol CreateTupleTypeSymbol(
-            INamedTypeSymbol underlyingType,
-            ImmutableArray<string?> elementNames,
-            ImmutableArray<Location?> elementLocations)
-        {
-            return CreateTupleTypeSymbol(underlyingType, elementNames, elementLocations, elementNullableAnnotations: default);
-        }
 
         protected abstract INamedTypeSymbol CommonCreateTupleTypeSymbol(
             INamedTypeSymbol underlyingType,
@@ -1386,13 +1386,8 @@ namespace Microsoft.CodeAnalysis
                     return true;
                 }
 
-                foreach (var reference in compilation.References)
-                {
-                    if (a.Equals(compilation.GetAssemblyOrModuleSymbol(reference)))
-                    {
-                        return true;
-                    }
-                }
+                if (compilation.References.Any(reference => a.Equals(compilation.GetAssemblyOrModuleSymbol(reference))))
+                    return true;
 
                 return false;
             }
@@ -1596,10 +1591,12 @@ namespace Microsoft.CodeAnalysis
                         manifestContents ??= typeof(Compilation).GetTypeInfo().Assembly.GetManifestResourceStream("Microsoft.CodeAnalysis.Resources.default.win32manifest");
                     }
                     else
+#pragma warning disable S125 // Sections of code should not be commented out
                     {
                         // Modules never have manifests, even if one is specified.
                         //Debug.Assert(!this.Options.OutputKind.IsNetModule() || manifestContents == null);
                     }
+#pragma warning restore S125 // Sections of code should not be commented out
 
                     if (manifestContents != null)
                     {
@@ -2502,7 +2499,9 @@ namespace Microsoft.CodeAnalysis
                 }
                 else if (options?.EmitMetadataOnly == true)
                 {
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one 
                     throw new ArgumentException(Properties.Resources.CannotTargetNetModuleWhenEmittingRefAssembly, nameof(options.EmitMetadataOnly));
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one 
                 }
             }
 
@@ -3216,17 +3215,17 @@ namespace Microsoft.CodeAnalysis
         public abstract bool ContainsSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Return source declaration symbols whose name meets given predicate.
-        /// </summary>
-        public abstract IEnumerable<ISymbol> GetSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Return true if there is a source declaration symbol name that matches the provided name.
         /// This may be faster than <see cref="ContainsSymbolsWithName(Func{string, bool},
         /// SymbolFilter, CancellationToken)"/> when predicate is just a simple string check.
         /// <paramref name="name"/> is case sensitive or not depending on the target language.
         /// </summary>
         public abstract bool ContainsSymbolsWithName(string name, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Return source declaration symbols whose name meets given predicate.
+        /// </summary>
+        public abstract IEnumerable<ISymbol> GetSymbolsWithName(Func<string, bool> predicate, SymbolFilter filter = SymbolFilter.TypeAndMember, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Return source declaration symbols whose name matches the provided name.  This may be

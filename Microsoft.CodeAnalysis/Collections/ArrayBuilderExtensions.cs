@@ -16,25 +16,17 @@ namespace Microsoft.CodeAnalysis
     {
         public static bool Any<T>(this ArrayBuilder<T> builder, Func<T, bool> predicate)
         {
-            foreach (var item in builder)
-            {
-                if (predicate(item))
-                {
-                    return true;
-                }
-            }
+            if (builder.Any(item => predicate(item)))
+                return true;
+
             return false;
         }
 
         public static bool Any<T, A>(this ArrayBuilder<T> builder, Func<T, A, bool> predicate, A arg)
         {
-            foreach (var item in builder)
-            {
-                if (predicate(item, arg))
-                {
-                    return true;
-                }
-            }
+            if (builder.Any(item => predicate(item, arg)))
+                return true;
+
             return false;
         }
 

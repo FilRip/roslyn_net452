@@ -616,7 +616,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         internal virtual ExecutableCodeBinder TryGetBodyBinder(BinderFactory binderFactoryOpt = null, bool ignoreAccessibility = false)
         {
             Binder inMethod = TryGetInMethodBinder(binderFactoryOpt);
-            return inMethod == null ? null : new ExecutableCodeBinder(SyntaxNode, this, inMethod.WithAdditionalFlags(ignoreAccessibility ? BinderFlags.IgnoreAccessibility : BinderFlags.None));
+            return inMethod == null ? null : new ExecutableCodeBinder(SyntaxNode, this, inMethod.WithAdditionalFlags(ignoreAccessibility ? EBinder.IgnoreAccessibility : EBinder.None));
         }
 
         /// <summary>

@@ -1688,7 +1688,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         }
 
         /// <remarks>
-        /// Returned binder doesn't need to have <see cref="BinderFlags.SemanticModel"/> set - the caller will add it.
+        /// Returned binder doesn't need to have <see cref="EBinder.SemanticModel"/> set - the caller will add it.
         /// </remarks>
         private static Binder GetQueryEnclosingBinder(int position, CSharpSyntaxNode startingNode, BoundQueryClause queryClause)
         {
@@ -1820,7 +1820,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <remarks>
         /// CONSIDER: can this share code with MemberSemanticModel.GetEnclosingBinder?
         /// 
-        /// Returned binder doesn't need to have <see cref="BinderFlags.SemanticModel"/> set - the caller will add it.
+        /// Returned binder doesn't need to have <see cref="EBinder.SemanticModel"/> set - the caller will add it.
         /// </remarks>
         private static Binder GetLambdaEnclosingBinder(int position, CSharpSyntaxNode startingNode, CSharpSyntaxNode containingLambda, Binder lambdaBinder)
         {
@@ -2276,7 +2276,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (binder != null)
                 {
-                    return new IncrementalBinder(_semanticModel, binder.WithAdditionalFlags(BinderFlags.SemanticModel));
+                    return new IncrementalBinder(_semanticModel, binder.WithAdditionalFlags(EBinder.SemanticModel));
                 }
 
                 return null;

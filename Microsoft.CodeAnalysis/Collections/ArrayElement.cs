@@ -12,7 +12,9 @@ namespace Microsoft.CodeAnalysis
     [DebuggerDisplay("{Value,nq}")]
     public struct ArrayElement<T>
     {
+#pragma warning disable S1104 // Fields should not have public accessibility
         public T Value;
+#pragma warning restore S1104 // Fields should not have public accessibility
 
         public static implicit operator T(ArrayElement<T> element)
         {

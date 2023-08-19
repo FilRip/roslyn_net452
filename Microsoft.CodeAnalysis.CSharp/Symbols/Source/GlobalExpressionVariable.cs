@@ -175,7 +175,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 if (_containingFieldOpt is not null && nodeToBind.Kind() != SyntaxKind.VariableDeclarator)
                 {
-                    binder = binder.WithContainingMemberOrLambda(_containingFieldOpt).WithAdditionalFlags(BinderFlags.FieldInitializer);
+                    binder = binder.WithContainingMemberOrLambda(_containingFieldOpt).WithAdditionalFlags(EBinder.FieldInitializer);
                 }
 
                 fieldsBeingBound = new ConsList<FieldSymbol>(this, fieldsBeingBound);

@@ -6,7 +6,7 @@ namespace System.Text
 
         private static volatile EncodingProvider[] s_providers;
 
-        public EncodingProvider()
+        protected EncodingProvider()
         {
         }
 

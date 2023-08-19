@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private Binder? _binder;
 
         internal BoundExpression MakeInvocationExpression(
-            BinderFlags flags,
+            EBinder flags,
             SyntaxNode node,
             BoundExpression receiver,
             string methodName,
@@ -632,25 +632,25 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public BoundExpression InstanceCall(BoundExpression receiver, string name, BoundExpression arg)
         {
-            return MakeInvocationExpression(BinderFlags.None, this.Syntax, receiver, name, ImmutableArray.Create(arg), this.Diagnostics);
+            return MakeInvocationExpression(EBinder.None, this.Syntax, receiver, name, ImmutableArray.Create(arg), this.Diagnostics);
         }
 
         public BoundExpression InstanceCall(BoundExpression receiver, string name)
         {
-            return MakeInvocationExpression(BinderFlags.None, this.Syntax, receiver, name, ImmutableArray<BoundExpression>.Empty, this.Diagnostics);
+            return MakeInvocationExpression(EBinder.None, this.Syntax, receiver, name, ImmutableArray<BoundExpression>.Empty, this.Diagnostics);
         }
 
         public BoundExpression StaticCall(TypeSymbol receiver, string name, params BoundExpression[] args)
         {
-            return MakeInvocationExpression(BinderFlags.None, this.Syntax, this.Type(receiver), name, args.ToImmutableArray(), this.Diagnostics);
+            return MakeInvocationExpression(EBinder.None, this.Syntax, this.Type(receiver), name, args.ToImmutableArray(), this.Diagnostics);
         }
 
         public BoundExpression StaticCall(TypeSymbol receiver, string name, ImmutableArray<BoundExpression> args, bool allowUnexpandedForm)
         {
-            return MakeInvocationExpression(BinderFlags.None, this.Syntax, this.Type(receiver), name, args, this.Diagnostics, allowUnexpandedForm: allowUnexpandedForm);
+            return MakeInvocationExpression(EBinder.None, this.Syntax, this.Type(receiver), name, args, this.Diagnostics, allowUnexpandedForm: allowUnexpandedForm);
         }
 
-        public BoundExpression StaticCall(BinderFlags flags, TypeSymbol receiver, string name, ImmutableArray<TypeSymbol> typeArgs, params BoundExpression[] args)
+        public BoundExpression StaticCall(EBinder flags, TypeSymbol receiver, string name, ImmutableArray<TypeSymbol> typeArgs, params BoundExpression[] args)
         {
             return MakeInvocationExpression(flags, this.Syntax, this.Type(receiver), name, args.ToImmutableArray(), this.Diagnostics, typeArgs);
         }

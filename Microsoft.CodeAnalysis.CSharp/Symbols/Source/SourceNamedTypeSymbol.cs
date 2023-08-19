@@ -57,7 +57,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 SeparatedSyntaxList<BaseTypeSyntax> inheritedTypeDecls = bases.Types;
 
                 var baseBinder = this.DeclaringCompilation.GetBinder(bases);
-                baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+                baseBinder = baseBinder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
 
                 backupLocation ??= inheritedTypeDecls[0].Type.GetLocation();
 
@@ -299,7 +299,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                         // Wrap binder from factory in a generic constraints specific binder 
                         // to avoid checking constraints when binding type names.
-                        binder = binder.WithContainingMemberOrLambda(this).WithAdditionalFlags(BinderFlags.GenericConstraintsClause | BinderFlags.SuppressConstraintChecks);
+                        binder = binder.WithContainingMemberOrLambda(this).WithAdditionalFlags(EBinder.GenericConstraintsClause | EBinder.SuppressConstraintChecks);
 
                         constraints = binder.BindTypeParameterConstraintClauses(this, typeParameters, typeParameterList, constraintClauses, diagnostics, performOnlyCycleSafeValidation: false);
                     }
@@ -377,7 +377,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         // Wrap binder from factory in a generic constraints specific binder 
                         // to avoid checking constraints when binding type names.
                         // Also, suppress type argument binding in constraint types, this helps to avoid cycles while we figure out constraint kinds. 
-                        binder = binder.WithContainingMemberOrLambda(this).WithAdditionalFlags(BinderFlags.GenericConstraintsClause | BinderFlags.SuppressConstraintChecks | BinderFlags.SuppressTypeArgumentBinding);
+                        binder = binder.WithContainingMemberOrLambda(this).WithAdditionalFlags(EBinder.GenericConstraintsClause | EBinder.SuppressConstraintChecks | EBinder.SuppressTypeArgumentBinding);
 
                         // We will recompute this diagnostics more accurately later, when binding without BinderFlags.SuppressTypeArgumentBinding  
                         constraints = binder.BindTypeParameterConstraintClauses(this, typeParameters, typeParameterList, constraintClauses, BindingDiagnosticBag.Discarded, performOnlyCycleSafeValidation: true);

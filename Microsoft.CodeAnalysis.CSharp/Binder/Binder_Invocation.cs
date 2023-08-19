@@ -1300,7 +1300,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             BoundExpression bindDefaultArgument(SyntaxNode syntax, ParameterSymbol parameter, Symbol containingMember, bool enableCallerInfo, BindingDiagnosticBag diagnostics)
             {
                 TypeSymbol parameterType = parameter.Type;
-                if (Flags.Includes(BinderFlags.ParameterDefaultValue))
+                if (Flags.Includes(EBinder.ParameterDefaultValue))
                 {
                     // This is only expected to occur in recursive error scenarios, for example: `object F(object param = F()) { }`
                     // We return a non-error expression here to ensure ERR_DefaultValueMustBeConstant (or another appropriate diagnostics) is produced by the caller.

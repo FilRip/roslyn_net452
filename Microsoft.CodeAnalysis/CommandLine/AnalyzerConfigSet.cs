@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -142,18 +143,18 @@ namespace Microsoft.CodeAnalysis
 
             var allMatchers = ArrayBuilder<ImmutableArray<SectionNameMatcher?>>.GetInstance(_analyzerConfigs.Length);
 
-            foreach (var config in _analyzerConfigs)
+            foreach (var config in _analyzerConfigs.Select(config => config.NamedSections))
             {
                 // Create an array of regexes with each entry corresponding to the same index
                 // in <see cref="EditorConfig.NamedSections"/>.
-                var builder = ArrayBuilder<SectionNameMatcher?>.GetInstance(config.NamedSections.Length);
-                foreach (var section in config.NamedSections)
+                var builder = ArrayBuilder<SectionNameMatcher?>.GetInstance(config.Length);
+                foreach (var section in config)
                 {
                     SectionNameMatcher? matcher = AnalyzerConfig.TryCreateSectionNameMatcher(section.Name);
                     builder.Add(matcher);
                 }
 
-                Debug.Assert(builder.Count == config.NamedSections.Length);
+                Debug.Assert(builder.Count == config.Length);
 
                 allMatchers.Add(builder.ToImmutableAndFree());
             }
@@ -201,12 +202,9 @@ namespace Microsoft.CodeAnalysis
             var normalizedPath = PathUtilities.NormalizeWithForwardSlash(sourcePath);
 
             // If we have a global config, add any sections that match the full path 
-            foreach (var section in _globalConfig.NamedSections)
+            foreach (var section in _globalConfig.NamedSections.Where(section => normalizedPath.Equals(section.Name, Section.NameComparer)))
             {
-                if (normalizedPath.Equals(section.Name, Section.NameComparer))
-                {
-                    sectionKey.Add(section);
-                }
+                sectionKey.Add(section);
             }
             int globalConfigOptionsCount = sectionKey.Count;
 

@@ -117,7 +117,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// Create a diagnostic for the given symbol. This could be an error or a warning based on
         /// the ObsoleteAttribute's arguments.
         /// </summary>
-        internal static DiagnosticInfo CreateObsoleteDiagnostic(Symbol symbol, BinderFlags location)
+        internal static DiagnosticInfo CreateObsoleteDiagnostic(Symbol symbol, EBinder location)
         {
             var data = symbol.ObsoleteAttributeData;
 
@@ -130,7 +130,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             // uninitialized.
 
             // The native compiler suppresses Obsolete diagnostics in these locations.
-            if (location.Includes(BinderFlags.SuppressObsoleteChecks))
+            if (location.Includes(EBinder.SuppressObsoleteChecks))
             {
                 return null;
             }
@@ -142,7 +142,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
 
             // Issue a specialized diagnostic for add methods of collection initializers
-            var isColInit = location.Includes(BinderFlags.CollectionInitializerAddMethod);
+            var isColInit = location.Includes(EBinder.CollectionInitializerAddMethod);
             var errorCode = (message: data.Message, isError: data.IsError, isColInit) switch
             {
                 // dev11 had a bug in this area (i.e. always produce a warning when there's no message) and we have to match it.

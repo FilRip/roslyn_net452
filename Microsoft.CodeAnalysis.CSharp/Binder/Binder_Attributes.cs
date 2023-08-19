@@ -123,7 +123,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // Bind constructor and named attribute arguments using the attribute binder
             var argumentListOpt = node.ArgumentList;
-            Binder attributeArgumentBinder = this.WithAdditionalFlags(BinderFlags.AttributeArgument);
+            Binder attributeArgumentBinder = this.WithAdditionalFlags(EBinder.AttributeArgument);
             AnalyzedAttributeArguments analyzedArguments = attributeArgumentBinder.BindAttributeArguments(argumentListOpt, attributeTypeForBinding, diagnostics);
 
             CompoundUseSiteInfo<AssemblySymbol> useSiteInfo = GetNewCompoundUseSiteInfo(diagnostics);

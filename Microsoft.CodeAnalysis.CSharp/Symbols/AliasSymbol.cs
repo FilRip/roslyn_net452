@@ -365,7 +365,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         private NamespaceOrTypeSymbol ResolveAliasTarget(NameSyntax syntax, BindingDiagnosticBag diagnostics, ConsList<TypeSymbol>? basesBeingResolved)
         {
-            var declarationBinder = ContainingSymbol!.DeclaringCompilation.GetBinderFactory(syntax.SyntaxTree).GetBinder(syntax).WithAdditionalFlags(BinderFlags.SuppressConstraintChecks | BinderFlags.SuppressObsoleteChecks);
+            var declarationBinder = ContainingSymbol!.DeclaringCompilation.GetBinderFactory(syntax.SyntaxTree).GetBinder(syntax).WithAdditionalFlags(EBinder.SuppressConstraintChecks | EBinder.SuppressObsoleteChecks);
             return declarationBinder.BindNamespaceOrTypeSymbol(syntax, diagnostics, basesBeingResolved).NamespaceOrTypeSymbol;
         }
 

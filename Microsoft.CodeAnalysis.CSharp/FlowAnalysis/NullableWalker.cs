@@ -1001,7 +1001,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 ((method.FlowAnalysisAnnotations & FlowAnalysisAnnotations.DoesNotReturn) == FlowAnalysisAnnotations.DoesNotReturn) &&
                 this.IsReachable())
             {
-                // A method marked [DoesNotReturn] should not return.
+                // A method marked [DoesNotReturn()] should not return.
                 ReportDiagnostic(ErrorCode.WRN_ShouldNotReturn, syntaxOpt?.GetLocation() ?? methodMainNode.Syntax.GetLastToken().GetLocation());
             }
         }

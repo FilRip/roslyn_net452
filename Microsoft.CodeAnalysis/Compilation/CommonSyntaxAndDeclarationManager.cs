@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis
         public readonly CommonMessageProvider MessageProvider;
         public readonly bool IsSubmission;
 
-        public CommonSyntaxAndDeclarationManager(
+        protected CommonSyntaxAndDeclarationManager(
             ImmutableArray<SyntaxTree> externalSyntaxTrees,
             string scriptClassName,
             SourceReferenceResolver resolver,

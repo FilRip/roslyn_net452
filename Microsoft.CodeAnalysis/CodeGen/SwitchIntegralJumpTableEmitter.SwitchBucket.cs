@@ -88,6 +88,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                 }
             }
 
+#pragma warning disable S1144 // Unused private types or members should be removed
             internal KeyValuePair<ConstantValue, object> this[int i]
             {
                 get
@@ -96,6 +97,7 @@ namespace Microsoft.CodeAnalysis.CodeGen
                     return _allLabels[i + _startLabelIndex];
                 }
             }
+#pragma warning restore S1144 // Unused private types or members should be removed
 
             internal ulong BucketSize
             {

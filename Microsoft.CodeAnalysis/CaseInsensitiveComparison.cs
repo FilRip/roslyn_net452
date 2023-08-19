@@ -66,6 +66,44 @@ namespace Microsoft.CodeAnalysis
             return ToLowerNonAscii(c);
         }
 
+        /// <summary>
+        /// In-place convert string in StringBuilder to lower case per Unicode rules
+        /// </summary>
+        /// <param name="builder"></param>
+        public static void ToLower(StringBuilder builder)
+        {
+            if (builder == null)
+                return;
+
+            for (int i = 0; i < builder.Length; i++)
+            {
+                builder[i] = ToLower(builder[i]);
+            }
+        }
+
+        /// <summary>
+        /// Convert a string to lower case per Unicode
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [return: NotNullIfNotNull(parameterName: nameof(value))]
+        public static string? ToLower(string? value)
+        {
+            if (value is null)
+                return null;
+
+            if (value.Length == 0)
+                return value;
+
+            var pooledStrbuilder = PooledStringBuilder.GetInstance();
+            StringBuilder builder = pooledStrbuilder.Builder;
+
+            builder.Append(value);
+            ToLower(builder);
+
+            return pooledStrbuilder.ToStringAndFree();
+        }
+
         private static char ToLowerNonAscii(char c)
         {
             if (c == '\u0130')
@@ -89,27 +127,27 @@ namespace Microsoft.CodeAnalysis
                 return (c1 == c2) ? 0 : ToLower(c1) - ToLower(c2);
             }
 
-            public override int Compare(string? str1, string? str2)
+            public override int Compare(string? x, string? y)
             {
-                if ((object?)str1 == str2)
+                if ((object?)x == y)
                 {
                     return 0;
                 }
 
-                if (str1 is null)
+                if (x is null)
                 {
                     return -1;
                 }
 
-                if (str2 is null)
+                if (y is null)
                 {
                     return 1;
                 }
 
-                int len = Math.Min(str1.Length, str2.Length);
+                int len = Math.Min(x.Length, y.Length);
                 for (int i = 0; i < len; i++)
                 {
-                    int ordDiff = CompareLowerUnicode(str1[i], str2[i]);
+                    int ordDiff = CompareLowerUnicode(x[i], y[i]);
                     if (ordDiff != 0)
                     {
                         return ordDiff;
@@ -117,7 +155,7 @@ namespace Microsoft.CodeAnalysis
                 }
 
                 // return the smaller string, or 0 if they are equal in length
-                return str1.Length - str2.Length;
+                return x.Length - y.Length;
             }
 
 #if !NET20 && !NETSTANDARD1_3
@@ -143,26 +181,26 @@ namespace Microsoft.CodeAnalysis
                 return c1 == c2 || ToLower(c1) == ToLower(c2);
             }
 
-            public override bool Equals(string? str1, string? str2)
+            public override bool Equals(string? x, string? y)
             {
-                if ((object?)str1 == str2)
+                if ((object?)x == y)
                 {
                     return true;
                 }
 
-                if (str1 is null || str2 is null)
+                if (x is null || y is null)
                 {
                     return false;
                 }
 
-                if (str1.Length != str2.Length)
+                if (x.Length != y.Length)
                 {
                     return false;
                 }
 
-                for (int i = 0; i < str1.Length; i++)
+                for (int i = 0; i < x.Length; i++)
                 {
-                    if (!AreEqualLowerUnicode(str1[i], str2[i]))
+                    if (!AreEqualLowerUnicode(x[i], y[i]))
                     {
                         return false;
                     }
@@ -253,13 +291,13 @@ namespace Microsoft.CodeAnalysis
                 return true;
             }
 
-            public override int GetHashCode(string str)
+            public override int GetHashCode(string obj)
             {
                 int hashCode = Hash.FnvOffsetBias;
 
-                for (int i = 0; i < str.Length; i++)
+                for (int i = 0; i < obj.Length; i++)
                 {
-                    hashCode = Hash.CombineFNVHash(hashCode, ToLower(str[i]));
+                    hashCode = Hash.CombineFNVHash(hashCode, ToLower(obj[i]));
                 }
 
                 return hashCode;
@@ -365,44 +403,6 @@ namespace Microsoft.CodeAnalysis
             RoslynDebug.Assert(value != null);
 
             return s_comparer.GetHashCode(value);
-        }
-
-        /// <summary>
-        /// Convert a string to lower case per Unicode
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [return: NotNullIfNotNull(parameterName: nameof(value))]
-        public static string? ToLower(string? value)
-        {
-            if (value is null)
-                return null;
-
-            if (value.Length == 0)
-                return value;
-
-            var pooledStrbuilder = PooledStringBuilder.GetInstance();
-            StringBuilder builder = pooledStrbuilder.Builder;
-
-            builder.Append(value);
-            ToLower(builder);
-
-            return pooledStrbuilder.ToStringAndFree();
-        }
-
-        /// <summary>
-        /// In-place convert string in StringBuilder to lower case per Unicode rules
-        /// </summary>
-        /// <param name="builder"></param>
-        public static void ToLower(StringBuilder builder)
-        {
-            if (builder == null)
-                return;
-
-            for (int i = 0; i < builder.Length; i++)
-            {
-                builder[i] = ToLower(builder[i]);
-            }
         }
     }
 }

@@ -401,7 +401,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var binder = binderFactory.GetBinder(syntax, syntax, this);
             SyntaxTokenList modifiers = GetModifierTokensSyntax(syntax);
             binder = binder.WithUnsafeRegionIfNecessary(modifiers);
-            return binder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.SuppressConstraintChecks, this);
+            return binder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.SuppressConstraintChecks, this);
         }
 
         protected override (TypeWithAnnotations Type, ImmutableArray<ParameterSymbol> Parameters) MakeParametersAndBindType(BindingDiagnosticBag diagnostics)

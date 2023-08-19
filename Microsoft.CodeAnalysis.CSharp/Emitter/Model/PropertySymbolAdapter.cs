@@ -17,7 +17,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {
-    internal partial class
+    public partial class
 #if DEBUG
         PropertySymbolAdapter : SymbolAdapter,
 #else
@@ -318,7 +318,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     }
 
 #if DEBUG
-    internal partial class PropertySymbolAdapter
+    public partial class PropertySymbolAdapter
     {
         internal PropertySymbolAdapter(PropertySymbol underlyingPropertySymbol)
         {

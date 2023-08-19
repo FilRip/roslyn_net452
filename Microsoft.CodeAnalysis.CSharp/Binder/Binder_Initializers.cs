@@ -146,7 +146,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 binder = new InMethodBinder(recordCtor, binder);
             }
 
-            return new LocalScopeBinder(binder).WithAdditionalFlagsAndContainingMemberOrLambda(suppressBinderFlagsFieldInitializer ? BinderFlags.None : BinderFlags.FieldInitializer, fieldSymbol);
+            return new LocalScopeBinder(binder).WithAdditionalFlagsAndContainingMemberOrLambda(suppressBinderFlagsFieldInitializer ? EBinder.None : EBinder.FieldInitializer, fieldSymbol);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     if (fieldSymbol is not null)
                     {
                         boundInitializer = BindFieldInitializer(
-                            parentBinder.WithAdditionalFlagsAndContainingMemberOrLambda(BinderFlags.FieldInitializer, fieldSymbol),
+                            parentBinder.WithAdditionalFlagsAndContainingMemberOrLambda(EBinder.FieldInitializer, fieldSymbol),
                             fieldSymbol,
                             (EqualsValueClauseSyntax)syntax,
                             diagnostics);

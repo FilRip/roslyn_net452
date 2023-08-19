@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis.PooledObjects;
@@ -46,22 +47,22 @@ namespace Microsoft.CodeAnalysis.Text
                 throw new InvalidOperationException("Delta length difference of change ranges didn't match before/after text length.");
 
             var position = 0;
-            foreach (var change in changeRanges)
+            foreach (var change in changeRanges.Select(change => change.Span))
             {
-                if (change.Span.Start < position)
+                if (change.Start < position)
                     throw new InvalidOperationException("Change preceded current position in oldText");
 
-                if (change.Span.Start > oldText.Length)
+                if (change.Start > oldText.Length)
                     throw new InvalidOperationException("Change start was after the end of oldText");
 
-                if (change.Span.End > oldText.Length)
+                if (change.End > oldText.Length)
                     throw new InvalidOperationException("Change end was after the end of oldText");
 
-                position = change.Span.End;
+                position = change.End;
             }
         }
 
-        private class ChangeInfo
+        private sealed class ChangeInfo
         {
             public ImmutableArray<TextChangeRange> ChangeRanges { get; }
 

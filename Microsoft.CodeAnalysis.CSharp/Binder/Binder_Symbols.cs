@@ -569,7 +569,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var elementType = BindType(node.ElementType, diagnostics, basesBeingResolved);
                 ReportUnsafeIfNotAllowed(node, diagnostics);
 
-                if (!Flags.HasFlag(BinderFlags.SuppressConstraintChecks))
+                if (!Flags.HasFlag(EBinder.SuppressConstraintChecks))
                 {
                     CheckManagedAddr(Compilation, elementType.Type, node.Location, diagnostics);
                 }
@@ -1153,7 +1153,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     resultType = unconstructedType.AsUnboundGenericType();
                 }
             }
-            else if ((Flags & BinderFlags.SuppressTypeArgumentBinding) != 0)
+            else if ((Flags & EBinder.SuppressTypeArgumentBinding) != 0)
             {
                 resultType = unconstructedType.Construct(PlaceholderTypeArgumentSymbol.CreateTypeArguments(unconstructedType.TypeParameters));
             }
@@ -1271,7 +1271,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         private TypeWithAnnotations BindTypeArgument(TypeSyntax typeArgument, BindingDiagnosticBag diagnostics, ConsList<TypeSymbol> basesBeingResolved = null)
         {
             // Unsafe types can never be type arguments, but there's a special error code for that.
-            var binder = this.WithAdditionalFlags(BinderFlags.SuppressUnsafeDiagnostics);
+            var binder = this.WithAdditionalFlags(EBinder.SuppressUnsafeDiagnostics);
 
             var arg = typeArgument.Kind() == SyntaxKind.OmittedTypeArgument
                 ? TypeWithAnnotations.Create(UnboundArgumentErrorTypeSymbol.Instance)
@@ -1380,7 +1380,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             get
             {
-                return !this.Flags.Includes(BinderFlags.SuppressConstraintChecks);
+                return !this.Flags.Includes(EBinder.SuppressConstraintChecks);
             }
         }
 
@@ -1809,7 +1809,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                                     {
                                         reportError = false;
                                     }
-                                    else if (this.Flags.Includes(BinderFlags.IgnoreCorLibraryDuplicatedTypes) &&
+                                    else if (this.Flags.Includes(EBinder.IgnoreCorLibraryDuplicatedTypes) &&
                                         secondBest.IsFromCorLibrary)
                                     {
                                         // Ignore duplicate types from the cor library if necessary.
@@ -2371,7 +2371,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // might require us to examine types forwarded by this assembly, thus binding assembly level
             // attributes again. And the cycle continues.
             // So, we won't do the analysis in this case, at the expense of better diagnostics.
-            if ((this.Flags & BinderFlags.InContextualAttributeBinder) != 0)
+            if ((this.Flags & EBinder.InContextualAttributeBinder) != 0)
             {
                 var current = this;
 
